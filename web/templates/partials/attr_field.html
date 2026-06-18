@@ -1,0 +1,27 @@
+{{define "attr_field"}}
+<div>
+    <label class="block text-xs text-gray-400 mb-1">{{.Label}}</label>
+    {{if eq .Type "textarea"}}
+    <textarea
+        name="value"
+        rows="2"
+        class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-sm text-gray-100 focus:border-amber-500 focus:outline-none resize-y"
+        hx-post="/attributes/update"
+        hx-trigger="change"
+        hx-vals='{"field": "{{.Field}}"}'
+        hx-swap="none"
+    >{{.Value}}</textarea>
+    {{else}}
+    <input
+        type="text"
+        name="value"
+        value="{{.Value}}"
+        class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-sm text-gray-100 focus:border-amber-500 focus:outline-none"
+        hx-post="/attributes/update"
+        hx-trigger="change"
+        hx-vals='{"field": "{{.Field}}"}'
+        hx-swap="none"
+    >
+    {{end}}
+</div>
+{{end}}

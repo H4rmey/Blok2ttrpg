@@ -1,0 +1,32 @@
+{{define "level_controls"}}
+<div id="level-controls" class="flex items-center gap-4">
+    <div class="flex items-center gap-2">
+        <button
+            class="w-6 h-6 rounded bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-bold flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed"
+            hx-post="/level/down"
+            hx-target="#level-controls"
+            hx-swap="outerHTML"
+            {{if not .CanLevelDown}}disabled{{end}}
+            hx-confirm="Level down to {{subtract .Level 1}}? This will revoke points gained at level {{.Level}}."
+        >&minus;</button>
+        <span class="text-sm text-gray-400">
+            Level <span class="text-amber-400 font-bold text-base">{{.Level}}</span>
+        </span>
+        <button
+            class="w-6 h-6 rounded bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed"
+            hx-post="/level/up"
+            hx-target="#level-controls"
+            hx-swap="outerHTML"
+            {{if not .CanLevelUp}}disabled{{end}}
+        >+</button>
+    </div>
+    <span class="text-sm text-gray-600">|</span>
+    <span class="text-sm text-gray-400">
+        Trait: <span class="text-green-400">{{.TraitPointsAvailable}}/{{.TotalTraitPoints}}</span>
+    </span>
+    <span class="text-sm text-gray-600">|</span>
+    <span class="text-sm text-gray-400">
+        Ability: <span class="text-blue-400">{{.AbilityPointsAvailable}}/{{.TotalAbilityPoints}}</span>
+    </span>
+</div>
+{{end}}

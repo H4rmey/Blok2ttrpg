@@ -1,0 +1,139 @@
+{{define "tab_attributes"}}
+<div class="space-y-6">
+    <h2 class="text-xl font-bold text-gray-200">Character Attributes</h2>
+    <p class="text-sm text-gray-400">Define your character's identity, background, and personality.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {{template "attr_field" dict "Field" "name" "Label" "Name" "Value" .Attributes.Name "Type" "input"}}
+        {{template "attr_field" dict "Field" "age" "Label" "Age" "Value" .Attributes.Age "Type" "input"}}
+        {{template "attr_field" dict "Field" "size" "Label" "Size" "Value" .Attributes.Size "Type" "input"}}
+        {{template "attr_field" dict "Field" "alignment" "Label" "Alignment" "Value" .Attributes.Alignment "Type" "input"}}
+        {{template "attr_field" dict "Field" "occupation" "Label" "Occupation" "Value" .Attributes.Occupation "Type" "input"}}
+    </div>
+
+    <div class="grid grid-cols-1 gap-4">
+        {{template "attr_field" dict "Field" "backstory" "Label" "Backstory" "Value" .Attributes.Backstory "Type" "textarea"}}
+        {{template "attr_field" dict "Field" "personality" "Label" "Personality" "Value" .Attributes.Personality "Type" "textarea"}}
+        {{template "attr_field" dict "Field" "traits" "Label" "Traits" "Value" .Attributes.Traits "Type" "textarea"}}
+        {{template "attr_field" dict "Field" "appearance" "Label" "Appearance" "Value" .Attributes.Appearance "Type" "textarea"}}
+        {{template "attr_field" dict "Field" "hobbies" "Label" "Hobbies" "Value" .Attributes.Hobbies "Type" "textarea"}}
+        {{template "attr_field" dict "Field" "inventory" "Label" "Inventory" "Value" .Attributes.Inventory "Type" "textarea"}}
+        {{template "attr_field" dict "Field" "quirks" "Label" "Quirks" "Value" .Attributes.Quirks "Type" "textarea"}}
+    </div>
+
+    <!-- Custom Fields -->
+    <div class="mt-8">
+        <h3 class="text-lg font-semibold text-gray-200 mb-4">Custom Fields</h3>
+        <div id="custom-fields-list">
+            {{template "custom_fields_list" .}}
+        </div>
+
+        <form class="mt-4 flex gap-2 items-end"
+              hx-post="/attributes/custom/add"
+              hx-target="#custom-fields-list"
+              hx-swap="innerHTML"
+              hx-on::after-request="this.reset()">
+            <div class="flex-1">
+                <label class="block text-xs text-gray-400 mb-1">Field Name</label>
+                <input type="text" name="label" required placeholder="e.g. Religion, Pet Name, Motto..."
+                    class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-sm text-gray-100 focus:border-amber-500 focus:outline-none">
+            </div>
+            <button type="submit"
+                class="px-4 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded text-sm font-medium">
+                Add Field
+            </button>
+        </form>
+    </div>
+
+    <!-- Temporary Attributes -->
+    <div class="mt-8">
+        <h3 class="text-lg font-semibold text-gray-200 mb-4">Temporary Attributes</h3>
+        <div id="temp-attributes-list">
+            {{template "temp_attributes_list" .}}
+        </div>
+
+        <form class="mt-4 flex gap-2 items-end"
+              hx-post="/attributes/temp/add"
+              hx-target="#temp-attributes-list"
+              hx-swap="innerHTML"
+              hx-on::after-request="this.reset()">
+            <div class="flex-1">
+                <label class="block text-xs text-gray-400 mb-1">Name</label>
+                <input type="text" name="name" required
+                    class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-sm text-gray-100 focus:border-amber-500 focus:outline-none">
+            </div>
+            <div class="flex-1">
+                <label class="block text-xs text-gray-400 mb-1">Description</label>
+                <input type="text" name="description"
+                    class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-sm text-gray-100 focus:border-amber-500 focus:outline-none">
+            </div>
+            <div class="w-32">
+                <label class="block text-xs text-gray-400 mb-1">Duration</label>
+                <input type="text" name="duration" placeholder="Optional"
+                    class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-sm text-gray-100 focus:border-amber-500 focus:outline-none">
+            </div>
+            <button type="submit"
+                class="px-4 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded text-sm font-medium">
+                Add
+            </button>
+        </form>
+    </div>
+</div>
+{{end}}
+
+{{define "temp_attributes_list"}}
+{{if .TemporaryAttributes}}
+<div class="space-y-2">
+    {{range $i, $attr := .TemporaryAttributes}}
+    <div class="flex items-center gap-3 bg-gray-800 rounded px-4 py-2 border border-gray-700">
+        <span class="font-medium text-amber-300 text-sm">{{$attr.Name}}</span>
+        {{if $attr.Description}}
+        <span class="text-gray-400 text-sm">— {{$attr.Description}}</span>
+        {{end}}
+        {{if $attr.Duration}}
+        <span class="text-xs text-gray-500 ml-auto">({{$attr.Duration}})</span>
+        {{end}}
+        <button
+            class="ml-auto text-red-400 hover:text-red-300 text-sm"
+            hx-delete="/attributes/temp/remove?index={{$i}}"
+            hx-target="#temp-attributes-list"
+            hx-swap="innerHTML"
+            hx-confirm="Remove temporary attribute '{{$attr.Name}}'?"
+        >
+            Remove
+        </button>
+    </div>
+    {{end}}
+</div>
+{{else}}
+<p class="text-sm text-gray-500 italic">No temporary attributes. Add one below.</p>
+{{end}}
+{{end}}
+
+{{define "custom_fields_list"}}
+{{if .Attributes.Custom}}
+<div class="space-y-2">
+    {{range $i, $field := .Attributes.Custom}}
+    <div class="flex items-center gap-3 bg-gray-800 rounded px-4 py-2 border border-gray-700">
+        <span class="font-medium text-amber-300 text-sm w-32 shrink-0">{{$field.Label}}</span>
+        <textarea rows="1"
+            class="flex-1 bg-gray-900 border border-gray-600 rounded px-3 py-1 text-sm text-gray-100 focus:border-amber-500 focus:outline-none resize-y"
+            hx-post="/attributes/custom/update"
+            hx-trigger="change"
+            hx-vals='{"index": "{{$i}}"}'
+            hx-swap="none"
+            name="value">{{$field.Value}}</textarea>
+        <button
+            class="text-red-400 hover:text-red-300 text-sm shrink-0"
+            hx-delete="/attributes/custom/remove?index={{$i}}"
+            hx-target="#custom-fields-list"
+            hx-swap="innerHTML"
+            hx-confirm="Remove field '{{$field.Label}}'?"
+        >Remove</button>
+    </div>
+    {{end}}
+</div>
+{{else}}
+<p class="text-sm text-gray-500 italic">No custom fields. Add one below.</p>
+{{end}}
+{{end}}

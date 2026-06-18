@@ -1,0 +1,124 @@
+{{define "tab_abilities"}}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-xl font-bold text-gray-200">Ability Builder</h2>
+            <p class="text-sm text-gray-400">Create and manage your abilities. Each ability costs Add Points to build.</p>
+        </div>
+        <div class="text-right">
+            <div class="text-sm text-gray-400">Ability Points</div>
+            <div class="text-lg font-bold {{if eq .PointsAvailable 0}}text-red-400{{else}}text-blue-400{{end}}">
+                {{.PointsAvailable}} / {{.PointsTotal}}
+            </div>
+            <div class="text-xs text-gray-500">{{.PointsSpent}} spent</div>
+        </div>
+    </div>
+
+    <!-- Ability List -->
+    {{if .Abilities}}
+    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div class="grid grid-cols-12 gap-0 px-4 py-2 border-b border-gray-700 text-xs font-medium text-gray-400 uppercase tracking-wide">
+            <div class="col-span-4">Name</div>
+            <div class="col-span-2">Type</div>
+            <div class="col-span-2 text-center">Add Cost</div>
+            <div class="col-span-2 text-center">Energy Cost</div>
+            <div class="col-span-2 text-right">Actions</div>
+        </div>
+        {{range .Abilities}}
+        <div class="grid grid-cols-12 gap-0 px-4 py-3 border-b border-gray-700 last:border-b-0 items-center hover:bg-gray-750">
+            <div class="col-span-4 font-medium text-gray-200">{{.Name}}</div>
+            <div class="col-span-2">
+                <span class="inline-block px-2 py-0.5 rounded text-xs font-medium
+                    {{if eq .Type "Execution"}}bg-purple-900/50 text-purple-300
+                    {{else if eq .Type "Reaction"}}bg-yellow-900/50 text-yellow-300
+                    {{else if eq .Type "Phase"}}bg-cyan-900/50 text-cyan-300
+                    {{else}}bg-green-900/50 text-green-300
+                    {{end}}">
+                    {{.Type}}
+                </span>
+            </div>
+            <div class="col-span-2 text-center text-sm text-blue-300">{{.AddCost}} pts</div>
+            <div class="col-span-2 text-center text-sm text-amber-300">{{.EnergyCost}} energy</div>
+            <div class="col-span-2 flex gap-2 justify-end">
+                <button
+                    class="text-xs text-blue-400 hover:text-blue-300 px-2 py-1 rounded border border-blue-800 hover:border-blue-600"
+                    hx-get="/abilities/edit?index={{.Index}}"
+                    hx-target="#tab-content"
+                    hx-swap="innerHTML"
+                >
+                    Edit
+                </button>
+                <a href="/abilities/export?index={{.Index}}"
+                   class="text-xs text-gray-400 hover:text-gray-200 px-2 py-1 rounded border border-gray-600 hover:border-gray-400">
+                    Export
+                </a>
+                <button
+                    class="text-xs text-red-400 hover:text-red-300 px-2 py-1 rounded border border-red-800 hover:border-red-600"
+                    hx-delete="/abilities/delete?index={{.Index}}"
+                    hx-target="#tab-content"
+                    hx-swap="innerHTML"
+                    hx-confirm="Delete ability '{{.Name}}'? This will refund {{.AddCost}} ability points."
+                >
+                    Delete
+                </button>
+            </div>
+        </div>
+        {{end}}
+    </div>
+    {{else}}
+    <div class="text-center py-8 bg-gray-800 rounded-lg border border-gray-700">
+        <p class="text-gray-500 mb-2">No abilities created yet.</p>
+        <p class="text-xs text-gray-600">Create a new ability or import one from a YAML file.</p>
+    </div>
+    {{end}}
+
+    <!-- Create New Ability -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+        <h3 class="text-sm font-semibold text-gray-200 mb-3">Create New Ability</h3>
+        <form class="flex gap-3 items-end"
+              hx-post="/abilities/new"
+              hx-target="#tab-content"
+              hx-swap="innerHTML">
+            <div class="flex-1">
+                <label class="block text-xs text-gray-400 mb-1">Name</label>
+                <input type="text" name="name" required placeholder="e.g. Fireball"
+                    class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-1.5 text-sm text-gray-100 focus:border-amber-500 focus:outline-none">
+            </div>
+            <div class="w-40">
+                <label class="block text-xs text-gray-400 mb-1">Type</label>
+                <select name="type"
+                    class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-1.5 text-sm text-gray-100 focus:border-amber-500 focus:outline-none">
+                    <option value="Execution">Execution</option>
+                    <option value="Reaction">Reaction</option>
+                    <option value="Phase">Phase</option>
+                    <option value="Minion">Minion</option>
+                </select>
+            </div>
+            <button type="submit"
+                class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded text-sm font-medium">
+                Create
+            </button>
+        </form>
+    </div>
+
+    <!-- Import Ability -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+        <h3 class="text-sm font-semibold text-gray-200 mb-3">Import Ability from YAML</h3>
+        <form class="flex gap-3 items-end"
+              hx-post="/abilities/import"
+              hx-target="#tab-content"
+              hx-swap="innerHTML"
+              hx-encoding="multipart/form-data">
+            <div class="flex-1">
+                <label class="block text-xs text-gray-400 mb-1">Ability YAML File</label>
+                <input type="file" name="ability_file" accept=".yaml,.yml" required
+                    class="w-full text-sm text-gray-400 file:mr-4 file:py-1.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-gray-700 file:text-gray-200 hover:file:bg-gray-600">
+            </div>
+            <button type="submit"
+                class="px-4 py-1.5 bg-gray-600 hover:bg-gray-500 text-white rounded text-sm font-medium">
+                Import
+            </button>
+        </form>
+    </div>
+</div>
+{{end}}
