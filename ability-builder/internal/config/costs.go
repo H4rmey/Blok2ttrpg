@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/models"
 )
@@ -18,7 +19,7 @@ type AbilityCostResult struct {
 // the YAML configuration and submitted form values. It uses the same rules as the
 // frontend live calculator so the server stays in sync with the displayed values.
 func (ab *AbilityBuilderConfig) ComputeAbilityCosts(a *models.Ability, values url.Values) error {
-	cfg, ok := ab.AbilityTypes[string(a.Type)]
+	cfg, ok := ab.AbilityTypes[strings.ToLower(string(a.Type))]
 	if !ok {
 		return fmt.Errorf("unknown ability type: %s", a.Type)
 	}
