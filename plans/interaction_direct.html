@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interaction Builder - Direct</title>
+</head>
+<body>
+  <h1>Interaction Builder - Direct</h1>
+  <p>Builder for Direct interaction.</p>
+<form id="builder"><fieldset><legend>Overview</legend><p><strong>Always Resolve:</strong> <output id="resolve">No</output> | <strong>Build Cost:</strong> <output id="build">0</output> | <strong>Cast Cost:</strong> <output id="cast">0</output></p><p><strong>Final Interaction:</strong> <output id="formula">Direct, 1 target, range 1m</output></p></fieldset><fieldset><legend>Builder</legend><p><label><input type="checkbox" name="always" /> Will always resolve</label></p><p><strong>Type =</strong> Direct <strong> + </strong><label>Range:</label><select name="range"><option value="1">1m</option>
+<option value="2">2m</option>
+<option value="3">3m</option>
+<option value="4">4m</option>
+<option value="5">5m</option>
+<option value="6">6m</option>
+<option value="7">7m</option>
+<option value="8">8m</option>
+<option value="9">9m</option>
+<option value="10">10m</option></select> <strong> + </strong><label>Targets:</label><select name="targets"><option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option></select></p></fieldset><fieldset><legend>Cost Breakdown</legend><ul id="breakdown"></ul></fieldset></form>
+<script>
+function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
+function fillList(id, items) {
+  const host = document.getElementById(id); if (!host) return;
+  host.innerHTML = '';
+  items.forEach(item => { const li = document.createElement('li'); li.textContent = item; host.appendChild(li); });
+}
+</script>
+<script>function calculate(){const f=document.getElementById('builder');let add=0,energy=0,lines=['Base direct: 1 target within 1m (add +0, energy +0)'];const r=Number(f.range.value),t=Number(f.targets.value);if(f.always.checked){add+=5;energy+=3;lines.unshift('Will always resolve (add +5, energy +3)');}if(r>1){add+=r-1;lines.push('Increase range (add +'+(r-1)+', energy +0)');}if(t>1){add+=(t-1)*3;energy+=(t-1)*2;lines.push('Add targets (add +'+((t-1)*3)+', energy +'+((t-1)*2)+')');}setText('resolve',f.always.checked?'Yes':'No');setText('build',add);setText('cast',energy);setText('formula','Direct, '+t+' target(s), range '+r+'m');fillList('breakdown',lines);}document.getElementById('builder').addEventListener('input',calculate);document.getElementById('builder').addEventListener('change',calculate);calculate();</script>
+</body>
+</html>

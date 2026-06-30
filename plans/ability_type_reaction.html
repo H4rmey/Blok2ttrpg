@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ability Type Builder - Reaction</title>
+</head>
+<body>
+  <h1>Ability Type Builder - Reaction</h1>
+  <p>Builder for Reaction ability type with trigger dropdown.</p>
+<form id="builder"><fieldset><legend>Overview</legend><p><strong>Type:</strong> Reaction | <strong>Build Cost:</strong> <output id="build">0</output> | <strong>Cast Cost:</strong> <output id="cast">3</output></p><p><strong>Final Type Summary:</strong> <output id="formula">Reaction, trigger: Target moves towards engager</output></p></fieldset><fieldset><legend>Builder</legend><p><label>Trigger:</label><select name="trigger" id="trigger"><option value="Target moves away from engager">Target moves away from engager</option>
+<option value="Target moves towards engager">Target moves towards engager</option>
+<option value="Target moves past engager">Target moves past engager</option>
+<option value="Engager gets healed by target">Engager gets healed by target</option>
+<option value="Target damages engager">Target damages engager</option>
+<option value="Target makes a trait check">Target makes a trait check</option>
+<option value="Target starts casting an ability">Target starts casting an ability</option>
+<option value="Target ends their turn within range">Target ends their turn within range</option>
+<option value="Target enters interaction range">Target enters interaction range</option>
+<option value="Target leaves interaction range">Target leaves interaction range</option>
+<option value="Target fails a validation">Target fails a validation</option>
+<option value="Target succeeds on a validation">Target succeeds on a validation</option>
+<option value="Target becomes affected by an enactment">Target becomes affected by an enactment</option>
+<option value="Engager takes damage">Engager takes damage</option>
+<option value="Engager gets targeted by an ability">Engager gets targeted by an ability</option>
+<option value="Ally within range takes damage">Ally within range takes damage</option>
+<option value="Ally within range gets healed">Ally within range gets healed</option>
+<option value="A target is moved by an effect">A target is moved by an effect</option>
+<option value="A persistent effect triggers">A persistent effect triggers</option>
+<option value="A minion is summoned within range">A minion is summoned within range</option></select><span id="trigger-trait-wrap" hidden><label>Trait:</label><select name="trigger_trait"><option value="Strength">Strength</option>
+<option value="Dexterity">Dexterity</option>
+<option value="Stealth">Stealth</option>
+<option value="Perception">Perception</option>
+<option value="Nature">Nature</option>
+<option value="Crafting">Crafting</option>
+<option value="People Skill">People Skill</option>
+<option value="Performance">Performance</option>
+<option value="Thievery">Thievery</option>
+<option value="Knowledge">Knowledge</option>
+<option value="Magic">Magic</option>
+<option value="Precision">Precision</option>
+<option value="Power">Power</option>
+<option value="Mind">Mind</option>
+<option value="Reflex">Reflex</option>
+<option value="Constitution">Constitution</option></select></span></p><p><label>Range:</label><select name="range"><option value="1">1m</option>
+<option value="2">2m</option>
+<option value="3">3m</option>
+<option value="4">4m</option>
+<option value="5">5m</option>
+<option value="6">6m</option></select> <strong> + </strong><label>Uses Per Round:</label><select name="uses"><option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option></select></p><p><label><input type="checkbox" name="item_dep" /> Has Item Dependency</label></p></fieldset><fieldset><legend>Cost Breakdown</legend><ul id="breakdown"></ul></fieldset></form>
+<script>
+function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
+function fillList(id, items) {
+  const host = document.getElementById(id); if (!host) return;
+  host.innerHTML = '';
+  items.forEach(item => { const li = document.createElement('li'); li.textContent = item; host.appendChild(li); });
+}
+</script>
+<script>function calculate(){const f=document.getElementById('builder');let add=0,energy=3,lines=['Base reaction: 1m range, 1 use per round, 3 energy (add +0, energy +3)'];const range=Number(f.range.value),uses=Number(f.uses.value);if(range>1){add+=range-1;lines.push('Add reaction range (add +'+(range-1)+', energy +0)');}if(uses>1){add+=(uses-1)*4;energy+=uses-1;lines.push('Add uses per round (add +'+((uses-1)*4)+', energy +'+(uses-1)+')');}if(f.item_dep.checked){add-=1;lines.push('Has item dependency (add -1, energy +0)');}const needsTrait=f.trigger.value==='Target makes a trait check';document.getElementById('trigger-trait-wrap').hidden=!needsTrait;const trigger=f.trigger.value+(needsTrait?' of type '+f.trigger_trait.value:'');setText('build',add);setText('cast',energy);setText('formula','Reaction, '+uses+' use(s) per round, range '+range+'m, trigger: '+trigger);fillList('breakdown',lines);}document.getElementById('builder').addEventListener('input',calculate);document.getElementById('builder').addEventListener('change',calculate);calculate();</script>
+</body>
+</html>

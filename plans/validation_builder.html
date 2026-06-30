@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Validation Builder</title>
+</head>
+<body>
+  <h1>Validation Builder</h1>
+  <p>Builder for validation rolls with dynamic counter roll options.</p>
+
+<form id="builder">
+  <fieldset><legend>Overview</legend><p><strong>Always Resolve:</strong> <output id="resolve">No</output> | <strong>Build Cost:</strong> <output id="build">0</output> | <strong>Cast Cost:</strong> <output id="cast">0</output></p><p><strong>Final Validation:</strong> <output id="formula">Precision vs Reflex or Constitution</output></p></fieldset>
+  <fieldset><legend>Builder</legend>
+    <p><label><input type="checkbox" name="always" /> Will always resolve</label></p>
+    <p><label>Engagement Roll:</label><select name="engage_mode" id="engage-mode"><option value="trait">Offensive Trait</option><option value="generic">Generic Roll</option><option value="other">Another roll result</option></select><span id="engage-trait"><label>Trait:</label><select name="engage_trait"><option value="Precision">Precision</option>
+<option value="Power">Power</option>
+<option value="Mind">Mind</option>
+<option value="Magic">Magic</option></select></span><span id="engage-generic" hidden><label>Die:</label><select name="engage_die"><option>d6</option><option>d8</option><option>d10</option><option>d12</option></select></span><span id="engage-other" hidden><label>Other Roll Text:</label><input name="engage_other" type="text" /></span></p>
+    <p><strong>Counter Rolls:</strong></p><div id="counters"></div><p><button type="button" id="add-counter">+ Counter</button> <button type="button" id="remove-counter">- Counter</button></p>
+  </fieldset><fieldset><legend>Cost Breakdown</legend><ul id="breakdown"></ul></fieldset>
+</form>
+<script>
+function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
+function fillList(id, items) {
+  const host = document.getElementById(id); if (!host) return;
+  host.innerHTML = '';
+  items.forEach(item => { const li = document.createElement('li'); li.textContent = item; host.appendChild(li); });
+}
+</script>
+
+<script>
+const defenseOptions=['Reflex', 'Constitution', 'Mind', 'Magic'];
+function counterSelect(value='Reflex'){const p=document.createElement('p');const s=document.createElement('select');s.name='counter';defenseOptions.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;if(t===value)o.selected=true;s.appendChild(o);});p.appendChild(s);return p;}
+function ensureCounter(){const host=document.getElementById('counters');if(host.children.length===0)host.appendChild(counterSelect());}
+function calculate(){ensureCounter();const f=document.getElementById('builder');let add=0,energy=0,lines=[];if(f.always.checked){add+=5;energy+=3;lines.push('Will always resolve (add +5, energy +3)');}let engage='';if(f.engage_mode.value==='trait'){engage=f.engage_trait.value;lines.push('Base engagement roll uses offensive trait (add +0, energy +0)');}if(f.engage_mode.value==='generic'){engage=f.engage_die.value;add-=2;lines.push('Engage roll replaced by generic roll (add -2, energy +0)');}if(f.engage_mode.value==='other'){engage=f.engage_other.value.trim()||'[other roll result]';add+=3;energy+=1;lines.push('Use another roll result for engagement (add +3, energy +1)');}const counters=[...document.querySelectorAll('select[name="counter"]')].map(s=>s.value);if(counters.length===1){add+=3;energy+=1;lines.push('Remove one counter roll option (add +3, energy +1)');}if(counters.length>2){add+=(counters.length-2)*2;lines.push('Add '+(counters.length-2)+' extra counter roll option(s) (add +'+((counters.length-2)*2)+', energy +0)');}document.getElementById('engage-trait').hidden=f.engage_mode.value!=='trait';document.getElementById('engage-generic').hidden=f.engage_mode.value!=='generic';document.getElementById('engage-other').hidden=f.engage_mode.value!=='other';setText('resolve',f.always.checked?'Yes':'No');setText('build',add);setText('cast',energy);setText('formula',engage+' vs '+counters.join(' or '));fillList('breakdown',lines);}
+document.getElementById('add-counter').onclick=()=>{document.getElementById('counters').appendChild(counterSelect());calculate();};document.getElementById('remove-counter').onclick=()=>{const host=document.getElementById('counters');if(host.children.length>1)host.removeChild(host.lastElementChild);calculate();};document.getElementById('builder').addEventListener('input',calculate);document.getElementById('builder').addEventListener('change',calculate);document.getElementById('counters').appendChild(counterSelect('Reflex'));document.getElementById('counters').appendChild(counterSelect('Constitution'));calculate();
+</script>
+</body>
+</html>

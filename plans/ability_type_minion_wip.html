@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ability Type Builder - Minion (WIP)</title>
+</head>
+<body>
+  <h1>Ability Type Builder - Minion (WIP)</h1>
+  <p>Simple WIP builder for Minion ability type.</p>
+<form id="builder"><fieldset><legend>Overview</legend><p><strong>Type:</strong> Minion | <strong>Build Cost:</strong> <output id="build">0</output> | <strong>Cast Cost:</strong> <output id="cast">0</output></p><p><strong>Final Type Summary:</strong> <output id="formula">Minion with 10 health, 3 round lifetime</output></p></fieldset><fieldset><legend>Builder</legend><p><label>Health Bonus:</label><select name="hp"><option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option></select> <strong> + </strong><label>Extra Lifetime:</label><select name="life"><option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option></select></p><p><label><input type="checkbox" name="item_dep" /> Has Item Dependency</label></p></fieldset><fieldset><legend>Cost Breakdown</legend><ul id="breakdown"></ul></fieldset></form>
+<script>
+function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
+function fillList(id, items) {
+  const host = document.getElementById(id); if (!host) return;
+  host.innerHTML = '';
+  items.forEach(item => { const li = document.createElement('li'); li.textContent = item; host.appendChild(li); });
+}
+</script>
+<script>function calculate(){const f=document.getElementById('builder');let add=0,energy=0,lines=['Base minion: 10 health, 3 round lifetime (add +0, energy +0)'];const hp=Number(f.hp.value),life=Number(f.life.value);if(hp>0){add+=hp;lines.push('Increase health by '+(hp*5)+' (add +'+hp+', energy +0)');}if(life>0){add+=life;energy+=life;lines.push('Increase lifetime by '+life+' round(s) (add +'+life+', energy +'+life+')');}if(f.item_dep.checked){add-=1;lines.push('Minion has item dependency (add -1, energy +0)');}setText('build',add);setText('cast',energy);setText('formula','Minion with '+(10+hp*5)+' health, '+(3+life)+' round lifetime');fillList('breakdown',lines);}document.getElementById('builder').addEventListener('input',calculate);document.getElementById('builder').addEventListener('change',calculate);calculate();</script>
+</body>
+</html>

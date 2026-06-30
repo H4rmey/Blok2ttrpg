@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ability Type Builder - Phase</title>
+</head>
+<body>
+  <h1>Ability Type Builder - Phase</h1>
+  <p>Builder for Phase ability type with dynamic knockout requirements.</p>
+<form id="builder"><fieldset><legend>Overview</legend><p><strong>Type:</strong> Phase | <strong>Build Cost:</strong> <output id="build">0</output> | <strong>Cast Cost:</strong> <output id="cast">3</output></p><p><strong>Final Type Summary:</strong> <output id="formula">Phase for 2 rounds</output></p></fieldset><fieldset><legend>Builder</legend><p><label>Phase Duration:</label><select name="phase_rounds"><option value="2">2 rounds</option>
+<option value="3">3 rounds</option>
+<option value="4">4 rounds</option>
+<option value="5">5 rounds</option></select> <strong> + </strong><label>Reverse Rounds:</label><select name="reverse_rounds"><option value="1">1 rounds</option>
+<option value="2">2 rounds</option>
+<option value="3">3 rounds</option>
+<option value="4">4 rounds</option>
+<option value="5">5 rounds</option></select></p><p><label><input type="checkbox" name="all_req" /> All knockout requirements must be met</label> <label><input type="checkbox" name="reverse_knockout" /> Knockout can be used on reverse phase</label></p><p><strong>Knockouts:</strong></p><div id="knockouts"></div><p><button type="button" id="add-ko">+ Knockout</button> <button type="button" id="remove-ko">- Knockout</button></p></fieldset><fieldset><legend>Cost Breakdown</legend><ul id="breakdown"></ul></fieldset></form>
+<script>
+function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
+function fillList(id, items) {
+  const host = document.getElementById(id); if (!host) return;
+  host.innerHTML = '';
+  items.forEach(item => { const li = document.createElement('li'); li.textContent = item; host.appendChild(li); });
+}
+</script>
+<script>
+const knockoutOptions=['Engager takes damage', 'Engager falls unconscious', 'Engager dies', 'Engager gets grabbed or restrained', 'Engager moves voluntarily', 'Engager is moved by another effect', 'Engager fails a validation', 'Engager uses another phase', 'Engager loses line of sight to target', 'Target moves out of range', 'Target falls unconscious', 'Target dies', 'Target succeeds on a counter roll', 'Phase duration expires', 'Engager runs out of energy'];function koSelect(value='Engager takes damage'){const p=document.createElement('p');const s=document.createElement('select');s.name='knockout';knockoutOptions.forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;if(k===value)o.selected=true;s.appendChild(o);});p.appendChild(s);return p;}function ensureKO(){const host=document.getElementById('knockouts');if(host.children.length===0)host.appendChild(koSelect());}
+function calculate(){ensureKO();const f=document.getElementById('builder');let add=0,energy=3,lines=['Base phase: 2 rounds, reverse phase 2 rounds, 3 energy (add +0, energy +3)'];const phase=Number(f.phase_rounds.value),reverse=Number(f.reverse_rounds.value);if(phase>2){add+=(phase-2)*2;energy+=phase-2;lines.push('Add phase rounds (add +'+((phase-2)*2)+', energy +'+(phase-2)+')');}if(reverse<phase){add+=(phase-reverse)*4;lines.push('Remove reverse phase rounds (add +'+((phase-reverse)*4)+', energy +0)');}if(f.all_req.checked){add+=3;lines.push('All knockout requirements have to be met (add +3, energy +0)');}if(f.reverse_knockout.checked){add+=3;lines.push('Knockout can be used on reverse phase (add +3, energy +0)');}const kos=[...document.querySelectorAll('select[name="knockout"]')].map(s=>s.value);if(kos.length>1){lines.push('Additional knockout requirements are currently free in this prototype');}setText('build',add);setText('cast',energy);setText('formula','Phase for '+phase+' round(s), reverse phase '+reverse+' round(s), knockout: '+kos.join(' or '));fillList('breakdown',lines);}
+document.getElementById('add-ko').onclick=()=>{document.getElementById('knockouts').appendChild(koSelect());calculate();};document.getElementById('remove-ko').onclick=()=>{const host=document.getElementById('knockouts');if(host.children.length>1)host.removeChild(host.lastElementChild);calculate();};document.getElementById('builder').addEventListener('input',calculate);document.getElementById('builder').addEventListener('change',calculate);ensureKO();calculate();
+</script>
+</body>
+</html>
