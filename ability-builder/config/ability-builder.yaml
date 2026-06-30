@@ -1,0 +1,778 @@
+version: 1
+ability_builder:
+  # Core cost rules
+  additional_enactment:
+    add_cost: 1
+    energy_cost: 1
+    description: "Adding an additional Enactment beyond the first"
+
+  # Ability types
+  ability_types:
+    execution:
+      name: "Execution"
+      description: "Performed instantly during a character's turn."
+      base_energy: 3
+      base_action: 2
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+        action:
+          increase:
+            add_cost: -2
+            energy_cost: 0
+          decrease:
+            add_cost: 4
+            energy_cost: 1
+      perks:
+        - id: item_dependency
+          description: "Has item dependency"
+          add_cost: -1
+          energy_cost: 0
+      compatible_enactments:
+        - Enact Damage
+        - Enact Healing
+        - Enact Movement
+        - Enact Proficiency Shift
+        - Enact Persistent Effect
+
+    reaction:
+      name: "Reaction"
+      description: "Triggered in response to an event or enemy action."
+      base_energy: 3
+      base_action: 0
+      base_range: 1
+      base_uses: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+      uses_cost:
+        add_cost: 4
+        energy_cost: 1
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      perks:
+        - id: item_dependency
+          description: "Has item dependency"
+          add_cost: -1
+          energy_cost: 0
+      triggers:
+        - id: "Target moves away from engager"
+          description: "Someone runs away from you"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target moves towards engager"
+          description: "Someone runs towards you"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target moves past engager"
+          description: "Someone moves past you"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Engager gets healed by target"
+          description: "Someone gets healed"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target damages engager"
+          description: "Someone takes damage"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target makes a trait check"
+          description: "Someone does a skill check"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target starts casting an ability"
+          description: "Someone starts casting an ability"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target ends their turn within range"
+          description: "A turn ends within range"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target enters interaction range"
+          description: "Someone enters range"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target leaves interaction range"
+          description: "Someone leaves range"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target fails a validation"
+          description: "Someone fails a validation"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target succeeds on a validation"
+          description: "Someone succeeds on a validation"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Target becomes affected by an enactment"
+          description: "Someone becomes affected by an enactment"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Engager takes damage"
+          description: "You take damage"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Engager gets targeted by an ability"
+          description: "You are targeted by an ability"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Ally within range takes damage"
+          description: "An ally within range takes damage"
+          add_cost: 2
+          energy_cost: 0
+        - id: "Ally within range gets healed"
+          description: "An ally within range gets healed"
+          add_cost: 2
+          energy_cost: 0
+        - id: "A target is moved by an effect"
+          description: "Someone is moved by an effect"
+          add_cost: 2
+          energy_cost: 0
+        - id: "A persistent effect triggers"
+          description: "A persistent effect triggers"
+          add_cost: 2
+          energy_cost: 0
+        - id: "A minion is summoned within range"
+          description: "A minion is summoned within range"
+          add_cost: 2
+          energy_cost: 0
+      compatible_enactments:
+        - Enact Damage
+        - Enact Healing
+        - Enact Movement
+        - Enact Proficiency Shift
+        - Enact Persistent Effect
+
+    phase:
+      name: "Phase"
+      description: "Requires setup or charging time before execution."
+      base_energy: 3
+      base_action: 2
+      base_duration: 2
+      base_reverse_duration: 2
+      duration_cost:
+        add_cost: 2
+        energy_cost: 1
+      reverse_duration_refund:
+        add_cost: 4
+        energy_cost: 0
+      perks:
+        - id: all_knockouts_req
+          description: "All knockout requirements have to be met"
+          add_cost: 3
+          energy_cost: 0
+        - id: reverse_knockout
+          description: "Knockout can be used on the reverse phase"
+          add_cost: 3
+          energy_cost: 0
+        - id: no_knockout
+          description: "No knockout possible"
+          add_cost: 5
+          energy_cost: 0
+        - id: item_dependency
+          description: "Has item dependency"
+          add_cost: -1
+          energy_cost: 0
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      knockout_requirements:
+        - id: "None"
+          description: "None"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager takes damage"
+          description: "You take damage"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager falls unconscious"
+          description: "You fall unconscious"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager dies"
+          description: "You die"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager gets grabbed or restrained"
+          description: "You get grabbed or restrained"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager moves voluntarily"
+          description: "You move voluntarily"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager is moved by another effect"
+          description: "You are moved by another effect"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager fails a validation"
+          description: "You fail a validation"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager uses another phase"
+          description: "You use another phase"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager loses line of sight to target"
+          description: "You lose line of sight to target"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Target moves out of range"
+          description: "Target moves out of range"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Target falls unconscious"
+          description: "Target falls unconscious"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Target dies"
+          description: "Target dies"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Target succeeds on a counter roll"
+          description: "Target succeeds on a counter roll"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Phase duration expires"
+          description: "Phase duration expires"
+          add_cost: 0
+          energy_cost: 0
+        - id: "Engager runs out of energy"
+          description: "You run out of energy"
+          add_cost: 0
+          energy_cost: 0
+      compatible_enactments:
+        - Enact Damage
+        - Enact Healing
+        - Enact Proficiency Shift
+      bad_enactments:
+        - id: reverse_default
+          description: "Reverse of the original Enactment"
+          add_cost: 0
+          energy_cost: 0
+
+    minion:
+      name: "Minion"
+      description: "Summons entities that act independently."
+      base_energy: 0
+      base_health: 10
+      base_lifetime: 3
+      health_bonus_cost:
+        add_cost: 1
+        energy_cost: 0
+      lifetime_bonus_cost:
+        add_cost: 1
+        energy_cost: 1
+      perks:
+        - id: item_dependency
+          description: "Has item dependency"
+          add_cost: -1
+          energy_cost: 0
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      compatible_enactments:
+        - Enact Damage
+        - Enact Healing
+        - Enact Movement
+        - Enact Proficiency Shift
+        - Enact Persistent Effect
+
+    preparation:
+      name: "Preparation"
+      description: "Works like a Reaction but must be prepared with an action."
+      base_energy: 3
+      base_action: 2
+      base_range: 1
+      base_uses: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+      uses_cost:
+        add_cost: 4
+        energy_cost: 1
+      step_costs:
+        action:
+          increase:
+            add_cost: -2
+            energy_cost: 0
+          decrease:
+            add_cost: 1
+            energy_cost: 4
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      perks:
+        - id: item_dependency
+          description: "Has item dependency"
+          add_cost: -1
+          energy_cost: 0
+      compatible_enactments:
+        - Enact Damage
+        - Enact Healing
+        - Enact Movement
+        - Enact Proficiency Shift
+        - Enact Persistent Effect
+
+  # Enactment types
+  enactments:
+    damage:
+      type: "Enact Damage"
+      description: "Inflicts damage to a target."
+      default_dice: "1d4"
+      dice_tiers:
+        d4: 0
+        d6: 1
+        d8: 2
+        d10: 3
+        d12: 4
+      dice_tier_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+        - id: trait_source
+          description: "Change Damage Dice to one of your traits"
+          add_cost: 3
+          energy_cost: 0
+        - id: flat_bonus
+          description: "Add a flat +1 bonus to the result"
+          add_cost: 2
+          energy_cost: 0
+        - id: offensive_trait
+          description: "Add an Offensive Trait Dice to the Damage Dice"
+          add_cost: 4
+          energy_cost: 2
+        - id: always_resolve
+          description: "Will Always Resolve"
+          add_cost: 5
+          energy_cost: 3
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      base_cost:
+        add_cost: 2
+        energy_cost: 1
+
+    healing:
+      type: "Enact Healing"
+      description: "Restores health to a target."
+      default_dice: "1d4"
+      dice_tiers:
+        d4: 0
+        d6: 1
+        d8: 2
+        d10: 3
+        d12: 4
+      dice_tier_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+        - id: trait_source
+          description: "Change Heal Dice to one of your traits"
+          add_cost: 3
+          energy_cost: 0
+        - id: flat_bonus
+          description: "Add a flat +1 bonus to the result"
+          add_cost: 2
+          energy_cost: 0
+        - id: medicine_trait
+          description: "Add Medicine Trait Dice to the heal effect"
+          add_cost: 3
+          energy_cost: 1
+        - id: always_resolve
+          description: "Will Always Resolve"
+          add_cost: 4
+          energy_cost: 2
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      base_cost:
+        add_cost: 2
+        energy_cost: 1
+
+    movement:
+      type: "Enact Movement"
+      description: "Moves a target or the Ability user."
+      default_distance: 1
+      distance_cost:
+        add_cost: 1
+        energy_cost: 0
+      perks:
+        - id: extra_direction
+          description: "Add another option for the direction"
+          add_cost: 1
+          energy_cost: 0
+        - id: other_origin
+          description: "Change Origin to something else"
+          add_cost: 2
+          energy_cost: 1
+        - id: trait_distance
+          description: "Change the total movement to any other trait"
+          add_cost: 3
+          energy_cost: 0
+        - id: always_resolve
+          description: "Will Always Resolve"
+          add_cost: 3
+          energy_cost: 1
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+        - id: free_direction
+          description: "Free direction (extra cost)"
+          add_cost: 2
+          energy_cost: 1
+      base_cost:
+        add_cost: 1
+        energy_cost: 0
+
+    proficiency_shift:
+      type: "Enact Proficiency Shift"
+      description: "Temporarily enhances or weakens Traits."
+      default_shift_amount: 1
+      default_uses: 1
+      shift_amount_cost:
+        add_cost: 3
+        energy_cost: 1
+      shift_uses_cost:
+        add_cost: 3
+        energy_cost: 1
+      perks:
+        - id: choose_shift
+          description: "You may choose if you use the Shifted Proficiency or not"
+          add_cost: 2
+          energy_cost: 0
+        - id: always_resolve
+          description: "Will Always Resolve"
+          add_cost: 4
+          energy_cost: 2
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      base_cost:
+        add_cost: 2
+        energy_cost: 1
+
+    persistent_effect:
+      type: "Enact Persistent Effect"
+      description: "Applies a lingering effect that remains for multiple turns."
+      default_duration: 2
+      base_cost:
+        add_cost: 3
+        energy_cost: 2
+      duration_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+        - id: single_solution
+          description: "Remove one Solution option"
+          add_cost: 3
+          energy_cost: 1
+        - id: extra_effect
+          description: "Add another Effect"
+          add_cost: 4
+          energy_cost: 2
+        - id: always_resolve
+          description: "Will Always Resolve"
+          add_cost: 5
+          energy_cost: 3
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      effects:
+        - id: damage
+          description: "Enact Damage"
+          add_cost: 2
+          energy_cost: 1
+        - id: healing
+          description: "Enact Healing"
+          add_cost: 2
+          energy_cost: 1
+        - id: movement
+          description: "Enact Movement"
+          add_cost: 1
+          energy_cost: 0
+        - id: proficiency_shift
+          description: "Enact Proficiency Shift"
+          add_cost: 2
+          energy_cost: 1
+
+    state:
+      type: "Enact State"
+      description: "Applies a state or condition to a target (WIP)."
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+      perks: []
+
+  # Interaction types
+  interactions:
+    self:
+      type: "Self"
+      description: "Targets the Ability user."
+      default_counter: "d8"
+      perks:
+        - id: generic_counter
+          description: "Validation counter roll is replaced by a Generic Dice: d8"
+          add_cost: 2
+          energy_cost: 0
+        - id: always_resolve
+          description: "Will always resolve"
+          add_cost: 5
+          energy_cost: 3
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+
+    direct:
+      type: "Direct"
+      description: "Affects a single target within 1m."
+      default_range: 1
+      default_targets: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+      target_cost:
+        add_cost: 3
+        energy_cost: 2
+      perks:
+        - id: always_resolve
+          description: "Will always resolve"
+          add_cost: 5
+          energy_cost: 3
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+
+    ranged:
+      type: "Ranged"
+      description: "Affects a single target at range with visibility requirements."
+      default_range: 10
+      default_targets: 1
+      default_visible: true
+      default_obstructed: false
+      range_extension_cost:
+        add_cost: 1
+        energy_cost: 0
+        step: 2
+      target_cost:
+        add_cost: 3
+        energy_cost: 2
+      perks:
+        - id: not_visible
+          description: "Engagement does not have to be visible"
+          add_cost: 3
+          energy_cost: 1
+        - id: obstructed
+          description: "Engagement may be obstructed"
+          add_cost: 3
+          energy_cost: 1
+        - id: remove_penalty
+          description: "Remove the Engagement Roll Penalty"
+          add_cost: 3
+          energy_cost: 1
+        - id: always_resolve
+          description: "Will always resolve"
+          add_cost: 5
+          energy_cost: 3
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+
+    area:
+      type: "Area"
+      description: "Affects a radius at a point within range."
+      default_radius: 1
+      default_range: 0
+      radius_cost:
+        add_cost: 2
+        energy_cost: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+        step: 2
+      perks:
+        - id: other_origin
+          description: "Change Origin to something else"
+          add_cost: 2
+          energy_cost: 1
+        - id: always_resolve
+          description: "Will always resolve"
+          add_cost: 5
+          energy_cost: 3
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+
+    area_of_effect:
+      type: "Area of Effect"
+      description: "A persistent area that triggers each round."
+      default_radius: 1
+      default_range: 0
+      default_duration: 2
+      radius_cost:
+        add_cost: 2
+        energy_cost: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+        step: 2
+      duration_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+        - id: immune
+          description: "Engager is immune to the effect"
+          add_cost: 2
+          energy_cost: 0
+        - id: other_origin
+          description: "Change Origin to something else"
+          add_cost: 2
+          energy_cost: 1
+        - id: always_resolve
+          description: "Will always resolve"
+          add_cost: 5
+          energy_cost: 3
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+
+  # Validation rules
+  validations:
+    default_engagement_trait: "offensive"
+    default_counter_count: 2
+    engagement:
+      modes:
+        - id: trait
+          description: "Offensive Trait by default"
+          add_cost: 0
+          energy_cost: 0
+        - id: generic
+          description: "Engage Roll is replaced by a Generic Roll (default 1d6)"
+          add_cost: -2
+          energy_cost: 0
+        - id: other
+          description: "Replace the Engagement Roll to any other Trait"
+          add_cost: 3
+          energy_cost: 1
+        - id: previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+    counter:
+      types:
+        - id: defense
+          description: "Defensive Trait (default)"
+          add_cost: 0
+          energy_cost: 0
+        - id: general
+          description: "Replace one of the Counter Rolls to a General Trait"
+          add_cost: 4
+          energy_cost: 0
+        - id: offense
+          description: "Replace one of the Counter Rolls to an Offensive Trait"
+          add_cost: 4
+          energy_cost: 0
+        - id: previous
+          description: "Use the result of another roll as counter"
+          add_cost: 3
+          energy_cost: 1
+      single_counter_cost:
+        add_cost: 3
+        energy_cost: 1
+      tier_shifts:
+        - id: counter_up
+          description: "Shift Dice Tier of Generic Counter Roll UP"
+          add_cost: 3
+          energy_cost: 1
+        - id: counter_down
+          description: "Shift Dice Tier of Generic Counter Roll DOWN"
+          add_cost: -2
+          energy_cost: 0
+        - id: engage_up
+          description: "Shift Dice Tier of Generic Engagement Roll UP"
+          add_cost: 3
+          energy_cost: 1
+        - id: engage_down
+          description: "Shift Dice Tier of Generic Engagement Roll DOWN"
+          add_cost: -2
+          energy_cost: 0
+
+  # Traits available for selection
+  traits:
+    general:
+      - Strength
+      - Dexterity
+      - Stealth
+      - Perception
+      - Nature
+      - Crafting
+      - People Skill
+      - Performance
+      - Thievery
+      - Knowledge
+      - Magic
+    offense:
+      - Precision
+      - Power
+      - Mind
+      - Magic
+    defense:
+      - Reflex
+      - Constitution
+      - Mind
+      - Magic
+
+  # Dice options
+  dice:
+    damage: ["d4", "d6", "d8", "d10", "d12"]
+    generic: ["d6", "d8", "d10", "d12"]

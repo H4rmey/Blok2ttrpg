@@ -1,0 +1,368 @@
+{
+	"formatVersion": 2,
+	"appVersion": "0.103.0",
+	"files": [
+		{
+			"isClone": false,
+			"noteId": "BzQqZ38CdKUt",
+			"notePath": [
+				"BzQqZ38CdKUt"
+			],
+			"title": "Blok2ttrpg",
+			"notePosition": 60,
+			"prefix": null,
+			"isExpanded": false,
+			"type": "text",
+			"mime": "text/markdown",
+			"attributes": [],
+			"format": "markdown",
+			"dataFileName": "Blok2ttrpg.md",
+			"attachments": [],
+			"dirFileName": "Blok2ttrpg",
+			"children": [
+				{
+					"isClone": false,
+					"noteId": "8qoEIl8MS4La",
+					"notePath": [
+						"BzQqZ38CdKUt",
+						"8qoEIl8MS4La"
+					],
+					"title": "Core",
+					"notePosition": 10,
+					"prefix": null,
+					"isExpanded": true,
+					"type": "text",
+					"mime": "text/markdown",
+					"attributes": [],
+					"format": "markdown",
+					"attachments": [],
+					"dirFileName": "Core",
+					"children": [
+						{
+							"isClone": false,
+							"noteId": "KBbr6utirUCH",
+							"notePath": [
+								"BzQqZ38CdKUt",
+								"8qoEIl8MS4La",
+								"KBbr6utirUCH"
+							],
+							"title": "Character Attributes",
+							"notePosition": 10,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [],
+							"format": "markdown",
+							"dataFileName": "Character Attributes.md",
+							"attachments": []
+						},
+						{
+							"isClone": false,
+							"noteId": "7x26Rl2cDMc8",
+							"notePath": [
+								"BzQqZ38CdKUt",
+								"8qoEIl8MS4La",
+								"7x26Rl2cDMc8"
+							],
+							"title": "Character Traits",
+							"notePosition": 20,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/markdown",
+							"attributes": [],
+							"format": "markdown",
+							"dataFileName": "Character Traits.md",
+							"attachments": []
+						},
+						{
+							"isClone": false,
+							"noteId": "EnqPgCcltNHJ",
+							"notePath": [
+								"BzQqZ38CdKUt",
+								"8qoEIl8MS4La",
+								"EnqPgCcltNHJ"
+							],
+							"title": "Leveling",
+							"notePosition": 30,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/markdown",
+							"attributes": [],
+							"format": "markdown",
+							"dataFileName": "Leveling.md",
+							"attachments": []
+						},
+						{
+							"isClone": false,
+							"noteId": "uupL35xCXMNg",
+							"notePath": [
+								"BzQqZ38CdKUt",
+								"8qoEIl8MS4La",
+								"uupL35xCXMNg"
+							],
+							"title": "Multi Dice System",
+							"notePosition": 40,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/markdown",
+							"attributes": [],
+							"format": "markdown",
+							"dataFileName": "Multi Dice System.md",
+							"attachments": []
+						}
+					]
+				},
+				{
+					"isClone": false,
+					"noteId": "PTrcXB9wKy87",
+					"notePath": [
+						"BzQqZ38CdKUt",
+						"PTrcXB9wKy87"
+					],
+					"title": "Modules",
+					"notePosition": 20,
+					"prefix": null,
+					"isExpanded": true,
+					"type": "text",
+					"mime": "text/markdown",
+					"attributes": [],
+					"format": "markdown",
+					"attachments": [],
+					"dirFileName": "Modules",
+					"children": [
+						{
+							"isClone": false,
+							"noteId": "BqhUhr09YpgE",
+							"notePath": [
+								"BzQqZ38CdKUt",
+								"PTrcXB9wKy87",
+								"BqhUhr09YpgE"
+							],
+							"title": "Ability Builder",
+							"notePosition": 10,
+							"prefix": null,
+							"isExpanded": true,
+							"type": "text",
+							"mime": "text/markdown",
+							"attributes": [],
+							"format": "markdown",
+							"dataFileName": "Ability Builder.md",
+							"attachments": [],
+							"dirFileName": "Ability Builder",
+							"children": [
+								{
+									"isClone": false,
+									"noteId": "QCFwrPDcaThm",
+									"notePath": [
+										"BzQqZ38CdKUt",
+										"PTrcXB9wKy87",
+										"BqhUhr09YpgE",
+										"QCFwrPDcaThm"
+									],
+									"title": "Ability Types",
+									"notePosition": 10,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/markdown",
+									"attributes": [],
+									"format": "markdown",
+									"dataFileName": "Ability Types.md",
+									"attachments": []
+								},
+								{
+									"isClone": false,
+									"noteId": "Jf07No91BWK7",
+									"notePath": [
+										"BzQqZ38CdKUt",
+										"PTrcXB9wKy87",
+										"BqhUhr09YpgE",
+										"Jf07No91BWK7"
+									],
+									"title": "Enactments",
+									"notePosition": 20,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/markdown",
+									"attributes": [],
+									"format": "markdown",
+									"dataFileName": "Enactments.md",
+									"attachments": []
+								},
+								{
+									"isClone": false,
+									"noteId": "RnR7Qjqc4rxK",
+									"notePath": [
+										"BzQqZ38CdKUt",
+										"PTrcXB9wKy87",
+										"BqhUhr09YpgE",
+										"RnR7Qjqc4rxK"
+									],
+									"title": "Interactions",
+									"notePosition": 30,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/markdown",
+									"attributes": [],
+									"format": "markdown",
+									"dataFileName": "Interactions.md",
+									"attachments": []
+								},
+								{
+									"isClone": false,
+									"noteId": "31rBk2GI1Zkp",
+									"notePath": [
+										"BzQqZ38CdKUt",
+										"PTrcXB9wKy87",
+										"BqhUhr09YpgE",
+										"31rBk2GI1Zkp"
+									],
+									"title": "Leveling",
+									"notePosition": 40,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/markdown",
+									"attributes": [],
+									"format": "markdown",
+									"dataFileName": "Leveling.md",
+									"attachments": []
+								},
+								{
+									"isClone": false,
+									"noteId": "KvbcF75B4V9D",
+									"notePath": [
+										"BzQqZ38CdKUt",
+										"PTrcXB9wKy87",
+										"BqhUhr09YpgE",
+										"KvbcF75B4V9D"
+									],
+									"title": "Validations",
+									"notePosition": 50,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/markdown",
+									"attributes": [],
+									"format": "markdown",
+									"dataFileName": "Validations.md",
+									"attachments": []
+								}
+							]
+						},
+						{
+							"isClone": false,
+							"noteId": "b5AuLRaZ00hV",
+							"notePath": [
+								"BzQqZ38CdKUt",
+								"PTrcXB9wKy87",
+								"b5AuLRaZ00hV"
+							],
+							"title": "Magic System",
+							"notePosition": 20,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/markdown",
+							"attributes": [],
+							"format": "markdown",
+							"dataFileName": "Magic System.md",
+							"attachments": [],
+							"dirFileName": "Magic System",
+							"children": [
+								{
+									"isClone": false,
+									"noteId": "sMqpBhy81NRy",
+									"notePath": [
+										"BzQqZ38CdKUt",
+										"PTrcXB9wKy87",
+										"b5AuLRaZ00hV",
+										"sMqpBhy81NRy"
+									],
+									"title": "Curses",
+									"notePosition": 10,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/markdown",
+									"attributes": [],
+									"format": "markdown",
+									"dataFileName": "Curses.md",
+									"attachments": []
+								},
+								{
+									"isClone": false,
+									"noteId": "g7jNPowiuhUP",
+									"notePath": [
+										"BzQqZ38CdKUt",
+										"PTrcXB9wKy87",
+										"b5AuLRaZ00hV",
+										"g7jNPowiuhUP"
+									],
+									"title": "Imbuing",
+									"notePosition": 20,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/markdown",
+									"attributes": [],
+									"format": "markdown",
+									"dataFileName": "Imbuing.md",
+									"attachments": []
+								}
+							]
+						},
+						{
+							"isClone": false,
+							"noteId": "1KtHeVZVCln6",
+							"notePath": [
+								"BzQqZ38CdKUt",
+								"PTrcXB9wKy87",
+								"1KtHeVZVCln6"
+							],
+							"title": "World",
+							"notePosition": 30,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/markdown",
+							"attributes": [],
+							"format": "markdown",
+							"dataFileName": "World.md",
+							"attachments": [],
+							"dirFileName": "World",
+							"children": [
+								{
+									"isClone": false,
+									"noteId": "u8jWNobb5ZqL",
+									"notePath": [
+										"BzQqZ38CdKUt",
+										"PTrcXB9wKy87",
+										"1KtHeVZVCln6",
+										"u8jWNobb5ZqL"
+									],
+									"title": "Culture",
+									"notePosition": 10,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/markdown",
+									"attributes": [],
+									"format": "markdown",
+									"dataFileName": "Culture.md",
+									"attachments": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

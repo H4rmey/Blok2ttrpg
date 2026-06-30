@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/harmey/blok2ttrpg/ability-builder/internal/config"
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/models"
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/session"
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/storage"
@@ -19,6 +20,7 @@ type App struct {
 	Sessions    *session.Manager
 	TemplateDir string
 	funcMap     template.FuncMap
+	Config      *config.Config
 }
 
 // templateFuncs returns custom template functions.
@@ -77,12 +79,13 @@ func templateFuncs() template.FuncMap {
 }
 
 // NewApp creates a new App with parsed templates.
-func NewApp(store *storage.Store, sessions *session.Manager, templateDir string) (*App, error) {
+func NewApp(store *storage.Store, sessions *session.Manager, templateDir string, cfg *config.Config) (*App, error) {
 	app := &App{
 		Store:       store,
 		Sessions:    sessions,
 		TemplateDir: templateDir,
 		funcMap:     templateFuncs(),
+		Config:      cfg,
 	}
 
 	// Verify templates can be parsed

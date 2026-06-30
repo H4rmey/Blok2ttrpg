@@ -3,10 +3,12 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	"html/template"
 	"net/http"
 	"strconv"
 	"strings"
 
+	"github.com/harmey/blok2ttrpg/ability-builder/internal/config"
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/export"
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/models"
 )
@@ -60,6 +62,7 @@ func (app *App) BuilderHandler(w http.ResponseWriter, r *http.Request) {
 		"GenericDieOptions":     models.GenericDieOptions,
 		"InitialStateJSON":      initialState,
 		"IsEdit":                state.Ability.ID != "",
+		"BuilderConfigJSON":     mustMarshalConfig(app.Config),
 	})
 }
 
@@ -352,56 +355,19 @@ func (app *App) SaveAbilityHandler(w http.ResponseWriter, r *http.Request) {
 	a.HasItemDependency = r.FormValue("ability_item_dep") == "on"
 	a.ItemName = r.FormValue("ability_item_name")
 
-	switch a.Type {
-	case models.AbilityExecution:
-		a.EnergySteps = atoi(r.FormValue("energy_steps"))
-		a.ActionSteps = atoi(r.FormValue("action_steps"))
-		a.EnergyCost = 3 + a.EnergySteps
-		a.ActionCost = 2 + a.ActionSteps
-		if a.ActionCost < 0 {
-			a.ActionCost = 0
-		}
-		a.EnergyCost += a.EnergySteps
-		if a.ActionSteps < 0 {
-			a.EnergyCost += -a.ActionSteps
-		}
-	case models.AbilityReaction:
-		a.ReactionRange = atoi(r.FormValue("range"))
-		a.ReactionUses = atoi(r.FormValue("uses"))
-		a.Trigger = r.FormValue("trigger")
-		if a.Trigger == "Target makes a trait check" {
-			a.TriggerTrait = r.FormValue("trigger_trait")
-		}
-		a.EnergyCost = 3
-		if a.ReactionRange > 1 {
-			a.EnergyCost += a.ReactionRange - 1
-		}
-		if a.ReactionUses > 1 {
-			a.EnergyCost += a.ReactionUses - 1
-		}
-	case models.AbilityPhase:
-		a.PhaseDuration = atoi(r.FormValue("phase_rounds"))
-		a.ReversePhaseRounds = atoi(r.FormValue("reverse_rounds"))
-		if a.PhaseDuration < 2 {
-			a.PhaseDuration = 2
-		}
-		if a.ReversePhaseRounds < 1 {
-			a.ReversePhaseRounds = 1
-		}
+	if err := app.Config.AbilityBuilder.ComputeAbilityCosts(a, r.Form); err != nil {
+		http.Error(w, "Failed to compute ability costs: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Phase-specific fields (not cost-related, but part of the ability type form).
+	if a.Type == models.AbilityPhase {
 		a.AllKnockoutsReq = r.FormValue("all_req") == "on"
 		a.ReverseKnockoutOK = r.FormValue("reverse_knockout") == "on"
 		a.NoKnockout = r.FormValue("no_knockout") == "on"
 		if ks := r.Form["knockout"]; len(ks) > 0 {
 			a.Knockouts = ks
 		}
-		a.EnergyCost = 3
-		if a.PhaseDuration > 2 {
-			a.EnergyCost += a.PhaseDuration - 2
-		}
-	case models.AbilityMinion:
-		a.HPBonus = atoi(r.FormValue("hp"))
-		a.ExtraLifetime = atoi(r.FormValue("life"))
-		a.EnergyCost = a.ExtraLifetime
 	}
 
 	a.Enactments = parseNewEnactments(r)
@@ -605,4 +571,15 @@ func (app *App) ResetHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func mustMarshalConfig(cfg *config.Config) template.JS {
+	if cfg == nil {
+		return "{}"
+	}
+	b, err := json.Marshal(cfg.AbilityBuilder)
+	if err != nil {
+		return "{}"
+	}
+	return template.JS(b)
 }

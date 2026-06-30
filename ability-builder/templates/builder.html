@@ -1,5 +1,11 @@
 {{define "title"}}Ability Builder — {{.Character.Name}}{{end}}
 
+{{define "navbar_extra"}}
+<a href="/docs/download" class="ml-auto bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-sm border border-gray-600">
+    Download Docs
+</a>
+{{end}}
+
 {{define "content"}}
 <div class="space-y-6">
     <div class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 sticky top-16 z-40 shadow-lg">
@@ -113,6 +119,7 @@ window.BUILDER_DATA = {
   persistentEffectTypes: [{{range $i, $t := .PersistentEffectTypes}}{{if $i}}, {{end}}"{{.}}"{{end}}],
   damageDiceOptions: [{{range $i, $t := .DamageDiceOptions}}{{if $i}}, {{end}}"{{.}}"{{end}}],
   genericDieOptions: [{{range $i, $t := .GenericDieOptions}}{{if $i}}, {{end}}"{{.}}"{{end}}],
+  cfg: {{.BuilderConfigJSON}},
 };
 </script>
 

@@ -44,14 +44,25 @@
       "vital_energy": "Trained",
       "abilities": [
         {
-          "id": "401784f808f1cca7",
-          "name": "Summon Imp",
-          "description": "A fiery minion",
-          "type": "Minion",
-          "energy_cost": 1,
-          "action_cost": 0,
-          "hp_bonus": 2,
-          "extra_lifetime": 1,
+          "id": "e47e6c4d6c714012",
+          "name": "Test",
+          "description": "TestDesc",
+          "type": "Execution",
+          "energy_cost": 6,
+          "action_cost": 1,
+          "energy_steps": 1,
+          "action_steps": -1,
+          "enactments": null
+        },
+        {
+          "id": "a300c1d33ca64aba",
+          "name": "Test2",
+          "description": "TestDesc",
+          "type": "Execution",
+          "energy_cost": 6,
+          "action_cost": 1,
+          "energy_steps": 1,
+          "action_steps": -1,
           "enactments": null
         }
       ]

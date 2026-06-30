@@ -1,0 +1,49 @@
+# Leveling
+## Ability Builder Leveling
+
+## Introduction
+
+As you level up, your character gains a deeper understanding of their powers, techniques, and spells. This growth is represented by **Ability Points**. Ability Points are spent to pay the **Add Cost** of Perks, Enactments, Interactions, and Validations when constructing or upgrading your Abilities.
+
+---
+
+## Ability Points
+
+At Level 1, a character starts with a base pool of Ability Points. As they level up, they gain a steady stream of new points, with larger spikes at milestone levels (Level 5 and Level 10).
+
+These points are permanently invested into your abilities during character creation or level-ups.
+
+### Upgrading Abilities
+
+You do not need to create a brand new Ability every time you level up. You can spend your newly gained Ability Points to upgrade an existing Ability by adding new Perks, extending its Range, or attaching additional Enactments.
+
+### Refunding Ability Points
+
+Some Perks in the Ability Builder apply drawbacks or restrictions to an Ability (such as giving it an Item Dependency or increasing its Action Cost). These Perks have a **negative Add Cost**. Taking these drawbacks refunds Ability Points, allowing you to spend them elsewhere on the same Ability to make it more powerful.
+
+---
+
+## Leveling Table: Ability Points
+
+The table below outlines the progression of Ability Points from Level 1 to Level 10.
+
+| Level | Ability Points Gained | Total Ability Points |
+| --- | --- | --- |
+| **1** | Base | 10 |
+| **2** | +2 | 12 |
+| **3** | +3 | 15 |
+| **4** | +2 | 17 |
+| **5** | +4 | 21 |
+| **6** | +2 | 23 |
+| **7** | +3 | 26 |
+| **8** | +2 | 28 |
+| **9** | +3 | 31 |
+| **10** | +5 | 36 |
+
+---
+
+## Example Progression
+
+If you build a simple "Fireball" at **Level 1**, you might spend 4 of your 10 starting points on it, leaving 6 points for a defensive Reaction ability.
+
+By **Level 5**, you will have earned 11 additional Ability Points. You could spend 6 of those new points to add an Area of Effect Interaction to your Fireball and increase its damage dice, transforming it from a basic projectile into a massive explosion.

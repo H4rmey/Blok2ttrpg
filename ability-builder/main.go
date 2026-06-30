@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/harmey/blok2ttrpg/ability-builder/internal/config"
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/handlers"
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/session"
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/storage"
@@ -30,8 +31,14 @@ func main() {
 	// Initialize session manager
 	sessions := session.NewManager()
 
+	// Load ability builder configuration
+	cfg, err := config.Load(config.DefaultPath())
+	if err != nil {
+		log.Fatalf("Failed to load ability builder config: %v", err)
+	}
+
 	// Initialize app with templates
-	app, err := handlers.NewApp(store, sessions, templateDir)
+	app, err := handlers.NewApp(store, sessions, templateDir, cfg)
 	if err != nil {
 		log.Fatalf("Failed to initialize app: %v", err)
 	}
@@ -139,6 +146,9 @@ func main() {
 	mux.HandleFunc("/ability/save", app.SaveAbilityHandler)
 	mux.HandleFunc("/ability/review", app.ReviewHandler)
 	mux.HandleFunc("/ability/reset", app.ResetHandler)
+
+	// Documentation download
+	mux.HandleFunc("/docs/download", app.DownloadDocsHandler)
 
 	// Start server
 	addr := fmt.Sprintf(":%s", port)

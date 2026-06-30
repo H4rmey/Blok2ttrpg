@@ -203,9 +203,39 @@
     '</div>';
   }
 
-  // =========================================================================
-  // Helper widget renderers
-  // =========================================================================
+  // Config helpers
+  var C = D.cfg ? (typeof D.cfg === 'string' ? JSON.parse(D.cfg) : D.cfg) : {};
+  function abilityTypeConfig() {
+    var card = document.querySelector('.section-card[data-section="ability-type"]');
+    var type = card ? card.dataset.abilityType : '';
+    return C.ability_types && C.ability_types[type.toLowerCase()] || {};
+  }
+  function findPerk(perks, id) {
+    if (!perks) return null;
+    for (var i = 0; i < perks.length; i++) if (perks[i].id === id) return perks[i];
+    return null;
+  }
+  function perkCost(perks, id) {
+    var p = findPerk(perks, id);
+    return p ? { add: p.add_cost || 0, energy: p.energy_cost || 0 } : { add: 0, energy: 0 };
+  }
+  function stepCost(steps, direction) {
+    if (!steps) return { add: 0, energy: 0 };
+    var s = steps[direction];
+    return s ? { add: s.add_cost || 0, energy: s.energy_cost || 0 } : { add: 0, energy: 0 };
+  }
+  function getEnactConfig(type) {
+    if (!type) return {};
+    var key = type.toLowerCase().replace(/enact /g, '').replace(/ /g, '_');
+    return C.enactments && C.enactments[key] || {};
+  }
+  function getInterConfig(type) {
+    if (!type) return {};
+    var key = type.toLowerCase().replace(/ /g, '_');
+    return C.interactions && C.interactions[key] || {};
+  }
+  function getValidationConfig() { return C.validations || {}; }
+
 
   function overview(showResolve) {
     showResolve = showResolve !== false;
@@ -1022,6 +1052,13 @@
         '</div>',
       '</div>',
       '<div class="collapsible-content space-y-3">',
+        '<div class="flex items-center gap-3 flex-wrap">',
+          '<label class="text-xs text-gray-400 flex items-center gap-1">Interaction: ',
+            '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
+              '<option value="">-- Select --</option>',
+            '</select>',
+          '</label>',
+        '</div>',
         '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-4 space-y-3" data-section="enactment-type">',
           '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
             '<h4 class="text-sm font-semibold text-indigo-300">Enactment Type</h4>',
@@ -1033,11 +1070,6 @@
                 '<select onchange="onEnactTypeChange(this)" class="enact-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
                   '<option value="">-- Select --</option>',
                   ENACT_TYPES.map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>';}).join(''),
-                '</select>',
-              '</label>',
-              '<label class="text-xs text-gray-400 flex items-center gap-1">Interaction: ',
-                '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
-                  '<option value="">-- Select --</option>',
                 '</select>',
               '</label>',
             '</div>',
@@ -1095,24 +1127,36 @@
   function calcAbilityType() {
     var card = document.querySelector('.section-card[data-section="ability-type"]');
     if (!card) return;
+    var cfg = abilityTypeConfig();
     var lines = [];
-    var build = 0, energy = 3;
+    var build = 0, energy = cfg.base_energy || 0;
 
-    if (readBool(card, 'item_dep')) { build -= 1; lines.push('Has item dependency (add -1, energy +0)'); }
+    var item = findPerk(cfg.perks, 'item_dependency');
+    if (item && readBool(card, 'item_dep')) {
+      build += item.add_cost || 0;
+      lines.push('Has item dependency (add '+(item.add_cost||0)+', energy '+(item.energy_cost||0)+')');
+    }
 
     var es = readNumber(card, 'energy_steps', 0);
     var as = readNumber(card, 'action_steps', 0);
 
-    if (es > 0) { build += es * -2; energy += es; lines.push('Increase energy cost (add '+es*-2+', energy +'+es+')'); }
-    else if (es < 0) { build += Math.abs(es) * 3; energy += es; lines.push('Reduce energy cost (add +'+Math.abs(es)*3+', energy '+es+')'); }
-    if (as > 0) { build += as * -2; lines.push('Increase action cost (add '+as*-2+', energy +0)'); }
-    else if (as < 0) { build += Math.abs(as) * 4; energy += Math.abs(as); lines.push('Reduce action cost (add +'+Math.abs(as)*4+', energy +'+Math.abs(as)+')'); }
+    var energySteps = stepCost(cfg.step_costs && cfg.step_costs.energy, 'increase');
+    var energyStepDec = stepCost(cfg.step_costs && cfg.step_costs.energy, 'decrease');
+    var actionSteps = stepCost(cfg.step_costs && cfg.step_costs.action, 'increase');
+    var actionStepDec = stepCost(cfg.step_costs && cfg.step_costs.action, 'decrease');
+
+    if (es > 0) { build += es * energySteps.add; energy += es * energySteps.energy; lines.push('Increase energy cost (add '+(es*energySteps.add)+', energy '+(es*energySteps.energy)+')'); }
+    else if (es < 0) { build += Math.abs(es) * energyStepDec.add; energy += Math.abs(es) * energyStepDec.energy; lines.push('Reduce energy cost (add '+(Math.abs(es)*energyStepDec.add)+', energy '+(Math.abs(es)*energyStepDec.energy)+')'); }
+    if (as > 0) { build += as * actionSteps.add; energy += as * actionSteps.energy; lines.push('Increase action cost (add '+(as*actionSteps.add)+', energy '+(as*actionSteps.energy)+')'); }
+    else if (as < 0) { build += Math.abs(as) * actionStepDec.add; energy += Math.abs(as) * actionStepDec.energy; lines.push('Reduce action cost (add '+(Math.abs(as)*actionStepDec.add)+', energy '+(Math.abs(as)*actionStepDec.energy)+')'); }
 
     if (card.querySelector('[name="trigger"]')) {
       var range = readNumber(card, 'range', 1);
       var uses  = readNumber(card, 'uses', 1);
-      if (range > 1) { build += range - 1; lines.push('Add reaction range (add +'+(range-1)+', energy +0)'); }
-      if (uses > 1)  { build += (uses-1)*4; energy += uses-1; lines.push('Add uses (add +'+(uses-1)*4+', energy +'+(uses-1)+')'); }
+      var rangeCost = cfg.range_cost || {add_cost:0, energy_cost:0};
+      var usesCost = cfg.uses_cost || {add_cost:0, energy_cost:0};
+      if (range > 1) { build += (range - 1) * rangeCost.add_cost; energy += (range - 1) * rangeCost.energy_cost; lines.push('Add reaction range (add '+((range-1)*rangeCost.add_cost)+', energy '+((range-1)*rangeCost.energy_cost)+')'); }
+      if (uses > 1)  { build += (uses-1) * usesCost.add_cost; energy += (uses-1) * usesCost.energy_cost; lines.push('Add uses (add '+((uses-1)*usesCost.add_cost)+', energy '+((uses-1)*usesCost.energy_cost)+')'); }
       var trigger = card.querySelector('[name="trigger"]').value || '';
       var triggerTrait = card.querySelector('[data-wrap="trigger-trait"]') && !card.querySelector('[data-wrap="trigger-trait"]').hidden
         ? card.querySelector('[name="trigger_trait"]').value : '';
@@ -1121,20 +1165,27 @@
     if (card.querySelector('[name="phase_rounds"]')) {
       var phase = readNumber(card, 'phase_rounds', 2);
       var rev   = readNumber(card, 'reverse_rounds', 1);
-      if (phase > 2) { build += (phase-2)*2; energy += phase-2; lines.push('Add phase rounds (add +'+(phase-2)*2+', energy +'+(phase-2)+')'); }
-      if (rev < phase) { build += (phase-rev)*4; lines.push('Remove reverse-phase rounds (add +'+(phase-rev)*4+', energy +0)'); }
-      if (readBool(card, 'all_req'))        { build += 3; lines.push('All knockout requirements met (add +3)'); }
-      if (readBool(card, 'reverse_knockout')){ build += 3; lines.push('Knockout on reverse phase (add +3)'); }
-      if (readBool(card, 'no_knockout'))    { build += 5; lines.push('No knockout possible (add +5)'); }
+      var durCost = cfg.duration_cost || {add_cost:0, energy_cost:0};
+      var revRefund = cfg.reverse_duration_refund || {add_cost:0, energy_cost:0};
+      if (phase > 2) { build += (phase-2) * durCost.add_cost; energy += (phase-2) * durCost.energy_cost; lines.push('Add phase rounds (add '+((phase-2)*durCost.add_cost)+', energy '+((phase-2)*durCost.energy_cost)+')'); }
+      if (rev < phase) { build += (phase-rev) * revRefund.add_cost; energy += (phase-rev) * revRefund.energy_cost; lines.push('Remove reverse-phase rounds (add '+((phase-rev)*revRefund.add_cost)+', energy '+((phase-rev)*revRefund.energy_cost)+')'); }
+      var allReq = findPerk(cfg.perks, 'all_knockouts_req');
+      if (allReq && readBool(card, 'all_req'))        { build += allReq.add_cost; energy += allReq.energy_cost; lines.push('All knockout requirements met (add '+allReq.add_cost+')'); }
+      var revKo = findPerk(cfg.perks, 'reverse_knockout');
+      if (revKo && readBool(card, 'reverse_knockout')){ build += revKo.add_cost; energy += revKo.energy_cost; lines.push('Knockout on reverse phase (add '+revKo.add_cost+')'); }
+      var noKo = findPerk(cfg.perks, 'no_knockout');
+      if (noKo && readBool(card, 'no_knockout'))    { build += noKo.add_cost; energy += noKo.energy_cost; lines.push('No knockout possible (add '+noKo.add_cost+')'); }
       var kos = Array.from(card.querySelectorAll('[name="knockout"]')).map(function(s){return s.value;}).filter(function(v){return v && v !== 'None';});
       setOut(card, 'formula', 'Phase for '+phase+' rounds, reverse '+rev+', knockouts: '+(kos.length?kos.join(' or '):'(none)'));
     }
     if (card.querySelector('[name="hp"]')) {
-      energy = 0;
+      energy = cfg.base_energy || 0;
       var hp   = readNumber(card, 'hp', 0);
       var life = readNumber(card, 'life', 0);
-      if (hp > 0)   { build += hp; lines.push('Increase health by '+(hp*5)+' (add +'+hp+')'); }
-      if (life > 0) { build += life; energy += life; lines.push('Increase lifetime by '+life+' rounds (add +'+life+', energy +'+life+')'); }
+      var hpCost = cfg.health_bonus_cost || {add_cost:0, energy_cost:0};
+      var lifeCost = cfg.lifetime_bonus_cost || {add_cost:0, energy_cost:0};
+      if (hp > 0)   { build += hp * hpCost.add_cost; energy += hp * hpCost.energy_cost; lines.push('Increase health by '+(hp*5)+' (add '+(hp*hpCost.add_cost)+')'); }
+      if (life > 0) { build += life * lifeCost.add_cost; energy += life * lifeCost.energy_cost; lines.push('Increase lifetime by '+life+' rounds (add '+(life*lifeCost.add_cost)+', energy '+(life*lifeCost.energy_cost)+')'); }
       setOut(card, 'formula', 'Minion: '+(10+hp*5)+' HP, '+(3+life)+' round lifetime');
     }
 
@@ -1163,64 +1214,99 @@
 
   function calcEnact(card) {
     if (!card) return;
+    var cfg = getEnactConfig(card.dataset.enactType);
     var lines = [];
-    var build = 0, energy = 0;
+    var build = 0, energy = cfg.base_cost ? (cfg.base_cost.energy_cost || 0) : 0;
     var formula = '';
 
-    if (readBool(card, 'always')) { build += 5; energy += 3; lines.push('Always resolve (add +5, energy +3)'); }
+    var always = findPerk(cfg.perks, 'always_resolve');
+    if (always && readBool(card, 'always')) {
+      build += always.add_cost || 0;
+      energy += always.energy_cost || 0;
+      lines.push('Always resolve (add '+(always.add_cost||0)+', energy '+(always.energy_cost||0)+')');
+    }
 
     var srcEl = card.querySelector('[name="source"]');
     if (srcEl) {
       var s = srcEl.value;
-      var isHealing = card.dataset.enactType === 'Enact Healing';
-      var shift = {d4:0,d6:1,d8:2,d10:3,d12:4};
-      if (shift[s] !== undefined) {
+      var tiers = cfg.dice_tiers || {d4:0,d6:1,d8:2,d10:3,d12:4};
+      var tierCost = cfg.dice_tier_cost || {add_cost:0, energy_cost:0};
+      if (tiers[s] !== undefined) {
+        var tier = tiers[s] || 0;
         formula = '1'+s;
-        build += shift[s]*2; energy += shift[s];
-        lines.push('Source 1'+s+' (add +'+(shift[s]*2)+', energy +'+shift[s]+')');
+        build += tier * tierCost.add_cost;
+        energy += tier * tierCost.energy_cost;
+        lines.push('Source 1'+s+' (add '+(tier*tierCost.add_cost)+', energy '+(tier*tierCost.energy_cost)+')');
       } else if (s === 'trait') {
         var cat = (card.querySelector('[name="source_category"]') || {}).value || 'offense';
         var tName = (card.querySelector('[name="source_trait"]') || {}).value || '(trait)';
         formula = '1d10 ('+cat+' trait)';
+        var traitCost = findPerk(cfg.perks, 'trait_source');
+        var traitAdd = traitCost ? traitCost.add_cost : 0;
         if (cat === 'general') {
-          build += 4; lines.push('Use general trait as source (add +4, extra cost)');
+          build += traitAdd + 1; // legacy general trait extra cost
+          lines.push('Use general trait as source (add '+(traitAdd+1)+', extra cost)');
         } else {
-          build += 3; lines.push('Use offensive trait as source (add +3)');
+          build += traitAdd;
+          lines.push('Use trait as source (add '+traitAdd+')');
         }
       } else if (s === 'previous') {
+        var prevCost = findPerk(cfg.perks, 'use_previous');
         formula = 'previous enactment result';
-        build += 3; energy += 1;
-        lines.push('Use result of previous enactment (add +3, energy +1)');
+        build += prevCost ? prevCost.add_cost : 0;
+        energy += prevCost ? prevCost.energy_cost : 0;
+        lines.push('Use result of previous enactment (add '+(prevCost?prevCost.add_cost:0)+', energy '+(prevCost?prevCost.energy_cost:0)+')');
       } else if (s === 'other') {
         var txt = (card.querySelector('[name="other"]')||{}).value || '';
         formula = txt || '(other roll result)';
-        build += 3; energy += 1;
-        lines.push('Use another roll result (add +3, energy +1)');
+        var otherCost = findPerk(cfg.perks, 'use_previous'); // use previous perk for other rolls
+        build += otherCost ? otherCost.add_cost : 0;
+        energy += otherCost ? otherCost.energy_cost : 0;
+        lines.push('Use another roll result (add '+(otherCost?otherCost.add_cost:0)+', energy '+(otherCost?otherCost.energy_cost:0)+')');
       }
     }
 
     var flatEl = card.querySelector('[name="flat"]');
     if (flatEl) {
       var flat = readNumber(card, 'flat', 0);
-      if (flat > 0) { formula += ' + '+flat; build += flat*2; lines.push('Flat +'+flat+' (add +'+(flat*2)+')'); }
+      var flatCost = findPerk(cfg.perks, 'flat_bonus');
+      var flatAdd = flatCost ? flatCost.add_cost : 0;
+      var flatEnergy = flatCost ? flatCost.energy_cost : 0;
+      if (flat > 0) { formula += ' + '+flat; build += flat * flatAdd; energy += flat * flatEnergy; lines.push('Flat +'+flat+' (add '+(flat*flatAdd)+', energy '+(flat*flatEnergy)+')'); }
     }
 
     var offenseEl = card.querySelector('[name="offense"]');
-    if (offenseEl && offenseEl.value) { build += 4; energy += 2; lines.push('Offensive trait die ('+offenseEl.value+') (add +4, energy +2)'); formula += ' + 1d8 ('+offenseEl.value+')'; }
+    if (offenseEl && offenseEl.value) {
+      var off = findPerk(cfg.perks, 'offensive_trait');
+      build += off ? off.add_cost : 0;
+      energy += off ? off.energy_cost : 0;
+      lines.push('Offensive trait die ('+offenseEl.value+') (add '+(off?off.add_cost:0)+', energy '+(off?off.energy_cost:0)+')');
+      formula += ' + 1d8 ('+offenseEl.value+')';
+    }
     var medEl = card.querySelector('[name="medicine"]');
-    if (medEl && medEl.value) { build += 3; energy += 1; lines.push('Medicine trait (add +3, energy +1)'); formula += ' + 1d10 (Medicine)'; }
+    if (medEl && medEl.value) {
+      var med = findPerk(cfg.perks, 'medicine_trait');
+      build += med ? med.add_cost : 0;
+      energy += med ? med.energy_cost : 0;
+      lines.push('Medicine trait (add '+(med?med.add_cost:0)+', energy '+(med?med.energy_cost:0)+')');
+      formula += ' + 1d10 (Medicine)';
+    }
 
     var distanceEl = card.querySelector('[name="distance"]');
     if (distanceEl) {
       var dist = readNumber(card, 'distance', 1);
       var dirArr = Array.from(card.querySelectorAll('[name="direction"]')).map(function(s){return s.value;}).filter(Boolean);
       var originMode = (card.querySelector('[name="origin_mode"]')||{}).value;
-      if (dist > 1) { build += dist-1; lines.push('Distance +'+(dist-1)+'m (add +'+(dist-1)+')'); }
+      var distCost = cfg.distance_cost || {add_cost:0, energy_cost:0};
+      if (dist > 1) { build += (dist-1) * distCost.add_cost; energy += (dist-1) * distCost.energy_cost; lines.push('Distance +'+(dist-1)+'m (add '+((dist-1)*distCost.add_cost)+', energy '+((dist-1)*distCost.energy_cost)+')'); }
       var origin = originMode === 'other' ? (card.querySelector('[name="origin_text"]')||{}).value || '(other)' : 'Engager';
-      if (originMode === 'other') { build += 2; energy += 1; lines.push('Other origin (add +2, energy +1)'); }
-      if (dirArr.length > 1) { build += dirArr.length-1; lines.push('Extra direction '+(dirArr.length-1)+' (add +'+(dirArr.length-1)+')'); }
+      var originCost = findPerk(cfg.perks, 'other_origin');
+      if (originMode === 'other') { build += originCost ? originCost.add_cost : 0; energy += originCost ? originCost.energy_cost : 0; lines.push('Other origin (add '+(originCost?originCost.add_cost:0)+', energy '+(originCost?originCost.energy_cost:0)+')'); }
+      var extraDir = findPerk(cfg.perks, 'extra_direction');
+      if (dirArr.length > 1) { build += (dirArr.length-1) * (extraDir?extraDir.add_cost:0); energy += (dirArr.length-1) * (extraDir?extraDir.energy_cost:0); lines.push('Extra direction '+(dirArr.length-1)+' (add '+((dirArr.length-1)*(extraDir?extraDir.add_cost:0))+', energy '+((dirArr.length-1)*(extraDir?extraDir.energy_cost:0))+')'); }
+      var freeDir = findPerk(cfg.perks, 'free_direction');
       var freeCount = dirArr.filter(function(d){return d==='Free';}).length;
-      if (freeCount > 0) { build += freeCount*2; energy += freeCount; lines.push('Free direction '+freeCount+'x (add +'+(freeCount*2)+', energy +'+freeCount+')'); }
+      if (freeCount > 0) { build += freeCount * (freeDir?freeDir.add_cost:0); energy += freeCount * (freeDir?freeDir.energy_cost:0); lines.push('Free direction '+freeCount+'x (add '+(freeCount*(freeDir?freeDir.add_cost:0))+', energy '+(freeCount*(freeDir?freeDir.energy_cost:0))+')'); }
       formula = 'Move target '+dist+'m '+(dirArr.join(' or '))+' from '+origin;
     }
 
@@ -1230,19 +1316,27 @@
       var dir   = (card.querySelector('[name="shift_dir"]')||{}).value || 'UP';
       var amt   = readNumber(card, 'shift_amount', 1);
       var uses  = readNumber(card, 'shift_uses', 1);
-      if (amt > 1) { build += (amt-1)*3; energy += amt-1; lines.push('Shift amount +'+(amt-1)+' (add +'+((amt-1)*3)+', energy +'+(amt-1)+')'); }
-      if (uses > 1) { build += (uses-1)*3; energy += uses-1; lines.push('Shift uses +'+(uses-1)+' (add +'+((uses-1)*3)+', energy +'+(uses-1)+')'); }
+      var amtCost = cfg.shift_amount_cost || {add_cost:0, energy_cost:0};
+      var usesCost = cfg.shift_uses_cost || {add_cost:0, energy_cost:0};
+      if (amt > 1) { build += (amt-1) * amtCost.add_cost; energy += (amt-1) * amtCost.energy_cost; lines.push('Shift amount +'+(amt-1)+' (add '+((amt-1)*amtCost.add_cost)+', energy '+((amt-1)*amtCost.energy_cost)+')'); }
+      if (uses > 1) { build += (uses-1) * usesCost.add_cost; energy += (uses-1) * usesCost.energy_cost; lines.push('Shift uses +'+(uses-1)+' (add '+((uses-1)*usesCost.add_cost)+', energy '+((uses-1)*usesCost.energy_cost)+')'); }
       formula = 'Shift '+trait+' '+dir+' by '+amt+' for '+uses+' uses';
     }
 
     var effName = card.querySelector('[name="effect_name"]');
     if (effName) {
-      energy = 2;
-      if (readBool(card, 'always')) { build += 5; energy += 3; lines.push('Always resolve (add +5, energy +3)'); }
+      energy = cfg.base_cost ? (cfg.base_cost.energy_cost || 0) : 0;
+      if (always && readBool(card, 'always')) {
+        build += always.add_cost || 0;
+        energy += always.energy_cost || 0;
+        lines.push('Always resolve (add '+(always.add_cost||0)+', energy '+(always.energy_cost||0)+')');
+      }
       var dur = readNumber(card, 'duration', 2);
-      if (dur > 2) { build += (dur-2)*2; energy += dur-2; lines.push('Duration '+dur+' rounds (add +'+((dur-2)*2)+', energy +'+(dur-2)+')'); }
+      var durCost = cfg.duration_cost || {add_cost:0, energy_cost:0};
+      if (dur > 2) { build += (dur-2) * durCost.add_cost; energy += (dur-2) * durCost.energy_cost; lines.push('Duration '+dur+' rounds (add '+((dur-2)*durCost.add_cost)+', energy '+((dur-2)*durCost.energy_cost)+')'); }
       var sols = Array.from(card.querySelectorAll('[name="solution"]')).map(function(s){return s.value;}).filter(Boolean);
-      if (sols.length === 1) { build += 3; energy += 1; lines.push('Only one solution (add +3, energy +1)'); }
+      var singleSol = findPerk(cfg.perks, 'single_solution');
+      if (sols.length === 1) { build += singleSol ? singleSol.add_cost : 0; energy += singleSol ? singleSol.energy_cost : 0; lines.push('Only one solution (add '+(singleSol?singleSol.add_cost:0)+', energy '+(singleSol?singleSol.energy_cost:0)+')'); }
       var effType = (card.querySelector('[name="effect_type"]')||{}).value || '(effect)';
       formula = (effName.value||'Effect')+' applies '+effType+' for '+dur+' rounds, solutions: '+(sols.join(' or ')||'(none)');
     }
@@ -1258,6 +1352,7 @@
 
   function calcInter(card) {
     if (!card) return;
+    var cfg = getInterConfig(card.dataset.interType);
     var lines = [];
     var build = 0, energy = 0;
     var formula = card.dataset.interType;
@@ -1268,40 +1363,57 @@
     } else if (type === 'Direct') {
       var r = readNumber(card, 'range', 1);
       var t = readNumber(card, 'targets', 1);
-      if (r > 1) { build += r-1; lines.push('Range +'+(r-1)+' (add +'+(r-1)+')'); }
-      if (t > 1) { build += (t-1)*3; energy += (t-1)*2; lines.push('Targets +'+(t-1)+' (add +'+((t-1)*3)+', energy +'+((t-1)*2)+')'); }
+      var rangeCost = cfg.range_cost || {add_cost:0, energy_cost:0};
+      var targetCost = cfg.target_cost || {add_cost:0, energy_cost:0};
+      if (r > 1) { build += (r-1) * rangeCost.add_cost; energy += (r-1) * rangeCost.energy_cost; lines.push('Range +'+(r-1)+' (add '+((r-1)*rangeCost.add_cost)+', energy '+((r-1)*rangeCost.energy_cost)+')'); }
+      if (t > 1) { build += (t-1) * targetCost.add_cost; energy += (t-1) * targetCost.energy_cost; lines.push('Targets +'+(t-1)+' (add '+((t-1)*targetCost.add_cost)+', energy '+((t-1)*targetCost.energy_cost)+')'); }
       formula = 'Direct, '+t+' target(s), range '+r+'m';
     } else if (type === 'Ranged') {
       var r2 = readNumber(card, 'range', 10);
       var t2 = readNumber(card, 'targets', 1);
-      if (r2 > 10) { var inc = Math.floor((r2-10)/2); build += inc; lines.push('Ranged range extension +'+inc+' (add +'+inc+')'); }
-      if (t2 > 1) { build += (t2-1)*3; energy += (t2-1)*2; lines.push('Targets +'+(t2-1)+' (add +'+((t2-1)*3)+', energy +'+((t2-1)*2)+')'); }
-      if (readBool(card, 'visible'))       { build += 3; energy += 1; lines.push('Target may be invisible (add +3, energy +1)'); }
-      if (readBool(card, 'obstructed'))    { build += 3; energy += 1; lines.push('Target may be obstructed (add +3, energy +1)'); }
-      if (readBool(card, 'remove_penalty')){ build += 3; energy += 1; lines.push('Remove engagement penalty (add +3, energy +1)'); }
+      var extCost = cfg.range_extension_cost || {add_cost:0, energy_cost:0, step:2};
+      var targetCost = cfg.target_cost || {add_cost:0, energy_cost:0};
+      if (r2 > 10) { var inc = Math.floor((r2-10)/(extCost.step||2)); build += inc * extCost.add_cost; energy += inc * extCost.energy_cost; lines.push('Ranged range extension +'+inc+' (add '+(inc*extCost.add_cost)+', energy '+(inc*extCost.energy_cost)+')'); }
+      if (t2 > 1) { build += (t2-1) * targetCost.add_cost; energy += (t2-1) * targetCost.energy_cost; lines.push('Targets +'+(t2-1)+' (add '+((t2-1)*targetCost.add_cost)+', energy '+((t2-1)*targetCost.energy_cost)+')'); }
+      var notVisible = findPerk(cfg.perks, 'not_visible');
+      if (notVisible && readBool(card, 'visible'))       { build += notVisible.add_cost; energy += notVisible.energy_cost; lines.push('Target may be invisible (add '+notVisible.add_cost+', energy '+notVisible.energy_cost+')'); }
+      var obstructed = findPerk(cfg.perks, 'obstructed');
+      if (obstructed && readBool(card, 'obstructed'))    { build += obstructed.add_cost; energy += obstructed.energy_cost; lines.push('Target may be obstructed (add '+obstructed.add_cost+', energy '+obstructed.energy_cost+')'); }
+      var removePenalty = findPerk(cfg.perks, 'remove_penalty');
+      if (removePenalty && readBool(card, 'remove_penalty')){ build += removePenalty.add_cost; energy += removePenalty.energy_cost; lines.push('Remove engagement penalty (add '+removePenalty.add_cost+', energy '+removePenalty.energy_cost+')'); }
       formula = 'Ranged, '+t2+' target(s), range '+r2+'m';
     } else if (type === 'Area') {
       var radius = readNumber(card, 'radius', 1);
       var range  = readNumber(card, 'range', 0);
-      if (radius > 1) { build += (radius-1)*2; energy += radius-1; lines.push('Radius +'+(radius-1)+'m (add +'+((radius-1)*2)+', energy +'+(radius-1)+')'); }
-      if (range > 0)  { var rng = Math.ceil(range/2); build += rng; lines.push('Range +'+range+'m (add +'+rng+')'); }
+      var radiusCost = cfg.radius_cost || {add_cost:0, energy_cost:0};
+      var rangeCost = cfg.range_cost || {add_cost:0, energy_cost:0, step:2};
+      if (radius > 1) { build += (radius-1) * radiusCost.add_cost; energy += (radius-1) * radiusCost.energy_cost; lines.push('Radius +'+(radius-1)+'m (add '+((radius-1)*radiusCost.add_cost)+', energy '+((radius-1)*radiusCost.energy_cost)+')'); }
+      if (range > 0)  { var rng = Math.ceil(range/(rangeCost.step||2)); build += rng * rangeCost.add_cost; energy += rng * rangeCost.energy_cost; lines.push('Range +'+range+'m (add '+(rng*rangeCost.add_cost)+', energy '+(rng*rangeCost.energy_cost)+')'); }
       var om = (card.querySelector('[name="origin_mode"]')||{}).value;
       var orig = om === 'other' ? (card.querySelector('[name="origin_text"]')||{}).value || '(origin)' : 'Engager';
-      if (om === 'other') { build += 2; energy += 1; lines.push('Other origin (add +2, energy +1)'); }
+      var otherOrigin = findPerk(cfg.perks, 'other_origin');
+      if (om === 'other') { build += otherOrigin ? otherOrigin.add_cost : 0; energy += otherOrigin ? otherOrigin.energy_cost : 0; lines.push('Other origin (add '+(otherOrigin?otherOrigin.add_cost:0)+', energy '+(otherOrigin?otherOrigin.energy_cost:0)+')'); }
       formula = 'Area, radius '+radius+'m, range '+range+'m, origin '+orig;
     } else if (type === 'Area of Effect') {
       var radius2 = readNumber(card, 'radius', 1);
       var range2  = readNumber(card, 'range', 0);
       var dur2    = readNumber(card, 'duration', 2);
-      if (radius2 > 1) { build += (radius2-1)*2; energy += radius2-1; lines.push('Radius +'+(radius2-1)+' (add +'+((radius2-1)*2)+', energy +'+(radius2-1)+')'); }
-      if (range2 > 0)  { var rng2 = Math.ceil(range2/2); build += rng2; lines.push('Range +'+range2+' (add +'+rng2+')'); }
-      if (dur2 > 2)    { build += (dur2-2)*2; energy += dur2-2; lines.push('Duration +'+(dur2-2)+' (add +'+((dur2-2)*2)+', energy +'+(dur2-2)+')'); }
-      if (readBool(card, 'immune')) { build += 2; lines.push('Engager immune (add +2)'); }
+      var radiusCost = cfg.radius_cost || {add_cost:0, energy_cost:0};
+      var rangeCost = cfg.range_cost || {add_cost:0, energy_cost:0, step:2};
+      var durationCost = cfg.duration_cost || {add_cost:0, energy_cost:0};
+      if (radius2 > 1) { build += (radius2-1) * radiusCost.add_cost; energy += (radius2-1) * radiusCost.energy_cost; lines.push('Radius +'+(radius2-1)+' (add '+((radius2-1)*radiusCost.add_cost)+', energy '+((radius2-1)*radiusCost.energy_cost)+')'); }
+      if (range2 > 0)  { var rng2 = Math.ceil(range2/(rangeCost.step||2)); build += rng2 * rangeCost.add_cost; energy += rng2 * rangeCost.energy_cost; lines.push('Range +'+range2+' (add '+(rng2*rangeCost.add_cost)+', energy '+(rng2*rangeCost.energy_cost)+')'); }
+      if (dur2 > 2)    { build += (dur2-2) * durationCost.add_cost; energy += (dur2-2) * durationCost.energy_cost; lines.push('Duration +'+(dur2-2)+' (add '+((dur2-2)*durationCost.add_cost)+', energy '+((dur2-2)*durationCost.energy_cost)+')'); }
+      var immune = findPerk(cfg.perks, 'immune');
+      if (immune && readBool(card, 'immune')) { build += immune.add_cost; energy += immune.energy_cost; lines.push('Engager immune (add '+immune.add_cost+', energy '+immune.energy_cost+')'); }
       var om2 = (card.querySelector('[name="origin_mode"]')||{}).value;
       var orig2 = om2 === 'other' ? (card.querySelector('[name="origin_text"]')||{}).value || '(origin)' : 'Engager';
+      var otherOrigin = findPerk(cfg.perks, 'other_origin');
+      if (om2 === 'other') { build += otherOrigin ? otherOrigin.add_cost : 0; energy += otherOrigin ? otherOrigin.energy_cost : 0; lines.push('Other origin (add '+(otherOrigin?otherOrigin.add_cost:0)+', energy '+(otherOrigin?otherOrigin.energy_cost:0)+')'); }
       formula = 'AoE, radius '+radius2+'m, range '+range2+'m, duration '+dur2+' rounds, origin '+orig2;
     }
-    if (readBool(card, 'use_previous')) { build += 3; energy += 1; lines.push('Use result of previous (add +3, energy +1)'); }
+    var usePrev = findPerk(cfg.perks, 'use_previous');
+    if (usePrev && readBool(card, 'use_previous')) { build += usePrev.add_cost; energy += usePrev.energy_cost; lines.push('Use result of previous (add '+usePrev.add_cost+', energy '+usePrev.energy_cost+')'); }
 
     setOut(card, 'build', build);
     setOut(card, 'cast', energy);
@@ -1313,6 +1425,7 @@
 
   function calcValidation(card) {
     if (!card) return;
+    var cfg = getValidationConfig();
     var lines = [];
     var build = 0, energy = 0;
     var formula = '';
@@ -1325,17 +1438,23 @@
       formula = t + ' vs counters';
     } else if (mode === 'generic') {
       var die = (card.querySelector('[name="engage_die"]') || {}).value || 'd6';
-      build -= 2;
-      lines.push('Engage roll: generic '+die+' (add -2)');
+      var generic = findPerk(cfg.engagement.modes, 'generic');
+      build += generic ? generic.add_cost : 0;
+      energy += generic ? generic.energy_cost : 0;
+      lines.push('Engage roll: generic '+die+' (add '+(generic?generic.add_cost:0)+', energy '+(generic?generic.energy_cost:0)+')');
       formula = die + ' vs counters';
     } else if (mode === 'other') {
       var txt = (card.querySelector('[name="engage_other"]') || {}).value || '(other)';
-      build += 3; energy += 1;
-      lines.push('Engage roll: another roll result '+txt+' (add +3, energy +1)');
+      var other = findPerk(cfg.engagement.modes, 'other');
+      build += other ? other.add_cost : 0;
+      energy += other ? other.energy_cost : 0;
+      lines.push('Engage roll: another roll result '+txt+' (add '+(other?other.add_cost:0)+', energy '+(other?other.energy_cost:0)+')');
       formula = '(other) vs counters';
     } else if (mode === 'previous') {
-      build += 3; energy += 1;
-      lines.push('Engage roll: use previous result (add +3, energy +1)');
+      var previous = findPerk(cfg.engagement.modes, 'previous');
+      build += previous ? previous.add_cost : 0;
+      energy += previous ? previous.energy_cost : 0;
+      lines.push('Engage roll: use previous result (add '+(previous?previous.add_cost:0)+', energy '+(previous?previous.energy_cost:0)+')');
       formula = 'previous vs counters';
     }
 
@@ -1349,17 +1468,16 @@
       var traitField = row.querySelector('[name="counter_trait"]');
       if (traitField) trait = traitField.value || '';
       counters.push({type:type, trait:trait});
+      var counterCfg = findPerk(cfg.counter.types, type);
       if (type === 'defense') {
         // default, no extra cost
-      } else if (type === 'general') {
-        build += 4; lines.push('General trait counter ('+trait+') (add +4)');
-      } else if (type === 'offense') {
-        build += 4; lines.push('Offensive trait counter ('+trait+') (add +4)');
-      } else if (type === 'previous') {
-        build += 3; energy += 1; lines.push('Use previous as counter (add +3, energy +1)');
+      } else if (counterCfg) {
+        build += counterCfg.add_cost; energy += counterCfg.energy_cost;
+        lines.push(type+' counter ('+trait+') (add '+counterCfg.add_cost+', energy '+counterCfg.energy_cost+')');
       }
     });
-    if (counterCount === 1) { build += 3; energy += 1; lines.push('Only one counter option (add +3, energy +1)'); }
+    var singleCounter = cfg.counter.single_counter_cost;
+    if (counterCount === 1) { build += singleCounter.add_cost; energy += singleCounter.energy_cost; lines.push('Only one counter option (add '+singleCounter.add_cost+', energy '+singleCounter.energy_cost+')'); }
 
     formula = (formula || 'engage vs counters') + ' vs ' + (counters.map(function(c){return c.trait;}).join(' or ') || '(no counters)');
 
@@ -1388,7 +1506,9 @@
       total += Number(c.dataset.build || 0);
       totalCast += Number(c.dataset.cast || 0);
     });
-    total += Math.max(0, acts.length - 1); // +1 per additional enactment
+    var extraCost = C.additional_enactment || {add_cost:1, energy_cost:0};
+    total += Math.max(0, acts.length - 1) * (extraCost.add_cost || 1); // +N per additional enactment
+    totalCast += Math.max(0, acts.length - 1) * (extraCost.energy_cost || 0);
     var totalEl = document.getElementById('total-cost');
     if (totalEl) totalEl.textContent = total;
     var totalCastEl = document.getElementById('total-cast-cost');
