@@ -44,7 +44,7 @@
       "vital_energy": "Trained",
       "abilities": [
         {
-          "id": "1ade484bf7ab2efc",
+          "id": "401784f808f1cca7",
           "name": "Summon Imp",
           "description": "A fiery minion",
           "type": "Minion",
@@ -52,68 +52,7 @@
           "action_cost": 0,
           "hp_bonus": 2,
           "extra_lifetime": 1,
-          "enactments": [
-            {
-              "type": "Enact Damage",
-              "source": "d4",
-              "interaction": {
-                "type": "Self",
-                "validation": {}
-              }
-            }
-          ]
-        },
-        {
-          "id": "21abe87df79b2059",
-          "name": "Burning Touch",
-          "description": "Applies burning",
-          "type": "Execution",
-          "energy_cost": 3,
-          "action_cost": 2,
-          "enactments": [
-            {
-              "type": "Enact Persistent Effect",
-              "effect_name": "Burning",
-              "effect_type": "Enact Damage",
-              "duration": 3,
-              "trigger_timing": "Start of Target Turn",
-              "solutions": [
-                "Dexterity",
-                "Constitution"
-              ],
-              "interaction": {
-                "type": "Self",
-                "validation": {}
-              }
-            }
-          ]
-        },
-        {
-          "id": "7401d4d3efbb3b3a",
-          "name": "something something",
-          "type": "Execution",
-          "energy_cost": 5,
-          "action_cost": 3,
-          "energy_steps": 2,
-          "action_steps": 1,
-          "enactments": [
-            {
-              "type": "Enact Damage",
-              "interaction": {
-                "type": "Ranged",
-                "validation": {
-                  "engage_mode": "generic",
-                  "engage_trait": "Precision",
-                  "engage_die": "d12",
-                  "counter_rolls": [
-                    "Mind",
-                    "Constitution",
-                    "Reflex"
-                  ]
-                }
-              }
-            }
-          ]
+          "enactments": null
         }
       ]
     },

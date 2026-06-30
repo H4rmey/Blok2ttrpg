@@ -809,7 +809,7 @@
   };
 
   window.toggleCollapse = function (btn) {
-    var card = btn.closest('.section-card, section');
+    var card = btn.closest('.section-card, .enactment-block, section');
     if (!card) return;
     var body = card.querySelector('.collapsible-content');
     if (!body) return;
@@ -1022,20 +1022,28 @@
         '</div>',
       '</div>',
       '<div class="collapsible-content space-y-3">',
-        '<div class="flex items-center gap-3 flex-wrap">',
-          '<label class="text-xs text-gray-400 flex items-center gap-1">Enactment Type: ',
-            '<select onchange="onEnactTypeChange(this)" class="enact-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
-              '<option value="">-- Select --</option>',
-              ENACT_TYPES.map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>';}).join(''),
-            '</select>',
-          '</label>',
-          '<label class="text-xs text-gray-400 flex items-center gap-1">Interaction: ',
-            '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
-              '<option value="">-- Select --</option>',
-            '</select>',
-          '</label>',
+        '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-4 space-y-3" data-section="enactment-type">',
+          '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+            '<h4 class="text-sm font-semibold text-indigo-300">Enactment Type</h4>',
+            '<span class="collapse-chevron text-indigo-300 text-xs">&#9660;</span>',
+          '</button>',
+          '<div class="collapsible-content space-y-3 mt-3">',
+            '<div class="flex items-center gap-3 flex-wrap">',
+              '<label class="text-xs text-gray-400 flex items-center gap-1">Enactment Type: ',
+                '<select onchange="onEnactTypeChange(this)" class="enact-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
+                  '<option value="">-- Select --</option>',
+                  ENACT_TYPES.map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>';}).join(''),
+                '</select>',
+              '</label>',
+              '<label class="text-xs text-gray-400 flex items-center gap-1">Interaction: ',
+                '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
+                  '<option value="">-- Select --</option>',
+                '</select>',
+              '</label>',
+            '</div>',
+            '<div class="enact-card-container space-y-2"></div>',
+          '</div>',
         '</div>',
-        '<div class="enact-card-container space-y-2"></div>',
         '<div class="inter-card-container space-y-2"></div>',
         '<div class="validation-card-container"></div>',
       '</div>',
@@ -1375,12 +1383,16 @@
     valids.forEach(calcValidation);
 
     var total = 0;
+    var totalCast = 0;
     document.querySelectorAll('.section-card').forEach(function(c){
       total += Number(c.dataset.build || 0);
+      totalCast += Number(c.dataset.cast || 0);
     });
     total += Math.max(0, acts.length - 1); // +1 per additional enactment
     var totalEl = document.getElementById('total-cost');
     if (totalEl) totalEl.textContent = total;
+    var totalCastEl = document.getElementById('total-cast-cost');
+    if (totalCastEl) totalCastEl.textContent = totalCast;
   };
 
   // =========================================================================
