@@ -69,6 +69,7 @@ var ReactionTriggers = []string{
 
 // KnockoutOptions are the 15 options for Phase knockout requirements.
 var KnockoutOptions = []string{
+	"None",
 	"Engager takes damage",
 	"Engager falls unconscious",
 	"Engager dies",

@@ -132,7 +132,7 @@ func (app *App) EditAbilityHandler(w http.ResponseWriter, r *http.Request) {
 		"GeneralTraitNames":     models.GeneralTraitNames,
 		"OffenseTraitNames":     models.OffenseTraitNames,
 		"DefenseTraitNames":     models.DefenseTraitNames,
-		"AllTraits":             models.AllTraitNames,
+		"AllTraits":             models.AllTraitNames(),
 		"ReactionTriggers":      models.ReactionTriggers,
 		"KnockoutOptions":       models.KnockoutOptions,
 		"DirectionOptions":      models.DirectionOptions,

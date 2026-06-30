@@ -92,12 +92,12 @@ func buildInitialState(a *models.Ability) string {
 		"trigger_trait":        a.TriggerTrait,
 		"phase_duration":       a.PhaseDuration,
 		"phase_reverse_rounds": a.ReversePhaseRounds,
-		"all_req":              a.AllKnockoutsReq,
-		"reverse_knockout":     a.ReverseKnockoutOK,
+		"all_knockouts_req":    a.AllKnockoutsReq,
+		"reverse_knockout_ok":  a.ReverseKnockoutOK,
 		"no_knockout":          a.NoKnockout,
 		"knockouts":            a.Knockouts,
-		"hp":                   a.HPBonus,
-		"life":                 a.ExtraLifetime,
+		"hp_bonus":             a.HPBonus,
+		"extra_lifetime":       a.ExtraLifetime,
 		"enactments":           []map[string]interface{}{},
 	}
 	for _, e := range a.Enactments {

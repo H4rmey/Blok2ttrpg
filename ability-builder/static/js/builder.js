@@ -84,7 +84,7 @@
     var itemWrap = d.item_dep ? '' : 'hidden';
     return [
       '<h3 class="text-md font-semibold text-indigo-400">Ability Type — Execution</h3>',
-      overview(),
+      overview(false),
       '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
         itemDepCheckbox(d.item_dep),
         stepSelect('energy_steps', 'Energy ±', [-2,-1,0,1,2], d.energy_steps || 0),
@@ -104,7 +104,7 @@
     var triggerWrap = triggerNeedsTrait ? '' : 'hidden';
     return [
       '<h3 class="text-md font-semibold text-indigo-400">Ability Type — Reaction</h3>',
-      overview(),
+      overview(false),
       '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
         '<div><label class="block text-xs text-gray-400 mb-1">Trigger</label>',
         '<select name="trigger" onchange="onReactionTriggerChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
@@ -136,7 +136,7 @@
     var showKos = !d.no_knockout;
     return [
       '<h3 class="text-md font-semibold text-indigo-400">Ability Type — Phase</h3>',
-      overview(),
+      overview(false),
       '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
         intSelect('phase_rounds', 'Phase Duration', 2, 5, d.phase_duration || 2, ' rounds'),
         intSelect('reverse_rounds', 'Reverse Rounds', 1, 5, d.reverse_phase_rounds || 2, ' rounds'),
@@ -167,7 +167,7 @@
     d = d || {};
     return [
       '<h3 class="text-md font-semibold text-indigo-400 flex items-center gap-2">Ability Type — Minion <span class="text-xs text-yellow-400">(WIP)</span></h3>',
-      overview(),
+      overview(false),
       '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
         intSelect('hp', 'Health Bonus', 0, 5, d.hp_bonus || 0),
         intSelect('life', 'Extra Lifetime', 0, 5, d.extra_lifetime || 0),
@@ -207,13 +207,19 @@
   // Helper widget renderers
   // =========================================================================
 
-  function overview() {
+  function overview(showResolve) {
+    showResolve = showResolve !== false;
+    var stats = [
+      statCard('Build Cost', '0', 'build'),
+      statCard('Cast Cost', '0', 'cast'),
+      statCard('Final', '...', 'formula'),
+    ];
+    if (showResolve) {
+      stats.unshift(statCard('Always Resolve', 'No', 'resolve'));
+    }
     return [
-      '<div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">',
-        statCard('Always Resolve', 'No', 'resolve'),
-        statCard('Build Cost', '0', 'build'),
-        statCard('Cast Cost', '0', 'cast'),
-        statCard('Final', '...', 'formula'),
+      '<div class="grid grid-cols-1 md:grid-cols-'+(showResolve ? '4' : '3')+' gap-3 text-sm">',
+      stats.join(''),
       '</div>',
     ].join('\n');
   }
@@ -784,17 +790,30 @@
     recalcAll();
   };
 
-  window.onKnockoutChange = function () { recalcAll(); };
+  window.onKnockoutChange = function (sel) {
+    var block = sel.closest('.enactment-block') || sel.closest('.section-card');
+    var noKnockoutCb = block.querySelector('[name="no_knockout"]');
+    var wrap = block.querySelector('[data-wrap="knockouts"]');
+    if (sel.value === 'None') {
+      if (noKnockoutCb) noKnockoutCb.checked = true;
+      if (wrap) wrap.hidden = true;
+    } else {
+      if (noKnockoutCb) noKnockoutCb.checked = false;
+      if (wrap) wrap.hidden = false;
+    }
+    recalcAll();
+  };
 
   window.onEnactTypeChange = function (sel) {
     var block = sel.closest('.enactment-block');
     var host = block.querySelector('.enact-card-container');
     var val = sel.value;
+    var cur = readCardData(host);
     host.innerHTML = '';
     block.dataset.enactType = val;
     updateInterOptions(block);
     if (!val) return;
-    host.innerHTML = renderEnactCard(val, {});
+    host.innerHTML = renderEnactCard(val, cur);
     recalcAll();
   };
 
@@ -804,13 +823,33 @@
       INTER_TYPES.map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>';}).join('');
   }
 
+  function readCardData(container) {
+    if (!container) return {};
+    var data = {};
+    var inputs = container.querySelectorAll('input,select,textarea');
+    inputs.forEach(function(el) {
+      if (!el.name) return;
+      if (el.type === 'checkbox') {
+        data[el.name] = el.checked;
+      } else if (el.tagName === 'SELECT' && el.multiple) {
+        var vals = [];
+        Array.from(el.selectedOptions).forEach(function(o){ vals.push(o.value); });
+        data[el.name] = vals;
+      } else {
+        data[el.name] = el.value;
+      }
+    });
+    return data;
+  }
+
   window.onInterTypeChange = function (sel) {
     var block = sel.closest('.enactment-block');
     var host = block.querySelector('.inter-card-container');
     var val = sel.value;
+    var cur = readCardData(host);
     host.innerHTML = '';
     if (!val) return;
-    host.innerHTML = renderInterCard(val, {});
+    host.innerHTML = renderInterCard(val, cur);
     recalcAll();
   };
 
@@ -1016,7 +1055,7 @@
       if (readBool(card, 'all_req'))        { build += 3; lines.push('All knockout requirements met (add +3)'); }
       if (readBool(card, 'reverse_knockout')){ build += 3; lines.push('Knockout on reverse phase (add +3)'); }
       if (readBool(card, 'no_knockout'))    { build += 5; lines.push('No knockout possible (add +5)'); }
-      var kos = Array.from(card.querySelectorAll('[name="knockout"]')).map(function(s){return s.value;}).filter(Boolean);
+      var kos = Array.from(card.querySelectorAll('[name="knockout"]')).map(function(s){return s.value;}).filter(function(v){return v && v !== 'None';});
       setOut(card, 'formula', 'Phase for '+phase+' rounds, reverse '+rev+', knockouts: '+(kos.length?kos.join(' or '):'(none)'));
     }
     if (card.querySelector('[name="hp"]')) {
