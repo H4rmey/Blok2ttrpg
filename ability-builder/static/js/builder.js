@@ -280,6 +280,26 @@
     }).join('');
   }
 
+  function traitOptionsGrouped(selectedValue) {
+    function group(label, list) {
+      var opts = list.map(function(t){
+        return '<option value="'+esc(t)+'" data-cat="'+esc(label.toLowerCase())+'" '+selected(selectedValue,t)+'>'+esc(t)+'</option>';
+      }).join('');
+      return '<optgroup label="'+esc(label)+'">'+opts+'</optgroup>';
+    }
+    return group('General', D.generalTraits) +
+           group('Offense', D.offenseTraits) +
+           group('Defense', D.defenseTraits);
+  }
+
+  function categoryOfTrait(name) {
+    if (!name) return '';
+    if (D.generalTraits.indexOf(name) !== -1) return 'general';
+    if (D.offenseTraits.indexOf(name) !== -1) return 'offense';
+    if (D.defenseTraits.indexOf(name) !== -1) return 'defense';
+    return '';
+  }
+
   // =========================================================================
   // Enactment cards
   // =========================================================================
@@ -311,7 +331,6 @@
       return '<option value="'+esc(o)+'" '+selected(d.source, o)+'>'+esc(o)+'</option>';
     }).join('');
     opts += '<option value="trait" '+selected(d.source, 'trait')+'>Trait (1d10)</option>';
-    opts += '<option value="general" '+selected(d.source, 'general')+'>General Trait (1d10)</option>';
     opts += '<option value="previous" '+selected(d.source, 'previous')+'>Use result of previous enactment</option>';
     opts += '<option value="other" '+selected(d.source, 'other')+'>Another roll result</option>';
     return opts;
@@ -320,23 +339,19 @@
   function renderEnactDamage(d) {
     d = d || {};
     var src = d.source || 'd4';
-    var cat = d.source_category || (src === 'trait' ? 'offense' : src === 'general' ? 'general' : '');
+    var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
     var traitSelectHTML = '';
-    if (cat === 'offense') {
-      traitSelectHTML = '<div data-wrap="source-trait"><label class="block text-xs text-gray-400 mb-1">Offensive Trait</label>'+
-        '<select name="source_trait" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-          '<option value="">-- Select --</option>' + traitOptions('offense', d.source_trait) +
-        '</select></div>';
-    } else if (cat === 'general') {
-      traitSelectHTML = '<div data-wrap="source-trait"><label class="block text-xs text-gray-400 mb-1">General Trait</label>'+
-        '<select name="source_trait" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-          '<option value="">-- Select --</option>' + traitOptions('general', d.source_trait) +
+    if (src === 'trait') {
+      traitSelectHTML = '<div data-wrap="source-trait"><label class="block text-xs text-gray-400 mb-1">Trait</label>'+
+        '<input type="hidden" name="source_category" value="'+esc(srcCat)+'">'+
+        '<select name="source_trait" onchange="onSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+          '<option value="">-- Select --</option>' + traitOptionsGrouped(d.source_trait) +
         '</select></div>';
     }
     var otherWrap = src === 'other' ? '' : 'hidden';
     var prevWrap  = src === 'previous' ? '' : 'hidden';
     return [
-      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-gray-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Damage" data-build="0" data-cast="0">',
+      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Damage" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Damage</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
@@ -373,23 +388,19 @@
   function renderEnactHealing(d) {
     d = d || {};
     var src = d.source || 'd4';
-    var cat = d.source_category || (src === 'trait' ? 'offense' : src === 'general' ? 'general' : '');
+    var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
     var traitSelectHTML = '';
-    if (cat === 'offense') {
-      traitSelectHTML = '<div data-wrap="source-trait"><label class="block text-xs text-gray-400 mb-1">Offensive Trait</label>'+
-        '<select name="source_trait" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-          '<option value="">-- Select --</option>' + traitOptions('offense', d.source_trait) +
-        '</select></div>';
-    } else if (cat === 'general') {
-      traitSelectHTML = '<div data-wrap="source-trait"><label class="block text-xs text-gray-400 mb-1">General Trait</label>'+
-        '<select name="source_trait" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-          '<option value="">-- Select --</option>' + traitOptions('general', d.source_trait) +
+    if (src === 'trait') {
+      traitSelectHTML = '<div data-wrap="source-trait"><label class="block text-xs text-gray-400 mb-1">Trait</label>'+
+        '<input type="hidden" name="source_category" value="'+esc(srcCat)+'">'+
+        '<select name="source_trait" onchange="onSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+          '<option value="">-- Select --</option>' + traitOptionsGrouped(d.source_trait) +
         '</select></div>';
     }
     var otherWrap = src === 'other' ? '' : 'hidden';
     var prevWrap  = src === 'previous' ? '' : 'hidden';
     return [
-      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-gray-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Healing" data-build="0" data-cast="0">',
+      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Healing" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Healing</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
@@ -426,7 +437,7 @@
     var dirs = d.directions && d.directions.length ? d.directions : ['Away'];
     var originMode = d.origin_mode || 'engager';
     return [
-      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-gray-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Movement" data-build="0" data-cast="0">',
+      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Movement" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Movement</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
@@ -467,7 +478,7 @@
   function renderEnactProfShift(d) {
     d = d || {};
     return [
-      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-gray-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Proficiency Shift" data-build="0" data-cast="0">',
+      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Proficiency Shift" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Proficiency Shift</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
@@ -494,7 +505,7 @@
     d = d || {};
     var sols = (d.solutions && d.solutions.length ? d.solutions : ['Dexterity', 'Constitution']);
     return [
-      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-gray-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Persistent Effect" data-build="0" data-cast="0">',
+      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Persistent Effect" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Persistent Effect</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
@@ -525,7 +536,7 @@
   }
   function solutionsList(sols) {
     var rows = sols.map(function(s){
-      var opts = D.allTraits.map(function(t){return '<option value="'+esc(t)+'" '+selected(s,t)+'>'+esc(t)+'</option>';}).join('');
+      var opts = '<option value="">-- Select --</option>' + traitOptionsGrouped(s);
       return '<div class="flex items-center gap-2">'+
         '<select name="solution" onchange="recalcAll()" class="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+opts+'</select>'+
         '<button type="button" onclick="this.parentElement.remove();recalcAll()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">−</button>'+
@@ -560,45 +571,60 @@
 
   function renderInterSelf(d) {
     return [
-      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-gray-700 p-4 space-y-3" data-section="interaction" data-inter-type="Self" data-build="0" data-cast="0">',
-        '<h4 class="text-sm font-semibold text-indigo-300">Interaction — Self</h4>',
-        interTopStats(),
-        '<div class="text-sm text-gray-300"><strong>Type =</strong> Self + <strong>Target =</strong> Self + <strong>Counter =</strong> d8</div>',
-        breakdown(),
+      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Self" data-build="0" data-cast="0">',
+        '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+          '<h4 class="text-sm font-semibold text-cyan-300">Interaction — Self</h4>',
+          '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
+        '</button>',
+        '<div class="collapsible-content space-y-3 mt-3">',
+          interTopStats(),
+          '<div class="text-sm text-gray-300"><strong>Type =</strong> Self + <strong>Target =</strong> Self + <strong>Counter =</strong> d8</div>',
+          breakdown(),
+        '</div>',
       '</div>'
     ].join('\n');
   }
 
   function renderInterDirect(d) {
     return [
-      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-gray-700 p-4 space-y-3" data-section="interaction" data-inter-type="Direct" data-build="0" data-cast="0">',
-        '<h4 class="text-sm font-semibold text-indigo-300">Interaction — Direct</h4>',
-        interTopStats(),
-        '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
-          intSelect('range', 'Range', 1, 10, d.range || 1, 'm'),
-          intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1),
+      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Direct" data-build="0" data-cast="0">',
+        '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+          '<h4 class="text-sm font-semibold text-cyan-300">Interaction — Direct</h4>',
+          '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
+        '</button>',
+        '<div class="collapsible-content space-y-3 mt-3">',
+          interTopStats(),
+          '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
+            intSelect('range', 'Range', 1, 10, d.range || 1, 'm'),
+            intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1),
+          '</div>',
+          '<div>'+usePrevCheck(d.use_previous)+'</div>',
+          breakdown(),
         '</div>',
-        '<div>'+usePrevCheck(d.use_previous)+'</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
   function renderInterRanged(d) {
     return [
-      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-gray-700 p-4 space-y-3" data-section="interaction" data-inter-type="Ranged" data-build="0" data-cast="0">',
-        '<h4 class="text-sm font-semibold text-indigo-300">Interaction — Ranged</h4>',
-        interTopStats(),
-        '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
-          intSelect('range', 'Range', 10, 20, d.range || 10, 'm'),
-          intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1),
+      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Ranged" data-build="0" data-cast="0">',
+        '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+          '<h4 class="text-sm font-semibold text-cyan-300">Interaction — Ranged</h4>',
+          '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
+        '</button>',
+        '<div class="collapsible-content space-y-3 mt-3">',
+          interTopStats(),
+          '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
+            intSelect('range', 'Range', 10, 20, d.range || 10, 'm'),
+            intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1),
+          '</div>',
+          '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">',
+            checkbox('visible', 'Target may be not visible', d.visible_ok),
+            checkbox('obstructed', 'Target may be obstructed', d.obstructed_ok),
+            checkbox('remove_penalty', 'Remove engagement penalty', d.remove_penalty),
+          '</div>',
+          '<div>'+usePrevCheck(d.use_previous)+'</div>',
+          breakdown(),
         '</div>',
-        '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">',
-          checkbox('visible', 'Target may be not visible', d.visible_ok),
-          checkbox('obstructed', 'Target may be obstructed', d.obstructed_ok),
-          checkbox('remove_penalty', 'Remove engagement penalty', d.remove_penalty),
-        '</div>',
-        '<div>'+usePrevCheck(d.use_previous)+'</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -606,26 +632,31 @@
     d = d || {};
     var om = d.origin_mode || 'engager';
     return [
-      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-gray-700 p-4 space-y-3" data-section="interaction" data-inter-type="Area" data-build="0" data-cast="0">',
-        '<h4 class="text-sm font-semibold text-indigo-300">Interaction — Area</h4>',
-        interTopStats(),
-        '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
-          intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm'),
-          intSelect('range', 'Range', 0, 10, d.range || 0, 'm'),
-        '</div>',
-        '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
-          '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
-            '<select name="origin_mode" onchange="onOriginModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              '<option value="engager" '+selected(om,'engager')+'>Engager</option>'+
-              '<option value="other" '+selected(om,'other')+'>Other Origin</option>'+
-            '</select></div>',
-          '<div data-wrap="origin" '+hiddenIf(om!=='other')+'>',
-            '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
-            '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Area" data-build="0" data-cast="0">',
+        '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+          '<h4 class="text-sm font-semibold text-cyan-300">Interaction — Area</h4>',
+          '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
+        '</button>',
+        '<div class="collapsible-content space-y-3 mt-3">',
+          interTopStats(),
+          '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
+            intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm'),
+            intSelect('range', 'Range', 0, 10, d.range || 0, 'm'),
           '</div>',
+          '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+            '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
+              '<select name="origin_mode" onchange="onOriginModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+                '<option value="engager" '+selected(om,'engager')+'>Engager</option>'+
+                '<option value="other" '+selected(om,'other')+'>Other Origin</option>'+
+              '</select></div>',
+            '<div data-wrap="origin" '+hiddenIf(om!=='other')+'>',
+              '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
+              '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+            '</div>',
+          '</div>',
+          '<div>'+usePrevCheck(d.use_previous)+'</div>',
+          breakdown(),
         '</div>',
-        '<div>'+usePrevCheck(d.use_previous)+'</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -633,32 +664,37 @@
     d = d || {};
     var om = d.origin_mode || 'engager';
     return [
-      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-gray-700 p-4 space-y-3" data-section="interaction" data-inter-type="Area of Effect" data-build="0" data-cast="0">',
-        '<h4 class="text-sm font-semibold text-indigo-300">Interaction — Area of Effect</h4>',
-        interTopStats(),
-        '<div class="grid grid-cols-1 md:grid-cols-3 gap-3">',
-          intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm'),
-          intSelect('range', 'Range', 0, 10, d.range || 0, 'm'),
-          intSelectFlat('duration', 'Duration', 2, 6, d.duration || 2),
+      '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Area of Effect" data-build="0" data-cast="0">',
+        '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+          '<h4 class="text-sm font-semibold text-cyan-300">Interaction — Area of Effect</h4>',
+          '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
+        '</button>',
+        '<div class="collapsible-content space-y-3 mt-3">',
+          interTopStats(),
+          '<div class="grid grid-cols-1 md:grid-cols-3 gap-3">',
+            intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm'),
+            intSelect('range', 'Range', 0, 10, d.range || 0, 'm'),
+            intSelectFlat('duration', 'Duration', 2, 6, d.duration || 2),
+          '</div>',
+          '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+            '<div><label class="block text-xs text-gray-400 mb-1">Trigger Timing</label>',
+              '<select name="timing" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+                D.aoeTriggerTimings.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.timing,t)+'>'+esc(t)+'</option>';}).join(''),
+              '</select></div>',
+            '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
+              '<select name="origin_mode" onchange="onOriginModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+                '<option value="engager" '+selected(om,'engager')+'>Engager</option>'+
+                '<option value="other" '+selected(om,'other')+'>Other Origin</option>'+
+              '</select></div>',
+          '</div>',
+          '<div data-wrap="origin" '+hiddenIf(om!=='other')+'>',
+            '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
+            '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+          '</div>',
+          checkbox('immune', 'Engager is immune', d.immune),
+          '<div>'+usePrevCheck(d.use_previous)+'</div>',
+          breakdown(),
         '</div>',
-        '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
-          '<div><label class="block text-xs text-gray-400 mb-1">Trigger Timing</label>',
-            '<select name="timing" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              D.aoeTriggerTimings.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.timing,t)+'>'+esc(t)+'</option>';}).join(''),
-            '</select></div>',
-          '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
-            '<select name="origin_mode" onchange="onOriginModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              '<option value="engager" '+selected(om,'engager')+'>Engager</option>'+
-              '<option value="other" '+selected(om,'other')+'>Other Origin</option>'+
-            '</select></div>',
-        '</div>',
-        '<div data-wrap="origin" '+hiddenIf(om!=='other')+'>',
-          '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
-          '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
-        '</div>',
-        checkbox('immune', 'Engager is immune', d.immune),
-        '<div>'+usePrevCheck(d.use_previous)+'</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -676,11 +712,15 @@
   function renderValidationCard(d) {
     d = d || {};
     var mode = d.engage_mode || 'trait';
-    var cat = d.engage_trait_category || 'offense';
+    var cat = d.engage_trait_category || (d.engage_trait ? (categoryOfTrait(d.engage_trait) || 'offense') : 'offense');
     var counters = d.counter_entries || d.counter_rolls || [];
     return [
-      '<div class="section-card validation-card bg-gray-800 rounded-lg border border-gray-700 p-4 space-y-3" data-section="validation" data-build="0" data-cast="0">',
-        '<h4 class="text-sm font-semibold text-indigo-300">Validation</h4>',
+      '<div class="section-card validation-card bg-gray-800 rounded-lg border border-rose-700 p-4 space-y-3" data-section="validation" data-build="0" data-cast="0">',
+        '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+          '<h4 class="text-sm font-semibold text-rose-300">Validation</h4>',
+          '<span class="collapse-chevron text-rose-300 text-xs">&#9660;</span>',
+        '</button>',
+        '<div class="collapsible-content space-y-3 mt-3">',
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">',
           statCard('Build Cost', '0', 'build'),
           statCard('Cast Cost', '0', 'cast'),
@@ -694,18 +734,12 @@
               '<option value="other" '+selected(mode,'other')+'>Another roll result</option>'+
               '<option value="previous" '+selected(mode,'previous')+'>Use result of previous interaction</option>'+
             '</select></div>',
-          '<div data-wrap="engage-trait-cat" '+hiddenIf(mode!=='trait')+'>',
-            '<label class="block text-xs text-gray-400 mb-1">Trait Category</label>',
-            '<select name="engage_trait_category" onchange="onEngageTraitCatChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              '<option value="offense" '+selected(cat,'offense')+'>Offensive Trait (default)</option>'+
-              '<option value="general" '+selected(cat,'general')+'>General Trait (costs extra)</option>'+
-              '<option value="defense" '+selected(cat,'defense')+'>Defensive Trait</option>'+
-            '</select></div>',
         '</div>',
         '<div data-wrap="engage-trait" '+hiddenIf(mode!=='trait')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Trait</label>',
-          '<select name="engage_trait" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-            traitOptions(cat, d.engage_trait) +
+          '<input type="hidden" name="engage_trait_category" value="'+esc(cat)+'">'+
+          '<select name="engage_trait" onchange="onEngageTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+            '<option value="">-- Select --</option>' + traitOptionsGrouped(d.engage_trait) +
           '</select></div>',
         '<div data-wrap="engage-generic" '+hiddenIf(mode!=='generic')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Die</label>',
@@ -727,6 +761,7 @@
           counterList(counters),
         '</div>',
         breakdown(),
+        '</div>',
       '</div>'
     ].join('\n');
   }
@@ -771,6 +806,21 @@
     var init = (initialState && initialState.ability_type === val) ? initialState : {};
     host.innerHTML = renderAbilityTypeCard(val, init);
     recalcAll();
+  };
+
+  window.toggleCollapse = function (btn) {
+    var card = btn.closest('.section-card, section');
+    if (!card) return;
+    var body = card.querySelector('.collapsible-content');
+    if (!body) return;
+    var expanded = btn.getAttribute('aria-expanded') !== 'false';
+    if (expanded) {
+      body.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+    } else {
+      body.removeAttribute('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+    }
   };
 
   window.onReactionTriggerChange = function (sel) {
@@ -856,9 +906,16 @@
   window.onEnactSourceChange = function (sel) {
     var c = sel.closest('.section-card');
     var v = sel.value;
-    setWrap(c, 'source-trait', v === 'trait' || v === 'general');
+    setWrap(c, 'source-trait', v === 'trait');
     setWrap(c, 'source-other', v === 'other');
     setWrap(c, 'source-previous', v === 'previous');
+  };
+
+  window.onSourceTraitChange = function (sel) {
+    var c = sel.closest('.section-card');
+    var hidden = c.querySelector('[name="source_category"]');
+    if (hidden) hidden.value = categoryOfTrait(sel.value);
+    recalcAll();
   };
 
   window.onOriginModeChange = function (sel) {
@@ -871,20 +928,16 @@
     var c = sel.closest('.section-card');
     var v = sel.value;
     setWrap(c, 'engage-trait', v === 'trait');
-    setWrap(c, 'engage-trait-cat', v === 'trait');
     setWrap(c, 'engage-generic', v === 'generic');
     setWrap(c, 'engage-other', v === 'other');
     setWrap(c, 'engage-previous', v === 'previous');
     recalcAll();
   };
 
-  window.onEngageTraitCatChange = function (sel) {
+  window.onEngageTraitChange = function (sel) {
     var c = sel.closest('.section-card');
-    var traitSel = c.querySelector('[name="engage_trait"]');
-    if (traitSel) {
-      // Re-populate options
-      traitSel.innerHTML = traitOptions(sel.value, traitSel.value);
-    }
+    var hidden = c.querySelector('[name="engage_trait_category"]');
+    if (hidden) hidden.value = categoryOfTrait(sel.value);
     recalcAll();
   };
 
@@ -923,7 +976,7 @@
     var list = btn.parentElement.parentElement.querySelector('[data-list="solutions"]');
     var first = list.querySelector('select[name="solution"]');
     var val = first ? first.value : 'Dexterity';
-    var opts = D.allTraits.map(function(t){return '<option value="'+esc(t)+'" '+selected(val,t)+'>'+esc(t)+'</option>';}).join('');
+    var opts = '<option value="">-- Select --</option>' + traitOptionsGrouped(val);
     var row = document.createElement('div');
     row.className = 'flex items-center gap-2';
     row.innerHTML =
@@ -953,29 +1006,39 @@
   function makeEmptyEnactBlock() {
     var idx = nextIndex();
     var block = document.createElement('div');
-    block.className = 'enactment-block border border-gray-700 rounded-lg p-4 bg-gray-900 space-y-3';
+    block.className = 'enactment-block border border-indigo-700 rounded-lg p-4 bg-gray-900 space-y-3';
     block.dataset.index = idx;
     block.innerHTML = [
       '<div class="flex items-center justify-between flex-wrap gap-2">',
-        '<h3 class="text-sm font-semibold text-indigo-400">Enactment #'+idx+'</h3>',
-        '<button type="button" onclick="removeEnactment(this)" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">Remove</button>',
+        '<button type="button" class="collapse-toggle flex items-center gap-2 text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+          '<span class="collapse-chevron text-indigo-400 text-xs">&#9660;</span>',
+          '<h3 class="text-sm font-semibold text-indigo-400">Enactment #'+idx+'</h3>',
+        '</button>',
+        '<div class="flex items-center gap-2 flex-wrap">',
+          '<label class="text-xs text-gray-400 flex items-center gap-1">Name: ',
+            '<input type="text" name="enactment_name" placeholder="e.g. Main Strike" class="enactment-name bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white w-40">',
+          '</label>',
+          '<button type="button" onclick="removeEnactment(this)" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">Remove</button>',
+        '</div>',
       '</div>',
-      '<div class="flex items-center gap-3 flex-wrap">',
-        '<label class="text-xs text-gray-400 flex items-center gap-1">Enactment Type: ',
-          '<select onchange="onEnactTypeChange(this)" class="enact-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
-            '<option value="">-- Select --</option>',
-            ENACT_TYPES.map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>';}).join(''),
-          '</select>',
-        '</label>',
-        '<label class="text-xs text-gray-400 flex items-center gap-1">Interaction: ',
-          '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
-            '<option value="">-- Select --</option>',
-          '</select>',
-        '</label>',
+      '<div class="collapsible-content space-y-3">',
+        '<div class="flex items-center gap-3 flex-wrap">',
+          '<label class="text-xs text-gray-400 flex items-center gap-1">Enactment Type: ',
+            '<select onchange="onEnactTypeChange(this)" class="enact-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
+              '<option value="">-- Select --</option>',
+              ENACT_TYPES.map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>';}).join(''),
+            '</select>',
+          '</label>',
+          '<label class="text-xs text-gray-400 flex items-center gap-1">Interaction: ',
+            '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
+              '<option value="">-- Select --</option>',
+            '</select>',
+          '</label>',
+        '</div>',
+        '<div class="enact-card-container space-y-2"></div>',
+        '<div class="inter-card-container space-y-2"></div>',
+        '<div class="validation-card-container"></div>',
       '</div>',
-      '<div class="enact-card-container space-y-2"></div>',
-      '<div class="inter-card-container space-y-2"></div>',
-      '<div class="validation-card-container"></div>',
     ].join('');
     return block;
   }
@@ -1108,13 +1171,14 @@
         build += shift[s]*2; energy += shift[s];
         lines.push('Source 1'+s+' (add +'+(shift[s]*2)+', energy +'+shift[s]+')');
       } else if (s === 'trait') {
-        formula = '1d10 (offensive trait)';
-        build += 3;
-        lines.push('Use offensive trait as source (add +3)');
-      } else if (s === 'general') {
-        formula = '1d10 (general trait)';
-        build += 4;  // costs extra vs default
-        lines.push('Use general trait as source (add +4, extra cost)');
+        var cat = (card.querySelector('[name="source_category"]') || {}).value || 'offense';
+        var tName = (card.querySelector('[name="source_trait"]') || {}).value || '(trait)';
+        formula = '1d10 ('+cat+' trait)';
+        if (cat === 'general') {
+          build += 4; lines.push('Use general trait as source (add +4, extra cost)');
+        } else {
+          build += 3; lines.push('Use offensive trait as source (add +3)');
+        }
       } else if (s === 'previous') {
         formula = 'previous enactment result';
         build += 3; energy += 1;
@@ -1354,6 +1418,10 @@
       renameIn(block.querySelector('.enact-card-container'),          'enact_'+idx+'_');
       renameIn(block.querySelector('.inter-card-container'),          'enact_'+idx+'_inter_');
       renameIn(block.querySelector('.validation-card-container'),     'enact_'+idx+'_valid_');
+      // Block-level name input
+      block.querySelectorAll('input[name="enactment_name"]').forEach(function(el){
+        el.name = 'enact_'+idx+'_name';
+      });
     });
 
     var abilityCard = document.querySelector('.section-card[data-section="ability-type"]');
@@ -1385,6 +1453,8 @@
       initialState.enactments.forEach(function (saved) {
         var block = makeEmptyEnactBlock();
         document.getElementById('enactments-container').appendChild(block);
+        var nameInput = block.querySelector('input[name="enactment_name"]');
+        if (nameInput) nameInput.value = saved.name || '';
         block.querySelector('.enact-type-select').value = saved.type || '';
         block.dataset.enactType = saved.type || '';
         if (saved.type) {

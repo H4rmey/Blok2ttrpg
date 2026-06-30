@@ -102,6 +102,7 @@ func buildInitialState(a *models.Ability) string {
 	}
 	for _, e := range a.Enactments {
 		em := map[string]interface{}{
+			"name":            e.Name,
 			"type":            string(e.Type),
 			"always":          e.Always,
 			"source":          e.Source,
@@ -448,15 +449,13 @@ func parseNewEnactments(r *http.Request) []models.Enactment {
 			continue
 		}
 		src := r.FormValue(prefix + "source")
-		cat := models.TraitCategory("")
-		switch src {
-		case "trait":
+		cat := models.TraitCategory(r.FormValue(prefix + "source_category"))
+		if cat == "" && src == "trait" {
 			cat = models.TraitCategoryOffense
-		case "general":
-			cat = models.TraitCategoryGeneral
 		}
 
 		e := models.Enactment{
+			Name:           strings.TrimSpace(r.FormValue(prefix + "name")),
 			Type:           models.EnactmentType(enactType),
 			Always:         r.FormValue(prefix+"always") == "on",
 			BuildCost:      atoi(r.FormValue(prefix + "build")),

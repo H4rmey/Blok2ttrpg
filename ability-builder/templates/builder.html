@@ -54,15 +54,20 @@
         </section>
 
         <!-- Enactments -->
-        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <h2 class="text-lg font-semibold text-indigo-400 mb-4">Enactments</h2>
-            <p class="text-sm text-gray-500 mb-4">Each ability must have at least one enactment. The first enactment is free; additional enactments cost 1 build point each.</p>
-            <div id="enactments-container" class="space-y-4"></div>
-            <button type="button" id="add-enactment-btn"
-                    onclick="addEnactment()"
-                    class="mt-4 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm border border-gray-600">
-                + Add Enactment
+        <section class="bg-gray-800 rounded-lg border border-indigo-700 p-6">
+            <button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">
+                <h2 class="text-lg font-semibold text-indigo-400">Enactments</h2>
+                <span class="collapse-chevron text-indigo-400 text-sm">&#9660;</span>
             </button>
+            <div class="collapsible-content mt-4">
+                <p class="text-sm text-gray-500 mb-4">Each ability must have at least one enactment. The first enactment is free; additional enactments cost 1 build point each.</p>
+                <div id="enactments-container" class="space-y-4"></div>
+                <button type="button" id="add-enactment-btn"
+                        onclick="addEnactment()"
+                        class="mt-4 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm border border-gray-600">
+                    + Add Enactment
+                </button>
+            </div>
         </section>
 
         <!-- Actions -->

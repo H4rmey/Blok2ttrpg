@@ -40,3 +40,15 @@
     tab-size: 2;
     line-height: 1.6;
 }
+
+/* Collapsible chevron rotation */
+.collapse-chevron {
+    display: inline-block;
+    transition: transform 150ms ease-in-out;
+}
+.collapsible-content[hidden] {
+    display: none;
+}
+.collapse-toggle[aria-expanded="false"] .collapse-chevron {
+    transform: rotate(-90deg);
+}
