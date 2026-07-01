@@ -197,6 +197,110 @@
       "current_hp": 0,
       "current_energy": 0,
       "abilities": []
+    },
+    {
+      "id": "b31f0645a2974010",
+      "level": 2,
+      "name": "Imported Hero",
+      "age": "",
+      "size": "",
+      "alignment": "Neutral",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Strength": "Trained"
+      },
+      "offense_traits": {},
+      "defense_traits": {},
+      "vital_hp": "Trained",
+      "vital_movement": "",
+      "vital_energy": "",
+      "current_hp": 16,
+      "current_energy": 0,
+      "abilities": [
+        {
+          "id": "6c62bc122326fbe3",
+          "name": "Fire Bolt",
+          "description": "A spark.",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "enactments": [
+            {
+              "type": "Enact Damage",
+              "source": "d10",
+              "interaction": {
+                "type": "Ranged",
+                "range": 30
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "49edceba29d195b7",
+      "level": 9,
+      "name": "Hero",
+      "age": "5",
+      "size": "1.6m",
+      "alignment": "Neutral",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Legendary",
+        "Knowledge": "Master",
+        "Magic": "Clumsy",
+        "Nature": "Untrained",
+        "New Trait": "Clumsy",
+        "People Skill": "Untrained",
+        "Perception": "Expert",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Trained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Clumsy",
+        "Mind": "Untrained",
+        "Power": "Trained",
+        "Precision": "Expert"
+      },
+      "defense_traits": {
+        "Constitution": "Expert",
+        "Magic": "Clumsy",
+        "Mind": "Untrained",
+        "Reflex": "Trained"
+      },
+      "vital_hp": "Trained",
+      "vital_movement": "Trained",
+      "vital_energy": "Trained",
+      "current_hp": 0,
+      "current_energy": 0,
+      "abilities": [
+        {
+          "id": "2654bfff7135a44e",
+          "name": "Test3",
+          "description": "TestDesc",
+          "type": "Execution",
+          "energy_cost": 5,
+          "action_cost": 1,
+          "energy_steps": 1,
+          "action_steps": -1,
+          "enactments": null
+        }
+      ]
     }
   ]
 }

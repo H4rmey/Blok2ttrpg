@@ -51,6 +51,7 @@ func main() {
 	// Character routes
 	mux.HandleFunc("/", app.IndexHandler)
 	mux.HandleFunc("/characters/new", app.NewCharacterHandler)
+	mux.HandleFunc("/characters/import", app.ImportCharacterYAMLHandler)
 	mux.HandleFunc("/characters", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost && r.URL.Path == "/characters" {
 			app.CreateCharacterHandler(w, r)
@@ -74,6 +75,10 @@ func main() {
 			app.NewCharacterHandler(w, r)
 			return
 		}
+		if charID == "import" {
+			app.ImportCharacterYAMLHandler(w, r)
+			return
+		}
 
 		// /characters/{id}
 		if len(parts) == 1 {
@@ -87,6 +92,11 @@ func main() {
 			default:
 				http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			}
+			return
+		}
+
+		if len(parts) == 2 && parts[1] == "export" {
+			app.ExportCharacterYAMLHandler(w, r)
 			return
 		}
 

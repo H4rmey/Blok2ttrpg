@@ -7,10 +7,16 @@
             {{if .IsNew}}New Character{{else}}{{if .Character.Name}}{{.Character.Name}}{{else}}Character Sheet{{end}}{{end}}
         </h1>
         {{if not .IsNew}}
-        <a href="/characters/{{.Character.ID}}/abilities"
-           class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
-            View Abilities ({{len .Character.Abilities}})
-        </a>
+        <div class="flex items-center gap-2">
+            <a href="/characters/{{.Character.ID}}/export"
+               class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                Export YAML
+            </a>
+            <a href="/characters/{{.Character.ID}}/abilities"
+               class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                View Abilities ({{len .Character.Abilities}})
+            </a>
+        </div>
         {{end}}
     </div>
 
