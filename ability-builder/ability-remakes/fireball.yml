@@ -1,0 +1,12 @@
+# Fireball (D&D/Pathfinder classic spell)
+ability:
+  type: Execution
+  name: Fireball
+  description: A bright streak flashes from your pointing finger to a point you choose.
+  enactments:
+    - type: Enact Damage
+      source: d6
+      interactions:
+        - type: Area
+          range: 40m
+          radius: 6m

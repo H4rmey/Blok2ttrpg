@@ -44,8 +44,8 @@
       "vital_energy": "Trained",
       "abilities": [
         {
-          "id": "e47e6c4d6c714012",
-          "name": "Test",
+          "id": "a300c1d33ca64aba",
+          "name": "Test2",
           "description": "TestDesc",
           "type": "Execution",
           "energy_cost": 6,
@@ -55,14 +55,24 @@
           "enactments": null
         },
         {
-          "id": "a300c1d33ca64aba",
-          "name": "Test2",
+          "id": "d3f3d0c8fcf97be0",
+          "name": "Test3",
           "description": "TestDesc",
           "type": "Execution",
-          "energy_cost": 6,
+          "energy_cost": 5,
           "action_cost": 1,
           "energy_steps": 1,
           "action_steps": -1,
+          "enactments": null
+        },
+        {
+          "id": "e22baf0c75599b4b",
+          "name": "Test4",
+          "description": "TestDesc",
+          "type": "Execution",
+          "energy_cost": 2,
+          "action_cost": 2,
+          "energy_steps": -1,
           "enactments": null
         }
       ]
