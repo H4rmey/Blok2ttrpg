@@ -84,44 +84,35 @@ type Character struct {
 	VitalMovement Proficiency `json:"vital_movement"`
 	VitalEnergy   Proficiency `json:"vital_energy"`
 
+	CurrentHP     int `json:"current_hp"`
+	CurrentEnergy int `json:"current_energy"`
+
 	Abilities []Ability `json:"abilities"`
 }
 
 // NewCharacter creates a character with default trait values.
-func NewCharacter(id string) Character {
-	return Character{
-		ID:    id,
-		Level: 1,
-		GeneralTraits: map[string]Proficiency{
-			"Strength":     ProfUntrained,
-			"Dexterity":    ProfUntrained,
-			"Stealth":      ProfUntrained,
-			"Perception":   ProfUntrained,
-			"Nature":       ProfUntrained,
-			"Crafting":     ProfUntrained,
-			"People Skill": ProfUntrained,
-			"Performance":  ProfUntrained,
-			"Thievery":     ProfUntrained,
-			"Knowledge":    ProfUntrained,
-			"Magic":        ProfUntrained,
-		},
-		OffenseTraits: map[string]Proficiency{
-			"Precision": ProfUntrained,
-			"Power":     ProfUntrained,
-			"Mind":      ProfUntrained,
-			"Magic":     ProfUntrained,
-		},
-		DefenseTraits: map[string]Proficiency{
-			"Reflex":       ProfUntrained,
-			"Constitution": ProfUntrained,
-			"Mind":         ProfUntrained,
-			"Magic":        ProfUntrained,
-		},
+func NewCharacter(id string, general, offense, defense []string) Character {
+	c := Character{
+		ID:            id,
+		Level:         1,
+		GeneralTraits: make(map[string]Proficiency),
+		OffenseTraits: make(map[string]Proficiency),
+		DefenseTraits: make(map[string]Proficiency),
 		VitalHP:       ProfUntrained,
 		VitalMovement: ProfUntrained,
 		VitalEnergy:   ProfUntrained,
 		Abilities:     []Ability{},
 	}
+	for _, t := range general {
+		c.GeneralTraits[t] = ProfUntrained
+	}
+	for _, t := range offense {
+		c.OffenseTraits[t] = ProfUntrained
+	}
+	for _, t := range defense {
+		c.DefenseTraits[t] = ProfUntrained
+	}
+	return c
 }
 
 // VitalOption is used for template rendering of vital stat dropdowns.

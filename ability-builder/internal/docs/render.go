@@ -15,6 +15,10 @@ import (
 type TemplateData struct {
 	Config *config.AbilityBuilderConfig
 
+	Leveling      config.LevelingConfig
+	Proficiencies []config.ProficiencyConfig
+	Traits        config.TraitConfig
+
 	AdditionalEnactmentTable template.HTML
 
 	Execution                    config.AbilityTypeConfig
@@ -149,6 +153,10 @@ func RenderFiles(files []string, data TemplateData) (string, error) {
 func BuildTemplateData(cfg *config.Config) TemplateData {
 	ab := cfg.AbilityBuilder
 	d := TemplateData{Config: &ab}
+
+	d.Leveling = ab.Leveling
+	d.Proficiencies = ab.Proficiencies
+	d.Traits = ab.Traits
 
 	d.AdditionalEnactmentTable = costTable("Additional Enactment", []config.PerkConfig{{Description: ab.AdditionalEnactment.Description, AddCost: ab.AdditionalEnactment.AddCost, EnergyCost: ab.AdditionalEnactment.EnergyCost}})
 

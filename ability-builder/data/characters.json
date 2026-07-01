@@ -2,7 +2,7 @@
   "characters": [
     {
       "id": "0c6873a40e1dbb31",
-      "level": 3,
+      "level": 9,
       "name": "Hero",
       "age": "5",
       "size": "1.6m",
@@ -16,10 +16,11 @@
       "quirks": "",
       "general_traits": {
         "Crafting": "Untrained",
-        "Dexterity": "Expert",
+        "Dexterity": "Legendary",
         "Knowledge": "Master",
         "Magic": "Clumsy",
         "Nature": "Untrained",
+        "New Trait": "Clumsy",
         "People Skill": "Untrained",
         "Perception": "Expert",
         "Performance": "Untrained",
@@ -42,20 +43,11 @@
       "vital_hp": "Trained",
       "vital_movement": "Trained",
       "vital_energy": "Trained",
+      "current_hp": 0,
+      "current_energy": 0,
       "abilities": [
         {
-          "id": "a300c1d33ca64aba",
-          "name": "Test2",
-          "description": "TestDesc",
-          "type": "Execution",
-          "energy_cost": 6,
-          "action_cost": 1,
-          "energy_steps": 1,
-          "action_steps": -1,
-          "enactments": null
-        },
-        {
-          "id": "d3f3d0c8fcf97be0",
+          "id": "73c7d6ef227c7d0a",
           "name": "Test3",
           "description": "TestDesc",
           "type": "Execution",
@@ -63,16 +55,6 @@
           "action_cost": 1,
           "energy_steps": 1,
           "action_steps": -1,
-          "enactments": null
-        },
-        {
-          "id": "e22baf0c75599b4b",
-          "name": "Test4",
-          "description": "TestDesc",
-          "type": "Execution",
-          "energy_cost": 2,
-          "action_cost": 2,
-          "energy_steps": -1,
           "enactments": null
         }
       ]
@@ -119,6 +101,8 @@
       "vital_hp": "Untrained",
       "vital_movement": "Untrained",
       "vital_energy": "Untrained",
+      "current_hp": 0,
+      "current_energy": 0,
       "abilities": []
     },
     {
@@ -163,6 +147,55 @@
       "vital_hp": "Untrained",
       "vital_movement": "Untrained",
       "vital_energy": "Untrained",
+      "current_hp": 0,
+      "current_energy": 0,
+      "abilities": []
+    },
+    {
+      "id": "f22189819fa3c083",
+      "level": 19,
+      "name": "",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "banana",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 0,
+      "current_energy": 0,
       "abilities": []
     }
   ]

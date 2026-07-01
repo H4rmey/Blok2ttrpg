@@ -2,33 +2,47 @@
 
 ## Introduction
 
-As you level up, your character gains a deeper understanding of their powers, techniques, and spells. This growth is represented by **Ability Points**. Ability Points are spent to pay the **Add Cost** of Perks, Enactments, Interactions, and Validations when constructing or upgrading your Abilities.
+As your character progresses through the world, they will gain levels. Leveling up represents your character's growth, allowing them to improve their Traits, increase their Vital stats, and become more capable in both combat and roleplay.
 
-## Ability Points
+The maximum level a character can reach is Level 10.
 
-At Level 1, a character starts with a base pool of Ability Points. As they level up, they gain a steady stream of new points, with larger spikes at milestone levels (Level 5 and Level 10).
+---
 
-These points are permanently invested into your abilities during character creation or level-ups.
+## Trait Points
 
-### Upgrading Abilities
+Trait Points are used to upgrade your Proficiency Levels in various Traits.
 
-You do not need to create a brand new Ability every time you level up. You can spend your newly gained Ability Points to upgrade an existing Ability by adding new Perks, extending its Range, or attaching additional Enactments.
+### Starting Trait Points
 
-### Refunding Ability Points
+At Level 1, your base Trait Points are calculated based on the total number of Traits used in your specific campaign setting.
 
-Some Perks in the Ability Builder apply drawbacks or restrictions to an Ability (such as giving it an Item Dependency or increasing its Action Cost). These Perks have a **negative Add Cost**. Taking these drawbacks refunds Ability Points, allowing you to spend them elsewhere on the same Ability to make it more powerful.
+For the standard 22-Trait setting, you would receive 8 Trait Points at Level 1.
+
+### Gaining and Refunding Points
+
+By the time you level up, you gain additional Trait Points as outlined in the leveling table below.
+
+You can also dynamically gain Trait Points by lowering your Proficiency.
+
+---
+
+## Leveling Table: Trait Points
+
+| Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
+| --- | --- | --- |
+{{range .Leveling.TraitPoints.Levels}}| **{{.Level}}** | +{{.PointsGained}} | {{.Total}} |
+{{end}}---
 
 ## Leveling Table: Ability Points
 
-| Level | Ability Points Gained | Total Ability Points |
+| Level | Points Gained | Total Ability Points |
 | --- | --- | --- |
-| **1** | Base | 10 |
-| **2** | +2 | 12 |
-| **3** | +3 | 15 |
-| **4** | +2 | 17 |
-| **5** | +4 | 21 |
-| **6** | +2 | 23 |
-| **7** | +3 | 26 |
-| **8** | +2 | 28 |
-| **9** | +3 | 31 |
-| **10** | +5 | 36 |
+{{range .Leveling.AbilityPoints.Levels}}| **{{.Level}}** | +{{.PointsGained}} | {{.Total}} |
+{{end}}---
+
+## Proficiency Tiers
+
+| Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+{{range .Proficiencies}}| {{.Name}} | {{.Cost}} | {{.Dice.General}} | {{.Dice.Offense}} | {{.Dice.Defense}} | {{index .Vitals "hp"}} | {{index .Vitals "movement"}} | {{index .Vitals "energy"}} |
+{{end}}

@@ -19,32 +19,44 @@
           class="space-y-8">
 
         <!-- Level & Trait Budget (sticky at top) -->
-        <section class="bg-gray-800 rounded-lg border border-gray-700 p-4 sticky top-16 z-40 shadow-lg">
+        <section class="bg-gray-800 rounded-lg border border-gray-700 p-4 {{if not .IsNew}}sticky top-16 z-40{{end}} shadow-lg">
             <div class="flex items-center justify-around flex-wrap gap-4 text-center">
                 <div class="flex items-center gap-2">
                     <span class="text-xs uppercase text-gray-400">Level</span>
-                    <input type="number" name="level" value="{{.Character.Level}}" min="1" max="20"
+                    <input type="number" name="level" value="{{.Character.Level}}" min="1" max="{{.MaxLevel}}"
                            class="w-16 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-center focus:border-indigo-500 focus:outline-none">
                 </div>
                 <div>
                     <span class="text-xs uppercase text-gray-400 block">Trait Points Used</span>
-                    <span id="trait-points-used" class="text-2xl font-bold text-green-400">0</span>
+                    <span id="trait-points-used" class="text-2xl font-bold {{if gt .TraitPointsUsed .TraitPointsBudget}}text-red-400{{else}}text-green-400{{end}}">{{.TraitPointsUsed}}</span>
                 </div>
                 <div>
                     <span class="text-xs uppercase text-gray-400 block">Trait Points Budget</span>
-                    <span id="trait-points-budget" class="text-2xl font-bold text-indigo-400">10</span>
+                    <span id="trait-points-budget" class="text-2xl font-bold text-indigo-400">{{.TraitPointsBudget}}</span>
                 </div>
                 <div>
-                    <span id="trait-points-warning" style="display:none"
+                    <span id="trait-points-warning" {{if not (gt .TraitPointsUsed .TraitPointsBudget)}}style="display:none"{{end}}
                           class="text-red-400 text-sm font-medium">⚠ Over budget!</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs uppercase text-gray-400">HP</span>
-                    <input type="text" value="{{.Character.GetHP}}" readonly class="w-12 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-white text-center text-sm">
-                    <span class="text-xs uppercase text-gray-400">Move</span>
-                    <input type="text" value="{{.Character.GetMovement}}" readonly class="w-12 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-white text-center text-sm">
-                    <span class="text-xs uppercase text-gray-400">Energy</span>
-                    <input type="text" value="{{.Character.GetEnergy}}" readonly class="w-12 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-white text-center text-sm">
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs uppercase text-gray-400">HP</span>
+                        <input type="number" id="current-hp" name="current_hp" value="{{.Character.CurrentHP}}" min="0" max="{{.CharacterHP}}"
+                               class="w-14 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-center text-sm focus:border-indigo-500 focus:outline-none">
+                        <span class="text-gray-400 text-sm">/</span>
+                        <span id="total-hp" class="text-white text-sm font-semibold">{{.CharacterHP}}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs uppercase text-gray-400">Move</span>
+                        <input type="text" id="total-movement" value="{{.CharacterMovement}}" readonly class="w-12 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-white text-center text-sm">
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs uppercase text-gray-400">Energy</span>
+                        <input type="number" id="current-energy" name="current_energy" value="{{.Character.CurrentEnergy}}" min="0" max="{{.CharacterEnergy}}"
+                               class="w-14 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-center text-sm focus:border-indigo-500 focus:outline-none">
+                        <span class="text-gray-400 text-sm">/</span>
+                        <span id="total-energy" class="text-white text-sm font-semibold">{{.CharacterEnergy}}</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -201,30 +213,6 @@
                         <option value="{{.Value}}" {{if eq .Value $.Character.VitalEnergy}}selected{{end}}>{{.Label}}</option>
                         {{end}}
                     </select>
-                </div>
-            </div>
-        </section>
-
-        <!-- Level & Trait Points -->
-        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <h2 class="text-lg font-semibold text-indigo-400 mb-4">Level & Trait Points</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Level</label>
-                    <input type="number" name="level" value="{{.Character.Level}}" min="1" max="20"
-                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                </div>
-                <div class="flex items-center gap-4 md:col-span-2">
-                    <div class="text-center">
-                        <span class="text-xs text-gray-400 block">Points Used</span>
-                        <span id="trait-points-used" class="text-2xl font-bold {{if gt .TraitPointsUsed .TraitPointsBudget}}text-red-400{{else}}text-green-400{{end}}">{{.TraitPointsUsed}}</span>
-                    </div>
-                    <span class="text-gray-500 text-xl">/</span>
-                    <div class="text-center">
-                        <span class="text-xs text-gray-400 block">Budget</span>
-                        <span id="trait-points-budget" class="text-2xl font-bold text-indigo-400">{{.TraitPointsBudget}}</span>
-                    </div>
-                    <span id="trait-points-warning" class="text-red-400 text-sm ml-4" {{if not (gt .TraitPointsUsed .TraitPointsBudget)}}style="display:none"{{end}}>⚠ Over budget!</span>
                 </div>
             </div>
         </section>

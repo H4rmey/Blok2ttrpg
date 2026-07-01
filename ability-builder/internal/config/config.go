@@ -21,6 +21,8 @@ type AbilityBuilderConfig struct {
 	Interactions        map[string]InteractionConfig `json:"interactions" yaml:"interactions"`
 	Validations         ValidationConfig             `json:"validations" yaml:"validations"`
 	Traits              TraitConfig                  `json:"traits" yaml:"traits"`
+	Proficiencies       []ProficiencyConfig          `json:"proficiencies" yaml:"proficiencies"`
+	Leveling            LevelingConfig               `json:"leveling" yaml:"leveling"`
 	Dice                DiceConfig                   `json:"dice" yaml:"dice"`
 }
 
@@ -169,6 +171,45 @@ type TraitConfig struct {
 	General []string `json:"general" yaml:"general"`
 	Offense []string `json:"offense" yaml:"offense"`
 	Defense []string `json:"defense" yaml:"defense"`
+	Vital   []string `json:"vital,omitempty" yaml:"vital,omitempty"`
+}
+
+// ProficiencyConfig defines a single proficiency tier and its dice/values.
+type ProficiencyConfig struct {
+	ID    string            `json:"id" yaml:"id"`
+	Name  string            `json:"name" yaml:"name"`
+	Cost  int               `json:"cost" yaml:"cost"`
+	Note  string            `json:"note,omitempty" yaml:"note,omitempty"`
+	Dice  ProficiencyDice   `json:"dice" yaml:"dice"`
+	Vitals map[string]int   `json:"vitals" yaml:"vitals"`
+}
+
+// ProficiencyDice maps category names to the dice they roll at this tier.
+type ProficiencyDice struct {
+	General string `json:"general" yaml:"general"`
+	Offense string `json:"offense" yaml:"offense"`
+	Defense string `json:"defense" yaml:"defense"`
+}
+
+// LevelingConfig holds the leveling tables.
+type LevelingConfig struct {
+	MaxLevel      int                 `json:"max_level" yaml:"max_level"`
+	TraitPoints   LevelingPointsConfig `json:"trait_points" yaml:"trait_points"`
+	AbilityPoints LevelingPointsConfig `json:"ability_points" yaml:"ability_points"`
+}
+
+// LevelingPointsConfig holds one resource's leveling table.
+type LevelingPointsConfig struct {
+	StandardTraitCount int           `json:"standard_trait_count,omitempty" yaml:"standard_trait_count,omitempty"`
+	StartingFormula    string        `json:"starting_formula,omitempty" yaml:"starting_formula,omitempty"`
+	Levels             []LevelEntry  `json:"levels" yaml:"levels"`
+}
+
+// LevelEntry is a single row in a leveling table.
+type LevelEntry struct {
+	Level         int `json:"level" yaml:"level"`
+	PointsGained  int `json:"points_gained" yaml:"points_gained"`
+	Total         int `json:"total" yaml:"total"`
 }
 
 // DiceConfig holds the available dice options.

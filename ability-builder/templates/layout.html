@@ -30,7 +30,7 @@
     </footer>
 
     <script>
-    // ===== Character Sheet: Dynamic Trait Points =====
+    // ===== Character Sheet: Dynamic Trait Points & Vitals =====
     var profCosts = {
         'Clumsy': -1,
         'Untrained': 0,
@@ -39,6 +39,11 @@
         'Master': 3,
         'Legendary': 4
     };
+
+    function extractVitalValue(label) {
+        var match = /\(([0-9]+(?:\.[0-9]+)?)/.exec(label);
+        return match ? parseFloat(match[1]) : 0;
+    }
 
     function recalculateTraitPoints() {
         var total = 0;
@@ -71,19 +76,65 @@
         }
     }
 
+    function recalculateVitals() {
+        var hpSel = document.querySelector('select[name="vital_hp"]');
+        var moveSel = document.querySelector('select[name="vital_movement"]');
+        var energySel = document.querySelector('select[name="vital_energy"]');
+
+        var totalHpEl = document.getElementById('total-hp');
+        var totalMoveEl = document.getElementById('total-movement');
+        var totalEnergyEl = document.getElementById('total-energy');
+        var currentHpEl = document.getElementById('current-hp');
+        var currentEnergyEl = document.getElementById('current-energy');
+
+        if (hpSel && totalHpEl) {
+            var hpTotal = extractVitalValue(hpSel.options[hpSel.selectedIndex].text);
+            totalHpEl.textContent = hpTotal;
+            if (currentHpEl) {
+                currentHpEl.max = hpTotal;
+                if (parseFloat(currentHpEl.value) > hpTotal) currentHpEl.value = hpTotal;
+            }
+        }
+
+        if (moveSel && totalMoveEl) {
+            totalMoveEl.value = extractVitalValue(moveSel.options[moveSel.selectedIndex].text);
+        }
+
+        if (energySel && totalEnergyEl) {
+            var energyTotal = extractVitalValue(energySel.options[energySel.selectedIndex].text);
+            totalEnergyEl.textContent = energyTotal;
+            if (currentEnergyEl) {
+                currentEnergyEl.max = energyTotal;
+                if (parseFloat(currentEnergyEl.value) > energyTotal) currentEnergyEl.value = energyTotal;
+            }
+        }
+    }
+
+    function recalculateAll() {
+        recalculateTraitPoints();
+        recalculateVitals();
+    }
+
     // Attach listeners on page load and after HTMX swaps
     document.addEventListener('DOMContentLoaded', function() {
         attachTraitListeners();
+        recalculateVitals();
     });
 
     document.addEventListener('htmx:afterSwap', function() {
         attachTraitListeners();
+        recalculateVitals();
     });
 
     function attachTraitListeners() {
-        document.querySelectorAll('select[name^="general_"], select[name^="offense_"], select[name^="defense_"], select[name="vital_hp"], select[name="vital_movement"], select[name="vital_energy"]').forEach(function(sel) {
+        document.querySelectorAll('select[name^="general_"], select[name^="offense_"], select[name^="defense_"]').forEach(function(sel) {
             sel.removeEventListener('change', recalculateTraitPoints);
             sel.addEventListener('change', recalculateTraitPoints);
+        });
+
+        document.querySelectorAll('select[name="vital_hp"], select[name="vital_movement"], select[name="vital_energy"]').forEach(function(sel) {
+            sel.removeEventListener('change', recalculateAll);
+            sel.addEventListener('change', recalculateAll);
         });
 
         var levelInput = document.querySelector('input[name="level"]');

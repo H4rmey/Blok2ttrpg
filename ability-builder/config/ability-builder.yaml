@@ -761,6 +761,7 @@ ability_builder:
       - Thievery
       - Knowledge
       - Magic
+      - New Trait
     offense:
       - Precision
       - Power
@@ -771,8 +772,162 @@ ability_builder:
       - Constitution
       - Mind
       - Magic
+    vital:
+      - HP
+      - Movement
+      - Energy
 
-  # Dice options
-  dice:
-    damage: ["d4", "d6", "d8", "d10", "d12"]
-    generic: ["d6", "d8", "d10", "d12"]
+  # Proficiency tiers and their associated dice / values
+  proficiencies:
+    - id: clumsy
+      name: "Clumsy"
+      cost: 1
+      dice:
+        general: "d4"
+        offense: "d4"
+        defense: "d4"
+      vitals:
+        hp: 8
+        movement: 3
+        energy: 5
+    - id: untrained
+      name: "Untrained"
+      cost: 1
+      dice:
+        general: "d6"
+        offense: "d6"
+        defense: "d6"
+      vitals:
+        hp: 12
+        movement: 4
+        energy: 8
+    - id: trained
+      name: "Trained"
+      cost: 1
+      dice:
+        general: "d8"
+        offense: "d8"
+        defense: "d8"
+      vitals:
+        hp: 16
+        movement: 5
+        energy: 12
+    - id: expert
+      name: "Expert"
+      cost: 1
+      dice:
+        general: "d10"
+        offense: "d10"
+        defense: "d10"
+      vitals:
+        hp: 20
+        movement: 6
+        energy: 16
+    - id: master
+      name: "Master"
+      cost: 1
+      dice:
+        general: "d12"
+        offense: "d12"
+        defense: "d12"
+      vitals:
+        hp: 24
+        movement: 7
+        energy: 20
+    - id: banana
+      name: "banana"
+      cost: 1
+      dice:
+        general: "+3"
+        offense: "+3"
+        defense: "+3"
+      vitals:
+        hp: 25.5
+        movement: 12
+        energy: 70
+    - id: legendary
+      name: "Legendary"
+      cost: 0
+      note: "Not purchasable via standard points"
+      dice:
+        general: "d20"
+        offense: "d20"
+        defense: "d20"
+      vitals:
+        hp: 28
+        movement: 8
+        energy: 25
+
+  # Leveling tables
+  leveling:
+    max_level: 10
+    trait_points:
+      # Formula: TraitPoints = (TraitAmount + 2) / 3
+      # Standard 22-Trait setting yields 8 starting trait points
+      standard_trait_count: 22
+      starting_formula: "(trait_count + 2) / 3"
+      # Levels table (standard 22-trait setting)
+      levels:
+        - level: 1
+          points_gained: 0
+          total: 8
+        - level: 2
+          points_gained: 1
+          total: 9
+        - level: 3
+          points_gained: 1
+          total: 10
+        - level: 4
+          points_gained: 1
+          total: 11
+        - level: 5
+          points_gained: 2
+          total: 13
+        - level: 6
+          points_gained: 1
+          total: 14
+        - level: 7
+          points_gained: 1
+          total: 15
+        - level: 8
+          points_gained: 1
+          total: 16
+        - level: 9
+          points_gained: 1
+          total: 17
+        - level: 10
+          points_gained: 2
+          total: 19
+    ability_points:
+      levels:
+        - level: 1
+          points_gained: 0
+          total: 10
+        - level: 2
+          points_gained: 2
+          total: 12
+        - level: 3
+          points_gained: 3
+          total: 15
+        - level: 4
+          points_gained: 2
+          total: 17
+        - level: 5
+          points_gained: 4
+          total: 21
+        - level: 6
+          points_gained: 2
+          total: 23
+        - level: 7
+          points_gained: 3
+          total: 26
+        - level: 8
+          points_gained: 2
+          total: 28
+        - level: 9
+          points_gained: 3
+          total: 31
+        - level: 10
+          points_gained: 5
+          total: 36
+
