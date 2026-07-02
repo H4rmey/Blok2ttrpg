@@ -3,6 +3,7 @@ package docs
 import (
 	"fmt"
 	"html/template"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
@@ -21,24 +22,24 @@ type TemplateData struct {
 
 	AdditionalEnactmentTable template.HTML
 
-	Execution                    config.AbilityTypeConfig
-	ExecutionPerksTable          template.HTML
-	ExecutionEnactmentsTable     template.HTML
-	Reaction                     config.AbilityTypeConfig
-	ReactionPerksTable           template.HTML
-	ReactionTriggersTable        template.HTML
-	ReactionEnactmentsTable      template.HTML
-	Phase                        config.AbilityTypeConfig
-	PhasePerksTable              template.HTML
-	PhaseKnockoutsTable          template.HTML
-	PhaseEnactmentsTable         template.HTML
-	Preparation                  config.AbilityTypeConfig
-	PreparationPerksTable        template.HTML
-	PreparationTriggersTable     template.HTML
-	PreparationEnactmentsTable   template.HTML
-	Minion                       config.AbilityTypeConfig
-	MinionPerksTable             template.HTML
-	MinionEnactmentsTable        template.HTML
+	Execution                  config.AbilityTypeConfig
+	ExecutionPerksTable        template.HTML
+	ExecutionEnactmentsTable   template.HTML
+	Reaction                   config.AbilityTypeConfig
+	ReactionPerksTable         template.HTML
+	ReactionTriggersTable      template.HTML
+	ReactionEnactmentsTable    template.HTML
+	Phase                      config.AbilityTypeConfig
+	PhasePerksTable            template.HTML
+	PhaseKnockoutsTable        template.HTML
+	PhaseEnactmentsTable       template.HTML
+	Preparation                config.AbilityTypeConfig
+	PreparationPerksTable      template.HTML
+	PreparationTriggersTable   template.HTML
+	PreparationEnactmentsTable template.HTML
+	Minion                     config.AbilityTypeConfig
+	MinionPerksTable           template.HTML
+	MinionEnactmentsTable      template.HTML
 
 	Damage                       config.EnactmentConfig
 	DamagePerksTable             template.HTML
@@ -66,17 +67,47 @@ type TemplateData struct {
 	AreaOfEffectPerksTable template.HTML
 
 	EngagementModesTable template.HTML
-	CounterTypesTable  template.HTML
-	TierShiftsTable    template.HTML
+	CounterTypesTable    template.HTML
+	TierShiftsTable      template.HTML
 }
 
-// DefaultDir returns the default directory containing markdown templates.
 func DefaultDir() string {
-	return "docs/ability-builder"
+	return filepath.Join("docs", "modules", "ability-builder")
 }
 
-// Render generates the merged markdown documentation from the templates and
-// the given configuration.
+func RenderFullDocumentation(cfg *config.Config) (string, error) {
+	if cfg == nil {
+		return "", fmt.Errorf("configuration is nil")
+	}
+
+	sections := []string{}
+	root, err := RenderStaticFile(filepath.Join("docs", "Blok2ttrpg.md"))
+	if err != nil {
+		return "", err
+	}
+	sections = append(sections, root)
+
+	core, err := RenderStaticDir(filepath.Join("docs", "core"), nil)
+	if err != nil {
+		return "", err
+	}
+	sections = append(sections, core)
+
+	modules, err := RenderStaticDir(filepath.Join("docs", "modules"), map[string]bool{filepath.Clean(DefaultDir()): true})
+	if err != nil {
+		return "", err
+	}
+	sections = append(sections, modules)
+
+	abilityBuilder, err := Render(cfg, DefaultDir())
+	if err != nil {
+		return "", err
+	}
+	sections = append(sections, abilityBuilder)
+
+	return joinSections(sections...), nil
+}
+
 func Render(cfg *config.Config, dir string) (string, error) {
 	if cfg == nil {
 		return "", fmt.Errorf("configuration is nil")
@@ -89,64 +120,140 @@ func Render(cfg *config.Config, dir string) (string, error) {
 	return RenderFiles(files, data)
 }
 
-// CollectFiles returns all markdown template files in render order.
 func CollectFiles(base string) ([]string, error) {
-	files := []string{
-		filepath.Join(base, "introduction.md"),
+	files, err := collectMarkdownFiles(base, nil)
+	if err != nil {
+		return nil, err
 	}
-
-	sections := []string{
-		filepath.Join(base, "ability-types"),
-		filepath.Join(base, "enactments"),
-		filepath.Join(base, "interactions"),
-	}
-	for _, dir := range sections {
-		entries, err := os.ReadDir(dir)
-		if err != nil {
-			return nil, fmt.Errorf("reading %s: %w", dir, err)
-		}
-		var names []string
-		for _, e := range entries {
-			if e.IsDir() || !strings.HasSuffix(e.Name(), ".md") {
-				continue
-			}
-			names = append(names, e.Name())
-		}
-		sort.Strings(names)
-		for _, n := range names {
-			files = append(files, filepath.Join(dir, n))
-		}
-	}
-
-	files = append(files,
-		filepath.Join(base, "validations.md"),
-		filepath.Join(base, "leveling.md"),
-	)
+	sort.SliceStable(files, func(i, j int) bool {
+		return templateFileRank(base, files[i]) < templateFileRank(base, files[j])
+	})
 	return files, nil
 }
 
-// RenderFiles executes each markdown template and concatenates the output.
 func RenderFiles(files []string, data TemplateData) (string, error) {
-	var out strings.Builder
-
+	sections := make([]string, 0, len(files))
 	for _, f := range files {
-		raw, err := os.ReadFile(f)
+		rendered, err := RenderTemplateFile(f, data)
 		if err != nil {
-			return "", fmt.Errorf("reading %s: %w", f, err)
+			return "", err
 		}
+		sections = append(sections, rendered)
+	}
+	return joinSections(sections...), nil
+}
 
-		tmpl, err := template.New(filepath.Base(f)).Parse(string(raw))
-		if err != nil {
-			return "", fmt.Errorf("parsing %s: %w", f, err)
-		}
-
-		if err := tmpl.Execute(&out, &data); err != nil {
-			return "", fmt.Errorf("executing %s: %w", f, err)
-		}
-		out.WriteString("\n\n")
+func RenderTemplateFile(path string, data TemplateData) (string, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return "", fmt.Errorf("reading %s: %w", path, err)
 	}
 
+	tmpl, err := template.New(filepath.Base(path)).Parse(string(raw))
+	if err != nil {
+		return "", fmt.Errorf("parsing %s: %w", path, err)
+	}
+
+	var out strings.Builder
+	if err := tmpl.Execute(&out, &data); err != nil {
+		return "", fmt.Errorf("executing %s: %w", path, err)
+	}
 	return strings.TrimSpace(out.String()), nil
+}
+
+func RenderStaticFile(path string) (string, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return "", fmt.Errorf("reading %s: %w", path, err)
+	}
+	return strings.TrimSpace(string(raw)), nil
+}
+
+func RenderStaticDir(dir string, excluded map[string]bool) (string, error) {
+	files, err := collectMarkdownFiles(dir, excluded)
+	if err != nil {
+		return "", err
+	}
+	sections := make([]string, 0, len(files))
+	for _, file := range files {
+		rendered, err := RenderStaticFile(file)
+		if err != nil {
+			return "", err
+		}
+		sections = append(sections, rendered)
+	}
+	return joinSections(sections...), nil
+}
+
+func collectMarkdownFiles(base string, excluded map[string]bool) ([]string, error) {
+	var files []string
+	cleanExcluded := map[string]bool{}
+	for path := range excluded {
+		cleanExcluded[filepath.Clean(path)] = true
+	}
+
+	if err := filepath.WalkDir(base, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		cleanPath := filepath.Clean(path)
+		if entry.IsDir() {
+			if cleanPath != filepath.Clean(base) && cleanExcluded[cleanPath] {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		if strings.EqualFold(filepath.Ext(path), ".md") {
+			files = append(files, path)
+		}
+		return nil
+	}); err != nil {
+		return nil, fmt.Errorf("walking %s: %w", base, err)
+	}
+
+	sort.Slice(files, func(i, j int) bool {
+		return strings.ToLower(filepath.ToSlash(files[i])) < strings.ToLower(filepath.ToSlash(files[j]))
+	})
+	return files, nil
+}
+
+func templateFileRank(base, path string) string {
+	rel, err := filepath.Rel(base, path)
+	if err != nil {
+		return filepath.ToSlash(path)
+	}
+	rel = filepath.ToSlash(strings.ToLower(rel))
+	switch {
+	case rel == "introduction.md":
+		return "0/" + rel
+	case strings.HasPrefix(rel, "ability-types/"):
+		return "1/" + rel
+	case strings.HasPrefix(rel, "enactments/"):
+		return "2/" + rel
+	case strings.HasPrefix(rel, "interactions/"):
+		return "3/" + rel
+	case rel == "validations.md":
+		return "4/" + rel
+	case rel == "leveling.md":
+		return "5/" + rel
+	default:
+		return "6/" + rel
+	}
+}
+
+func joinSections(sections ...string) string {
+	var out strings.Builder
+	for _, section := range sections {
+		section = strings.TrimSpace(section)
+		if section == "" {
+			continue
+		}
+		if out.Len() > 0 {
+			out.WriteString("\n\n")
+		}
+		out.WriteString(section)
+	}
+	return strings.TrimSpace(out.String())
 }
 
 // BuildTemplateData creates the flat template data with all generated tables.

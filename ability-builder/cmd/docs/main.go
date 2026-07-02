@@ -25,7 +25,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	rendered, err := docs.Render(cfg, docs.DefaultDir())
+	rendered, err := docs.RenderFullDocumentation(cfg)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to render docs: %v\n", err)
 		os.Exit(1)

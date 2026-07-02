@@ -16,7 +16,7 @@ func (app *App) DownloadDocsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	merged, err := docs.Render(cfg, docs.DefaultDir())
+	merged, err := docs.RenderFullDocumentation(cfg)
 	if err != nil {
 		log.Printf("failed to render docs: %v", err)
 		http.Error(w, "Failed to render documentation", http.StatusInternalServerError)
@@ -24,7 +24,7 @@ func (app *App) DownloadDocsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/markdown; charset=utf-8")
-	w.Header().Set("Content-Disposition", "attachment; filename=\"blok2-ability-builder-docs.md\"")
+	w.Header().Set("Content-Disposition", "attachment; filename=\"blok2ttrpg-docs.md\"")
 	if _, err := w.Write([]byte(merged)); err != nil {
 		log.Printf("failed to write docs response: %v", err)
 	}
