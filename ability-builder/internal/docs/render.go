@@ -6,7 +6,6 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/config"
@@ -79,68 +78,80 @@ func RenderFullDocumentation(cfg *config.Config) (string, error) {
 	if cfg == nil {
 		return "", fmt.Errorf("configuration is nil")
 	}
-
-	sections := []string{}
-	root, err := RenderStaticFile(filepath.Join("docs", "Blok2ttrpg.md"))
-	if err != nil {
-		return "", err
+	if len(cfg.AbilityBuilder.FileOrder) == 0 {
+		return "", fmt.Errorf("ability_builder.file_order is required")
 	}
-	sections = append(sections, root)
 
-	core, err := RenderStaticDir(filepath.Join("docs", "core"), nil)
-	if err != nil {
-		return "", err
-	}
-	sections = append(sections, core)
-
-	modules, err := RenderStaticDir(filepath.Join("docs", "modules"), map[string]bool{filepath.Clean(DefaultDir()): true})
-	if err != nil {
-		return "", err
-	}
-	sections = append(sections, modules)
-
-	abilityBuilder, err := Render(cfg, DefaultDir())
-	if err != nil {
-		return "", err
-	}
-	sections = append(sections, abilityBuilder)
-
-	return joinSections(sections...), nil
-}
-
-func Render(cfg *config.Config, dir string) (string, error) {
-	if cfg == nil {
-		return "", fmt.Errorf("configuration is nil")
-	}
-	files, err := CollectFiles(dir)
-	if err != nil {
-		return "", err
-	}
+	templatedPrefix := filepath.ToSlash(filepath.Clean(DefaultDir())) + "/"
+	listed := make(map[string]bool, len(cfg.AbilityBuilder.FileOrder))
 	data := BuildTemplateData(cfg)
-	return RenderFiles(files, data)
-}
 
-func CollectFiles(base string) ([]string, error) {
-	files, err := collectMarkdownFiles(base, nil)
-	if err != nil {
-		return nil, err
-	}
-	sort.SliceStable(files, func(i, j int) bool {
-		return templateFileRank(base, files[i]) < templateFileRank(base, files[j])
-	})
-	return files, nil
-}
+	sections := make([]string, 0, len(cfg.AbilityBuilder.FileOrder))
+	for _, raw := range cfg.AbilityBuilder.FileOrder {
+		clean := normalizeDocPath(raw)
+		listed[clean] = true
 
-func RenderFiles(files []string, data TemplateData) (string, error) {
-	sections := make([]string, 0, len(files))
-	for _, f := range files {
-		rendered, err := RenderTemplateFile(f, data)
-		if err != nil {
-			return "", err
+		if _, err := os.Stat(clean); err != nil {
+			if os.IsNotExist(err) {
+				fmt.Fprintf(os.Stderr, "warning: file_order entry %q does not exist, skipping\n", raw)
+				continue
+			}
+			return "", fmt.Errorf("stating %s: %w", clean, err)
+		}
+
+		slash := filepath.ToSlash(clean)
+		var (
+			rendered string
+			rerr     error
+		)
+		if strings.HasPrefix(slash, templatedPrefix) {
+			rendered, rerr = RenderTemplateFile(clean, data)
+		} else {
+			rendered, rerr = RenderStaticFile(clean)
+		}
+		if rerr != nil {
+			return "", rerr
 		}
 		sections = append(sections, rendered)
 	}
+
+	docsRoot := filepath.Join("docs")
+	if err := warnUnlistedMarkdown(docsRoot, listed); err != nil {
+		return "", err
+	}
+
 	return joinSections(sections...), nil
+}
+
+func normalizeDocPath(p string) string {
+	p = filepath.ToSlash(p)
+	p = strings.TrimPrefix(p, "./")
+	return filepath.Clean(filepath.FromSlash(p))
+}
+
+func warnUnlistedMarkdown(root string, listed map[string]bool) error {
+	if _, err := os.Stat(root); err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return fmt.Errorf("stating %s: %w", root, err)
+	}
+	return filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		if !strings.EqualFold(filepath.Ext(path), ".md") {
+			return nil
+		}
+		clean := normalizeDocPath(path)
+		if !listed[clean] {
+			fmt.Fprintf(os.Stderr, "warning: %s exists on disk but is not in file_order, skipping\n", clean)
+		}
+		return nil
+	})
 }
 
 func RenderTemplateFile(path string, data TemplateData) (string, error) {
@@ -167,78 +178,6 @@ func RenderStaticFile(path string) (string, error) {
 		return "", fmt.Errorf("reading %s: %w", path, err)
 	}
 	return strings.TrimSpace(string(raw)), nil
-}
-
-func RenderStaticDir(dir string, excluded map[string]bool) (string, error) {
-	files, err := collectMarkdownFiles(dir, excluded)
-	if err != nil {
-		return "", err
-	}
-	sections := make([]string, 0, len(files))
-	for _, file := range files {
-		rendered, err := RenderStaticFile(file)
-		if err != nil {
-			return "", err
-		}
-		sections = append(sections, rendered)
-	}
-	return joinSections(sections...), nil
-}
-
-func collectMarkdownFiles(base string, excluded map[string]bool) ([]string, error) {
-	var files []string
-	cleanExcluded := map[string]bool{}
-	for path := range excluded {
-		cleanExcluded[filepath.Clean(path)] = true
-	}
-
-	if err := filepath.WalkDir(base, func(path string, entry fs.DirEntry, walkErr error) error {
-		if walkErr != nil {
-			return walkErr
-		}
-		cleanPath := filepath.Clean(path)
-		if entry.IsDir() {
-			if cleanPath != filepath.Clean(base) && cleanExcluded[cleanPath] {
-				return filepath.SkipDir
-			}
-			return nil
-		}
-		if strings.EqualFold(filepath.Ext(path), ".md") {
-			files = append(files, path)
-		}
-		return nil
-	}); err != nil {
-		return nil, fmt.Errorf("walking %s: %w", base, err)
-	}
-
-	sort.Slice(files, func(i, j int) bool {
-		return strings.ToLower(filepath.ToSlash(files[i])) < strings.ToLower(filepath.ToSlash(files[j]))
-	})
-	return files, nil
-}
-
-func templateFileRank(base, path string) string {
-	rel, err := filepath.Rel(base, path)
-	if err != nil {
-		return filepath.ToSlash(path)
-	}
-	rel = filepath.ToSlash(strings.ToLower(rel))
-	switch {
-	case rel == "introduction.md":
-		return "0/" + rel
-	case strings.HasPrefix(rel, "ability-types/"):
-		return "1/" + rel
-	case strings.HasPrefix(rel, "enactments/"):
-		return "2/" + rel
-	case strings.HasPrefix(rel, "interactions/"):
-		return "3/" + rel
-	case rel == "validations.md":
-		return "4/" + rel
-	case rel == "leveling.md":
-		return "5/" + rel
-	default:
-		return "6/" + rel
-	}
 }
 
 func joinSections(sections ...string) string {

@@ -4,12 +4,11 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"net/http"
+	"strings"
 	"sync"
 
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/models"
 )
-
-const cookieName = "blok2_session"
 
 // BuilderState holds the work-in-progress ability being constructed.
 type BuilderState struct {
@@ -19,14 +18,16 @@ type BuilderState struct {
 
 // Manager manages in-memory sessions for the ability builder.
 type Manager struct {
-	mu       sync.RWMutex
-	sessions map[string]*BuilderState
+	mu         sync.RWMutex
+	cookieName string
+	sessions   map[string]*BuilderState
 }
 
-// NewManager creates a new session manager.
-func NewManager() *Manager {
+// NewManagerForProfile creates a new session manager for a profile.
+func NewManagerForProfile(profileID string) *Manager {
 	return &Manager{
-		sessions: make(map[string]*BuilderState),
+		cookieName: "blok2_session_" + strings.ReplaceAll(profileID, "-", "_"),
+		sessions:   make(map[string]*BuilderState),
 	}
 }
 
@@ -39,7 +40,7 @@ func generateID() string {
 
 // GetOrCreate returns the session for the request, creating one if needed.
 func (m *Manager) GetOrCreate(w http.ResponseWriter, r *http.Request) (string, *BuilderState) {
-	cookie, err := r.Cookie(cookieName)
+	cookie, err := r.Cookie(m.cookieName)
 	if err == nil {
 		m.mu.RLock()
 		state, ok := m.sessions[cookie.Value]
@@ -58,7 +59,7 @@ func (m *Manager) GetOrCreate(w http.ResponseWriter, r *http.Request) (string, *
 	m.mu.Unlock()
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     cookieName,
+		Name:     m.cookieName,
 		Value:    id,
 		Path:     "/",
 		HttpOnly: true,
@@ -69,7 +70,7 @@ func (m *Manager) GetOrCreate(w http.ResponseWriter, r *http.Request) (string, *
 
 // Get returns the session for the request, or nil if none exists.
 func (m *Manager) Get(r *http.Request) *BuilderState {
-	cookie, err := r.Cookie(cookieName)
+	cookie, err := r.Cookie(m.cookieName)
 	if err != nil {
 		return nil
 	}

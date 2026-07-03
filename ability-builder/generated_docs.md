@@ -345,6 +345,433 @@ For example, when making a stealth roll we roll a d8 because we are trained in s
 
 When picking a dice the GM could pick a d10 for the difficulty, because it is quite a hard roll. The GM rolls the d10 and the player the d8, the player succeeds when the number is higher or equal to the GM roll.
 
+# Culture
+## The Accepted Worldview
+
+For most civilizations, the world is believed to be **flat and enclosed**.
+
+The sky is perceived as a dome.  
+Stars are thought to be distant lights embedded in that dome.  
+The sun is believed to move across the world and disappear beyond its edge or behind a barrier.
+
+This belief is reinforced by daily experience:
+
+*   The ground appears flat
+*   There is no visible curvature
+*   The sky curves overhead
+*   No edge of the world can be reached
+
+As a result, the idea that the universe is anything other than a flat, enclosed world is considered **dangerous nonsense**.
+
+---
+
+## The Heresy of Curvature
+
+At various points in history, individuals and small groups proposed an alternative idea:
+
+> That the world is not flat,  
+> that it does not exist _inside_ a globe,  
+> but rather on the **outside of an infinite sphere**.
+
+They claimed:
+
+*   The sky only _appears_ curved because of light bending
+*   Stars are other worlds, not lights
+*   There is no ceiling above the world
+*   Traveling upward never ends
+*   Other worlds can only be reached sideways
+
+These claims were met with hostility.
+
+To most cultures, they sounded absurd — or worse, destabilizing.
+
+---
+
+## Social Response and Suppression
+
+Those who argued that the world curves, or that the universe is a sphere rather than a globe, were often labeled as:
+
+*   Liars
+*   Madmen
+*   Blasphemers
+*   Enemies of social order
+
+In many societies:
+
+*   Their teachings were banned
+*   Their writings were destroyed
+*   Their gatherings were broken up
+*   Their voices were silenced
+
+The idea that the world “curves away beneath your feet” was seen as an attack on common sense, tradition, and authority.
+
+In extreme cases, speaking openly about curvature or infinite ascent was punishable by exile, imprisonment, or death.
+
+---
+
+## The Reason for Fear
+
+This suppression was not only ideological — it was **practical**.
+
+If the world had no ceiling:
+
+*   Then gods did not live above it
+*   Then authority was not anchored to the sky
+*   Then the universe was not designed _for_ the people living in it
+
+If other worlds existed:
+
+*   Then isolation was a lie
+*   Then myths became geography
+*   Then power structures based on uniqueness collapsed
+
+The truth was destabilizing.
+
+---
+
+## Cultural Myths and Distortions
+
+Over time, suppressed ideas resurfaced in distorted forms:
+
+*   Legends of “endless ascent”
+*   Myths of people who climbed forever and vanished
+*   Stories of forbidden heights
+*   Religious tales of souls ascending beyond creation
+
+These stories were tolerated as metaphor, but not as fact.
+
+The truth survived only in fragments.
+
+---
+
+## The Eventual Discovery
+
+Eventually, knowledge advanced.
+
+Through careful observation, experimentation, and resonance science, it became undeniable that:
+
+*   Light bends over distance
+*   The sky is an illusion
+*   No ceiling exists
+*   Upward travel never returns
+*   Lateral travel can reach other Islands
+
+What had once been heresy became **measurable reality**.
+
+The universe was proven to be a sphere of infinite size — not a globe containing the world, but a surface upon which the world rests.
+
+---
+
+## Cultural Fallout
+
+The revelation caused immense cultural shock.
+
+Some societies:
+
+*   Rewrote history
+*   Claimed the knowledge had always been known
+*   Reframed ancient myths as intentional allegory
+
+Others collapsed under the weight of the truth.
+
+Institutions built on the enclosed‑world model lost legitimacy. Religions fractured. Philosophies rewrote themselves.
+
+Even after proof, many refused to accept it.
+
+---
+
+## Modern Attitudes
+
+In the present age:
+
+*   Some cultures accept the true structure of reality
+*   Others acknowledge it academically but ignore it culturally
+*   A few still deny it entirely
+
+Belief in a flat, enclosed world persists not because it is correct, but because it is **comforting**.
+
+Knowing the truth means accepting that:
+
+*   The universe has no top
+*   The world is not central
+*   You are not contained
+*   You are not protected
+
+---
+
+## Summary
+
+For most of history, people believed the world was flat and enclosed.
+
+Those who claimed otherwise were silenced.
+
+Only much later was the truth discovered:
+
+The world does not sit _inside_ a globe.
+
+It lies on the **outside of an infinite sphere**, beneath a sky that lies, in a universe far larger — and far less comforting — than anyone was prepared to accept.
+
+# World
+## Universes
+
+Reality consists of **multiple universes**.
+
+Each universe appears to be a globe of infinite size. This appearance is **not caused by physical boundaries**, but by large‑scale **light bending** driven by resonance interactions between matter, Mantles, and the surrounding medium.
+
+There is no enclosing shell, no inner surface, and no central point.
+
+The universe only _appears_ to be a globe.
+
+---
+
+## Apparent Geometry vs True Geometry
+
+Light does not travel in perfectly straight lines over extreme distances. Instead, it bends gradually due to continuous resonance interactions.
+
+This causes:
+
+*   Distant objects to appear overhead
+*   The sky to appear dome‑like
+*   Space to feel enclosed
+
+In reality, all civilizations exist on the **outside** of an infinitely large sphere.
+
+Each universe is best described as a **sphere of infinite radius**:
+
+*   Locally flat everywhere
+*   Globally unbounded
+*   Without edges, ceilings, or walls
+
+The spherical appearance is an optical effect, not a physical structure.
+
+---
+
+## Islands (Worlds)
+
+Within each universe exist massive structures known as **Islands**.
+
+An Island:
+
+*   Is comparable in size to a planet
+*   Is considered a complete world by its inhabitants
+*   Exists on the surface of the universe
+
+Because the universe is infinitely large, the surface of an Island appears perfectly flat. There is no visible curvature or horizon drop.
+
+---
+
+## Vertical Space: Infinite Ascent
+
+Traveling **upward**, away from the surface of an Island, has no finite limit.
+
+There is:
+
+*   No ceiling
+*   No boundary
+*   No enclosing shell
+
+An individual may continue upward indefinitely.
+
+However, **eventually**, far beyond any finite distance, another universe (another infinite sphere) exists above.
+
+The distance required to reach another universe is **infinite**.
+
+This means:
+
+*   At or below the speed of light, another universe can never be reached
+*   Only movement beyond light‑speed could theoretically bridge this distance
+*   For all practical purposes, upward travel leads forever into empty space
+
+---
+
+## Lateral Space: Reaching Other Worlds
+
+Movement **sideways**, relative to an Island’s surface, follows the surface of the universe.
+
+By traveling laterally for a sufficient amount of time, one may eventually reach another Island.
+
+Distances between Islands vary:
+
+*   Some are separated by immense distances, comparable to interplanetary travel
+*   Others may be relatively close, similar to the distance between a planet and its moon
+
+Because of this:
+
+*   Some Islands appear as bright stars
+*   Others appear large and distinct in the sky
+*   Rarely, multiple Islands may be visible as clearly separate bodies
+
+---
+
+## Inter‑Island Medium
+
+The space between Islands is **not empty**.
+
+Depending on the universe, this medium may consist of:
+
+*   Water
+*   Sand
+*   Dust
+*   Other particulate or fluid matter
+
+This medium exists **along the surface** of the universe.
+
+Vertical travel moves away from all Islands.  
+Lateral travel moves between Islands.
+
+---
+
+## The Sky and the Stars
+
+The sky is a **misleading representation of space**.
+
+Stars are not distant points of light in a void. They are:
+
+*   Other Islands
+*   Other worlds
+*   Other planets
+
+Light bending causes laterally distant Islands to appear overhead instead of on the horizon.
+
+Navigation by sight alone is unreliable.
+
+---
+
+## Suns and Light‑Islands
+
+A “sun” is an Island whose **Response Profile causes it to emit light**.
+
+Light emission is not permanent.
+
+Due to the properties of the materials composing these light‑Islands:
+
+*   Resonance alignment degrades
+*   Mantles lose coherence
+*   Light emission weakens and ceases
+
+The sun does not set.
+
+**The sun turns off.**
+
+After sufficient resonance realignment, the light‑Island may emit again, creating a new day.
+
+---
+
+## Motion, Interaction, and Pseudo‑Gravity
+
+Traditional gravity does not govern the movement of Islands.
+
+Instead, **Response Profiles act as the primary organizing force**.
+
+Each Island’s materials interact resonantly with:
+
+*   The surrounding medium
+*   Nearby Islands
+*   Large‑scale resonance gradients
+
+These interactions function as a form of **pseudo‑gravity**:
+
+*   Islands are guided into stable configurations
+*   Close Islands tend to avoid destructive trajectories
+*   Long‑term balance is maintained through resonance alignment
+
+---
+
+## Island Collisions and Merging
+
+Although rare, **Island collisions are possible**.
+
+When two Islands approach one another:
+
+*   Their Response Profiles begin to interact
+*   Materials slowly transmute at the boundary
+*   The Islands tend to **merge rather than collide catastrophically**
+
+In most cases, this merging is gradual and non‑violent, forming:
+
+*   Larger composite Islands
+*   Complex layered worlds
+*   Shared ecosystems over long timescales
+
+However, catastrophic outcomes are possible.
+
+If a **light‑emitting Island (sun)** merges with a living world:
+
+*   Resonance overload may occur
+*   Ecosystems may collapse
+*   The event may resemble an apocalyptic catastrophe
+
+---
+
+## Motion Through Transmutation
+
+All matter continuously interacts via resonance.
+
+Stone interacts with air.  
+Air interacts with stone.
+
+Over immense spans of time, these interactions cause **gradual transmutation**.
+
+To preserve balance:
+
+*   Some matter converts into other forms
+*   Equivalent matter elsewhere converts back
+
+This slow, distributed process creates the **illusion of motion**:
+
+*   Islands appear to drift
+*   Suns appear to move
+*   Stars shift position
+
+Nothing truly travels through space.
+
+**Space itself is re‑categorizing matter.**
+
+---
+
+## Accelerated Change and Imbuing
+
+Some materials have closely aligned Response Profiles and transmute more easily.
+
+This process can be **artificially accelerated** through **Imbuing**.
+
+By imprinting a Resonance Signature onto an object or region:
+
+*   Certain transmutation pathways are favored
+*   Local equilibrium shifts
+*   Changes that would normally take millennia can occur rapidly
+
+Imbuing does not violate the laws of reality.
+
+It forces resonance interactions to occur **faster than intended**.
+
+---
+
+## Consequences
+
+This structure of reality implies several truths:
+
+*   Worlds are not eternal
+*   Islands may slowly merge or drift apart
+*   Space travel is possible, but slow and dangerous
+*   Ancient composite Islands may exist
+*   Legends of ascension may describe attempts to reach other universes
+*   Catastrophic events are resonance failures, not random disasters
+
+---
+
+## Summary
+
+The universe is not a globe.
+
+It only **appears** to be one.
+
+You live on the outside of an infinite sphere shaped by resonance and curved light. You can ascend forever, never reaching a boundary. Other worlds lie not above you, but far to the side.
+
+Worlds do not orbit.
+
+Worlds **interact**, **align**, and sometimes **become one**.
+
 # Curses
 In the world of SAS, a **curse is not a supernatural judgment or imposed effect**.  
 A curse is a **natural abnormality** — comparable to a birth defect, genetic disorder, chronic illness, or degenerative disease.
@@ -785,433 +1212,6 @@ It exists entirely as a self-sustaining structure of Mantles.
 ## Cursed
 
 _(To be expanded)_
-
-# Culture
-## The Accepted Worldview
-
-For most civilizations, the world is believed to be **flat and enclosed**.
-
-The sky is perceived as a dome.  
-Stars are thought to be distant lights embedded in that dome.  
-The sun is believed to move across the world and disappear beyond its edge or behind a barrier.
-
-This belief is reinforced by daily experience:
-
-*   The ground appears flat
-*   There is no visible curvature
-*   The sky curves overhead
-*   No edge of the world can be reached
-
-As a result, the idea that the universe is anything other than a flat, enclosed world is considered **dangerous nonsense**.
-
----
-
-## The Heresy of Curvature
-
-At various points in history, individuals and small groups proposed an alternative idea:
-
-> That the world is not flat,  
-> that it does not exist _inside_ a globe,  
-> but rather on the **outside of an infinite sphere**.
-
-They claimed:
-
-*   The sky only _appears_ curved because of light bending
-*   Stars are other worlds, not lights
-*   There is no ceiling above the world
-*   Traveling upward never ends
-*   Other worlds can only be reached sideways
-
-These claims were met with hostility.
-
-To most cultures, they sounded absurd — or worse, destabilizing.
-
----
-
-## Social Response and Suppression
-
-Those who argued that the world curves, or that the universe is a sphere rather than a globe, were often labeled as:
-
-*   Liars
-*   Madmen
-*   Blasphemers
-*   Enemies of social order
-
-In many societies:
-
-*   Their teachings were banned
-*   Their writings were destroyed
-*   Their gatherings were broken up
-*   Their voices were silenced
-
-The idea that the world “curves away beneath your feet” was seen as an attack on common sense, tradition, and authority.
-
-In extreme cases, speaking openly about curvature or infinite ascent was punishable by exile, imprisonment, or death.
-
----
-
-## The Reason for Fear
-
-This suppression was not only ideological — it was **practical**.
-
-If the world had no ceiling:
-
-*   Then gods did not live above it
-*   Then authority was not anchored to the sky
-*   Then the universe was not designed _for_ the people living in it
-
-If other worlds existed:
-
-*   Then isolation was a lie
-*   Then myths became geography
-*   Then power structures based on uniqueness collapsed
-
-The truth was destabilizing.
-
----
-
-## Cultural Myths and Distortions
-
-Over time, suppressed ideas resurfaced in distorted forms:
-
-*   Legends of “endless ascent”
-*   Myths of people who climbed forever and vanished
-*   Stories of forbidden heights
-*   Religious tales of souls ascending beyond creation
-
-These stories were tolerated as metaphor, but not as fact.
-
-The truth survived only in fragments.
-
----
-
-## The Eventual Discovery
-
-Eventually, knowledge advanced.
-
-Through careful observation, experimentation, and resonance science, it became undeniable that:
-
-*   Light bends over distance
-*   The sky is an illusion
-*   No ceiling exists
-*   Upward travel never returns
-*   Lateral travel can reach other Islands
-
-What had once been heresy became **measurable reality**.
-
-The universe was proven to be a sphere of infinite size — not a globe containing the world, but a surface upon which the world rests.
-
----
-
-## Cultural Fallout
-
-The revelation caused immense cultural shock.
-
-Some societies:
-
-*   Rewrote history
-*   Claimed the knowledge had always been known
-*   Reframed ancient myths as intentional allegory
-
-Others collapsed under the weight of the truth.
-
-Institutions built on the enclosed‑world model lost legitimacy. Religions fractured. Philosophies rewrote themselves.
-
-Even after proof, many refused to accept it.
-
----
-
-## Modern Attitudes
-
-In the present age:
-
-*   Some cultures accept the true structure of reality
-*   Others acknowledge it academically but ignore it culturally
-*   A few still deny it entirely
-
-Belief in a flat, enclosed world persists not because it is correct, but because it is **comforting**.
-
-Knowing the truth means accepting that:
-
-*   The universe has no top
-*   The world is not central
-*   You are not contained
-*   You are not protected
-
----
-
-## Summary
-
-For most of history, people believed the world was flat and enclosed.
-
-Those who claimed otherwise were silenced.
-
-Only much later was the truth discovered:
-
-The world does not sit _inside_ a globe.
-
-It lies on the **outside of an infinite sphere**, beneath a sky that lies, in a universe far larger — and far less comforting — than anyone was prepared to accept.
-
-# World
-## Universes
-
-Reality consists of **multiple universes**.
-
-Each universe appears to be a globe of infinite size. This appearance is **not caused by physical boundaries**, but by large‑scale **light bending** driven by resonance interactions between matter, Mantles, and the surrounding medium.
-
-There is no enclosing shell, no inner surface, and no central point.
-
-The universe only _appears_ to be a globe.
-
----
-
-## Apparent Geometry vs True Geometry
-
-Light does not travel in perfectly straight lines over extreme distances. Instead, it bends gradually due to continuous resonance interactions.
-
-This causes:
-
-*   Distant objects to appear overhead
-*   The sky to appear dome‑like
-*   Space to feel enclosed
-
-In reality, all civilizations exist on the **outside** of an infinitely large sphere.
-
-Each universe is best described as a **sphere of infinite radius**:
-
-*   Locally flat everywhere
-*   Globally unbounded
-*   Without edges, ceilings, or walls
-
-The spherical appearance is an optical effect, not a physical structure.
-
----
-
-## Islands (Worlds)
-
-Within each universe exist massive structures known as **Islands**.
-
-An Island:
-
-*   Is comparable in size to a planet
-*   Is considered a complete world by its inhabitants
-*   Exists on the surface of the universe
-
-Because the universe is infinitely large, the surface of an Island appears perfectly flat. There is no visible curvature or horizon drop.
-
----
-
-## Vertical Space: Infinite Ascent
-
-Traveling **upward**, away from the surface of an Island, has no finite limit.
-
-There is:
-
-*   No ceiling
-*   No boundary
-*   No enclosing shell
-
-An individual may continue upward indefinitely.
-
-However, **eventually**, far beyond any finite distance, another universe (another infinite sphere) exists above.
-
-The distance required to reach another universe is **infinite**.
-
-This means:
-
-*   At or below the speed of light, another universe can never be reached
-*   Only movement beyond light‑speed could theoretically bridge this distance
-*   For all practical purposes, upward travel leads forever into empty space
-
----
-
-## Lateral Space: Reaching Other Worlds
-
-Movement **sideways**, relative to an Island’s surface, follows the surface of the universe.
-
-By traveling laterally for a sufficient amount of time, one may eventually reach another Island.
-
-Distances between Islands vary:
-
-*   Some are separated by immense distances, comparable to interplanetary travel
-*   Others may be relatively close, similar to the distance between a planet and its moon
-
-Because of this:
-
-*   Some Islands appear as bright stars
-*   Others appear large and distinct in the sky
-*   Rarely, multiple Islands may be visible as clearly separate bodies
-
----
-
-## Inter‑Island Medium
-
-The space between Islands is **not empty**.
-
-Depending on the universe, this medium may consist of:
-
-*   Water
-*   Sand
-*   Dust
-*   Other particulate or fluid matter
-
-This medium exists **along the surface** of the universe.
-
-Vertical travel moves away from all Islands.  
-Lateral travel moves between Islands.
-
----
-
-## The Sky and the Stars
-
-The sky is a **misleading representation of space**.
-
-Stars are not distant points of light in a void. They are:
-
-*   Other Islands
-*   Other worlds
-*   Other planets
-
-Light bending causes laterally distant Islands to appear overhead instead of on the horizon.
-
-Navigation by sight alone is unreliable.
-
----
-
-## Suns and Light‑Islands
-
-A “sun” is an Island whose **Response Profile causes it to emit light**.
-
-Light emission is not permanent.
-
-Due to the properties of the materials composing these light‑Islands:
-
-*   Resonance alignment degrades
-*   Mantles lose coherence
-*   Light emission weakens and ceases
-
-The sun does not set.
-
-**The sun turns off.**
-
-After sufficient resonance realignment, the light‑Island may emit again, creating a new day.
-
----
-
-## Motion, Interaction, and Pseudo‑Gravity
-
-Traditional gravity does not govern the movement of Islands.
-
-Instead, **Response Profiles act as the primary organizing force**.
-
-Each Island’s materials interact resonantly with:
-
-*   The surrounding medium
-*   Nearby Islands
-*   Large‑scale resonance gradients
-
-These interactions function as a form of **pseudo‑gravity**:
-
-*   Islands are guided into stable configurations
-*   Close Islands tend to avoid destructive trajectories
-*   Long‑term balance is maintained through resonance alignment
-
----
-
-## Island Collisions and Merging
-
-Although rare, **Island collisions are possible**.
-
-When two Islands approach one another:
-
-*   Their Response Profiles begin to interact
-*   Materials slowly transmute at the boundary
-*   The Islands tend to **merge rather than collide catastrophically**
-
-In most cases, this merging is gradual and non‑violent, forming:
-
-*   Larger composite Islands
-*   Complex layered worlds
-*   Shared ecosystems over long timescales
-
-However, catastrophic outcomes are possible.
-
-If a **light‑emitting Island (sun)** merges with a living world:
-
-*   Resonance overload may occur
-*   Ecosystems may collapse
-*   The event may resemble an apocalyptic catastrophe
-
----
-
-## Motion Through Transmutation
-
-All matter continuously interacts via resonance.
-
-Stone interacts with air.  
-Air interacts with stone.
-
-Over immense spans of time, these interactions cause **gradual transmutation**.
-
-To preserve balance:
-
-*   Some matter converts into other forms
-*   Equivalent matter elsewhere converts back
-
-This slow, distributed process creates the **illusion of motion**:
-
-*   Islands appear to drift
-*   Suns appear to move
-*   Stars shift position
-
-Nothing truly travels through space.
-
-**Space itself is re‑categorizing matter.**
-
----
-
-## Accelerated Change and Imbuing
-
-Some materials have closely aligned Response Profiles and transmute more easily.
-
-This process can be **artificially accelerated** through **Imbuing**.
-
-By imprinting a Resonance Signature onto an object or region:
-
-*   Certain transmutation pathways are favored
-*   Local equilibrium shifts
-*   Changes that would normally take millennia can occur rapidly
-
-Imbuing does not violate the laws of reality.
-
-It forces resonance interactions to occur **faster than intended**.
-
----
-
-## Consequences
-
-This structure of reality implies several truths:
-
-*   Worlds are not eternal
-*   Islands may slowly merge or drift apart
-*   Space travel is possible, but slow and dangerous
-*   Ancient composite Islands may exist
-*   Legends of ascension may describe attempts to reach other universes
-*   Catastrophic events are resonance failures, not random disasters
-
----
-
-## Summary
-
-The universe is not a globe.
-
-It only **appears** to be one.
-
-You live on the outside of an infinite sphere shaped by resonance and curved light. You can ascend forever, never reaching a boundary. Other worlds lie not above you, but far to the side.
-
-Worlds do not orbit.
-
-Worlds **interact**, **align**, and sometimes **become one**.
 
 # Ability Builder
 
@@ -1757,6 +1757,48 @@ enactments:
         is_optional: <True/False>
 ```
 
+# Area
+
+Area Interactions encompass actions like bombs, splash potions, and traps. These interactions always have a defined **Radius** and **Range**:
+
+*   **Radius**: This determines the area where the Enactment will take effect.
+*   **Range**: This specifies how far from the user the point of origin is set. By default, the point of origin is 0m from the user.
+
+## Rules
+
+*   **Validation**: The interaction must have a validation.
+*   **Radius**: The default radius is 1 meter.
+*   **Range**: The default range is 0 meters.
+*   **Origin**: The point of origin for the radius is the engager or item/location from previous enactment.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Change Origin to something else | +1 | +2 |
+| Will always resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+interactions:
+  - type: Area
+    radius: 1m # Default radius for Area interactions
+    range: 0m # Default range for Area interactions
+    origin: Engager # Point of origin is the Engager
+    perks:
+      - description: <insert description of perk here>
+        add_cost: <cost of the perk>
+        amount: <amount of times the perk is chosen>
+        total_add_cost: <total add cost>
+        energy_cost: <energy cost to use>
+        is_optional: <True/False>
+    validation:
+      engagement_roll: <pick an Offensive Trait>
+      counter_roll: <pick two Defensive Traits>
+```
+
 # Area of Effect
 
 An Area of Effect (AoE) Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. While an Area Interaction might be like a single-use bomb, an AoE Interaction is akin to a bomb that detonates every round.
@@ -1793,48 +1835,6 @@ interactions:
     trigger_conditions:
       - Entering the Area of Effect
       - Start of character's turn within the Area of Effect
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait>
-      counter_roll: <pick two Defensive Traits>
-```
-
-# Area
-
-Area Interactions encompass actions like bombs, splash potions, and traps. These interactions always have a defined **Radius** and **Range**:
-
-*   **Radius**: This determines the area where the Enactment will take effect.
-*   **Range**: This specifies how far from the user the point of origin is set. By default, the point of origin is 0m from the user.
-
-## Rules
-
-*   **Validation**: The interaction must have a validation.
-*   **Radius**: The default radius is 1 meter.
-*   **Range**: The default range is 0 meters.
-*   **Origin**: The point of origin for the radius is the engager or item/location from previous enactment.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Change Origin to something else | +1 | +2 |
-| Will always resolve | +3 | +5 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-interactions:
-  - type: Area
-    radius: 1m # Default radius for Area interactions
-    range: 0m # Default range for Area interactions
-    origin: Engager # Point of origin is the Engager
     perks:
       - description: <insert description of perk here>
         add_cost: <cost of the perk>

@@ -1,5 +1,40 @@
 version: 1
+profile_id: ability-builder
 ability_builder:
+  # Order in which markdown files under ./docs are appended to the generated output.
+  # Paths are relative to the ability-builder module root.
+  # The list must be exhaustive: every .md file under ./docs/ must appear exactly once.
+  file_order:
+    - ./docs/Blok2ttrpg.md
+    - ./docs/core/Character Attributes.md
+    - ./docs/core/Character Traits.md
+    - ./docs/core/Leveling.md
+    - ./docs/core/Multi Dice System.md
+    - ./docs/modules/World/Culture.md
+    - ./docs/modules/World/World.md
+    - ./docs/modules/Magic System/Curses.md
+    - ./docs/modules/Magic System/Imbuing.md
+    - ./docs/modules/Magic System/Magic System.md
+    - ./docs/modules/ability-builder/introduction.md
+    - ./docs/modules/ability-builder/ability-types/execution.md
+    - ./docs/modules/ability-builder/ability-types/minion.md
+    - ./docs/modules/ability-builder/ability-types/phase.md
+    - ./docs/modules/ability-builder/ability-types/preparation.md
+    - ./docs/modules/ability-builder/ability-types/reaction.md
+    - ./docs/modules/ability-builder/enactments/damage.md
+    - ./docs/modules/ability-builder/enactments/healing.md
+    - ./docs/modules/ability-builder/enactments/movement.md
+    - ./docs/modules/ability-builder/enactments/persistent-effect.md
+    - ./docs/modules/ability-builder/enactments/proficiency-shift.md
+    - ./docs/modules/ability-builder/enactments/state.md
+    - ./docs/modules/ability-builder/interactions/area.md
+    - ./docs/modules/ability-builder/interactions/area-of-effect.md
+    - ./docs/modules/ability-builder/interactions/direct.md
+    - ./docs/modules/ability-builder/interactions/ranged.md
+    - ./docs/modules/ability-builder/interactions/self.md
+    - ./docs/modules/ability-builder/validations.md
+    - ./docs/modules/ability-builder/leveling.md
+
   # Core cost rules
   additional_enactment:
     add_cost: 1

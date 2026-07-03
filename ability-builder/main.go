@@ -1,10 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/config"
@@ -14,28 +16,33 @@ import (
 )
 
 func main() {
-	// Configuration
+	configPath := resolveConfigPath()
+
 	port := "8080"
 	if p := os.Getenv("PORT"); p != "" {
 		port = p
 	}
-	dataFile := "data/characters.json"
 	templateDir := "templates"
 
-	// Initialize storage
+	cfg, err := config.Load(configPath)
+	if err != nil {
+		log.Fatalf("Failed to load ability builder config: %v", err)
+	}
+
+	dataFile, err := ensureProfileStore(cfg.ProfileID)
+	if err != nil {
+		log.Fatalf("Failed to prepare profile storage: %v", err)
+	}
+
 	store, err := storage.New(dataFile)
 	if err != nil {
 		log.Fatalf("Failed to initialize storage: %v", err)
 	}
 
-	// Initialize session manager
-	sessions := session.NewManager()
+	sessions := session.NewManagerForProfile(cfg.ProfileID)
 
-	// Load ability builder configuration
-	cfg, err := config.Load(config.DefaultPath())
-	if err != nil {
-		log.Fatalf("Failed to load ability builder config: %v", err)
-	}
+	log.Printf("Using config %s with profile %s", configPath, cfg.ProfileID)
+	log.Printf("Using character storage %s", dataFile)
 
 	// Initialize app with templates
 	app, err := handlers.NewApp(store, sessions, templateDir, cfg)
@@ -166,4 +173,41 @@ func main() {
 	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
+}
+
+func resolveConfigPath() string {
+	configFlag := flag.String("config", "", "path to ability builder YAML config")
+	flag.Parse()
+	if *configFlag != "" {
+		return *configFlag
+	}
+	if configPath := os.Getenv("ABILITY_BUILDER_CONFIG"); configPath != "" {
+		return configPath
+	}
+	return config.DefaultPath()
+}
+
+func ensureProfileStore(profileID string) (string, error) {
+	dataFile := filepath.Join("data", profileID, "characters.json")
+	if err := os.MkdirAll(filepath.Dir(dataFile), 0755); err != nil {
+		return "", err
+	}
+	if profileID == "ability-builder" {
+		legacyFile := filepath.Join("data", "characters.json")
+		if !fileExists(dataFile) && fileExists(legacyFile) {
+			data, err := os.ReadFile(legacyFile)
+			if err != nil {
+				return "", err
+			}
+			if err := os.WriteFile(dataFile, data, 0644); err != nil {
+				return "", err
+			}
+		}
+	}
+	return dataFile, nil
+}
+
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }

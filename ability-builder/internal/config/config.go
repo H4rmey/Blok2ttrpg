@@ -3,19 +3,24 @@ package config
 import (
 	"fmt"
 	"os"
+	"regexp"
 
 	"gopkg.in/yaml.v3"
 )
 
+var profileIDPattern = regexp.MustCompile(`^[a-z0-9_-]+$`)
+
 // Config is the top-level ability-builder configuration loaded from YAML.
 type Config struct {
 	Version        string               `json:"version" yaml:"version"`
+	ProfileID      string               `json:"profile_id" yaml:"profile_id"`
 	AbilityBuilder AbilityBuilderConfig `json:"ability_builder" yaml:"ability_builder"`
 }
 
 // AbilityBuilderConfig holds the main ability-builder rules and costs.
 type AbilityBuilderConfig struct {
-	AdditionalEnactment CostDefinition              `json:"additional_enactment" yaml:"additional_enactment"`
+	FileOrder           []string                     `json:"file_order" yaml:"file_order"`
+	AdditionalEnactment CostDefinition               `json:"additional_enactment" yaml:"additional_enactment"`
 	AbilityTypes        map[string]AbilityTypeConfig `json:"ability_types" yaml:"ability_types"`
 	Enactments          map[string]EnactmentConfig   `json:"enactments" yaml:"enactments"`
 	Interactions        map[string]InteractionConfig `json:"interactions" yaml:"interactions"`
@@ -161,9 +166,9 @@ type EngagementValidationConfig struct {
 
 // CounterValidationConfig defines counter roll rules.
 type CounterValidationConfig struct {
-	Types            []PerkConfig   `json:"types" yaml:"types"`
+	Types             []PerkConfig   `json:"types" yaml:"types"`
 	SingleCounterCost CostDefinition `json:"single_counter_cost" yaml:"single_counter_cost"`
-	TierShifts       []PerkConfig   `json:"tier_shifts" yaml:"tier_shifts"`
+	TierShifts        []PerkConfig   `json:"tier_shifts" yaml:"tier_shifts"`
 }
 
 // TraitConfig holds the trait lists.
@@ -176,12 +181,12 @@ type TraitConfig struct {
 
 // ProficiencyConfig defines a single proficiency tier and its dice/values.
 type ProficiencyConfig struct {
-	ID    string            `json:"id" yaml:"id"`
-	Name  string            `json:"name" yaml:"name"`
-	Cost  int               `json:"cost" yaml:"cost"`
-	Note  string            `json:"note,omitempty" yaml:"note,omitempty"`
-	Dice  ProficiencyDice   `json:"dice" yaml:"dice"`
-	Vitals map[string]int   `json:"vitals" yaml:"vitals"`
+	ID     string          `json:"id" yaml:"id"`
+	Name   string          `json:"name" yaml:"name"`
+	Cost   int             `json:"cost" yaml:"cost"`
+	Note   string          `json:"note,omitempty" yaml:"note,omitempty"`
+	Dice   ProficiencyDice `json:"dice" yaml:"dice"`
+	Vitals map[string]int  `json:"vitals" yaml:"vitals"`
 }
 
 // ProficiencyDice maps category names to the dice they roll at this tier.
@@ -193,23 +198,23 @@ type ProficiencyDice struct {
 
 // LevelingConfig holds the leveling tables.
 type LevelingConfig struct {
-	MaxLevel      int                 `json:"max_level" yaml:"max_level"`
+	MaxLevel      int                  `json:"max_level" yaml:"max_level"`
 	TraitPoints   LevelingPointsConfig `json:"trait_points" yaml:"trait_points"`
 	AbilityPoints LevelingPointsConfig `json:"ability_points" yaml:"ability_points"`
 }
 
 // LevelingPointsConfig holds one resource's leveling table.
 type LevelingPointsConfig struct {
-	StandardTraitCount int           `json:"standard_trait_count,omitempty" yaml:"standard_trait_count,omitempty"`
-	StartingFormula    string        `json:"starting_formula,omitempty" yaml:"starting_formula,omitempty"`
-	Levels             []LevelEntry  `json:"levels" yaml:"levels"`
+	StandardTraitCount int          `json:"standard_trait_count,omitempty" yaml:"standard_trait_count,omitempty"`
+	StartingFormula    string       `json:"starting_formula,omitempty" yaml:"starting_formula,omitempty"`
+	Levels             []LevelEntry `json:"levels" yaml:"levels"`
 }
 
 // LevelEntry is a single row in a leveling table.
 type LevelEntry struct {
-	Level         int `json:"level" yaml:"level"`
-	PointsGained  int `json:"points_gained" yaml:"points_gained"`
-	Total         int `json:"total" yaml:"total"`
+	Level        int `json:"level" yaml:"level"`
+	PointsGained int `json:"points_gained" yaml:"points_gained"`
+	Total        int `json:"total" yaml:"total"`
 }
 
 // DiceConfig holds the available dice options.
@@ -241,6 +246,15 @@ func Load(path string) (*Config, error) {
 func (c *Config) Validate() error {
 	if c.Version == "" {
 		return fmt.Errorf("config version is required")
+	}
+	if c.ProfileID == "" {
+		return fmt.Errorf("profile_id is required")
+	}
+	if !profileIDPattern.MatchString(c.ProfileID) {
+		return fmt.Errorf("profile_id must contain only lowercase letters, numbers, underscores, and hyphens")
+	}
+	if len(c.AbilityBuilder.FileOrder) == 0 {
+		return fmt.Errorf("ability_builder.file_order is required")
 	}
 	if len(c.AbilityBuilder.AbilityTypes) == 0 {
 		return fmt.Errorf("at least one ability type is required")

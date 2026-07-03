@@ -1,0 +1,1076 @@
+version: 1
+profile_id: dnd
+ability_builder:
+  file_order:
+  - ./docs/Blok2ttrpg.md
+  - ./docs/core/Character Attributes.md
+  - ./docs/core/Character Traits.md
+  - ./docs/core/Leveling.md
+  - ./docs/core/Multi Dice System.md
+  - ./docs/modules/World/Culture.md
+  - ./docs/modules/World/World.md
+  - ./docs/modules/Magic System/Curses.md
+  - ./docs/modules/Magic System/Imbuing.md
+  - ./docs/modules/Magic System/Magic System.md
+  - ./docs/modules/ability-builder/introduction.md
+  - ./docs/modules/ability-builder/ability-types/execution.md
+  - ./docs/modules/ability-builder/ability-types/minion.md
+  - ./docs/modules/ability-builder/ability-types/phase.md
+  - ./docs/modules/ability-builder/ability-types/preparation.md
+  - ./docs/modules/ability-builder/ability-types/reaction.md
+  - ./docs/modules/ability-builder/enactments/damage.md
+  - ./docs/modules/ability-builder/enactments/healing.md
+  - ./docs/modules/ability-builder/enactments/movement.md
+  - ./docs/modules/ability-builder/enactments/persistent-effect.md
+  - ./docs/modules/ability-builder/enactments/proficiency-shift.md
+  - ./docs/modules/ability-builder/enactments/state.md
+  - ./docs/modules/ability-builder/interactions/area.md
+  - ./docs/modules/ability-builder/interactions/area-of-effect.md
+  - ./docs/modules/ability-builder/interactions/direct.md
+  - ./docs/modules/ability-builder/interactions/ranged.md
+  - ./docs/modules/ability-builder/interactions/self.md
+  - ./docs/modules/ability-builder/validations.md
+  - ./docs/modules/ability-builder/leveling.md
+  additional_enactment:
+    add_cost: 1
+    energy_cost: 1
+    description: Adding an additional Enactment beyond the first
+  ability_types:
+    execution:
+      name: Execution
+      description: Performed instantly during a character's turn.
+      base_energy: 3
+      base_action: 2
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+        action:
+          increase:
+            add_cost: -2
+            energy_cost: 0
+          decrease:
+            add_cost: 4
+            energy_cost: 1
+      perks:
+      - id: item_dependency
+        description: Has item dependency
+        add_cost: -1
+        energy_cost: 0
+      compatible_enactments:
+      - Enact Damage
+      - Enact Healing
+      - Enact Movement
+      - Enact Proficiency Shift
+      - Enact Persistent Effect
+    reaction:
+      name: Reaction
+      description: Triggered in response to an event or enemy action.
+      base_energy: 3
+      base_action: 0
+      base_range: 1
+      base_uses: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+      uses_cost:
+        add_cost: 4
+        energy_cost: 1
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      perks:
+      - id: item_dependency
+        description: Has item dependency
+        add_cost: -1
+        energy_cost: 0
+      triggers:
+      - id: Target moves away from engager
+        description: Someone runs away from you
+        add_cost: 2
+        energy_cost: 0
+      - id: Target moves towards engager
+        description: Someone runs towards you
+        add_cost: 2
+        energy_cost: 0
+      - id: Target moves past engager
+        description: Someone moves past you
+        add_cost: 2
+        energy_cost: 0
+      - id: Engager gets healed by target
+        description: Someone gets healed
+        add_cost: 2
+        energy_cost: 0
+      - id: Target damages engager
+        description: Someone takes damage
+        add_cost: 2
+        energy_cost: 0
+      - id: Target makes a trait check
+        description: Someone does a skill check
+        add_cost: 2
+        energy_cost: 0
+      - id: Target starts casting an ability
+        description: Someone starts casting an ability
+        add_cost: 2
+        energy_cost: 0
+      - id: Target ends their turn within range
+        description: A turn ends within range
+        add_cost: 2
+        energy_cost: 0
+      - id: Target enters interaction range
+        description: Someone enters range
+        add_cost: 2
+        energy_cost: 0
+      - id: Target leaves interaction range
+        description: Someone leaves range
+        add_cost: 2
+        energy_cost: 0
+      - id: Target fails a validation
+        description: Someone fails a validation
+        add_cost: 2
+        energy_cost: 0
+      - id: Target succeeds on a validation
+        description: Someone succeeds on a validation
+        add_cost: 2
+        energy_cost: 0
+      - id: Target becomes affected by an enactment
+        description: Someone becomes affected by an enactment
+        add_cost: 2
+        energy_cost: 0
+      - id: Engager takes damage
+        description: You take damage
+        add_cost: 2
+        energy_cost: 0
+      - id: Engager gets targeted by an ability
+        description: You are targeted by an ability
+        add_cost: 2
+        energy_cost: 0
+      - id: Ally within range takes damage
+        description: An ally within range takes damage
+        add_cost: 2
+        energy_cost: 0
+      - id: Ally within range gets healed
+        description: An ally within range gets healed
+        add_cost: 2
+        energy_cost: 0
+      - id: A target is moved by an effect
+        description: Someone is moved by an effect
+        add_cost: 2
+        energy_cost: 0
+      - id: A persistent effect triggers
+        description: A persistent effect triggers
+        add_cost: 2
+        energy_cost: 0
+      - id: A minion is summoned within range
+        description: A minion is summoned within range
+        add_cost: 2
+        energy_cost: 0
+      compatible_enactments:
+      - Enact Damage
+      - Enact Healing
+      - Enact Movement
+      - Enact Proficiency Shift
+      - Enact Persistent Effect
+    phase:
+      name: Phase
+      description: Requires setup or charging time before execution.
+      base_energy: 3
+      base_action: 2
+      base_duration: 2
+      base_reverse_duration: 2
+      duration_cost:
+        add_cost: 2
+        energy_cost: 1
+      reverse_duration_refund:
+        add_cost: 4
+        energy_cost: 0
+      perks:
+      - id: all_knockouts_req
+        description: All knockout requirements have to be met
+        add_cost: 3
+        energy_cost: 0
+      - id: reverse_knockout
+        description: Knockout can be used on the reverse phase
+        add_cost: 3
+        energy_cost: 0
+      - id: no_knockout
+        description: No knockout possible
+        add_cost: 5
+        energy_cost: 0
+      - id: item_dependency
+        description: Has item dependency
+        add_cost: -1
+        energy_cost: 0
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      knockout_requirements:
+      - id: None
+        description: None
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager takes damage
+        description: You take damage
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager falls unconscious
+        description: You fall unconscious
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager dies
+        description: You die
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager gets grabbed or restrained
+        description: You get grabbed or restrained
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager moves voluntarily
+        description: You move voluntarily
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager is moved by another effect
+        description: You are moved by another effect
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager fails a validation
+        description: You fail a validation
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager uses another phase
+        description: You use another phase
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager loses line of sight to target
+        description: You lose line of sight to target
+        add_cost: 0
+        energy_cost: 0
+      - id: Target moves out of range
+        description: Target moves out of range
+        add_cost: 0
+        energy_cost: 0
+      - id: Target falls unconscious
+        description: Target falls unconscious
+        add_cost: 0
+        energy_cost: 0
+      - id: Target dies
+        description: Target dies
+        add_cost: 0
+        energy_cost: 0
+      - id: Target succeeds on a counter roll
+        description: Target succeeds on a counter roll
+        add_cost: 0
+        energy_cost: 0
+      - id: Phase duration expires
+        description: Phase duration expires
+        add_cost: 0
+        energy_cost: 0
+      - id: Engager runs out of energy
+        description: You run out of energy
+        add_cost: 0
+        energy_cost: 0
+      compatible_enactments:
+      - Enact Damage
+      - Enact Healing
+      - Enact Proficiency Shift
+      bad_enactments:
+      - id: reverse_default
+        description: Reverse of the original Enactment
+        add_cost: 0
+        energy_cost: 0
+    minion:
+      name: Minion
+      description: Summons entities that act independently.
+      base_energy: 0
+      base_health: 10
+      base_lifetime: 3
+      health_bonus_cost:
+        add_cost: 1
+        energy_cost: 0
+      lifetime_bonus_cost:
+        add_cost: 1
+        energy_cost: 1
+      perks:
+      - id: item_dependency
+        description: Has item dependency
+        add_cost: -1
+        energy_cost: 0
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      compatible_enactments:
+      - Enact Damage
+      - Enact Healing
+      - Enact Movement
+      - Enact Proficiency Shift
+      - Enact Persistent Effect
+    preparation:
+      name: Preparation
+      description: Works like a Reaction but must be prepared with an action.
+      base_energy: 3
+      base_action: 2
+      base_range: 1
+      base_uses: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+      uses_cost:
+        add_cost: 4
+        energy_cost: 1
+      step_costs:
+        action:
+          increase:
+            add_cost: -2
+            energy_cost: 0
+          decrease:
+            add_cost: 1
+            energy_cost: 4
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      perks:
+      - id: item_dependency
+        description: Has item dependency
+        add_cost: -1
+        energy_cost: 0
+      compatible_enactments:
+      - Enact Damage
+      - Enact Healing
+      - Enact Movement
+      - Enact Proficiency Shift
+      - Enact Persistent Effect
+  enactments:
+    damage:
+      type: Enact Damage
+      description: Inflicts damage to a target.
+      default_dice: 1d8
+      dice_tiers:
+        d4: 0
+        d6: 1
+        d8: 2
+        d10: 3
+        d12: 4
+      dice_tier_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+      - id: trait_source
+        description: Change Damage Dice to one of your traits
+        add_cost: 3
+        energy_cost: 0
+      - id: flat_bonus
+        description: Add a flat +1 bonus to the result
+        add_cost: 2
+        energy_cost: 0
+      - id: offensive_trait
+        description: Add an Offensive Trait Dice to the Damage Dice
+        add_cost: 4
+        energy_cost: 2
+      - id: always_resolve
+        description: Will Always Resolve
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      base_cost:
+        add_cost: 2
+        energy_cost: 1
+    healing:
+      type: Enact Healing
+      description: Restores health to a target.
+      default_dice: 1d8
+      dice_tiers:
+        d4: 0
+        d6: 1
+        d8: 2
+        d10: 3
+        d12: 4
+      dice_tier_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+      - id: trait_source
+        description: Change Heal Dice to one of your traits
+        add_cost: 3
+        energy_cost: 0
+      - id: flat_bonus
+        description: Add a flat +1 bonus to the result
+        add_cost: 2
+        energy_cost: 0
+      - id: medicine_trait
+        description: Add Medicine Trait Dice to the heal effect
+        add_cost: 3
+        energy_cost: 1
+      - id: always_resolve
+        description: Will Always Resolve
+        add_cost: 4
+        energy_cost: 2
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      base_cost:
+        add_cost: 2
+        energy_cost: 1
+    movement:
+      type: Enact Movement
+      description: Moves a target or the Ability user.
+      default_distance: 1
+      distance_cost:
+        add_cost: 1
+        energy_cost: 0
+      perks:
+      - id: extra_direction
+        description: Add another option for the direction
+        add_cost: 1
+        energy_cost: 0
+      - id: other_origin
+        description: Change Origin to something else
+        add_cost: 2
+        energy_cost: 1
+      - id: trait_distance
+        description: Change the total movement to any other trait
+        add_cost: 3
+        energy_cost: 0
+      - id: always_resolve
+        description: Will Always Resolve
+        add_cost: 3
+        energy_cost: 1
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      - id: free_direction
+        description: Free direction (extra cost)
+        add_cost: 2
+        energy_cost: 1
+      base_cost:
+        add_cost: 1
+        energy_cost: 0
+    proficiency_shift:
+      type: Enact Proficiency Shift
+      description: Temporarily enhances or weakens Traits.
+      default_shift_amount: 1
+      default_uses: 1
+      shift_amount_cost:
+        add_cost: 3
+        energy_cost: 1
+      shift_uses_cost:
+        add_cost: 3
+        energy_cost: 1
+      perks:
+      - id: choose_shift
+        description: You may choose if you use the Shifted Proficiency or not
+        add_cost: 2
+        energy_cost: 0
+      - id: always_resolve
+        description: Will Always Resolve
+        add_cost: 4
+        energy_cost: 2
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      base_cost:
+        add_cost: 2
+        energy_cost: 1
+    persistent_effect:
+      type: Enact Persistent Effect
+      description: Applies a lingering effect that remains for multiple turns.
+      default_duration: 2
+      base_cost:
+        add_cost: 3
+        energy_cost: 2
+      duration_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+      - id: single_solution
+        description: Remove one Solution option
+        add_cost: 3
+        energy_cost: 1
+      - id: extra_effect
+        description: Add another Effect
+        add_cost: 4
+        energy_cost: 2
+      - id: always_resolve
+        description: Will Always Resolve
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      effects:
+      - id: damage
+        description: Enact Damage
+        add_cost: 2
+        energy_cost: 1
+      - id: healing
+        description: Enact Healing
+        add_cost: 2
+        energy_cost: 1
+      - id: movement
+        description: Enact Movement
+        add_cost: 1
+        energy_cost: 0
+      - id: proficiency_shift
+        description: Enact Proficiency Shift
+        add_cost: 2
+        energy_cost: 1
+    state:
+      type: Enact State
+      description: Applies a state or condition to a target (WIP).
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+      perks: []
+  interactions:
+    self:
+      type: Self
+      description: Targets the Ability user.
+      default_counter: d8
+      perks:
+      - id: generic_counter
+        description: 'Validation counter roll is replaced by a Generic Dice: d8'
+        add_cost: 2
+        energy_cost: 0
+      - id: always_resolve
+        description: Will always resolve
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+    direct:
+      type: Direct
+      description: Affects a single target within 1m.
+      default_range: 1
+      default_targets: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+      target_cost:
+        add_cost: 3
+        energy_cost: 2
+      perks:
+      - id: always_resolve
+        description: Will always resolve
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+    ranged:
+      type: Ranged
+      description: Affects a single target at range with visibility requirements.
+      default_range: 10
+      default_targets: 1
+      default_visible: true
+      default_obstructed: false
+      range_extension_cost:
+        add_cost: 1
+        energy_cost: 0
+        step: 2
+      target_cost:
+        add_cost: 3
+        energy_cost: 2
+      perks:
+      - id: not_visible
+        description: Engagement does not have to be visible
+        add_cost: 3
+        energy_cost: 1
+      - id: obstructed
+        description: Engagement may be obstructed
+        add_cost: 3
+        energy_cost: 1
+      - id: remove_penalty
+        description: Remove the Engagement Roll Penalty
+        add_cost: 3
+        energy_cost: 1
+      - id: always_resolve
+        description: Will always resolve
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+    area:
+      type: Area
+      description: Affects a radius at a point within range.
+      default_radius: 1
+      default_range: 0
+      radius_cost:
+        add_cost: 2
+        energy_cost: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+        step: 2
+      perks:
+      - id: other_origin
+        description: Change Origin to something else
+        add_cost: 2
+        energy_cost: 1
+      - id: always_resolve
+        description: Will always resolve
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+    area_of_effect:
+      type: Area of Effect
+      description: A persistent area that triggers each round.
+      default_radius: 1
+      default_range: 0
+      default_duration: 2
+      radius_cost:
+        add_cost: 2
+        energy_cost: 1
+      range_cost:
+        add_cost: 1
+        energy_cost: 0
+        step: 2
+      duration_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+      - id: immune
+        description: Engager is immune to the effect
+        add_cost: 2
+        energy_cost: 0
+      - id: other_origin
+        description: Change Origin to something else
+        add_cost: 2
+        energy_cost: 1
+      - id: always_resolve
+        description: Will always resolve
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+      base_cost:
+        add_cost: 0
+        energy_cost: 0
+  validations:
+    default_engagement_trait: offense
+    default_counter_count: 1
+    engagement:
+      modes:
+      - id: trait
+        description: Offensive Trait by default
+        add_cost: 0
+        energy_cost: 0
+      - id: generic
+        description: Engage Roll is replaced by a Generic Roll (default 1d6)
+        add_cost: -2
+        energy_cost: 0
+      - id: other
+        description: Replace the Engagement Roll to any other Trait
+        add_cost: 3
+        energy_cost: 1
+      - id: previous
+        description: Use the result of another roll for this entry
+        add_cost: 3
+        energy_cost: 1
+    counter:
+      types:
+      - id: defense
+        description: Defensive Trait (default)
+        add_cost: 0
+        energy_cost: 0
+      - id: general
+        description: Replace one of the Counter Rolls to a General Trait
+        add_cost: 4
+        energy_cost: 0
+      - id: offense
+        description: Replace one of the Counter Rolls to an Offensive Trait
+        add_cost: 4
+        energy_cost: 0
+      - id: previous
+        description: Use the result of another roll as counter
+        add_cost: 3
+        energy_cost: 1
+      single_counter_cost:
+        add_cost: 3
+        energy_cost: 1
+      tier_shifts:
+      - id: counter_up
+        description: Shift Dice Tier of Generic Counter Roll UP
+        add_cost: 3
+        energy_cost: 1
+      - id: counter_down
+        description: Shift Dice Tier of Generic Counter Roll DOWN
+        add_cost: -2
+        energy_cost: 0
+      - id: engage_up
+        description: Shift Dice Tier of Generic Engagement Roll UP
+        add_cost: 3
+        energy_cost: 1
+      - id: engage_down
+        description: Shift Dice Tier of Generic Engagement Roll DOWN
+        add_cost: -2
+        energy_cost: 0
+  traits:
+    general:
+    - Acrobatics
+    - Animal Handling
+    - Arcana
+    - Athletics
+    - Deception
+    - History
+    - Insight
+    - Intimidation
+    - Investigation
+    - Medicine
+    - Nature
+    - Perception
+    - Performance
+    - Persuasion
+    - Religion
+    - Sleight of Hand
+    - Stealth
+    - Survival
+    offense:
+    - Strength
+    - Dexterity
+    - Constitution
+    - Intelligence
+    - Wisdom
+    - Charisma
+    defense:
+    - Strength Save
+    - Dexterity Save
+    - Constitution Save
+    - Intelligence Save
+    - Wisdom Save
+    - Charisma Save
+    vital:
+    - HP
+    - Movement
+    - Energy
+  proficiencies:
+  - id: bonus_minus_2
+    name: '-2'
+    cost: 1
+    dice:
+      general: d20-2
+      offense: d20-2
+      defense: d20-2
+    vitals:
+      hp: 6
+      movement: 3
+      energy: 4
+  - id: bonus_minus_1
+    name: '-1'
+    cost: 1
+    dice:
+      general: d20-1
+      offense: d20-1
+      defense: d20-1
+    vitals:
+      hp: 6
+      movement: 3
+      energy: 4
+  - id: bonus_0
+    name: '+0'
+    cost: 1
+    dice:
+      general: d20+0
+      offense: d20+0
+      defense: d20+0
+    vitals:
+      hp: 6
+      movement: 3
+      energy: 4
+  - id: bonus_plus_1
+    name: '+1'
+    cost: 1
+    dice:
+      general: d20+1
+      offense: d20+1
+      defense: d20+1
+    vitals:
+      hp: 7
+      movement: 3
+      energy: 5
+  - id: bonus_plus_2
+    name: '+2'
+    cost: 1
+    dice:
+      general: d20+2
+      offense: d20+2
+      defense: d20+2
+    vitals:
+      hp: 8
+      movement: 3
+      energy: 6
+  - id: bonus_plus_3
+    name: '+3'
+    cost: 1
+    dice:
+      general: d20+3
+      offense: d20+3
+      defense: d20+3
+    vitals:
+      hp: 9
+      movement: 3
+      energy: 7
+  - id: bonus_plus_4
+    name: '+4'
+    cost: 1
+    dice:
+      general: d20+4
+      offense: d20+4
+      defense: d20+4
+    vitals:
+      hp: 10
+      movement: 4
+      energy: 8
+  - id: bonus_plus_5
+    name: '+5'
+    cost: 1
+    dice:
+      general: d20+5
+      offense: d20+5
+      defense: d20+5
+    vitals:
+      hp: 11
+      movement: 4
+      energy: 9
+  - id: bonus_plus_6
+    name: '+6'
+    cost: 1
+    dice:
+      general: d20+6
+      offense: d20+6
+      defense: d20+6
+    vitals:
+      hp: 12
+      movement: 4
+      energy: 10
+  - id: bonus_plus_7
+    name: '+7'
+    cost: 1
+    dice:
+      general: d20+7
+      offense: d20+7
+      defense: d20+7
+    vitals:
+      hp: 13
+      movement: 4
+      energy: 11
+  - id: bonus_plus_8
+    name: '+8'
+    cost: 1
+    dice:
+      general: d20+8
+      offense: d20+8
+      defense: d20+8
+    vitals:
+      hp: 14
+      movement: 5
+      energy: 12
+  - id: bonus_plus_9
+    name: '+9'
+    cost: 1
+    dice:
+      general: d20+9
+      offense: d20+9
+      defense: d20+9
+    vitals:
+      hp: 15
+      movement: 5
+      energy: 13
+  - id: bonus_plus_10
+    name: '+10'
+    cost: 1
+    dice:
+      general: d20+10
+      offense: d20+10
+      defense: d20+10
+    vitals:
+      hp: 16
+      movement: 5
+      energy: 14
+  leveling:
+    max_level: 20
+    trait_points:
+      standard_trait_count: 30
+      starting_formula: (trait_count + 2) / 4
+      levels:
+      - level: 1
+        points_gained: 0
+        total: 8
+      - level: 2
+        points_gained: 0
+        total: 8
+      - level: 3
+        points_gained: 0
+        total: 8
+      - level: 4
+        points_gained: 1
+        total: 9
+      - level: 5
+        points_gained: 0
+        total: 9
+      - level: 6
+        points_gained: 0
+        total: 9
+      - level: 7
+        points_gained: 0
+        total: 9
+      - level: 8
+        points_gained: 1
+        total: 10
+      - level: 9
+        points_gained: 0
+        total: 10
+      - level: 10
+        points_gained: 0
+        total: 10
+      - level: 11
+        points_gained: 0
+        total: 10
+      - level: 12
+        points_gained: 1
+        total: 11
+      - level: 13
+        points_gained: 0
+        total: 11
+      - level: 14
+        points_gained: 0
+        total: 11
+      - level: 15
+        points_gained: 0
+        total: 11
+      - level: 16
+        points_gained: 1
+        total: 12
+      - level: 17
+        points_gained: 0
+        total: 12
+      - level: 18
+        points_gained: 0
+        total: 12
+      - level: 19
+        points_gained: 0
+        total: 12
+      - level: 20
+        points_gained: 1
+        total: 13
+    ability_points:
+      levels:
+      - level: 1
+        points_gained: 0
+        total: 10
+      - level: 2
+        points_gained: 2
+        total: 12
+      - level: 3
+        points_gained: 1
+        total: 13
+      - level: 4
+        points_gained: 2
+        total: 15
+      - level: 5
+        points_gained: 1
+        total: 16
+      - level: 6
+        points_gained: 2
+        total: 18
+      - level: 7
+        points_gained: 1
+        total: 19
+      - level: 8
+        points_gained: 2
+        total: 21
+      - level: 9
+        points_gained: 1
+        total: 22
+      - level: 10
+        points_gained: 2
+        total: 24
+      - level: 11
+        points_gained: 1
+        total: 25
+      - level: 12
+        points_gained: 2
+        total: 27
+      - level: 13
+        points_gained: 1
+        total: 28
+      - level: 14
+        points_gained: 2
+        total: 30
+      - level: 15
+        points_gained: 1
+        total: 31
+      - level: 16
+        points_gained: 2
+        total: 33
+      - level: 17
+        points_gained: 1
+        total: 34
+      - level: 18
+        points_gained: 2
+        total: 36
+      - level: 19
+        points_gained: 1
+        total: 37
+      - level: 20
+        points_gained: 2
+        total: 39
+  dice:
+    generic:
+    - d20
+    damage:
+    - d4
+    - d6
+    - d8
+    - d10
+    - d12
