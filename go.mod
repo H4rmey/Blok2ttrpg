@@ -1,5 +1,5 @@
-module github.com/blok2ttrpg/charsheet
+module github.com/harmey/blok2ttrpg/ability-builder
 
-go 1.24.3
+go 1.23
 
-require gopkg.in/yaml.v3 v3.0.1
+require gopkg.in/yaml.v3 v3.0.1 // indirect

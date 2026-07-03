@@ -1,125 +1,74 @@
-# Blok2ttrpg Character Sheet
+# Blok2 TTRPG — Ability Builder
 
-A self-hostable web application for managing character sheets in the Blok2ttrpg tabletop RPG system. Built with Go, HTMX, and Tailwind CSS.
+A Go web application for building TTRPG abilities using cascading dropdowns, managing character sheets, and exporting abilities as YAML.
 
-## Features
+## Prerequisites
 
-- **Character Attributes** — name, backstory, personality, custom fields, temporary attributes
-- **General Traits** — 11 traits with proficiency ladder (Clumsy → Master), free re-speccing
-- **Combative Traits** — Offense, Defense, and Vital stats sharing the same point pool
-- **Ability Builder** — cascading wizard to design abilities with enactments, interactions, validations, and perks
-- **Leveling** — level up/down with automatic point grants, snapshot-based undo
-- **YAML Import/Export** — full character or individual abilities
-- **Light/Dark Theme** — toggle with localStorage persistence
-- **No Database** — YAML is the save format, session state lives in memory
+- [Go 1.23+](https://go.dev/dl/)
 
 ## Quick Start
 
-### Prerequisites
-
-- [Go 1.21+](https://go.dev/dl/)
-- [Node.js](https://nodejs.org/) (for Tailwind CSS CLI via npx)
-
-### Run (Development)
-
-```powershell
-./start.ps1
-```
-
-This builds CSS, compiles the binary, and starts the server in dev mode (templates loaded from disk — edit and refresh).
-
-Open http://localhost:8080
-
-### Run (Manual)
-
 ```bash
-# Build CSS
-npx tailwindcss -i ./web/static/css/input.css -o ./web/static/css/output.css --minify
+cd ability-builder
 
-# Build and run
-go build -o bin/charsheet.exe ./cmd/server
-DEV=1 ./bin/charsheet.exe
+# Download dependencies
+go mod tidy
+
+# Run the server
+go run main.go
 ```
 
-### Production Build
+Then open [http://localhost:8080](http://localhost:8080) in your browser.
 
-Without `DEV` env var, templates and static assets are embedded in the binary:
+## Features
 
-```bash
-npx tailwindcss -i ./web/static/css/input.css -o ./web/static/css/output.css --minify
-go build -o charsheet ./cmd/server
-./charsheet
+### Character Sheet
+- Create and manage characters with full trait proficiency configuration
+- General Traits: Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic
+- Combative Traits: Offense (Precision, Power, Mind, Magic) and Defense (Reflex, Constitution, Mind, Magic)
+- Vital Stats: HP, Movement, Energy
+
+### Ability Builder
+- Cascading dropdown form powered by HTMX
+- 4 Ability Types: Execution, Reaction, Phase, Minion
+- 5 Enactment Types: Damage, Healing, Movement, Proficiency Shift, Persistent Effect
+- 5 Interaction Types: Self, Direct, Ranged, Area, Area of Effect
+- Validation configuration with Engagement and Counter rolls
+- Perk system at every level with cost tracking
+
+### Ability List
+- Browse all abilities for a character
+- View ability details with YAML output
+- Export abilities as YAML files
+- Delete abilities
+
+## Project Structure
+
+```
+ability-builder/
+├── main.go                          # Entry point, router
+├── internal/
+│   ├── handlers/                    # HTTP handlers
+│   ├── models/                      # Data models + reference data
+│   ├── storage/                     # JSON file persistence
+│   ├── session/                     # In-memory builder session
+│   └── export/                      # YAML export
+├── templates/                       # HTML templates
+│   └── partials/                    # HTMX partial templates
+├── static/                          # CSS
+└── data/                            # JSON data files
 ```
 
-Single binary, no external files needed.
+## Tech Stack
 
-### Docker (Linux deployment)
-
-```bash
-# Build and run
-docker compose up -d
-
-# Or build manually
-docker build -t blok2ttrpg .
-docker run -d -p 8080:8080 --name charsheet blok2ttrpg
-```
-
-The image is ~15MB (Alpine-based), runs on any Linux host with Docker.
-
-### Deploy to a Linux server
-
-```bash
-# On your dev machine: build the image and push
-docker build -t your-registry/blok2ttrpg:latest .
-docker push your-registry/blok2ttrpg:latest
-
-# On the server: pull and run
-docker pull your-registry/blok2ttrpg:latest
-docker run -d -p 8080:8080 --restart unless-stopped --name charsheet your-registry/blok2ttrpg:latest
-```
-
-Or copy `docker-compose.yml` to the server and run `docker compose up -d`.
+- **Go** stdlib `net/http` — no framework
+- **html/template** — server-side rendering
+- **HTMX** — dynamic UI without JavaScript framework
+- **Tailwind CSS** (CDN) — styling
+- **JSON files** — persistence
 
 ## Configuration
 
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
-| `PORT` | `8080` | HTTP port |
-| `DEV` | (unset) | If set, loads templates from disk instead of embed |
-
-## Project Structure
-
-```
-cmd/server/          — main entry point
-internal/
-  models/            — domain models (Character, Traits, Abilities, YAML)
-  server/            — HTTP handlers, session store, view models
-  server/tmplfuncs/  — template helper functions
-  gamedata/          — TTRPG rule catalog (perks, enactments, interactions)
-web/
-  templates/         — Go HTML templates (layouts + partials)
-  static/css/        — Tailwind input/output CSS
-  embed.go           — embed directives for production builds
-docs/                — TTRPG game design documents
-```
-
-## How It Works
-
-- **Session**: cookie-based in-memory sessions (24h TTL). No accounts needed.
-- **State**: character lives in server memory during session. Export to YAML to save, import to restore.
-- **UI**: server-rendered HTML with HTMX for dynamic updates. No JavaScript framework.
-- **Ability Builder**: cascading dropdowns — pick Type → add Enactments → set Interactions → configure Validations → apply Perks. Each perk dynamically updates the computed summary.
-
-## Game System
-
-Based on the Blok2ttrpg tabletop RPG. Key concepts:
-
-- **Proficiency Ladder**: Clumsy (d4) → Untrained (d6) → Trained (d8) → Expert (d10) → Master (d12) → Legendary (d20)
-- **Trait Points**: shared pool for General + Combative traits, formula-based on trait count
-- **Ability Points**: separate pool for building abilities, gained per level
-- **Max Level**: 10
-- **Re-spec**: trait points freely reallocatable; ability points refunded on perk/ability removal
-
-## License
-
-MIT
+| `PORT` | `8080` | Server port |

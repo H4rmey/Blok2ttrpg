@@ -1,14 +1,13 @@
 # Blok2ttrpg
-
 bla bla bla introduction…
 
 ## uuuuuh:
 
 The subpages are modules that can be used int he Blok2ttrpg. The following Modules exist:
 
-- Character Creation (core)
-- Ability Builder
-- Leveling
+*   Character Creation (core)
+*   Ability Builder
+*   Leveling
 
 ## Planned Modules:
 
@@ -34,14 +33,14 @@ you cast a message into someones mind
 
 default rules would be:
 
-- no reply possible
-- only use 6 words
-- only withing 10m
+*   no reply possible
+*   only use 6 words
+*   only withing 10m
 
 and perks would be:
 
-- double the word count
-- reply is possible
-- range increased
+*   double the word count
+*   reply is possible
+*   range increased
 
 This kinda ties in with skill trees i think, but idk yet
