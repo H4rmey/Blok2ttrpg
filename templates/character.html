@@ -1,0 +1,236 @@
+{{define "title"}}Character Sheet{{end}}
+
+{{define "content"}}
+<div class="space-y-8">
+    <div class="flex items-center justify-between">
+        <h1 class="text-3xl font-bold text-white">
+            {{if .IsNew}}New Character{{else}}{{if .Character.Name}}{{.Character.Name}}{{else}}Character Sheet{{end}}{{end}}
+        </h1>
+        {{if not .IsNew}}
+        <div class="flex items-center gap-2">
+            <a href="/characters/{{.Character.ID}}/export"
+               class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                Export YAML
+            </a>
+            <a href="/characters/{{.Character.ID}}/abilities"
+               class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                View Abilities ({{len .Character.Abilities}})
+            </a>
+        </div>
+        {{end}}
+    </div>
+
+    <form method="POST"
+          action="{{if .IsNew}}/characters{{else}}/characters/{{.Character.ID}}{{end}}"
+          class="space-y-8">
+
+        <!-- Level & Trait Budget (sticky at top) -->
+        <section class="bg-gray-800 rounded-lg border border-gray-700 p-4 {{if not .IsNew}}sticky top-16 z-40{{end}} shadow-lg">
+            <div class="flex items-center justify-around flex-wrap gap-4 text-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs uppercase text-gray-400">Level</span>
+                    <input type="number" name="level" value="{{.Character.Level}}" min="1" max="{{.MaxLevel}}"
+                           class="w-16 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-center focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <span class="text-xs uppercase text-gray-400 block">Trait Points Used</span>
+                    <span id="trait-points-used" class="text-2xl font-bold {{if gt .TraitPointsUsed .TraitPointsBudget}}text-red-400{{else}}text-green-400{{end}}">{{.TraitPointsUsed}}</span>
+                </div>
+                <div>
+                    <span class="text-xs uppercase text-gray-400 block">Trait Points Budget</span>
+                    <span id="trait-points-budget" class="text-2xl font-bold text-indigo-400">{{.TraitPointsBudget}}</span>
+                </div>
+                <div>
+                    <span id="trait-points-warning" {{if not (gt .TraitPointsUsed .TraitPointsBudget)}}style="display:none"{{end}}
+                          class="text-red-400 text-sm font-medium">⚠ Over budget!</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs uppercase text-gray-400">HP</span>
+                        <input type="number" id="current-hp" name="current_hp" value="{{.Character.CurrentHP}}" min="0" max="{{.CharacterHP}}"
+                               class="w-14 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-center text-sm focus:border-indigo-500 focus:outline-none">
+                        <span class="text-gray-400 text-sm">/</span>
+                        <span id="total-hp" class="text-white text-sm font-semibold">{{.CharacterHP}}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs uppercase text-gray-400">Move</span>
+                        <input type="text" id="total-movement" value="{{.CharacterMovement}}" readonly class="w-12 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-white text-center text-sm">
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs uppercase text-gray-400">Energy</span>
+                        <input type="number" id="current-energy" name="current_energy" value="{{.Character.CurrentEnergy}}" min="0" max="{{.CharacterEnergy}}"
+                               class="w-14 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-center text-sm focus:border-indigo-500 focus:outline-none">
+                        <span class="text-gray-400 text-sm">/</span>
+                        <span id="total-energy" class="text-white text-sm font-semibold">{{.CharacterEnergy}}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Basic Info -->
+        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <h2 class="text-lg font-semibold text-indigo-400 mb-4">Basic Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Name</label>
+                    <input type="text" name="name" value="{{.Character.Name}}"
+                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Age</label>
+                    <input type="text" name="age" value="{{.Character.Age}}"
+                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Size</label>
+                    <input type="text" name="size" value="{{.Character.Size}}"
+                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Alignment</label>
+                    <input type="text" name="alignment" value="{{.Character.Alignment}}"
+                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Occupation</label>
+                    <input type="text" name="occupation" value="{{.Character.Occupation}}"
+                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Appearance</label>
+                    <input type="text" name="appearance" value="{{.Character.Appearance}}"
+                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Backstory</label>
+                    <textarea name="backstory" rows="2"
+                              class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">{{.Character.Backstory}}</textarea>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Personality</label>
+                    <textarea name="personality" rows="2"
+                              class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">{{.Character.Personality}}</textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Hobbies</label>
+                        <input type="text" name="hobbies" value="{{.Character.Hobbies}}"
+                               class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Quirks</label>
+                        <input type="text" name="quirks" value="{{.Character.Quirks}}"
+                               class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Inventory</label>
+                    <textarea name="inventory" rows="2"
+                              class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">{{.Character.Inventory}}</textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- General Traits -->
+        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <h2 class="text-lg font-semibold text-indigo-400 mb-4">General Traits</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {{range .GeneralTraitNames}}
+                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
+                    <label class="text-sm text-gray-300 font-medium">{{.}}</label>
+                    <select name="general_{{.}}"
+                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                        {{$current := index $.Character.GeneralTraits .}}
+                        {{range $.ProficiencyOptions}}
+                        <option value="{{.Value}}" {{if eq .Value $current}}selected{{end}}>{{.Label}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                {{end}}
+            </div>
+        </section>
+
+        <!-- Combative Traits -->
+        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <h2 class="text-lg font-semibold text-indigo-400 mb-4">Combative Traits</h2>
+
+            <h3 class="text-sm font-semibold text-red-400 uppercase tracking-wide mb-3">Offense</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {{range .OffenseTraitNames}}
+                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
+                    <label class="text-sm text-gray-300 font-medium">{{.}}</label>
+                    <select name="offense_{{.}}"
+                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                        {{$current := index $.Character.OffenseTraits .}}
+                        {{range $.ProficiencyOptions}}
+                        <option value="{{.Value}}" {{if eq .Value $current}}selected{{end}}>{{.Label}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                {{end}}
+            </div>
+
+            <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wide mb-3">Defense</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {{range .DefenseTraitNames}}
+                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
+                    <label class="text-sm text-gray-300 font-medium">{{.}}</label>
+                    <select name="defense_{{.}}"
+                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                        {{$current := index $.Character.DefenseTraits .}}
+                        {{range $.ProficiencyOptions}}
+                        <option value="{{.Value}}" {{if eq .Value $current}}selected{{end}}>{{.Label}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                {{end}}
+            </div>
+        </section>
+
+        <!-- Vital Stats -->
+        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <h2 class="text-lg font-semibold text-indigo-400 mb-4">Vital Stats</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
+                    <label class="text-sm text-gray-300 font-medium">HP</label>
+                    <select name="vital_hp"
+                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                        {{range .VitalHPOptions}}
+                        <option value="{{.Value}}" {{if eq .Value $.Character.VitalHP}}selected{{end}}>{{.Label}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
+                    <label class="text-sm text-gray-300 font-medium">Movement</label>
+                    <select name="vital_movement"
+                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                        {{range .VitalMovementOptions}}
+                        <option value="{{.Value}}" {{if eq .Value $.Character.VitalMovement}}selected{{end}}>{{.Label}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
+                    <label class="text-sm text-gray-300 font-medium">Energy</label>
+                    <select name="vital_energy"
+                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                        {{range .VitalEnergyOptions}}
+                        <option value="{{.Value}}" {{if eq .Value $.Character.VitalEnergy}}selected{{end}}>{{.Label}}</option>
+                        {{end}}
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Submit -->
+        <div class="flex items-center gap-4">
+            <button type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-lg font-medium transition">
+                {{if .IsNew}}Create Character{{else}}Save Changes{{end}}
+            </button>
+            <a href="/" class="text-gray-400 hover:text-white transition">Cancel</a>
+        </div>
+    </form>
+</div>
+{{end}}

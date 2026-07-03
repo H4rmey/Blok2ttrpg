@@ -1,0 +1,15 @@
+# Fog Cloud (D&D spell)
+ability:
+  type: Execution
+  name: Fog Cloud
+  description: Creates a sphere of concealing mist.
+  enactments:
+    - type: Enact Persistent Effect
+      effect_name: Fog Cloud
+      effect_type: Enact Movement
+      duration: 2
+      solutions:
+        - Perception
+      interactions:
+        - type: Area
+          radius: 4m

@@ -1,0 +1,69 @@
+{{define "title"}}Characters{{end}}
+
+{{define "content"}}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <h1 class="text-3xl font-bold text-white">Characters</h1>
+        <div class="flex items-center gap-2">
+            <form method="POST" action="/characters/import" enctype="multipart/form-data" class="inline">
+                <label class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition cursor-pointer">
+                    Import YAML
+                    <input type="file" name="yaml_file" accept=".yaml,.yml,text/yaml" required
+                           class="hidden"
+                           onchange="this.form.submit()">
+                </label>
+            </form>
+            <a href="/characters/new"
+               class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                + New Character
+            </a>
+        </div>
+    </div>
+
+    {{if .Characters}}
+    <div class="grid gap-4 md:grid-cols-2">
+        {{range .Characters}}
+        <div class="bg-gray-800 rounded-lg border border-gray-700 p-5 hover:border-indigo-500 transition">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-xl font-semibold text-white">
+                    {{if .Name}}{{.Name}}{{else}}Unnamed Character{{end}}
+                </h2>
+                <span class="text-xs text-gray-400">{{len .Abilities}} abilities</span>
+            </div>
+            {{if .Occupation}}<p class="text-gray-400 text-sm mb-1">{{.Occupation}}</p>{{end}}
+            {{if .Alignment}}<p class="text-gray-500 text-xs mb-3">{{.Alignment}}</p>{{end}}
+            <div class="flex gap-2 mt-4 flex-wrap">
+                <a href="/characters/{{.ID}}"
+                   class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-sm transition">
+                    Edit Sheet
+                </a>
+                <a href="/characters/{{.ID}}/abilities"
+                   class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-sm transition">
+                    Abilities
+                </a>
+                <a href="/characters/{{.ID}}/export"
+                   class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-sm transition">
+                    Export YAML
+                </a>
+                <button hx-delete="/characters/{{.ID}}"
+                        hx-confirm="Delete this character and all their abilities?"
+                        hx-target="closest div.bg-gray-800"
+                        hx-swap="outerHTML"
+                        class="bg-red-700 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm transition ml-auto">
+                    Delete
+                </button>
+            </div>
+        </div>
+        {{end}}
+    </div>
+    {{else}}
+    <div class="text-center py-16 text-gray-500">
+        <p class="text-lg mb-4">No characters yet.</p>
+        <a href="/characters/new"
+           class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-lg font-medium transition">
+            Create Your First Character
+        </a>
+    </div>
+    {{end}}
+</div>
+{{end}}

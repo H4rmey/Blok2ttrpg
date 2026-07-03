@@ -1,0 +1,54 @@
+/* Custom styles for Blok2 TTRPG Ability Builder */
+
+/* Smooth transitions for HTMX swaps */
+.htmx-swapping {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+}
+
+.htmx-settling {
+    opacity: 1;
+    transition: opacity 200ms ease-in;
+}
+
+/* Gray-750 shade (between Tailwind's 700 and 800) */
+.bg-gray-750 {
+    background-color: #2d3748;
+}
+
+/* Scrollbar styling for dark theme */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a202c;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4a5568;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #718096;
+}
+
+/* YAML output styling */
+#yaml-output {
+    tab-size: 2;
+    line-height: 1.6;
+}
+
+/* Collapsible chevron rotation */
+.collapse-chevron {
+    display: inline-block;
+    transition: transform 150ms ease-in-out;
+}
+.collapsible-content[hidden] {
+    display: none;
+}
+.collapse-toggle[aria-expanded="false"] .collapse-chevron {
+    transform: rotate(-90deg);
+}

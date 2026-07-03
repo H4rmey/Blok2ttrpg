@@ -1,0 +1,11 @@
+# Sneak Attack (D&D Rogue feature)
+ability:
+  type: Execution
+  name: Sneak Attack
+  description: Extra damage when flanking or has advantage.
+  enactments:
+    - type: Enact Damage
+      source: d6
+      flat_bonus: 2
+      interactions:
+        - type: Direct

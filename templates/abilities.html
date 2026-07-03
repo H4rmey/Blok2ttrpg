@@ -1,0 +1,89 @@
+{{define "title"}}Abilities — {{.Character.Name}}{{end}}
+
+{{define "content"}}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-white">Abilities</h1>
+            <p class="text-gray-400 mt-1">Character: <a href="/characters/{{.Character.ID}}" class="text-indigo-400 hover:text-indigo-300">{{if .Character.Name}}{{.Character.Name}}{{else}}Unnamed{{end}}</a></p>
+        </div>
+        <div class="flex items-center gap-2">
+            <form method="POST" action="/characters/import?merge={{.Character.ID}}" enctype="multipart/form-data" class="inline">
+                <label class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer">
+                    Import YAML
+                    <input type="file" name="yaml_file" accept=".yaml,.yml,text/yaml" required
+                           class="hidden"
+                           onchange="this.form.submit()">
+                </label>
+            </form>
+            <a href="/characters/{{.Character.ID}}/abilities/new"
+               class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                + Create New Ability
+            </a>
+        </div>
+    </div>
+
+    {{if .Abilities}}
+    <div class="space-y-4" id="ability-list">
+        {{range .Abilities}}
+        <div class="bg-gray-800 rounded-lg border border-gray-700 p-5 hover:border-indigo-500 transition"
+             id="ability-{{.ID}}">
+            <div class="flex items-start justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-lg">
+                            {{if eq .Type "Execution"}}⚔{{end}}
+                            {{if eq .Type "Reaction"}}🛡{{end}}
+                            {{if eq .Type "Phase"}}🔥{{end}}
+                            {{if eq .Type "Minion"}}👾{{end}}
+                        </span>
+                        <h2 class="text-xl font-semibold text-white">
+                            {{if .Name}}{{.Name}}{{else}}Unnamed Ability{{end}}
+                        </h2>
+                        <span class="bg-gray-700 text-gray-300 px-2 py-0.5 rounded text-xs font-medium">{{.Type}}</span>
+                    </div>
+                    <div class="flex gap-4 text-sm text-gray-400">
+                        <span>Energy: {{.EnergyCost}}</span>
+                        {{if eq .Type "Execution"}}<span>Actions: {{.ActionCost}}</span>{{end}}
+                        {{if eq .Type "Reaction"}}<span>Trigger: {{.Trigger}}</span>{{end}}
+                        {{if eq .Type "Phase"}}<span>Duration: {{.PhaseDuration}} rounds</span>{{end}}
+                        <span>Cost: {{.TotalCost}}</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">Enactments: {{.EnactmentSummary}}</p>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-4">
+                <a href="/characters/{{$.Character.ID}}/abilities/{{.ID}}"
+                   class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-sm transition">
+                    View
+                </a>
+                <a href="/characters/{{$.Character.ID}}/abilities/{{.ID}}/edit"
+                   class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-sm transition">
+                    Edit
+                </a>
+                <a href="/characters/{{$.Character.ID}}/abilities/{{.ID}}/export"
+                   class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-sm transition">
+                    Export
+                </a>
+                <button hx-delete="/characters/{{$.Character.ID}}/abilities/{{.ID}}"
+                        hx-confirm="Delete this ability?"
+                        hx-target="#ability-{{.ID}}"
+                        hx-swap="outerHTML"
+                        class="bg-red-700 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm transition ml-auto">
+                    Delete
+                </button>
+            </div>
+        </div>
+        {{end}}
+    </div>
+    {{else}}
+    <div class="text-center py-16 text-gray-500">
+        <p class="text-lg mb-4">No abilities created yet.</p>
+        <a href="/characters/{{.Character.ID}}/abilities/new"
+           class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-lg font-medium transition">
+            Create Your First Ability
+        </a>
+    </div>
+    {{end}}
+</div>
+{{end}}

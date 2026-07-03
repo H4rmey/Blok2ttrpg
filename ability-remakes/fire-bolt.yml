@@ -1,0 +1,11 @@
+# Fire Bolt (D&D cantrip)
+ability:
+  type: Execution
+  name: Fire Bolt
+  description: A flammable spark ignites.
+  enactments:
+    - type: Enact Damage
+      source: d10
+      interactions:
+        - type: Ranged
+          range: 30m
