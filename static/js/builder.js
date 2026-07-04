@@ -431,14 +431,14 @@
     cfg = cfg || {};
     var src = d.source || 'd4';
     var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
-    var traitSelectHTML = '';
-    if (src === 'trait') {
-      traitSelectHTML = '<div data-wrap="source-trait"><label class="block text-xs text-gray-400 mb-1">Trait</label>'+
+    var traitSelectHTML =
+      '<div data-wrap="source-trait" '+hiddenIf(src!=='trait')+'>'+
+        '<label class="block text-xs text-gray-400 mb-1">Trait</label>'+
         '<input type="hidden" name="source_category" value="'+esc(srcCat)+'">'+
         '<select name="source_trait" onchange="onSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
           '<option value="">-- Select --</option>' + traitOptionsGrouped(d.source_trait) +
-        '</select></div>';
-    }
+        '</select>'+
+      '</div>';
     var otherWrap = src === 'other' ? '' : 'hidden';
     var prevWrap  = src === 'previous' ? '' : 'hidden';
     return [
@@ -481,14 +481,14 @@
     cfg = cfg || {};
     var src = d.source || 'd4';
     var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
-    var traitSelectHTML = '';
-    if (src === 'trait') {
-      traitSelectHTML = '<div data-wrap="source-trait"><label class="block text-xs text-gray-400 mb-1">Trait</label>'+
+    var traitSelectHTML =
+      '<div data-wrap="source-trait" '+hiddenIf(src!=='trait')+'>'+
+        '<label class="block text-xs text-gray-400 mb-1">Trait</label>'+
         '<input type="hidden" name="source_category" value="'+esc(srcCat)+'">'+
         '<select name="source_trait" onchange="onSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
           '<option value="">-- Select --</option>' + traitOptionsGrouped(d.source_trait) +
-        '</select></div>';
-    }
+        '</select>'+
+      '</div>';
     var otherWrap = src === 'other' ? '' : 'hidden';
     var prevWrap  = src === 'previous' ? '' : 'hidden';
     return [
@@ -1147,9 +1147,7 @@
 
   window.addCounter = function (btn) {
     var list = btn.parentElement.parentElement.querySelector('[data-list="counters"]');
-    var row = document.createElement('div');
-    row.innerHTML = counterRow({type:'defense', trait:''}, getValidationConfig());
-    list.appendChild(row);
+    list.insertAdjacentHTML('beforeend', counterRow({type:'defense', trait:''}, getValidationConfig()));
     recalcAll();
   };
 
