@@ -22,8 +22,9 @@ func (app *App) AbilityListHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.render(w, "abilities.html", map[string]interface{}{
-		"Character": c,
-		"Abilities": c.Abilities,
+		"Character":   c,
+		"Abilities":   c.Abilities,
+		"Breadcrumbs": abilitiesBreadcrumbs(c),
 	})
 }
 
@@ -54,6 +55,7 @@ func (app *App) AbilityDetailHandler(w http.ResponseWriter, r *http.Request) {
 	app.render(w, "review.html", map[string]interface{}{
 		"Character":   c,
 		"Ability":     ability,
+		"Breadcrumbs": abilityDetailBreadcrumbs(c, ability),
 		"YAML":        yamlOutput,
 		"CharacterID": charID,
 		"TotalCost":   ability.TotalCost(),
@@ -123,27 +125,32 @@ func (app *App) EditAbilityHandler(w http.ResponseWriter, r *http.Request) {
 	app.Sessions.Update(sessID, state)
 
 	app.render(w, "builder.html", map[string]interface{}{
-		"Character":             c,
-		"Ability":               state.Ability,
-		"AbilityTypes":          models.AllAbilityTypes,
-		"AllEnactmentTypes":     models.AllEnactmentTypes,
-		"AllInteractionTypes":   models.AllInteractionTypes,
-		"CompatibleEnactsMap":   compatibleEnactsMapForTemplate(),
-		"GeneralTraitNames":     app.Config.AbilityBuilder.Traits.General,
-		"OffenseTraitNames":     app.Config.AbilityBuilder.Traits.Offense,
-		"DefenseTraitNames":     app.Config.AbilityBuilder.Traits.Defense,
-		"AllTraits":             models.AllTraitNames(),
-		"ReactionTriggers":      models.ReactionTriggers,
-		"KnockoutOptions":       models.KnockoutOptions,
-		"DirectionOptions":      models.DirectionOptions,
-		"ShiftDirectionOptions": models.ShiftDirectionOptions,
-		"TriggerTimings":        models.TriggerTimings,
-		"AoETimings":            models.AoETriggerTimings,
-		"PersistentEffectTypes": models.PersistentEffectTypes,
-		"DamageDiceOptions":     models.DamageDiceOptions,
-		"GenericDieOptions":     models.GenericDieOptions,
-		"InitialStateJSON":      buildInitialState(ability),
-		"IsEdit":                true,
+		"Character":              c,
+		"Ability":                state.Ability,
+		"Breadcrumbs":            editAbilityBreadcrumbs(c, ability),
+		"AbilityTypes":           models.AllAbilityTypes,
+		"AllEnactmentTypes":      models.AllEnactmentTypes,
+		"AllInteractionTypes":    models.AllInteractionTypes,
+		"CompatibleEnactsMap":    compatibleEnactsMapForTemplate(),
+		"GeneralTraitNames":      app.Config.AbilityBuilder.Traits.General,
+		"OffenseTraitNames":      app.Config.AbilityBuilder.Traits.Offense,
+		"DefenseTraitNames":      app.Config.AbilityBuilder.Traits.Defense,
+		"AllTraits":              models.AllTraitNames(),
+		"ReactionTriggers":       models.ReactionTriggers,
+		"KnockoutOptions":        models.KnockoutOptions,
+		"DirectionOptions":       models.DirectionOptions,
+		"ShiftDirectionOptions":  models.ShiftDirectionOptions,
+		"TriggerTimings":         models.TriggerTimings,
+		"AoETimings":             models.AoETriggerTimings,
+		"PersistentEffectTypes":  models.PersistentEffectTypes,
+		"DamageDiceOptions":      models.DamageDiceOptions,
+		"GenericDieOptions":      models.GenericDieOptions,
+		"InitialStateJSON":       buildInitialState(ability),
+		"IsEdit":                 true,
+		"BuilderConfigJSON":      mustMarshalConfig(app.Config),
+		"AbilityPointsBudget":    abilityPointsBudget(c.Level, app.Config.AbilityBuilder.Leveling),
+		"AbilityPointsUsed":      abilityPointsUsed(*c, app.Config.AbilityBuilder),
+		"AbilityPointsRemaining": abilityPointsBudget(c.Level, app.Config.AbilityBuilder.Leveling) - abilityPointsUsed(*c, app.Config.AbilityBuilder),
 	})
 }
 

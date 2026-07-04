@@ -9,3 +9,5 @@ ability:
       shifted_trait: Reflex
       shift_dir: UP
       shift_amount: 2
+      interactions:
+        - type: Self

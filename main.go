@@ -52,8 +52,9 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// Static files
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	// Static files. We disable heuristic caching so edits to builder.js / css
+	// are picked up immediately during development (browser must revalidate).
+	mux.Handle("/static/", noCache(http.StripPrefix("/static/", http.FileServer(http.Dir("static")))))
 
 	// Character routes
 	mux.HandleFunc("/", app.IndexHandler)
@@ -210,4 +211,13 @@ func ensureProfileStore(profileID string) (string, error) {
 func fileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
+}
+
+// noCache wraps a handler so responses are never served from a stale
+// heuristic cache: the browser must always revalidate with the origin.
+func noCache(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-cache, must-revalidate")
+		h.ServeHTTP(w, r)
+	})
 }

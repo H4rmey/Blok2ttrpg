@@ -17,13 +17,18 @@
             </div>
             <div class="flex items-center gap-3">
                 <div class="bg-gray-900 border border-gray-700 rounded px-4 py-2 text-center">
-                    <span class="text-xs text-gray-400 block">Total Build Cost</span>
+                    <span class="text-xs text-gray-400 block">Ability Points</span>
+                    <span id="ability-points-display" data-spent="{{.AbilityPointsUsed}}" class="text-2xl font-bold {{if lt .AbilityPointsRemaining 0}}text-red-400{{else}}text-green-400{{end}}"><span id="ability-points-used">{{.AbilityPointsRemaining}}</span>/<span id="ability-points-budget">{{.AbilityPointsBudget}}</span></span>
+                </div>
+                <div class="bg-gray-900 border border-gray-700 rounded px-4 py-2 text-center">
+                    <span class="text-xs text-gray-400 block">Build Cost</span>
                     <span class="text-2xl font-bold text-indigo-400" id="total-cost">0</span>
                 </div>
                 <div class="bg-gray-900 border border-gray-700 rounded px-4 py-2 text-center">
-                    <span class="text-xs text-gray-400 block">Total Ability Cost</span>
+                    <span class="text-xs text-gray-400 block">Total Energy Cost</span>
                     <span class="text-2xl font-bold text-cyan-400" id="total-cast-cost">0</span>
                 </div>
+                <div id="ability-points-warning" class="text-red-400 text-sm font-medium" style="display:none">Out of ability points</div>
             </div>
         </div>
     </div>
@@ -120,8 +125,10 @@ window.BUILDER_DATA = {
   damageDiceOptions: [{{range $i, $t := .DamageDiceOptions}}{{if $i}}, {{end}}"{{.}}"{{end}}],
   genericDieOptions: [{{range $i, $t := .GenericDieOptions}}{{if $i}}, {{end}}"{{.}}"{{end}}],
   cfg: {{.BuilderConfigJSON}},
+  abilityPointsUsed: {{.AbilityPointsUsed}},
+  abilityPointsBudget: {{.AbilityPointsBudget}},
 };
 </script>
 
-<script src="/static/js/builder.js"></script>
+<script src="/static/js/builder.js?v=2"></script>
 {{end}}

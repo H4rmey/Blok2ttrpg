@@ -23,6 +23,22 @@
         </div>
     </nav>
     <main class="max-w-5xl mx-auto px-4 py-8">
+        {{if .Breadcrumbs}}
+        <nav aria-label="Breadcrumb" class="mb-6 text-sm text-gray-400">
+            <ol class="flex flex-wrap items-center gap-2">
+                {{range $i, $crumb := .Breadcrumbs}}
+                {{if $i}}<li class="text-gray-600">/</li>{{end}}
+                <li>
+                    {{if $crumb.URL}}
+                    <a href="{{$crumb.URL}}" class="text-gray-400 hover:text-indigo-300 transition">{{$crumb.Label}}</a>
+                    {{else}}
+                    <span class="text-gray-200 font-medium">{{$crumb.Label}}</span>
+                    {{end}}
+                </li>
+                {{end}}
+            </ol>
+        </nav>
+        {{end}}
         {{template "content" .}}
     </main>
     <footer class="text-center text-gray-500 text-sm py-8">
@@ -31,14 +47,11 @@
 
     <script>
     // ===== Character Sheet: Dynamic Trait Points & Vitals =====
-    var profCosts = {
-        'Clumsy': -1,
-        'Untrained': 0,
-        'Trained': 1,
-        'Expert': 2,
-        'Master': 3,
-        'Legendary': 4
-    };
+    // Only run on the character sheet page, where CHARACTER_DATA is defined.
+    // On other pages (e.g. the ability builder) these element ids collide
+    // with the builder's own display, so we must not touch them there.
+    var characterData = window.CHARACTER_DATA;
+    var profCosts = null;
 
     function extractVitalValue(label) {
         var match = /\(([0-9]+(?:\.[0-9]+)?)/.exec(label);
@@ -55,11 +68,18 @@
         });
 
         var usedEl = document.getElementById('trait-points-used');
-        if (usedEl) usedEl.textContent = total;
 
         var levelInput = document.querySelector('input[name="level"]');
         var level = levelInput ? parseInt(levelInput.value) || 1 : 1;
-        var budget = 10 + (level - 1);
+        var budget = 0;
+        var levels = characterData.traitPointLevels || [];
+        for (var i = 0; i < levels.length; i++) {
+            if (levels[i].level <= level) budget = levels[i].total;
+        }
+        if (!budget) budget = 10 + (level - 1);
+
+        var remaining = budget - total;
+        if (usedEl) usedEl.textContent = remaining;
 
         var budgetEl = document.getElementById('trait-points-budget');
         if (budgetEl) budgetEl.textContent = budget;
@@ -69,8 +89,27 @@
             warningEl.style.display = total > budget ? 'inline' : 'none';
         }
 
-        if (usedEl) {
-            usedEl.className = total > budget
+        var abilityBudget = 0;
+        var abilityLevels = characterData.abilityPointLevels || [];
+        for (var j = 0; j < abilityLevels.length; j++) {
+            if (abilityLevels[j].level <= level) abilityBudget = abilityLevels[j].total;
+        }
+        var abilityBudgetEl = document.getElementById('ability-points-budget');
+        if (abilityBudgetEl) abilityBudgetEl.textContent = abilityBudget;
+        var abilityDisplayEl = document.getElementById('ability-points-display');
+        var abilitySpent = abilityDisplayEl ? parseInt(abilityDisplayEl.dataset.spent || '0') || 0 : 0;
+        var abilityRemaining = abilityBudget - abilitySpent;
+        var abilityUsedEl = document.getElementById('ability-points-used');
+        if (abilityUsedEl) abilityUsedEl.textContent = abilityRemaining;
+        if (abilityDisplayEl) {
+            abilityDisplayEl.className = abilityRemaining < 0
+                ? 'text-2xl font-bold text-red-400'
+                : 'text-2xl font-bold text-green-400';
+        }
+
+        var displayEl = document.getElementById('trait-points-display');
+        if (displayEl) {
+            displayEl.className = remaining < 0
                 ? 'text-2xl font-bold text-red-400'
                 : 'text-2xl font-bold text-green-400';
         }
@@ -116,31 +155,47 @@
     }
 
     // Attach listeners on page load and after HTMX swaps
-    document.addEventListener('DOMContentLoaded', function() {
+    function initCharacterSheet() {
+        if (!window.CHARACTER_DATA) return; // not a character sheet page
+        profCosts = characterData.proficiencyCosts || {
+            'Clumsy': -1,
+            'Untrained': 0,
+            'Trained': 1,
+            'Expert': 2,
+            'Master': 3,
+            'Legendary': 4
+        };
         attachTraitListeners();
-        recalculateVitals();
-    });
+        recalculateAll();
+    }
+
+    document.addEventListener('DOMContentLoaded', initCharacterSheet);
 
     document.addEventListener('htmx:afterSwap', function() {
+        if (!window.CHARACTER_DATA) return;
         attachTraitListeners();
-        recalculateVitals();
+        recalculateAll();
     });
 
     function attachTraitListeners() {
         document.querySelectorAll('select[name^="general_"], select[name^="offense_"], select[name^="defense_"]').forEach(function(sel) {
-            sel.removeEventListener('change', recalculateTraitPoints);
-            sel.addEventListener('change', recalculateTraitPoints);
+            sel.removeEventListener('change', recalculateAll);
+            sel.addEventListener('change', recalculateAll);
+            sel.removeEventListener('input', recalculateAll);
+            sel.addEventListener('input', recalculateAll);
         });
 
         document.querySelectorAll('select[name="vital_hp"], select[name="vital_movement"], select[name="vital_energy"]').forEach(function(sel) {
             sel.removeEventListener('change', recalculateAll);
             sel.addEventListener('change', recalculateAll);
+            sel.removeEventListener('input', recalculateAll);
+            sel.addEventListener('input', recalculateAll);
         });
 
         var levelInput = document.querySelector('input[name="level"]');
         if (levelInput) {
-            levelInput.removeEventListener('input', recalculateTraitPoints);
-            levelInput.addEventListener('input', recalculateTraitPoints);
+            levelInput.removeEventListener('input', recalculateAll);
+            levelInput.addEventListener('input', recalculateAll);
         }
     }
     </script>

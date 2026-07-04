@@ -30,6 +30,21 @@
   function checked(v) { return v ? 'checked' : ''; }
   function hiddenIf(v) { return v ? '' : 'hidden'; }
 
+  // --- Cost display helpers -------------------------------------------------
+  // Build a " (-/+xpt, -/+yE)" suffix. A positive add/energy value is a cost
+  // (shown with '-'), a negative value is a refund/grant (shown with '+').
+  // Example: add=5, energy=3 -> " (-5pt, -3E)"; add=-2 -> " (+2pt, +0E)".
+  function costSuffix(add, energy) {
+    add = Number(add) || 0;
+    energy = Number(energy) || 0;
+    function sgn(v) { return v > 0 ? '-' : '+'; }
+    return ' (' + sgn(add) + Math.abs(add) + 'pt, ' + sgn(energy) + Math.abs(energy) + 'E)';
+  }
+  // Build a single <option> with a cost suffix.
+  function opt(label, value, isSel, add, energy) {
+    return '<option value="' + esc(value) + '" ' + selected(isSel, value) + '>' + esc(label) + costSuffix(add, energy) + '</option>';
+  }
+
   var D = window.BUILDER_DATA;
   var ABILITY_TYPES = D.abilityTypes;
   var ENACT_TYPES = D.allEnactmentTypes;
@@ -57,20 +72,17 @@
 
   function renderAbilityTypeCard(type, data) {
     data = data || {};
+    var cfg = (C.ability_types && C.ability_types[type.toLowerCase()]) || {};
     var inner = '';
-    var opt = '';
-    function addTraitOption(name) {
-      return '<option value="'+esc(name)+'" '+selected(data.shift_trait||data.engage_trait, name)+'>'+esc(name)+'</option>';
-    }
 
     if (type === 'Execution') {
-      inner = renderExecutionCard(data);
+      inner = renderExecutionCard(data, cfg);
     } else if (type === 'Reaction') {
-      inner = renderReactionCard(data);
+      inner = renderReactionCard(data, cfg);
     } else if (type === 'Phase') {
-      inner = renderPhaseCard(data);
+      inner = renderPhaseCard(data, cfg);
     } else if (type === 'Minion') {
-      inner = renderMinionCard(data);
+      inner = renderMinionCard(data, cfg);
     } else {
       inner = '<p class="text-yellow-400">Unknown ability type: '+esc(type)+'</p>';
     }
@@ -78,17 +90,35 @@
     return '<div class="section-card ability-type-card bg-gray-800 rounded-lg border border-gray-700 p-5 space-y-4" data-section="ability-type" data-ability-type="'+esc(type)+'">'+inner+'</div>';
   }
 
-  function renderExecutionCard(d) {
+  function stepCostFn(cfg, key) {
+    return function (v) {
+      var dir = v > 0 ? 'increase' : (v < 0 ? 'decrease' : null);
+      if (!dir) return { add: 0, energy: 0 };
+      var c = stepCost(cfg.step_costs && cfg.step_costs[key], dir);
+      var n = Math.abs(v);
+      return { add: n * c.add, energy: n * c.energy };
+    };
+  }
+  function cumCostFn(base, perUnit) {
+    perUnit = perUnit || { add_cost: 0, energy_cost: 0 };
+    return function (i) {
+      var steps = Math.max(0, i - base);
+      return { add: steps * (perUnit.add_cost || 0), energy: steps * (perUnit.energy_cost || 0) };
+    };
+  }
+
+  function renderExecutionCard(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var itemName = d.item_name || '';
     var itemWrap = d.item_dep ? '' : 'hidden';
     return [
       '<h3 class="text-md font-semibold text-indigo-400">Ability Type — Execution</h3>',
       overview(false),
       '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
-        itemDepCheckbox(d.item_dep),
-        stepSelect('energy_steps', 'Energy ±', [-2,-1,0,1,2], d.energy_steps || 0),
-        stepSelect('action_steps', 'Action ±', [-1,0,1], d.action_steps || 0),
+        itemDepCheckbox(d.item_dep, perkCost(cfg.perks, 'item_dependency')),
+        stepSelect('energy_steps', 'Energy ±', [-2,-1,0,1,2], d.energy_steps || 0, stepCostFn(cfg, 'energy')),
+        stepSelect('action_steps', 'Action ±', [-1,0,1], d.action_steps || 0, stepCostFn(cfg, 'action')),
       '</div>',
       '<div data-wrap="item-name" '+itemWrap+'>',
         '<label class="block text-xs text-gray-400 mb-1">Item Name</label>',
@@ -98,10 +128,15 @@
     ].join('\n');
   }
 
-  function renderReactionCard(d) {
+  function renderReactionCard(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var triggerNeedsTrait = d.trigger === 'Target makes a trait check';
     var triggerWrap = triggerNeedsTrait ? '' : 'hidden';
+    var triggerOpts = D.reactionTriggers.map(function(t){
+      var c = findPerk(cfg.triggers, t) || { add_cost: 0, energy_cost: 0 };
+      return opt(t, t, d.trigger, c.add_cost, c.energy_cost);
+    }).join('');
     return [
       '<h3 class="text-md font-semibold text-indigo-400">Ability Type — Reaction</h3>',
       overview(false),
@@ -109,18 +144,18 @@
         '<div><label class="block text-xs text-gray-400 mb-1">Trigger</label>',
         '<select name="trigger" onchange="onReactionTriggerChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
           '<option value="">-- Select --</option>',
-          D.reactionTriggers.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.trigger,t)+'>'+esc(t)+'</option>';}).join(''),
+          triggerOpts,
         '</select></div>',
         '<div data-wrap="trigger-trait" '+triggerWrap+'>',
           '<label class="block text-xs text-gray-400 mb-1">Trigger Trait</label>',
-          '<select name="trigger_trait" class="bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white w-full">',
+          '<select name="trigger_trait" onchange="recalcAll()" class="bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white w-full">',
             traitOptions('defense', d.trigger_trait),
           '</select></div>',
       '</div>',
       '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
-        intSelect('range', 'Range', 1, 6, d.reaction_range || 1),
-        intSelect('uses', 'Uses', 1, 3, d.reaction_uses || 1),
-        itemDepCheckbox(d.item_dep),
+        intSelect('range', 'Range', 1, 6, d.reaction_range || 1, 'm', cumCostFn(1, cfg.range_cost)),
+        intSelect('uses', 'Uses', 1, 3, d.reaction_uses || 1, '', cumCostFn(1, cfg.uses_cost)),
+        itemDepCheckbox(d.item_dep, perkCost(cfg.perks, 'item_dependency')),
       '</div>',
       '<div data-wrap="item-name" '+hiddenIf(d.item_dep)+'>',
         '<label class="block text-xs text-gray-400 mb-1">Item Name</label>',
@@ -130,29 +165,34 @@
     ].join('\n');
   }
 
-  function renderPhaseCard(d) {
+  function renderPhaseCard(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var kos = d.knockouts || [];
     var showKos = !d.no_knockout;
     return [
       '<h3 class="text-md font-semibold text-indigo-400">Ability Type — Phase</h3>',
       overview(false),
       '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
-        intSelect('phase_rounds', 'Phase Duration', 2, 5, d.phase_duration || 2, ' rounds'),
-        intSelect('reverse_rounds', 'Reverse Rounds', 1, 5, d.reverse_phase_rounds || 2, ' rounds'),
+        intSelect('phase_rounds', 'Phase Duration', 2, 5, d.phase_duration || 2, ' rounds', cumCostFn(2, cfg.duration_cost)),
+        intSelect('reverse_rounds', 'Reverse Rounds', 1, 5, d.reverse_phase_rounds || 2, ' rounds', function(i){
+          var rev = cfg.reverse_duration_refund || { add_cost: 0, energy_cost: 0 };
+          var steps = Math.max(0, 2 - i);
+          return { add: steps * (rev.add_cost || 0), energy: steps * (rev.energy_cost || 0) };
+        }),
       '</div>',
       '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">',
-        checkbox('all_req', 'All knockout requirements have to be met', d.all_knockouts_req),
-        checkbox('reverse_knockout', 'Knockout can be used on reverse phase', d.reverse_knockout_ok),
+        checkbox('all_req', 'All knockout requirements have to be met', d.all_knockouts_req, perkCost(cfg.perks, 'all_knockouts_req')),
+        checkbox('reverse_knockout', 'Knockout can be used on reverse phase', d.reverse_knockout_ok, perkCost(cfg.perks, 'reverse_knockout')),
       '</div>',
       '<div>',
         '<label class="flex items-center gap-2 text-sm text-gray-300 mb-2">',
           '<input type="checkbox" name="no_knockout" onchange="onNoKnockoutChange(this)" '+checked(d.no_knockout)+' class="rounded bg-gray-700 border-gray-600">',
-          '<span><strong>No knockout possible</strong> — the phase cannot be ended by any condition (costs extra)</span>',
+          '<span><strong>No knockout possible</strong> — the phase cannot be ended by any condition'+costSuffix((findPerk(cfg.perks, 'no_knockout')||{}).add_cost||0, (findPerk(cfg.perks, 'no_knockout')||{}).energy_cost||0)+'</span>',
         '</label>',
         '<div data-wrap="knockouts" '+hiddenIf(!showKos)+'>',
           '<div class="text-xs text-gray-400 uppercase mb-1">Knockouts</div>',
-          knockoutList(kos),
+          knockoutList(kos, cfg),
         '</div>',
       '</div>',
       '<div data-wrap="item-name" '+hiddenIf(d.item_dep)+'>',
@@ -163,15 +203,16 @@
     ].join('\n');
   }
 
-  function renderMinionCard(d) {
+  function renderMinionCard(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     return [
       '<h3 class="text-md font-semibold text-indigo-400 flex items-center gap-2">Ability Type — Minion <span class="text-xs text-yellow-400">(WIP)</span></h3>',
       overview(false),
       '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
-        intSelect('hp', 'Health Bonus', 0, 5, d.hp_bonus || 0),
-        intSelect('life', 'Extra Lifetime', 0, 5, d.extra_lifetime || 0),
-        itemDepCheckbox(d.item_dep),
+        intSelectFlat('hp', 'Health Bonus', 0, 5, d.hp_bonus || 0, cumCostFn(0, cfg.health_bonus_cost)),
+        intSelectFlat('life', 'Extra Lifetime', 0, 5, d.extra_lifetime || 0, cumCostFn(0, cfg.lifetime_bonus_cost)),
+        itemDepCheckbox(d.item_dep, perkCost(cfg.perks, 'item_dependency')),
       '</div>',
       '<div data-wrap="item-name" '+hiddenIf(d.item_dep)+'>',
         '<label class="block text-xs text-gray-400 mb-1">Item Name</label>',
@@ -181,21 +222,24 @@
     ].join('\n');
   }
 
-  function knockoutList(values) {
+  function knockoutList(values, cfg) {
     values = values || [];
     var rows = '';
-    rows += knockoutRow(values[0]);
+    rows += knockoutRow(values[0], cfg);
     if (values.length > 1) {
-      for (var i = 1; i < values.length; i++) rows += knockoutRow(values[i]);
+      for (var i = 1; i < values.length; i++) rows += knockoutRow(values[i], cfg);
     } else {
-      rows += knockoutRow(null);
+      rows += knockoutRow(null, cfg);
     }
     return '<div data-list="knockouts" class="space-y-2">'+rows+'</div>';
   }
-  function knockoutRow(value) {
+  function knockoutRow(value, cfg) {
+    cfg = cfg || {};
+    var kos = cfg.knockout_requirements || [];
     var opts = '<option value="">-- Select --</option>' +
       D.knockoutOptions.map(function(k){
-        return '<option value="'+esc(k)+'" '+selected(value,k)+'>'+esc(k)+'</option>';
+        var c = findPerk(kos, k) || { add_cost: 0, energy_cost: 0 };
+        return opt(k, k, value, c.add_cost, c.energy_cost);
       }).join('');
     return '<div class="flex items-center gap-2">'+
       '<select name="knockout" onchange="onKnockoutChange(this)" class="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+opts+'</select>'+
@@ -263,41 +307,51 @@
     return '<div><div class="text-xs text-gray-400 uppercase mb-1">Cost Breakdown</div>'+
       '<ul data-out="breakdown" class="text-sm text-gray-300 list-disc list-inside space-y-1"></ul></div>';
   }
-  function stepSelect(name, label, options, selectedValue) {
+  function stepSelect(name, label, options, selectedValue, costFn) {
+    costFn = costFn || function () { return { add: 0, energy: 0 }; };
     var opts = options.map(function(o){
       var lbl = (o > 0 ? '+' : '') + o;
-      return '<option value="'+o+'" '+selected(selectedValue, o)+'>'+lbl+'</option>';
+      var c = costFn(o);
+      return '<option value="'+o+'" '+selected(selectedValue, o)+'>'+lbl+costSuffix(c.add, c.energy)+'</option>';
     }).join('');
     return '<div class="flex items-center gap-2">'+
       '<span class="text-sm text-gray-400 whitespace-nowrap">'+esc(label)+'</span>'+
       '<select name="'+name+'" onchange="recalcAll()" class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white flex-1">'+opts+'</select>'+
     '</div>';
   }
-  function intSelect(name, label, min, max, selectedValue, suffix) {
+  function intSelect(name, label, min, max, selectedValue, suffix, costFn) {
     suffix = suffix || 'm';
+    costFn = costFn || function () { return { add: 0, energy: 0 }; };
     var opts = '';
     for (var i = min; i <= max; i++) {
-      opts += '<option value="'+i+'" '+selected(selectedValue, i)+'>'+i+suffix+'</option>';
+      var c = costFn(i);
+      opts += '<option value="'+i+'" '+selected(selectedValue, i)+'>'+i+suffix+costSuffix(c.add, c.energy)+'</option>';
     }
     return '<div><label class="block text-xs text-gray-400 mb-1">'+esc(label)+'</label>'+
       '<select name="'+name+'" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+opts+'</select></div>';
   }
-  function intSelectFlat(name, label, min, max, selectedValue) {
+  function intSelectFlat(name, label, min, max, selectedValue, costFn) {
+    costFn = costFn || function () { return { add: 0, energy: 0 }; };
     var opts = '';
-    for (var i = min; i <= max; i++) opts += '<option value="'+i+'" '+selected(selectedValue, i)+'>'+i+'</option>';
+    for (var i = min; i <= max; i++) {
+      var c = costFn(i);
+      opts += '<option value="'+i+'" '+selected(selectedValue, i)+'>'+i+costSuffix(c.add, c.energy)+'</option>';
+    }
     return '<div><label class="block text-xs text-gray-400 mb-1">'+esc(label)+'</label>'+
       '<select name="'+name+'" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+opts+'</select></div>';
   }
-  function checkbox(name, label, value) {
+  function checkbox(name, label, value, cost) {
+    var suffix = cost ? costSuffix(cost.add, cost.energy) : '';
     return '<label class="flex items-center gap-2 text-sm text-gray-300">'+
       '<input type="checkbox" name="'+name+'" onchange="recalcAll()" '+checked(value)+' class="rounded bg-gray-700 border-gray-600">'+
-      esc(label)+
+      esc(label)+suffix+
     '</label>';
   }
-  function itemDepCheckbox(value) {
+  function itemDepCheckbox(value, cost) {
+    var suffix = cost ? costSuffix(cost.add, cost.energy) : '';
     return '<label class="flex items-center gap-2 text-sm text-gray-300">'+
       '<input type="checkbox" name="item_dep" onchange="onItemDepChange(this)" '+checked(value)+' class="rounded bg-gray-700 border-gray-600">'+
-      'Has Item Dependency'+
+      'Has Item Dependency'+suffix+
     '</label>';
   }
   function traitOptions(category, selectedValue) {
@@ -336,11 +390,12 @@
 
   function renderEnactCard(type, data) {
     data = data || {};
-    if (type === 'Enact Damage') return renderEnactDamage(data);
-    if (type === 'Enact Healing') return renderEnactHealing(data);
-    if (type === 'Enact Movement') return renderEnactMovement(data);
-    if (type === 'Enact Proficiency Shift') return renderEnactProfShift(data);
-    if (type === 'Enact Persistent Effect') return renderEnactPersistent(data);
+    var cfg = getEnactConfig(type);
+    if (type === 'Enact Damage') return renderEnactDamage(data, cfg);
+    if (type === 'Enact Healing') return renderEnactHealing(data, cfg);
+    if (type === 'Enact Movement') return renderEnactMovement(data, cfg);
+    if (type === 'Enact Proficiency Shift') return renderEnactProfShift(data, cfg);
+    if (type === 'Enact Persistent Effect') return renderEnactPersistent(data, cfg);
     return '<div class="section-card enact-card bg-gray-800 rounded border border-gray-700 p-4 text-red-400">Unknown enact type: '+esc(type)+'</div>';
   }
 
@@ -355,19 +410,25 @@
     ].join('\n');
   }
 
-  function sourceSelect(d, name) {
-    name = name || 'source';
+  function sourceSelect(d, cfg) {
+    cfg = cfg || {};
+    var tiers = cfg.dice_tiers || {d4:0,d6:1,d8:2,d10:3,d12:4};
+    var tierCost = cfg.dice_tier_cost || {add_cost:0, energy_cost:0};
     var opts = D.damageDiceOptions.map(function(o){
-      return '<option value="'+esc(o)+'" '+selected(d.source, o)+'>'+esc(o)+'</option>';
+      var tier = tiers[o] || 0;
+      return opt(o, o, d.source, tier * (tierCost.add_cost || 0), tier * (tierCost.energy_cost || 0));
     }).join('');
-    opts += '<option value="trait" '+selected(d.source, 'trait')+'>Trait (1d10)</option>';
-    opts += '<option value="previous" '+selected(d.source, 'previous')+'>Use result of previous enactment</option>';
-    opts += '<option value="other" '+selected(d.source, 'other')+'>Another roll result</option>';
+    var traitCost = findPerk(cfg.perks, 'trait_source') || {add_cost:0, energy_cost:0};
+    opts += opt('Trait (1d10)', 'trait', d.source, traitCost.add_cost, traitCost.energy_cost);
+    var prevCost = findPerk(cfg.perks, 'use_previous') || {add_cost:0, energy_cost:0};
+    opts += opt('Use result of previous enactment', 'previous', d.source, prevCost.add_cost, prevCost.energy_cost);
+    opts += opt('Another roll result', 'other', d.source, prevCost.add_cost, prevCost.energy_cost);
     return opts;
   }
 
-  function renderEnactDamage(d) {
+  function renderEnactDamage(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var src = d.source || 'd4';
     var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
     var traitSelectHTML = '';
@@ -385,11 +446,11 @@
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Damage</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
-          checkbox('always', 'Will always resolve (costs extra)', d.always),
+          checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
           '<div>',
             '<label class="block text-xs text-gray-400 mb-1">Source</label>',
             '<select name="source" onchange="onEnactSourceChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
-              sourceSelect(d),
+              sourceSelect(d, cfg),
             '</select>',
           '</div>',
           traitSelectHTML,
@@ -403,11 +464,11 @@
           '<input type="text" name="other" value="'+esc(d.other_roll_text||'')+'" placeholder="e.g. previous_enactment.result" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
         '</div>',
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
-          intSelectFlat('flat', 'Flat Bonus', 0, 20, d.flat_bonus || 0),
+          intSelectFlat('flat', 'Flat Bonus', 0, 20, d.flat_bonus || 0, cumCostFn(0, findPerk(cfg.perks, 'flat_bonus'))),
           '<div><label class="block text-xs text-gray-400 mb-1">Offensive Trait (extra die)</label>',
             '<select name="offense" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              '<option value="">None</option>' +
-              D.offenseTraits.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.offensive_trait,t)+'>'+esc(t)+'</option>';}).join('') +
+              opt('None', '', d.offensive_trait, 0, 0) +
+              D.offenseTraits.map(function(t){ var c = perkCost(cfg.perks, 'offensive_trait'); return opt(t, t, d.offensive_trait, c.add, c.energy); }).join('') +
             '</select></div>',
         '</div>',
         breakdown(),
@@ -415,8 +476,9 @@
     ].join('\n');
   }
 
-  function renderEnactHealing(d) {
+  function renderEnactHealing(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var src = d.source || 'd4';
     var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
     var traitSelectHTML = '';
@@ -434,10 +496,10 @@
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Healing</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
-          checkbox('always', 'Will always resolve (costs extra)', d.always),
+          checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
           '<div><label class="block text-xs text-gray-400 mb-1">Source</label>',
           '<select name="source" onchange="onEnactSourceChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
-            sourceSelect(d),
+            sourceSelect(d, cfg),
           '</select></div>',
           traitSelectHTML,
         '</div>',
@@ -450,11 +512,11 @@
           '<input type="text" name="other" value="'+esc(d.other_roll_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
         '</div>',
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
-          intSelectFlat('flat', 'Flat Bonus', 0, 20, d.flat_bonus || 0),
+          intSelectFlat('flat', 'Flat Bonus', 0, 20, d.flat_bonus || 0, cumCostFn(0, findPerk(cfg.perks, 'flat_bonus'))),
           '<div><label class="block text-xs text-gray-400 mb-1">Medicine</label>',
             '<select name="medicine" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              '<option value="">None</option>'+
-              '<option value="Medicine" '+selected(d.medicine_trait,'Medicine')+'>Medicine (1d10)</option>'+
+              opt('None', '', d.medicine_trait, 0, 0)+
+              (function(){ var c = perkCost(cfg.perks, 'medicine_trait'); return opt('Medicine (1d10)', 'Medicine', d.medicine_trait, c.add, c.energy); })() +
             '</select></div>',
         '</div>',
         breakdown(),
@@ -462,20 +524,22 @@
     ].join('\n');
   }
 
-  function renderEnactMovement(d) {
+  function renderEnactMovement(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var dirs = d.directions && d.directions.length ? d.directions : ['Away'];
     var originMode = d.origin_mode || 'engager';
+    var otherOrigin = perkCost(cfg.perks, 'other_origin');
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Movement" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Movement</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
-          checkbox('always', 'Will always resolve (costs extra)', d.always),
+          checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
           '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
             '<select name="origin_mode" onchange="onOriginModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              '<option value="engager" '+selected(originMode,'engager')+'>Engager</option>'+
-              '<option value="other" '+selected(originMode,'other')+'>Other Origin</option>'+
+              opt('Engager', 'engager', originMode, 0, 0)+
+              opt('Other Origin', 'other', originMode, otherOrigin.add, otherOrigin.energy)+
             '</select></div>',
         '</div>',
         '<div data-wrap="origin" '+hiddenIf(originMode !== 'other')+'>',
@@ -483,20 +547,24 @@
           '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
         '</div>',
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
-          intSelect('distance', 'Distance', 1, 10, d.distance || 1, 'm'),
+          intSelect('distance', 'Distance', 1, 10, d.distance || 1, 'm', cumCostFn(1, cfg.distance_cost)),
           '<div>',
             '<div class="flex items-center justify-between mb-1"><span class="text-xs text-gray-400">Directions</span>',
               '<button type="button" onclick="addDirection(this)" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded text-xs">+ Direction</button>',
             '</div>',
-            directionsList(dirs),
+            directionsList(dirs, cfg),
         '</div>',
         breakdown(),
       '</div>'
     ].join('\n');
   }
-  function directionsList(dirs) {
+  function directionsList(dirs, cfg) {
+    var freeDir = perkCost((cfg||{}).perks, 'free_direction');
     var rows = dirs.map(function(dir){
-      var opts = D.directionOptions.map(function(o){return '<option value="'+esc(o)+'" '+selected(dir,o)+'>'+esc(o)+'</option>';}).join('');
+      var opts = D.directionOptions.map(function(o){
+        if (o === 'Free') return opt(o, o, dir, freeDir.add, freeDir.energy);
+        return opt(o, o, dir, 0, 0);
+      }).join('');
       return '<div class="flex items-center gap-2">'+
         '<select name="direction" onchange="recalcAll()" class="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+opts+'</select>'+
         '<button type="button" onclick="this.parentElement.remove();recalcAll()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">−</button>'+
@@ -505,14 +573,15 @@
     return '<div data-list="directions" class="space-y-1">'+rows+'</div>';
   }
 
-  function renderEnactProfShift(d) {
+  function renderEnactProfShift(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Proficiency Shift" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Proficiency Shift</h3>',
         enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
-          checkbox('always', 'Will always resolve (costs extra)', d.always),
+          checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
         '</div>',
         '<div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">',
           '<div><label class="block text-xs text-gray-400 mb-1">Trait</label>',
@@ -523,17 +592,25 @@
             '<select name="shift_dir" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
               D.shiftDirectionOptions.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.shift_dir,t)+'>'+esc(t)+'</option>';}).join(''),
             '</select></div>',
-          intSelectFlat('shift_amount', 'Amount', 1, 5, d.shift_amount || 1),
-          intSelectFlat('shift_uses', 'Uses', 1, 5, d.shift_uses || 1),
+          intSelectFlat('shift_amount', 'Amount', 1, 5, d.shift_amount || 1, cumCostFn(1, cfg.shift_amount_cost)),
+          intSelectFlat('shift_uses', 'Uses', 1, 5, d.shift_uses || 1, cumCostFn(1, cfg.shift_uses_cost)),
         '</div>',
         breakdown(),
       '</div>'
     ].join('\n');
   }
 
-  function renderEnactPersistent(d) {
+  function renderEnactPersistent(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var sols = (d.solutions && d.solutions.length ? d.solutions : ['Dexterity', 'Constitution']);
+    var effects = cfg.effects || [];
+    var effectByDesc = {};
+    effects.forEach(function(e){ effectByDesc[e.description] = e; });
+    var effectOpts = D.persistentEffectTypes.map(function(t){
+      var e = effectByDesc[t] || { add_cost: 0, energy_cost: 0 };
+      return opt(t, t, d.effect_type, e.add_cost, e.energy_cost);
+    }).join('');
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Persistent Effect" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Persistent Effect</h3>',
@@ -541,14 +618,14 @@
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
           '<div><label class="block text-xs text-gray-400 mb-1">Name</label>',
             '<input type="text" name="effect_name" value="'+esc(d.effect_name||'Burning')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white"></div>',
-          checkbox('always', 'Will always resolve (costs extra)', d.always),
+          checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
         '</div>',
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
           '<div><label class="block text-xs text-gray-400 mb-1">Applies</label>',
             '<select name="effect_type" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              D.persistentEffectTypes.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.effect_type,t)+'>'+esc(t)+'</option>';}).join('') +
+              effectOpts +
             '</select></div>',
-          intSelectFlat('duration', 'Duration', 2, 8, d.duration || 2),
+          intSelectFlat('duration', 'Duration', 2, 8, d.duration || 2, cumCostFn(2, cfg.duration_cost)),
           '<div><label class="block text-xs text-gray-400 mb-1">Trigger</label>',
             '<select name="trigger_timing" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
               D.triggerTimings.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.trigger_timing,t)+'>'+esc(t)+'</option>';}).join('') +
@@ -581,11 +658,12 @@
 
   function renderInterCard(type, data) {
     data = data || {};
-    if (type === 'Self')         return renderInterSelf(data);
-    if (type === 'Direct')       return renderInterDirect(data);
-    if (type === 'Ranged')       return renderInterRanged(data);
-    if (type === 'Area')         return renderInterArea(data);
-    if (type === 'Area of Effect') return renderInterAoE(data);
+    var cfg = getInterConfig(type);
+    if (type === 'Self')         return renderInterSelf(data, cfg);
+    if (type === 'Direct')       return renderInterDirect(data, cfg);
+    if (type === 'Ranged')       return renderInterRanged(data, cfg);
+    if (type === 'Area')         return renderInterArea(data, cfg);
+    if (type === 'Area of Effect') return renderInterAoE(data, cfg);
     return '<div class="section-card inter-card bg-gray-800 rounded border border-gray-700 p-4 text-red-400">Unknown inter type: '+esc(type)+'</div>';
   }
 
@@ -599,7 +677,7 @@
     ].join('\n');
   }
 
-  function renderInterSelf(d) {
+  function renderInterSelf(d, cfg) {
     return [
       '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Self" data-build="0" data-cast="0">',
         '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
@@ -615,7 +693,8 @@
     ].join('\n');
   }
 
-  function renderInterDirect(d) {
+  function renderInterDirect(d, cfg) {
+    cfg = cfg || {};
     return [
       '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Direct" data-build="0" data-cast="0">',
         '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
@@ -625,16 +704,19 @@
         '<div class="collapsible-content space-y-3 mt-3">',
           interTopStats(),
           '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
-            intSelect('range', 'Range', 1, 10, d.range || 1, 'm'),
-            intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1),
+            intSelect('range', 'Range', 1, 10, d.range || 1, 'm', cumCostFn(1, cfg.range_cost)),
+            intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1, cumCostFn(1, cfg.target_cost)),
           '</div>',
-          '<div>'+usePrevCheck(d.use_previous)+'</div>',
+          '<div>'+usePrevCheck(d.use_previous, perkCost(cfg.perks, 'use_previous'))+'</div>',
           breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
   }
-  function renderInterRanged(d) {
+  function renderInterRanged(d, cfg) {
+    cfg = cfg || {};
+    var ext = cfg.range_extension_cost || {add_cost:0, energy_cost:0, step:2};
+    var step = ext.step || 2;
     return [
       '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Ranged" data-build="0" data-cast="0">',
         '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
@@ -644,23 +726,30 @@
         '<div class="collapsible-content space-y-3 mt-3">',
           interTopStats(),
           '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
-            intSelect('range', 'Range', 10, 20, d.range || 10, 'm'),
-            intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1),
+            intSelect('range', 'Range', 10, 20, d.range || 10, 'm', function(i){
+              var inc = Math.floor(Math.max(0, i - 10) / step);
+              return { add: inc * (ext.add_cost || 0), energy: inc * (ext.energy_cost || 0) };
+            }),
+            intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1, cumCostFn(1, cfg.target_cost)),
           '</div>',
           '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">',
-            checkbox('visible', 'Target may be not visible', d.visible_ok),
-            checkbox('obstructed', 'Target may be obstructed', d.obstructed_ok),
-            checkbox('remove_penalty', 'Remove engagement penalty', d.remove_penalty),
+            checkbox('visible', 'Target may be not visible', d.visible_ok, perkCost(cfg.perks, 'not_visible')),
+            checkbox('obstructed', 'Target may be obstructed', d.obstructed_ok, perkCost(cfg.perks, 'obstructed')),
+            checkbox('remove_penalty', 'Remove engagement penalty', d.remove_penalty, perkCost(cfg.perks, 'remove_penalty')),
           '</div>',
-          '<div>'+usePrevCheck(d.use_previous)+'</div>',
+          '<div>'+usePrevCheck(d.use_previous, perkCost(cfg.perks, 'use_previous'))+'</div>',
           breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
   }
-  function renderInterArea(d) {
+  function renderInterArea(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var om = d.origin_mode || 'engager';
+    var rangeCost = cfg.range_cost || {add_cost:0, energy_cost:0, step:2};
+    var step = rangeCost.step || 2;
+    var otherOrigin = perkCost(cfg.perks, 'other_origin');
     return [
       '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Area" data-build="0" data-cast="0">',
         '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
@@ -670,29 +759,36 @@
         '<div class="collapsible-content space-y-3 mt-3">',
           interTopStats(),
           '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
-            intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm'),
-            intSelect('range', 'Range', 0, 10, d.range || 0, 'm'),
+            intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm', cumCostFn(1, cfg.radius_cost)),
+            intSelect('range', 'Range', 0, 10, d.range || 0, 'm', function(i){
+              var rng = Math.ceil(Math.max(0, i) / step);
+              return { add: rng * (rangeCost.add_cost || 0), energy: rng * (rangeCost.energy_cost || 0) };
+            }),
           '</div>',
           '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
             '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
               '<select name="origin_mode" onchange="onOriginModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-                '<option value="engager" '+selected(om,'engager')+'>Engager</option>'+
-                '<option value="other" '+selected(om,'other')+'>Other Origin</option>'+
+                opt('Engager', 'engager', om, 0, 0)+
+                opt('Other Origin', 'other', om, otherOrigin.add, otherOrigin.energy)+
               '</select></div>',
             '<div data-wrap="origin" '+hiddenIf(om!=='other')+'>',
               '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
               '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
             '</div>',
           '</div>',
-          '<div>'+usePrevCheck(d.use_previous)+'</div>',
+          '<div>'+usePrevCheck(d.use_previous, perkCost(cfg.perks, 'use_previous'))+'</div>',
           breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
   }
-  function renderInterAoE(d) {
+  function renderInterAoE(d, cfg) {
     d = d || {};
+    cfg = cfg || {};
     var om = d.origin_mode || 'engager';
+    var rangeCost = cfg.range_cost || {add_cost:0, energy_cost:0, step:2};
+    var step = rangeCost.step || 2;
+    var otherOrigin = perkCost(cfg.perks, 'other_origin');
     return [
       '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="Area of Effect" data-build="0" data-cast="0">',
         '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
@@ -702,9 +798,12 @@
         '<div class="collapsible-content space-y-3 mt-3">',
           interTopStats(),
           '<div class="grid grid-cols-1 md:grid-cols-3 gap-3">',
-            intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm'),
-            intSelect('range', 'Range', 0, 10, d.range || 0, 'm'),
-            intSelectFlat('duration', 'Duration', 2, 6, d.duration || 2),
+            intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm', cumCostFn(1, cfg.radius_cost)),
+            intSelect('range', 'Range', 0, 10, d.range || 0, 'm', function(i){
+              var rng = Math.ceil(Math.max(0, i) / step);
+              return { add: rng * (rangeCost.add_cost || 0), energy: rng * (rangeCost.energy_cost || 0) };
+            }),
+            intSelectFlat('duration', 'Duration', 2, 6, d.duration || 2, cumCostFn(2, cfg.duration_cost)),
           '</div>',
           '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
             '<div><label class="block text-xs text-gray-400 mb-1">Trigger Timing</label>',
@@ -713,25 +812,26 @@
               '</select></div>',
             '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
               '<select name="origin_mode" onchange="onOriginModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-                '<option value="engager" '+selected(om,'engager')+'>Engager</option>'+
-                '<option value="other" '+selected(om,'other')+'>Other Origin</option>'+
+                opt('Engager', 'engager', om, 0, 0)+
+                opt('Other Origin', 'other', om, otherOrigin.add, otherOrigin.energy)+
               '</select></div>',
           '</div>',
           '<div data-wrap="origin" '+hiddenIf(om!=='other')+'>',
             '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
             '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
           '</div>',
-          checkbox('immune', 'Engager is immune', d.immune),
-          '<div>'+usePrevCheck(d.use_previous)+'</div>',
+          checkbox('immune', 'Engager is immune', d.immune, perkCost(cfg.perks, 'immune')),
+          '<div>'+usePrevCheck(d.use_previous, perkCost(cfg.perks, 'use_previous'))+'</div>',
           breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
   }
-  function usePrevCheck(v) {
+  function usePrevCheck(v, cost) {
+    var suffix = cost ? costSuffix(cost.add, cost.energy) : ' (costs extra)';
     return '<label class="flex items-center gap-2 text-sm text-gray-300">'+
       '<input type="checkbox" name="use_previous" onchange="recalcAll()" '+checked(v)+' class="rounded bg-gray-700 border-gray-600">'+
-      'Use result of previous interaction/validation (costs extra)'+
+      'Use result of previous interaction/validation'+suffix+
     '</label>';
   }
 
@@ -741,9 +841,25 @@
 
   function renderValidationCard(d) {
     d = d || {};
+    var cfg = getValidationConfig();
     var mode = d.engage_mode || 'trait';
     var cat = d.engage_trait_category || (d.engage_trait ? (categoryOfTrait(d.engage_trait) || 'offense') : 'offense');
     var counters = d.counter_entries || d.counter_rolls || [];
+
+    var modes = (cfg.engagement && cfg.engagement.modes) || [];
+    var modeOpts = ['trait','generic','other','previous'].map(function(m){
+      var c = findPerk(modes, m) || { add_cost: 0, energy_cost: 0 };
+      var label = { trait: 'Trait Roll', generic: 'Generic Roll', other: 'Another roll result', previous: 'Use result of previous interaction' }[m];
+      return opt(label, m, mode, c.add_cost, c.energy_cost);
+    }).join('');
+
+    var dieTiers = { d6: 0, d8: 1, d10: 2, d12: 3 };
+    var engageUp = findPerk((cfg.counter && cfg.counter.tier_shifts) || [], 'engage_up') || { add_cost: 0, energy_cost: 0 };
+    var dieOpts = D.genericDieOptions.map(function(o){
+      var tier = dieTiers[o] || 0;
+      return opt(o, o, d.engage_die, tier * (engageUp.add_cost || 0), tier * (engageUp.energy_cost || 0));
+    }).join('');
+
     return [
       '<div class="section-card validation-card bg-gray-800 rounded-lg border border-rose-700 p-4 space-y-3" data-section="validation" data-build="0" data-cast="0">',
         '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
@@ -759,22 +875,19 @@
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
           '<div><label class="block text-xs text-gray-400 mb-1">Engage Roll Type</label>',
             '<select name="engage_mode" onchange="onEngageModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              '<option value="trait" '+selected(mode,'trait')+'>Trait Roll</option>'+
-              '<option value="generic" '+selected(mode,'generic')+'>Generic Roll</option>'+
-              '<option value="other" '+selected(mode,'other')+'>Another roll result</option>'+
-              '<option value="previous" '+selected(mode,'previous')+'>Use result of previous interaction</option>'+
+              modeOpts +
             '</select></div>',
         '</div>',
         '<div data-wrap="engage-trait" '+hiddenIf(mode!=='trait')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Trait</label>',
-          '<input type="hidden" name="engage_trait_category" value="'+esc(cat)+'">'+
+          '<input type="hidden" name="engage_trait_category" value="'+esc(cat)+'">',
           '<select name="engage_trait" onchange="onEngageTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
             '<option value="">-- Select --</option>' + traitOptionsGrouped(d.engage_trait) +
           '</select></div>',
         '<div data-wrap="engage-generic" '+hiddenIf(mode!=='generic')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Die</label>',
           '<select name="engage_die" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-            D.genericDieOptions.map(function(o){return '<option value="'+esc(o)+'" '+selected(d.engage_die,o)+'>'+esc(o)+'</option>';}).join('') +
+            dieOpts +
           '</select></div>',
         '<div data-wrap="engage-other" '+hiddenIf(mode!=='other')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Other Roll Text</label>',
@@ -788,26 +901,34 @@
             '<span class="text-xs text-gray-400 uppercase">Counter Rolls</span>',
             '<button type="button" onclick="addCounter(this)" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded text-xs">+ Counter</button>',
           '</div>',
-          counterList(counters),
+          counterList(counters, cfg),
         '</div>',
         breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
   }
-  function counterList(items) {
+  function counterList(items, cfg) {
     items = items.length ? items : [{type:'defense', trait:'Reflex'}, {type:'defense', trait:'Constitution'}];
     var rows = items.map(function(item){
       if (typeof item === 'string') item = {type:'defense', trait:item};
-      return counterRow(item);
+      return counterRow(item, cfg);
     }).join('');
     return '<div data-list="counters" class="space-y-2">'+rows+'</div>';
   }
-  function counterRow(item) {
-    var opts = '<option value="defense" '+selected(item.type,'defense')+'>Defensive Trait (default)</option>'+
-               '<option value="general" '+selected(item.type,'general')+'>General Trait (costs extra)</option>'+
-               '<option value="offense" '+selected(item.type,'offense')+'>Offensive Trait (costs extra)</option>'+
-               '<option value="previous" '+selected(item.type,'previous')+'>Use result of previous (costs extra)</option>';
+  function counterRow(item, cfg) {
+    cfg = cfg || {};
+    var types = (cfg.counter && cfg.counter.types) || [];
+    var typeDefs = {
+      defense: 'Defensive Trait (default)',
+      general: 'General Trait',
+      offense: 'Offensive Trait',
+      previous: 'Use result of previous'
+    };
+    var opts = ['defense','general','offense','previous'].map(function(t){
+      var c = findPerk(types, t) || { add_cost: 0, energy_cost: 0 };
+      return opt(typeDefs[t] || t, t, item.type, c.add_cost, c.energy_cost);
+    }).join('');
     var traitSelect = '';
     if (item.type === 'defense' || item.type === 'general' || item.type === 'offense') {
       var cat = item.type === 'defense' ? 'defense' : item.type === 'general' ? 'general' : 'offense';
@@ -856,6 +977,7 @@
   window.onReactionTriggerChange = function (sel) {
     var wrap = sel.closest('.section-card').querySelector('[data-wrap="trigger-trait"]');
     if (wrap) wrap.hidden = (sel.value !== 'Target makes a trait check');
+    recalcAll();
   };
 
   window.onNoKnockoutChange = function (cb) {
@@ -939,6 +1061,7 @@
     setWrap(c, 'source-trait', v === 'trait');
     setWrap(c, 'source-other', v === 'other');
     setWrap(c, 'source-previous', v === 'previous');
+    recalcAll();
   };
 
   window.onSourceTraitChange = function (sel) {
@@ -992,7 +1115,13 @@
     var list = btn.parentElement.parentElement.querySelector('[data-list="directions"]');
     var first = list.querySelector('select[name="direction"]');
     var val = first ? first.value : 'Away';
-    var opts = D.directionOptions.map(function(o){return '<option value="'+esc(o)+'" '+selected(val,o)+'>'+esc(o)+'</option>';}).join('');
+    var card = btn.closest('.section-card[data-section="enact"]');
+    var cfg = card ? getEnactConfig(card.dataset.enactType) : {};
+    var freeDir = perkCost(cfg.perks, 'free_direction');
+    var opts = D.directionOptions.map(function(o){
+      if (o === 'Free') return opt(o, o, val, freeDir.add, freeDir.energy);
+      return opt(o, o, val, 0, 0);
+    }).join('');
     var row = document.createElement('div');
     row.className = 'flex items-center gap-2';
     row.innerHTML =
@@ -1019,7 +1148,7 @@
   window.addCounter = function (btn) {
     var list = btn.parentElement.parentElement.querySelector('[data-list="counters"]');
     var row = document.createElement('div');
-    row.innerHTML = counterRow({type:'defense', trait:''});
+    row.innerHTML = counterRow({type:'defense', trait:''}, getValidationConfig());
     list.appendChild(row);
     recalcAll();
   };
@@ -1158,6 +1287,8 @@
       if (range > 1) { build += (range - 1) * rangeCost.add_cost; energy += (range - 1) * rangeCost.energy_cost; lines.push('Add reaction range (add '+((range-1)*rangeCost.add_cost)+', energy '+((range-1)*rangeCost.energy_cost)+')'); }
       if (uses > 1)  { build += (uses-1) * usesCost.add_cost; energy += (uses-1) * usesCost.energy_cost; lines.push('Add uses (add '+((uses-1)*usesCost.add_cost)+', energy '+((uses-1)*usesCost.energy_cost)+')'); }
       var trigger = card.querySelector('[name="trigger"]').value || '';
+      var triggerCost = findPerk(cfg.triggers, trigger);
+      if (triggerCost) { build += triggerCost.add_cost || 0; energy += triggerCost.energy_cost || 0; lines.push('Trigger (add '+(triggerCost.add_cost||0)+', energy '+(triggerCost.energy_cost||0)+')'); }
       var triggerTrait = card.querySelector('[data-wrap="trigger-trait"]') && !card.querySelector('[data-wrap="trigger-trait"]').hidden
         ? card.querySelector('[name="trigger_trait"]').value : '';
       setOut(card, 'formula', 'Reaction, '+uses+' uses/round, range '+range+'m, trigger: '+trigger+(triggerTrait?(' of type '+triggerTrait):''));
@@ -1200,6 +1331,29 @@
   function setOut(card, key, value) {
     var el = card && card.querySelector('[data-out="'+key+'"]');
     if (el) el.textContent = value;
+    var hidden = card && card.querySelector('input[type="hidden"][name="'+key+'"]');
+    if (hidden) hidden.value = value;
+  }
+  function upsertHidden(container, name, value) {
+    if (!container) return;
+    var el = container.querySelector('input[type="hidden"][name="'+name+'"]');
+    if (!el) {
+      el = document.createElement('input');
+      el.type = 'hidden';
+      el.name = name;
+      container.appendChild(el);
+    }
+    el.value = value === undefined || value === null ? '' : value;
+  }
+  function prepareCardSubmit(container, typeAttr) {
+    if (!container) return;
+    var card = container.querySelector('.section-card');
+    if (!card) return;
+    if (typeAttr) upsertHidden(container, 'type', card.dataset[typeAttr] || '');
+    upsertHidden(container, 'build', card.dataset.build || '0');
+    upsertHidden(container, 'cast', card.dataset.cast || '0');
+    var formula = card.querySelector('[data-out="formula"]');
+    if (formula) upsertHidden(container, 'formula', formula.textContent || '');
   }
   function fillList(card, lines) {
     var host = card && card.querySelector('[data-out="breakdown"]');
@@ -1338,6 +1492,16 @@
       var singleSol = findPerk(cfg.perks, 'single_solution');
       if (sols.length === 1) { build += singleSol ? singleSol.add_cost : 0; energy += singleSol ? singleSol.energy_cost : 0; lines.push('Only one solution (add '+(singleSol?singleSol.add_cost:0)+', energy '+(singleSol?singleSol.energy_cost:0)+')'); }
       var effType = (card.querySelector('[name="effect_type"]')||{}).value || '(effect)';
+      var effCfg = findPerk(cfg.effects, effType) || (function(){
+        var e = cfg.effects || []; var match = null;
+        for (var i = 0; i < e.length; i++) { if (e[i].description === effType) { match = e[i]; break; } }
+        return match;
+      })();
+      if (effCfg) {
+        build += effCfg.add_cost || 0;
+        energy += effCfg.energy_cost || 0;
+        lines.push('Effect '+effType+' (add '+(effCfg.add_cost||0)+', energy '+(effCfg.energy_cost||0)+')');
+      }
       formula = (effName.value||'Effect')+' applies '+effType+' for '+dur+' rounds, solutions: '+(sols.join(' or ')||'(none)');
     }
 
@@ -1439,9 +1603,19 @@
     } else if (mode === 'generic') {
       var die = (card.querySelector('[name="engage_die"]') || {}).value || 'd6';
       var generic = findPerk(cfg.engagement.modes, 'generic');
-      build += generic ? generic.add_cost : 0;
-      energy += generic ? generic.energy_cost : 0;
-      lines.push('Engage roll: generic '+die+' (add '+(generic?generic.add_cost:0)+', energy '+(generic?generic.energy_cost:0)+')');
+      var genericAdd = generic ? generic.add_cost : 0;
+      var genericEnergy = generic ? generic.energy_cost : 0;
+      build += genericAdd;
+      energy += genericEnergy;
+      // Die tier cost (relative to d6) via the engage_up tier shift.
+      var dieTiers = { d6: 0, d8: 1, d10: 2, d12: 3 };
+      var tier = dieTiers[die] || 0;
+      var engageUp = findPerk(cfg.counter.tier_shifts, 'engage_up');
+      var upAdd = (tier > 0 && engageUp) ? tier * engageUp.add_cost : 0;
+      var upEnergy = (tier > 0 && engageUp) ? tier * engageUp.energy_cost : 0;
+      build += upAdd;
+      energy += upEnergy;
+      lines.push('Engage roll: generic '+die+' (add '+(genericAdd + upAdd)+', energy '+(genericEnergy + upEnergy)+')');
       formula = die + ' vs counters';
     } else if (mode === 'other') {
       var txt = (card.querySelector('[name="engage_other"]') || {}).value || '(other)';
@@ -1513,6 +1687,17 @@
     if (totalEl) totalEl.textContent = total;
     var totalCastEl = document.getElementById('total-cast-cost');
     if (totalCastEl) totalCastEl.textContent = totalCast;
+    var spent = Number(D.abilityPointsUsed || 0) + total;
+    var budget = Number(D.abilityPointsBudget || 0);
+    var remaining = budget - spent;
+    var usedEl = document.getElementById('ability-points-used');
+    if (usedEl) usedEl.textContent = remaining;
+    var budgetEl = document.getElementById('ability-points-budget');
+    if (budgetEl) budgetEl.textContent = budget;
+    var displayEl = document.getElementById('ability-points-display');
+    if (displayEl) displayEl.className = remaining < 0 ? 'text-2xl font-bold text-red-400' : 'text-2xl font-bold text-green-400';
+    var warningEl = document.getElementById('ability-points-warning');
+    if (warningEl) warningEl.style.display = remaining < 0 ? 'block' : 'none';
   };
 
   // =========================================================================
@@ -1533,9 +1718,18 @@
     var hiddenType = document.getElementById('hidden-ability-type');
     if (typeSel && hiddenType) hiddenType.value = typeSel.value;
 
+    if (!document.querySelector('.section-card[data-section="interaction"]')) {
+      evt.preventDefault();
+      alert('Add at least one interaction before saving the ability.');
+      return;
+    }
+
     var blocks = document.querySelectorAll('.enactment-block');
     blocks.forEach(function (block, idx) {
       block.dataset.index = idx; // re-number in display order
+      prepareCardSubmit(block.querySelector('.enact-card-container'), 'enactType');
+      prepareCardSubmit(block.querySelector('.inter-card-container'), 'interType');
+      prepareCardSubmit(block.querySelector('.validation-card-container'));
       // Rename inputs inside the enact card only (rendered inside
       // .enact-card-container); inter card (inside .inter-card-container);
       // validation card (inside .validation-card-container).
@@ -1587,6 +1781,7 @@
         document.getElementById('enactments-container').appendChild(block);
         var nameInput = block.querySelector('input[name="enactment_name"]');
         if (nameInput) nameInput.value = saved.name || '';
+        updateInterOptions(block);
         block.querySelector('.enact-type-select').value = saved.type || '';
         block.dataset.enactType = saved.type || '';
         if (saved.type) {

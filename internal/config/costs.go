@@ -26,6 +26,10 @@ func (ab *AbilityBuilderConfig) ComputeAbilityCosts(a *models.Ability, values ur
 
 	energy := cfg.BaseEnergy
 	action := cfg.BaseAction
+	build := 0
+	if values.Get("ability_item_dep") == "on" {
+		build += perkAddCost(cfg.Perks, "item_dependency")
+	}
 
 	switch a.Type {
 	case models.AbilityExecution:
@@ -36,15 +40,21 @@ func (ab *AbilityBuilderConfig) ComputeAbilityCosts(a *models.Ability, values ur
 
 		if energySteps > 0 {
 			energy += energySteps * stepEnergyCost(cfg, "energy", 1)
+			build += energySteps * stepAddCost(cfg, "energy", 1)
 		} else if energySteps < 0 {
 			energy += (-energySteps) * stepEnergyCost(cfg, "energy", -1)
+			build += (-energySteps) * stepAddCost(cfg, "energy", -1)
 		}
 
 		action += actionSteps
 
-		// Reducing action cost adds energy (per YAML step cost).
+		if actionSteps > 0 {
+			energy += actionSteps * stepEnergyCost(cfg, "action", 1)
+			build += actionSteps * stepAddCost(cfg, "action", 1)
+		}
 		if actionSteps < 0 {
 			energy += -actionSteps * stepEnergyCost(cfg, "action", -1)
+			build += -actionSteps * stepAddCost(cfg, "action", -1)
 		}
 		if action < 0 {
 			action = 0
@@ -58,26 +68,48 @@ func (ab *AbilityBuilderConfig) ComputeAbilityCosts(a *models.Ability, values ur
 			a.TriggerTrait = values.Get("trigger_trait")
 		}
 		if a.ReactionRange > cfg.BaseRange {
+			build += (a.ReactionRange - cfg.BaseRange) * cfg.RangeCost.AddCost
 			energy += (a.ReactionRange - cfg.BaseRange) * cfg.RangeCost.EnergyCost
 		}
 		if a.ReactionUses > cfg.BaseUses {
+			build += (a.ReactionUses - cfg.BaseUses) * cfg.UsesCost.AddCost
 			energy += (a.ReactionUses - cfg.BaseUses) * cfg.UsesCost.EnergyCost
 		}
+		build += triggerAddCost(cfg.Triggers, a.Trigger)
 
 	case models.AbilityPhase:
 		a.PhaseDuration = max(atoi(values.Get("phase_rounds")), cfg.BaseDuration)
 		a.ReversePhaseRounds = max(atoi(values.Get("reverse_rounds")), 1)
 		if a.PhaseDuration > cfg.BaseDuration {
+			build += (a.PhaseDuration - cfg.BaseDuration) * cfg.DurationCost.AddCost
 			energy += (a.PhaseDuration - cfg.BaseDuration) * cfg.DurationCost.EnergyCost
+		}
+		if a.ReversePhaseRounds < a.PhaseDuration {
+			build += (a.PhaseDuration - a.ReversePhaseRounds) * cfg.ReverseDurationRefund.AddCost
+			energy += (a.PhaseDuration - a.ReversePhaseRounds) * cfg.ReverseDurationRefund.EnergyCost
+		}
+		if values.Get("all_req") == "on" {
+			build += perkAddCost(cfg.Perks, "all_knockouts_req")
+			energy += perkEnergyCost(cfg.Perks, "all_knockouts_req")
+		}
+		if values.Get("reverse_knockout") == "on" {
+			build += perkAddCost(cfg.Perks, "reverse_knockout")
+			energy += perkEnergyCost(cfg.Perks, "reverse_knockout")
+		}
+		if values.Get("no_knockout") == "on" {
+			build += perkAddCost(cfg.Perks, "no_knockout")
+			energy += perkEnergyCost(cfg.Perks, "no_knockout")
 		}
 
 	case models.AbilityMinion:
 		a.HPBonus = atoi(values.Get("hp"))
 		a.ExtraLifetime = atoi(values.Get("life"))
-		energy = cfg.BaseEnergy + a.ExtraLifetime*cfg.LifetimeBonusCost.EnergyCost
+		build += a.HPBonus*cfg.HealthBonusCost.AddCost + a.ExtraLifetime*cfg.LifetimeBonusCost.AddCost
+		energy = cfg.BaseEnergy + a.HPBonus*cfg.HealthBonusCost.EnergyCost + a.ExtraLifetime*cfg.LifetimeBonusCost.EnergyCost
 		action = cfg.BaseAction
 	}
 
+	a.BuildCost = build
 	a.EnergyCost = energy
 	a.ActionCost = action
 	return nil
@@ -93,6 +125,44 @@ func stepEnergyCost(cfg AbilityTypeConfig, stepType string, direction int) int {
 		return steps.Increase.EnergyCost
 	}
 	return steps.Decrease.EnergyCost
+}
+
+func stepAddCost(cfg AbilityTypeConfig, stepType string, direction int) int {
+	steps, ok := cfg.StepCosts[stepType]
+	if !ok {
+		return 0
+	}
+	if direction >= 0 {
+		return steps.Increase.AddCost
+	}
+	return steps.Decrease.AddCost
+}
+
+func perkAddCost(perks []PerkConfig, id string) int {
+	for _, p := range perks {
+		if p.ID == id {
+			return p.AddCost
+		}
+	}
+	return 0
+}
+
+func perkEnergyCost(perks []PerkConfig, id string) int {
+	for _, p := range perks {
+		if p.ID == id {
+			return p.EnergyCost
+		}
+	}
+	return 0
+}
+
+func triggerAddCost(triggers []TriggerConfig, id string) int {
+	for _, t := range triggers {
+		if t.ID == id {
+			return t.AddCost
+		}
+	}
+	return 0
 }
 
 func atoi(s string) int {

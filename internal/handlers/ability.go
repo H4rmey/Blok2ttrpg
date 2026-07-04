@@ -32,37 +32,39 @@ func (app *App) BuilderHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sessID, state := app.Sessions.GetOrCreate(w, r)
-	if state.Ability.ID == "" {
-		state.CharacterID = charID
-		state.Ability = models.Ability{}
-		app.Sessions.Update(sessID, state)
-	}
+	state.CharacterID = charID
+	state.Ability = models.Ability{}
+	app.Sessions.Update(sessID, state)
 
 	initialState := buildInitialState(&state.Ability)
 
 	app.render(w, "builder.html", map[string]interface{}{
-		"Character":             c,
-		"Ability":               state.Ability,
-		"AbilityTypes":          models.AllAbilityTypes,
-		"AllEnactmentTypes":     models.AllEnactmentTypes,
-		"AllInteractionTypes":   models.AllInteractionTypes,
-		"CompatibleEnactsMap":   compatibleEnactsMapForTemplate(),
-		"GeneralTraitNames":     app.Config.AbilityBuilder.Traits.General,
-		"OffenseTraitNames":     app.Config.AbilityBuilder.Traits.Offense,
-		"DefenseTraitNames":     app.Config.AbilityBuilder.Traits.Defense,
-		"AllTraits":             models.AllTraitNames(),
-		"ReactionTriggers":      models.ReactionTriggers,
-		"KnockoutOptions":       models.KnockoutOptions,
-		"DirectionOptions":      models.DirectionOptions,
-		"ShiftDirectionOptions": models.ShiftDirectionOptions,
-		"TriggerTimings":        models.TriggerTimings,
-		"AoETimings":            models.AoETriggerTimings,
-		"PersistentEffectTypes": models.PersistentEffectTypes,
-		"DamageDiceOptions":     models.DamageDiceOptions,
-		"GenericDieOptions":     models.GenericDieOptions,
-		"InitialStateJSON":      initialState,
-		"IsEdit":                state.Ability.ID != "",
-		"BuilderConfigJSON":     mustMarshalConfig(app.Config),
+		"Character":              c,
+		"Ability":                state.Ability,
+		"Breadcrumbs":            newAbilityBreadcrumbs(c),
+		"AbilityTypes":           models.AllAbilityTypes,
+		"AllEnactmentTypes":      models.AllEnactmentTypes,
+		"AllInteractionTypes":    models.AllInteractionTypes,
+		"CompatibleEnactsMap":    compatibleEnactsMapForTemplate(),
+		"GeneralTraitNames":      app.Config.AbilityBuilder.Traits.General,
+		"OffenseTraitNames":      app.Config.AbilityBuilder.Traits.Offense,
+		"DefenseTraitNames":      app.Config.AbilityBuilder.Traits.Defense,
+		"AllTraits":              models.AllTraitNames(),
+		"ReactionTriggers":       models.ReactionTriggers,
+		"KnockoutOptions":        models.KnockoutOptions,
+		"DirectionOptions":       models.DirectionOptions,
+		"ShiftDirectionOptions":  models.ShiftDirectionOptions,
+		"TriggerTimings":         models.TriggerTimings,
+		"AoETimings":             models.AoETriggerTimings,
+		"PersistentEffectTypes":  models.PersistentEffectTypes,
+		"DamageDiceOptions":      models.DamageDiceOptions,
+		"GenericDieOptions":      models.GenericDieOptions,
+		"InitialStateJSON":       initialState,
+		"IsEdit":                 state.Ability.ID != "",
+		"BuilderConfigJSON":      mustMarshalConfig(app.Config),
+		"AbilityPointsBudget":    abilityPointsBudget(c.Level, app.Config.AbilityBuilder.Leveling),
+		"AbilityPointsUsed":      abilityPointsUsed(*c, app.Config.AbilityBuilder),
+		"AbilityPointsRemaining": abilityPointsBudget(c.Level, app.Config.AbilityBuilder.Leveling) - abilityPointsUsed(*c, app.Config.AbilityBuilder),
 	})
 }
 
@@ -371,6 +373,20 @@ func (app *App) SaveAbilityHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	a.Enactments = parseNewEnactments(r)
+	if !hasInteraction(a.Enactments) {
+		http.Error(w, "At least one interaction is required", http.StatusBadRequest)
+		return
+	}
+
+	if c, err := app.Store.GetCharacter(state.CharacterID); err == nil {
+		budget := abilityPointsBudget(c.Level, app.Config.AbilityBuilder.Leveling)
+		used := abilityPointsUsed(*c, app.Config.AbilityBuilder)
+		cost := abilityBuildCost(*a, app.Config.AbilityBuilder)
+		if used+cost > budget {
+			http.Error(w, "Not enough ability points to save this ability", http.StatusBadRequest)
+			return
+		}
+	}
 
 	if err := app.Store.AddAbility(state.CharacterID, *a); err != nil {
 		http.Error(w, "Failed to save ability", http.StatusInternalServerError)
@@ -504,6 +520,15 @@ func parseNewEnactments(r *http.Request) []models.Enactment {
 	return out
 }
 
+func hasInteraction(enactments []models.Enactment) bool {
+	for _, e := range enactments {
+		if e.Interaction != nil && e.Interaction.Type != "" {
+			return true
+		}
+	}
+	return false
+}
+
 func stripPrefix(s, p string) (string, bool) {
 	if len(s) >= len(p) && s[:len(p)] == p {
 		return s[len(p):], true
@@ -546,9 +571,16 @@ func (app *App) ReviewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	yamlOutput := export.ToYAML(&state.Ability)
+	var c *models.Character
+	if state.CharacterID != "" {
+		if character, err := app.Store.GetCharacter(state.CharacterID); err == nil {
+			c = character
+		}
+	}
 
 	app.render(w, "review.html", map[string]interface{}{
 		"Ability":     state.Ability,
+		"Breadcrumbs": reviewBreadcrumbs(c),
 		"YAML":        yamlOutput,
 		"CharacterID": state.CharacterID,
 		"TotalCost":   state.Ability.TotalCost(),

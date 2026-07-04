@@ -14,6 +14,11 @@ import (
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/storage"
 )
 
+type Breadcrumb struct {
+	Label string
+	URL   string
+}
+
 // App holds shared dependencies for all handlers.
 type App struct {
 	Store       *storage.Store
@@ -158,6 +163,56 @@ func (app *App) renderPartial(w http.ResponseWriter, partialName string, data in
 		log.Printf("partial template execute error for %s: %v", partialName, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
+}
+
+func charactersBreadcrumbs() []Breadcrumb {
+	return []Breadcrumb{{Label: "Characters"}}
+}
+
+func newCharacterBreadcrumbs() []Breadcrumb {
+	return []Breadcrumb{{Label: "Characters", URL: "/"}, {Label: "New Character"}}
+}
+
+func characterBreadcrumbs(c *models.Character) []Breadcrumb {
+	return []Breadcrumb{{Label: "Characters", URL: "/"}, {Label: characterBreadcrumbLabel(c)}}
+}
+
+func abilitiesBreadcrumbs(c *models.Character) []Breadcrumb {
+	return []Breadcrumb{{Label: "Characters", URL: "/"}, {Label: characterBreadcrumbLabel(c), URL: "/characters/" + c.ID}, {Label: "Abilities"}}
+}
+
+func newAbilityBreadcrumbs(c *models.Character) []Breadcrumb {
+	return []Breadcrumb{{Label: "Characters", URL: "/"}, {Label: characterBreadcrumbLabel(c), URL: "/characters/" + c.ID}, {Label: "Abilities", URL: "/characters/" + c.ID + "/abilities"}, {Label: "New Ability"}}
+}
+
+func editAbilityBreadcrumbs(c *models.Character, a *models.Ability) []Breadcrumb {
+	label := "Edit Ability"
+	if a != nil && a.Name != "" {
+		label = "Edit " + a.Name
+	}
+	return []Breadcrumb{{Label: "Characters", URL: "/"}, {Label: characterBreadcrumbLabel(c), URL: "/characters/" + c.ID}, {Label: "Abilities", URL: "/characters/" + c.ID + "/abilities"}, {Label: label}}
+}
+
+func abilityDetailBreadcrumbs(c *models.Character, a *models.Ability) []Breadcrumb {
+	label := "Ability Detail"
+	if a != nil && a.Name != "" {
+		label = a.Name
+	}
+	return []Breadcrumb{{Label: "Characters", URL: "/"}, {Label: characterBreadcrumbLabel(c), URL: "/characters/" + c.ID}, {Label: "Abilities", URL: "/characters/" + c.ID + "/abilities"}, {Label: label}}
+}
+
+func reviewBreadcrumbs(c *models.Character) []Breadcrumb {
+	if c == nil {
+		return []Breadcrumb{{Label: "Characters", URL: "/"}, {Label: "Review Ability"}}
+	}
+	return []Breadcrumb{{Label: "Characters", URL: "/"}, {Label: characterBreadcrumbLabel(c), URL: "/characters/" + c.ID}, {Label: "Abilities", URL: "/characters/" + c.ID + "/abilities"}, {Label: "New Ability", URL: "/characters/" + c.ID + "/abilities/new"}, {Label: "Review"}}
+}
+
+func characterBreadcrumbLabel(c *models.Character) string {
+	if c != nil && c.Name != "" {
+		return c.Name
+	}
+	return "Unnamed Character"
 }
 
 // extractPathParam extracts a path segment from the URL.

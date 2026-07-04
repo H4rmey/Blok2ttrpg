@@ -24,6 +24,7 @@ type Ability struct {
 	Name        string      `json:"name" yaml:"name,omitempty"`
 	Description string      `json:"description,omitempty" yaml:"description,omitempty"`
 	Type        AbilityType `json:"type" yaml:"type"`
+	BuildCost   int         `json:"build_cost,omitempty" yaml:"build_cost,omitempty"`
 
 	// Common
 	HasItemDependency bool   `json:"has_item_dependency,omitempty" yaml:"has_item_dependency,omitempty"`
@@ -58,15 +59,41 @@ type Ability struct {
 	Enactments []Enactment `json:"enactments" yaml:"enactments"`
 }
 
-// TotalCost sums the build/cast cost stored on each enactment and adds +1 for
-// each additional enactment (beyond the first).
+// TotalCost sums build costs and adds +1 for each additional enactment.
 func (a *Ability) TotalCost() int {
-	total := 0
+	return a.TotalBuildCost()
+}
+
+func (a *Ability) TotalBuildCost() int {
+	total := a.BuildCost
 	for i, e := range a.Enactments {
 		if i > 0 {
 			total++
 		}
-		total += e.TotalCost()
+		total += e.BuildCost
+		if e.Interaction != nil {
+			total += e.Interaction.BuildCost
+			if e.Interaction.Validation != nil {
+				total += e.Interaction.Validation.BuildCost
+			}
+		}
+	}
+	return total
+}
+
+func (a *Ability) TotalEnergyCost(additionalEnergyCost int) int {
+	total := a.EnergyCost
+	for i, e := range a.Enactments {
+		if i > 0 {
+			total += additionalEnergyCost
+		}
+		total += e.CastCost
+		if e.Interaction != nil {
+			total += e.Interaction.CastCost
+			if e.Interaction.Validation != nil {
+				total += e.Interaction.Validation.CastCost
+			}
+		}
 	}
 	return total
 }

@@ -3,6 +3,8 @@ package handlers
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"encoding/json"
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -25,7 +27,8 @@ func (app *App) IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 	characters := app.Store.ListCharacters()
 	app.render(w, "index.html", map[string]interface{}{
-		"Characters": characters,
+		"Characters":  characters,
+		"Breadcrumbs": charactersBreadcrumbs(),
 	})
 }
 
@@ -36,23 +39,7 @@ func (app *App) NewCharacterHandler(w http.ResponseWriter, r *http.Request) {
 	c := models.NewCharacter("", traits.General, traits.Offense, traits.Defense)
 	c.CurrentHP = vitalValueFromConfig(cfg.Proficiencies, c.VitalHP, "hp")
 	c.CurrentEnergy = vitalValueFromConfig(cfg.Proficiencies, c.VitalEnergy, "energy")
-	app.render(w, "character.html", map[string]interface{}{
-		"Character":            c,
-		"IsNew":                true,
-		"GeneralTraitNames":    traits.General,
-		"OffenseTraitNames":    traits.Offense,
-		"DefenseTraitNames":    traits.Defense,
-		"ProficiencyOptions":   proficiencyOptionsFromConfig(cfg.Proficiencies),
-		"VitalHPOptions":       vitalOptionsFromConfig(cfg.Proficiencies, "hp"),
-		"VitalMovementOptions": vitalOptionsFromConfig(cfg.Proficiencies, "movement"),
-		"VitalEnergyOptions":   vitalOptionsFromConfig(cfg.Proficiencies, "energy"),
-		"TraitPointsBudget":    traitPointsBudget(c.Level, cfg.Leveling),
-		"TraitPointsUsed":      traitPointsUsed(c, cfg.Proficiencies),
-		"CharacterHP":          vitalValueFromConfig(cfg.Proficiencies, c.VitalHP, "hp"),
-		"CharacterMovement":    vitalValueFromConfig(cfg.Proficiencies, c.VitalMovement, "movement"),
-		"CharacterEnergy":      vitalValueFromConfig(cfg.Proficiencies, c.VitalEnergy, "energy"),
-		"MaxLevel":             cfg.Leveling.MaxLevel,
-	})
+	app.render(w, "character.html", characterPageData(&c, cfg, traits, true, newCharacterBreadcrumbs()))
 }
 
 // CreateCharacterHandler handles POST to create a new character.
@@ -94,23 +81,35 @@ func (app *App) ViewCharacterHandler(w http.ResponseWriter, r *http.Request) {
 
 	cfg := app.Config.AbilityBuilder
 	traits := cfg.Traits
-	app.render(w, "character.html", map[string]interface{}{
-		"Character":            c,
-		"IsNew":                false,
-		"GeneralTraitNames":    traits.General,
-		"OffenseTraitNames":    traits.Offense,
-		"DefenseTraitNames":    traits.Defense,
-		"ProficiencyOptions":   proficiencyOptionsFromConfig(cfg.Proficiencies),
-		"VitalHPOptions":       vitalOptionsFromConfig(cfg.Proficiencies, "hp"),
-		"VitalMovementOptions": vitalOptionsFromConfig(cfg.Proficiencies, "movement"),
-		"VitalEnergyOptions":   vitalOptionsFromConfig(cfg.Proficiencies, "energy"),
-		"TraitPointsBudget":    traitPointsBudget(c.Level, cfg.Leveling),
-		"TraitPointsUsed":      traitPointsUsed(*c, cfg.Proficiencies),
-		"CharacterHP":          vitalValueFromConfig(cfg.Proficiencies, c.VitalHP, "hp"),
-		"CharacterMovement":    vitalValueFromConfig(cfg.Proficiencies, c.VitalMovement, "movement"),
-		"CharacterEnergy":      vitalValueFromConfig(cfg.Proficiencies, c.VitalEnergy, "energy"),
-		"MaxLevel":             cfg.Leveling.MaxLevel,
-	})
+	app.render(w, "character.html", characterPageData(c, cfg, traits, false, characterBreadcrumbs(c)))
+}
+
+// characterPageData builds the template data map shared by the character
+// page and the points-bar partial.
+func characterPageData(c *models.Character, cfg config.AbilityBuilderConfig, traits config.TraitConfig, isNew bool, crumbs []Breadcrumb) map[string]interface{} {
+	return map[string]interface{}{
+		"Character":              c,
+		"IsNew":                  isNew,
+		"Breadcrumbs":            crumbs,
+		"GeneralTraitNames":      traits.General,
+		"OffenseTraitNames":      traits.Offense,
+		"DefenseTraitNames":      traits.Defense,
+		"ProficiencyOptions":     proficiencyOptionsFromConfig(cfg.Proficiencies),
+		"VitalHPOptions":         vitalOptionsFromConfig(cfg.Proficiencies, "hp"),
+		"VitalMovementOptions":   vitalOptionsFromConfig(cfg.Proficiencies, "movement"),
+		"VitalEnergyOptions":     vitalOptionsFromConfig(cfg.Proficiencies, "energy"),
+		"TraitPointsBudget":      traitPointsBudget(c.Level, cfg.Leveling),
+		"TraitPointsUsed":        traitPointsUsed(*c, cfg.Proficiencies),
+		"TraitPointsRemaining":   traitPointsBudget(c.Level, cfg.Leveling) - traitPointsUsed(*c, cfg.Proficiencies),
+		"AbilityPointsBudget":    abilityPointsBudget(c.Level, cfg.Leveling),
+		"AbilityPointsUsed":      abilityPointsUsed(*c, cfg),
+		"AbilityPointsRemaining": abilityPointsBudget(c.Level, cfg.Leveling) - abilityPointsUsed(*c, cfg),
+		"CharacterDataJSON":      mustMarshalCharacterData(cfg),
+		"CharacterHP":            vitalValueFromConfig(cfg.Proficiencies, c.VitalHP, "hp"),
+		"CharacterMovement":      vitalValueFromConfig(cfg.Proficiencies, c.VitalMovement, "movement"),
+		"CharacterEnergy":        vitalValueFromConfig(cfg.Proficiencies, c.VitalEnergy, "energy"),
+		"MaxLevel":               cfg.Leveling.MaxLevel,
+	}
 }
 
 // UpdateCharacterHandler handles POST to update an existing character.
@@ -132,7 +131,6 @@ func (app *App) UpdateCharacterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	traits := app.Config.AbilityBuilder.Traits
 	maxLevel := app.Config.AbilityBuilder.Leveling.MaxLevel
 	r.ParseForm()
@@ -141,6 +139,14 @@ func (app *App) UpdateCharacterHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := app.Store.SaveCharacter(*c); err != nil {
 		http.Error(w, "Failed to save character", http.StatusInternalServerError)
+		return
+	}
+
+	// HTMX level-change requests come from the points bar and expect the bar
+	// partial back so only the top stats refresh, not the whole page.
+	if r.Header.Get("HX-Request") == "true" {
+		cfg := app.Config.AbilityBuilder
+		app.renderPartial(w, "points_bar.html", characterPageData(c, cfg, cfg.Traits, false, nil))
 		return
 	}
 
@@ -239,8 +245,6 @@ func populateCharacterFromForm(c *models.Character, r *http.Request, general, of
 	}
 }
 
-
-
 // vitalValueFromConfig returns the numeric value for a vital proficiency from YAML config.
 func vitalValueFromConfig(profs []config.ProficiencyConfig, prof models.Proficiency, vital string) int {
 	for _, p := range profs {
@@ -268,6 +272,7 @@ func clampCurrentVitals(c *models.Character, profs []config.ProficiencyConfig) {
 		c.CurrentEnergy = 0
 	}
 }
+
 // proficiencyOptionsFromConfig builds proficiency dropdown options from YAML config.
 func proficiencyOptionsFromConfig(profs []config.ProficiencyConfig) []models.ProficiencyOption {
 	out := make([]models.ProficiencyOption, 0, len(profs))
@@ -321,10 +326,7 @@ func traitPointsBudget(level int, cfg config.LevelingConfig) int {
 
 // traitPointsUsed returns the total trait points spent using YAML config costs.
 func traitPointsUsed(c models.Character, profs []config.ProficiencyConfig) int {
-	costs := make(map[models.Proficiency]int)
-	for _, p := range profs {
-		costs[models.Proficiency(p.Name)] = p.Cost
-	}
+	costs := proficiencyCosts(profs)
 	total := 0
 	for _, p := range c.GeneralTraits {
 		total += costs[p]
@@ -339,4 +341,96 @@ func traitPointsUsed(c models.Character, profs []config.ProficiencyConfig) int {
 	total += costs[c.VitalMovement]
 	total += costs[c.VitalEnergy]
 	return total
+}
+
+func proficiencyCosts(profs []config.ProficiencyConfig) map[models.Proficiency]int {
+	base := 0
+	for i, p := range profs {
+		if p.Name == string(models.ProfUntrained) {
+			base = i
+			break
+		}
+	}
+	costs := make(map[models.Proficiency]int)
+	for i, p := range profs {
+		total := 0
+		if i > base {
+			for j := base + 1; j <= i; j++ {
+				total += profs[j].Cost
+			}
+		} else if i < base {
+			for j := i; j < base; j++ {
+				total -= profs[j].Cost
+			}
+		}
+		costs[models.Proficiency(p.Name)] = total
+	}
+	return costs
+}
+
+func abilityPointsBudget(level int, cfg config.LevelingConfig) int {
+	if level < 1 {
+		level = 1
+	}
+	for i := len(cfg.AbilityPoints.Levels) - 1; i >= 0; i-- {
+		if cfg.AbilityPoints.Levels[i].Level <= level {
+			return cfg.AbilityPoints.Levels[i].Total
+		}
+	}
+	return 0
+}
+
+func abilityPointsUsed(c models.Character, cfg config.AbilityBuilderConfig) int {
+	total := 0
+	for _, a := range c.Abilities {
+		total += abilityBuildCost(a, cfg)
+	}
+	return total
+}
+
+func abilityBuildCost(a models.Ability, cfg config.AbilityBuilderConfig) int {
+	total := a.BuildCost
+	for i, e := range a.Enactments {
+		if i > 0 {
+			total += cfg.AdditionalEnactment.AddCost
+		}
+		total += e.BuildCost
+		if e.Interaction != nil {
+			total += e.Interaction.BuildCost
+			if e.Interaction.Validation != nil {
+				total += e.Interaction.Validation.BuildCost
+			}
+		}
+	}
+	return total
+}
+
+func abilityEnergyCost(a models.Ability, cfg config.AbilityBuilderConfig) int {
+	total := a.EnergyCost
+	for i, e := range a.Enactments {
+		if i > 0 {
+			total += cfg.AdditionalEnactment.EnergyCost
+		}
+		total += e.CastCost
+		if e.Interaction != nil {
+			total += e.Interaction.CastCost
+			if e.Interaction.Validation != nil {
+				total += e.Interaction.Validation.CastCost
+			}
+		}
+	}
+	return total
+}
+
+func mustMarshalCharacterData(cfg config.AbilityBuilderConfig) template.JS {
+	data := map[string]interface{}{
+		"proficiencyCosts":   proficiencyCosts(cfg.Proficiencies),
+		"traitPointLevels":   cfg.Leveling.TraitPoints.Levels,
+		"abilityPointLevels": cfg.Leveling.AbilityPoints.Levels,
+	}
+	b, err := json.Marshal(data)
+	if err != nil {
+		return "{}"
+	}
+	return template.JS(b)
 }

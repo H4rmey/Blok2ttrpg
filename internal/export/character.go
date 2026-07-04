@@ -128,27 +128,27 @@ func indentAbilityBlock(block, indent string) string {
 // CharacterToYAML but is forgiving about missing fields.
 type characterYAML struct {
 	Character struct {
-		Name           string            `yaml:"name"`
-		Level          int               `yaml:"level"`
-		Age            string            `yaml:"age"`
-		Size           string            `yaml:"size"`
-		Alignment      string            `yaml:"alignment"`
-		Backstory      string            `yaml:"backstory"`
-		Personality    string            `yaml:"personality"`
-		Appearance     string            `yaml:"appearance"`
-		Hobbies        string            `yaml:"hobbies"`
-		Occupation     string            `yaml:"occupation"`
-		Inventory      string            `yaml:"inventory"`
-		Quirks         string            `yaml:"quirks"`
-		GeneralTraits  map[string]string `yaml:"general_traits"`
-		OffenseTraits  map[string]string `yaml:"offense_traits"`
-		DefenseTraits  map[string]string `yaml:"defense_traits"`
-		VitalHP        string            `yaml:"vital_hp"`
-		VitalMovement  string            `yaml:"vital_movement"`
-		VitalEnergy    string            `yaml:"vital_energy"`
-		CurrentHP      int               `yaml:"current_hp"`
-		CurrentEnergy  int               `yaml:"current_energy"`
-		Abilities      []yaml.Node       `yaml:"abilities"`
+		Name          string            `yaml:"name"`
+		Level         int               `yaml:"level"`
+		Age           string            `yaml:"age"`
+		Size          string            `yaml:"size"`
+		Alignment     string            `yaml:"alignment"`
+		Backstory     string            `yaml:"backstory"`
+		Personality   string            `yaml:"personality"`
+		Appearance    string            `yaml:"appearance"`
+		Hobbies       string            `yaml:"hobbies"`
+		Occupation    string            `yaml:"occupation"`
+		Inventory     string            `yaml:"inventory"`
+		Quirks        string            `yaml:"quirks"`
+		GeneralTraits map[string]string `yaml:"general_traits"`
+		OffenseTraits map[string]string `yaml:"offense_traits"`
+		DefenseTraits map[string]string `yaml:"defense_traits"`
+		VitalHP       string            `yaml:"vital_hp"`
+		VitalMovement string            `yaml:"vital_movement"`
+		VitalEnergy   string            `yaml:"vital_energy"`
+		CurrentHP     int               `yaml:"current_hp"`
+		CurrentEnergy int               `yaml:"current_energy"`
+		Abilities     []yaml.Node       `yaml:"abilities"`
 	} `yaml:"character"`
 }
 
@@ -249,27 +249,27 @@ func ParseCharacterYAML(data []byte) (*models.Character, error) {
 // field with the exact key names used by the exporter so round-trips are
 // lossless.
 type abilityYAMLSchema struct {
-	Type             string                 `yaml:"type"`
-	Name             string                 `yaml:"name"`
-	Description      string                 `yaml:"description"`
-	HasItemDep       string                 `yaml:"has_item_dependency"`
-	ItemName         string                 `yaml:"item_name"`
-	EnergyCost       int                    `yaml:"energy_cost"`
-	ActionCost       int                    `yaml:"action_cost"`
-	EnergyAdj        int                    `yaml:"energy_adjustment"`
-	ActionAdj        int                    `yaml:"action_adjustment"`
-	Range            string                 `yaml:"range"`
-	Uses             int                    `yaml:"uses"`
-	Trigger          string                 `yaml:"trigger"`
-	PhaseDuration    int                    `yaml:"phase_duration"`
-	ReverseDuration  int                    `yaml:"reverse_phase_duration"`
-	AllKnockouts     bool                   `yaml:"all_knockout_requirements"`
-	ReverseKO        bool                   `yaml:"knockout_on_reverse_phase"`
-	Knockouts        []string               `yaml:"knockout_requirements"`
-	Health           int                    `yaml:"health"`
-	Lifetime         int                    `yaml:"lifetime"`
-	Enactments       []yaml.Node            `yaml:"enactments"`
-	Extra            map[string]interface{} `yaml:",inline"`
+	Type            string                 `yaml:"type"`
+	Name            string                 `yaml:"name"`
+	Description     string                 `yaml:"description"`
+	HasItemDep      string                 `yaml:"has_item_dependency"`
+	ItemName        string                 `yaml:"item_name"`
+	EnergyCost      int                    `yaml:"energy_cost"`
+	ActionCost      int                    `yaml:"action_cost"`
+	EnergyAdj       int                    `yaml:"energy_adjustment"`
+	ActionAdj       int                    `yaml:"action_adjustment"`
+	Range           string                 `yaml:"range"`
+	Uses            int                    `yaml:"uses"`
+	Trigger         string                 `yaml:"trigger"`
+	PhaseDuration   int                    `yaml:"phase_duration"`
+	ReverseDuration int                    `yaml:"reverse_phase_duration"`
+	AllKnockouts    bool                   `yaml:"all_knockout_requirements"`
+	ReverseKO       bool                   `yaml:"knockout_on_reverse_phase"`
+	Knockouts       []string               `yaml:"knockout_requirements"`
+	Health          int                    `yaml:"health"`
+	Lifetime        int                    `yaml:"lifetime"`
+	Enactments      []yaml.Node            `yaml:"enactments"`
+	Extra           map[string]interface{} `yaml:",inline"`
 }
 
 func decodeAbilityNode(node yaml.Node) (models.Ability, error) {
@@ -350,56 +350,71 @@ func decodeEnactmentNode(node yaml.Node) (models.Enactment, error) {
 	}
 
 	var schema struct {
-		Type           string       `yaml:"type"`
-		Always         bool         `yaml:"always_resolve"`
-		BuildCost      int          `yaml:"build_cost"`
-		CastCost       int          `yaml:"cast_cost"`
-		Formula        string       `yaml:"formula"`
-		Source         string       `yaml:"source"`
-		Trait          string       `yaml:"trait"`
-		OtherText      string       `yaml:"other_text"`
-		FlatBonus      int          `yaml:"flat_bonus"`
-		OffensiveTrait string       `yaml:"offensive_trait"`
-		Medicine       bool         `yaml:"medicine"`
-		Origin         string       `yaml:"origin"`
-		Distance       int          `yaml:"distance"`
-		Directions     []string     `yaml:"directions"`
-		ShiftedTrait   string       `yaml:"shifted_trait"`
-		Direction      string       `yaml:"direction"`
-		Amount         int          `yaml:"amount"`
-		ShiftUses      int          `yaml:"uses"`
-		EffectName     string       `yaml:"name"`
-		Applies        string       `yaml:"applies"`
-		Duration       int          `yaml:"duration"`
-		Trigger        string       `yaml:"trigger"`
-		Solutions      []string     `yaml:"solutions"`
-		Interaction    yaml.Node    `yaml:"interaction"`
-		Interactions   []yaml.Node  `yaml:"interactions"`
+		Type           string      `yaml:"type"`
+		Always         bool        `yaml:"always_resolve"`
+		BuildCost      int         `yaml:"build_cost"`
+		CastCost       int         `yaml:"cast_cost"`
+		Formula        string      `yaml:"formula"`
+		Source         string      `yaml:"source"`
+		Trait          string      `yaml:"trait"`
+		OtherText      string      `yaml:"other_text"`
+		FlatBonus      int         `yaml:"flat_bonus"`
+		OffensiveTrait string      `yaml:"offensive_trait"`
+		Medicine       bool        `yaml:"medicine"`
+		Origin         string      `yaml:"origin"`
+		Distance       int         `yaml:"distance"`
+		Directions     []string    `yaml:"directions"`
+		ShiftedTrait   string      `yaml:"shifted_trait"`
+		Direction      string      `yaml:"direction"`
+		ShiftDirection string      `yaml:"shift_dir"`
+		Amount         int         `yaml:"amount"`
+		ShiftAmount    int         `yaml:"shift_amount"`
+		ShiftUses      int         `yaml:"uses"`
+		ShiftUsesAlias int         `yaml:"shift_uses"`
+		EffectName     string      `yaml:"name"`
+		Applies        string      `yaml:"applies"`
+		Duration       int         `yaml:"duration"`
+		Trigger        string      `yaml:"trigger"`
+		Solutions      []string    `yaml:"solutions"`
+		Interaction    yaml.Node   `yaml:"interaction"`
+		Interactions   []yaml.Node `yaml:"interactions"`
 	}
 	if err := yaml.Unmarshal(raw, &schema); err != nil {
 		return models.Enactment{}, fmt.Errorf("failed to decode enactment: %w", err)
 	}
 
+	shiftDir := schema.Direction
+	if shiftDir == "" {
+		shiftDir = schema.ShiftDirection
+	}
+	shiftAmount := schema.Amount
+	if shiftAmount == 0 {
+		shiftAmount = schema.ShiftAmount
+	}
+	shiftUses := schema.ShiftUses
+	if shiftUses == 0 {
+		shiftUses = schema.ShiftUsesAlias
+	}
+
 	e := models.Enactment{
-		Type:            models.EnactmentType(schema.Type),
-		BuildCost:       schema.BuildCost,
-		CastCost:        schema.CastCost,
-		Formula:         schema.Formula,
-		Always:          schema.Always,
-		FlatBonus:       schema.FlatBonus,
-		OffensiveTrait:  schema.OffensiveTrait,
-		MedicineTrait:   schema.ShiftedTrait, // unused; kept for symmetry
-		Distance:        schema.Distance,
-		Directions:      schema.Directions,
-		ShiftedTrait:    schema.ShiftedTrait,
-		ShiftDir:        schema.Direction,
-		ShiftAmount:     schema.Amount,
-		ShiftUses:       schema.ShiftUses,
-		EffectName:      schema.EffectName,
-		EffectType:      schema.Applies,
-		Duration:        schema.Duration,
-		TriggerTiming:   schema.Trigger,
-		Solutions:       schema.Solutions,
+		Type:           models.EnactmentType(schema.Type),
+		BuildCost:      schema.BuildCost,
+		CastCost:       schema.CastCost,
+		Formula:        schema.Formula,
+		Always:         schema.Always,
+		FlatBonus:      schema.FlatBonus,
+		OffensiveTrait: schema.OffensiveTrait,
+		Distance:       schema.Distance,
+		Directions:     schema.Directions,
+		ShiftedTrait:   schema.ShiftedTrait,
+		ShiftDir:       shiftDir,
+		ShiftAmount:    shiftAmount,
+		ShiftUses:      shiftUses,
+		EffectName:     schema.EffectName,
+		EffectType:     schema.Applies,
+		Duration:       schema.Duration,
+		TriggerTiming:  schema.Trigger,
+		Solutions:      schema.Solutions,
 	}
 
 	if schema.Source != "" {
@@ -415,6 +430,12 @@ func decodeEnactmentNode(node yaml.Node) (models.Enactment, error) {
 
 	if schema.Interaction.Kind != 0 {
 		inter, err := decodeInteractionNode(schema.Interaction)
+		if err != nil {
+			return e, err
+		}
+		e.Interaction = &inter
+	} else if len(schema.Interactions) > 0 && schema.Interactions[0].Kind != 0 {
+		inter, err := decodeInteractionNode(schema.Interactions[0])
 		if err != nil {
 			return e, err
 		}
@@ -435,8 +456,8 @@ func decodeInteractionNode(node yaml.Node) (models.Interaction, error) {
 		BuildCost    int         `yaml:"build_cost"`
 		CastCost     int         `yaml:"cast_cost"`
 		Targets      int         `yaml:"targets"`
-		Range        string      `yaml:"range"`
-		Radius       int         `yaml:"radius"`
+		Range        interface{} `yaml:"range"`
+		Radius       interface{} `yaml:"radius"`
 		Origin       string      `yaml:"origin"`
 		Duration     int         `yaml:"duration"`
 		Timing       string      `yaml:"timing"`
@@ -455,8 +476,8 @@ func decodeInteractionNode(node yaml.Node) (models.Interaction, error) {
 		BuildCost:   schema.BuildCost,
 		CastCost:    schema.CastCost,
 		Targets:     schema.Targets,
-		Range:       parseRangeMeters(schema.Range),
-		Radius:      schema.Radius,
+		Range:       parseMeters(schema.Range),
+		Radius:      parseMeters(schema.Radius),
 		Duration:    schema.Duration,
 		Timing:      schema.Timing,
 		Immune:      schema.Immune,
@@ -487,11 +508,11 @@ func decodeValidationNode(node yaml.Node) (models.Validation, error) {
 		return models.Validation{}, fmt.Errorf("failed to decode validation: %w", err)
 	}
 	var schema struct {
-		BuildCost    int      `yaml:"build_cost"`
-		CastCost     int      `yaml:"cast_cost"`
-		EngageRoll   string   `yaml:"engagement_roll"`
-		CounterRoll  string   `yaml:"counter_roll"`
-		CounterList  []string `yaml:"counter_roll_list"`
+		BuildCost   int      `yaml:"build_cost"`
+		CastCost    int      `yaml:"cast_cost"`
+		EngageRoll  string   `yaml:"engagement_roll"`
+		CounterRoll string   `yaml:"counter_roll"`
+		CounterList []string `yaml:"counter_roll_list"`
 	}
 	if err := yaml.Unmarshal(raw, &schema); err != nil {
 		return models.Validation{}, fmt.Errorf("failed to decode validation: %w", err)
@@ -575,16 +596,30 @@ func coerceBool(v interface{}) bool {
 }
 
 func parseRangeMeters(s string) int {
-	s = strings.TrimSpace(strings.ToLower(s))
-	s = strings.TrimSuffix(s, "m")
-	s = strings.TrimSuffix(s, " meters")
-	s = strings.TrimSuffix(s, " meter")
-	if s == "" {
-		return 0
+	return parseMeters(s)
+}
+
+func parseMeters(v interface{}) int {
+	switch x := v.(type) {
+	case int:
+		return x
+	case int64:
+		return int(x)
+	case float64:
+		return int(x)
+	case string:
+		s := strings.TrimSpace(strings.ToLower(x))
+		s = strings.TrimSuffix(s, "m")
+		s = strings.TrimSuffix(s, " meters")
+		s = strings.TrimSuffix(s, " meter")
+		if s == "" {
+			return 0
+		}
+		var n int
+		fmt.Sscanf(s, "%d", &n)
+		return n
 	}
-	var n int
-	fmt.Sscanf(s, "%d", &n)
-	return n
+	return 0
 }
 
 func splitTriggerOfType(s string) (string, string, bool) {

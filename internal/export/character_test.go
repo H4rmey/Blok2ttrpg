@@ -1,6 +1,8 @@
 package export
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -8,7 +10,7 @@ import (
 )
 
 func sampleCharacter() *models.Character {
-	c := models.NewCharacter("test-id", []string{"Strength", "Magic"}, []string{"Power"}, []string{"Constitution"}, )
+	c := models.NewCharacter("test-id", []string{"Strength", "Magic"}, []string{"Power"}, []string{"Constitution"})
 	c.Name = "Aelara the Bold"
 	c.Level = 3
 	c.Age = "27"
@@ -36,12 +38,12 @@ func sampleCharacter() *models.Character {
 		ActionSteps: 0,
 		Enactments: []models.Enactment{
 			{
-				Type:    models.EnactDamage,
-				Source:  "d10",
+				Type:      models.EnactDamage,
+				Source:    "d10",
 				BuildCost: 1,
 				Interaction: &models.Interaction{
-					Type:   models.InteractionRanged,
-					Range:  30,
+					Type:      models.InteractionRanged,
+					Range:     30,
 					BuildCost: 1,
 				},
 			},
@@ -50,17 +52,17 @@ func sampleCharacter() *models.Character {
 	c.Abilities = append(c.Abilities, ability)
 
 	ability2 := models.Ability{
-		ID:          "ability-2",
-		Name:        "Healing Word",
-		Type:        models.AbilityExecution,
-		EnergyCost:  3,
-		ActionCost:  2,
+		ID:         "ability-2",
+		Name:       "Healing Word",
+		Type:       models.AbilityExecution,
+		EnergyCost: 3,
+		ActionCost: 2,
 		Enactments: []models.Enactment{
 			{
-				Type:    models.EnactHealing,
-				Source:  "d8",
+				Type:   models.EnactHealing,
+				Source: "d8",
 				Interaction: &models.Interaction{
-					Type: models.InteractionDirect,
+					Type:  models.InteractionDirect,
 					Range: 5,
 				},
 			},
@@ -154,4 +156,48 @@ func TestParseSingleAbility(t *testing.T) {
 	if c.Abilities[0].Type != models.AbilityExecution {
 		t.Errorf("type: %s", c.Abilities[0].Type)
 	}
+	if len(c.Abilities[0].Enactments) != 1 {
+		t.Fatalf("expected 1 enactment, got %d", len(c.Abilities[0].Enactments))
+	}
+	inter := c.Abilities[0].Enactments[0].Interaction
+	if inter == nil || inter.Type != models.InteractionRanged || inter.Range != 30 {
+		t.Fatalf("interaction not decoded: %+v", inter)
+	}
+}
+
+func TestAbilityRemakesImportWithInteractions(t *testing.T) {
+	files, err := filepath.Glob("../../ability-remakes/*.yml")
+	if err != nil {
+		t.Fatalf("glob: %v", err)
+	}
+	if len(files) == 0 {
+		t.Fatal("expected ability-remakes fixtures")
+	}
+	for _, file := range files {
+		t.Run(filepath.Base(file), func(t *testing.T) {
+			data, err := os.ReadFile(file)
+			if err != nil {
+				t.Fatalf("read: %v", err)
+			}
+			c, err := ParseCharacterYAML(data)
+			if err != nil {
+				t.Fatalf("parse: %v", err)
+			}
+			if len(c.Abilities) != 1 {
+				t.Fatalf("expected one ability, got %d", len(c.Abilities))
+			}
+			if !abilityHasInteraction(c.Abilities[0]) {
+				t.Fatalf("expected at least one interaction")
+			}
+		})
+	}
+}
+
+func abilityHasInteraction(a models.Ability) bool {
+	for _, e := range a.Enactments {
+		if e.Interaction != nil && e.Interaction.Type != "" {
+			return true
+		}
+	}
+	return false
 }
