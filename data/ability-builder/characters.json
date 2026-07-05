@@ -46,6 +46,53 @@
       "current_hp": 12,
       "current_energy": 8,
       "abilities": []
+    },
+    {
+      "id": "0f86423bd5591c22",
+      "level": 10,
+      "name": "",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Legendary",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Legendary",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
     }
   ]
 }

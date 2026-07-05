@@ -190,7 +190,7 @@
           '<input type="checkbox" name="no_knockout" onchange="onNoKnockoutChange(this)" '+checked(d.no_knockout)+' class="rounded bg-gray-700 border-gray-600">',
           '<span><strong>No knockout possible</strong> — the phase cannot be ended by any condition'+costSuffix((findPerk(cfg.perks, 'no_knockout')||{}).add_cost||0, (findPerk(cfg.perks, 'no_knockout')||{}).energy_cost||0)+'</span>',
         '</label>',
-        '<div data-wrap="knockouts" '+hiddenIf(!showKos)+'>',
+        '<div data-wrap="knockouts" '+hiddenIf(showKos)+'>',
           '<div class="text-xs text-gray-400 uppercase mb-1">Knockouts</div>',
           knockoutList(kos, cfg),
         '</div>',
@@ -432,7 +432,7 @@
     var src = d.source || 'd4';
     var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
     var traitSelectHTML =
-      '<div data-wrap="source-trait" '+hiddenIf(src!=='trait')+'>'+
+      '<div data-wrap="source-trait" '+hiddenIf(src==='trait')+'>'+
         '<label class="block text-xs text-gray-400 mb-1">Trait</label>'+
         '<input type="hidden" name="source_category" value="'+esc(srcCat)+'">'+
         '<select name="source_trait" onchange="onSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
@@ -482,7 +482,7 @@
     var src = d.source || 'd4';
     var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
     var traitSelectHTML =
-      '<div data-wrap="source-trait" '+hiddenIf(src!=='trait')+'>'+
+      '<div data-wrap="source-trait" '+hiddenIf(src==='trait')+'>'+
         '<label class="block text-xs text-gray-400 mb-1">Trait</label>'+
         '<input type="hidden" name="source_category" value="'+esc(srcCat)+'">'+
         '<select name="source_trait" onchange="onSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
@@ -542,7 +542,7 @@
               opt('Other Origin', 'other', originMode, otherOrigin.add, otherOrigin.energy)+
             '</select></div>',
         '</div>',
-        '<div data-wrap="origin" '+hiddenIf(originMode !== 'other')+'>',
+        '<div data-wrap="origin" '+hiddenIf(originMode === 'other')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
           '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
         '</div>',
@@ -586,7 +586,7 @@
         '<div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">',
           '<div><label class="block text-xs text-gray-400 mb-1">Trait</label>',
             '<select name="shifted_trait" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
-              '<option value="">-- Select --</option>' + D.allTraits.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.shifted_trait,t)+'>'+esc(t)+'</option>';}).join(''),
+              '<option value="">-- Select --</option>' + traitOptionsGrouped(d.shifted_trait),
             '</select></div>',
           '<div><label class="block text-xs text-gray-400 mb-1">Direction</label>',
             '<select name="shift_dir" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
@@ -771,7 +771,7 @@
                 opt('Engager', 'engager', om, 0, 0)+
                 opt('Other Origin', 'other', om, otherOrigin.add, otherOrigin.energy)+
               '</select></div>',
-            '<div data-wrap="origin" '+hiddenIf(om!=='other')+'>',
+            '<div data-wrap="origin" '+hiddenIf(om==='other')+'>',
               '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
               '<input type="text" name="origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
             '</div>',
@@ -878,22 +878,22 @@
               modeOpts +
             '</select></div>',
         '</div>',
-        '<div data-wrap="engage-trait" '+hiddenIf(mode!=='trait')+'>',
+        '<div data-wrap="engage-trait" '+hiddenIf(mode==='trait')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Trait</label>',
           '<input type="hidden" name="engage_trait_category" value="'+esc(cat)+'">',
           '<select name="engage_trait" onchange="onEngageTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
             '<option value="">-- Select --</option>' + traitOptionsGrouped(d.engage_trait) +
           '</select></div>',
-        '<div data-wrap="engage-generic" '+hiddenIf(mode!=='generic')+'>',
+        '<div data-wrap="engage-generic" '+hiddenIf(mode==='generic')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Die</label>',
           '<select name="engage_die" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
             dieOpts +
           '</select></div>',
-        '<div data-wrap="engage-other" '+hiddenIf(mode!=='other')+'>',
+        '<div data-wrap="engage-other" '+hiddenIf(mode==='other')+'>',
           '<label class="block text-xs text-gray-400 mb-1">Other Roll Text</label>',
           '<input type="text" name="engage_other" value="'+esc(d.engage_other||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
         '</div>',
-        '<div data-wrap="engage-previous" '+hiddenIf(mode!=='previous')+'>',
+        '<div data-wrap="engage-previous" '+hiddenIf(mode==='previous')+'>',
           '<p class="text-xs text-yellow-400">Engagement roll = result of previous interaction/validation (costs extra)</p>',
         '</div>',
         '<div>',
@@ -1304,7 +1304,15 @@
       if (revKo && readBool(card, 'reverse_knockout')){ build += revKo.add_cost; energy += revKo.energy_cost; lines.push('Knockout on reverse phase (add '+revKo.add_cost+')'); }
       var noKo = findPerk(cfg.perks, 'no_knockout');
       if (noKo && readBool(card, 'no_knockout'))    { build += noKo.add_cost; energy += noKo.energy_cost; lines.push('No knockout possible (add '+noKo.add_cost+')'); }
+      var koReqs = cfg.knockout_requirements || [];
       var kos = Array.from(card.querySelectorAll('[name="knockout"]')).map(function(s){return s.value;}).filter(function(v){return v && v !== 'None';});
+      kos.forEach(function(k){
+        var koCost = findPerk(koReqs, k);
+        if (koCost && (koCost.add_cost || koCost.energy_cost)) {
+          build += koCost.add_cost; energy += koCost.energy_cost;
+          lines.push('Knockout '+k+' (add '+koCost.add_cost+', energy '+koCost.energy_cost+')');
+        }
+      });
       setOut(card, 'formula', 'Phase for '+phase+' rounds, reverse '+rev+', knockouts: '+(kos.length?kos.join(' or '):'(none)'));
     }
     if (card.querySelector('[name="hp"]')) {
@@ -1488,7 +1496,13 @@
       if (dur > 2) { build += (dur-2) * durCost.add_cost; energy += (dur-2) * durCost.energy_cost; lines.push('Duration '+dur+' rounds (add '+((dur-2)*durCost.add_cost)+', energy '+((dur-2)*durCost.energy_cost)+')'); }
       var sols = Array.from(card.querySelectorAll('[name="solution"]')).map(function(s){return s.value;}).filter(Boolean);
       var singleSol = findPerk(cfg.perks, 'single_solution');
-      if (sols.length === 1) { build += singleSol ? singleSol.add_cost : 0; energy += singleSol ? singleSol.energy_cost : 0; lines.push('Only one solution (add '+(singleSol?singleSol.add_cost:0)+', energy '+(singleSol?singleSol.energy_cost:0)+')'); }
+      var solDiff = 2 - sols.length;
+      if (singleSol && solDiff !== 0) {
+        build += solDiff * (singleSol.add_cost || 0);
+        energy += solDiff * (singleSol.energy_cost || 0);
+        var solDir = solDiff > 0 ? 'Remove' : 'Add';
+        lines.push(solDir+' '+Math.abs(solDiff)+' solution option'+(Math.abs(solDiff)===1?'':'s')+' (add '+(solDiff*(singleSol.add_cost||0))+', energy '+(solDiff*(singleSol.energy_cost||0))+')');
+      }
       var effType = (card.querySelector('[name="effect_type"]')||{}).value || '(effect)';
       var effCfg = findPerk(cfg.effects, effType) || (function(){
         var e = cfg.effects || []; var match = null;
@@ -1648,8 +1662,14 @@
         lines.push(type+' counter ('+trait+') (add '+counterCfg.add_cost+', energy '+counterCfg.energy_cost+')');
       }
     });
-    var singleCounter = cfg.counter.single_counter_cost;
-    if (counterCount === 1) { build += singleCounter.add_cost; energy += singleCounter.energy_cost; lines.push('Only one counter option (add '+singleCounter.add_cost+', energy '+singleCounter.energy_cost+')'); }
+    var singleCounter = cfg.counter.single_counter_cost || {add_cost:0, energy_cost:0};
+    var counterDiff = 2 - counterCount;
+    if (counterDiff !== 0) {
+      build += counterDiff * (singleCounter.add_cost || 0);
+      energy += counterDiff * (singleCounter.energy_cost || 0);
+      var counterDir = counterDiff > 0 ? 'Remove' : 'Add';
+      lines.push(counterDir+' '+Math.abs(counterDiff)+' counter option'+(Math.abs(counterDiff)===1?'':'s')+' (add '+(counterDiff*(singleCounter.add_cost||0))+', energy '+(counterDiff*(singleCounter.energy_cost||0))+')');
+    }
 
     formula = (formula || 'engage vs counters') + ' vs ' + (counters.map(function(c){return c.trait;}).join(' or ') || '(no counters)');
 
