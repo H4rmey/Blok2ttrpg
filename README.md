@@ -5,6 +5,7 @@ A Go web application for building TTRPG abilities using cascading dropdowns, man
 ## Prerequisites
 
 - [Go 1.23+](https://go.dev/dl/)
+- [Docker](https://docs.docker.com/get-docker/) (optional)
 
 ## Quick Start
 
@@ -16,6 +17,63 @@ go mod tidy
 
 # Run the server
 go run main.go
+```
+
+Then open [http://localhost:8080](http://localhost:8080) in your browser.
+
+## Docker
+
+The application can be containerized using Docker.
+
+### Build the Docker Image
+
+```bash
+docker build -t blok2ttrpg-ability-builder .
+```
+
+### Run the Container
+
+```bash
+docker run -d -p 8080:8080 --name ability-builder blok2ttrpg-ability-builder
+```
+
+### Docker Configuration
+
+The container supports the following configuration via environment variables:
+
+| Environment Variable | Default | Description |
+|---------------------|---------|-------------|
+| `PORT` | `8080` | Server port |
+| `ABILITY_BUILDER_CONFIG` | `/app/config/ability-builder.yaml` | Path to config file |
+
+### Running with Custom Configuration
+
+To use a custom configuration file, mount it as a volume:
+
+```bash
+docker run -d -p 8080:8080 \
+  -v /path/to/your/config.yaml:/app/config/ability-builder.yaml \
+  --name ability-builder blok2ttrpg-ability-builder
+```
+
+### Running with Persistent Data
+
+To persist character data, mount a data directory:
+
+```bash
+docker run -d -p 8080:8080 \
+  -v /path/to/your/data:/app/data \
+  --name ability-builder blok2ttrpg-ability-builder
+```
+
+### Combined Example
+
+```bash
+docker run -d -p 8080:8080 \
+  -v ./config/ability-builder.yaml:/app/config/ability-builder.yaml \
+  -v ./data:/app/data \
+  --name ability-builder \
+  blok2ttrpg-ability-builder
 ```
 
 Then open [http://localhost:8080](http://localhost:8080) in your browser.
@@ -72,3 +130,4 @@ ability-builder/
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
 | `PORT` | `8080` | Server port |
+| `ABILITY_BUILDER_CONFIG` | `config/ability-builder.yaml` | Path to YAML configuration file |
