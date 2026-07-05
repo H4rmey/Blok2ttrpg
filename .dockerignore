@@ -1,0 +1,16 @@
+.git
+.gitignore
+Dockerfile
+.dockerignore
+README.md
+docs.zip
+.kilo
+*.md
+*.log
+*.test
+*.out
+testdata
+.env
+.idea
+.vscode
+*.tmp
