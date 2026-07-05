@@ -5,7 +5,8 @@ A Go web application for building TTRPG abilities using cascading dropdowns, man
 ## Prerequisites
 
 - [Go 1.23+](https://go.dev/dl/)
-- [Docker](https://docs.docker.com/get-docker/) (optional)
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/) (optional)
 
 ## Quick Start
 
@@ -77,6 +78,33 @@ docker run -d -p 8080:8080 \
 ```
 
 Then open [http://localhost:8080](http://localhost:8080) in your browser.
+
+## Docker Compose
+
+For easier management with persistent data, use Docker Compose:
+
+### Start with Docker Compose
+
+```bash
+docker compose up -d
+```
+
+This starts the container with:
+- Config, data, and docs mounted as volumes for persistence
+- Automatic restart on failure
+
+### Manage the Container
+
+```bash
+# Stop
+docker compose down
+
+# Restart
+docker compose restart
+
+# View logs
+docker compose logs -f
+```
 
 ## Features
 
