@@ -9,6 +9,8 @@ const (
 	EnactMovement         EnactmentType = "Enact Movement"
 	EnactProficiencyShift EnactmentType = "Enact Proficiency Shift"
 	EnactPersistentEffect EnactmentType = "Enact Persistent Effect"
+	EnactNegation         EnactmentType = "Enact Negation"
+	EnactState            EnactmentType = "Enact State"
 )
 
 // AllEnactmentTypes lists all available enactment types.
@@ -18,6 +20,8 @@ var AllEnactmentTypes = []EnactmentType{
 	EnactMovement,
 	EnactProficiencyShift,
 	EnactPersistentEffect,
+	EnactNegation,
+	EnactState,
 }
 
 // Enactment represents a single effect within an ability.

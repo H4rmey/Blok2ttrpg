@@ -5,16 +5,16 @@ ability_builder:
   # Paths are relative to the ability-builder module root.
   # The list must be exhaustive: every .md file under ./docs/ must appear exactly once.
   file_order:
-    - ./docs/Blok2ttrpg.md
-    - ./docs/core/Character Attributes.md
-    - ./docs/core/Character Traits.md
-    - ./docs/core/Leveling.md
-    - ./docs/core/Multi Dice System.md
-    - ./docs/modules/World/Culture.md
-    - ./docs/modules/World/World.md
-    - ./docs/modules/Magic System/Curses.md
-    - ./docs/modules/Magic System/Imbuing.md
-    - ./docs/modules/Magic System/Magic System.md
+    - ./docs/blok2ttrpg.md
+    - ./docs/core/character-attributes.md
+    - ./docs/core/character-traits.md
+    - ./docs/core/leveling.md
+    - ./docs/core/multi-dice-system.md
+    - ./docs/modules/world/culture.md
+    - ./docs/modules/world/world.md
+    - ./docs/modules/magic-system/curses.md
+    - ./docs/modules/magic-system/imbuing.md
+    - ./docs/modules/magic-system/magic-system.md
     - ./docs/modules/ability-builder/introduction.md
     - ./docs/modules/ability-builder/ability-types/execution.md
     - ./docs/modules/ability-builder/ability-types/minion.md
@@ -376,6 +376,52 @@ ability_builder:
 
   # Enactment types
   enactments:
+    negation:
+      type: "Enact Negation"
+      description: "Negate an ability"
+      default_dice: "1d4"
+      dice_tiers:
+        d4: 0
+        d6: 1
+        d8: 2
+        d10: 3
+        d12: 4
+      dice_tier_cost:
+        add_cost: 2
+        energy_cost: 1
+      perks:
+        - id: trait_source
+          description: "Change Negation Dice to one of your traits"
+          add_cost: 3
+          energy_cost: 0
+        - id: flat_bonus
+          description: "Add a flat +1 bonus to the result"
+          add_cost: 2
+          energy_cost: 0
+        - id: offensive_trait
+          description: "Add an Defensive Trait Dice to the Negation Dice"
+          add_cost: 4
+          energy_cost: 2
+        - id: always_resolve
+          description: "Will Always Resolve"
+          add_cost: 5
+          energy_cost: 3
+        - id: use_previous
+          description: "Use the result of another roll for this entry"
+          add_cost: 3
+          energy_cost: 1
+        - id: counter_negation
+          description: "The Negation is applied to the counter roll instead"
+          add_cost: 4
+          energy_cost: 2
+        - id: full_counter
+          description: "The Ability hits the Enageger instead (Engager must roll the Counter roll)"
+          add_cost: 4
+          energy_cost: 2
+      base_cost:
+        add_cost: 2
+        energy_cost: 1
+
     damage:
       type: "Enact Damage"
       description: "Inflicts damage to a target."

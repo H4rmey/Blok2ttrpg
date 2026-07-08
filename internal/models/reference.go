@@ -170,10 +170,19 @@ var MinionEnactments = []EnactmentType{
 	EnactPersistentEffect,
 }
 
+var PreparationEnactments = []EnactmentType{
+	EnactDamage,
+	EnactHealing,
+	EnactMovement,
+	EnactProficiencyShift,
+	EnactPersistentEffect,
+}
+
 // CompatibleEnactments maps ability types to their compatible enactment types.
 var CompatibleEnactments = map[AbilityType][]EnactmentType{
-	AbilityExecution: ExecutionEnactments,
-	AbilityReaction:  ReactionEnactments,
-	AbilityPhase:     PhaseEnactments,
-	AbilityMinion:    MinionEnactments,
+	AbilityExecution:   ExecutionEnactments,
+	AbilityReaction:    ReactionEnactments,
+	AbilityPhase:       PhaseEnactments,
+	AbilityMinion:      MinionEnactments,
+	AbilityPreparation: PreparationEnactments,
 }

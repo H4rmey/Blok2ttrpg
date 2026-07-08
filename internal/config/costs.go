@@ -107,6 +107,47 @@ func (ab *AbilityBuilderConfig) ComputeAbilityCosts(a *models.Ability, values ur
 		build += a.HPBonus*cfg.HealthBonusCost.AddCost + a.ExtraLifetime*cfg.LifetimeBonusCost.AddCost
 		energy = cfg.BaseEnergy + a.HPBonus*cfg.HealthBonusCost.EnergyCost + a.ExtraLifetime*cfg.LifetimeBonusCost.EnergyCost
 		action = cfg.BaseAction
+
+	case models.AbilityPreparation:
+		a.ReactionRange = atoi(values.Get("range"))
+		a.ReactionUses = atoi(values.Get("uses"))
+		a.Trigger = values.Get("trigger")
+		if a.Trigger == "Target makes a trait check" {
+			a.TriggerTrait = values.Get("trigger_trait")
+		}
+		if a.ReactionRange > cfg.BaseRange {
+			build += (a.ReactionRange - cfg.BaseRange) * cfg.RangeCost.AddCost
+			energy += (a.ReactionRange - cfg.BaseRange) * cfg.RangeCost.EnergyCost
+		}
+		if a.ReactionUses > cfg.BaseUses {
+			build += (a.ReactionUses - cfg.BaseUses) * cfg.UsesCost.AddCost
+			energy += (a.ReactionUses - cfg.BaseUses) * cfg.UsesCost.EnergyCost
+		}
+		build += triggerAddCost(cfg.Triggers, a.Trigger)
+
+		actionSteps := atoi(values.Get("action_steps"))
+		energySteps := atoi(values.Get("energy_steps"))
+		a.ActionSteps = actionSteps
+		a.EnergySteps = energySteps
+
+		if actionSteps > 0 {
+			energy += actionSteps * stepEnergyCost(cfg, "action", 1)
+			build += actionSteps * stepAddCost(cfg, "action", 1)
+		} else if actionSteps < 0 {
+			energy += (-actionSteps) * stepEnergyCost(cfg, "action", -1)
+			build += (-actionSteps) * stepAddCost(cfg, "action", -1)
+		}
+		if action < 0 {
+			action = 0
+		}
+
+		if energySteps > 0 {
+			energy += energySteps * stepEnergyCost(cfg, "energy", 1)
+			build += energySteps * stepAddCost(cfg, "energy", 1)
+		} else if energySteps < 0 {
+			energy += (-energySteps) * stepEnergyCost(cfg, "energy", -1)
+			build += (-energySteps) * stepAddCost(cfg, "energy", -1)
+		}
 	}
 
 	a.BuildCost = build

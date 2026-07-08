@@ -1,14 +1,15 @@
-# Enact Damage
+# Enact Negation
 
-Enact Damage allows characters to inflict harm on their enemies.
+Enact Negation allows characters to reduce incomming damage by default by {{.Negate.DefaultDice}}. This can also be used to remove an Persistant Effect.
 
 ## Rules
 
-*   **Damage Dice**: The default damage dice is {{.Damage.DefaultDice}}.
+*   **Negate Dice**: The default Negate roll is {{.Negate.DefaultDice}}.
+*   **Remove Persistant Effect**: Make the Negation roll, the damage of the persistant effect is reduced by this value. If the Negate roll is higher or equal then the Persistant Effect is removed.
 
 ## Perks
 
-{{.DamagePerksTable}}
+{{.NegatePerksTable}}
 
 ## Template
 

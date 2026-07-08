@@ -51,6 +51,8 @@ type TemplateData struct {
 	PersistentEffect             config.EnactmentConfig
 	PersistentEffectPerksTable   template.HTML
 	PersistentEffectEffectsTable template.HTML
+	Negate                       config.EnactmentConfig
+	NegatePerksTable             template.HTML
 	State                        config.EnactmentConfig
 	StatePerksTable              template.HTML
 
@@ -240,6 +242,8 @@ func BuildTemplateData(cfg *config.Config) TemplateData {
 	d.PersistentEffect = ab.Enactments["persistent_effect"]
 	d.PersistentEffectPerksTable = perkTable(d.PersistentEffect.Perks)
 	d.PersistentEffectEffectsTable = effectTable(d.PersistentEffect.Effects)
+	d.Negate = ab.Enactments["negation"]
+	d.NegatePerksTable = perkTable(d.Negate.Perks)
 	d.State = ab.Enactments["state"]
 	d.StatePerksTable = perkTable(d.State.Perks)
 

@@ -83,6 +83,8 @@
       inner = renderPhaseCard(data, cfg);
     } else if (type === 'Minion') {
       inner = renderMinionCard(data, cfg);
+    } else if (type === 'Preparation') {
+      inner = renderPreparationCard(data, cfg);
     } else {
       inner = '<p class="text-yellow-400">Unknown ability type: '+esc(type)+'</p>';
     }
@@ -217,6 +219,54 @@
       '<div data-wrap="item-name" '+hiddenIf(d.item_dep)+'>',
         '<label class="block text-xs text-gray-400 mb-1">Item Name</label>',
         '<input type="text" name="item_name" id="ability_item_name" value="'+esc(d.item_name||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white text-sm">',
+      '</div>',
+      breakdown(),
+    ].join('\n');
+  }
+
+  function renderPreparationCard(d, cfg) {
+    d = d || {};
+    cfg = cfg || {};
+    var triggerNeedsTrait = d.trigger === 'Target makes a trait check';
+    var triggerWrap = triggerNeedsTrait ? '' : 'hidden';
+    var triggerOpts = (cfg.triggers || []).map(function(t){
+      var c = { add_cost: t.add_cost || 0, energy_cost: t.energy_cost || 0 };
+      return opt(t.id, t.id, d.trigger, c.add_cost, c.energy_cost);
+    }).join('');
+    if (D.reactionTriggers) {
+      triggerOpts = D.reactionTriggers.map(function(t){
+        var c = findPerk(cfg.triggers, t) || { add_cost: 0, energy_cost: 0 };
+        return opt(t, t, d.trigger, c.add_cost, c.energy_cost);
+      }).join('');
+    }
+    return [
+      '<h3 class="text-md font-semibold text-indigo-400">Ability Type — Preparation</h3>',
+      overview(false),
+      '<p class="text-xs text-gray-400">A Preparation works like a Reaction but must be prepared with an action. The first trigger is free; additional triggers cost per the table below.</p>',
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
+        '<div><label class="block text-xs text-gray-400 mb-1">Trigger</label>',
+        '<select name="trigger" onchange="onReactionTriggerChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+          '<option value="">-- Select --</option>',
+          triggerOpts,
+        '</select></div>',
+        '<div data-wrap="trigger-trait" '+triggerWrap+'>',
+          '<label class="block text-xs text-gray-400 mb-1">Trigger Trait</label>',
+          '<select name="trigger_trait" onchange="recalcAll()" class="bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white w-full">',
+            traitOptions('defense', d.trigger_trait),
+          '</select></div>',
+      '</div>',
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+        intSelect('range', 'Range', 1, 6, d.reaction_range || 1, 'm', cumCostFn(1, cfg.range_cost)),
+        intSelect('uses', 'Uses', 1, 3, d.reaction_uses || 1, '', cumCostFn(1, cfg.uses_cost)),
+      '</div>',
+      '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
+        stepSelect('action_steps', 'Action ±', [-1,0,1], d.action_steps || 0, stepCostFn(cfg, 'action')),
+        stepSelect('energy_steps', 'Energy ±', [-2,-1,0,1,2], d.energy_steps || 0, stepCostFn(cfg, 'energy')),
+        itemDepCheckbox(d.item_dep, perkCost(cfg.perks, 'item_dependency')),
+      '</div>',
+      '<div data-wrap="item-name" '+hiddenIf(d.item_dep)+'>',
+        '<label class="block text-xs text-gray-400 mb-1">Item Name</label>',
+        '<input type="text" name="item_name" id="ability_item_name" value="'+esc(d.item_name||'')+'" placeholder="e.g. Shield" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white text-sm">',
       '</div>',
       breakdown(),
     ].join('\n');
@@ -396,6 +446,8 @@
     if (type === 'Enact Movement') return renderEnactMovement(data, cfg);
     if (type === 'Enact Proficiency Shift') return renderEnactProfShift(data, cfg);
     if (type === 'Enact Persistent Effect') return renderEnactPersistent(data, cfg);
+    if (type === 'Enact Negation') return renderEnactNegation(data, cfg);
+    if (type === 'Enact State') return renderEnactState(data, cfg);
     return '<div class="section-card enact-card bg-gray-800 rounded border border-gray-700 p-4 text-red-400">Unknown enact type: '+esc(type)+'</div>';
   }
 
@@ -650,6 +702,77 @@
       '</div>';
     }).join('');
     return '<div data-list="solutions" class="space-y-1">'+rows+'</div>';
+  }
+
+  function renderEnactNegation(d, cfg) {
+    d = d || {};
+    cfg = cfg || {};
+    var src = d.source || 'd4';
+    var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'defense') : '');
+    var traitSelectHTML =
+      '<div data-wrap="source-trait" '+hiddenIf(src==='trait')+'>'+
+        '<label class="block text-xs text-gray-400 mb-1">Trait</label>'+
+        '<input type="hidden" name="source_category" value="'+esc(srcCat)+'">'+
+        '<select name="source_trait" onchange="onSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+          '<option value="">-- Select --</option>' + traitOptionsGrouped(d.source_trait) +
+        '</select>'+
+      '</div>';
+    var otherWrap = src === 'other' ? '' : 'hidden';
+    var prevWrap  = src === 'previous' ? '' : 'hidden';
+    return [
+      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Negation" data-build="0" data-cast="0">',
+        '<h3 class="text-md font-semibold text-indigo-400">Enact — Negation</h3>',
+        enactTopStats(d),
+        '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
+          checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
+          '<div>',
+            '<label class="block text-xs text-gray-400 mb-1">Source</label>',
+            '<select name="source" onchange="onEnactSourceChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+              sourceSelect(d, cfg),
+            '</select>',
+          '</div>',
+          traitSelectHTML,
+        '</div>',
+        '<div data-wrap="source-other" '+otherWrap+'>',
+          '<label class="block text-xs text-gray-400 mb-1">Other Roll Text</label>',
+          '<input type="text" name="other" value="'+esc(d.other_roll_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+        '</div>',
+        '<div data-wrap="source-previous" '+prevWrap+'>',
+          '<label class="block text-xs text-gray-400 mb-1">Previous Reference</label>',
+          '<input type="text" name="other" value="'+esc(d.other_roll_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+        '</div>',
+        '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+          intSelectFlat('flat', 'Flat Bonus', 0, 20, d.flat_bonus || 0, cumCostFn(0, findPerk(cfg.perks, 'flat_bonus'))),
+          '<div><label class="block text-xs text-gray-400 mb-1">Defensive Trait (extra die)</label>',
+            '<select name="offense" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+              opt('None', '', d.offensive_trait, 0, 0) +
+              D.defenseTraits.map(function(t){ var c = perkCost(cfg.perks, 'offensive_trait'); return opt(t, t, d.offensive_trait, c.add, c.energy); }).join('') +
+            '</select></div>',
+        '</div>',
+        '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">',
+          checkbox('counter_negation', 'Apply Negation to the counter roll', d.counter_negation, perkCost(cfg.perks, 'counter_negation')),
+          checkbox('full_counter', 'Ability hits the Engager instead (Engager rolls counter)', d.full_counter, perkCost(cfg.perks, 'full_counter')),
+        '</div>',
+        breakdown(),
+      '</div>'
+    ].join('\n');
+  }
+
+  function renderEnactState(d, cfg) {
+    d = d || {};
+    cfg = cfg || {};
+    return [
+      '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact State" data-build="0" data-cast="0">',
+        '<h3 class="text-md font-semibold text-indigo-400 flex items-center gap-2">Enact — State <span class="text-xs text-yellow-400">(WIP)</span></h3>',
+        enactTopStats(d),
+        '<p class="text-sm text-gray-400">Applies a state or condition to a target. The Enact State rules are still being finalised — this card is a placeholder.</p>',
+        '<div>',
+          '<label class="block text-xs text-gray-400 mb-1">State Name</label>',
+          '<input type="text" name="effect_name" value="'+esc(d.effect_name||'')+'" placeholder="e.g. Stunned" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+        '</div>',
+        breakdown(),
+      '</div>'
+    ].join('\n');
   }
 
   // =========================================================================
@@ -1289,7 +1412,8 @@
       if (triggerCost) { build += triggerCost.add_cost || 0; energy += triggerCost.energy_cost || 0; lines.push('Trigger (add '+(triggerCost.add_cost||0)+', energy '+(triggerCost.energy_cost||0)+')'); }
       var triggerTrait = card.querySelector('[data-wrap="trigger-trait"]') && !card.querySelector('[data-wrap="trigger-trait"]').hidden
         ? card.querySelector('[name="trigger_trait"]').value : '';
-      setOut(card, 'formula', 'Reaction, '+uses+' uses/round, range '+range+'m, trigger: '+trigger+(triggerTrait?(' of type '+triggerTrait):''));
+      var typeLabel = card.dataset.abilityType === 'Preparation' ? 'Preparation' : 'Reaction';
+      setOut(card, 'formula', typeLabel+', '+uses+' uses/round, range '+range+'m, trigger: '+trigger+(triggerTrait?(' of type '+triggerTrait):''));
     }
     if (card.querySelector('[name="phase_rounds"]')) {
       var phase = readNumber(card, 'phase_rounds', 2);
@@ -1515,6 +1639,31 @@
         lines.push('Effect '+effType+' (add '+(effCfg.add_cost||0)+', energy '+(effCfg.energy_cost||0)+')');
       }
       formula = (effName.value||'Effect')+' applies '+effType+' for '+dur+' rounds, solutions: '+(sols.join(' or ')||'(none)');
+    }
+
+    // Enact Negation-specific perks (counter_negation / full_counter)
+    if (card.dataset.enactType === 'Enact Negation') {
+      var cneg = findPerk(cfg.perks, 'counter_negation');
+      if (cneg && readBool(card, 'counter_negation')) {
+        build += cneg.add_cost || 0;
+        energy += cneg.energy_cost || 0;
+        lines.push('Negation applied to counter roll (add '+(cneg.add_cost||0)+', energy '+(cneg.energy_cost||0)+')');
+      }
+      var fc = findPerk(cfg.perks, 'full_counter');
+      if (fc && readBool(card, 'full_counter')) {
+        build += fc.add_cost || 0;
+        energy += fc.energy_cost || 0;
+        lines.push('Ability hits Engager instead (add '+(fc.add_cost||0)+', energy '+(fc.energy_cost||0)+')');
+      }
+    }
+
+    // Enact State (WIP placeholder — no costs yet, just a friendly formula).
+    if (card.dataset.enactType === 'Enact State') {
+      var stateName = (card.querySelector('[name="effect_name"]') || {}).value || 'State';
+      build = 0;
+      energy = 0;
+      lines = [];
+      formula = stateName + ' (WIP — no cost yet)';
     }
 
     setOut(card, 'resolve', readBool(card, 'always') ? 'Yes' : 'No');

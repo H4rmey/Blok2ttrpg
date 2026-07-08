@@ -4,10 +4,11 @@ package models
 type AbilityType string
 
 const (
-	AbilityExecution AbilityType = "Execution"
-	AbilityReaction  AbilityType = "Reaction"
-	AbilityPhase     AbilityType = "Phase"
-	AbilityMinion    AbilityType = "Minion"
+	AbilityExecution   AbilityType = "Execution"
+	AbilityReaction    AbilityType = "Reaction"
+	AbilityPhase       AbilityType = "Phase"
+	AbilityMinion      AbilityType = "Minion"
+	AbilityPreparation AbilityType = "Preparation"
 )
 
 // AllAbilityTypes lists all available ability types.
@@ -16,6 +17,7 @@ var AllAbilityTypes = []AbilityType{
 	AbilityReaction,
 	AbilityPhase,
 	AbilityMinion,
+	AbilityPreparation,
 }
 
 // Ability represents a complete ability built from components.
