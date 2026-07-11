@@ -108,6 +108,7 @@ func buildInitialState(a *models.Ability) string {
 	for _, e := range a.Enactments {
 		em := map[string]interface{}{
 			"name":            e.Name,
+			"description":     e.Description,
 			"type":            string(e.Type),
 			"always":          e.Always,
 			"source":          e.Source,
@@ -438,6 +439,7 @@ func parseNewEnactments(r *http.Request) []models.Enactment {
 
 		e := models.Enactment{
 			Name:           strings.TrimSpace(r.FormValue(prefix + "name")),
+			Description:    strings.TrimSpace(r.FormValue(prefix + "description")),
 			Type:           models.EnactmentType(enactType),
 			Always:         r.FormValue(prefix+"always") == "on",
 			BuildCost:      atoi(r.FormValue(prefix + "build")),

@@ -31,14 +31,19 @@
   function hiddenIf(v) { return v ? '' : 'hidden'; }
 
   // --- Cost display helpers -------------------------------------------------
-  // Build a " (-/+xpt, -/+yE)" suffix. A positive add/energy value is a cost
-  // (shown with '-'), a negative value is a refund/grant (shown with '+').
-  // Example: add=5, energy=3 -> " (-5pt, -3E)"; add=-2 -> " (+2pt, +0E)".
+  // Build a " (+/-xpt, +/-yE)" suffix. A positive add/energy value increases
+  // the total cost (shown with '+'); a negative value decreases the total
+  // cost (shown with '-').
+  // Example: add=5, energy=3 -> " (+5pt, +3E)"; add=-2 -> " (-2pt, +0E)".
   function costSuffix(add, energy) {
     add = Number(add) || 0;
     energy = Number(energy) || 0;
-    function sgn(v) { return v > 0 ? '-' : '+'; }
-    return ' (' + sgn(add) + Math.abs(add) + 'pt, ' + sgn(energy) + Math.abs(energy) + 'E)';
+    if (add === 0 && energy === 0) return '';
+    function sgn(v) { return v > 0 ? '+' : '-'; }
+    var parts = [];
+    if (add !== 0) parts.push(sgn(add) + Math.abs(add) + 'pt');
+    if (energy !== 0) parts.push(sgn(energy) + Math.abs(energy) + 'E');
+    return ' (' + parts.join(', ') + ')';
   }
   // Build a single <option> with a cost suffix.
   function opt(label, value, isSel, add, energy) {
@@ -451,17 +456,6 @@
     return '<div class="section-card enact-card bg-gray-800 rounded border border-gray-700 p-4 text-red-400">Unknown enact type: '+esc(type)+'</div>';
   }
 
-  function enactTopStats(d) {
-    return [
-      '<div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">',
-        statCard('Always Resolve', d.always ? 'Yes' : 'No', 'resolve'),
-        statCard('Build Cost', '0', 'build'),
-        statCard('Cast Cost', '0', 'cast'),
-        statCard('Formula', '...', 'formula'),
-      '</div>',
-    ].join('\n');
-  }
-
   function sourceSelect(d, cfg) {
     cfg = cfg || {};
     var tiers = cfg.dice_tiers || {d4:0,d6:1,d8:2,d10:3,d12:4};
@@ -496,7 +490,6 @@
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Damage" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Damage</h3>',
-        enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
           checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
           '<div>',
@@ -523,7 +516,6 @@
               D.offenseTraits.map(function(t){ var c = perkCost(cfg.perks, 'offensive_trait'); return opt(t, t, d.offensive_trait, c.add, c.energy); }).join('') +
             '</select></div>',
         '</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -546,7 +538,6 @@
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Healing" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Healing</h3>',
-        enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
           checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
           '<div><label class="block text-xs text-gray-400 mb-1">Source</label>',
@@ -571,7 +562,6 @@
               (function(){ var c = perkCost(cfg.perks, 'medicine_trait'); return opt('Medicine (1d10)', 'Medicine', d.medicine_trait, c.add, c.energy); })() +
             '</select></div>',
         '</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -585,7 +575,6 @@
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Movement" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Movement</h3>',
-        enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
           checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
           '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
@@ -606,7 +595,6 @@
             '</div>',
             directionsList(dirs, cfg),
         '</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -631,7 +619,6 @@
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Proficiency Shift" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Proficiency Shift</h3>',
-        enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
           checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
         '</div>',
@@ -647,7 +634,6 @@
           intSelectFlat('shift_amount', 'Amount', 1, 5, d.shift_amount || 1, cumCostFn(1, cfg.shift_amount_cost)),
           intSelectFlat('shift_uses', 'Uses', 1, 5, d.shift_uses || 1, cumCostFn(1, cfg.shift_uses_cost)),
         '</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -666,7 +652,6 @@
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Persistent Effect" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Persistent Effect</h3>',
-        enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
           '<div><label class="block text-xs text-gray-400 mb-1">Name</label>',
             '<input type="text" name="effect_name" value="'+esc(d.effect_name||'Burning')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white"></div>',
@@ -689,7 +674,6 @@
           '</div>',
           solutionsList(sols),
         '</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -722,7 +706,6 @@
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Negation" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Negation</h3>',
-        enactTopStats(d),
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
           checkbox('always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
           '<div>',
@@ -753,7 +736,6 @@
           checkbox('counter_negation', 'Apply Negation to the counter roll', d.counter_negation, perkCost(cfg.perks, 'counter_negation')),
           checkbox('full_counter', 'Ability hits the Engager instead (Engager rolls counter)', d.full_counter, perkCost(cfg.perks, 'full_counter')),
         '</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -764,13 +746,11 @@
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact State" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400 flex items-center gap-2">Enact — State <span class="text-xs text-yellow-400">(WIP)</span></h3>',
-        enactTopStats(d),
         '<p class="text-sm text-gray-400">Applies a state or condition to a target. The Enact State rules are still being finalised — this card is a placeholder.</p>',
         '<div>',
           '<label class="block text-xs text-gray-400 mb-1">State Name</label>',
           '<input type="text" name="effect_name" value="'+esc(d.effect_name||'')+'" placeholder="e.g. Stunned" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
         '</div>',
-        breakdown(),
       '</div>'
     ].join('\n');
   }
@@ -790,14 +770,13 @@
     return '<div class="section-card inter-card bg-gray-800 rounded border border-gray-700 p-4 text-red-400">Unknown inter type: '+esc(type)+'</div>';
   }
 
-  function interTopStats(d) {
-    return [
-      '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">',
-        statCard('Build Cost', '0', 'build'),
-        statCard('Cast Cost', '0', 'cast'),
-        statCard('Final', '...', 'formula'),
-      '</div>',
-    ].join('\n');
+  function interTypeSelect(selectedValue) {
+    return '<label class="text-xs text-gray-400 flex items-center gap-1">Interaction: ' +
+      '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">' +
+        '<option value="">-- Select --</option>' +
+        INTER_TYPES.map(function(t){return '<option value="'+esc(t)+'" '+selected(selectedValue,t)+'>'+esc(t)+'</option>';}).join('') +
+      '</select>' +
+    '</label>';
   }
 
   function renderInterSelf(d, cfg) {
@@ -808,9 +787,8 @@
           '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
         '</button>',
         '<div class="collapsible-content space-y-3 mt-3">',
-          interTopStats(),
+          interTypeSelect('Self'),
           '<div class="text-sm text-gray-300"><strong>Type =</strong> Self + <strong>Target =</strong> Self + <strong>Counter =</strong> d8</div>',
-          breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
@@ -825,13 +803,12 @@
           '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
         '</button>',
         '<div class="collapsible-content space-y-3 mt-3">',
-          interTopStats(),
+          interTypeSelect('Direct'),
           '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
             intSelect('range', 'Range', 1, 10, d.range || 1, 'm', cumCostFn(1, cfg.range_cost)),
             intSelectFlat('targets', 'Targets', 1, 5, d.targets || 1, cumCostFn(1, cfg.target_cost)),
           '</div>',
           '<div>'+usePrevCheck(d.use_previous, perkCost(cfg.perks, 'use_previous'))+'</div>',
-          breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
@@ -847,7 +824,7 @@
           '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
         '</button>',
         '<div class="collapsible-content space-y-3 mt-3">',
-          interTopStats(),
+          interTypeSelect('Ranged'),
           '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
             intSelect('range', 'Range', 10, 20, d.range || 10, 'm', function(i){
               var inc = Math.floor(Math.max(0, i - 10) / step);
@@ -861,7 +838,6 @@
             checkbox('remove_penalty', 'Remove engagement penalty', d.remove_penalty, perkCost(cfg.perks, 'remove_penalty')),
           '</div>',
           '<div>'+usePrevCheck(d.use_previous, perkCost(cfg.perks, 'use_previous'))+'</div>',
-          breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
@@ -880,7 +856,7 @@
           '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
         '</button>',
         '<div class="collapsible-content space-y-3 mt-3">',
-          interTopStats(),
+          interTypeSelect('Area'),
           '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
             intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm', cumCostFn(1, cfg.radius_cost)),
             intSelect('range', 'Range', 0, 10, d.range || 0, 'm', function(i){
@@ -900,7 +876,6 @@
             '</div>',
           '</div>',
           '<div>'+usePrevCheck(d.use_previous, perkCost(cfg.perks, 'use_previous'))+'</div>',
-          breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
@@ -919,7 +894,7 @@
           '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
         '</button>',
         '<div class="collapsible-content space-y-3 mt-3">',
-          interTopStats(),
+          interTypeSelect('Area of Effect'),
           '<div class="grid grid-cols-1 md:grid-cols-3 gap-3">',
             intSelect('radius', 'Radius', 1, 6, d.radius || 1, 'm', cumCostFn(1, cfg.radius_cost)),
             intSelect('range', 'Range', 0, 10, d.range || 0, 'm', function(i){
@@ -945,7 +920,6 @@
           '</div>',
           checkbox('immune', 'Engager is immune', d.immune, perkCost(cfg.perks, 'immune')),
           '<div>'+usePrevCheck(d.use_previous, perkCost(cfg.perks, 'use_previous'))+'</div>',
-          breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
@@ -990,11 +964,6 @@
           '<span class="collapse-chevron text-rose-300 text-xs">&#9660;</span>',
         '</button>',
         '<div class="collapsible-content space-y-3 mt-3">',
-        '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">',
-          statCard('Build Cost', '0', 'build'),
-          statCard('Cast Cost', '0', 'cast'),
-          statCard('Final', '...', 'formula'),
-        '</div>',
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">',
           '<div><label class="block text-xs text-gray-400 mb-1">Engage Roll Type</label>',
             '<select name="engage_mode" onchange="onEngageModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
@@ -1026,7 +995,6 @@
           '</div>',
           counterList(counters, cfg),
         '</div>',
-        breakdown(),
         '</div>',
       '</div>'
     ].join('\n');
@@ -1136,17 +1104,10 @@
     var cur = readCardData(host);
     host.innerHTML = '';
     block.dataset.enactType = val;
-    updateInterOptions(block);
     if (!val) return;
     host.innerHTML = renderEnactCard(val, cur);
     recalcAll();
   };
-
-  function updateInterOptions(block) {
-    var select = block.querySelector('.inter-type-select');
-    select.innerHTML = '<option value="">-- Select --</option>' +
-      INTER_TYPES.map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>';}).join('');
-  }
 
   function readCardData(container) {
     if (!container) return {};
@@ -1301,13 +1262,20 @@
           '<button type="button" onclick="removeEnactment(this)" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">Remove</button>',
         '</div>',
       '</div>',
+      '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">',
+        statCard('Always Resolve', 'No', 'resolve'),
+        statCard('Build Cost', '0', 'build'),
+        statCard('Cast Cost', '0', 'cast'),
+      '</div>',
       '<div class="collapsible-content space-y-3">',
-        '<div class="flex items-center gap-3 flex-wrap">',
-          '<label class="text-xs text-gray-400 flex items-center gap-1">Interaction: ',
-            '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">',
-              '<option value="">-- Select --</option>',
-            '</select>',
-          '</label>',
+        '<div class="section-card bg-gray-800 rounded-lg border border-gray-700 p-4 space-y-3">',
+          '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="false" onclick="toggleCollapse(this)">',
+            '<h4 class="text-sm font-semibold text-gray-300">Description</h4>',
+            '<span class="collapse-chevron text-gray-300 text-xs">&#9654;</span>',
+          '</button>',
+          '<div class="collapsible-content space-y-3 mt-3" hidden>',
+            '<textarea name="enactment_description" rows="3" placeholder="Describe this enactment..." class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm"></textarea>',
+          '</div>',
         '</div>',
         '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-4 space-y-3" data-section="enactment-type">',
           '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
@@ -1326,7 +1294,17 @@
             '<div class="enact-card-container space-y-2"></div>',
           '</div>',
         '</div>',
-        '<div class="inter-card-container space-y-2"></div>',
+        '<div class="inter-card-container space-y-2">',
+          '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-build="0" data-cast="0">',
+            '<button type="button" class="collapse-toggle w-full flex items-center justify-between text-left" aria-expanded="true" onclick="toggleCollapse(this)">',
+              '<h4 class="text-sm font-semibold text-cyan-300">Interaction</h4>',
+              '<span class="collapse-chevron text-cyan-300 text-xs">&#9660;</span>',
+            '</button>',
+            '<div class="collapsible-content space-y-3 mt-3">',
+              interTypeSelect(''),
+            '</div>',
+          '</div>',
+        '</div>',
         '<div class="validation-card-container"></div>',
       '</div>',
     ].join('');
@@ -1666,13 +1644,8 @@
       formula = stateName + ' (WIP — no cost yet)';
     }
 
-    setOut(card, 'resolve', readBool(card, 'always') ? 'Yes' : 'No');
-    setOut(card, 'build', build);
-    setOut(card, 'cast', energy);
-    setOut(card, 'formula', formula);
     card.dataset.build = build;
     card.dataset.cast = energy;
-    fillList(card, lines);
   }
 
   function calcInter(card) {
@@ -1740,12 +1713,8 @@
     var usePrev = findPerk(cfg.perks, 'use_previous');
     if (usePrev && readBool(card, 'use_previous')) { build += usePrev.add_cost; energy += usePrev.energy_cost; lines.push('Use result of previous (add '+usePrev.add_cost+', energy '+usePrev.energy_cost+')'); }
 
-    setOut(card, 'build', build);
-    setOut(card, 'cast', energy);
-    setOut(card, 'formula', formula);
     card.dataset.build = build;
     card.dataset.cast = energy;
-    fillList(card, lines);
   }
 
   function calcValidation(card) {
@@ -1822,12 +1791,29 @@
 
     formula = (formula || 'engage vs counters') + ' vs ' + (counters.map(function(c){return c.trait;}).join(' or ') || '(no counters)');
 
-    setOut(card, 'build', build);
-    setOut(card, 'cast', energy);
-    setOut(card, 'formula', formula);
     card.dataset.build = build;
     card.dataset.cast = energy;
-    fillList(card, lines);
+  }
+
+  function updateBlockTotals(block) {
+    var build = 0, energy = 0;
+    var always = false;
+    block.querySelectorAll('.section-card[data-section="enact"]').forEach(function(card){
+      build += Number(card.dataset.build || 0);
+      energy += Number(card.dataset.cast || 0);
+      if (readBool(card, 'always')) always = true;
+    });
+    block.querySelectorAll('.section-card[data-section="interaction"]').forEach(function(card){
+      build += Number(card.dataset.build || 0);
+      energy += Number(card.dataset.cast || 0);
+    });
+    block.querySelectorAll('.section-card[data-section="validation"]').forEach(function(card){
+      build += Number(card.dataset.build || 0);
+      energy += Number(card.dataset.cast || 0);
+    });
+    setOut(block, 'resolve', always ? 'Yes' : 'No');
+    setOut(block, 'build', build);
+    setOut(block, 'cast', energy);
   }
 
   window.recalcAll = function () {
@@ -1840,6 +1826,8 @@
     acts.forEach(calcEnact);
     inters.forEach(calcInter);
     valids.forEach(calcValidation);
+
+    document.querySelectorAll('.enactment-block').forEach(updateBlockTotals);
 
     var total = 0;
     var totalCast = 0;
@@ -1885,7 +1873,7 @@
     var hiddenType = document.getElementById('hidden-ability-type');
     if (typeSel && hiddenType) hiddenType.value = typeSel.value;
 
-    if (!document.querySelector('.section-card[data-section="interaction"]')) {
+    if (!document.querySelector('.section-card[data-section="interaction"][data-inter-type]')) {
       evt.preventDefault();
       alert('Add at least one interaction before saving the ability.');
       return;
@@ -1911,9 +1899,12 @@
       renameIn(block.querySelector('.enact-card-container'),          'enact_'+idx+'_');
       renameIn(block.querySelector('.inter-card-container'),          'enact_'+idx+'_inter_');
       renameIn(block.querySelector('.validation-card-container'),     'enact_'+idx+'_valid_');
-      // Block-level name input
+      // Block-level name and description inputs
       block.querySelectorAll('input[name="enactment_name"]').forEach(function(el){
         el.name = 'enact_'+idx+'_name';
+      });
+      block.querySelectorAll('textarea[name="enactment_description"]').forEach(function(el){
+        el.name = 'enact_'+idx+'_description';
       });
     });
 
@@ -1948,17 +1939,14 @@
         document.getElementById('enactments-container').appendChild(block);
         var nameInput = block.querySelector('input[name="enactment_name"]');
         if (nameInput) nameInput.value = saved.name || '';
-        updateInterOptions(block);
+        var descInput = block.querySelector('textarea[name="enactment_description"]');
+        if (descInput) descInput.value = saved.description || '';
         block.querySelector('.enact-type-select').value = saved.type || '';
         block.dataset.enactType = saved.type || '';
         if (saved.type) {
           block.querySelector('.enact-card-container').innerHTML = renderEnactCard(saved.type, saved);
         }
         if (saved.interaction && saved.interaction.type) {
-          var interSelect = block.querySelector('.inter-type-select');
-          var opts = INTER_TYPES.map(function(t){return '<option value="'+esc(t)+'" '+(t===saved.interaction.type?'selected':'')+'>'+esc(t)+'</option>';}).join('');
-          interSelect.innerHTML = '<option value="">-- Select --</option>' + opts;
-          interSelect.value = saved.interaction.type;
           block.querySelector('.inter-card-container').innerHTML = renderInterCard(saved.interaction.type, saved.interaction);
         }
         // validation card always present

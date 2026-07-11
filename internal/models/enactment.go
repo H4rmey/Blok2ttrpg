@@ -26,11 +26,12 @@ var AllEnactmentTypes = []EnactmentType{
 
 // Enactment represents a single effect within an ability.
 type Enactment struct {
-	Name     string        `json:"name,omitempty" yaml:"name,omitempty"`
-	Type     EnactmentType `json:"type" yaml:"type"`
-	BuildCost int `json:"build_cost,omitempty" yaml:"build_cost,omitempty"`
-	CastCost  int `json:"cast_cost,omitempty" yaml:"cast_cost,omitempty"`
-	Formula   string        `json:"formula,omitempty" yaml:"formula,omitempty"`
+	Name        string        `json:"name,omitempty" yaml:"name,omitempty"`
+	Description string        `json:"description,omitempty" yaml:"description,omitempty"`
+	Type        EnactmentType `json:"type" yaml:"type"`
+	BuildCost   int           `json:"build_cost,omitempty" yaml:"build_cost,omitempty"`
+	CastCost    int           `json:"cast_cost,omitempty" yaml:"cast_cost,omitempty"`
+	Formula     string        `json:"formula,omitempty" yaml:"formula,omitempty"`
 
 	// Common
 	Always bool `json:"always,omitempty" yaml:"always,omitempty"`
