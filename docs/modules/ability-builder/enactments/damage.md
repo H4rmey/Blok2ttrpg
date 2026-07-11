@@ -1,4 +1,5 @@
-# Enact Damage
+# damage
+## Enact Damage
 
 Enact Damage allows characters to inflict harm on their enemies.
 

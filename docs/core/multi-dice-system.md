@@ -1,4 +1,6 @@
-# Multi Dice System
+# multi-dice-system
+## Multi Dice System
+
 ## Introduction
 
 The dice system used in this game consists of six different dice: **d4, d6, d8, d10, d12, and d20**. These dice are categorized into **Dice Tiers** (1-6), each corresponding to a **Proficiency Level**:
@@ -36,6 +38,8 @@ When making a Trait Check:
 2.  Roll the corresponding **Dice Tier** (e.g., an **Expert roll** uses a **d10**).
 3.  Compare the result to the set difficulty by making an opposing roll.
 
-For example, when making a stealth roll we roll a d8 because we are trained in stealth. Then the GM either sets a difficulty by picking a number between 1-12 or the GM picks a dice to roll against.
+For example, when making a stealth roll by hiding in the crowd, we roll a d8 because we are trained in stealth. Then the GM either sets a difficulty by picking a number between 1-12 or the GM picks a dice to roll against. When picking a dice the GM could pick a d10 for the difficulty, because it is quite a hard roll. The GM rolls the d10 and the player the d8, the player succeeds when the number is higher or equal to the GM roll.
 
-When picking a dice the GM could pick a d10 for the difficulty, because it is quite a hard roll. The GM rolls the d10 and the player the d8, the player succeeds when the number is higher or equal to the GM roll.
+During these this roll the person trying to do the Trait check is called the **Engager**. The roll the **Engager** does is called an **Engagement Roll.** The posing roll is called the **Counter Roll**. If the **Engager** makes a roll against another player, npc, person, cat, dog, wall, cliff, tree, whatever… The thing that is making the **Counter Roll** is called the **Target**.
+
+In the example above the roller of the stealth roll is called the **Engager** and the opposing d10 roll is the **Counter Roll**. The thing you are trying to hide from with stealth is the **Target**.

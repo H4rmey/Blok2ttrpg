@@ -1,6 +1,7 @@
-# Enact Healing
+# healing
+## Enact Healing
 
-Enact Healing allows characters to restore health to themselves or their allies.
+Enact Healing abilities allow characters to restore health to themselves or their allies. These abilities can be used to mend wounds, cure ailments, and provide vital support during combat.
 
 ## Rules
 

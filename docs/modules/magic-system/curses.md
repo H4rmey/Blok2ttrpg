@@ -1,4 +1,6 @@
-# Curses
+# curses
+## Curses
+
 In the world of SAS, a **curse is not a supernatural judgment or imposed effect**.  
 A curse is a **natural abnormality** — comparable to a birth defect, genetic disorder, chronic illness, or degenerative disease.
 

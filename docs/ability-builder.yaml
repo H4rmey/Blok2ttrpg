@@ -10,6 +10,11 @@ ability_builder:
     - ./docs/core/character-traits.md
     - ./docs/core/leveling.md
     - ./docs/core/multi-dice-system.md
+    - ./docs/modules/world/culture.md
+    - ./docs/modules/world/world.md
+    - ./docs/modules/magic-system/curses.md
+    - ./docs/modules/magic-system/imbuing.md
+    - ./docs/modules/magic-system/magic-system.md
     - ./docs/modules/ability-builder/introduction.md
     - ./docs/modules/ability-builder/ability-types/execution.md
     - ./docs/modules/ability-builder/ability-types/minion.md
@@ -29,13 +34,6 @@ ability_builder:
     - ./docs/modules/ability-builder/interactions/self.md
     - ./docs/modules/ability-builder/validations.md
     - ./docs/modules/ability-builder/leveling.md
-    - ./docs/modules/ability-builder/enactments/negation.md
-    - ./docs/modules/world/culture.md
-    - ./docs/modules/world/world.md
-    - ./docs/modules/magic-system/curses.md
-    - ./docs/modules/magic-system/imbuing.md
-    - ./docs/modules/magic-system/magic-system.md
-
 
   # Core cost rules
   additional_enactment:

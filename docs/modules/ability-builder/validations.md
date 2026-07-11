@@ -1,8 +1,9 @@
-# Validations
+# validations
+## Validations
 
 ## Introduction
 
-Here, you'll find the guidelines and options for customizing your engagement and counter rolls.
+Here, you'll find the guidelines and options for customizing your **Engagement and Counter Rolls**.
 
 ## Rules
 

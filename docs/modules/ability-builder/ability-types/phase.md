@@ -1,4 +1,5 @@
-# Phase
+# phase
+## Phase
 
 Phases are a state or passive ability that lasts for a predefined amount of time. They exist to buff or nerf someone for a specific number of rounds. A Phase lasts for a few rounds, after which the Reverse Phase starts and lasts just as long as the original phase did.
 

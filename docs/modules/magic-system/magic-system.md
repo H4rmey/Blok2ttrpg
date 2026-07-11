@@ -1,4 +1,6 @@
-# Magic System
+# magic-system
+## Magic System
+
 Designing a believable magic system is difficult, especially when the goal is to ground it in a reality that feels internally consistent and understandable.  
 The goal of the SAS magic system is to make interaction with the world feel **systematic rather than mystical**.
 
@@ -57,7 +59,7 @@ Below is a schematic representation of an iron atom. The outer ring represents i
 
 - [ ] TODO: Insert explanation of why there are exactly seven Mantles per atom
 
-![Iron atom with Mantles](api/images/uqoLWSjCrCGN/image.png)
+![Iron atom with Mantles](api/images/mZLxxsD7CEYX/image.png)
 
 To interact with the Mantles of an atom, a Aggregate must generate Resonance Slices that match the material’s Response Profile. This requires precision and sustained concentration.
 
@@ -82,7 +84,7 @@ Resonance Signatures are emitted passively and continuously. Because of this, th
 
 A Resonance Signature can be visualized as a three-dimensional wave:
 
-![Resonance Signature](api/images/jylOjtR0i2OI/image.png)
+![Resonance Signature](api/images/dyMQhULhGsN8/image.png)
 
 Each slice of the wave represents a Resonance Slice.
 
@@ -111,7 +113,7 @@ Response Profiles describe how Mantles will react when stimulated.
 
 Example Response Profile for wood:
 
-![Wood Response Profile](api/images/Gzf7YvySBosc/image.png)
+![Wood Response Profile](api/images/V4mrVYQmvH6d/image.png)
 
 Each slice again represents a Resonance Slice.  
 In this example, the slice at **4** corresponds to heat.
@@ -127,11 +129,11 @@ Mantles react only to specific slices.
 
 Resonance Slices are visualized as waves. For example, water may respond to a wave like this:
 
-![Water Resonance Slice](api/images/E2M4jBQHR9la/image.png)
+![Water Resonance Slice](api/images/gnWN8hs7HDEz/image.png)
 
 Electricity, however, may require a completely different wave pattern:
 
-![Electric Resonance Slice](api/images/3FNiboYdiHW9/image.png)
+![Electric Resonance Slice](api/images/zNRnYym5VSrH/image.png)
 
 Exact matches are impossible. Interaction relies on _sufficient_ alignment rather than perfect resonance.
 

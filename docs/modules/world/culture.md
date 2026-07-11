@@ -1,4 +1,6 @@
-# Culture
+# culture
+## Culture
+
 ## The Accepted Worldview
 
 For most civilizations, the world is believed to be **flat and enclosed**.

@@ -1,4 +1,5 @@
-# Direct
+# direct
+## Direct
 
 ## Rules
 

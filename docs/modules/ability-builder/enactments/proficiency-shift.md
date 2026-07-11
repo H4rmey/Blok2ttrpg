@@ -1,6 +1,7 @@
-# Enact Proficiency Shift
+# proficiency-shift
+## Enact Proficiency Shift
 
-Enact Proficiency Shift abilities allow characters to temporarily enhance or weaken Traits.
+**Enact Proficiency Shift** abilities allow characters to temporarily enhance or weaken Traits. These abilities can be used to boost a character's **Proficiency** in a specific area or to hinder an opponent's effectiveness. **Proficiency** **Shifts** add a strategic layer to gameplay, enabling players to adapt to different situations by modifying their strengths and weaknesses.
 
 ## Rules
 

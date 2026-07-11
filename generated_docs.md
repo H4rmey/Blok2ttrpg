@@ -1,4 +1,6 @@
-# Blok2ttrpg
+# blok2ttrpg
+## Blok2ttrpg
+
 bla bla bla introduction…
 
 ## uuuuuh:
@@ -45,7 +47,9 @@ and perks would be:
 
 This kinda ties in with skill trees i think, but idk yet
 
-# Character Attributes
+# character-attributes
+## Character Attributes
+
 ## Attributes
 
 Attributes define a character, situation, or environment by providing specific, factual details. They are not inherently positive or negative, and they can be permanent or temporary. Attributes can be invoked during gameplay to influence outcomes, either positively or negatively.
@@ -184,7 +188,9 @@ Michael is fighting in a tavern with the following Environment Attributes: “Al
 
 ---
 
-# Character Traits
+# character-traits
+## Character Traits
+
 ## **Traits**
 
 Character Attributes form the core of your character, while Traits determine the success of your actions. Below are two lists of Traits your character might possess. Depending on the world setting, you may modify some of these Traits.
@@ -242,14 +248,14 @@ By the time you level up, you gain additional Trait Points. You can also gain Tr
 | Movement | 3 | 4 | 5 | 6 | 7 | 8 |
 | Energy | 3 | 4 | 5 | 6 | 7 | 8 |
 
-# Leveling
+# leveling
+## Leveling
+
 ## Introduction
 
 As your character progresses through the world, they will gain levels. Leveling up represents your character's growth, allowing them to improve their Traits, increase their Vital stats, and become more capable in both combat and roleplay.
 
 The maximum level a character can reach is Level 10.
-
----
 
 ## Trait Points
 
@@ -271,39 +277,23 @@ By the time you level up, you gain additional Trait Points as outlined in the le
 
 You can also dynamically gain Trait Points by lowering your Proficiency. For instance, if you are an Expert in Dexterity but want to balance out your Traits, you can lower the Proficiency to Trained or even Untrained to gain 1 or 2 points, respectively. This means spending points does not lock you into your choices; you can always reallocate them as needed.
 
----
+## Leveling Table: Trait Points
 
-## Leveling Table: Traits
-
-| Level | Trait Points Gained | Total Trait Points (Standard 22-Trait Setting) |
+| Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
 | --- | --- | --- |
-| **1** | Base | 8 |
-| **2** | +1 | 9 |
-| **3** | +1 | 10 |
-| **4** | +1 | 11 |
-| **5** | +2 | 13 |
-| **6** | +1 | 14 |
-| **7** | +1 | 15 |
-| **8** | +1 | 16 |
-| **9** | +1 | 17 |
-| **10** | +2 | 19 |
+| {{range .Leveling.TraitPoints.Levels}} | **{{.Level}}** | +{{.PointsGained}} |
+| {{end}}--- |  |  |
 
----
+## Proficiency Tiers
 
-## Vital Trait Scaling (Energy)
+| Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| {{range .Proficiencies}} | {{.Name}} | {{.Cost}} | {{.Dice.General}} | {{.Dice.Offense}} | {{.Dice.Defense}} | {{index .Vitals "hp"}} | {{index .Vitals "movement"}} |
+| {{end}} |  |  |  |  |  |  |  |
 
-As your proficiency in Energy shifts alongside your leveling, your total Energy pool expands. Energy is critical for executing abilities. The Energy pool scales as follows:
+# multi-dice-system
+## Multi Dice System
 
-| Proficiency Tier | Total Energy |
-| --- | --- |
-| **Clumsy (d4)** | 5 |
-| **Untrained (d6)** | 8 |
-| **Trained (d8)** | 12 |
-| **Expert (d10)** | 16 |
-| **Master (d12)** | 20 |
-| **Legendary (d20)** | 25 |
-
-# Multi Dice System
 ## Introduction
 
 The dice system used in this game consists of six different dice: **d4, d6, d8, d10, d12, and d20**. These dice are categorized into **Dice Tiers** (1-6), each corresponding to a **Proficiency Level**:
@@ -341,11 +331,940 @@ When making a Trait Check:
 2.  Roll the corresponding **Dice Tier** (e.g., an **Expert roll** uses a **d10**).
 3.  Compare the result to the set difficulty by making an opposing roll.
 
-For example, when making a stealth roll we roll a d8 because we are trained in stealth. Then the GM either sets a difficulty by picking a number between 1-12 or the GM picks a dice to roll against.
+For example, when making a stealth roll by hiding in the crowd, we roll a d8 because we are trained in stealth. Then the GM either sets a difficulty by picking a number between 1-12 or the GM picks a dice to roll against. When picking a dice the GM could pick a d10 for the difficulty, because it is quite a hard roll. The GM rolls the d10 and the player the d8, the player succeeds when the number is higher or equal to the GM roll.
 
-When picking a dice the GM could pick a d10 for the difficulty, because it is quite a hard roll. The GM rolls the d10 and the player the d8, the player succeeds when the number is higher or equal to the GM roll.
+During these this roll the person trying to do the Trait check is called the **Engager**. The roll the **Engager** does is called an **Engagement Roll.** The posing roll is called the **Counter Roll**. If the **Engager** makes a roll against another player, npc, person, cat, dog, wall, cliff, tree, whatever… The thing that is making the **Counter Roll** is called the **Target**.
 
-# Culture
+In the example above the roller of the stealth roll is called the **Engager** and the opposing d10 roll is the **Counter Roll**. The thing you are trying to hide from with stealth is the **Target**.
+
+# introduction
+## Ability Builder
+
+> [!NOTE]
+> This document assumes you've read the core chapters, character-attribute, character-traits, leveling and multi-dice-system.
+
+## Introduction
+
+The **Ability Builder** is the core system used to create actions, maneuvers, spells, techniques, and special effects. An Ability represents an **action** taken by a character. But rather than relying on predefined spell lists or class-locked abilities, this system allows abilities to be created from **Enactments**.  What that action does, who it affects, how it is resolved, and under which conditions it succeeds are all explicitly defined by the **Enactment** chosen during creation. Each **Enactment** has one **Interaction** and one **validation**.
+
+Definitions: 
+
+*   **Enactments** — define _what happens_ (damage, healing, movement, shifts, persistent effects, etc.).
+    *   **Interactions** — define _how and to whom_ the Enactments are applied (self, direct, ranged, area, or area of effect).
+    *   **Validations** — define _if and how_ the Enactments succeed or fail.
+
+In turn each of these Components (Enactment, Validation, Interaction) has Rules and Perks:
+
+*   **Rules**  — define how the Component works by default.
+*   **Perks** — modify the Rules to upgrade the Component.
+
+Every **Ability** must contain **at least one Enactment**. Additional Enactments may be added to create more complex effects, which are resolved **in sequence**. Each Enactment is evaluated independently unless explicitly overridden by a Perk.
+
+The Ability Builder is intentionally **system-agnostic** with regard to flavor. A fireball, a sword technique, a healing prayer, or a mechanical trap are all created using the same underlying rules. The narrative description of an Ability is left to the player and GM, while the mechanical behavior remains the same. So a shot from an arrow might be the same as a light beam in terms of Ability Components.
+
+## Costs
+
+Applying perks has a cost. The first cost is the **Ability Cost** to add the Perk. Each level you gain **Ability Points** that can be spent to create abilities.
+
+Then there is the **Energy Cost**. This cost is used to use your ability. Sometimes you do not have enough energy to use your ability. In this system it is allowed to still use your ability, but there is a catch: either you take damage equal to the amount of energy you are missing, or you only partially use your ability. The latter is done by not executing all enactments of the ability. The fireball you cast will still burn someone, but will not explode on impact anymore because you don't have the energy for that.
+
+## Execution
+
+So an **Ability** is made up from Enactments. Each of these Enactments describe what they do. The order in which you execute the Enactment is a bit odd compared to other systems. The order goes as follows:
+
+1.  Resolve the **Enactment** → Check what the will be if the **Validation** succeeds.
+2.  Resolve the **Interaction** → Which targets are going to be affected by this **Enactment.**
+3.  Resolve the **Validation** → Are the targets going to be affected by this **Enactment.**
+
+Let's say you want to hit someone with a ice fist. You first roll your damage 1d8 for example. This is the damage you are going to deal if you hit. Then you check, who are you going to hit, you choose the person right in front of you. Then you check if you are going to hit. So you make a **Enagement Roll** and the Target makes a **Counter Roll** of their choice.
+
+## Additional Enactments
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Adding an additional Enactment beyond the first | +1 | +1 |
+
+# execution
+## Execution
+
+Execution is the most basic form for an Ability. It is simply the: "I want to do this now" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
+
+## Rules
+
+*   **Enactments**: Has at least one Enactment (the first Enactment is free)
+*   **Actions**: Costs 2 Actions to use
+*   **Energy**: Costs 3 Energy to use
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Has item dependency | +0 | -1 |
+
+## Compatible Enactments
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Enact Damage | +1 | +2 |
+| Enact Healing | +1 | +2 |
+| Enact Movement | +0 | +1 |
+| Enact Proficiency Shift | +1 | +2 |
+| Enact Persistent Effect | +2 | +3 |
+
+## Template
+
+```yaml
+ability:
+  type: Execution
+  has_item_dependency: No # If yes, enter which item
+  energy_cost: 3
+  action_cost: 2
+  enactments:
+    - Type:
+  perks:
+```
+
+# minion
+## Minion
+
+Minions are entities that players can create, summon, and control. They have default stats and actions, and can use Enactments created by the user if the appropriate perk is selected. Minions follow specific rules within the action economy.
+
+## Rules
+
+*   Minions have their own turn in the action economy.
+*   Minions can perform one action per turn.
+*   Minions have default stats: Health, Attack, Defense, Speed, Lifetime.
+*   Minions can be summoned once per encounter.
+*   Minions require a summoning cost (e.g., energy, mana).
+*   Minions can be controlled by the player during their turn.
+*   Minions can be dismissed by the player as a free action.
+*   Minions have a default lifetime of 3 rounds.
+
+## Default Stats
+
+| Stat | Value |
+| --- | --- |
+| Health | 10 |
+| Attack | 2d6 |
+| Defense | 1d6 |
+| Speed | 5m |
+| Lifetime | 3 rounds |
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Has item dependency | +0 | -1 |
+
+## Compatible Enactments
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Enact Damage | +1 | +2 |
+| Enact Healing | +1 | +2 |
+| Enact Movement | +0 | +1 |
+| Enact Proficiency Shift | +1 | +2 |
+| Enact Persistent Effect | +2 | +3 |
+
+# phase
+## Phase
+
+Phases are a state or passive ability that lasts for a predefined amount of time. They exist to buff or nerf someone for a specific number of rounds. A Phase lasts for a few rounds, after which the Reverse Phase starts and lasts just as long as the original phase did.
+
+## Rules
+
+*   Costs 3 Energy to Use.
+*   After activation, Phase is active for 2 rounds.
+*   Phase ends at the start of the 2nd turn of the character.
+*   When Phase ends, the Reverse Phase starts.
+*   During the Reverse Phase, no new Phases can be started for the character.
+*   Phase will have an Enactment assigned to it.
+*   The Enactment can be triggered as a free action at the end of the character's turn.
+*   Reverse Phase will have a Bad Enactment assigned to it.
+*   Bad Enactment will be applied to the character.
+*   Bad Enactment must be used at the end of the character's turn as a free action.
+*   If no Bad Enactment is chosen, the Bad Enactment will be the reverse of the original Enactment.
+*   Phase has a knockout requirement.
+*   If any knockout requirement is met, the Phase ends (and the "Bad Enactment" starts).
+*   The Reverse Phase cannot be cancelled by the knockout.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| All knockout requirements have to be met | +0 | +3 |
+| Knockout can be used on the reverse phase | +0 | +3 |
+| No knockout possible | +0 | +5 |
+| Has item dependency | +0 | -1 |
+
+## Knockout Requirements
+
+| Description | Add Cost |
+| --- | --- |
+| None | +0 |
+| You take damage | +0 |
+| You fall unconscious | +0 |
+| You die | +0 |
+| You get grabbed or restrained | +0 |
+| You move voluntarily | +0 |
+| You are moved by another effect | +0 |
+| You fail a validation | +0 |
+| You use another phase | +0 |
+| You lose line of sight to target | +0 |
+| Target moves out of range | +0 |
+| Target falls unconscious | +0 |
+| Target dies | +0 |
+| Target succeeds on a counter roll | +0 |
+| Phase duration expires | +0 |
+| You run out of energy | +0 |
+
+## Compatible Enactments
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Enact Damage | +1 | +2 |
+| Enact Healing | +1 | +2 |
+| Enact Proficiency Shift | +1 | +2 |
+
+## Template
+
+```yaml
+ability:
+  type: Phase
+  phase_duration: 2 rounds
+  reverse_phase_duration: 2 rounds
+  has_item_dependency: No # If yes, enter which item
+  energy_cost: 3
+  enactments:
+    - Type:
+  Perks:
+```
+
+# preparation
+## Preparation
+
+Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation must cost an action to prepare, but in turn cost far less to use.
+
+## Rules
+
+*   Can only be used once per round.
+*   Costs 2 actions.
+*   Costs 3 Energy to Use.
+*   Always has at least one Trigger (Pick one from the list below, first one is free).
+*   Has at least one Enactment (the first Enactment is free)
+*   Only triggers when the triggering effect happens within 1m of you.
+*   Target of Enactments is overwritten to the character that triggers the Reaction.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Has item dependency | +0 | -1 |
+
+## Triggers
+
+_No triggers available._
+
+## Compatible Enactments
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Enact Damage | +1 | +2 |
+| Enact Healing | +1 | +2 |
+| Enact Movement | +0 | +1 |
+| Enact Proficiency Shift | +1 | +2 |
+| Enact Persistent Effect | +2 | +3 |
+
+## Template
+
+```yaml
+ability:
+  type: Preparation
+  range: 1
+  uses: 1
+  has_item_dependency: No # If yes, enter which item
+  energy_cost: 3
+  action_cost: 2
+  trigger: <trigger name here>
+  enactments:
+    - Type:
+  Perks:
+```
+
+# reaction
+## Reaction
+
+Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed. For example, you could have a reaction that triggers whenever someone runs towards you, Enacting a healing effect on yourself.
+
+## Rules
+
+*   Can only be used once per round.
+*   Does not cost an action.
+*   Costs 3 Energy to Use.
+*   Always has at least one Trigger (Pick one from the list below, first one is free).
+*   Has at least one Enactment (the first Enactment is free)
+*   Only triggers when the triggering effect happens within 1m of you.
+*   Target of Enactments is overwritten to the character that triggers the Reaction.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Has item dependency | +0 | -1 |
+
+## Triggers
+
+| Description | Add Cost |
+| --- | --- |
+| Someone runs away from you | +2 |
+| Someone runs towards you | +2 |
+| Someone moves past you | +2 |
+| Someone gets healed | +2 |
+| Someone takes damage | +2 |
+| Someone does a skill check | +2 |
+| Someone starts casting an ability | +2 |
+| A turn ends within range | +2 |
+| Someone enters range | +2 |
+| Someone leaves range | +2 |
+| Someone fails a validation | +2 |
+| Someone succeeds on a validation | +2 |
+| Someone becomes affected by an enactment | +2 |
+| You take damage | +2 |
+| You are targeted by an ability | +2 |
+| An ally within range takes damage | +2 |
+| An ally within range gets healed | +2 |
+| Someone is moved by an effect | +2 |
+| A persistent effect triggers | +2 |
+| A minion is summoned within range | +2 |
+
+## Compatible Enactments
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Enact Damage | +1 | +2 |
+| Enact Healing | +1 | +2 |
+| Enact Movement | +0 | +1 |
+| Enact Proficiency Shift | +1 | +2 |
+| Enact Persistent Effect | +2 | +3 |
+
+## Template
+
+```yaml
+ability:
+  type: Reaction
+  range: 1
+  uses: 1
+  has_item_dependency: No # If yes, enter which item
+  energy_cost: 3
+  trigger: <trigger name here>
+  enactments:
+    - Type:
+  Perks:
+```
+
+# damage
+## Enact Damage
+
+Enact Damage allows characters to inflict harm on their enemies.
+
+## Rules
+
+*   **Damage Dice**: The default damage dice is 1d4.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Change Damage Dice to one of your traits | +0 | +3 |
+| Add a flat +1 bonus to the result | +0 | +2 |
+| Add an Offensive Trait Dice to the Damage Dice | +2 | +4 |
+| Will Always Resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+enactments:
+  - type: Enact Damage
+    damage_dice: <dice here>
+    is_optional: False # First enactment is usually mandatory
+    base_enactment_energy_cost: 0 # 0 if first enactment, otherwise 1
+    perks:
+      - description: <Perk Description>
+        add_cost: <Cost>
+        amount: <Amount>
+        total_add_cost: <Total Add Cost>
+        energy_cost: <Total Cost Energy>
+        is_optional: <True/False>
+    interactions:
+      - type:
+          validation:
+```
+
+# healing
+## Enact Healing
+
+Enact Healing abilities allow characters to restore health to themselves or their allies. These abilities can be used to mend wounds, cure ailments, and provide vital support during combat.
+
+## Rules
+
+*   **Healing Dice**: The default healing dice is 1d4.
+*   **Interaction Type**: If the interaction type is Self or Direct, no validation is required.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Change Heal Dice to one of your traits | +0 | +3 |
+| Add a flat +1 bonus to the result | +0 | +2 |
+| Add Medicine Trait Dice to the heal effect | +1 | +3 |
+| Will Always Resolve | +2 | +4 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+enactments:
+  - type: Enact Healing
+    healing_dice: <dice here>
+    is_optional: False
+    base_enactment_energy_cost: 0
+    perks:
+      - description: <Perk Description>
+        add_cost: <Cost>
+        amount: <Amount>
+        total_add_cost: <Total Cost>
+        energy_cost: <Total Cost Energy>
+        is_optional: <True/False>
+    interactions:
+        validation:
+```
+
+# movement
+## Enact Movement
+
+**Enact Movement** abilities allow characters to manipulate the position of themselves or their targets. These abilities can be used to push enemies away, pull allies closer, or reposition oneself strategically. Movement abilities add a dynamic element to gameplay, enabling tactical maneuvers and creative solutions to challenges. Additionally, the **Origin** of the movement can be assigned to an object or another person, allowing for even more creative and strategic uses. For example, you could attach the **Origin** to an arrow or a device, and then use a **Ranged Interaction** to throw it and pull the **Target** towards it.
+
+## Rules
+
+*   **Direction**: The target will move in one direction relative to an origin. Possible directions include Up, Down, Away, Towards, Forward, Left, Right, Free (extra cost).
+*   **Distance**: The target will move 1 meter by default.
+*   **Origin**: The default **Origin** is the **Engager** or item/location from previous enactment.
+*   **Obstacle**: If the Target moves into an obstacle, they take 1d4 damage.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Add another option for the direction | +0 | +1 |
+| Change Origin to something else | +1 | +2 |
+| Change the total movement to any other trait | +0 | +3 |
+| Will Always Resolve | +1 | +3 |
+| Use the result of another roll for this entry | +1 | +3 |
+| Free direction (extra cost) | +1 | +2 |
+
+## Template
+
+```yaml
+enactments:
+  - type: Enact Movement
+    minimal_distance: 1m
+    origin: engager
+    direction_options:
+      - <Direction>
+    is_optional: False
+    base_enactment_energy_cost: 0
+    perks:
+      - description: <Perk Description>
+        add_cost: <Cost>
+        amount: <Amount>
+        total_add_cost: <Total Cost>
+        energy_cost: <Total Cost Energy>
+        is_optional: <True/False>
+    interactions:
+      - type:
+          validation:
+```
+
+# persistent-effect
+## Enact Persistent Effect
+
+The Enact Persistent Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for 2 rounds and triggers at either the start of the target's turn or the end of the engager's turn.
+
+## Rules
+
+*   **Duration**: Lasts 2 rounds by default.
+*   **Trigger Timing**: The effect triggers at either the start of the target's turn or the end of the engager's turn.
+*   **Solutions**: Targets can spend one action to attempt to remove the effect using the provided solution. There must be two solutions, which can be any Trait Roll.
+*   **Applies a Single Enactment**: The persistent effect applies a single other Enactment (e.g., Enact Damage, Enact Healing).
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Remove one Solution option | +1 | +3 |
+| Add another Effect | +2 | +4 |
+| Will Always Resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Effects
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Enact Damage | +1 | +2 |
+| Enact Healing | +1 | +2 |
+| Enact Movement | +0 | +1 |
+| Enact Proficiency Shift | +1 | +2 |
+
+## Template
+
+```yaml
+enactment:
+  - type: Enact Persistent Effect
+    duration: 2 rounds
+    trigger_timing: Start of Target's Turn or The end of the engager's turn.
+    solutions:
+      - Dexterity
+      - Constitution
+    is_optional: True
+    base_enactment_energy_cost: 2
+    effects:
+      - type: <Enactment here type>
+    interactions:
+      - type:
+          validation:
+```
+
+# proficiency-shift
+## Enact Proficiency Shift
+
+**Enact Proficiency Shift** abilities allow characters to temporarily enhance or weaken Traits. These abilities can be used to boost a character's **Proficiency** in a specific area or to hinder an opponent's effectiveness. **Proficiency** **Shifts** add a strategic layer to gameplay, enabling players to adapt to different situations by modifying their strengths and weaknesses.
+
+## Rules
+
+*   **Shift Direction**: Shift a Proficiency Tier from a Trait either up or down.
+*   **Single Use**: The shift only has one use.
+*   **Trait Check**: The next time a Trait check is made with the shifted Trait, you must use the shifted Proficiency.
+*   **Reset**: Using the shifted Proficiency resets the Trait back to its original Proficiency.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| You may choose if you use the Shifted Proficiency or not | +0 | +2 |
+| Will Always Resolve | +2 | +4 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+enactments:
+  - type: Enact Proficiency Shift
+    shifted_trait: <trait here>
+    shift_direction: <UP DOWN or>
+    shift_amount: 1
+    shift_uses: 1
+    is_optional: False
+    base_enactment_energy_cost: 0
+    perks:
+      - description: <Perk Description>
+        add_cost: <Cost>
+        amount: <Amount>
+        total_add_cost: <Total Cost>
+        energy_cost: <Total Cost Energy>
+        is_optional: <True/False>
+    interactions:
+      - type:
+          validation:
+```
+
+# state
+## Enact State
+
+Enact State abilities apply a state or condition to a target (e.g., stunned, poisoned). This enactment type is currently a work in progress.
+
+## Rules
+
+*   **State**: Applies a condition to the target.
+
+## Perks
+
+_No perks available._
+
+## Template
+
+```yaml
+enactments:
+  - type: Enact State
+    state: <state here>
+    is_optional: False
+    base_enactment_energy_cost: 0
+    perks:
+      - description: <Perk Description>
+        add_cost: <Cost>
+        amount: <Amount>
+        total_add_cost: <Total Cost>
+        energy_cost: <Total Cost Energy>
+        is_optional: <True/False>
+```
+
+# area
+## Area
+
+**Area Interactions** encompass actions like bombs, splash potions, and traps. These interactions always have a defined **Radius** and **Range**:
+
+*   **Radius**: This determines the area where the Enactment will take effect.
+*   **Range**: This specifies how far from the user the point of origin is set. By default, the point of origin is 0m from the user.
+
+You can also assign the point of **Origin** to an object, but this must be discussed with the GM beforehand. So you could put the point of **Origin** to an arrow or a device you’ve made. Then use a **Ranged Interaction** to throw it.
+
+## Rules
+
+*   **Validation**: The interaction must have a validation.
+*   **Radius**: The default radius is 1 meter.
+*   **Range**: The default range is 0 meters.
+*   **Origin**: The point of origin for the radius is the engager or item/location from previous enactment.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Change Origin to something else | +1 | +2 |
+| Will always resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+interactions:
+  - type: Area
+    radius: 1m # Default radius for Area interactions
+    range: 0m # Default range for Area interactions
+    origin: Engager # Point of origin is the Engager
+    perks:
+      - description: <insert description of perk here>
+        add_cost: <cost of the perk>
+        amount: <amount of times the perk is chosen>
+        total_add_cost: <total add cost>
+        energy_cost: <energy cost to use>
+        is_optional: <True/False>
+    validation:
+      engagement_roll: <pick an Offensive Trait>
+      counter_roll: <pick two Defensive Traits>
+```
+
+# area-of-effect
+## Area of Effect
+
+An **Area of Effect (AoE)** Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. While an **Area Interaction** might be like a single-use bomb, an **AoE** Interaction is akin to a bomb that detonates every round. Alternatively, it could represent a healing circle, where characters gain health each round they remain within the **AoE**. The possibilities are endless, so get creative!
+
+The effect of the **AoE** does not trigger immediately. Instead, it activates either at the start of a character's turn within the **AoE** or at the end of the **Engager**'s turn.
+
+## Rules
+
+*   **Validation**: The interaction must have a validation.
+*   **Radius**: The default radius is 1 meter.
+*   **Range**: The default range is 0 meters.
+*   **Origin**: The point of origin for the radius is the engager.
+*   **Duration**: The effect lasts for 2 rounds.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Engager is immune to the effect | +0 | +2 |
+| Change Origin to something else | +1 | +2 |
+| Will always resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+interactions:
+  - type: Area of Effect
+    radius: 1m
+    range: 0m
+    origin: Engager
+    duration: 2 rounds
+    immunity: false
+    trigger_conditions:
+      - Entering the Area of Effect
+      - Start of character's turn within the Area of Effect
+    perks:
+      - description: <insert description of perk here>
+        add_cost: <cost of the perk>
+        amount: <amount of times the perk is chosen>
+        total_add_cost: <total add cost>
+        energy_cost: <energy cost to use>
+        is_optional: <True/False>
+    validation:
+      engagement_roll: <pick an Offensive Trait>
+      counter_roll: <pick two Defensive Traits>
+```
+
+# direct
+## Direct
+
+## Rules
+
+*   Has a Validation.
+*   Target is a single character.
+*   Target must be within 1m of your character.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Will always resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+interactions:
+  - type: Direct
+    engager: Self
+    target_amount: 1
+    range: 1m
+    perks:
+      - description: <insert description of perk here>
+        add_cost: <cost of the perk>
+        amount: <amount of times the perk is chosen>
+        total_add_cost: <total add cost of this perk = cost * amount>
+        energy_cost: <energy cost to use>
+        is_optional: <True/False>
+    validation:
+      engagement_roll: <pick an Offensive Trait>
+      counter_roll: <pick two Defensive Traits>
+```
+
+# ranged
+## Ranged
+
+**Ranged** **Interactions** include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to **Direct** Interactions but come with a lower success rate due to a penalty on the **Engagement Roll**. Additionally, the target must not be obstructed or invisible to the **Engager** by default.
+
+## Rules
+
+*   Has a Validation
+*   Target is a single character.
+*   Target must be within 10m of your character.
+*   Target must be visible.
+*   Target must not be obstructed.
+*   Engagement roll result is lowered by 2
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Engagement does not have to be visible | +1 | +3 |
+| Engagement may be obstructed | +1 | +3 |
+| Remove the Engagement Roll Penalty | +1 | +3 |
+| Will always resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+interactions:
+  - type: Ranged
+    engager: Self
+    target_amount: 1
+    range: 10m # Default range for Ranged interactions
+    visibility: Visible # Target must be visible
+    obstruction: Not obstructed # Target must not be obstructed
+    perks:
+      - description: <insert description of perk here>
+        add_cost: <cost of the perk>
+        amount: <amount of times the perk is chosen>
+        total_add_cost: <total add cost>
+        energy_cost: <energy cost to use>
+        is_optional: <True/False>
+    validation:
+      engagement_roll: <pick an Offensive Trait> - 2
+      counter_roll: <pick two Defensive Traits>
+```
+
+# self
+## Self
+
+## Rules
+
+*   Has a Validation
+*   Engager is yourself
+*   Target is yourself
+*   Counter Roll is a d8
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Validation counter roll is replaced by a Generic Dice: d8 | +0 | +2 |
+| Will always resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Template
+
+```yaml
+interactions:
+  - type: Self
+    engager: Self
+    target: Self
+    validation:
+      engagement_roll: Power
+      counter_roll: d8 # d8 is default
+      perks:
+        - description: <Perk Description>
+          add_cost: <Cost>
+          amount: <Amount>
+          total_add_cost: <Total Add Cost>
+          energy_cost: <Total Cost Energy>
+          is_optional: <True/False>
+```
+
+# validations
+## Validations
+
+## Introduction
+
+Here, you'll find the guidelines and options for customizing your **Engagement and Counter Rolls**.
+
+## Rules
+
+*   **Engagement Roll**: This is an Offensive Trait used to initiate actions against a target.
+*   **Counter Roll**: This involves two Defensive Traits, allowing the target to choose how they respond to the attack.
+
+## Engagement Roll Modes
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Offensive Trait by default | +0 | +0 |
+| Engage Roll is replaced by a Generic Roll (default 1d6) | +0 | -2 |
+| Replace the Engagement Roll to any other Trait | +1 | +3 |
+| Use the result of another roll for this entry | +1 | +3 |
+
+## Counter Roll Types
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Defensive Trait (default) | +0 | +0 |
+| Replace one of the Counter Rolls to a General Trait | +0 | +4 |
+| Replace one of the Counter Rolls to an Offensive Trait | +0 | +4 |
+| Use the result of another roll as counter | +1 | +3 |
+
+## Tier Shifts
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Shift Dice Tier of Generic Counter Roll UP | +1 | +3 |
+| Shift Dice Tier of Generic Counter Roll DOWN | +0 | -2 |
+| Shift Dice Tier of Generic Engagement Roll UP | +1 | +3 |
+| Shift Dice Tier of Generic Engagement Roll DOWN | +0 | -2 |
+
+## Template
+
+```yaml
+validation:
+  engagement_roll: <pick an offensive trait>
+  counter_roll: <pick two defensive traits>
+  perks:
+    - description: <insert description of perk here>
+      add_cost: <cost of the perk>
+      amount: <amount of times the perk is chosen>
+      total_add_cost: <total add cost of this perk = cost * amount>
+      energy_cost: <total energy cost>
+      is_optional: <True/False>
+```
+
+# leveling
+## Ability Builder Leveling
+
+## Introduction
+
+As you level up, your character gains a deeper understanding of their powers, techniques, and spells. This growth is represented by **Ability Points**. Ability Points are spent to pay the **Add Cost** of Perks, Enactments, Interactions, and Validations when constructing or upgrading your Abilities.
+
+---
+
+## Ability Points
+
+At Level 1, a character starts with a base pool of Ability Points. As they level up, they gain a steady stream of new points, with larger spikes at milestone levels (Level 5 and Level 10).
+
+These points are permanently invested into your abilities during character creation or level-ups.
+
+### Upgrading Abilities
+
+You do not need to create a brand new Ability every time you level up. You can spend your newly gained Ability Points to upgrade an existing Ability by adding new Perks, extending its Range, or attaching additional Enactments.
+
+### Refunding Ability Points
+
+Some Perks in the Ability Builder apply drawbacks or restrictions to an Ability (such as giving it an Item Dependency or increasing its Action Cost). These Perks have a **negative Add Cost**. Taking these drawbacks refunds Ability Points, allowing you to spend them elsewhere on the same Ability to make it more powerful
+
+## Example Progression
+
+If you build a simple "Fireball" at **Level 1**, you might spend 4 of your 10 starting points on it, leaving 6 points for a defensive Reaction ability.
+
+By **Level 5**, you will have earned 11 additional Ability Points. You could spend 6 of those new points to add an Area of Effect Interaction to your Fireball and increase its damage dice, transforming it from a basic projectile into a massive explosion.
+
+## Leveling Table: Ability Points
+
+| Level | Points Gained | Total Ability Points |
+| --- | --- | --- |
+|  | **1** | +0 |
+|  | **2** | +2 |
+|  | **3** | +3 |
+|  | **4** | +2 |
+|  | **5** | +4 |
+|  | **6** | +2 |
+|  | **7** | +3 |
+|  | **8** | +2 |
+|  | **9** | +3 |
+|  | **10** | +5 |
+| --- |  |  |
+
+# negation
+## Enact Negation
+
+Enact Negation allows characters to reduce incomming damage by default by 1d4. This can also be used to remove an Persistant Effect.
+
+## Rules
+
+*   **Negate Dice**: The default Negate roll is 1d4.
+*   **Remove Persistant Effect**: Make the Negation roll, the damage of the persistant effect is reduced by this value. If the Negate roll is higher or equal then the Persistant Effect is removed.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Change Negation Dice to one of your traits | +0 | +3 |
+| Add a flat +1 bonus to the result | +0 | +2 |
+| Add an Defensive Trait Dice to the Negation Dice | +2 | +4 |
+| Will Always Resolve | +3 | +5 |
+| Use the result of another roll for this entry | +1 | +3 |
+| The Negation is applied to the counter roll instead | +2 | +4 |
+| The Ability hits the Enageger instead (Engager must roll the Counter roll) | +2 | +4 |
+
+## Template
+
+```yaml
+enactments:
+  - type: Enact Damage
+    damage_dice: <dice here>
+    is_optional: False # First enactment is usually mandatory
+    base_enactment_energy_cost: 0 # 0 if first enactment, otherwise 1
+    perks:
+      - description: <Perk Description>
+        add_cost: <Cost>
+        amount: <Amount>
+        total_add_cost: <Total Add Cost>
+        energy_cost: <Total Cost Energy>
+        is_optional: <True/False>
+    interactions:
+      - type:
+          validation:
+```
+
+# culture
+## Culture
+
 ## The Accepted Worldview
 
 For most civilizations, the world is believed to be **flat and enclosed**.
@@ -511,7 +1430,9 @@ The world does not sit _inside_ a globe.
 
 It lies on the **outside of an infinite sphere**, beneath a sky that lies, in a universe far larger — and far less comforting — than anyone was prepared to accept.
 
-# World
+# world
+## World
+
 ## Universes
 
 Reality consists of **multiple universes**.
@@ -772,7 +1693,9 @@ Worlds do not orbit.
 
 Worlds **interact**, **align**, and sometimes **become one**.
 
-# Curses
+# curses
+## Curses
+
 In the world of SAS, a **curse is not a supernatural judgment or imposed effect**.  
 A curse is a **natural abnormality** — comparable to a birth defect, genetic disorder, chronic illness, or degenerative disease.
 
@@ -925,7 +1848,9 @@ A curse is:
 
 > **The world responding honestly to a flawed Resonance Signature.**
 
-# Imbuing
+# imbuing
+## Imbuing
+
 ## Imbuing
 
 **Imbuing** is the act of permanently altering an object by imprinting it with a **Resonance Signature**.
@@ -1052,7 +1977,9 @@ In some cases, an improperly imbued object may act as a **vector for curse‑lik
 
 ---
 
-# Magic System
+# magic-system
+## Magic System
+
 Designing a believable magic system is difficult, especially when the goal is to ground it in a reality that feels internally consistent and understandable.  
 The goal of the SAS magic system is to make interaction with the world feel **systematic rather than mystical**.
 
@@ -1111,7 +2038,7 @@ Below is a schematic representation of an iron atom. The outer ring represents i
 
 - [ ] TODO: Insert explanation of why there are exactly seven Mantles per atom
 
-![Iron atom with Mantles](api/images/uqoLWSjCrCGN/image.png)
+![Iron atom with Mantles](api/images/mZLxxsD7CEYX/image.png)
 
 To interact with the Mantles of an atom, a Aggregate must generate Resonance Slices that match the material’s Response Profile. This requires precision and sustained concentration.
 
@@ -1136,7 +2063,7 @@ Resonance Signatures are emitted passively and continuously. Because of this, th
 
 A Resonance Signature can be visualized as a three-dimensional wave:
 
-![Resonance Signature](api/images/jylOjtR0i2OI/image.png)
+![Resonance Signature](api/images/dyMQhULhGsN8/image.png)
 
 Each slice of the wave represents a Resonance Slice.
 
@@ -1165,7 +2092,7 @@ Response Profiles describe how Mantles will react when stimulated.
 
 Example Response Profile for wood:
 
-![Wood Response Profile](api/images/Gzf7YvySBosc/image.png)
+![Wood Response Profile](api/images/V4mrVYQmvH6d/image.png)
 
 Each slice again represents a Resonance Slice.  
 In this example, the slice at **4** corresponds to heat.
@@ -1181,11 +2108,11 @@ Mantles react only to specific slices.
 
 Resonance Slices are visualized as waves. For example, water may respond to a wave like this:
 
-![Water Resonance Slice](api/images/E2M4jBQHR9la/image.png)
+![Water Resonance Slice](api/images/gnWN8hs7HDEz/image.png)
 
 Electricity, however, may require a completely different wave pattern:
 
-![Electric Resonance Slice](api/images/3FNiboYdiHW9/image.png)
+![Electric Resonance Slice](api/images/zNRnYym5VSrH/image.png)
 
 Exact matches are impossible. Interaction relies on _sufficient_ alignment rather than perfect resonance.
 
@@ -1212,878 +2139,3 @@ It exists entirely as a self-sustaining structure of Mantles.
 ## Cursed
 
 _(To be expanded)_
-
-# Ability Builder
-
-## Introduction
-
-The **Ability Builder** is the core system used to create actions, maneuvers, spells, techniques, and special effects. Rather than relying on predefined spell lists or class-locked abilities, this system allows abilities to be **constructed from modular components** with clearly defined rules and costs.
-
-An Ability represents a **single intentional action** taken by a character. What that action does, who it affects, how it is resolved, and under which conditions it succeeds are all explicitly defined by the components chosen during creation.
-
-Abilities are built from the following core elements:
-
-*   **Enactments** — define _what happens_ (damage, healing, movement, shifts, persistent effects, etc.).
-*   **Interactions** — define _how and to whom_ the Enactments are applied (self, direct, ranged, area, or area of effect).
-*   **Validations** — define _if and how_ the Enactments succeed or fail.
-*   **Rules and Perks** — modify default behavior, allowing abilities to break or bend standard limitations at a defined cost.
-
-Every Ability must contain **at least one Enactment**. Additional Enactments may be added to create more complex effects, which are resolved **in sequence**. Each Enactment is evaluated independently unless explicitly overridden by a Perk.
-
-The Ability Builder is intentionally **system-agnostic** with regard to flavor. A fireball, a sword technique, a healing prayer, or a mechanical trap are all created using the same underlying rules. The narrative description of an Ability is left to the player and GM, while the mechanical behavior remains explicit and predictable.
-
-## Costs
-
-Rules are free, but to apply perks there is a cost. The first cost is the **Add Cost** to add the Perk. Each level you gain **Ability Points** that can be spent to create abilities.
-
-Then there is the **Energy Cost**. This cost is used to use your ability. Sometimes you do not have enough energy to use your ability. In this system it is allowed to still use your ability, but there is a catch: either you take damage equal to the amount of energy you are missing, or you only partially use your ability.
-
-## Additional Enactments
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Adding an additional Enactment beyond the first | +1 | +1 |
-
-# Execution
-
-Execution is the most basic form for an Ability. It is simply the: "I want to do this now" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
-
-## Rules
-
-*   **Enactments**: Has at least one Enactment (the first Enactment is free)
-*   **Actions**: Costs 2 Actions to use
-*   **Energy**: Costs 3 Energy to use
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Has item dependency | +0 | -1 |
-
-## Compatible Enactments
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Enact Damage | +1 | +2 |
-| Enact Healing | +1 | +2 |
-| Enact Movement | +0 | +1 |
-| Enact Proficiency Shift | +1 | +2 |
-| Enact Persistent Effect | +2 | +3 |
-
-## Template
-
-```yaml
-ability:
-  type: Execution
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
-  action_cost: 2
-  enactments:
-    - Type:
-  perks:
-```
-
-# Minion
-
-Minions are entities that players can create, summon, and control. They have default stats and actions, and can use Enactments created by the user if the appropriate perk is selected. Minions follow specific rules within the action economy.
-
-## Rules
-
-*   Minions have their own turn in the action economy.
-*   Minions can perform one action per turn.
-*   Minions have default stats: Health, Attack, Defense, Speed, Lifetime.
-*   Minions can be summoned once per encounter.
-*   Minions require a summoning cost (e.g., energy, mana).
-*   Minions can be controlled by the player during their turn.
-*   Minions can be dismissed by the player as a free action.
-*   Minions have a default lifetime of 3 rounds.
-
-## Default Stats
-
-| Stat | Value |
-| --- | --- |
-| Health | 10 |
-| Attack | 2d6 |
-| Defense | 1d6 |
-| Speed | 5m |
-| Lifetime | 3 rounds |
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Has item dependency | +0 | -1 |
-
-## Compatible Enactments
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Enact Damage | +1 | +2 |
-| Enact Healing | +1 | +2 |
-| Enact Movement | +0 | +1 |
-| Enact Proficiency Shift | +1 | +2 |
-| Enact Persistent Effect | +2 | +3 |
-
-# Phase
-
-Phases are a state or passive ability that lasts for a predefined amount of time. They exist to buff or nerf someone for a specific number of rounds. A Phase lasts for a few rounds, after which the Reverse Phase starts and lasts just as long as the original phase did.
-
-## Rules
-
-*   Costs 3 Energy to Use.
-*   After activation, Phase is active for 2 rounds.
-*   Phase ends at the start of the 2nd turn of the character.
-*   When Phase ends, the Reverse Phase starts.
-*   During the Reverse Phase, no new Phases can be started for the character.
-*   Phase will have an Enactment assigned to it.
-*   The Enactment can be triggered as a free action at the end of the character's turn.
-*   Reverse Phase will have a Bad Enactment assigned to it.
-*   Bad Enactment will be applied to the character.
-*   Bad Enactment must be used at the end of the character's turn as a free action.
-*   If no Bad Enactment is chosen, the Bad Enactment will be the reverse of the original Enactment.
-*   Phase has a knockout requirement.
-*   If any knockout requirement is met, the Phase ends (and the "Bad Enactment" starts).
-*   The Reverse Phase cannot be cancelled by the knockout.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| All knockout requirements have to be met | +0 | +3 |
-| Knockout can be used on the reverse phase | +0 | +3 |
-| No knockout possible | +0 | +5 |
-| Has item dependency | +0 | -1 |
-
-## Knockout Requirements
-
-| Description | Add Cost |
-| --- | --- |
-| None | +0 |
-| You take damage | +0 |
-| You fall unconscious | +0 |
-| You die | +0 |
-| You get grabbed or restrained | +0 |
-| You move voluntarily | +0 |
-| You are moved by another effect | +0 |
-| You fail a validation | +0 |
-| You use another phase | +0 |
-| You lose line of sight to target | +0 |
-| Target moves out of range | +0 |
-| Target falls unconscious | +0 |
-| Target dies | +0 |
-| Target succeeds on a counter roll | +0 |
-| Phase duration expires | +0 |
-| You run out of energy | +0 |
-
-## Compatible Enactments
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Enact Damage | +1 | +2 |
-| Enact Healing | +1 | +2 |
-| Enact Proficiency Shift | +1 | +2 |
-
-## Template
-
-```yaml
-ability:
-  type: Phase
-  phase_duration: 2 rounds
-  reverse_phase_duration: 2 rounds
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
-  enactments:
-    - Type:
-  Perks:
-```
-
-# Preparation
-
-Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation must cost an action to prepare.
-
-## Rules
-
-*   Can only be used once per round.
-*   Costs 2 actions.
-*   Costs 3 Energy to Use.
-*   Always has at least one Trigger (Pick one from the list below, first one is free).
-*   Has at least one Enactment (the first Enactment is free)
-*   Only triggers when the triggering effect happens within 1m of you.
-*   Target of Enactments is overwritten to the character that triggers the Reaction.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Has item dependency | +0 | -1 |
-
-## Triggers
-
-_No triggers available._
-
-## Compatible Enactments
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Enact Damage | +1 | +2 |
-| Enact Healing | +1 | +2 |
-| Enact Movement | +0 | +1 |
-| Enact Proficiency Shift | +1 | +2 |
-| Enact Persistent Effect | +2 | +3 |
-
-## Template
-
-```yaml
-ability:
-  type: Preparation
-  range: 1
-  uses: 1
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
-  action_cost: 2
-  trigger: <trigger name here>
-  enactments:
-    - Type:
-  Perks:
-```
-
-# Reaction
-
-Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else (or you) does something. When the trigger happens, the linked Enactment is executed.
-
-## Rules
-
-*   Can only be used once per round.
-*   Does not cost an action.
-*   Costs 3 Energy to Use.
-*   Always has at least one Trigger (Pick one from the list below, first one is free).
-*   Has at least one Enactment (the first Enactment is free)
-*   Only triggers when the triggering effect happens within 1m of you.
-*   Target of Enactments is overwritten to the character that triggers the Reaction.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Has item dependency | +0 | -1 |
-
-## Triggers
-
-| Description | Add Cost |
-| --- | --- |
-| Someone runs away from you | +2 |
-| Someone runs towards you | +2 |
-| Someone moves past you | +2 |
-| Someone gets healed | +2 |
-| Someone takes damage | +2 |
-| Someone does a skill check | +2 |
-| Someone starts casting an ability | +2 |
-| A turn ends within range | +2 |
-| Someone enters range | +2 |
-| Someone leaves range | +2 |
-| Someone fails a validation | +2 |
-| Someone succeeds on a validation | +2 |
-| Someone becomes affected by an enactment | +2 |
-| You take damage | +2 |
-| You are targeted by an ability | +2 |
-| An ally within range takes damage | +2 |
-| An ally within range gets healed | +2 |
-| Someone is moved by an effect | +2 |
-| A persistent effect triggers | +2 |
-| A minion is summoned within range | +2 |
-
-## Compatible Enactments
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Enact Damage | +1 | +2 |
-| Enact Healing | +1 | +2 |
-| Enact Movement | +0 | +1 |
-| Enact Proficiency Shift | +1 | +2 |
-| Enact Persistent Effect | +2 | +3 |
-
-## Template
-
-```yaml
-ability:
-  type: Reaction
-  range: 1
-  uses: 1
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
-  trigger: <trigger name here>
-  enactments:
-    - Type:
-  Perks:
-```
-
-# Enact Damage
-
-Enact Damage abilities allow characters to inflict harm on their enemies.
-
-## Rules
-
-*   **Damage Dice**: The default damage dice is 1d4.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Change Damage Dice to one of your traits | +0 | +3 |
-| Add a flat +1 bonus to the result | +0 | +2 |
-| Add an Offensive Trait Dice to the Damage Dice | +2 | +4 |
-| Will Always Resolve | +3 | +5 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-enactments:
-  - type: Enact Damage
-    damage_dice: <dice here>
-    is_optional: False # First enactment is usually mandatory
-    base_enactment_energy_cost: 0 # 0 if first enactment, otherwise 1
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Add Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-      - type:
-          validation:
-```
-
-# Enact Healing
-
-Enact Healing abilities allow characters to restore health to themselves or their allies.
-
-## Rules
-
-*   **Healing Dice**: The default healing dice is 1d4.
-*   **Interaction Type**: If the interaction type is Self or Direct, no validation is required.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Change Heal Dice to one of your traits | +0 | +3 |
-| Add a flat +1 bonus to the result | +0 | +2 |
-| Add Medicine Trait Dice to the heal effect | +1 | +3 |
-| Will Always Resolve | +2 | +4 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-enactments:
-  - type: Enact Healing
-    healing_dice: <dice here>
-    is_optional: False
-    base_enactment_energy_cost: 0
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-        validation:
-```
-
-# Enact Movement
-
-Enact Movement abilities allow characters to manipulate the position of themselves or their targets. Movement abilities add a dynamic element to gameplay, enabling tactical maneuvers and creative solutions to challenges.
-
-## Rules
-
-*   **Direction**: The target will move in one direction relative to an origin. Possible directions include Up, Down, Away, Towards, Forward, Left, Right, Free (extra cost).
-*   **Distance**: The target will move 1 meter by default.
-*   **Origin**: The default origin is the engager or item/location from previous enactment.
-*   **Obstacle**: If the target moves into an obstacle, they take 1d4 damage.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Add another option for the direction | +0 | +1 |
-| Change Origin to something else | +1 | +2 |
-| Change the total movement to any other trait | +0 | +3 |
-| Will Always Resolve | +1 | +3 |
-| Use the result of another roll for this entry | +1 | +3 |
-| Free direction (extra cost) | +1 | +2 |
-
-## Template
-
-```yaml
-enactments:
-  - type: Enact Movement
-    minimal_distance: 1m
-    origin: engager
-    direction_options:
-      - <Direction>
-    is_optional: False
-    base_enactment_energy_cost: 0
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-      - type:
-          validation:
-```
-
-# Enact Persistent Effect
-
-The Enact Persistent Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for 2 rounds and triggers at either the start of the target's turn or the end of the engager's turn.
-
-## Rules
-
-*   **Duration**: Lasts 2 rounds by default.
-*   **Trigger Timing**: The effect triggers at either the start of the target's turn or the end of the engager's turn.
-*   **Solutions**: Targets can spend one action to attempt to remove the effect using the provided solution. There must be two solutions, which can be any Trait Roll.
-*   **Applies a Single Enactment**: The persistent effect applies a single enactment (e.g., Enact Damage, Enact Healing).
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Remove one Solution option | +1 | +3 |
-| Add another Effect | +2 | +4 |
-| Will Always Resolve | +3 | +5 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Effects
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Enact Damage | +1 | +2 |
-| Enact Healing | +1 | +2 |
-| Enact Movement | +0 | +1 |
-| Enact Proficiency Shift | +1 | +2 |
-
-## Template
-
-```yaml
-enactment:
-  - type: Enact Persistent Effect
-    duration: 2 rounds
-    trigger_timing: Start of Target's Turn or The end of the engager's turn.
-    solutions:
-      - Dexterity
-      - Constitution
-    is_optional: True
-    base_enactment_energy_cost: 2
-    effects:
-      - type: <Enactment here type>
-    interactions:
-      - type:
-          validation:
-```
-
-# Enact Proficiency Shift
-
-Enact Proficiency Shift abilities allow characters to temporarily enhance or weaken Traits.
-
-## Rules
-
-*   **Shift Direction**: Shift a Proficiency Tier from a Trait either up or down.
-*   **Single Use**: The shift only has one use.
-*   **Trait Check**: The next time a Trait check is made with the shifted Trait, you must use the shifted Proficiency.
-*   **Reset**: Using the shifted Proficiency resets the Trait back to its original Proficiency.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| You may choose if you use the Shifted Proficiency or not | +0 | +2 |
-| Will Always Resolve | +2 | +4 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-enactments:
-  - type: Enact Proficiency Shift
-    shifted_trait: <trait here>
-    shift_direction: <UP DOWN or>
-    shift_amount: 1
-    shift_uses: 1
-    is_optional: False
-    base_enactment_energy_cost: 0
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-      - type:
-          validation:
-```
-
-# Enact State
-
-Enact State abilities apply a state or condition to a target (e.g., stunned, poisoned). This enactment type is currently a work in progress.
-
-## Rules
-
-*   **State**: Applies a condition to the target.
-
-## Perks
-
-_No perks available._
-
-## Template
-
-```yaml
-enactments:
-  - type: Enact State
-    state: <state here>
-    is_optional: False
-    base_enactment_energy_cost: 0
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-```
-
-# Area
-
-Area Interactions encompass actions like bombs, splash potions, and traps. These interactions always have a defined **Radius** and **Range**:
-
-*   **Radius**: This determines the area where the Enactment will take effect.
-*   **Range**: This specifies how far from the user the point of origin is set. By default, the point of origin is 0m from the user.
-
-## Rules
-
-*   **Validation**: The interaction must have a validation.
-*   **Radius**: The default radius is 1 meter.
-*   **Range**: The default range is 0 meters.
-*   **Origin**: The point of origin for the radius is the engager or item/location from previous enactment.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Change Origin to something else | +1 | +2 |
-| Will always resolve | +3 | +5 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-interactions:
-  - type: Area
-    radius: 1m # Default radius for Area interactions
-    range: 0m # Default range for Area interactions
-    origin: Engager # Point of origin is the Engager
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait>
-      counter_roll: <pick two Defensive Traits>
-```
-
-# Area of Effect
-
-An Area of Effect (AoE) Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. While an Area Interaction might be like a single-use bomb, an AoE Interaction is akin to a bomb that detonates every round.
-
-The effect of the AoE does not trigger immediately. Instead, it activates either at the start of a character's turn within the AoE or at the end of the Engager's turn.
-
-## Rules
-
-*   **Validation**: The interaction must have a validation.
-*   **Radius**: The default radius is 1 meter.
-*   **Range**: The default range is 0 meters.
-*   **Origin**: The point of origin for the radius is the engager.
-*   **Duration**: The effect lasts for 2 rounds.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Engager is immune to the effect | +0 | +2 |
-| Change Origin to something else | +1 | +2 |
-| Will always resolve | +3 | +5 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-interactions:
-  - type: Area of Effect
-    radius: 1m
-    range: 0m
-    origin: Engager
-    duration: 2 rounds
-    immunity: false
-    trigger_conditions:
-      - Entering the Area of Effect
-      - Start of character's turn within the Area of Effect
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait>
-      counter_roll: <pick two Defensive Traits>
-```
-
-# Direct
-
-## Rules
-
-*   Has a Validation.
-*   Target is a single character.
-*   Target must be within 1m of your character.
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Will always resolve | +3 | +5 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-interactions:
-  - type: Direct
-    engager: Self
-    target_amount: 1
-    range: 1m
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost of this perk = cost * amount>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait>
-      counter_roll: <pick two Defensive Traits>
-```
-
-# Ranged
-
-Ranged Interactions include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to Direct Interactions but come with a lower success rate due to a penalty on the Engagement Roll.
-
-## Rules
-
-*   Has a Validation
-*   Target is a single character.
-*   Target must be within 10m of your character.
-*   Target must be visible.
-*   Target must not be obstructed.
-*   Engagement roll result is lowered by 2
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Engagement does not have to be visible | +1 | +3 |
-| Engagement may be obstructed | +1 | +3 |
-| Remove the Engagement Roll Penalty | +1 | +3 |
-| Will always resolve | +3 | +5 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-interactions:
-  - type: Ranged
-    engager: Self
-    target_amount: 1
-    range: 10m # Default range for Ranged interactions
-    visibility: Visible # Target must be visible
-    obstruction: Not obstructed # Target must not be obstructed
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait> - 2
-      counter_roll: <pick two Defensive Traits>
-```
-
-# Self
-
-## Rules
-
-*   Has a Validation
-*   Engager is yourself
-*   Target is yourself
-*   Counter Roll is a d8
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Validation counter roll is replaced by a Generic Dice: d8 | +0 | +2 |
-| Will always resolve | +3 | +5 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Template
-
-```yaml
-interactions:
-  - type: Self
-    engager: Self
-    target: Self
-    validation:
-      engagement_roll: Power
-      counter_roll: d8 # d8 is default
-      perks:
-        - description: <Perk Description>
-          add_cost: <Cost>
-          amount: <Amount>
-          total_add_cost: <Total Add Cost>
-          energy_cost: <Total Cost Energy>
-          is_optional: <True/False>
-```
-
-# Validations
-
-## Introduction
-
-Here, you'll find the guidelines and options for customizing your engagement and counter rolls.
-
-## Rules
-
-*   **Engagement Roll**: This is an Offensive Trait used to initiate actions against a target.
-*   **Counter Roll**: This involves two Defensive Traits, allowing the target to choose how they respond to the attack.
-
-## Engagement Roll Modes
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Offensive Trait by default | +0 | +0 |
-| Engage Roll is replaced by a Generic Roll (default 1d6) | +0 | -2 |
-| Replace the Engagement Roll to any other Trait | +1 | +3 |
-| Use the result of another roll for this entry | +1 | +3 |
-
-## Counter Roll Types
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Defensive Trait (default) | +0 | +0 |
-| Replace one of the Counter Rolls to a General Trait | +0 | +4 |
-| Replace one of the Counter Rolls to an Offensive Trait | +0 | +4 |
-| Use the result of another roll as counter | +1 | +3 |
-
-## Tier Shifts
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Shift Dice Tier of Generic Counter Roll UP | +1 | +3 |
-| Shift Dice Tier of Generic Counter Roll DOWN | +0 | -2 |
-| Shift Dice Tier of Generic Engagement Roll UP | +1 | +3 |
-| Shift Dice Tier of Generic Engagement Roll DOWN | +0 | -2 |
-
-## Template
-
-```yaml
-validation:
-  engagement_roll: <pick an offensive trait>
-  counter_roll: <pick two defensive traits>
-  perks:
-    - description: <insert description of perk here>
-      add_cost: <cost of the perk>
-      amount: <amount of times the perk is chosen>
-      total_add_cost: <total add cost of this perk = cost * amount>
-      energy_cost: <total energy cost>
-      is_optional: <True/False>
-```
-
-# Leveling
-
-## Introduction
-
-As your character progresses through the world, they will gain levels. Leveling up represents your character's growth, allowing them to improve their Traits, increase their Vital stats, and become more capable in both combat and roleplay.
-
-The maximum level a character can reach is Level 10.
-
----
-
-## Trait Points
-
-Trait Points are used to upgrade your Proficiency Levels in various Traits.
-
-### Starting Trait Points
-
-At Level 1, your base Trait Points are calculated based on the total number of Traits used in your specific campaign setting.
-
-For the standard 22-Trait setting, you would receive 8 Trait Points at Level 1.
-
-### Gaining and Refunding Points
-
-By the time you level up, you gain additional Trait Points as outlined in the leveling table below.
-
-You can also dynamically gain Trait Points by lowering your Proficiency.
-
----
-
-## Leveling Table: Trait Points
-
-| Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
-| --- | --- | --- |
-| **1** | +0 | 8 |
-| **2** | +1 | 9 |
-| **3** | +1 | 10 |
-| **4** | +1 | 11 |
-| **5** | +2 | 13 |
-| **6** | +1 | 14 |
-| **7** | +1 | 15 |
-| **8** | +1 | 16 |
-| **9** | +1 | 17 |
-| **10** | +2 | 19 |
----
-
-## Leveling Table: Ability Points
-
-| Level | Points Gained | Total Ability Points |
-| --- | --- | --- |
-| **1** | +0 | 10 |
-| **2** | +2 | 12 |
-| **3** | +3 | 15 |
-| **4** | +2 | 17 |
-| **5** | +4 | 21 |
-| **6** | +2 | 23 |
-| **7** | +3 | 26 |
-| **8** | +2 | 28 |
-| **9** | +3 | 31 |
-| **10** | +5 | 36 |
----
-
-## Proficiency Tiers
-
-| Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Clumsy | 1 | d4 | d4 | d4 | 8 | 3 | 5 |
-| Untrained | 1 | d6 | d6 | d6 | 12 | 4 | 8 |
-| Trained | 1 | d8 | d8 | d8 | 16 | 5 | 12 |
-| Expert | 1 | d10 | d10 | d10 | 20 | 6 | 16 |
-| Master | 1 | d12 | d12 | d12 | 24 | 7 | 20 |
-| banana | 1 | &#43;3 | &#43;3 | &#43;3 | 25 | 12 | 70 |
-| Legendary | 0 | d20 | d20 | d20 | 28 | 8 | 25 |

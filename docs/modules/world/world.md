@@ -1,4 +1,6 @@
-# World
+# world
+## World
+
 ## Universes
 
 Reality consists of **multiple universes**.

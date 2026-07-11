@@ -1,4 +1,6 @@
-# Imbuing
+# imbuing
+## Imbuing
+
 ## Imbuing
 
 **Imbuing** is the act of permanently altering an object by imprinting it with a **Resonance Signature**.

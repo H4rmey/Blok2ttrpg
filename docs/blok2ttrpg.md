@@ -1,4 +1,6 @@
-# Blok2ttrpg
+# blok2ttrpg
+## Blok2ttrpg
+
 bla bla bla introduction…
 
 ## uuuuuh:

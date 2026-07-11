@@ -1,4 +1,6 @@
-# Character Traits
+# character-traits
+## Character Traits
+
 ## **Traits**
 
 Character Attributes form the core of your character, while Traits determine the success of your actions. Below are two lists of Traits your character might possess. Depending on the world setting, you may modify some of these Traits.

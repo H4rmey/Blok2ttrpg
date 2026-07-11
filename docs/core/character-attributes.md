@@ -1,4 +1,6 @@
-# Character Attributes
+# character-attributes
+## Character Attributes
+
 ## Attributes
 
 Attributes define a character, situation, or environment by providing specific, factual details. They are not inherently positive or negative, and they can be permanent or temporary. Attributes can be invoked during gameplay to influence outcomes, either positively or negatively.

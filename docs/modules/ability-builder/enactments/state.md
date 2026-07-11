@@ -1,4 +1,5 @@
-# Enact State
+# state
+## Enact State
 
 Enact State abilities apply a state or condition to a target (e.g., stunned, poisoned). This enactment type is currently a work in progress.
 
