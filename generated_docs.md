@@ -281,15 +281,28 @@ You can also dynamically gain Trait Points by lowering your Proficiency. For ins
 
 | Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
 | --- | --- | --- |
-| {{range .Leveling.TraitPoints.Levels}} | **{{.Level}}** | +{{.PointsGained}} |
-| {{end}}--- |  |  |
+| **1** | +0 | 8 |
+| **2** | +1 | 9 |
+| **3** | +1 | 10 |
+| **4** | +1 | 11 |
+| **5** | +2 | 13 |
+| **6** | +1 | 14 |
+| **7** | +1 | 15 |
+| **8** | +1 | 16 |
+| **9** | +1 | 17 |
+| **10** | +2 | 19 |
 
 ## Proficiency Tiers
 
 | Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| {{range .Proficiencies}} | {{.Name}} | {{.Cost}} | {{.Dice.General}} | {{.Dice.Offense}} | {{.Dice.Defense}} | {{index .Vitals "hp"}} | {{index .Vitals "movement"}} |
-| {{end}} |  |  |  |  |  |  |  |
+| Clumsy | 1 | d4 | d4 | d4 | 8 | 3 | 5 |
+| Untrained | 1 | d6 | d6 | d6 | 12 | 4 | 8 |
+| Trained | 1 | d8 | d8 | d8 | 16 | 5 | 12 |
+| Expert | 1 | d10 | d10 | d10 | 20 | 6 | 16 |
+| Master | 1 | d12 | d12 | d12 | 24 | 7 | 20 |
+| banana | 1 | &#43;3 | &#43;3 | &#43;3 | 25 | 12 | 70 |
+| Legendary | 0 | d20 | d20 | d20 | 28 | 8 | 25 |
 
 # multi-dice-system
 ## Multi Dice System
@@ -1208,17 +1221,16 @@ By **Level 5**, you will have earned 11 additional Ability Points. You could spe
 
 | Level | Points Gained | Total Ability Points |
 | --- | --- | --- |
-|  | **1** | +0 |
-|  | **2** | +2 |
-|  | **3** | +3 |
-|  | **4** | +2 |
-|  | **5** | +4 |
-|  | **6** | +2 |
-|  | **7** | +3 |
-|  | **8** | +2 |
-|  | **9** | +3 |
-|  | **10** | +5 |
-| --- |  |  |
+| **1** | +0 | 10 |
+| **2** | +2 | 12 |
+| **3** | +3 | 15 |
+| **4** | +2 | 17 |
+| **5** | +4 | 21 |
+| **6** | +2 | 23 |
+| **7** | +3 | 26 |
+| **8** | +2 | 28 |
+| **9** | +3 | 31 |
+| **10** | +5 | 36 |
 
 # negation
 ## Enact Negation

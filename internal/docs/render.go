@@ -84,7 +84,6 @@ func RenderFullDocumentation(cfg *config.Config) (string, error) {
 		return "", fmt.Errorf("ability_builder.file_order is required")
 	}
 
-	templatedPrefix := filepath.ToSlash(filepath.Clean(DefaultDir())) + "/"
 	listed := make(map[string]bool, len(cfg.AbilityBuilder.FileOrder))
 	data := BuildTemplateData(cfg)
 
@@ -101,16 +100,7 @@ func RenderFullDocumentation(cfg *config.Config) (string, error) {
 			return "", fmt.Errorf("stating %s: %w", clean, err)
 		}
 
-		slash := filepath.ToSlash(clean)
-		var (
-			rendered string
-			rerr     error
-		)
-		if strings.HasPrefix(slash, templatedPrefix) {
-			rendered, rerr = RenderTemplateFile(clean, data)
-		} else {
-			rendered, rerr = RenderStaticFile(clean)
-		}
+		rendered, rerr := RenderDocFile(clean, data)
 		if rerr != nil {
 			return "", rerr
 		}
@@ -172,6 +162,23 @@ func RenderTemplateFile(path string, data TemplateData) (string, error) {
 		return "", fmt.Errorf("executing %s: %w", path, err)
 	}
 	return strings.TrimSpace(out.String()), nil
+}
+
+// RenderDocFile renders a markdown file. If the file contains Go template
+// syntax it is executed against data; otherwise it is returned as-is.
+func RenderDocFile(path string, data TemplateData) (string, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return "", fmt.Errorf("reading %s: %w", path, err)
+	}
+	if !containsTemplateSyntax(raw) {
+		return strings.TrimSpace(string(raw)), nil
+	}
+	return RenderTemplateFile(path, data)
+}
+
+func containsTemplateSyntax(b []byte) bool {
+	return strings.Contains(string(b), "{{") || strings.Contains(string(b), "}}")
 }
 
 func RenderStaticFile(path string) (string, error) {

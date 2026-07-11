@@ -31,5 +31,5 @@ By **Level 5**, you will have earned 11 additional Ability Points. You could spe
 
 | Level | Points Gained | Total Ability Points |
 | --- | --- | --- |
-| {{range .Leveling.AbilityPoints.Levels}} | **{{.Level}}** | +{{.PointsGained}} |
-| {{end}}--- |  |  |
+{{range .Leveling.AbilityPoints.Levels}}| **{{.Level}}** | +{{.PointsGained}} | {{.Total}} |
+{{end}}
