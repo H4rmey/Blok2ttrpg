@@ -25,21 +25,54 @@ Each Proficiency Level is directly tied to its Dice Tier. When referring to dice
 *   Shifting up a **Proficiency Level** means improving to the corresponding Dice Tier (e.g., Trained → Expert).
 *   Shifting down a **Dice Tier** means downgrading to the previous die in the sequence (e.g., d6 → d4).
 *   Shifting down a **Proficiency Level** means downgrading to the corresponding Dice Tier (e.g., Expert → Trained).
+*   You can also state that you can have a **die shift** of -2 (Shifting to tiers down) or a **die shift** of 1 Shifting up one time.
 
 ---
 
-## Rolling Mechanics
+### Trait Checks
 
-Unlike traditional TTRPGs where players roll a **d20** and add modifiers, this system uses **variable dice sizes** instead of modifiers.
+When attempting an action where the outcome is uncertain, the acting character must make a **Trait Check**. Unlike systems that use a d20 and flat modifiers, this system relies entirely on variable Dice Tiers.
 
-When making a Trait Check:
+**1\. The Engagement Roll**
 
-1.  Determine the **Proficiency Level** for the Trait being tested.
-2.  Roll the corresponding **Dice Tier** (e.g., an **Expert roll** uses a **d10**).
-3.  Compare the result to the set difficulty by making an opposing roll.
+The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Trait and rolls the corresponding die (ranging from d4 to d12). This is the **Engagement Roll**.
 
-For example, when making a stealth roll by hiding in the crowd, we roll a d8 because we are trained in stealth. Then the GM either sets a difficulty by picking a number between 1-12 or the GM picks a dice to roll against. When picking a dice the GM could pick a d10 for the difficulty, because it is quite a hard roll. The GM rolls the d10 and the player the d8, the player succeeds when the number is higher or equal to the GM roll.
+**2\. The Counter Roll**
 
-During these this roll the person trying to do the Trait check is called the **Engager**. The roll the **Engager** does is called an **Engagement Roll.** The posing roll is called the **Counter Roll**. If the **Engager** makes a roll against another player, npc, person, cat, dog, wall, cliff, tree, whatever… The thing that is making the **Counter Roll** is called the **Target**.
+The obstacle, creature, or entity the Engager is acting against is called the **Target**. The Target opposes the Engager with a **Counter Roll**, determined by the Game Master in one of two ways:
 
-In the example above the roller of the stealth roll is called the **Engager** and the opposing d10 roll is the **Counter Roll**. The thing you are trying to hide from with stealth is the **Target**.
+*   **Static Difficulty:** The GM sets a fixed difficulty number between 1 and 12.
+*   **Opposed Die:** The GM selects a Dice Tier that represents the Target's resistance (e.g., a d10 for a sturdy vault door, or a d6 for an average guard) and rolls it.
+
+**3\. Resolution**
+
+Compare the Engagement Roll to the Counter Roll (or static difficulty). If the Engager's total is **equal to or higher** than the Target's total, the Trait Check is a Success. Ties always favor the Engager.
+
+> **Example:** You attempt to hide in a bustling market. You are an Expert in Stealth, making you the **Engager** with an Engagement Roll of a d8.
+> 
+> The **Target** is the crowd's general awareness. Because the crowd is thick and distracted, the GM decides it will be an opposed roll using a d6.
+> 
+> You roll a 5. The GM rolls a 5 for the crowd. Because ties favor the Engager, your stealth check is successful.
+
+### Die Overloading
+
+When making an Engagement Roll or Counter Roll, if your die lands on its maximum possible value, you may choose to **Overload** the die.
+
+To Overload, roll the die again, subtract **1** from the new result, and add it to your total.
+
+If this new roll _also_ lands on its maximum value, you may choose to Overload the die a second time. However, the penalty increases with every subsequent roll: the second Overload takes a **\-2**, the third takes a **\-3**, and so on. (Formula: $Roll - (n - 1)$ where $n$ is the current roll number).
+
+> **Example:** You roll a d8 and get an 8. You choose to Overload.
+> 
+> *   **Roll 2:** You roll a 5. Result: `8 + 5 - 1 = 12`.
+> 
+> But what if you roll an 8 on that second roll instead?
+> 
+> *   **Roll 2:** You roll an 8. Result: `8 + 8 - 1 = 15`. You can stop here, or Overload again.
+> *   **Roll 3:** You roll a 4. Result: `15 + 4 - 2 = 17`.
+
+### Critical Success
+
+When attempting an action, compare your final total against the **Counter Roll**:
+
+*   **Success (4+):** You accomplish what you set out to do.
