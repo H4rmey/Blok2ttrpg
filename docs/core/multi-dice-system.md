@@ -25,11 +25,11 @@ Each Proficiency Level is directly tied to its Dice Tier. When referring to dice
 *   Shifting up a **Proficiency Level** means improving to the corresponding Dice Tier (e.g., Trained → Expert).
 *   Shifting down a **Dice Tier** means downgrading to the previous die in the sequence (e.g., d6 → d4).
 *   Shifting down a **Proficiency Level** means downgrading to the corresponding Dice Tier (e.g., Expert → Trained).
-*   You can also state that you can have a **die shift** of -2 (Shifting to tiers down) or a **die shift** of 1 Shifting up one time.
+*   You can also state that you can have a **die shift** of -2 (Shifting to tiers down) or a **die shift** of +1 Shifting up one time.
 
 ---
 
-### Trait Checks
+### Engagement and Counter Rolls
 
 When attempting an action where the outcome is uncertain, the acting character must make a **Trait Check**. Unlike systems that use a d20 and flat modifiers, this system relies entirely on variable Dice Tiers.
 
@@ -75,4 +75,4 @@ If this new roll _also_ lands on its maximum value, you may choose to Overload t
 
 When attempting an action, compare your final total against the **Counter Roll**:
 
-*   **Success (4+):** You accomplish what you set out to do.
+*   **Critcal Success (4+):** You accomplish what you set out to do.

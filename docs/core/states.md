@@ -67,26 +67,56 @@ When a **State** has impact on your **Traits** they always have a value ranging 
 
 ## Specific States
 
+Below is a list of the specific **States** and what they do.
+
 ### Movement States
 
-*   Standing
-*   Walking
-*   Running
-*   Sitting
-*   Prone
-*   Jumping
-*   Airborne/Flying
-*   Falling
-*   Spinning
-*   Dancing
+*   Prone --> You are knocked on the ground, use one of your actions to get up.
+*   Stunned --> You are stunned, you lose one of your actions.
+*   Dying --> Your HP went below 0, you are out of combat untill revived by an ally.
+*   Charmed --> You must do what the Charmer says.
+*   Aggrivated --> You can only target a preset Target.
+*   Pacified --> You can no longer attack any Target.
+*   Confused --> You indiscriminately target anyone.
+*   Untouchable --> You cannot be targeted by who you choose.
+*   Invinsible --> You cannot be damaged.
+*   Ignored --> You cannot be targeted, but you can still get hit.
+*   Swayed --> You cannot target a preset Target anymore.
+*   Silenced --> You can no longer talk.
+*   Restrained --> You can no longer move or use your arms.
+*   Terrified --> You move 1m away from the target (or take damage).
+*   Weakened --> Damage is halved.
+*   Paralyzed --> Lose your turn.
+*   Disarmed --> You no longer have a weapon.
+*   Linked --> You are linked to a Target, what happens to you happens to the linked Target
+*   Magnetized --> All projectiles go towards you.
+*   Slowed --> Movement speed is halved.
+*   Marked --> Everything that happens to you is buffed or nerfed
+*   Staggered --> You can no longer use Reactions or the Preperation is cancelled
+*   Zombified --> Healing damages instead, Damage heals instead.
+*   Doomed --> You will move to Dying in x turns.
+*   Fatigued --> Energy cost of abilities is upgraded by 1.
+*   Energized --> Energy cost of abilities is reduces by 1.
+*   Hesitant --> Engegement Roll must be rolled twice.
+*   Enraged --> You can no longer use weapons.
+*   Anchored --> You can no longer move.
+*   Fragile --> Damage is doubled.
+*   Incorporeal --> Phase through walls.
+*   Isolated --> You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent.
+*   Vengeful --> You can only target the last entity that dealt damage to you.
+*   Distracted --> If you change your current target to a new one, your attack action automatically fails.
+*   Stubborn --> You cannot repeat the same action or use the same ability two turns in a row.
+*   Insane --> At the start of your turn, roll a dice to determine if you attack, skip your turn, or hit yourself.
+*   Hypnotized --> You mimic the exact movement and action of the person who hypnotized you on their last turn.
+*   Stifled --> Your hands are bound; you cannot use items, potions, or consumables from your inventory
+*   Encumbered --> You are carrying too much; every action you take costs double the usual resource stamina.
+*   Broken Gear --> Rolls for this gear is reduced by one die shift.
+*   Amplified Gear --> Rolls of rhti gear is upgraded by one die shift.
+*   Delayed --> You move down on in the turn order
+*   Hastened --> You move up one in the turn order
+*   Echoed --> What ever action you tool last round will be executed autmatically next round
+*   Cursed --> 
+*   Blessed --> die shifts down are converted to die shifts up.
+*   Paranoid --> you refuse help from anyone
+*   Deafened --> you can no longer listen
 
-### Activity States
-
-*   Building/Crafting
-*   Blocking
-*   Healing
-*   Damaging
-*   Singing
-*   Acting
-*   Stealthing
-and more to list
