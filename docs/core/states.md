@@ -21,6 +21,7 @@ Some states do have a specific definition, rulesets or traits that they apply to
 
 ### List of General States
 
+
 *   Blinded
 *   Deafened
 *   Broken
