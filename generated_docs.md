@@ -1,4 +1,4 @@
-- [x] general combat page
+ - [x] general combat page
  - [ ] states verder uitwerken
  - [x] state enactment verder uitwerken
  - [ ] minion implementation

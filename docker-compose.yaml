@@ -3,12 +3,18 @@ services:
     build: .
     container_name: ability-builder
     ports:
-      - "8080:8080"
+      - "4040:8080"
     volumes:
       - ./config:/app/config
       - ./data:/app/data
       - ./docs:/app/docs
     environment:
-      - PORT=8080
       - ABILITY_BUILDER_CONFIG=/app/config/ability-builder.yaml
     restart: unless-stopped
+    networks:
+      - proxynet
+
+networks:
+  proxynet:
+    external: true
+    name: global_network
