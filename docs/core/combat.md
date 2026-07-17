@@ -9,7 +9,7 @@ Rolling for initiative is done by rolling your perception + movement. PC's go be
 
 ### Turns and Actions
 
-On your turn you get three actions. By default you have {<{ .Combat.Actions.Amount }>} of actions. How much actions an ability costs can may differ. 
+On your turn you get three actions. By default you have {{ .Combat.Actions.Amount }} of actions. How much actions an ability costs can may differ. 
 
 ### Movement
 
