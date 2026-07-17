@@ -5,12 +5,19 @@ ability_builder:
   # Paths are relative to the ability-builder module root.
   # The list must be exhaustive: every .md file under ./docs/ must appear exactly once.
   file_order:
+    - ./docs/TODO.md
     - ./docs/blok2ttrpg.md
     - ./docs/core/character-attributes.md
     - ./docs/core/character-traits.md
+    - ./docs/core/dice-rolling.md
+    - ./docs/core/combat.md
+    - ./docs/core/states.md
+    - ./docs/core/abilities.md
+    - ./docs/core/items.md
+    - ./docs/core/skills.md
     - ./docs/core/leveling.md
-    - ./docs/core/multi-dice-system.md
     - ./docs/modules/ability-builder/introduction.md
+    - ./docs/modules/ability-builder/guide.md
     - ./docs/modules/ability-builder/ability-types/execution.md
     - ./docs/modules/ability-builder/ability-types/minion.md
     - ./docs/modules/ability-builder/ability-types/phase.md

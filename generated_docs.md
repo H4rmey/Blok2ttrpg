@@ -1,3 +1,13 @@
+- [x] general combat page
+ - [ ] states verder uitwerken
+ - [x] state enactment verder uitwerken
+ - [ ] minion implementation
+ - [ ] misschien geen skill trees, want states zijn best lit
+ - [ ] premade abilities --> teleport, message etc...
+ - [ ] premade items
+ - [ ] create simple guide on how to make abilities
+ - [ ] Concentration rules
+
 # blok2ttrpg
 ## Blok2ttrpg
 
@@ -248,6 +258,244 @@ By the time you level up, you gain additional Trait Points. You can also gain Tr
 | Movement | 3 | 4 | 5 | 6 | 7 | 8 |
 | Energy | 3 | 4 | 5 | 6 | 7 | 8 |
 
+# dice-rolling
+## Dice Rolling
+
+## Introduction
+
+The dice system used in this system consists of six different dice: **d4, d6, d8, d10, d12, and d20**. These dice are categorized into **Dice Tiers** (1-6), each corresponding to a **Proficiency Level**:
+
+| Proficiency | Dice |
+| --- | --- |
+| Clumsy | d4 |
+| Untrained | d6 |
+| Trained | d8 |
+| Expert | d10 |
+| Master | d12 |
+| Legendary | d20 |
+
+---
+
+## Dice Tier Mechanics
+
+Each Proficiency Level is directly tied to its Dice Tier. When referring to dice rolls:
+
+*   A **Trained Roll** refers to rolling a **d8**.
+*   Shifting up a **Dice Tier** means upgrading to the next die in the sequence (e.g., d8 → d10).
+*   Shifting up a **Proficiency Level** means improving to the corresponding Dice Tier (e.g., Trained → Expert).
+*   Shifting down a **Dice Tier** means downgrading to the previous die in the sequence (e.g., d6 → d4).
+*   Shifting down a **Proficiency Level** means downgrading to the corresponding Dice Tier (e.g., Expert → Trained).
+*   You can also state that you can have a **die shift** of -2 (Shifting to tiers down) or a **die shift** of +1 Shifting up one time.
+
+---
+
+### Engagement and Counter Rolls
+
+When attempting an action where the outcome is uncertain, the acting character must make a **Trait Check**. Unlike systems that use a d20 and flat modifiers, this system relies entirely on variable Dice Tiers.
+
+**1\. The Engagement Roll**
+
+The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Trait and rolls the corresponding die (ranging from d4 to d12). This is the **Engagement Roll**.
+
+**2\. The Counter Roll**
+
+The obstacle, creature, or entity the Engager is acting against is called the **Target**. The Target opposes the Engager with a **Counter Roll**, determined by the Game Master in one of two ways:
+
+*   **Static Difficulty:** The GM sets a fixed difficulty number between 1 and 12.
+*   **Opposed Die:** The GM selects a Dice Tier that represents the Target's resistance (e.g., a d10 for a sturdy vault door, or a d6 for an average guard) and rolls it.
+
+**3\. Resolution**
+
+Compare the **Engagement Roll** to the **Counter Roll** (or static difficulty). If the **Engager's** total is **equal to or higher** than the Target's total, the Trait Check is a Success. Ties always favor the Engager.
+
+> **Example:** You attempt to hide in a bustling market. You are an Expert in Stealth, making you the **Engager** with an Engagement Roll of a d8.
+> 
+> The **Target** is the crowd's general awareness. Because the crowd is thick and distracted, the GM decides it will be an opposed roll using a d6.
+> 
+> You roll a 5. The GM rolls a 5 for the crowd. Because ties favor the Engager, your stealth check is successful.
+
+### Die Overloading
+
+When making an **Engagement Roll** or **Counter Roll**, if your die lands on its maximum possible value, you may choose to **Overload** the die.
+
+To **Overload**, roll the die again, subtract **1** from the new result, and add it to your total.
+
+If this new roll _also_ lands on its maximum value, you may choose to **Overload** the die a second time. However, the penalty increases with every subsequent roll: the second Overload takes a **\-2**, the third takes a **\-3**, and so on. (Formula: $Roll - (n - 1)$ where $n$ is the current roll number).
+
+> **Example:** You roll a d8 and get an 8. You choose to Overload.
+> 
+> *   **Roll 2:** You roll a 5. Result: `8 + 5 - 1 = 12`.
+> 
+> But what if you roll an 8 on that second roll instead?
+> 
+> *   **Roll 2:** You roll an 8. Result: `8 + 8 - 1 = 15`. You can stop here, or Overload again.
+> *   **Roll 3:** You roll a 4. Result: `15 + 4 - 2 = 17`.
+
+### Critical Success/Fail
+
+When attempting an action, compare your final total against the **Counter Roll** if the **Engagement Roll** is 4 or higher than the **Counter Roll** then it is a **Critcal Success**. If it is 4 or lower it is a **Critical Fail**. A **Critical Success/Fail** can mean multiple things. But that truly depends on what type of roll you get critical success or fail. This is described per category, and if it is not specified the DM will have to get creative :).
+
+### Group Rolls
+
+When doing a group roll such as Stealth. Everybody rolls a their die. 
+
+Count the successes/fails:
+**Critical Succes**: +2
+**Succes**: +1
+**Fail**: -1
+**Critical Fail**: -2
+
+The total of the roll must be **zero or above** in order to succeed. If the final result is **4 or higher**, the group **Critically Succeeds**.
+
+The idea is that when someone in the group fails. the other PC's can still aid the PC that failed the roll. 
+
+### Aid/Help
+
+You can choose to help someone on a **Trait Check**. This uses the same rules as a **Group Roll**. But only the people aiding and the PC making the **Trait Check** have to roll. **Aiding/Helping** someone can also be done after noticing the PC making the **Trait Check** has failed.
+
+# combat
+## Combat
+
+Combat works as most other ttrpg's, there is a type of grid where each square represents 1m. We have initiative rolls, actions, movement and all the other good stuff. Most of it is very basic so i won't go into to much detail. 
+
+### Initiative
+
+Rolling for initiative is done by rolling your perception + movement. PC's go before NPC's when equal values are rolled. PC's will discuess between themselfs when they roll an equal roll.
+
+### Turns and Actions
+
+On your turn you get three actions. By default you have {<{ .Combat.Actions.Amount }>} of actions. How much actions an ability costs can may differ. 
+
+### Movement
+
+Movement costs one action; it is fully allowed to just keep using actions just to move, however each subsequent movement action costs 1 energy extra (this stacks between turns).So moving 3 times in a row will cost 0 + 1 + 2 = 3 Energy.
+
+### Attacking/Healing/Doing
+
+Oppenents are not willing to get hit by your attacks/abilities. That is why when attacking an opponent you make an **Attack Roll** to a **Target**. In the chapter about [Dice Rolling](dice-rolling.md) We already dicussed Engegement Rolls and Counter Rolls. An **Attack Roll** is a type of **Engegment Roll**.
+
+When Attacking/Healing/Prepping/Anythinging you always first roll what the result will be if you succeed. Afterwards you make the **Engegement Rolls** and **Counter Rolls**.
+
+# States.md
+
+## States
+
+**States** can either boost or limit your character. They can either be a collection of nerf/buffs to your **Traits**, have some special properties or be a combination of both. 
+
+We seperate them into two groups: **General States** and **Specific States**.
+
+**General States**: States that are flexible in their use. They only **Shift** a collection of Traits up or down by x amount. For example, Blinded, Encumbered, Encouraged or Frightened.
+
+**Specific States**: States that impact something other then the Traits, like action economie or character behaviour. For example: When you are stunned you lose one of your actions. When you are Taunted, you may only attack one preset Target.
+
+When a **State** has impact on your **Traits** they always have a value ranging from -6 to +6 representing **Die Shifts** in your **Traits**. So each States shifts x amount of traits in your character a y amount. This can either be temporary or permanent, depending on how the **State** was applied and what was discussed with the DM. 
+
+> **Example:** Your character gets **Blinded** by a flash of light because you failed a **Counter Roll**. The DM tells you that you are now **Blinded -2**. You now have **-2 Die Shift** on **Offensive Presicion Rolls** and **Defensive Reflex Rolls**. The DM now rules that you will be blinded for 2 rounds.
+
+> [!NOTE]
+> As the number and type of **Traits** can differ between games, the DM or group may need to tweak what a state applies to. For example, in some games you may not have a **Crafting Trait**. Because it is highly encouraged to create your own list of **Traits**, We cannot make a clear definition of what does what. Adding to that, i also won't list what **States** do exactly what, because that highly depends on the scenario. The Amount of States you have in a game might also differ quite a lot from game to game. If your game, does not have a "Magic" component, then the whole list of **States** will have to be re-created for that. There is also the issue that **States** are not always aplicable to all scenario's. 
+
+> **Example:** You are Frightened can be either you are scared in the dark or you have are afraid of public speaking. 
+
+> **Example:** Being Encumbered might is a state that applies to all movement type traits but also strength. As you carry to much you also do not have any strength left to lift anything else, it will therefor also impact your Offensive power stat. At least that is how i would maybe rule it, but another DM/group, might not agree. It is also highly depended on how you are Encumbered. So the removal method might change depended on the situation.
+
+## Specific States
+
+Below is a list of the specific **States** and what they do. Note that i will not list what **Traits** they target, that is up to the DM to decide and is depended on the situation.
+
+### Targeting & Perception Mechanics
+
+| Status Condition | In-Game Effect (Player POV) |
+| :--- | :--- |
+| **Taunted** | You can only target a preset Target. |
+| **Swayed** | You cannot target a preset Target anymore. |
+| **Untouchable** | You cannot be targeted |
+| **Ignored** | You cannot be targeted, but you can still get hit. |
+| **Confused** | You indiscriminately target anyone. |
+| **Vengeful** | You can only target the last entity that dealt damage to you. |
+| **Distracted** | If you change your current target to a new one, your rolls will shift one down for that new  target |
+| **Isolated** | You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent. |
+| **Magnetized** | All projectiles go towards you. |
+
+### Mind Control & Behavioral Constraints
+
+| Status Condition | In-Game Effect (Player POV) |
+| :--- | :--- |
+| **Charmed** | You must do what the Charmer says. |
+| **Hypnotized** | You mimic the exact movement and action of the person who hypnotized you on their last turn. |
+| **Stubborn** | You cannot repeat the same action or use the same ability two turns in a row. |
+| **Paranoid** | You refuse help from anyone. |
+| **Insane** | At the start of your turn, roll a die (d4) to determine if you attack an ally, attack an opponent, skip your turn, or hit yourself. |
+
+### Action & Ability Inhibitors
+
+| Status Condition | In-Game Effect (Player POV) |
+| :--- | :--- |
+| **Stunned** | You are stunned; you lose one of your actions. |
+| **Paralyzed** | Lose your turn. |
+| **Pacified** | You can no longer attack any Target. |
+| **Enraged** | You can no longer use weapons. |
+| **Disarmed** | You no longer have a weapon. |
+| **Silenced** | You can no longer talk. |
+| **Deafened** | You can no longer listen. |
+| **Stifled** | Your hands are bound; you cannot use items, potions, or consumables from your inventory. |
+| **Staggered** | You can no longer use Reactions or your Preparation is cancelled. |
+
+### Movement & Positioning
+
+| Status Condition | In-Game Effect (Player POV) |
+| :--- | :--- |
+| **Prone** | You are knocked on the ground; use one of your actions to get up. |
+| **Anchored** | You can no longer move. |
+| **Restrained** | You can no longer use your hands. |
+| **Slowed** | Movement speed shifted one down. |
+| **Terrified** | You move 1m away from the target (or take 1d4 damage). |
+
+### Dice & Stats Modifications
+
+| Status Condition | In-Game Effect (Player POV) |
+| :--- | :--- |
+| **Weakened** | Damaging rolls are shifted one die down. |
+| **Fragile** | Engager that targets you, may shift their damage die by +1. |
+| **Cursed** | Die shifts up are converted to die shifts down. |
+| **Blessed** | Die shifts down are converted to die shifts up. |
+| **Hesitant** | Your Engagement Roll must be rolled twice. |
+| **Broken Gear** | Rolls for this gear are reduced by one die shift. |
+| **Amplified Gear** | Rolls for this gear are upgraded by one die shift. |
+
+### Energy & Resource Manipulation
+
+| Status Condition | In-Game Effect (Player POV) |
+| :--- | :--- |
+| **Fatigued** | Energy cost of abilities is increased by 1. |
+| **Energized** | Energy cost of abilities is reduced by 1. |
+
+### Time & Round Economy
+
+| Status Condition | In-Game Effect (Player POV) |
+| :--- | :--- |
+| **Delayed** | You move down one in the turn order. |
+| **Hastened** | You move up one in the turn order. |
+| **Echoed** | Whatever action you took last round will be executed automatically next round. |
+
+### Health, Death & Reality Alterations
+
+| Status Condition | In-Game Effect (Player POV) |
+| :--- | :--- |
+| **Dying** | Your HP went below 0; you are out of combat until revived by an ally. |
+| **Doomed** | You will move to Dying in x turns. |
+| **Invincible** | You cannot be damaged. |
+| **Zombified** | Healing damages instead; Damage heals instead. |
+| **Linked** | You are linked to a Target; what happens to you happens to the linked Target. This links per Trait. |
+| **Incorporeal** | Phase through walls. |
+| **Marked** | Everything that happens to you is buffed or nerfed (pick one). |
+
+# items
+## Items
+
+# skills
+## Skills
+
 # leveling
 ## Leveling
 
@@ -281,74 +529,30 @@ You can also dynamically gain Trait Points by lowering your Proficiency. For ins
 
 | Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
 | --- | --- | --- |
-| **1** | +0 | 8 |
-| **2** | +1 | 9 |
-| **3** | +1 | 10 |
-| **4** | +1 | 11 |
-| **5** | +2 | 13 |
-| **6** | +1 | 14 |
-| **7** | +1 | 15 |
-| **8** | +1 | 16 |
-| **9** | +1 | 17 |
-| **10** | +2 | 19 |
+|  | **1** | +0 |
+|  | **2** | +1 |
+|  | **3** | +1 |
+|  | **4** | +1 |
+|  | **5** | +2 |
+|  | **6** | +1 |
+|  | **7** | +1 |
+|  | **8** | +1 |
+|  | **9** | +1 |
+|  | **10** | +2 |
+| --- |  |  |
 
 ## Proficiency Tiers
 
 | Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Clumsy | 1 | d4 | d4 | d4 | 8 | 3 | 5 |
-| Untrained | 1 | d6 | d6 | d6 | 12 | 4 | 8 |
-| Trained | 1 | d8 | d8 | d8 | 16 | 5 | 12 |
-| Expert | 1 | d10 | d10 | d10 | 20 | 6 | 16 |
-| Master | 1 | d12 | d12 | d12 | 24 | 7 | 20 |
-| banana | 1 | &#43;3 | &#43;3 | &#43;3 | 25 | 12 | 70 |
-| Legendary | 0 | d20 | d20 | d20 | 28 | 8 | 25 |
-
-# multi-dice-system
-## Multi Dice System
-
-## Introduction
-
-The dice system used in this game consists of six different dice: **d4, d6, d8, d10, d12, and d20**. These dice are categorized into **Dice Tiers** (1-6), each corresponding to a **Proficiency Level**:
-
-| Proficiency | Dice |
-| --- | --- |
-| Clumsy | d4 |
-| Untrained | d6 |
-| Trained | d8 |
-| Expert | d10 |
-| Master | d12 |
-| Legendary | d20 |
-
----
-
-## Dice Tier Mechanics
-
-Each Proficiency Level is directly tied to its Dice Tier. When referring to dice rolls:
-
-*   A **Trained Roll** refers to rolling a **d8**.
-*   Shifting up a **Dice Tier** means upgrading to the next die in the sequence (e.g., d8 → d10).
-*   Shifting up a **Proficiency Level** means improving to the corresponding Dice Tier (e.g., Trained → Expert).
-*   Shifting down a **Dice Tier** means downgrading to the previous die in the sequence (e.g., d6 → d4).
-*   Shifting down a **Proficiency Level** means downgrading to the corresponding Dice Tier (e.g., Expert → Trained).
-
----
-
-## Rolling Mechanics
-
-Unlike traditional TTRPGs where players roll a **d20** and add modifiers, this system uses **variable dice sizes** instead of modifiers.
-
-When making a Trait Check:
-
-1.  Determine the **Proficiency Level** for the Trait being tested.
-2.  Roll the corresponding **Dice Tier** (e.g., an **Expert roll** uses a **d10**).
-3.  Compare the result to the set difficulty by making an opposing roll.
-
-For example, when making a stealth roll by hiding in the crowd, we roll a d8 because we are trained in stealth. Then the GM either sets a difficulty by picking a number between 1-12 or the GM picks a dice to roll against. When picking a dice the GM could pick a d10 for the difficulty, because it is quite a hard roll. The GM rolls the d10 and the player the d8, the player succeeds when the number is higher or equal to the GM roll.
-
-During these this roll the person trying to do the Trait check is called the **Engager**. The roll the **Engager** does is called an **Engagement Roll.** The posing roll is called the **Counter Roll**. If the **Engager** makes a roll against another player, npc, person, cat, dog, wall, cliff, tree, whatever… The thing that is making the **Counter Roll** is called the **Target**.
-
-In the example above the roller of the stealth roll is called the **Engager** and the opposing d10 roll is the **Counter Roll**. The thing you are trying to hide from with stealth is the **Target**.
+|  | Clumsy | 1 | d4 | d4 | d4 | 8 | 3 |
+|  | Untrained | 1 | d6 | d6 | d6 | 12 | 4 |
+|  | Trained | 1 | d8 | d8 | d8 | 16 | 5 |
+|  | Expert | 1 | d10 | d10 | d10 | 20 | 6 |
+|  | Master | 1 | d12 | d12 | d12 | 24 | 7 |
+|  | banana | 1 | &#43;3 | &#43;3 | &#43;3 | 25 | 12 |
+|  | Legendary | 0 | d20 | d20 | d20 | 28 | 8 |
+|  |  |  |  |  |  |  |  |
 
 # introduction
 ## Ability Builder
@@ -445,39 +649,7 @@ Minions are entities that players can create, summon, and control. They have def
 ## Rules
 
 *   Minions have their own turn in the action economy.
-*   Minions can perform one action per turn.
-*   Minions have default stats: Health, Attack, Defense, Speed, Lifetime.
-*   Minions can be summoned once per encounter.
-*   Minions require a summoning cost (e.g., energy, mana).
-*   Minions can be controlled by the player during their turn.
-*   Minions can be dismissed by the player as a free action.
-*   Minions have a default lifetime of 3 rounds.
-
-## Default Stats
-
-| Stat | Value |
-| --- | --- |
-| Health | 10 |
-| Attack | 2d6 |
-| Defense | 1d6 |
-| Speed | 5m |
-| Lifetime | 3 rounds |
-
-## Perks
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Has item dependency | +0 | -1 |
-
-## Compatible Enactments
-
-| Description | Energy Cost | Add Cost |
-| --- | --- | --- |
-| Enact Damage | +1 | +2 |
-| Enact Healing | +1 | +2 |
-| Enact Movement | +0 | +1 |
-| Enact Proficiency Shift | +1 | +2 |
-| Enact Persistent Effect | +2 | +3 |
+*   Minions
 
 # phase
 ## Phase
@@ -556,7 +728,7 @@ ability:
 # preparation
 ## Preparation
 
-Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation must cost an action to prepare, but in turn cost far less to use.
+Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation will cost an action to prepare, but in turn cost far less to use.
 
 ## Rules
 
@@ -851,7 +1023,7 @@ enactment:
 # proficiency-shift
 ## Enact Proficiency Shift
 
-**Enact Proficiency Shift** abilities allow characters to temporarily enhance or weaken Traits. These abilities can be used to boost a character's **Proficiency** in a specific area or to hinder an opponent's effectiveness. **Proficiency** **Shifts** add a strategic layer to gameplay, enabling players to adapt to different situations by modifying their strengths and weaknesses.
+**Enact Proficiency Shift** abilities allow characters to temporarily enhance or weaken Traits. These abilities can be used to boost a character's **Proficiency** in a specific area or to hinder an opponent's effectiveness. 
 
 ## Rules
 
@@ -894,7 +1066,7 @@ enactments:
 # state
 ## Enact State
 
-Enact State abilities apply a state or condition to a target (e.g., stunned, poisoned). This enactment type is currently a work in progress.
+Enact State will apply a state to a target (e.g., prone, stunned, charmed). 
 
 ## Rules
 
@@ -1221,21 +1393,22 @@ By **Level 5**, you will have earned 11 additional Ability Points. You could spe
 
 | Level | Points Gained | Total Ability Points |
 | --- | --- | --- |
-| **1** | +0 | 10 |
-| **2** | +2 | 12 |
-| **3** | +3 | 15 |
-| **4** | +2 | 17 |
-| **5** | +4 | 21 |
-| **6** | +2 | 23 |
-| **7** | +3 | 26 |
-| **8** | +2 | 28 |
-| **9** | +3 | 31 |
-| **10** | +5 | 36 |
+|  | **1** | +0 |
+|  | **2** | +2 |
+|  | **3** | +3 |
+|  | **4** | +2 |
+|  | **5** | +4 |
+|  | **6** | +2 |
+|  | **7** | +3 |
+|  | **8** | +2 |
+|  | **9** | +3 |
+|  | **10** | +5 |
+| --- |  |  |
 
 # negation
 ## Enact Negation
 
-Enact Negation allows characters to reduce incomming damage by default by 1d4. This can also be used to remove an Persistant Effect.
+Enact Negation allows characters to reduce incomming damage by default by 1d4. This can also be used to remove a Persistant Effect.
 
 ## Rules
 
