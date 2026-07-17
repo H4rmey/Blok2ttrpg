@@ -1,7 +1,7 @@
 # negation
 ## Enact Negation
 
-Enact Negation allows characters to reduce incomming damage by default by {{.Negate.DefaultDice}}. This can also be used to remove an Persistant Effect.
+Enact Negation allows characters to reduce incomming damage by default by {{.Negate.DefaultDice}}. This can also be used to remove a Persistant Effect.
 
 ## Rules
 
