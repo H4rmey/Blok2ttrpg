@@ -103,6 +103,9 @@ func buildInitialState(a *models.Ability) string {
 		"knockouts":            a.Knockouts,
 		"hp_bonus":             a.HPBonus,
 		"extra_lifetime":       a.ExtraLifetime,
+		"effortless":           a.Effortless,
+		"iron_will":            a.IronWill,
+		"dual_focus":           a.DualFocus,
 		"enactments":           []map[string]interface{}{},
 	}
 	for _, e := range a.Enactments {
@@ -371,6 +374,13 @@ func (app *App) SaveAbilityHandler(w http.ResponseWriter, r *http.Request) {
 		if ks := r.Form["knockout"]; len(ks) > 0 {
 			a.Knockouts = ks
 		}
+	}
+
+	// Concentration-specific fields
+	if a.Type == models.AbilityConcentration {
+		a.Effortless = r.FormValue("effortless") == "on"
+		a.IronWill = r.FormValue("iron_will") == "on"
+		a.DualFocus = r.FormValue("dual_focus") == "on"
 	}
 
 	a.Enactments = parseNewEnactments(r)

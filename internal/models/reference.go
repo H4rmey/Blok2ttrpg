@@ -178,11 +178,21 @@ var PreparationEnactments = []EnactmentType{
 	EnactPersistentEffect,
 }
 
+var ConcentrationEnactments = []EnactmentType{
+	EnactDamage,
+	EnactHealing,
+	EnactMovement,
+	EnactProficiencyShift,
+	EnactPersistentEffect,
+	EnactState,
+}
+
 // CompatibleEnactments maps ability types to their compatible enactment types.
 var CompatibleEnactments = map[AbilityType][]EnactmentType{
-	AbilityExecution:   ExecutionEnactments,
-	AbilityReaction:    ReactionEnactments,
-	AbilityPhase:       PhaseEnactments,
-	AbilityMinion:      MinionEnactments,
-	AbilityPreparation: PreparationEnactments,
+	AbilityExecution:    ExecutionEnactments,
+	AbilityReaction:     ReactionEnactments,
+	AbilityPhase:        PhaseEnactments,
+	AbilityMinion:       MinionEnactments,
+	AbilityPreparation:  PreparationEnactments,
+	AbilityConcentration: ConcentrationEnactments,
 }

@@ -14,7 +14,6 @@ ability_builder:
     - ./docs/core/states.md
     - ./docs/core/abilities.md
     - ./docs/core/items.md
-    - ./docs/core/skills.md
     - ./docs/core/leveling.md
     - ./docs/modules/ability-builder/introduction.md
     - ./docs/modules/ability-builder/guide.md
@@ -23,6 +22,7 @@ ability_builder:
     - ./docs/modules/ability-builder/ability-types/phase.md
     - ./docs/modules/ability-builder/ability-types/preparation.md
     - ./docs/modules/ability-builder/ability-types/reaction.md
+    - ./docs/modules/ability-builder/ability-types/concentration.md
     - ./docs/modules/ability-builder/enactments/damage.md
     - ./docs/modules/ability-builder/enactments/healing.md
     - ./docs/modules/ability-builder/enactments/movement.md
@@ -37,12 +37,18 @@ ability_builder:
     - ./docs/modules/ability-builder/validations.md
     - ./docs/modules/ability-builder/leveling.md
     - ./docs/modules/ability-builder/enactments/negation.md
+    - ./docs/modules/skill-trees.md
     - ./docs/modules/world/culture.md
     - ./docs/modules/world/world.md
     - ./docs/modules/magic-system/curses.md
     - ./docs/modules/magic-system/imbuing.md
     - ./docs/modules/magic-system/magic-system.md
 
+
+  # Combat rules
+  combat:
+    actions:
+      amount: 3
 
   # Core cost rules
   additional_enactment:
@@ -382,6 +388,46 @@ ability_builder:
         - Enact Movement
         - Enact Proficiency Shift
         - Enact Persistent Effect
+
+    concentration:
+      name: "Concentration"
+      description: "An effect that persists over multiple rounds as long as the Engager maintains focus."
+      base_energy: 3
+      base_action: 2
+      base_upkeep_action: 1
+      base_upkeep_energy: 1
+      step_costs:
+        energy:
+          increase:
+            add_cost: -2
+            energy_cost: 1
+          decrease:
+            add_cost: 3
+            energy_cost: -1
+      perks:
+        - id: effortless
+          description: "Upkeep no longer costs an Action or Energy; it just requires focus."
+          add_cost: 3
+          energy_cost: 0
+        - id: iron_will
+          description: "When rolling to maintain Concentration after taking damage, you may shift your Counter Roll up one Dice Tier."
+          add_cost: 2
+          energy_cost: 0
+        - id: dual_focus
+          description: "You can have a second Concentration Ability active, but the upkeep for both doubles."
+          add_cost: 5
+          energy_cost: 0
+        - id: item_dependency
+          description: "Has item dependency"
+          add_cost: -1
+          energy_cost: 0
+      compatible_enactments:
+        - Enact Damage
+        - Enact Healing
+        - Enact Movement
+        - Enact Proficiency Shift
+        - Enact Persistent Effect
+        - Enact State
 
   # Enactment types
   enactments:

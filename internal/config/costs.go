@@ -148,6 +148,32 @@ func (ab *AbilityBuilderConfig) ComputeAbilityCosts(a *models.Ability, values ur
 			energy += (-energySteps) * stepEnergyCost(cfg, "energy", -1)
 			build += (-energySteps) * stepAddCost(cfg, "energy", -1)
 		}
+
+	case models.AbilityConcentration:
+		a.Effortless = values.Get("effortless") == "on"
+		a.IronWill = values.Get("iron_will") == "on"
+		a.DualFocus = values.Get("dual_focus") == "on"
+		if a.Effortless {
+			build += perkAddCost(cfg.Perks, "effortless")
+			energy += perkEnergyCost(cfg.Perks, "effortless")
+		}
+		if a.IronWill {
+			build += perkAddCost(cfg.Perks, "iron_will")
+			energy += perkEnergyCost(cfg.Perks, "iron_will")
+		}
+		if a.DualFocus {
+			build += perkAddCost(cfg.Perks, "dual_focus")
+			energy += perkEnergyCost(cfg.Perks, "dual_focus")
+		}
+		energySteps := atoi(values.Get("energy_steps"))
+		a.EnergySteps = energySteps
+		if energySteps > 0 {
+			energy += energySteps * stepEnergyCost(cfg, "energy", 1)
+			build += energySteps * stepAddCost(cfg, "energy", 1)
+		} else if energySteps < 0 {
+			energy += (-energySteps) * stepEnergyCost(cfg, "energy", -1)
+			build += (-energySteps) * stepAddCost(cfg, "energy", -1)
+		}
 	}
 
 	a.BuildCost = build

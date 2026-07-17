@@ -64,6 +64,17 @@ func ToYAML(a *models.Ability) string {
 	case models.AbilityMinion:
 		b.WriteString(fmt.Sprintf("  health: %d\n", 10+a.HPBonus*5))
 		b.WriteString(fmt.Sprintf("  lifetime: %d rounds\n", 3+a.ExtraLifetime))
+	case models.AbilityConcentration:
+		b.WriteString("  upkeep: 1 Action or 1 Energy\n")
+		if a.Effortless {
+			b.WriteString("  effortless: true\n")
+		}
+		if a.IronWill {
+			b.WriteString("  iron_will: true\n")
+		}
+		if a.DualFocus {
+			b.WriteString("  dual_focus: true\n")
+		}
 	}
 
 	if len(a.Enactments) > 0 {

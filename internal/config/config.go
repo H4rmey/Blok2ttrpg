@@ -29,6 +29,17 @@ type AbilityBuilderConfig struct {
 	Proficiencies       []ProficiencyConfig          `json:"proficiencies" yaml:"proficiencies"`
 	Leveling            LevelingConfig               `json:"leveling" yaml:"leveling"`
 	Dice                DiceConfig                   `json:"dice" yaml:"dice"`
+	Combat              CombatConfig                 `json:"combat" yaml:"combat"`
+}
+
+// CombatConfig holds global combat rules.
+type CombatConfig struct {
+	Actions CombatActions `json:"actions" yaml:"actions"`
+}
+
+// CombatActions defines the action economy defaults.
+type CombatActions struct {
+	Amount int `json:"amount" yaml:"amount"`
 }
 
 // CostDefinition is a simple add/energy cost pair.
@@ -57,6 +68,8 @@ type AbilityTypeConfig struct {
 	BaseReverseDuration   int                  `json:"base_reverse_duration,omitempty" yaml:"base_reverse_duration,omitempty"`
 	BaseHealth            int                  `json:"base_health,omitempty" yaml:"base_health,omitempty"`
 	BaseLifetime          int                  `json:"base_lifetime,omitempty" yaml:"base_lifetime,omitempty"`
+	BaseUpkeepAction      int                  `json:"base_upkeep_action,omitempty" yaml:"base_upkeep_action,omitempty"`
+	BaseUpkeepEnergy      int                  `json:"base_upkeep_energy,omitempty" yaml:"base_upkeep_energy,omitempty"`
 	RangeCost             CostDefinition       `json:"range_cost,omitempty" yaml:"range_cost,omitempty"`
 	UsesCost              CostDefinition       `json:"uses_cost,omitempty" yaml:"uses_cost,omitempty"`
 	DurationCost          CostDefinition       `json:"duration_cost,omitempty" yaml:"duration_cost,omitempty"`

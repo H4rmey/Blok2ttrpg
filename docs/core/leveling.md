@@ -31,12 +31,11 @@ You can also dynamically gain Trait Points by lowering your Proficiency. For ins
 
 | Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
 | --- | --- | --- |
-| {{range .Leveling.TraitPoints.Levels}} | **{{.Level}}** | +{{.PointsGained}} |
-| {{end}}--- |  |  |
-
+{{range .Leveling.TraitPoints.Levels}}| **{{.Level}}** | +{{.PointsGained}} | {{.Total}} |
+{{end}}
 ## Proficiency Tiers
 
 | Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| {{range .Proficiencies}} | {{.Name}} | {{.Cost}} | {{.Dice.General}} | {{.Dice.Offense}} | {{.Dice.Defense}} | {{index .Vitals "hp"}} | {{index .Vitals "movement"}} |
-| {{end}} |  |  |  |  |  |  |  |
+{{range .Proficiencies}}| {{.Name}} | {{.Cost}} | {{.Dice.General}} | {{.Dice.Offense}} | {{.Dice.Defense}} | {{index .Vitals "hp"}} | {{index .Vitals "movement"}} | {{index .Vitals "energy"}} |
+{{end}}

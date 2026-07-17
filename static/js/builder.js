@@ -90,6 +90,8 @@
       inner = renderMinionCard(data, cfg);
     } else if (type === 'Preparation') {
       inner = renderPreparationCard(data, cfg);
+    } else if (type === 'Concentration') {
+      inner = renderConcentrationCard(data, cfg);
     } else {
       inner = '<p class="text-yellow-400">Unknown ability type: '+esc(type)+'</p>';
     }
@@ -275,6 +277,40 @@
       '</div>',
       breakdown(),
     ].join('\n');
+  }
+
+  function renderConcentrationCard(d, cfg) {
+    d = d || {};
+    cfg = cfg || {};
+    var itemWrap = d.item_dep ? '' : 'hidden';
+    return [
+      '<h3 class="text-md font-semibold text-indigo-400">Ability Type — Concentration</h3>',
+      overview(false),
+      '<p class="text-xs text-gray-400">A Concentration Ability persists for multiple rounds. At the start of each of your turns you must pay the upkeep cost ('+esc(cfg.base_upkeep_action||1)+' Action or '+esc(cfg.base_upkeep_energy||1)+' Energy) or the ability ends.</p>',
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+        stepSelect('energy_steps', 'Energy ±', [-2,-1,0,1,2], d.energy_steps || 0, stepCostFn(cfg, 'energy')),
+        itemDepCheckbox(d.item_dep, perkCost(cfg.perks, 'item_dependency')),
+      '</div>',
+      '<div data-wrap="item-name" '+itemWrap+'>',
+        '<label class="block text-xs text-gray-400 mb-1">Item Name</label>',
+        '<input type="text" name="item_name" id="ability_item_name" value="'+esc(d.item_name||'')+'" placeholder="e.g. Crystal Focus" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white text-sm">',
+      '</div>',
+      '<div class="space-y-1">',
+        '<div class="text-xs text-gray-400 uppercase">Concentration Perks</div>',
+        perkCheckbox('effortless', 'Effortless (upkeep is free)', d.effortless, perkCost(cfg.perks, 'effortless')),
+        perkCheckbox('iron_will', 'Iron Will (shift counter roll up on damage)', d.iron_will, perkCost(cfg.perks, 'iron_will')),
+        perkCheckbox('dual_focus', 'Dual Focus (allow a second Concentration)', d.dual_focus, perkCost(cfg.perks, 'dual_focus')),
+      '</div>',
+      breakdown(),
+    ].join('\n');
+  }
+
+  function perkCheckbox(name, label, value, cost) {
+    var suffix = cost ? costSuffix(cost.add, cost.energy) : '';
+    return '<label class="flex items-center gap-2 text-sm text-gray-300">'+
+      '<input type="checkbox" name="'+esc(name)+'" onchange="recalcAll()" '+checked(value)+' class="rounded bg-gray-700 border-gray-600">'+
+      esc(label)+suffix+
+    '</label>';
   }
 
   function knockoutList(values, cfg) {
@@ -1426,6 +1462,16 @@
       if (hp > 0)   { build += hp * hpCost.add_cost; energy += hp * hpCost.energy_cost; lines.push('Increase health by '+(hp*5)+' (add '+(hp*hpCost.add_cost)+')'); }
       if (life > 0) { build += life * lifeCost.add_cost; energy += life * lifeCost.energy_cost; lines.push('Increase lifetime by '+life+' rounds (add '+(life*lifeCost.add_cost)+', energy '+(life*lifeCost.energy_cost)+')'); }
       setOut(card, 'formula', 'Minion: '+(10+hp*5)+' HP, '+(3+life)+' round lifetime');
+    }
+    if (card.querySelector('[name="effortless"]')) {
+      var eff = findPerk(cfg.perks, 'effortless');
+      if (eff && readBool(card, 'effortless')) { build += eff.add_cost || 0; energy += eff.energy_cost || 0; lines.push('Effortless (add '+(eff.add_cost||0)+', energy '+(eff.energy_cost||0)+')'); }
+      var iw = findPerk(cfg.perks, 'iron_will');
+      if (iw && readBool(card, 'iron_will')) { build += iw.add_cost || 0; energy += iw.energy_cost || 0; lines.push('Iron Will (add '+(iw.add_cost||0)+', energy '+(iw.energy_cost||0)+')'); }
+      var df = findPerk(cfg.perks, 'dual_focus');
+      if (df && readBool(card, 'dual_focus')) { build += df.add_cost || 0; energy += df.energy_cost || 0; lines.push('Dual Focus (add '+(df.add_cost||0)+', energy '+(df.energy_cost||0)+')'); }
+      var upkeep = (cfg.base_upkeep_action||1) + ' Action or ' + (cfg.base_upkeep_energy||1) + ' Energy per turn';
+      setOut(card, 'formula', 'Concentration, upkeep: '+upkeep);
     }
 
     setOut(card, 'resolve', 'No');

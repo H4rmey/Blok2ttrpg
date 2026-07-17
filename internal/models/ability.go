@@ -4,11 +4,12 @@ package models
 type AbilityType string
 
 const (
-	AbilityExecution   AbilityType = "Execution"
-	AbilityReaction    AbilityType = "Reaction"
-	AbilityPhase       AbilityType = "Phase"
-	AbilityMinion      AbilityType = "Minion"
-	AbilityPreparation AbilityType = "Preparation"
+	AbilityExecution    AbilityType = "Execution"
+	AbilityReaction     AbilityType = "Reaction"
+	AbilityPhase        AbilityType = "Phase"
+	AbilityMinion       AbilityType = "Minion"
+	AbilityPreparation  AbilityType = "Preparation"
+	AbilityConcentration AbilityType = "Concentration"
 )
 
 // AllAbilityTypes lists all available ability types.
@@ -18,6 +19,7 @@ var AllAbilityTypes = []AbilityType{
 	AbilityPhase,
 	AbilityMinion,
 	AbilityPreparation,
+	AbilityConcentration,
 }
 
 // Ability represents a complete ability built from components.
@@ -57,6 +59,11 @@ type Ability struct {
 	// Minion fields
 	HPBonus       int `json:"hp_bonus,omitempty" yaml:"-"`
 	ExtraLifetime int `json:"extra_lifetime,omitempty" yaml:"-"`
+
+	// Concentration fields
+	Effortless bool `json:"effortless,omitempty" yaml:"-"`
+	IronWill   bool `json:"iron_will,omitempty" yaml:"-"`
+	DualFocus  bool `json:"dual_focus,omitempty" yaml:"-"`
 
 	Enactments []Enactment `json:"enactments" yaml:"enactments"`
 }

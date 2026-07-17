@@ -364,7 +364,7 @@ Rolling for initiative is done by rolling your perception + movement. PC's go be
 
 ### Turns and Actions
 
-On your turn you get three actions. By default you have {<{ .Combat.Actions.Amount }>} of actions. How much actions an ability costs can may differ. 
+On your turn you get three actions. By default you have 3 of actions. How much actions an ability costs can may differ. 
 
 ### Movement
 
@@ -490,11 +490,38 @@ Below is a list of the specific **States** and what they do. Note that i will no
 | **Incorporeal** | Phase through walls. |
 | **Marked** | Everything that happens to you is buffed or nerfed (pick one). |
 
+# abilities
+## Abilities
+
+Abilities are the main source of interactions in combat. They can also be used as tools during other types of gameplay. This page will list some **predefined abilities** and some **Specialized Abilities**.
+
+## Predefined Abilities
+
+This page will list some predefined abilities that players and DM's can use to create their character. While there is an Ability Builder system that can be used. Sometimes people do not want to use it or they want a quick lookup for an ability. The abilitis listed here are all created in the Ability Builder.
+
+### Ability List
+
+## Specialized Abilities 
+
+While the Ability Builder is perfect for creating fireballs, sword strikes, and healing spells using standard Enactments, some concepts are too abstract, vague, or narrative-driven to fit into the Ability Builder system.
+
+Abilities like Message, Mind Reading, or Illusion often lack hard numbers. Predefined Abilities solve this by providing a conceptual base effect with hardcoded rules and a dedicated list of Perks to upgrade them.
+
+### Specialized Abilities List
+
 # items
 ## Items
 
-# skills
-## Skills
+Items are physical objects that characters can use to aid them in combat, exploration, or roleplay. They range from simple tools and weapons to Imbued artifacts that hold complex Abilities.
+
+In the Ability Builder, you can often select the **Has item dependency** perk, which reduces the Ability's Add Cost by 1. This means the Ability is physically tied to the item—if the item is dropped, stolen, or broken, the character can no longer use the Ability.
+Item Categories
+
+## Item Categories
+
+**Equipment (Weapons & Armor):** Items that grant a passive Die Shift to specific Traits while equipped. For example, a well-crafted sword might grant a +1 Die Shift to Offensive Power rolls, while heavy armor might grant a +1 Die Shift to Defensive Constitution rolls but a -1 Die Shift to Stealth.
+
+**Consumables:** Single-use items like potions, bombs, or rations. These often trigger an Area Interaction or Direct Interaction with a predefined Enactment (like Enact Healing).
 
 # leveling
 ## Leveling
@@ -529,30 +556,28 @@ You can also dynamically gain Trait Points by lowering your Proficiency. For ins
 
 | Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
 | --- | --- | --- |
-|  | **1** | +0 |
-|  | **2** | +1 |
-|  | **3** | +1 |
-|  | **4** | +1 |
-|  | **5** | +2 |
-|  | **6** | +1 |
-|  | **7** | +1 |
-|  | **8** | +1 |
-|  | **9** | +1 |
-|  | **10** | +2 |
-| --- |  |  |
+| **1** | +0 | 8 |
+| **2** | +1 | 9 |
+| **3** | +1 | 10 |
+| **4** | +1 | 11 |
+| **5** | +2 | 13 |
+| **6** | +1 | 14 |
+| **7** | +1 | 15 |
+| **8** | +1 | 16 |
+| **9** | +1 | 17 |
+| **10** | +2 | 19 |
 
 ## Proficiency Tiers
 
 | Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Clumsy | 1 | d4 | d4 | d4 | 8 | 3 |
-|  | Untrained | 1 | d6 | d6 | d6 | 12 | 4 |
-|  | Trained | 1 | d8 | d8 | d8 | 16 | 5 |
-|  | Expert | 1 | d10 | d10 | d10 | 20 | 6 |
-|  | Master | 1 | d12 | d12 | d12 | 24 | 7 |
-|  | banana | 1 | &#43;3 | &#43;3 | &#43;3 | 25 | 12 |
-|  | Legendary | 0 | d20 | d20 | d20 | 28 | 8 |
-|  |  |  |  |  |  |  |  |
+| Clumsy | 1 | d4 | d4 | d4 | 8 | 3 | 5 |
+| Untrained | 1 | d6 | d6 | d6 | 12 | 4 | 8 |
+| Trained | 1 | d8 | d8 | d8 | 16 | 5 | 12 |
+| Expert | 1 | d10 | d10 | d10 | 20 | 6 | 16 |
+| Master | 1 | d12 | d12 | d12 | 24 | 7 | 20 |
+| banana | 1 | &#43;3 | &#43;3 | &#43;3 | 25 | 12 | 70 |
+| Legendary | 0 | d20 | d20 | d20 | 28 | 8 | 25 |
 
 # introduction
 ## Ability Builder
@@ -845,6 +870,57 @@ ability:
   enactments:
     - Type:
   Perks:
+```
+
+# concentration
+## Concentration
+
+Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It acts like a continuous Execution. You can use it to maintain a beam of fire, hold an enemy in a telekinetic grip, or keep a protective shield active.
+
+## Rules
+
+*   **Single Focus**: You can only have one Concentration Ability active at a time. If you cast another Ability with the Concentration type, the first one immediately ends.
+*   **Initial Cost**: Costs 2 Actions and 3 Energy to initiate.
+*   **Upkeep Cost**: At the start of your turn, you must spend either 1 Action or 1 Energy to maintain the Concentration. If you cannot (or choose not to) pay this upkeep, the Ability ends immediately.
+*   **Voluntary End**: You can drop Concentration at any time as a free action.
+*   **Breaking Focus**: If you take damage or are hit by an Enact State that restricts your mind or movement (like Stunned or Paralyzed), you must make a Validation check to keep focus.
+    *   Make a Counter Roll (using your Mind or Constitution Trait).
+    *   Compare it to the attacker's original Engagement Roll.
+    *   If your roll is equal to or higher, you maintain Concentration. If lower, the Ability ends.
+*   **Persistent Enactments**: Any Enactments attached to this Ability re-trigger automatically on your Target(s) at the start of your turn, right after you pay the upkeep cost.
+
+## Perks
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Upkeep no longer costs an Action or Energy; it just requires focus. | +0 | +3 |
+| When rolling to maintain Concentration after taking damage, you may shift your Counter Roll up one Dice Tier. | +0 | +2 |
+| You can have a second Concentration Ability active, but the upkeep for both doubles. | +0 | +5 |
+| Has item dependency | +0 | -1 |
+
+## Compatible Enactments
+
+| Description | Energy Cost | Add Cost |
+| --- | --- | --- |
+| Enact Damage | +1 | +2 |
+| Enact Healing | +1 | +2 |
+| Enact Movement | +0 | +1 |
+| Enact Proficiency Shift | +1 | +2 |
+| Enact Persistent Effect | +2 | +3 |
+| Enact State | +0 | +0 |
+
+## Template
+
+```yaml
+ability:
+  type: Concentration
+  has_item_dependency: No # If yes, enter which item
+  energy_cost: 3
+  action_cost: 2
+  upkeep_cost: 1 Action or 1 Energy
+  enactments:
+    - Type:
+  perks:
 ```
 
 # damage
@@ -1393,17 +1469,16 @@ By **Level 5**, you will have earned 11 additional Ability Points. You could spe
 
 | Level | Points Gained | Total Ability Points |
 | --- | --- | --- |
-|  | **1** | +0 |
-|  | **2** | +2 |
-|  | **3** | +3 |
-|  | **4** | +2 |
-|  | **5** | +4 |
-|  | **6** | +2 |
-|  | **7** | +3 |
-|  | **8** | +2 |
-|  | **9** | +3 |
-|  | **10** | +5 |
-| --- |  |  |
+| **1** | +0 | 10 |
+| **2** | +2 | 12 |
+| **3** | +3 | 15 |
+| **4** | +2 | 17 |
+| **5** | +4 | 21 |
+| **6** | +2 | 23 |
+| **7** | +3 | 26 |
+| **8** | +2 | 28 |
+| **9** | +3 | 31 |
+| **10** | +5 | 36 |
 
 # negation
 ## Enact Negation
@@ -1446,6 +1521,20 @@ enactments:
       - type:
           validation:
 ```
+
+# skill-trees
+## Skills Trees
+
+Skill Trees are thematic collections of Abilities, Traits, and Perks. Instead of building Abilities completely from scratch every time, a player can adopt a Skill Tree (e.g., The Pyromancer, The Master Thief, The Telepath).
+
+Skill trees guide character progression by locking powerful, complex Abilities behind foundational ones. This ensures a character naturally grows into a specialized role.
+Rules
+
+*   **Nodes:** A Skill Tree is made up of interconnected Nodes. A Node can be a new Ability, a Perk for an existing Ability, a new Trait, or a flat stat boost (like +Max Energy).
+
+*   **Progression:** You must unlock the prerequisite Node before you can spend Ability Points or Trait Points to unlock the next Node connected to it.
+
+*   **Creating Trees:** GMs and players are encouraged to build custom Skill Trees during character creation by bundling custom-built Abilities and mapping out how they evolve.
 
 # culture
 ## Culture

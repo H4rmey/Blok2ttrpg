@@ -39,6 +39,11 @@ type TemplateData struct {
 	Minion                     config.AbilityTypeConfig
 	MinionPerksTable           template.HTML
 	MinionEnactmentsTable      template.HTML
+	Concentration              config.AbilityTypeConfig
+	ConcentrationPerksTable    template.HTML
+	ConcentrationEnactmentsTable template.HTML
+
+	Combat config.CombatConfig
 
 	Damage                       config.EnactmentConfig
 	DamagePerksTable             template.HTML
@@ -237,6 +242,14 @@ func BuildTemplateData(cfg *config.Config) TemplateData {
 	d.Minion = ab.AbilityTypes["minion"]
 	d.MinionPerksTable = perkTable(d.Minion.Perks)
 	d.MinionEnactmentsTable = enactmentTable(d.Minion.CompatibleEnactments, ab.Enactments)
+
+	if c, ok := ab.AbilityTypes["concentration"]; ok {
+		d.Concentration = c
+		d.ConcentrationPerksTable = perkTable(c.Perks)
+		d.ConcentrationEnactmentsTable = enactmentTable(c.CompatibleEnactments, ab.Enactments)
+	}
+
+	d.Combat = ab.Combat
 
 	d.Damage = ab.Enactments["damage"]
 	d.DamagePerksTable = perkTable(d.Damage.Perks)
