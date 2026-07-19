@@ -1,0 +1,177 @@
+version: 1
+profile_id: ability-builder
+combat:
+  actions:
+    amount: 3
+additional_enactment:
+  add_cost: 1
+  energy_cost: 1
+  description: "Adding an additional Enactment beyond the first"
+dice:
+  damage:
+    - "d4"
+    - "d6"
+    - "d8"
+    - "d10"
+    - "d12"
+  generic:
+    - "d6"
+    - "d8"
+    - "d10"
+    - "d12"
+validations:
+  default_engagement_trait: "offensive"
+  default_counter_count: 2
+  engagement:
+    modes:
+      - id: trait
+        description: "Offensive Trait by default"
+        add_cost: 0
+        energy_cost: 0
+      - id: generic
+        description: "Engage Roll is replaced by a Generic Roll (default 1d6)"
+        add_cost: -2
+        energy_cost: 0
+      - id: other
+        description: "Replace the Engagement Roll to any other Trait"
+        add_cost: 3
+        energy_cost: 1
+      - id: previous
+        description: "Use the result of another roll for this entry"
+        add_cost: 3
+        energy_cost: 1
+  counter:
+    types:
+      - id: defense
+        description: "Defensive Trait (default)"
+        add_cost: 0
+        energy_cost: 0
+      - id: general
+        description: "Replace one of the Counter Rolls to a General Trait"
+        add_cost: 4
+        energy_cost: 0
+      - id: offense
+        description: "Replace one of the Counter Rolls to an Offensive Trait"
+        add_cost: 4
+        energy_cost: 0
+      - id: previous
+        description: "Use the result of another roll as counter"
+        add_cost: 3
+        energy_cost: 1
+    single_counter_cost:
+      add_cost: 3
+      energy_cost: 1
+    tier_shifts:
+      - id: counter_up
+        description: "Shift Dice Tier of Generic Counter Roll UP"
+        add_cost: 3
+        energy_cost: 1
+      - id: counter_down
+        description: "Shift Dice Tier of Generic Counter Roll DOWN"
+        add_cost: -2
+        energy_cost: 0
+      - id: engage_up
+        description: "Shift Dice Tier of Generic Engagement Roll UP"
+        add_cost: 3
+        energy_cost: 1
+      - id: engage_down
+        description: "Shift Dice Tier of Generic Engagement Roll DOWN"
+        add_cost: -2
+        energy_cost: 0
+  fields:
+    - key: engage_mode
+      label: "Engage Roll Type"
+      type: dropdown
+      default: trait
+      options:
+        - value: trait
+          label: "Trait Roll"
+        - value: generic
+          label: "Generic Roll"
+          cost:
+            add_cost: -2
+            energy_cost: 0
+        - value: other
+          label: "Another roll result"
+          cost:
+            add_cost: 3
+            energy_cost: 1
+        - value: previous
+          label: "Use result of previous interaction"
+          cost:
+            add_cost: 3
+            energy_cost: 1
+    - key: engage_trait
+      label: "Trait"
+      type: dropdown
+      options_source: traits_all
+      visibility_when: engage_mode
+      show_when: trait
+    - key: engage_die
+      label: "Die"
+      type: free_number
+      default: 0
+      min: 0
+      max: 3
+      step: 1
+      visibility_when: engage_mode
+      show_when: generic
+      per_step:
+        increase:
+          add_cost: 3
+          energy_cost: 1
+        decrease:
+          add_cost: -2
+          energy_cost: 0
+    - key: engage_other
+      label: "Other Roll Text"
+      type: free_text
+      visibility_when: engage_mode
+      show_when: other
+    - key: counter_trait
+      label: "Counter Trait"
+      type: solutions
+      default_count: 2
+      default:
+        - type: defense
+          value: Reflex
+        - type: defense
+          value: Constitution
+      options_source: traits_all
+      row_fields:
+        - key: type
+          label: "Counter Type"
+          type: dropdown
+          default: defense
+          options:
+            - value: defense
+              label: "Defensive Trait (default)"
+              cost:
+                add_cost: 0
+                energy_cost: 0
+            - value: general
+              label: "General Trait"
+              cost:
+                add_cost: 4
+                energy_cost: 0
+            - value: offense
+              label: "Offensive Trait"
+              cost:
+                add_cost: 4
+                energy_cost: 0
+            - value: previous
+              label: "Use result of previous"
+              cost:
+                add_cost: 3
+                energy_cost: 1
+        - key: value
+          label: "Counter Trait"
+          type: dropdown
+          options_source: traits_all
+      per_item:
+        increase:
+          add_cost: 0
+          energy_cost: 0
+        decrease:
+          add_cost: 3
+          energy_cost: 1

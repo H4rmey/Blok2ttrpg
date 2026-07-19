@@ -26,6 +26,10 @@ type Interaction struct {
 	BuildCost int             `json:"build_cost,omitempty" yaml:"build_cost,omitempty"`
 	CastCost  int             `json:"cast_cost,omitempty" yaml:"cast_cost,omitempty"`
 
+	// Fields is the generic field-values map driven by the interaction
+	// schema. Values can be string, bool, int, or []string.
+	Fields map[string]interface{} `json:"fields,omitempty" yaml:"-"`
+
 	// Range / Targets (Direct, Ranged)
 	Range   int `json:"range,omitempty" yaml:"range,omitempty"`
 	Targets int `json:"targets,omitempty" yaml:"targets,omitempty"`

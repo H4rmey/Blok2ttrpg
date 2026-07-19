@@ -53,7 +53,7 @@ To use a custom configuration file, mount it as a volume:
 
 ```bash
 docker run -d -p 8080:8080 \
-  -v /path/to/your/config.yaml:/app/config/ability-builder.yaml \
+  -v /path/to/your/config/ability-builder:/app/config/ability-builder \
   --name ability-builder blok2ttrpg-ability-builder
 ```
 
@@ -71,7 +71,7 @@ docker run -d -p 8080:8080 \
 
 ```bash
 docker run -d -p 8080:8080 \
-  -v ./config/ability-builder.yaml:/app/config/ability-builder.yaml \
+  -v ./config/ability-builder:/app/config/ability-builder \
   -v ./data:/app/data \
   --name ability-builder \
   blok2ttrpg-ability-builder
@@ -155,7 +155,20 @@ ability-builder/
 
 ## Configuration
 
+The ability-builder config is a directory (`config/ability-builder/`) containing:
+- `general.yaml` — version, profile_id, combat, additional_enactment, dice, validations
+- `file_order.yaml` — documentation file order for YAML output
+- `ability_types.yaml` — Execution, Reaction, Phase, Minion, Preparation, Concentration
+- `enactments.yaml` — Damage, Healing, Movement, Proficiency Shift, Persistent Effect, State
+- `interactions.yaml` — Self, Direct, Ranged, Area, Area of Effect
+- `proficiencies.yaml` — Proficiency tiers and dice
+- `traits.yaml` — General, Offense, Defense, Vital trait lists
+- `leveling.yaml` — Leveling tables for trait/ability points
+- `states.yaml` — State definitions (General and Specific states)
+
+See `docs/modules/ability-builder/configuration.md` for the detailed schema reference.
+
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
 | `PORT` | `8080` | Server port |
-| `ABILITY_BUILDER_CONFIG` | `config/ability-builder.yaml` | Path to YAML configuration file |
+| `ABILITY_BUILDER_CONFIG` | `config/ability-builder` | Path to config directory |

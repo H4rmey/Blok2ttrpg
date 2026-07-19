@@ -55,6 +55,23 @@
   var ENACT_TYPES = D.allEnactmentTypes;
   var INTER_TYPES = D.interactionTypes;
 
+  // Global registry of generic field schemas keyed by card uid. Each generic-
+  // rendered card gets a data-generic-id attribute; the schema lives in this
+  // map so it survives HTML insertion and round-trips through the DOM.
+  var __genericFieldRegistry = {};
+  var __genericIdCounter = 0;
+  function registerGenericFields(fields) {
+    var id = 'gf_' + (++__genericIdCounter);
+    __genericFieldRegistry[id] = fields;
+    return id;
+  }
+  function getGenericFieldsForCard(card) {
+    if (!card) return null;
+    var id = card.getAttribute('data-generic-id');
+    if (!id) return null;
+    return __genericFieldRegistry[id] || null;
+  }
+
   // =========================================================================
   // ID generators. We use unique indices within each block instead of global
   // ids so multiple enactments do not collide. Helper to make input names
@@ -80,7 +97,19 @@
     var cfg = (C.ability_types && C.ability_types[type.toLowerCase()]) || {};
     var inner = '';
 
-    if (type === 'Execution') {
+    if (cfg.fields && cfg.fields.length) {
+      var fieldsHolder = '<div class="space-y-2">';
+      var hydration = data.fields || data;
+      for (var i = 0; i < cfg.fields.length; i++) {
+        var visClass = isFieldVisible(cfg.fields[i], hydration, cfg.fields) ? '' : 'hidden';
+        fieldsHolder += '<div data-field-key="' + esc(cfg.fields[i].key) + '"' + (visClass ? ' ' + visClass : '') + '>' + renderFieldHTML(cfg.fields[i], hydration) + '</div>';
+      }
+      fieldsHolder += '</div>';
+      inner = '<h3 class="text-md font-semibold text-indigo-400">Ability Type — ' + esc(type) + '</h3>' +
+              overview(false) + fieldsHolder + breakdown();
+      var gid = registerGenericFields(cfg.fields);
+      return '<div class="section-card ability-type-card bg-gray-800 rounded-lg border border-gray-700 p-5 space-y-4" data-section="ability-type" data-ability-type="'+esc(type)+'" data-generic-id="'+gid+'" data-build="0" data-cast="0">' + inner + '</div>';
+    } else if (type === 'Execution') {
       inner = renderExecutionCard(data, cfg);
     } else if (type === 'Reaction') {
       inner = renderReactionCard(data, cfg);
@@ -342,7 +371,10 @@
   var C = D.cfg ? (typeof D.cfg === 'string' ? JSON.parse(D.cfg) : D.cfg) : {};
   function abilityTypeConfig() {
     var card = document.querySelector('.section-card[data-section="ability-type"]');
-    var type = card ? card.dataset.abilityType : '';
+    if (!card) return {};
+    var fields = getGenericFieldsForCard(card);
+    if (fields) return C.ability_types && C.ability_types[card.dataset.abilityType.toLowerCase()] || {};
+    var type = card.dataset.abilityType;
     return C.ability_types && C.ability_types[type.toLowerCase()] || {};
   }
   function findPerk(perks, id) {
@@ -370,6 +402,602 @@
     return C.interactions && C.interactions[key] || {};
   }
   function getValidationConfig() { return C.validations || {}; }
+
+  // =========================================================================
+  // Generic field renderer (schema-driven). Mirrors server's internal/config/
+  // field_costs.go. Returns HTML strings so the host card can include them.
+  // =========================================================================
+  function resolveOptions(source) {
+    if (!source) return [];
+    switch (source) {
+      case 'traits_general': return D.generalTraits || [];
+      case 'traits_offense': return D.offenseTraits || [];
+      case 'traits_defense': return D.defenseTraits || [];
+      case 'traits_all':
+        return (D.generalTraits || []).concat(D.offenseTraits || [], D.defenseTraits || []);
+      case 'dice_damage': return D.damageDiceOptions || [];
+      case 'dice_generic': return D.genericDieOptions || [];
+      case 'states_general': return (C.states && C.states.general_states) || [];
+      case 'states_specific': return (C.states && C.states.specific_states) || [];
+      case 'directions_all':
+      case 'directions':
+        return D.directionOptions || [];
+      case 'shift_directions': return D.shiftDirectionOptions || [];
+      case 'trigger_timings': return D.triggerTimings || [];
+      case 'aoe_trigger_timings': return D.aoeTriggerTimings || [];
+      case 'knockout_options': return D.knockoutOptions || [];
+      case 'reaction_triggers': return D.reactionTriggers || [];
+      case 'ability_types': return D.abilityTypes || [];
+      case 'enactment_types': return D.allEnactmentTypes || [];
+      case 'interaction_types': return D.interactionTypes || [];
+    }
+    return [];
+  }
+  function isFieldVisible(field, allValues, fields) {
+    if (!field.visibility_when) return true;
+    var v = allValues ? allValues[field.visibility_when] : undefined;
+    if (v === undefined || v === null || v === '') {
+      if (fields) {
+        for (var i = 0; i < fields.length; i++) {
+          if (fields[i].key === field.visibility_when) {
+            if (fields[i].default !== undefined) {
+              v = fields[i].default;
+            }
+            break;
+          }
+        }
+      }
+    }
+    if (v === undefined || v === null) v = '';
+    if (Array.isArray(v)) v = v.length ? v[0] : '';
+    return String(v) === String(field.show_when);
+  }
+  function renderFieldHTML(field, data) {
+    data = data || {};
+    var name = field.key;
+    var value = data[name];
+    var label = '<label class="block text-xs text-gray-400 mb-1">' + esc(field.label) + '</label>';
+    var costSuffixStr = field.cost ? costSuffix(field.cost.add_cost, field.cost.energy_cost) : '';
+    switch (field.type) {
+      case 'checkbox': {
+        var isChecked = value !== undefined ? toBool(value) : toBool(field.default);
+        return '<label class="flex items-center gap-2 text-sm text-gray-300">' +
+          '<input type="checkbox" name="' + esc(name) + '" data-generic-field="' + esc(name) + '" onchange="onGenericFieldChange(this)" ' + checked(isChecked) +
+          ' class="rounded bg-gray-700 border-gray-600">' +
+          esc(field.label) + costSuffixStr + '</label>';
+      }
+      case 'dropdown': {
+        var sel = toStr(value);
+        if (sel === '' && field.default !== undefined) sel = String(field.default);
+        var opts = field.options && field.options.length ? field.options : null;
+        if (opts) {
+          var html = label + '<select name="' + esc(name) + '" data-generic-field="' + esc(name) + '" onchange="onGenericFieldChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">';
+          html += '<option value="">-- Select --</option>';
+          for (var i = 0; i < opts.length; i++) {
+            var o = opts[i];
+            var cs = o.cost ? costSuffix(o.cost.add_cost, o.cost.energy_cost) : '';
+            html += '<option value="' + esc(o.value) + '" ' + selected(sel, o.value) + '>' + esc(o.label) + cs + '</option>';
+          }
+          html += '</select>';
+          return html;
+        }
+        var list = resolveOptions(field.options_source);
+        var dynHtml = label + '<select name="' + esc(name) + '" data-generic-field="' + esc(name) + '" onchange="onGenericFieldChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">';
+        dynHtml += '<option value="">-- Select --</option>';
+        if (field.options_source === 'traits_all') {
+          dynHtml += traitOptionsGrouped(toStr(value));
+        } else if (field.options_source === 'traits_general') {
+          dynHtml += traitOptionsForCategory('general', toStr(value));
+        } else if (field.options_source === 'traits_offense') {
+          dynHtml += traitOptionsForCategory('offense', toStr(value));
+        } else if (field.options_source === 'traits_defense') {
+          dynHtml += traitOptionsForCategory('defense', toStr(value));
+        } else {
+          for (var k = 0; k < list.length; k++) {
+            var item = list[k];
+            var itemVal = typeof item === 'string' ? item : item.id;
+            var itemLabel = typeof item === 'string' ? item : item.name;
+            var rowSel = toStr(value) || (field.default !== undefined ? String(field.default) : '');
+            dynHtml += '<option value="' + esc(itemVal) + '" ' + selected(rowSel, itemVal) + '>' + esc(itemLabel) + '</option>';
+          }
+        }
+        dynHtml += '</select>';
+        return dynHtml;
+      }
+      case 'free_text': {
+        var v = toStr(value);
+        return label + '<input type="text" name="' + esc(name) + '" data-generic-field="' + esc(name) + '" value="' + esc(v) + '" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">';
+      }
+      case 'free_number': {
+        var nv = toStr(value);
+        if (!nv) nv = String(toInt(field.default));
+        var mn = field.min || 0;
+        var mx = field.max || 100;
+        var opts2 = '';
+        for (var s = mn; s <= mx; s++) {
+          var c2 = calcFreeNumCost(field, s);
+          opts2 += '<option value="' + s + '" ' + selected(Number(nv) === s, s) + '>' + s + costSuffix(c2.add, c2.energy) + '</option>';
+        }
+        return label + '<select name="' + esc(name) + '" data-generic-field="' + esc(name) + '" onchange="onGenericFieldChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">' + opts2 + '</select>';
+      }
+      case 'solutions': {
+        var arr = Array.isArray(value) ? value : [];
+        if (arr.length === 0 && field.default) {
+          arr = Array.isArray(field.default) ? field.default : [field.default];
+        }
+        var rows = [];
+        for (var i = 0; i < arr.length; i++) {
+          var item = arr[i];
+          if (typeof item === 'string') {
+            rows.push({ value: item });
+          } else if (item && typeof item === 'object') {
+            rows.push({ value: item.value || item.solution || '', type: item.type || 'defense' });
+          }
+        }
+        var defaultCount = field.default_count || 1;
+        while (rows.length < defaultCount) rows.push({});
+        var rowHTML = '';
+        for (var ri = 0; ri < rows.length; ri++) {
+          rowHTML += renderSolutionRow(name, ri, rows[ri], field);
+        }
+        var headerHtml = '<div class="flex items-center justify-between mb-1"><span class="text-xs text-gray-400 uppercase">' + esc(field.label) + '</span>' +
+          '<button type="button" onclick="addGenericRow(this, \'' + esc(name) + '\')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded text-xs">+ Add</button>' +
+          '</div>';
+        return headerHtml + '<div data-generic-list="' + esc(name) + '" data-generic-type="solutions" class="space-y-1">' + rowHTML + '</div>';
+      }
+      case 'states': {
+        var statesList = Array.isArray(value) ? value : [];
+        if (statesList.length === 0) {
+          statesList = [{}];
+        }
+        var rendered = '';
+        for (var si = 0; si < statesList.length; si++) {
+          rendered += renderStateRow(name, si, statesList[si] || {}, field);
+        }
+        var header = '<div class="flex items-center justify-between mb-1"><span class="text-xs text-gray-400 uppercase">' + esc(field.label) + '</span>' +
+          '<button type="button" onclick="addStateRow(this, \'' + esc(name) + '\')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded text-xs">+ Add State</button>' +
+          '</div>';
+        return header + '<div data-states-list="' + esc(name) + '" data-generic-type="states" class="space-y-2">' + rendered + '</div>';
+      }
+    }
+    return '';
+  }
+  function calcFreeNumCost(field, val) {
+    var def = toInt(field.default);
+    var step = field.step || 1;
+    var delta = val - def;
+    if (delta === 0 || !field.per_step) return { add: 0, energy: 0 };
+    var dir = delta > 0 ? 'increase' : 'decrease';
+    var sc = stepCostOf(field.per_step, dir);
+    var steps;
+    if (field.rounding === 'ceil') {
+      steps = Math.ceil(delta / step);
+      if (steps < 0) steps = 0;
+    } else if (field.rounding === 'floor') {
+      steps = Math.floor(delta / step);
+    } else {
+      steps = delta / step;
+    }
+    if (steps === 0) return { add: 0, energy: 0 };
+    return { add: Math.abs(steps) * sc.add, energy: Math.abs(steps) * sc.energy };
+  }
+  function renderSolutionRow(name, idx, row, field) {
+    row = row || {};
+    var selectedVal = row.value || row.solution || '';
+    var rowType = row.type || '';
+    var list = resolveOptions(field.options_source);
+    var rowFields = field.row_fields || [];
+    var inner = '';
+    for (var ri = 0; ri < rowFields.length; ri++) {
+      var rf = rowFields[ri];
+      var rv = row[rf.key];
+      var fullKey = name + '__' + rf.key;
+      var fieldCopy = {};
+      for (var k in rf) { if (rf.hasOwnProperty(k)) fieldCopy[k] = rf[k]; }
+      fieldCopy.key = fullKey;
+      fieldCopy.label = '';
+      if (rf.key === 'value' && rowType && rowType !== 'previous') {
+        fieldCopy.options_source = 'traits_' + rowType;
+      }
+      inner += '<div data-row-field="' + esc(rf.key) + '">' + renderFieldHTML(fieldCopy, { [fullKey]: rv }) + '</div>';
+    }
+    return '<div class="bg-gray-900 rounded p-2 space-y-1" data-row>' + inner +
+      '<div class="flex items-center gap-2">' +
+      '<button type="button" onclick="this.closest(\'[data-row]\').remove();recalcAll()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs ml-auto">−</button>' +
+      '</div></div>';
+  }
+  function renderStateRow(name, idx, row, field) {
+    row = row || {};
+    var kind = row.state_kind || '';
+    var specs = (C.states && C.states.specific_states) || [];
+    var gens = (C.states && C.states.general_states) || [];
+    var specificOpts = '<option value="">-- Select --</option>';
+    var generalOpts = '<option value="">-- Select --</option>';
+    var kindOpts = '<option value="">-- Select --</option>' +
+      opt('Specific', 'specific', kind, 0, 0) +
+      opt('General', 'general', kind, 0, 0);
+    for (var i = 0; i < specs.length; i++) {
+      var s = specs[i];
+      specificOpts += '<option value="' + esc(s.id) + '" ' + selected(row.specific_state === s.id, s.id) + '>' + esc(s.name || s.id) + '</option>';
+    }
+    for (var j = 0; j < gens.length; j++) {
+      var g = gens[j];
+      generalOpts += '<option value="' + esc(g.id) + '" ' + selected(row.general_state === g.id, g.id) + '>' + esc(g.name || g.id) + '</option>';
+    }
+    var selectedGeneral = null;
+    for (var gj = 0; gj < gens.length; gj++) {
+      if (gens[gj].id === row.general_state) { selectedGeneral = gens[gj]; break; }
+    }
+    var minShift = selectedGeneral ? selectedGeneral.min_shift : -6;
+    var maxShift = selectedGeneral ? selectedGeneral.max_shift : 6;
+    if (selectedGeneral && (row.shift_amount === undefined || row.shift_amount === null || row.shift_amount === '')) {
+      row.shift_amount = Math.max(minShift, Math.min(maxShift, 1));
+    }
+    var shiftVal = Number(row.shift_amount) || 0;
+    var shiftOptions = '';
+    for (var s2 = minShift; s2 <= maxShift; s2++) {
+      var abs = Math.abs(s2);
+      var shiftCost = selectedGeneral ? selectedGeneral.shift_cost : { add_cost: 0, energy_cost: 0 };
+      shiftOptions += '<option value="' + s2 + '" ' + selected(shiftVal === s2, s2) + '>' + s2 + costSuffix(abs * (shiftCost.add_cost || 0), abs * (shiftCost.energy_cost || 0)) + '</option>';
+    }
+    var kindHidden = '';
+    var generalHidden = 'hidden';
+    var specificHidden = '';
+    if (kind === 'general') { specificHidden = 'hidden'; generalHidden = ''; }
+    return '<div class="bg-gray-900 rounded p-3 space-y-2" data-state-row>' +
+      '<div class="flex items-center gap-2"><span class="text-xs text-gray-400">State</span>' +
+      '<select name="' + esc(name) + '__state_kind" onchange="onStateKindChange(this)" class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">' +
+        kindOpts +
+      '</select>' +
+      '<button type="button" onclick="this.closest(\'[data-state-row]\').remove();recalcAll()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs ml-auto">− Remove State</button>' +
+      '</div>' +
+      '<div data-wrap="specific" ' + specificHidden + '>' +
+        '<label class="block text-xs text-gray-400 mb-1">Specific State</label>' +
+        '<select name="' + esc(name) + '__specific_state" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">' + specificOpts + '</select>' +
+      '</div>' +
+      '<div data-wrap="general" ' + generalHidden + '>' +
+        '<label class="block text-xs text-gray-400 mb-1">General State</label>' +
+        '<select name="' + esc(name) + '__general_state" onchange="onStateGeneralChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">' + generalOpts + '</select>' +
+      '</div>' +
+      '<div data-wrap="shift" ' + generalHidden + '>' +
+        '<label class="block text-xs text-gray-400 mb-1">Shift Amount</label>' +
+        '<select name="' + esc(name) + '__shift_amount" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">' + shiftOptions + '</select>' +
+      '</div>' +
+      '</div>';
+  }
+  window.onStateKindChange = function (sel) {
+    var row = sel.closest('[data-state-row]');
+    if (!row) return;
+    var kind = sel.value;
+    var setWrap = function (key, show) {
+      var el = row.querySelector('[data-wrap="' + key + '"]');
+      if (el) el.hidden = !show;
+    };
+    setWrap('specific', kind === 'specific');
+    setWrap('general', kind === 'general');
+    setWrap('shift', kind === 'general');
+    recalcAll();
+  };
+  window.onStateGeneralChange = function (sel) {
+    var row = sel.closest('[data-state-row]');
+    if (!row) return;
+    var card = sel.closest('.section-card');
+    var fieldKey = sel.name.replace('__general_state', '');
+    var fields = card ? getGenericFieldsForCard(card) : null;
+    if (!fields) return;
+    var field = null;
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].key === fieldKey) { field = fields[i]; break; }
+    }
+    if (!field) return;
+    var gens = (C.states && C.states.general_states) || [];
+    var g = null;
+    for (var j = 0; j < gens.length; j++) {
+      if (gens[j].id === sel.value) { g = gens[j]; break; }
+    }
+    if (!g) return;
+    var shiftSel = row.querySelector('select[name="' + fieldKey + '__shift_amount"]');
+    if (!shiftSel) return;
+    shiftSel.innerHTML = '';
+    for (var s = g.min_shift; s <= g.max_shift; s++) {
+      var abs = Math.abs(s);
+      var c = g.shift_cost || { add_cost: 0, energy_cost: 0 };
+      var optEl = document.createElement('option');
+      optEl.value = s;
+      optEl.textContent = s + costSuffix(abs * (c.add_cost || 0), abs * (c.energy_cost || 0));
+      shiftSel.appendChild(optEl);
+    }
+    shiftSel.value = Math.max(g.min_shift, Math.min(g.max_shift, 1));
+    recalcAll();
+  };
+  window.onGenericFieldChange = function (el) {
+    var card = el.closest('.section-card');
+    if (!card) { recalcAll(); return; }
+    var fields = getGenericFieldsForCard(card);
+    if (!fields) { recalcAll(); return; }
+    var field = null;
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].key === el.name || (el.getAttribute('data-generic-field') === fields[i].key)) { field = fields[i]; break; }
+    }
+    var values = readGenericCardValues(card);
+    for (var k = 0; k < fields.length; k++) {
+      var f = fields[k];
+      if (f.visibility_when && f.visibility_when === (field ? field.key : el.name)) {
+        var wrap = card.querySelector('[data-field-key="' + f.key + '"]');
+        if (wrap) wrap.hidden = !isFieldVisible(f, values, fields);
+      }
+    }
+    recalcAll();
+  };
+  window.addGenericRow = function (btn, fieldKey) {
+    var list = btn.closest('div').parentElement.querySelector('[data-generic-list="' + fieldKey + '"]');
+    if (!list) return;
+    var card = btn.closest('.section-card');
+    var fields = card ? getGenericFieldsForCard(card) : null;
+    if (!fields) return;
+    var field = null;
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].key === fieldKey) { field = fields[i]; break; }
+    }
+    if (!field) return;
+    var fakeRow = document.createElement('div');
+    fakeRow.innerHTML = renderSolutionRow(fieldKey, list.children.length, {}, field);
+    list.appendChild(fakeRow.firstChild);
+    recalcAll();
+  };
+  window.addStateRow = function (btn, fieldKey) {
+    var list = btn.closest('div').parentElement.querySelector('[data-states-list="' + fieldKey + '"]');
+    if (!list) return;
+    var card = btn.closest('.section-card');
+    var fields = card ? getGenericFieldsForCard(card) : null;
+    if (!fields) return;
+    var field = null;
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].key === fieldKey) { field = fields[i]; break; }
+    }
+    if (!field) return;
+    var fakeRow = document.createElement('div');
+    fakeRow.innerHTML = renderStateRow(fieldKey, list.children.length, {}, field);
+    list.appendChild(fakeRow.firstChild);
+    recalcAll();
+  };
+
+  // Read all generic field values from a card DOM. Returns a map compatible
+  // with the Go FieldValueMap shape.
+  function readGenericCardValues(card) {
+    var fields = card ? getGenericFieldsForCard(card) : null;
+    var values = {};
+    if (!fields || !card) return values;
+    for (var i = 0; i < fields.length; i++) {
+      var f = fields[i];
+      if (f.type === 'checkbox') {
+        var cb = card.querySelector('[data-generic-field="' + f.key + '"]');
+        values[f.key] = cb ? cb.checked : false;
+      } else if (f.type === 'free_number' || f.type === 'dropdown' || f.type === 'free_text') {
+        var sel = card.querySelector('[data-generic-field="' + f.key + '"]');
+        if (sel) values[f.key] = sel.value;
+      } else if (f.type === 'solutions') {
+        var rows = card.querySelectorAll('[data-generic-list="' + f.key + '"] [data-row]');
+        var arr = [];
+        for (var r = 0; r < rows.length; r++) {
+          var row = rows[r];
+          var rowVal = {};
+          for (var rf = 0; rf < f.row_fields.length; rf++) {
+            var rfi = f.row_fields[rf];
+            var fullKey = f.key + '__' + rfi.key;
+            if (rfi.type === 'checkbox') {
+              var cb2 = row.querySelector('[data-generic-field="' + fullKey + '"]');
+              rowVal[rfi.key] = cb2 ? cb2.checked : false;
+            } else {
+              var s2 = row.querySelector('[data-generic-field="' + fullKey + '"]');
+              if (s2) {
+                if (rfi.type === 'free_number') rowVal[rfi.key] = Number(s2.value);
+                else rowVal[rfi.key] = s2.value;
+              }
+            }
+          }
+          if (rowVal.value !== '' && rowVal.value !== undefined) {
+            arr.push(rowVal);
+          }
+        }
+        values[f.key] = arr;
+      } else if (f.type === 'states') {
+        var srows = card.querySelectorAll('[data-states-list="' + f.key + '"] [data-state-row]');
+        var sarr = [];
+        for (var s = 0; s < srows.length; s++) {
+          var row = srows[s];
+          var kindSel = row.querySelector('select[name="' + f.key + '__state_kind"]');
+          var specSel = row.querySelector('select[name="' + f.key + '__specific_state"]');
+          var genSel = row.querySelector('select[name="' + f.key + '__general_state"]');
+          var shiftSel = row.querySelector('select[name="' + f.key + '__shift_amount"]');
+          var rowVal = {
+            state_kind: kindSel ? kindSel.value : '',
+            specific_state: specSel ? specSel.value : '',
+            general_state: genSel ? genSel.value : '',
+            shift_amount: shiftSel ? Number(shiftSel.value) : 0
+          };
+          if (rowVal.state_kind || rowVal.specific_state || rowVal.general_state) {
+            sarr.push(rowVal);
+          }
+        }
+        values[f.key] = sarr;
+      }
+    }
+    return values;
+  }
+
+  // =========================================================================
+  // Generic cost evaluator (mirrors internal/config/field_costs.go). Used for
+  // live UI feedback. Server-side evaluation remains authoritative.
+  // =========================================================================
+  function toBool(v) {
+    if (v === true) return true;
+    if (typeof v === 'string') return v === 'on' || v === 'true' || v === '1' || v === 'yes';
+    return false;
+  }
+  function toStr(v) {
+    if (v === null || v === undefined) return '';
+    return String(v);
+  }
+  function toInt(v) {
+    var n = Number(v);
+    return isNaN(n) ? 0 : n;
+  }
+  function stepCostOf(perStep, direction) {
+    if (!perStep) return { add: 0, energy: 0 };
+    var d = perStep[direction] || { add_cost: 0, energy_cost: 0 };
+    return { add: d.add_cost || 0, energy: d.energy_cost || 0 };
+  }
+  function evalFieldJS(field, raw, allValues) {
+    var build = 0, cast = 0;
+    if (raw === undefined || raw === null) return { build: build, cast: cast };
+    if (raw === '' || raw === false) return { build: build, cast: cast };
+    if (Array.isArray(raw) && raw.length === 0 && field.type !== 'solutions') return { build: build, cast: cast };
+    switch (field.type) {
+      case 'checkbox':
+        if (toBool(raw) && field.cost) {
+          build += field.cost.add_cost || 0;
+          cast += field.cost.energy_cost || 0;
+        }
+        break;
+      case 'dropdown': {
+        var sel = toStr(raw);
+        if (sel) {
+          if (field.cost) {
+            build += field.cost.add_cost || 0;
+            cast += field.cost.energy_cost || 0;
+          }
+          var opts = field.options || [];
+          for (var i = 0; i < opts.length; i++) {
+            if (opts[i].value === sel) {
+              if (opts[i].cost) {
+                build += opts[i].cost.add_cost || 0;
+                cast += opts[i].cost.energy_cost || 0;
+              }
+              var childVals = (allValues && allValues.__cascadeFor && allValues.__cascadeFor[field.key]) || {};
+              var cc = evalFieldsJS(opts[i].fields || [], childVals);
+              build += cc.build; cast += cc.cast;
+              break;
+            }
+          }
+        }
+        break;
+      }
+      case 'free_text':
+        break;
+      case 'free_number': {
+        var n = toInt(raw);
+        var def = toInt(field.default);
+        var step = field.step || 1;
+        var delta = n - def;
+        if (delta !== 0) {
+          var dir = delta > 0 ? 'increase' : 'decrease';
+          var sc = stepCostOf(field.per_step, dir);
+          var steps;
+          if (field.rounding === 'ceil') {
+            steps = Math.ceil(delta / step);
+            if (steps < 0) steps = 0;
+          } else if (field.rounding === 'floor') {
+            steps = Math.floor(delta / step);
+          } else {
+            steps = delta / step;
+          }
+          if (steps !== 0) {
+            build += Math.abs(steps) * sc.add;
+            cast += Math.abs(steps) * sc.energy;
+          }
+        }
+        break;
+      }
+      case 'solutions': {
+        var arr = Array.isArray(raw) ? raw : [];
+        for (var ri = 0; ri < arr.length; ri++) {
+          var rv = arr[ri] || {};
+          var rc = evalFieldsJS(field.row_fields || [], rv);
+          build += rc.build; cast += rc.cast;
+        }
+        if (field.per_item) {
+          var dc = field.default_count || 0;
+          var diff = arr.length - dc;
+          if (diff !== 0) {
+            var pi = diff > 0 ? field.per_item.increase : field.per_item.decrease;
+            build += Math.abs(diff) * (pi.add_cost || 0);
+            cast += Math.abs(diff) * (pi.energy_cost || 0);
+          }
+        }
+        break;
+      }
+      case 'states': {
+        var rows = Array.isArray(raw) ? raw : [];
+        for (var si = 0; si < rows.length; si++) {
+          var sr = rows[si] || {};
+          if (!sr.state_kind && !sr.specific_state && !sr.general_state) continue;
+          var src = evalFieldsJS(field.row_fields || [], sr);
+          build += src.build; cast += src.cast;
+        }
+        break;
+      }
+    }
+    return { build: build, cast: cast };
+  }
+  function evalFieldsJS(fields, values) {
+    var build = 0, cast = 0;
+    if (!fields) return { build: build, cast: cast };
+    for (var i = 0; i < fields.length; i++) {
+      var f = fields[i];
+      if (!isFieldVisible(f, values)) continue;
+      var raw = values ? values[f.key] : undefined;
+      var res = evalFieldJS(f, raw, values);
+      build += res.build;
+      cast += res.cast;
+    }
+    return { build: build, cast: cast };
+  }
+  function evalStateRowJS(row, gens, specs, surcharge) {
+    var build = 0, cast = 0;
+    if (!row) return { build: build, cast: cast };
+    if (row.state_kind === 'general') {
+      var gid = row.general_state;
+      for (var i = 0; i < gens.length; i++) {
+        if (gens[i].id === gid) {
+          var abs = Math.abs(Number(row.shift_amount) || 0);
+          build += abs * (gens[i].shift_cost ? (gens[i].shift_cost.add_cost || 0) : 0);
+          cast += abs * (gens[i].shift_cost ? (gens[i].shift_cost.energy_cost || 0) : 0);
+          break;
+        }
+      }
+    } else {
+      var sid = row.specific_state;
+      for (var j = 0; j < specs.length; j++) {
+        if (specs[j].id === sid) {
+          build += specs[j].add_cost || 0;
+          cast += specs[j].energy_cost || 0;
+          break;
+        }
+      }
+    }
+    return { build: build, cast: cast };
+  }
+  function evalStatesSurchargeJS(surcharge, rowCount) {
+    if (!surcharge || rowCount <= 1) return { build: 0, cast: 0 };
+    var extra = rowCount - 1;
+    return { build: extra * (surcharge.add_cost || 0), cast: extra * (surcharge.energy_cost || 0) };
+  }
+  function genericCalcJS(cfg, values) {
+    var base = (cfg && cfg.base_cost) || { add_cost: 0, energy_cost: 0 };
+    var b = base.add_cost || 0;
+    var c = base.energy_cost || 0;
+    var res = evalFieldsJS(cfg && cfg.fields, values);
+    return { build: b + res.build, cast: c + res.cast };
+  }
+  function abilityTypeCalcJS(cfg, values) {
+    var base = (cfg && cfg.base_energy) || 0;
+    var action = (cfg && cfg.base_action) || 0;
+    var res = evalFieldsJS(cfg && cfg.fields, values);
+    var totalBuild = res.build;
+    var totalEnergy = base + res.cast;
+    return { build: totalBuild, energy: totalEnergy, action: action };
+  }
 
 
   function overview(showResolve) {
@@ -467,6 +1095,18 @@
            group('Defense', D.defenseTraits);
   }
 
+  function traitOptionsForCategory(category, selectedValue) {
+    if (category === 'general' || category === 'offense' || category === 'defense') {
+      var label = category.charAt(0).toUpperCase() + category.slice(1);
+      var list = category === 'general' ? D.generalTraits : (category === 'offense' ? D.offenseTraits : D.defenseTraits);
+      var opts = list.map(function(t){
+        return '<option value="'+esc(t)+'" data-cat="'+esc(category)+'" '+selected(selectedValue,t)+'>'+esc(t)+'</option>';
+      }).join('');
+      return '<optgroup label="'+esc(label)+'">'+opts+'</optgroup>';
+    }
+    return traitOptionsGrouped(selectedValue);
+  }
+
   function categoryOfTrait(name) {
     if (!name) return '';
     if (D.generalTraits.indexOf(name) !== -1) return 'general';
@@ -479,9 +1119,39 @@
   // Enactment cards
   // =========================================================================
 
+  function legacyStateToRows(data) {
+    if (!data) return [{}];
+    if (data.states && Array.isArray(data.states)) return data.states;
+    return [{
+      state_kind: data.state_type || 'specific',
+      specific_state: data.specific_state || '',
+      general_state: data.general_state || '',
+      shift_amount: data.shift_amount !== undefined ? Number(data.shift_amount) : 1
+    }];
+  }
+
   function renderEnactCard(type, data) {
     data = data || {};
     var cfg = getEnactConfig(type);
+    if (cfg.fields && cfg.fields.length) {
+      var hydration = data.fields || data;
+      if (type === 'Enact State' && !data.fields) {
+        hydration = Object.assign({}, data, { states: legacyStateToRows(data) });
+      }
+      var fieldsHolder = '<div class="space-y-2">';
+      for (var i = 0; i < cfg.fields.length; i++) {
+        var visClass = isFieldVisible(cfg.fields[i], hydration, cfg.fields) ? '' : 'hidden';
+        fieldsHolder += '<div data-field-key="' + esc(cfg.fields[i].key) + '"' + (visClass ? ' ' + visClass : '') + '>' + renderFieldHTML(cfg.fields[i], hydration) + '</div>';
+      }
+      fieldsHolder += '</div>';
+      var gid = registerGenericFields(cfg.fields);
+      return '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="'+esc(type)+'" data-generic-id="'+gid+'" data-build="0" data-cast="0">' +
+        '<div class="flex items-center justify-between"><h3 class="text-md font-semibold text-indigo-400">Enact — '+esc(type.replace(/^Enact /, ''))+'</h3>' +
+        enactTypeSelect(type) +
+        '</div>' +
+        fieldsHolder +
+        '</div>';
+    }
     if (type === 'Enact Damage') return renderEnactDamage(data, cfg);
     if (type === 'Enact Healing') return renderEnactHealing(data, cfg);
     if (type === 'Enact Movement') return renderEnactMovement(data, cfg);
@@ -798,6 +1468,22 @@
   function renderInterCard(type, data) {
     data = data || {};
     var cfg = getInterConfig(type);
+    if (cfg.fields && cfg.fields.length) {
+      var hydration = data.fields || data;
+      var fieldsHolder = '<div class="space-y-2">';
+      for (var i = 0; i < cfg.fields.length; i++) {
+        var visClass = isFieldVisible(cfg.fields[i], hydration, cfg.fields) ? '' : 'hidden';
+        fieldsHolder += '<div data-field-key="' + esc(cfg.fields[i].key) + '"' + (visClass ? ' ' + visClass : '') + '>' + renderFieldHTML(cfg.fields[i], hydration) + '</div>';
+      }
+      fieldsHolder += '</div>';
+      var gid = registerGenericFields(cfg.fields);
+      return '<div class="section-card inter-card bg-gray-800 rounded-lg border border-cyan-700 p-4 space-y-3" data-section="interaction" data-inter-type="'+esc(type)+'" data-generic-id="'+gid+'" data-build="0" data-cast="0">' +
+        '<div class="flex items-center justify-between"><h4 class="text-sm font-semibold text-cyan-300">Interaction — '+esc(type)+'</h4>' +
+        interTypeSelect(type) +
+        '</div>' +
+        fieldsHolder +
+        '</div>';
+    }
     if (type === 'Self')         return renderInterSelf(data, cfg);
     if (type === 'Direct')       return renderInterDirect(data, cfg);
     if (type === 'Ranged')       return renderInterRanged(data, cfg);
@@ -811,6 +1497,15 @@
       '<select onchange="onInterTypeChange(this)" class="inter-type-select bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">' +
         '<option value="">-- Select --</option>' +
         INTER_TYPES.map(function(t){return '<option value="'+esc(t)+'" '+selected(selectedValue,t)+'>'+esc(t)+'</option>';}).join('') +
+      '</select>' +
+    '</label>';
+  }
+
+  function enactTypeSelect(selectedValue) {
+    return '<label class="text-xs text-gray-400 flex items-center gap-1">Enactment: ' +
+      '<select onchange="onEnactSwapType(this)" class="enact-type-swap bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white">' +
+        '<option value="">-- Select --</option>' +
+        ENACT_TYPES.map(function(t){return '<option value="'+esc(t)+'" '+selected(selectedValue,t)+'>'+esc(t)+'</option>';}).join('') +
       '</select>' +
     '</label>';
   }
@@ -975,6 +1670,20 @@
   function renderValidationCard(d) {
     d = d || {};
     var cfg = getValidationConfig();
+    if (cfg.fields && cfg.fields.length) {
+      var hydration = d.fields || d;
+      var fieldsHolder = '<div class="space-y-2">';
+      for (var i = 0; i < cfg.fields.length; i++) {
+        var visClass = isFieldVisible(cfg.fields[i], hydration, cfg.fields) ? '' : 'hidden';
+        fieldsHolder += '<div data-field-key="' + esc(cfg.fields[i].key) + '"' + (visClass ? ' ' + visClass : '') + '>' + renderFieldHTML(cfg.fields[i], hydration) + '</div>';
+      }
+      fieldsHolder += '</div>';
+      var gid = registerGenericFields(cfg.fields);
+      return '<div class="section-card validation-card bg-gray-800 rounded-lg border border-rose-700 p-4 space-y-3" data-section="validation" data-generic-id="'+gid+'" data-build="0" data-cast="0">' +
+        '<h4 class="text-sm font-semibold text-rose-300">Validation</h4>' +
+        fieldsHolder +
+        '</div>';
+    }
     var mode = d.engage_mode || 'trait';
     var cat = d.engage_trait_category || (d.engage_trait ? (categoryOfTrait(d.engage_trait) || 'offense') : 'offense');
     var counters = d.counter_entries || d.counter_rolls || [];
@@ -1175,6 +1884,21 @@
     recalcAll();
   };
 
+  window.onEnactSwapType = function (sel) {
+    var block = sel.closest('.enactment-block');
+    var host = block.querySelector('.enact-card-container');
+    var val = sel.value;
+    var cur = readCardData(host);
+    host.innerHTML = '';
+    if (!val) return;
+    block.dataset.enactType = val;
+    if (block.querySelector('.enact-type-select')) {
+      block.querySelector('.enact-type-select').value = val;
+    }
+    host.innerHTML = renderEnactCard(val, cur);
+    recalcAll();
+  };
+
   window.onEnactSourceChange = function (sel) {
     var c = sel.closest('.section-card');
     var v = sel.value;
@@ -1230,6 +1954,23 @@
     existingTraitSel.outerHTML = newSelHTML;
     recalcAll();
   };
+
+  // Generic counter trait rows: filter the value dropdown by selected type.
+  function updateCounterTraitValue(typeSel) {
+    var row = typeSel.closest('[data-row]');
+    if (!row) return;
+    var valueSel = row.querySelector('select[name="counter_trait__value"]');
+    if (!valueSel) return;
+    var selectedValue = valueSel.value;
+    var category = typeSel.value;
+    valueSel.innerHTML = '<option value="">-- Select --</option>' + traitOptionsForCategory(category, selectedValue);
+  }
+  document.addEventListener('change', function(e) {
+    if (e.target.name === 'counter_trait__type') {
+      updateCounterTraitValue(e.target);
+      recalcAll();
+    }
+  });
 
   window.addDirection = function (btn) {
     var list = btn.parentElement.parentElement.querySelector('[data-list="directions"]');
@@ -1392,6 +2133,17 @@
     var card = document.querySelector('.section-card[data-section="ability-type"]');
     if (!card) return;
     var cfg = abilityTypeConfig();
+
+    if (getGenericFieldsForCard(card)) {
+      var values = readGenericCardValues(card);
+      var res = abilityTypeCalcJS(cfg, values);
+      setOut(card, 'build', res.build);
+      setOut(card, 'cast', res.energy);
+      card.dataset.build = res.build;
+      card.dataset.cast = res.energy;
+      return;
+    }
+
     var lines = [];
     var build = 0, energy = cfg.base_energy || 0;
 
@@ -1523,6 +2275,38 @@
   function calcEnact(card) {
     if (!card) return;
     var cfg = getEnactConfig(card.dataset.enactType);
+
+    if (getGenericFieldsForCard(card)) {
+      var values = readGenericCardValues(card);
+      if (card.dataset.enactType === 'Enact State' && values.states) {
+        var surcharge = (C.states && C.states.additional_state) || null;
+        var gens = (C.states && C.states.general_states) || [];
+        var specs = (C.states && C.states.specific_states) || [];
+        var stateField = null;
+        for (var sfi = 0; sfi < cfg.fields.length; sfi++) {
+          if (cfg.fields[sfi].type === 'states') { stateField = cfg.fields[sfi]; break; }
+        }
+        var rowFields = stateField ? stateField.row_fields : [];
+        var build = 0, energy = 0;
+        for (var ri = 0; ri < values.states.length; ri++) {
+          var r = values.states[ri] || {};
+          var rowCosts = evalFieldsJS(rowFields, r);
+          build += rowCosts.build; energy += rowCosts.cast;
+          var stateCost = evalStateRowJS(r, gens, specs, surcharge);
+          build += stateCost.build; energy += stateCost.cast;
+        }
+        var sur = evalStatesSurchargeJS(surcharge, values.states.length);
+        build += sur.build; energy += sur.cast;
+        card.dataset.build = build;
+        card.dataset.cast = energy;
+        return;
+      }
+      var res = genericCalcJS(cfg, values);
+      card.dataset.build = res.build;
+      card.dataset.cast = res.cast;
+      return;
+    }
+
     var lines = [];
     var build = 0, energy = cfg.base_cost ? (cfg.base_cost.energy_cost || 0) : 0;
     var formula = '';
@@ -1697,6 +2481,13 @@
   function calcInter(card) {
     if (!card) return;
     var cfg = getInterConfig(card.dataset.interType);
+    if (getGenericFieldsForCard(card)) {
+      var values = readGenericCardValues(card);
+      var res = genericCalcJS(cfg, values);
+      card.dataset.build = res.build;
+      card.dataset.cast = res.cast;
+      return;
+    }
     var lines = [];
     var build = 0, energy = 0;
     var formula = card.dataset.interType;
@@ -1766,6 +2557,13 @@
   function calcValidation(card) {
     if (!card) return;
     var cfg = getValidationConfig();
+    if (getGenericFieldsForCard(card)) {
+      var values = readGenericCardValues(card);
+      var res = genericCalcJS(cfg, values);
+      card.dataset.build = res.build;
+      card.dataset.cast = res.cast;
+      return;
+    }
     var lines = [];
     var build = 0, energy = 0;
     var formula = '';

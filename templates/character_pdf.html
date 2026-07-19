@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{.Character.Name}} - Character Sheet</title>
+<style>
+@page { size: A4; margin: 1cm; }
+body { font-family: "Georgia", "Times New Roman", serif; color: #1a1a1a; margin: 0; padding: 0; background: #fff; }
+.sheet { max-width: 210mm; margin: 0 auto; padding: 10mm; }
+.header { border: 3px double #8b4513; padding: 12px; margin-bottom: 12px; background: #faf8f5; }
+.header h1 { margin: 0; font-size: 28px; color: #8b4513; text-align: center; }
+.header .subtitle { text-align: center; font-size: 14px; color: #666; margin-top: 4px; }
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+.info-grid .field { font-size: 12px; }
+.info-grid .field .label { font-weight: bold; color: #8b4513; }
+.info-grid .field .value { border-bottom: 1px solid #ccc; min-height: 18px; }
+.section { border: 2px solid #8b4513; margin-bottom: 10px; padding: 8px; background: #faf8f5; }
+.section h2 { margin: 0 0 8px 0; font-size: 16px; color: #8b4513; border-bottom: 1px solid #8b4513; padding-bottom: 4px; }
+.vitals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.vital-box { border: 1px solid #8b4513; padding: 8px; text-align: center; background: #fff; }
+.vital-box .label { font-size: 11px; font-weight: bold; color: #8b4513; text-transform: uppercase; }
+.vital-box .value { font-size: 24px; font-weight: bold; color: #333; margin-top: 4px; }
+.vital-box .dice { font-size: 11px; color: #666; }
+.traits-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.trait-category h3 { margin: 0 0 6px 0; font-size: 13px; color: #8b4513; font-weight: bold; }
+.trait-list { font-size: 11px; }
+.trait-row { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dotted #ddd; }
+.trait-row .name { flex: 1; }
+.trait-row .prof { font-weight: bold; color: #333; min-width: 80px; text-align: right; }
+.trait-row .dice { font-size: 10px; color: #666; min-width: 30px; text-align: right; }
+.ability-item { border: 1px solid #8b4513; padding: 8px; margin-bottom: 10px; background: #fff; page-break-inside: avoid; }
+.ability-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid #d4a574; padding-bottom: 4px; }
+.ability-name { font-weight: bold; font-size: 15px; color: #8b4513; }
+.ability-type { font-size: 10px; color: #666; font-style: italic; }
+.ability-cost { font-size: 10px; color: #333; }
+.ability-desc { font-size: 11px; color: #444; margin-bottom: 8px; }
+.ability-fields { font-size: 10px; color: #555; margin-bottom: 8px; }
+.ability-fields .field-label { font-weight: bold; color: #8b4513; }
+.enactment { border: 1px solid #d4a574; padding: 6px; margin-bottom: 6px; background: #faf8f5; }
+.enactment-title { font-weight: bold; font-size: 12px; color: #8b4513; margin-bottom: 4px; }
+.enactment-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; font-size: 10px; }
+.enactment-grid .kv { display: flex; gap: 4px; }
+.enactment-grid .kv .k { color: #666; min-width: 80px; }
+.enactment-grid .kv .v { font-weight: bold; color: #333; }
+.interaction { border-left: 3px solid #4a90a4; padding-left: 8px; margin: 4px 0; font-size: 10px; }
+.validation { border-left: 3px solid #c0392b; padding-left: 8px; margin: 4px 0; font-size: 10px; }
+.subsection-title { font-size: 11px; font-weight: bold; color: #666; margin: 4px 0 2px 0; text-transform: uppercase; }
+.text-block { font-size: 11px; line-height: 1.4; }
+.text-block .label { font-weight: bold; color: #8b4513; margin-bottom: 2px; }
+.text-block .content { min-height: 30px; border-bottom: 1px solid #ccc; padding: 4px 0; }
+.two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.field-list { font-size: 10px; color: #555; }
+.field-list .kv { display: flex; gap: 4px; margin-bottom: 2px; }
+.field-list .kv .k { color: #666; min-width: 120px; }
+.field-list .kv .v { color: #333; }
+.list { margin: 0; padding-left: 16px; font-size: 10px; }
+.list li { margin-bottom: 2px; }
+.no-print { background: #e8f4f8; padding: 12px; margin-bottom: 12px; border: 1px solid #4a90a4; border-radius: 4px; text-align: center; }
+.no-print button { background: #4a90a4; color: white; border: none; padding: 8px 16px; font-size: 14px; cursor: pointer; border-radius: 4px; }
+.no-print button:hover { background: #357a8a; }
+@media print { .no-print { display: none; } body { background: white; } .ability-item { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="no-print">
+<button onclick="window.print()">Print / Save as PDF</button>
+<span style="margin-left:12px; color:#4a90a4;">Use your browser's print dialog to save as PDF.</span>
+</div>
+<div class="sheet">
+
+<div class="header">
+<h1>{{if .Character.Name}}{{.Character.Name}}{{else}}Unnamed Character{{end}}</h1>
+<div class="subtitle">Level {{.Character.Level}} Character</div>
+<div class="info-grid">
+<div class="field"><div class="label">Age</div><div class="value">{{.Character.Age}}</div></div>
+<div class="field"><div class="label">Size</div><div class="value">{{.Character.Size}}</div></div>
+<div class="field"><div class="label">Alignment</div><div class="value">{{.Character.Alignment}}</div></div>
+<div class="field"><div class="label">Occupation</div><div class="value">{{.Character.Occupation}}</div></div>
+<div class="field"><div class="label">Appearance</div><div class="value">{{.Character.Appearance}}</div></div>
+<div class="field"><div class="label">Hobbies</div><div class="value">{{.Character.Hobbies}}</div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Vital Stats</h2>
+<div class="three-col">
+<div class="vital-box">
+<div class="label">Max HP</div>
+<div class="value">{{.Character.GetHP}}</div>
+<div class="dice">({{index $.ProfDice .Character.VitalHP}})</div>
+</div>
+<div class="vital-box">
+<div class="label">Current HP</div>
+<div class="value">{{.Character.CurrentHP}}</div>
+</div>
+<div class="vital-box">
+<div class="label">Movement</div>
+<div class="value">{{.Character.GetMovement}}m</div>
+<div class="dice">({{index $.ProfDice .Character.VitalMovement}})</div>
+</div>
+<div class="vital-box">
+<div class="label">Max Energy</div>
+<div class="value">{{.Character.GetEnergy}}</div>
+<div class="dice">({{index $.ProfDice .Character.VitalEnergy}})</div>
+</div>
+<div class="vital-box">
+<div class="label">Current Energy</div>
+<div class="value">{{.Character.CurrentEnergy}}</div>
+</div>
+<div class="vital-box">
+<div class="label">Level</div>
+<div class="value">{{.Character.Level}}</div>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Traits</h2>
+<div class="traits-grid">
+<div class="trait-category">
+<h3>General</h3>
+<div class="trait-list">
+{{range $name, $prof := .Character.GeneralTraits}}
+<div class="trait-row">
+<span class="name">{{$name}}</span>
+<span class="prof">{{printf "%s" $prof}}</span>
+<span class="dice">{{index $.ProfDice $prof}}</span>
+</div>
+{{end}}
+</div>
+</div>
+<div class="trait-category">
+<h3>Offense</h3>
+<div class="trait-list">
+{{range $name, $prof := .Character.OffenseTraits}}
+<div class="trait-row">
+<span class="name">{{$name}}</span>
+<span class="prof">{{printf "%s" $prof}}</span>
+<span class="dice">{{index $.ProfDice $prof}}</span>
+</div>
+{{end}}
+</div>
+</div>
+</div>
+<div class="traits-grid" style="margin-top: 8px;">
+<div class="trait-category">
+<h3>Defense</h3>
+<div class="trait-list">
+{{range $name, $prof := .Character.DefenseTraits}}
+<div class="trait-row">
+<span class="name">{{$name}}</span>
+<span class="prof">{{printf "%s" $prof}}</span>
+<span class="dice">{{index $.ProfDice $prof}}</span>
+</div>
+{{end}}
+</div>
+</div>
+</div>
+</div>
+
+{{if .Character.Abilities}}
+<div class="section">
+<h2>Abilities ({{len .Character.Abilities}})</h2>
+{{range .Character.Abilities}}
+<div class="ability-item">
+<div class="ability-header">
+<span class="ability-name">{{if .Name}}{{.Name}}{{else}}Unnamed Ability{{end}}</span>
+<span class="ability-type">{{.Type}}</span>
+<span class="ability-cost">Build: {{.TotalCost}} | Energy: {{.EnergyCost}} | Action: {{.ActionCost}}</span>
+</div>
+{{if .Description}}<div class="ability-desc">{{.Description}}</div>{{end}}
+{{if .HasItemDependency}}<div class="ability-fields"><span class="field-label">Item Dependency:</span> {{.ItemName}}</div>{{end}}
+
+{{if .Fields}}
+<div class="ability-fields">
+<div class="subsection-title">Ability Fields</div>
+<div class="field-list">
+{{range $k, $v := .Fields}}
+<div class="kv"><span class="k">{{$k}}:</span><span class="v">{{$v}}</span></div>
+{{end}}
+</div>
+</div>
+{{end}}
+
+{{if .Enactments}}
+<div class="subsection-title">Enactments</div>
+{{range .Enactments}}
+<div class="enactment">
+<div class="enactment-title">{{.Type}}</div>
+<div class="enactment-grid">
+{{if .Name}}<div class="kv"><span class="k">Name:</span><span class="v">{{.Name}}</span></div>{{end}}
+{{if .Description}}<div class="kv"><span class="k">Description:</span><span class="v">{{.Description}}</span></div>{{end}}
+{{if .Formula}}<div class="kv"><span class="k">Formula:</span><span class="v">{{.Formula}}</span></div>{{end}}
+{{if .Always}}<div class="kv"><span class="k">Always:</span><span class="v">Yes</span></div>{{end}}
+{{if .BuildCost}}<div class="kv"><span class="k">Build Cost:</span><span class="v">{{.BuildCost}}</span></div>{{end}}
+{{if .CastCost}}<div class="kv"><span class="k">Cast Cost:</span><span class="v">{{.CastCost}}</span></div>{{end}}
+{{if .Source}}<div class="kv"><span class="k">Source:</span><span class="v">{{.Source}}</span></div>{{end}}
+{{if .SourceTrait}}<div class="kv"><span class="k">Source Trait:</span><span class="v">{{.SourceTrait}}</span></div>{{end}}
+{{if .OtherRollText}}<div class="kv"><span class="k">Other Roll:</span><span class="v">{{.OtherRollText}}</span></div>{{end}}
+{{if .FlatBonus}}<div class="kv"><span class="k">Flat Bonus:</span><span class="v">+{{.FlatBonus}}</span></div>{{end}}
+{{if .OffensiveTrait}}<div class="kv"><span class="k">Offensive Trait:</span><span class="v">{{.OffensiveTrait}}</span></div>{{end}}
+{{if .MedicineTrait}}<div class="kv"><span class="k">Medicine Trait:</span><span class="v">{{.MedicineTrait}}</span></div>{{end}}
+{{if .OriginText}}<div class="kv"><span class="k">Origin:</span><span class="v">{{.OriginText}}</span></div>{{end}}
+{{if .Distance}}<div class="kv"><span class="k">Distance:</span><span class="v">{{.Distance}}m</span></div>{{end}}
+{{if .Directions}}<div class="kv"><span class="k">Directions:</span><span class="v">{{join .Directions ", "}}</span></div>{{end}}
+{{if .ShiftedTrait}}<div class="kv"><span class="k">Shifted Trait:</span><span class="v">{{.ShiftedTrait}}</span></div>{{end}}
+{{if .ShiftDir}}<div class="kv"><span class="k">Shift Direction:</span><span class="v">{{.ShiftDir}}</span></div>{{end}}
+{{if .ShiftAmount}}<div class="kv"><span class="k">Shift Amount:</span><span class="v">{{.ShiftAmount}}</span></div>{{end}}
+{{if .ShiftUses}}<div class="kv"><span class="k">Shift Uses:</span><span class="v">{{.ShiftUses}}</span></div>{{end}}
+{{if .EffectName}}<div class="kv"><span class="k">Effect Name:</span><span class="v">{{.EffectName}}</span></div>{{end}}
+{{if .EffectType}}<div class="kv"><span class="k">Applies:</span><span class="v">{{.EffectType}}</span></div>{{end}}
+{{if .Duration}}<div class="kv"><span class="k">Duration:</span><span class="v">{{.Duration}} rounds</span></div>{{end}}
+{{if .TriggerTiming}}<div class="kv"><span class="k">Trigger:</span><span class="v">{{.TriggerTiming}}</span></div>{{end}}
+{{if .Solutions}}
+<div class="kv"><span class="k">Solutions:</span></div>
+<ul class="list">
+{{range .Solutions}}<li>{{.}}</li>{{end}}
+</ul>
+{{end}}
+</div>
+{{if .Fields}}
+<div class="field-list" style="margin-top: 4px;">
+{{range $k, $v := .Fields}}
+<div class="kv"><span class="k">{{$k}}:</span><span class="v">{{$v}}</span></div>
+{{end}}
+</div>
+{{end}}
+{{if .Interaction}}
+<div class="interaction">
+<div class="subsection-title">Interaction</div>
+<div class="enactment-grid">
+<div class="kv"><span class="k">Type:</span><span class="v">{{.Interaction.Type}}</span></div>
+{{if .Interaction.BuildCost}}<div class="kv"><span class="k">Build Cost:</span><span class="v">{{.Interaction.BuildCost}}</span></div>{{end}}
+{{if .Interaction.CastCost}}<div class="kv"><span class="k">Cast Cost:</span><span class="v">{{.Interaction.CastCost}}</span></div>{{end}}
+{{if .Interaction.Range}}<div class="kv"><span class="k">Range:</span><span class="v">{{.Interaction.Range}}m</span></div>{{end}}
+{{if .Interaction.Targets}}<div class="kv"><span class="k">Targets:</span><span class="v">{{.Interaction.Targets}}</span></div>{{end}}
+{{if .Interaction.Radius}}<div class="kv"><span class="k">Radius:</span><span class="v">{{.Interaction.Radius}}m</span></div>{{end}}
+{{if .Interaction.OriginText}}<div class="kv"><span class="k">Origin:</span><span class="v">{{.Interaction.OriginText}}</span></div>{{end}}
+{{if .Interaction.Duration}}<div class="kv"><span class="k">Duration:</span><span class="v">{{.Interaction.Duration}} rounds</span></div>{{end}}
+{{if .Interaction.Timing}}<div class="kv"><span class="k">Timing:</span><span class="v">{{.Interaction.Timing}}</span></div>{{end}}
+{{if .Interaction.UsePrevious}}<div class="kv"><span class="k">Use Previous:</span><span class="v">Yes</span></div>{{end}}
+{{if .Interaction.VisibleOK}}<div class="kv"><span class="k">Not Visible OK:</span><span class="v">Yes</span></div>{{end}}
+{{if .Interaction.ObstructedOK}}<div class="kv"><span class="k">Obstructed OK:</span><span class="v">Yes</span></div>{{end}}
+{{if .Interaction.RemovePenalty}}<div class="kv"><span class="k">Remove Penalty:</span><span class="v">Yes</span></div>{{end}}
+{{if .Interaction.Immune}}<div class="kv"><span class="k">Engager Immune:</span><span class="v">Yes</span></div>{{end}}
+</div>
+{{if .Interaction.Fields}}
+<div class="field-list" style="margin-top: 4px;">
+{{range $k, $v := .Interaction.Fields}}
+<div class="kv"><span class="k">{{$k}}:</span><span class="v">{{$v}}</span></div>
+{{end}}
+</div>
+{{end}}
+{{if .Interaction.Validation}}
+<div class="validation">
+<div class="subsection-title">Validation</div>
+<div class="enactment-grid">
+{{if .Interaction.Validation.BuildCost}}<div class="kv"><span class="k">Build Cost:</span><span class="v">{{.Interaction.Validation.BuildCost}}</span></div>{{end}}
+{{if .Interaction.Validation.CastCost}}<div class="kv"><span class="k">Cast Cost:</span><span class="v">{{.Interaction.Validation.CastCost}}</span></div>{{end}}
+{{if .Interaction.Validation.EngageMode}}<div class="kv"><span class="k">Engage Mode:</span><span class="v">{{.Interaction.Validation.EngageMode}}</span></div>{{end}}
+{{if .Interaction.Validation.EngageTrait}}<div class="kv"><span class="k">Engage Trait:</span><span class="v">{{.Interaction.Validation.EngageTrait}}</span></div>{{end}}
+{{if .Interaction.Validation.EngageDie}}<div class="kv"><span class="k">Engage Die:</span><span class="v">{{.Interaction.Validation.EngageDie}}</span></div>{{end}}
+{{if .Interaction.Validation.EngageOther}}<div class="kv"><span class="k">Engage Other:</span><span class="v">{{.Interaction.Validation.EngageOther}}</span></div>{{end}}
+</div>
+{{if .Interaction.Validation.CounterRolls}}
+<div class="kv"><span class="k">Counter Rolls:</span></div>
+<ul class="list">
+{{range .Interaction.Validation.CounterRolls}}<li>{{.}}</li>{{end}}
+</ul>
+{{end}}
+{{if .Interaction.Validation.Fields}}
+<div class="field-list" style="margin-top: 4px;">
+{{range $k, $v := .Interaction.Validation.Fields}}
+<div class="kv"><span class="k">{{$k}}:</span><span class="v">{{$v}}</span></div>
+{{end}}
+</div>
+{{end}}
+</div>
+{{end}}
+</div>
+{{end}}
+</div>
+{{end}}
+{{end}}
+</div>
+{{end}}
+</div>
+{{end}}
+
+<div class="section">
+<h2>Character Details</h2>
+<div class="two-col">
+<div class="text-block">
+<div class="label">Backstory</div>
+<div class="content">{{.Character.Backstory}}</div>
+</div>
+<div class="text-block">
+<div class="label">Personality</div>
+<div class="content">{{.Character.Personality}}</div>
+</div>
+</div>
+<div class="text-block" style="margin-top: 8px;">
+<div class="label">Inventory</div>
+<div class="content">{{.Character.Inventory}}</div>
+</div>
+<div class="text-block" style="margin-top: 8px;">
+<div class="label">Quirks</div>
+<div class="content">{{.Character.Quirks}}</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>

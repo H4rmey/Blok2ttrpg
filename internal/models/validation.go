@@ -41,13 +41,14 @@ type CounterRoll struct {
 
 // Validation determines whether an enactment successfully affects its targets.
 type Validation struct {
-	BuildCost           int           `json:"build_cost,omitempty" yaml:"build_cost,omitempty"`
-	CastCost            int           `json:"cast_cost,omitempty" yaml:"cast_cost,omitempty"`
-	EngageMode          EngageMode    `json:"engage_mode,omitempty" yaml:"engage_mode,omitempty"`
-	EngageTrait         string        `json:"engage_trait,omitempty" yaml:"engage_trait,omitempty"`
-	EngageTraitCategory TraitCategory `json:"engage_trait_category,omitempty" yaml:"-"`
-	EngageDie           string        `json:"engage_die,omitempty" yaml:"engage_die,omitempty"`
-	EngageOther         string        `json:"engage_other,omitempty" yaml:"-"`
+	BuildCost           int                    `json:"build_cost,omitempty" yaml:"build_cost,omitempty"`
+	CastCost            int                    `json:"cast_cost,omitempty" yaml:"cast_cost,omitempty"`
+	Fields              map[string]interface{} `json:"fields,omitempty" yaml:"-"`
+	EngageMode          EngageMode             `json:"engage_mode,omitempty" yaml:"engage_mode,omitempty"`
+	EngageTrait         string                 `json:"engage_trait,omitempty" yaml:"engage_trait,omitempty"`
+	EngageTraitCategory TraitCategory          `json:"engage_trait_category,omitempty" yaml:"-"`
+	EngageDie           string                 `json:"engage_die,omitempty" yaml:"engage_die,omitempty"`
+	EngageOther         string                 `json:"engage_other,omitempty" yaml:"-"`
 	// CounterRolls is kept flat for backward compatibility. New code uses
 	// CounterRollEntries for typed counter rolls.
 	CounterRolls       []string      `json:"counter_rolls,omitempty" yaml:"counter_rolls,omitempty"`

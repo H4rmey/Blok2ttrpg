@@ -1,0 +1,28 @@
+traits:
+  general:
+    - Strength
+    - Dexterity
+    - Stealth
+    - Perception
+    - Nature
+    - Crafting
+    - People Skill
+    - Performance
+    - Thievery
+    - Knowledge
+    - Magic
+    - New Trait
+  offense:
+    - Precision
+    - Power
+    - Mind
+    - Magic
+  defense:
+    - Reflex
+    - Constitution
+    - Mind
+    - Magic
+  vital:
+    - HP
+    - Movement
+    - Energy

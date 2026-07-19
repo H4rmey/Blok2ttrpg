@@ -1,0 +1,502 @@
+enactments:
+  negation:
+    type: "Enact Negation"
+    description: "Negate an ability"
+    base_cost:
+      add_cost: 2
+      energy_cost: 1
+    fields:
+      - key: always
+        label: "Will always resolve"
+        type: checkbox
+        cost:
+          add_cost: 5
+          energy_cost: 3
+      - key: source
+        label: "Source"
+        type: dropdown
+        options:
+          - value: d4
+            label: "1d4"
+            cost:
+              add_cost: 0
+              energy_cost: 0
+          - value: d6
+            label: "1d6"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+          - value: d8
+            label: "1d8"
+            cost:
+              add_cost: 4
+              energy_cost: 2
+          - value: d10
+            label: "1d10"
+            cost:
+              add_cost: 6
+              energy_cost: 3
+          - value: d12
+            label: "1d12"
+            cost:
+              add_cost: 8
+              energy_cost: 4
+          - value: trait
+            label: "Trait (1d10)"
+            cost:
+              add_cost: 3
+              energy_cost: 0
+          - value: other
+            label: "Another roll result"
+            cost:
+              add_cost: 3
+              energy_cost: 1
+      - key: source_trait
+        label: "Trait"
+        type: dropdown
+        options_source: traits_defense
+        visibility_when: source
+        show_when: trait
+      - key: other
+        label: "Other Roll Text"
+        type: free_text
+        visibility_when: source
+        show_when: other
+      - key: flat
+        label: "Flat Bonus"
+        type: free_number
+        default: 0
+        min: 0
+        max: 20
+        step: 1
+        per_step:
+          increase:
+            add_cost: 2
+            energy_cost: 0
+          decrease:
+            add_cost: 0
+            energy_cost: 0
+      - key: offense
+        label: "Defensive Trait (extra die)"
+        type: dropdown
+        options_source: traits_defense
+        cost:
+          add_cost: 4
+          energy_cost: 2
+      - key: counter_negation
+        label: "Apply Negation to counter roll"
+        type: checkbox
+        cost:
+          add_cost: 4
+          energy_cost: 2
+      - key: full_counter
+        label: "Ability hits Engager instead"
+        type: checkbox
+        cost:
+          add_cost: 4
+          energy_cost: 2
+
+  damage:
+    type: "Enact Damage"
+    description: "Inflicts damage to a target."
+    base_cost:
+      add_cost: 2
+      energy_cost: 1
+    fields:
+      - key: always
+        label: "Will always resolve"
+        type: checkbox
+        cost:
+          add_cost: 5
+          energy_cost: 3
+      - key: source
+        label: "Source"
+        type: dropdown
+        options:
+          - value: d4
+            label: "1d4"
+            cost:
+              add_cost: 0
+              energy_cost: 0
+          - value: d6
+            label: "1d6"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+          - value: d8
+            label: "1d8"
+            cost:
+              add_cost: 4
+              energy_cost: 2
+          - value: d10
+            label: "1d10"
+            cost:
+              add_cost: 6
+              energy_cost: 3
+          - value: d12
+            label: "1d12"
+            cost:
+              add_cost: 8
+              energy_cost: 4
+          - value: trait
+            label: "Trait (1d10)"
+            cost:
+              add_cost: 3
+              energy_cost: 0
+          - value: other
+            label: "Another roll result"
+            cost:
+              add_cost: 3
+              energy_cost: 1
+      - key: source_trait
+        label: "Trait"
+        type: dropdown
+        options_source: traits_offense
+        visibility_when: source
+        show_when: trait
+      - key: other
+        label: "Other Roll Text"
+        type: free_text
+        visibility_when: source
+        show_when: other
+      - key: flat
+        label: "Flat Bonus"
+        type: free_number
+        default: 0
+        min: 0
+        max: 20
+        step: 1
+        per_step:
+          increase:
+            add_cost: 2
+            energy_cost: 0
+      - key: offense
+        label: "Offensive Trait (extra die)"
+        type: dropdown
+        options_source: traits_offense
+        cost:
+          add_cost: 4
+          energy_cost: 2
+
+  healing:
+    type: "Enact Healing"
+    description: "Restores health to a target."
+    base_cost:
+      add_cost: 2
+      energy_cost: 1
+    fields:
+      - key: always
+        label: "Will always resolve"
+        type: checkbox
+        cost:
+          add_cost: 4
+          energy_cost: 2
+      - key: source
+        label: "Source"
+        type: dropdown
+        options:
+          - value: d4
+            label: "1d4"
+            cost:
+              add_cost: 0
+              energy_cost: 0
+          - value: d6
+            label: "1d6"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+          - value: d8
+            label: "1d8"
+            cost:
+              add_cost: 4
+              energy_cost: 2
+          - value: d10
+            label: "1d10"
+            cost:
+              add_cost: 6
+              energy_cost: 3
+          - value: d12
+            label: "1d12"
+            cost:
+              add_cost: 8
+              energy_cost: 4
+          - value: trait
+            label: "Trait (1d10)"
+            cost:
+              add_cost: 3
+              energy_cost: 0
+          - value: other
+            label: "Another roll result"
+            cost:
+              add_cost: 3
+              energy_cost: 1
+      - key: source_trait
+        label: "Trait"
+        type: dropdown
+        options_source: traits_general
+        visibility_when: source
+        show_when: trait
+      - key: other
+        label: "Other Roll Text"
+        type: free_text
+        visibility_when: source
+        show_when: other
+      - key: flat
+        label: "Flat Bonus"
+        type: free_number
+        default: 0
+        min: 0
+        max: 20
+        step: 1
+        per_step:
+          increase:
+            add_cost: 2
+            energy_cost: 0
+      - key: medicine
+        label: "Medicine Trait"
+        type: dropdown
+        options_source: traits_general
+        cost:
+          add_cost: 3
+          energy_cost: 1
+
+  movement:
+    type: "Enact Movement"
+    description: "Moves a target or the Ability user."
+    base_cost:
+      add_cost: 1
+      energy_cost: 0
+    fields:
+      - key: always
+        label: "Will always resolve"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
+      - key: origin_mode
+        label: "Origin"
+        type: dropdown
+        options:
+          - value: engager
+            label: "Engager"
+            cost:
+              add_cost: 0
+              energy_cost: 0
+          - value: other
+            label: "Other Origin"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+            fields:
+              - key: origin_text
+                label: "Origin Text"
+                type: free_text
+                visibility_when: origin_mode
+                show_when: other
+      - key: distance
+        label: "Distance"
+        type: free_number
+        default: 1
+        min: 1
+        max: 20
+        step: 1
+        per_step:
+          increase:
+            add_cost: 1
+            energy_cost: 0
+      - key: direction
+        label: "Directions"
+        type: solutions
+        default_count: 1
+        options_source: directions_all
+        row_fields:
+          - key: value
+            label: "Direction"
+            type: dropdown
+            options_source: directions_all
+        per_item:
+          increase:
+            add_cost: 0
+            energy_cost: 0
+          decrease:
+            add_cost: 0
+            energy_cost: 0
+
+  proficiency_shift:
+    type: "Enact Proficiency Shift"
+    description: "Temporarily enhances or weakens Traits."
+    base_cost:
+      add_cost: 2
+      energy_cost: 1
+    fields:
+      - key: always
+        label: "Will always resolve"
+        type: checkbox
+        cost:
+          add_cost: 4
+          energy_cost: 2
+      - key: shifted_trait
+        label: "Trait"
+        type: dropdown
+        options_source: traits_all
+      - key: shift_dir
+        label: "Direction"
+        type: dropdown
+        options:
+          - value: UP
+            label: "UP"
+            cost:
+              add_cost: 0
+              energy_cost: 0
+          - value: DOWN
+            label: "DOWN"
+            cost:
+              add_cost: 0
+              energy_cost: 0
+      - key: shift_amount
+        label: "Amount"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            add_cost: 3
+            energy_cost: 1
+      - key: shift_uses
+        label: "Uses"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            add_cost: 3
+            energy_cost: 1
+
+  persistent_effect:
+    type: "Enact Persistent Effect"
+    description: "Applies a lingering effect that remains for multiple turns."
+    base_cost:
+      add_cost: 3
+      energy_cost: 2
+    fields:
+      - key: always
+        label: "Will always resolve"
+        type: checkbox
+        cost:
+          add_cost: 5
+          energy_cost: 3
+      - key: effect_name
+        label: "Name"
+        type: free_text
+        default: "Effect"
+      - key: effect_type
+        label: "Applies"
+        type: dropdown
+        options:
+          - value: "Enact Damage"
+            label: "Enact Damage"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+          - value: "Enact Healing"
+            label: "Enact Healing"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+          - value: "Enact Movement"
+            label: "Enact Movement"
+            cost:
+              add_cost: 1
+              energy_cost: 0
+          - value: "Enact Proficiency Shift"
+            label: "Enact Proficiency Shift"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+      - key: duration
+        label: "Duration"
+        type: free_number
+        default: 2
+        min: 2
+        max: 10
+        step: 1
+        per_step:
+          increase:
+            add_cost: 2
+            energy_cost: 1
+      - key: trigger_timing
+        label: "Trigger"
+        type: dropdown
+        options:
+          - value: "Start of Target Turn"
+            label: "Start of Target Turn"
+          - value: "End of Engager Turn"
+            label: "End of Engager Turn"
+      - key: solution
+        label: "Solutions"
+        type: solutions
+        default_count: 2
+        options_source: traits_general
+        row_fields:
+          - key: value
+            label: "Solution"
+            type: dropdown
+            options_source: traits_general
+        per_item:
+          increase:
+            add_cost: -1
+            energy_cost: 0
+          decrease:
+            add_cost: 3
+            energy_cost: 1
+
+  state:
+    type: "Enact State"
+    description: "Applies a state or condition to a target."
+    base_cost:
+      add_cost: 0
+      energy_cost: 0
+    fields:
+      - key: states
+        label: "States"
+        type: states
+        default_count: 1
+        row_fields:
+          - key: state_kind
+            label: "State Type"
+            type: dropdown
+            default: ""
+            options:
+              - value: specific
+                label: "Specific State"
+                cost:
+                  add_cost: 0
+                  energy_cost: 0
+              - value: general
+                label: "General State (shift)"
+                cost:
+                  add_cost: 0
+                  energy_cost: 0
+          - key: specific_state
+            label: "Specific State"
+            type: dropdown
+            options_source: states_specific
+            visibility_when: state_kind
+            show_when: specific
+          - key: general_state
+            label: "General State"
+            type: dropdown
+            options_source: states_general
+            visibility_when: state_kind
+            show_when: general
+          - key: shift_amount
+            label: "Shift Amount"
+            type: free_number
+            default: 1
+            step: 1
+            visibility_when: state_kind
+            show_when: general

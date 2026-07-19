@@ -21,26 +21,26 @@ type TemplateData struct {
 
 	AdditionalEnactmentTable template.HTML
 
-	Execution                  config.AbilityTypeConfig
-	ExecutionPerksTable        template.HTML
-	ExecutionEnactmentsTable   template.HTML
-	Reaction                   config.AbilityTypeConfig
-	ReactionPerksTable         template.HTML
-	ReactionTriggersTable      template.HTML
-	ReactionEnactmentsTable    template.HTML
-	Phase                      config.AbilityTypeConfig
-	PhasePerksTable            template.HTML
-	PhaseKnockoutsTable        template.HTML
-	PhaseEnactmentsTable       template.HTML
-	Preparation                config.AbilityTypeConfig
-	PreparationPerksTable      template.HTML
-	PreparationTriggersTable   template.HTML
-	PreparationEnactmentsTable template.HTML
-	Minion                     config.AbilityTypeConfig
-	MinionPerksTable           template.HTML
-	MinionEnactmentsTable      template.HTML
-	Concentration              config.AbilityTypeConfig
-	ConcentrationPerksTable    template.HTML
+	Execution                    config.AbilityTypeConfig
+	ExecutionPerksTable          template.HTML
+	ExecutionEnactmentsTable     template.HTML
+	Reaction                     config.AbilityTypeConfig
+	ReactionPerksTable           template.HTML
+	ReactionTriggersTable        template.HTML
+	ReactionEnactmentsTable      template.HTML
+	Phase                        config.AbilityTypeConfig
+	PhasePerksTable              template.HTML
+	PhaseKnockoutsTable          template.HTML
+	PhaseEnactmentsTable         template.HTML
+	Preparation                  config.AbilityTypeConfig
+	PreparationPerksTable        template.HTML
+	PreparationTriggersTable     template.HTML
+	PreparationEnactmentsTable   template.HTML
+	Minion                       config.AbilityTypeConfig
+	MinionPerksTable             template.HTML
+	MinionEnactmentsTable        template.HTML
+	Concentration                config.AbilityTypeConfig
+	ConcentrationPerksTable      template.HTML
 	ConcentrationEnactmentsTable template.HTML
 
 	Combat config.CombatConfig

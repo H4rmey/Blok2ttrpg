@@ -1,0 +1,68 @@
+leveling:
+  max_level: 10
+  trait_points:
+    standard_trait_count: 22
+    starting_formula: "(trait_count + 2) / 3"
+    levels:
+      - level: 1
+        points_gained: 0
+        total: 8
+      - level: 2
+        points_gained: 1
+        total: 9
+      - level: 3
+        points_gained: 1
+        total: 10
+      - level: 4
+        points_gained: 1
+        total: 11
+      - level: 5
+        points_gained: 2
+        total: 13
+      - level: 6
+        points_gained: 1
+        total: 14
+      - level: 7
+        points_gained: 1
+        total: 15
+      - level: 8
+        points_gained: 1
+        total: 16
+      - level: 9
+        points_gained: 1
+        total: 17
+      - level: 10
+        points_gained: 2
+        total: 19
+  ability_points:
+    levels:
+      - level: 1
+        points_gained: 0
+        total: 10
+      - level: 2
+        points_gained: 2
+        total: 12
+      - level: 3
+        points_gained: 3
+        total: 15
+      - level: 4
+        points_gained: 2
+        total: 17
+      - level: 5
+        points_gained: 4
+        total: 21
+      - level: 6
+        points_gained: 2
+        total: 23
+      - level: 7
+        points_gained: 3
+        total: 26
+      - level: 8
+        points_gained: 2
+        total: 28
+      - level: 9
+        points_gained: 3
+        total: 31
+      - level: 10
+        points_gained: 5
+        total: 36

@@ -1,11 +1,14 @@
 package handlers
 
 import (
+	"html/template"
+	"log"
 	"net/http"
 	"path/filepath"
 	"strings"
 
 	"github.com/harmey/blok2ttrpg/ability-builder/internal/export"
+	"github.com/harmey/blok2ttrpg/ability-builder/internal/models"
 )
 
 // ExportCharacterYAMLHandler returns a YAML file download for an entire
@@ -110,3 +113,53 @@ func sanitizeFilename(name string) string {
 	repl := strings.NewReplacer("/", "-", "\\", "-", ":", "-", "*", "-", "?", "-", "\"", "-", "<", "-", ">", "-", "|", "-")
 	return repl.Replace(base) + ext
 }
+
+// PdfCharacterHandler renders the character as a print-friendly HTML page
+// styled like a D&D/Pathfinder character sheet, with a print button.
+func (app *App) PdfCharacterHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	id := extractPathParam(r, "characters", 1)
+	if id == "" {
+		http.NotFound(w, r)
+		return
+	}
+
+	c, err := app.Store.GetCharacter(id)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	data := struct {
+		Character *models.Character
+		ProfDice  map[models.Proficiency]string
+	}{
+		Character: c,
+		ProfDice:  models.ProficiencyDice,
+	}
+
+	pdfPath := filepath.Join(app.TemplateDir, "character_pdf.html")
+	tmpl, err := template.New("").Funcs(app.funcMap).ParseFiles(pdfPath)
+	if err != nil {
+		log.Printf("failed to parse character pdf template: %v", err)
+		http.Error(w, "Failed to load character sheet template", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if err := tmpl.ExecuteTemplate(w, "character_pdf.html", data); err != nil {
+		log.Printf("failed to render character pdf: %v", err)
+		http.Error(w, "Failed to render character sheet", http.StatusInternalServerError)
+	}
+}
+
+var characterPdfTemplate = template.Must(template.New("character_pdf_inline").Parse(`<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Character Sheet</title></head>
+<body><p>Legacy inline template</p></body>
+</html>`))
+

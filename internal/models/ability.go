@@ -4,11 +4,11 @@ package models
 type AbilityType string
 
 const (
-	AbilityExecution    AbilityType = "Execution"
-	AbilityReaction     AbilityType = "Reaction"
-	AbilityPhase        AbilityType = "Phase"
-	AbilityMinion       AbilityType = "Minion"
-	AbilityPreparation  AbilityType = "Preparation"
+	AbilityExecution     AbilityType = "Execution"
+	AbilityReaction      AbilityType = "Reaction"
+	AbilityPhase         AbilityType = "Phase"
+	AbilityMinion        AbilityType = "Minion"
+	AbilityPreparation   AbilityType = "Preparation"
 	AbilityConcentration AbilityType = "Concentration"
 )
 
@@ -64,6 +64,10 @@ type Ability struct {
 	Effortless bool `json:"effortless,omitempty" yaml:"-"`
 	IronWill   bool `json:"iron_will,omitempty" yaml:"-"`
 	DualFocus  bool `json:"dual_focus,omitempty" yaml:"-"`
+
+	// Fields is the generic field-values map driven by the ability-type
+	// schema. Values can be string, bool, int, or []string.
+	Fields map[string]interface{} `json:"fields,omitempty" yaml:"-"`
 
 	Enactments []Enactment `json:"enactments" yaml:"enactments"`
 }

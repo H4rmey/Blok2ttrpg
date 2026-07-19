@@ -1,0 +1,289 @@
+# States configuration for Enact State enactment type.
+# Placeholders: costs are tunable and represent WIP values.
+
+additional_state:
+  add_cost: 1
+  energy_cost: 0
+
+general_states:
+  # General states apply trait shifts with per-shift cost
+  - id: blinded
+    name: "Blinded"
+    description: "Reduces certain trait rolls"
+    min_shift: -6
+    max_shift: 0
+    shift_cost:
+      add_cost: 1
+      energy_cost: 0
+  - id: encumbered
+    name: "Encumbered"
+    description: "Reduces movement and relevant traits"
+    min_shift: -6
+    max_shift: 0
+    shift_cost:
+      add_cost: 1
+      energy_cost: 0
+  - id: encouraged
+    name: "Encouraged"
+    description: "Positive trait shifts"
+    min_shift: 1
+    max_shift: 6
+    shift_cost:
+      add_cost: 2
+      energy_cost: 1
+  - id: frightened
+    name: "Frightened"
+    description: "Negative trait shifts"
+    min_shift: -6
+    max_shift: 0
+    shift_cost:
+      add_cost: 1
+      energy_cost: 0
+
+specific_states:
+  # Specific states have fixed costs
+  # Targeting & Perception Mechanics
+  - id: taunted
+    name: "Taunted"
+    description: "You can only target a preset Target."
+    add_cost: 2
+    energy_cost: 0
+  - id: swayed
+    name: "Swayed"
+    description: "You cannot target a preset Target anymore."
+    add_cost: 2
+    energy_cost: 0
+  - id: untargetable
+    name: "Untouchable"
+    description: "You cannot be targeted."
+    add_cost: 2
+    energy_cost: 0
+  - id: ignored
+    name: "Ignored"
+    description: "You cannot be targeted, but you can still get hit."
+    add_cost: 1
+    energy_cost: 0
+  - id: confused
+    name: "Confused"
+    description: "You indiscriminately target anyone."
+    add_cost: 2
+    energy_cost: 0
+  - id: vengeful
+    name: "Vengeful"
+    description: "You can only target the last entity that dealt damage to you."
+    add_cost: 2
+    energy_cost: 0
+  - id: distracted
+    name: "Distracted"
+    description: "If you change your current target to a new one, your rolls will shift one down for that new target."
+    add_cost: 1
+    energy_cost: 0
+  - id: isolated
+    name: "Isolated"
+    description: "You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent."
+    add_cost: 2
+    energy_cost: 0
+
+  # Mind Control & Behavioral Constraints
+  - id: charmed
+    name: "Charmed"
+    description: "You must do what the Charmer says."
+    add_cost: 3
+    energy_cost: 1
+  - id: hypnotized
+    name: "Hypnotized"
+    description: "You mimic the exact movement and action of the person who hypnotized you on their last turn."
+    add_cost: 2
+    energy_cost: 0
+  - id: stubborn
+    name: "Stubborn"
+    description: "You cannot repeat the same action or use the same ability two turns in a row."
+    add_cost: 2
+    energy_cost: 0
+  - id: paranoid
+    name: "Paranoid"
+    description: "You refuse help from anyone."
+    add_cost: 1
+    energy_cost: 0
+  - id: insane
+    name: "Insane"
+    description: "At the start of your turn, roll a die (d4) to determine random behavior."
+    add_cost: 4
+    energy_cost: 2
+
+  # Action & Ability Inhibitors
+  - id: stunned
+    name: "Stunned"
+    description: "You are stunned; you lose one of your actions."
+    add_cost: 2
+    energy_cost: 0
+  - id: paralyzed
+    name: "Paralyzed"
+    description: "Lose your turn."
+    add_cost: 3
+    energy_cost: 0
+  - id: pacified
+    name: "Pacified"
+    description: "You can no longer attack any Target."
+    add_cost: 2
+    energy_cost: 0
+  - id: enraged
+    name: "Enraged"
+    description: "You can no longer use weapons."
+    add_cost: 2
+    energy_cost: 0
+  - id: disarmed
+    name: "Disarmed"
+    description: "You no longer have a weapon."
+    add_cost: 1
+    energy_cost: 0
+  - id: silenced
+    name: "Silenced"
+    description: "You can no longer talk."
+    add_cost: 1
+    energy_cost: 0
+  - id: deafened
+    name: "Deafened"
+    description: "You can no longer listen."
+    add_cost: 1
+    energy_cost: 0
+  - id: stifled
+    name: "Stifled"
+    description: "Your hands are bound; you cannot use items, potions, or consumables from your inventory."
+    add_cost: 1
+    energy_cost: 0
+  - id: staggered
+    name: "Staggered"
+    description: "You can no longer use Reactions or your Preparation is cancelled."
+    add_cost: 2
+    energy_cost: 0
+
+  # Movement & Positioning
+  - id: prone
+    name: "Prone"
+    description: "You are knocked on the ground; use one of your actions to get up."
+    add_cost: 1
+    energy_cost: 0
+  - id: anchored
+    name: "Anchored"
+    description: "You can no longer move."
+    add_cost: 2
+    energy_cost: 0
+  - id: restrained
+    name: "Restrained"
+    description: "You can no longer use your hands."
+    add_cost: 2
+    energy_cost: 0
+  - id: slowed
+    name: "Slowed"
+    description: "Movement speed shifted one down."
+    add_cost: 1
+    energy_cost: 0
+  - id: terrified
+    name: "Terrified"
+    description: "You move 1m away from the target (or take 1d4 damage)."
+    add_cost: 2
+    energy_cost: 0
+
+  # Dice & Stats Modifications
+  - id: weakened
+    name: "Weakened"
+    description: "Damaging rolls are shifted one die down."
+    add_cost: 2
+    energy_cost: 0
+  - id: fragile
+    name: "Fragile"
+    description: "Engager that targets you, may shift their damage die by +1."
+    add_cost: 2
+    energy_cost: 0
+  - id: cursed
+    name: "Cursed"
+    description: "Die shifts up are converted to die shifts down."
+    add_cost: 3
+    energy_cost: 1
+  - id: blessed
+    name: "Blessed"
+    description: "Die shifts down are converted to die shifts up."
+    add_cost: 3
+    energy_cost: 1
+  - id: hesitant
+    name: "Hesitant"
+    description: "Your Engagement Roll must be rolled twice."
+    add_cost: 2
+    energy_cost: 0
+  - id: broken_gear
+    name: "Broken Gear"
+    description: "Rolls for this gear are reduced by one die shift."
+    add_cost: 2
+    energy_cost: 0
+  - id: amplified_gear
+    name: "Amplified Gear"
+    description: "Rolls for this gear are upgraded by one die shift."
+    add_cost: 2
+    energy_cost: 0
+
+  # Energy & Resource Manipulation
+  - id: fatigued
+    name: "Fatigued"
+    description: "Energy cost of abilities is increased by 1."
+    add_cost: 2
+    energy_cost: 0
+  - id: energized
+    name: "Energized"
+    description: "Energy cost of abilities is reduced by 1."
+    add_cost: 2
+    energy_cost: 0
+
+  # Time & Round Economy
+  - id: delayed
+    name: "Delayed"
+    description: "You move down one in the turn order."
+    add_cost: 1
+    energy_cost: 0
+  - id: hastened
+    name: "Hastened"
+    description: "You move up one in the turn order."
+    add_cost: 2
+    energy_cost: 0
+  - id: echoed
+    name: "Echoed"
+    description: "Whatever action you took last round will be executed automatically next round."
+    add_cost: 2
+    energy_cost: 0
+
+  # Health, Death & Reality Alterations
+  - id: dying
+    name: "Dying"
+    description: "Your HP went below 0; you are out of combat until revived by an ally."
+    add_cost: 0
+    energy_cost: 0
+  - id: doomed
+    name: "Doomed"
+    description: "You will move to Dying in x turns."
+    add_cost: 1
+    energy_cost: 0
+  - id: invincible
+    name: "Invincible"
+    description: "You cannot be damaged."
+    add_cost: 4
+    energy_cost: 2
+  - id: zombified
+    name: "Zombified"
+    description: "Healing damages instead; Damage heals instead."
+    add_cost: 3
+    energy_cost: 1
+  - id: linked
+    name: "Linked"
+    description: "You are linked to a Target; what happens to you happens to the linked Target. This links per Trait."
+    add_cost: 3
+    energy_cost: 1
+  - id: incorporeal
+    name: "Incorporeal"
+    description: "Phase through walls."
+    add_cost: 3
+    energy_cost: 1
+  - id: marked
+    name: "Marked"
+    description: "Everything that happens to you is buffed or nerfed (pick one)."
+    add_cost: 2
+    energy_cost: 0

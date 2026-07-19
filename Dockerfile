@@ -26,6 +26,6 @@ RUN mkdir -p /app/data
 EXPOSE 8080
 
 ENV PORT=8080
-ENV ABILITY_BUILDER_CONFIG=/app/config/ability-builder.yaml
+ENV ABILITY_BUILDER_CONFIG=/app/config/ability-builder
 
 CMD ["./ability-builder"]

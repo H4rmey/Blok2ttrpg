@@ -108,6 +108,11 @@ func main() {
 			return
 		}
 
+		if len(parts) == 2 && parts[1] == "pdf" {
+			app.PdfCharacterHandler(w, r)
+			return
+		}
+
 		// /characters/{id}/abilities[/...]
 		if parts[1] == "abilities" {
 			if len(parts) == 2 {
@@ -167,6 +172,7 @@ func main() {
 
 	// Documentation download
 	mux.HandleFunc("/docs/download", app.DownloadDocsHandler)
+	mux.HandleFunc("/docs/pdf", app.PdfDocsHandler)
 
 	// Start server
 	addr := fmt.Sprintf(":%s", port)

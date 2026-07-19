@@ -9,7 +9,7 @@ services:
       - ./data:/app/data
       - ./docs:/app/docs
     environment:
-      - ABILITY_BUILDER_CONFIG=/app/config/ability-builder.yaml
+      - ABILITY_BUILDER_CONFIG=/app/config/ability-builder
     restart: unless-stopped
     networks:
       - proxynet

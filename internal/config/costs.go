@@ -24,9 +24,19 @@ func (ab *AbilityBuilderConfig) ComputeAbilityCosts(a *models.Ability, values ur
 		return fmt.Errorf("unknown ability type: %s", a.Type)
 	}
 
+	if len(cfg.Fields) > 0 {
+		return ab.ComputeAbilityTypeCosts(a, values)
+	}
+
 	energy := cfg.BaseEnergy
 	action := cfg.BaseAction
 	build := 0
+	return ab.computeAbilityCostsLegacy(a, values, cfg, energy, action, build)
+}
+
+// computeAbilityCostsLegacy contains the original perk-based cost logic used
+// when the ability type config does not declare generic fields.
+func (ab *AbilityBuilderConfig) computeAbilityCostsLegacy(a *models.Ability, values url.Values, cfg AbilityTypeConfig, energy int, action int, build int) error {
 	if values.Get("ability_item_dep") == "on" {
 		build += perkAddCost(cfg.Perks, "item_dependency")
 	}

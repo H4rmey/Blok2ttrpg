@@ -92,7 +92,82 @@
       "vital_energy": "Untrained",
       "current_hp": 12,
       "current_energy": 8,
-      "abilities": []
+      "abilities": [
+        {
+          "id": "46fe465ac7f31649",
+          "name": "sdfv",
+          "description": "sdf",
+          "type": "Execution",
+          "build_cost": 10,
+          "energy_cost": 2,
+          "action_cost": 1,
+          "energy_steps": -2,
+          "action_steps": -1,
+          "fields": {
+            "action_steps": "-1",
+            "energy_steps": "-2",
+            "item_name": ""
+          },
+          "enactments": [
+            {
+              "type": "Enact Damage",
+              "build_cost": 20,
+              "cast_cost": 6,
+              "fields": {
+                "flat": "4",
+                "offense": "Power",
+                "other": "",
+                "source": "d10",
+                "source_trait": ""
+              },
+              "source": "d10",
+              "flat_bonus": 4,
+              "offensive_trait": "Power",
+              "interaction": {
+                "type": "Direct",
+                "fields": {
+                  "range": "1",
+                  "targets": "1"
+                },
+                "range": 1,
+                "targets": 1,
+                "validation": {
+                  "build_cost": 3,
+                  "cast_cost": 1,
+                  "fields": {
+                    "counter_trait": [
+                      {
+                        "type": "defense",
+                        "value": "Reflex"
+                      }
+                    ],
+                    "counter_trait__list": [
+                      "Reflex"
+                    ],
+                    "engage_die": "0",
+                    "engage_mode": "trait",
+                    "engage_other": "",
+                    "engage_trait": "Precision"
+                  },
+                  "engage_mode": "trait",
+                  "engage_trait": "Precision",
+                  "engage_die": "d6",
+                  "counter_rolls": [
+                    "Reflex"
+                  ],
+                  "counter_roll_entries": [
+                    {
+                      "type": "defense",
+                      "trait": "Reflex"
+                    }
+                  ],
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

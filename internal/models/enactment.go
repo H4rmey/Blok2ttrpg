@@ -33,15 +33,18 @@ type Enactment struct {
 	CastCost    int           `json:"cast_cost,omitempty" yaml:"cast_cost,omitempty"`
 	Formula     string        `json:"formula,omitempty" yaml:"formula,omitempty"`
 
-	// Common
+	// Fields is the generic field-values map driven by the enactment schema.
+	// Values can be string, bool, int, or []string.
+	Fields map[string]interface{} `json:"fields,omitempty" yaml:"-"`
+
+	// Common - kept for backward compatibility with hydration logic
 	Always bool `json:"always,omitempty" yaml:"always,omitempty"`
 
-	// Damage / Healing fields
+	// Damage / Healing fields - kept for backward compatibility
 	Source         string        `json:"source,omitempty" yaml:"source,omitempty"` // d4..d12, "trait", "general", "other"
 	SourceTrait    string        `json:"source_trait,omitempty" yaml:"source_trait,omitempty"`
 	SourceCategory TraitCategory `json:"source_category,omitempty" yaml:"-"`
 	OtherRollText  string        `json:"other_roll_text,omitempty" yaml:"other_roll_text,omitempty"`
-	UsePrevious    bool          `json:"use_previous,omitempty" yaml:"-"`
 	FlatBonus      int           `json:"flat_bonus,omitempty" yaml:"flat_bonus,omitempty"`
 
 	// Damage-only

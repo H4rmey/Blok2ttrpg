@@ -1,0 +1,355 @@
+interactions:
+  self:
+    type: "Self"
+    description: "Targets the Ability user."
+    perks:
+      - id: generic_counter
+        description: "Validation counter roll is replaced by a Generic Dice: d8"
+        add_cost: 2
+        energy_cost: 0
+      - id: always_resolve
+        description: "Will always resolve"
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: "Use the result of another roll for this entry"
+        add_cost: 3
+        energy_cost: 1
+    base_cost:
+      add_cost: 0
+      energy_cost: 0
+    fields:
+      - key: use_previous
+        label: "Use result of previous interaction/validation"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
+
+  direct:
+    type: "Direct"
+    description: "Affects a single target within 1m."
+    default_range: 1
+    default_targets: 1
+    range_cost:
+      add_cost: 1
+      energy_cost: 0
+    target_cost:
+      add_cost: 3
+      energy_cost: 2
+    perks:
+      - id: always_resolve
+        description: "Will always resolve"
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: "Use the result of another roll for this entry"
+        add_cost: 3
+        energy_cost: 1
+    base_cost:
+      add_cost: 0
+      energy_cost: 0
+    fields:
+      - key: range
+        label: "Range"
+        type: free_number
+        default: 1
+        min: 1
+        max: 10
+        step: 1
+        per_step:
+          increase:
+            add_cost: 1
+            energy_cost: 0
+      - key: targets
+        label: "Targets"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            add_cost: 3
+            energy_cost: 2
+      - key: use_previous
+        label: "Use result of previous interaction/validation"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
+
+  ranged:
+    type: "Ranged"
+    description: "Affects a single target at range with visibility requirements."
+    default_range: 10
+    default_targets: 1
+    default_visible: true
+    default_obstructed: false
+    range_extension_cost:
+      add_cost: 1
+      energy_cost: 0
+      step: 2
+    target_cost:
+      add_cost: 3
+      energy_cost: 2
+    perks:
+      - id: not_visible
+        description: "Engagement does not have to be visible"
+        add_cost: 3
+        energy_cost: 1
+      - id: obstructed
+        description: "Engagement may be obstructed"
+        add_cost: 3
+        energy_cost: 1
+      - id: remove_penalty
+        description: "Remove the Engagement Roll Penalty"
+        add_cost: 3
+        energy_cost: 1
+      - id: always_resolve
+        description: "Will always resolve"
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: "Use the result of another roll for this entry"
+        add_cost: 3
+        energy_cost: 1
+    base_cost:
+      add_cost: 0
+      energy_cost: 0
+    fields:
+      - key: range
+        label: "Range"
+        type: free_number
+        default: 10
+        min: 10
+        max: 20
+        step: 2
+        rounding: floor
+        per_step:
+          increase:
+            add_cost: 1
+            energy_cost: 0
+          decrease:
+            add_cost: 0
+            energy_cost: 0
+      - key: targets
+        label: "Targets"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            add_cost: 3
+            energy_cost: 2
+      - key: visible
+        label: "Target may be not visible"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
+      - key: obstructed
+        label: "Target may be obstructed"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
+      - key: remove_penalty
+        label: "Remove engagement penalty"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
+      - key: use_previous
+        label: "Use result of previous interaction/validation"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
+
+  area:
+    type: "Area"
+    description: "Affects a radius at a point within range."
+    default_radius: 1
+    default_range: 0
+    radius_cost:
+      add_cost: 2
+      energy_cost: 1
+    range_cost:
+      add_cost: 1
+      energy_cost: 0
+      step: 2
+    perks:
+      - id: other_origin
+        description: "Change Origin to something else"
+        add_cost: 2
+        energy_cost: 1
+      - id: always_resolve
+        description: "Will always resolve"
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: "Use the result of another roll for this entry"
+        add_cost: 3
+        energy_cost: 1
+    base_cost:
+      add_cost: 0
+      energy_cost: 0
+    fields:
+      - key: radius
+        label: "Radius"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            add_cost: 2
+            energy_cost: 1
+      - key: range
+        label: "Range"
+        type: free_number
+        default: 0
+        min: 0
+        max: 10
+        step: 2
+        rounding: ceil
+        per_step:
+          increase:
+            add_cost: 1
+            energy_cost: 0
+      - key: origin_mode
+        label: "Origin"
+        type: dropdown
+        options:
+          - value: engager
+            label: "Engager"
+            cost:
+              add_cost: 0
+              energy_cost: 0
+          - value: other
+            label: "Other Origin"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+      - key: origin_text
+        label: "Origin Text"
+        type: free_text
+        visibility_when: origin_mode
+        show_when: other
+      - key: use_previous
+        label: "Use result of previous interaction/validation"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
+
+  area_of_effect:
+    type: "Area of Effect"
+    description: "A persistent area that triggers each round."
+    default_radius: 1
+    default_range: 0
+    default_duration: 2
+    radius_cost:
+      add_cost: 2
+      energy_cost: 1
+    range_cost:
+      add_cost: 1
+      energy_cost: 0
+      step: 2
+    duration_cost:
+      add_cost: 2
+      energy_cost: 1
+    perks:
+      - id: immune
+        description: "Engager is immune to the effect"
+        add_cost: 2
+        energy_cost: 0
+      - id: other_origin
+        description: "Change Origin to something else"
+        add_cost: 2
+        energy_cost: 1
+      - id: always_resolve
+        description: "Will always resolve"
+        add_cost: 5
+        energy_cost: 3
+      - id: use_previous
+        description: "Use the result of another roll for this entry"
+        add_cost: 3
+        energy_cost: 1
+    base_cost:
+      add_cost: 0
+      energy_cost: 0
+    fields:
+      - key: radius
+        label: "Radius"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            add_cost: 2
+            energy_cost: 1
+      - key: range
+        label: "Range"
+        type: free_number
+        default: 0
+        min: 0
+        max: 10
+        step: 2
+        rounding: ceil
+        per_step:
+          increase:
+            add_cost: 1
+            energy_cost: 0
+      - key: duration
+        label: "Duration"
+        type: free_number
+        default: 2
+        min: 2
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            add_cost: 2
+            energy_cost: 1
+      - key: timing
+        label: "Trigger Timing"
+        type: dropdown
+        options_source: aoe_trigger_timings
+      - key: origin_mode
+        label: "Origin"
+        type: dropdown
+        options:
+          - value: engager
+            label: "Engager"
+            cost:
+              add_cost: 0
+              energy_cost: 0
+          - value: other
+            label: "Other Origin"
+            cost:
+              add_cost: 2
+              energy_cost: 1
+      - key: origin_text
+        label: "Origin Text"
+        type: free_text
+        visibility_when: origin_mode
+        show_when: other
+      - key: immune
+        label: "Engager is immune"
+        type: checkbox
+        cost:
+          add_cost: 2
+          energy_cost: 0
+      - key: use_previous
+        label: "Use result of previous interaction/validation"
+        type: checkbox
+        cost:
+          add_cost: 3
+          energy_cost: 1
