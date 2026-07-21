@@ -151,6 +151,44 @@ func writeYAMLEnactment(b *strings.Builder, indent string, e models.Enactment) {
 	case models.EnactPersistentEffect:
 		b.WriteString(fmt.Sprintf("%s  name: %s\n", indent, orDefault(e.EffectName, "Effect")))
 		b.WriteString(fmt.Sprintf("%s  applies: %s\n", indent, e.EffectType))
+		// When an inline effect has been configured (Applies != none), emit
+		// the same fields the standalone enactments would write. The form
+		// uses effect_*-prefixed inputs which the server copies onto the
+		// typed fields when EffectType is set, so the standard fields here
+		// are already populated.
+		switch e.EffectType {
+		case string(models.EnactDamage), string(models.EnactHealing):
+			b.WriteString(fmt.Sprintf("%s  source: %s\n", indent, sourceLabel(e)))
+			if e.Source == "trait" {
+				b.WriteString(fmt.Sprintf("%s  trait: %s\n", indent, orDefault(e.SourceTrait, "(choose a trait)")))
+			}
+			if e.Source == "other" {
+				b.WriteString(fmt.Sprintf("%s  other_text: %s\n", indent, orDefault(e.OtherRollText, "(roll reference)")))
+			}
+			if e.FlatBonus > 0 {
+				b.WriteString(fmt.Sprintf("%s  flat_bonus: +%d\n", indent, e.FlatBonus))
+			}
+			if e.OffensiveTrait != "" {
+				b.WriteString(fmt.Sprintf("%s  offensive_trait: %s\n", indent, e.OffensiveTrait))
+			}
+			if e.MedicineTrait != "" {
+				b.WriteString(fmt.Sprintf("%s  medicine: true\n", indent))
+			}
+		case string(models.EnactMovement):
+			b.WriteString(fmt.Sprintf("%s  origin: %s\n", indent, movementOrigin(e)))
+			b.WriteString(fmt.Sprintf("%s  distance: %dm\n", indent, e.Distance))
+			if len(e.Directions) > 0 {
+				b.WriteString(fmt.Sprintf("%s  directions:\n", indent))
+				for _, d := range e.Directions {
+					b.WriteString(fmt.Sprintf("%s    - %s\n", indent, d))
+				}
+			}
+		case string(models.EnactProficiencyShift):
+			b.WriteString(fmt.Sprintf("%s  trait: %s\n", indent, orDefault(e.ShiftedTrait, "(choose a trait)")))
+			b.WriteString(fmt.Sprintf("%s  direction: %s\n", indent, e.ShiftDir))
+			b.WriteString(fmt.Sprintf("%s  amount: %d\n", indent, e.ShiftAmount))
+			b.WriteString(fmt.Sprintf("%s  uses: %d\n", indent, e.ShiftUses))
+		}
 		b.WriteString(fmt.Sprintf("%s  duration: %d rounds\n", indent, e.Duration))
 		b.WriteString(fmt.Sprintf("%s  trigger: %s\n", indent, e.TriggerTiming))
 		if len(e.Solutions) > 0 {

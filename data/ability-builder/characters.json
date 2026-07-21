@@ -168,6 +168,5379 @@
           ]
         }
       ]
+    },
+    {
+      "id": "056c0c68ac1cca25",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "c0eca44d5dc6db19",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "ece0b61470851cbc",
+          "name": "SmokeTest_Persistent",
+          "description": "Test ability",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "enactments": [
+            {
+              "name": "Burning",
+              "description": "Persistent burn",
+              "type": "Enact Persistent Effect",
+              "build_cost": 10,
+              "cast_cost": 5,
+              "fields": {
+                "duration": "3",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "flat_bonus": 4,
+              "offensive_trait": "Strength",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 3,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d7b24641a9cca4ed",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "0dc7dafb69bdd28e",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "f79e9bab8bea1dc2",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "9f46ade9251b16cf",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "444241464c248021",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "d6d6cebdf93680b1",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "2165e2532d4e3fa3",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "dfd9974fcec6476c",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "8f5327e68ff7637b",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "83078c7aca76eb77",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "343402c1f973e270",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "71a55cad997c1486",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "6fb09afdb0097428",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "08320607637c2073",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "a3c4bd25f89542d4",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "ae4c47fdc9d0a26e",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "de35ab8264d088ae",
+          "name": "SmokeTest_Persistent",
+          "description": "Test ability",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "enactments": [
+            {
+              "name": "Burning",
+              "description": "Persistent burn",
+              "type": "Enact Persistent Effect",
+              "build_cost": 10,
+              "cast_cost": 5,
+              "fields": {
+                "duration": "3",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "flat_bonus": 4,
+              "offensive_trait": "Strength",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 3,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eed0a2c976cb094d",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "37f42522069c1543",
+          "name": "SmokeTest_Persistent",
+          "description": "Test ability",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "enactments": [
+            {
+              "name": "Burning",
+              "description": "Persistent burn",
+              "type": "Enact Persistent Effect",
+              "build_cost": 10,
+              "cast_cost": 5,
+              "fields": {
+                "duration": "3",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "flat_bonus": 4,
+              "offensive_trait": "Strength",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 3,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "60262fa23a090a6b",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "c0850352b135aeac",
+          "name": "SmokeTest_Persistent",
+          "description": "Test ability",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "enactments": [
+            {
+              "name": "Burning",
+              "description": "Persistent burn",
+              "type": "Enact Persistent Effect",
+              "build_cost": 10,
+              "cast_cost": 5,
+              "fields": {
+                "duration": "3",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "flat_bonus": 4,
+              "offensive_trait": "Strength",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 3,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5bb0b96ddb93f556",
+      "level": 1,
+      "name": "Tester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "5c476658902abe7f",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "7565f93c07c2cec2",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "04d8984bbc0ae499",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "6a7f1225b7eed346",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "2b71b09c1f53d416",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "8d644b468bd7e162",
+      "level": 1,
+      "name": "NodeTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "3725787cdf15890d",
+      "level": 1,
+      "name": "NodeTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "61ce7589d2b03677",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "fbc591e2302d384e",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "0b41c4869e724263",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "5727473376bb8202",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "ea9cd6822fc5bb3b",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "660096ac9c7f9664",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "098df7159ba5449a",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "bc99e6d11075697a",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "0b07c2f513d6604e",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "8b99a4acdebc1a5a",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "3973f0d9629fb500",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "a7cf2803d358b065",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "3b5cbbd8defd1d5d",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "f7b79d005847946b",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "1abda9e140b966fd",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "4c3b060f1ae8fd29",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "b0c696845cf069c4",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "d01462638564fa76",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "21abfeec269a7800",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "309138462abb8493",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "9411ffbdd7ac8f81",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "4d2ac0be60ce5047",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "1ce16a4b26234195",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "82db4f4f3e7909b4",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "4edd4d17151eea9b",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "438f6df14729f503",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "34cea8a5d850d357",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "e4b036e9c2f1fae1",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "22fff52e7d29ae52",
+      "level": 1,
+      "name": "NodeTest2",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "b73a43cea2369338",
+      "level": 10,
+      "name": "NodeTest2",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "5bf8a99d094b4367",
+          "name": "PersistentTest",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 15,
+              "cast_cost": 8,
+              "fields": {
+                "always": "on",
+                "duration": "3",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "always": true,
+              "source": "d8",
+              "source_category": "offense",
+              "flat_bonus": 4,
+              "offensive_trait": "Power",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 3,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f8d391658a2238cb",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "d80ba14457a5321d",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "d98773d297fb08b2",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "7e269b1f1c08c3e0",
+      "level": 1,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 10,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "3c78b8ee7b993461",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "38605c16553df81e",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "b57189ec5b7b7198",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "5e88484aa2968b2e",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "3050ed7e19309167",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "2a74239411c15f2e",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "134925e88353915d",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "1db31c96ffe354d6",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "a925caa836fad2c3",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "e1c6b0e2607c0d0e",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "2b092cd958a7f8a6",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "f63573586ab96f43",
+      "level": 10,
+      "name": "PuppeteerTester",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "44bdbeaabf672cda",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "f88c8e84be5d6997",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": []
+    },
+    {
+      "id": "a2459dcdd29497ef",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "9188b05d2b80cdef",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 22,
+              "cast_cost": 9,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "flat_bonus": 2,
+              "offensive_trait": "Precision",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4452da524f6554f2",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "c01b35e7346a4f0b",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "76956813134d0f42",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "ab9e63f820f37225",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e9e8df31dd392941",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "a4bd0b45d26dad4b",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "27168353f17fb339",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "5fdc19a2fa802e9a",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1c65b932157f5e0d",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "497706a47d5cf817",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f365745a48553904",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "f88946e79fb99e7f",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cc8362e068403445",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "46cd703cf4e6c259",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14090eda83365759",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "e0ba053b30bc022a",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "afce6d53177cbfb0",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "38db9d95486b2ae2",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "686f4b1ae7c33e9d",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "d4a54a8b454b3ea2",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c0c118295587bb96",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "16a106b2d034733e",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0141894302ea0680",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "01ecbde4b22c3bc1",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "45c0ab7981c054c4",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "dc44d4e3877e14ff",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 14,
+              "cast_cost": 7,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2a8623090a6bf39b",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "5e8176e9f0ea1e72",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 19,
+              "cast_cost": 8,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Dexterity"
+                  },
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Dexterity",
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "flat_bonus": 2,
+              "offensive_trait": "Precision",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Dexterity",
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e12698abee9099ea",
+      "level": 10,
+      "name": "CostTest",
+      "age": "",
+      "size": "",
+      "alignment": "",
+      "backstory": "",
+      "personality": "",
+      "appearance": "",
+      "hobbies": "",
+      "occupation": "",
+      "inventory": "",
+      "quirks": "",
+      "general_traits": {
+        "Crafting": "Untrained",
+        "Dexterity": "Untrained",
+        "Knowledge": "Untrained",
+        "Magic": "Untrained",
+        "Nature": "Untrained",
+        "New Trait": "Untrained",
+        "People Skill": "Untrained",
+        "Perception": "Untrained",
+        "Performance": "Untrained",
+        "Stealth": "Untrained",
+        "Strength": "Untrained",
+        "Thievery": "Untrained"
+      },
+      "offense_traits": {
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Power": "Untrained",
+        "Precision": "Untrained"
+      },
+      "defense_traits": {
+        "Constitution": "Untrained",
+        "Magic": "Untrained",
+        "Mind": "Untrained",
+        "Reflex": "Untrained"
+      },
+      "vital_hp": "Untrained",
+      "vital_movement": "Untrained",
+      "vital_energy": "Untrained",
+      "current_hp": 12,
+      "current_energy": 8,
+      "abilities": [
+        {
+          "id": "560afef51deed552",
+          "name": "CostTestAbility",
+          "type": "Execution",
+          "energy_cost": 3,
+          "action_cost": 2,
+          "fields": {
+            "action_steps": "0",
+            "energy_steps": "0"
+          },
+          "enactments": [
+            {
+              "name": "Burning",
+              "type": "Enact Persistent Effect",
+              "build_cost": 19,
+              "cast_cost": 8,
+              "fields": {
+                "duration": "2",
+                "effect_name": "Burning",
+                "effect_type": "Enact Damage",
+                "solution": [
+                  {
+                    "value": "Dexterity"
+                  },
+                  {
+                    "value": "Constitution"
+                  }
+                ],
+                "solution__list": [
+                  "Dexterity",
+                  "Constitution"
+                ],
+                "trigger_timing": "Start of Target Turn"
+              },
+              "source": "d8",
+              "source_category": "offense",
+              "flat_bonus": 2,
+              "offensive_trait": "Precision",
+              "effect_name": "Burning",
+              "effect_type": "Enact Damage",
+              "duration": 2,
+              "trigger_timing": "Start of Target Turn",
+              "solutions": [
+                "Dexterity",
+                "Constitution"
+              ],
+              "interaction": {
+                "type": "Self",
+                "validation": {
+                  "counter_default_type": "defense"
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

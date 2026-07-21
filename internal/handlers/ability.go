@@ -605,6 +605,32 @@ func parseNewEnactments(r *http.Request, cfg *config.AbilityBuilderConfig) ([]mo
 			cast = atoi(r.FormValue(prefix + "cast"))
 		}
 
+		// Persistent Effect's inline editor submits effect_*-prefixed fields
+		// (effect_source, effect_flat, effect_offense, etc.) whose costs are
+		// not part of the persistent-effect schema. Add the inline effect's
+		// per-field costs using the matching standalone enactment's config
+		// so the saved build/cast reflects the inline editor's choices.
+		if enactType == string(models.EnactPersistentEffect) {
+			inlineType := r.FormValue(prefix + "effect_type")
+			if inlineKey := enactTypeKey(inlineType); inlineKey != "" && inlineKey != "persistent_effect" {
+				if inlineCfg, ok := cfg.Enactments[inlineKey]; ok && len(inlineCfg.Fields) > 0 {
+					inlineFields := url.Values{}
+					for k, v := range enactFields {
+						if strings.HasPrefix(k, "effect_") {
+							inlineFields[strings.TrimPrefix(k, "effect_")] = v
+						}
+					}
+					if len(inlineFields) > 0 {
+						ib, ic, err := config.ComputeEnactmentCosts(inlineCfg, inlineFields, cfg.States)
+						if err == nil {
+							build += ib
+							cast += ic
+						}
+					}
+				}
+			}
+		}
+
 		e := models.Enactment{
 			Name:           strings.TrimSpace(r.FormValue(prefix + "name")),
 			Description:    strings.TrimSpace(r.FormValue(prefix + "description")),
@@ -635,6 +661,30 @@ func parseNewEnactments(r *http.Request, cfg *config.AbilityBuilderConfig) ([]mo
 		if hasEnactFields {
 			e.Fields = config.BuildFieldValueMap(enactFields, ecfg.Fields)
 			populateEnactmentTypedFromFields(&e, e.Fields)
+		}
+
+		// Persistent Effect uses an inline editor whose inputs are prefixed
+		// with `effect_`. When present, copy them onto the typed fields so
+		// the existing model / YAML / export code paths work without
+		// changes. This runs AFTER populateEnactmentTypedFromFields so the
+		// inline editor's values take precedence over any generic fields
+		// the schema might also expose.
+		if e.Type == models.EnactPersistentEffect && e.EffectType != "" {
+			e.Source = r.FormValue(prefix + "effect_source")
+			e.SourceTrait = r.FormValue(prefix + "effect_source_trait")
+			e.SourceCategory = models.TraitCategory(r.FormValue(prefix + "effect_source_category"))
+			e.OtherRollText = r.FormValue(prefix + "effect_other")
+			e.FlatBonus = atoi(r.FormValue(prefix + "effect_flat"))
+			e.OffensiveTrait = r.FormValue(prefix + "effect_offense")
+			e.MedicineTrait = r.FormValue(prefix + "effect_medicine")
+			e.OriginMode = r.FormValue(prefix + "effect_origin_mode")
+			e.OriginText = r.FormValue(prefix + "effect_origin_text")
+			e.Distance = atoi(r.FormValue(prefix + "effect_distance"))
+			e.Directions = r.Form[prefix+"effect_direction"]
+			e.ShiftedTrait = r.FormValue(prefix + "effect_shifted_trait")
+			e.ShiftDir = r.FormValue(prefix + "effect_shift_dir")
+			e.ShiftAmount = atoi(r.FormValue(prefix + "effect_shift_amount"))
+			e.ShiftUses = atoi(r.FormValue(prefix + "effect_shift_uses"))
 		}
 
 		interType := r.FormValue(prefix + "inter_type")

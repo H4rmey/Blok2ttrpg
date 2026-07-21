@@ -727,6 +727,13 @@
         if (wrap) wrap.hidden = !isFieldVisible(f, values, fields);
       }
     }
+    // For Enact Persistent Effect, the "Applies" dropdown also controls
+    // which inline editor body is shown. Swap the body when effect_type
+    // changes (the generic effect_type field keeps its value, so cost
+    // calc and form submission are unaffected).
+    if (card.dataset.enactType === 'Enact Persistent Effect' && el.name === 'effect_type') {
+      swapInlineEffectEditor(card);
+    }
     recalcAll();
   };
   window.addGenericRow = function (btn, fieldKey) {
@@ -1145,11 +1152,37 @@
       }
       fieldsHolder += '</div>';
       var gid = registerGenericFields(cfg.fields);
+      // For Enact Persistent Effect, append an inline editor region whose
+      // contents swap when the effect_type dropdown changes. The generic
+      // effect_type select is kept (for cost calc and form submission); we
+      // attach a swap handler to it after render via a delegated listener.
+      //
+      // The inline editor reads typed fields (source, flat_bonus,
+      // offensive_trait, etc.) from `data` directly, not from `data.fields`
+      // (which only contains schema fields and omits them).
+      var inlineHost = '';
+      if (type === 'Enact Persistent Effect') {
+        var effectType = (hydration && hydration.effect_type) || '';
+        var title = effectType
+          ? 'Inline Effect — ' + esc(effectType.replace(/^Enact /, ''))
+          : 'Inline Effect';
+        inlineHost =
+          '<div class="border-t border-indigo-700 pt-3 space-y-2" data-inline-effect-host>'+
+            '<div class="flex items-center justify-between">'+
+              '<h4 class="text-sm font-semibold text-indigo-300" data-inline-effect-title>'+title+'</h4>'+
+              '<span class="text-xs text-gray-500">crafts the effect applied by this persistent effect</span>'+
+            '</div>'+
+            '<div data-inline-effect-body class="bg-gray-900/40 rounded p-3 space-y-3">'+
+              renderInlineEffectEditor(effectType, data, cfg)+
+            '</div>'+
+          '</div>';
+      }
       return '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="'+esc(type)+'" data-generic-id="'+gid+'" data-build="0" data-cast="0">' +
         '<div class="flex items-center justify-between"><h3 class="text-md font-semibold text-indigo-400">Enact — '+esc(type.replace(/^Enact /, ''))+'</h3>' +
         enactTypeSelect(type) +
         '</div>' +
         fieldsHolder +
+        inlineHost +
         '</div>';
     }
     if (type === 'Enact Damage') return renderEnactDamage(data, cfg);
@@ -1355,6 +1388,13 @@
       var e = effectByDesc[t] || { add_cost: 0, energy_cost: 0 };
       return opt(t, t, d.effect_type, e.add_cost, e.energy_cost);
     }).join('');
+    var effectType = d.effect_type || '';
+    // The inline editor's values are the same typed fields already on the
+    // enactment (Source/SourceTrait/FlatBonus/OffensiveTrait/Medicine/Origin
+    // /Distance/Directions/Shift*). On the initial render we just feed the
+    // incoming data; the per-effect-type cache maintained in
+    // onPersistentEffectTypeChange kicks in on subsequent swaps.
+    var inlineData = d;
     return [
       '<div class="section-card enact-card bg-gray-800 rounded-lg border border-indigo-700 p-5 space-y-4" data-section="enact" data-enact-type="Enact Persistent Effect" data-build="0" data-cast="0">',
         '<h3 class="text-md font-semibold text-indigo-400">Enact — Persistent Effect</h3>',
@@ -1365,7 +1405,7 @@
         '</div>',
         '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
           '<div><label class="block text-xs text-gray-400 mb-1">Applies</label>',
-            '<select name="effect_type" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+            '<select name="effect_type" onchange="onPersistentEffectTypeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
               effectOpts +
             '</select></div>',
           intSelectFlat('duration', 'Duration', 2, 8, d.duration || 2, cumCostFn(2, cfg.duration_cost)),
@@ -1380,9 +1420,303 @@
           '</div>',
           solutionsList(sols),
         '</div>',
+        '<div class="border-t border-indigo-700 pt-3 space-y-2" data-inline-effect-host>',
+          '<div class="flex items-center justify-between">',
+            '<h4 class="text-sm font-semibold text-indigo-300" data-inline-effect-title>'+
+              (effectType ? ('Inline Effect — ' + esc(effectType.replace(/^Enact /, ''))) : 'Inline Effect') +
+            '</h4>',
+            '<span class="text-xs text-gray-500">crafts the effect applied by this persistent effect</span>',
+          '</div>',
+          '<div data-inline-effect-body class="bg-gray-900/40 rounded p-3 space-y-3">',
+            renderInlineEffectEditor(effectType, inlineData, cfg),
+          '</div>',
+        '</div>',
       '</div>'
     ].join('\n');
   }
+
+  // Maps persistent-effect "Applies" type to the corresponding standalone
+  // enactment type whose inner fields the inline editor mirrors.
+  var PERSISTENT_TO_ENACT = {
+    'Enact Damage': 'Enact Damage',
+    'Enact Healing': 'Enact Healing',
+    'Enact Movement': 'Enact Movement',
+    'Enact Proficiency Shift': 'Enact Proficiency Shift'
+  };
+
+  // Returns the inner HTML for the inline effect editor. All input `name=`
+  // attributes are prefixed with `effect_` to avoid colliding with the
+  // persistent-effect card's own fields, and to make server-side parsing
+  // unambiguous. Field options, perks, and cost helpers are the same as the
+  // standalone enactments, so dropdowns and costs match 1:1.
+  function renderInlineEffectEditor(effectType, d, cfg) {
+    d = d || {};
+    cfg = cfg || {};
+    if (!effectType || !PERSISTENT_TO_ENACT[effectType]) {
+      return '<p class="text-xs text-gray-500 italic">Select an effect type above to configure its inline editor.</p>';
+    }
+    var enactCfg = getEnactConfig(effectType);
+    var t = effectType;
+    if (t === 'Enact Damage')  return renderInlineDamageBody(d, enactCfg);
+    if (t === 'Enact Healing') return renderInlineHealingBody(d, enactCfg);
+    if (t === 'Enact Movement') return renderInlineMovementBody(d, enactCfg);
+    if (t === 'Enact Proficiency Shift') return renderInlineProfShiftBody(d, enactCfg);
+    return '';
+  }
+
+  function renderInlineDamageBody(d, cfg) {
+    cfg = cfg || {};
+    var src = d.source || 'd4';
+    var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
+    var traitSelectHTML =
+      '<div data-wrap="effect-source-trait" '+hiddenIf(src==='trait')+'>'+
+        '<label class="block text-xs text-gray-400 mb-1">Trait</label>'+
+        '<input type="hidden" name="effect_source_category" value="'+esc(srcCat)+'">'+
+        '<select name="effect_source_trait" onchange="onInlineEffectSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+          '<option value="">-- Select --</option>' + traitOptionsGrouped(d.source_trait) +
+        '</select>'+
+      '</div>';
+    var otherWrap = src === 'other' ? '' : 'hidden';
+    var prevWrap  = src === 'previous' ? '' : 'hidden';
+    return [
+      '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
+        checkbox('effect_always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
+        '<div>',
+          '<label class="block text-xs text-gray-400 mb-1">Source</label>',
+          '<select name="effect_source" onchange="onInlineEffectSourceChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+            sourceSelect(d, cfg),
+          '</select>',
+        '</div>',
+        traitSelectHTML,
+      '</div>',
+      '<div data-wrap="effect-source-other" '+otherWrap+'>',
+        '<label class="block text-xs text-gray-400 mb-1">Other Roll Text</label>',
+        '<input type="text" name="effect_other" value="'+esc(d.other_roll_text||'')+'" placeholder="e.g. previous_enactment.result" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+      '</div>',
+      '<div data-wrap="effect-source-previous" '+prevWrap+'>',
+        '<label class="block text-xs text-gray-400 mb-1">Previous Reference</label>',
+        '<input type="text" name="effect_other" value="'+esc(d.other_roll_text||'')+'" placeholder="e.g. previous_enactment.result" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+      '</div>',
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+        intSelectFlat('effect_flat', 'Flat Bonus', 0, 20, d.flat_bonus || 0, cumCostFn(0, findPerk(cfg.perks, 'flat_bonus'))),
+        '<div><label class="block text-xs text-gray-400 mb-1">Offensive Trait (extra die)</label>',
+          '<select name="effect_offense" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+            opt('None', '', d.offensive_trait, 0, 0) +
+            D.offenseTraits.map(function(x){ var c = perkCost(cfg.perks, 'offensive_trait'); return opt(x, x, d.offensive_trait, c.add, c.energy); }).join('') +
+          '</select></div>',
+      '</div>',
+    ].join('\n');
+  }
+
+  function renderInlineHealingBody(d, cfg) {
+    cfg = cfg || {};
+    var src = d.source || 'd4';
+    var srcCat = d.source_category || (src === 'trait' ? (categoryOfTrait(d.source_trait) || 'offense') : '');
+    var traitSelectHTML =
+      '<div data-wrap="effect-source-trait" '+hiddenIf(src==='trait')+'>'+
+        '<label class="block text-xs text-gray-400 mb-1">Trait</label>'+
+        '<input type="hidden" name="effect_source_category" value="'+esc(srcCat)+'">'+
+        '<select name="effect_source_trait" onchange="onInlineEffectSourceTraitChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+          '<option value="">-- Select --</option>' + traitOptionsGrouped(d.source_trait) +
+        '</select>'+
+      '</div>';
+    var otherWrap = src === 'other' ? '' : 'hidden';
+    var prevWrap  = src === 'previous' ? '' : 'hidden';
+    return [
+      '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
+        checkbox('effect_always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
+        '<div><label class="block text-xs text-gray-400 mb-1">Source</label>',
+        '<select name="effect_source" onchange="onInlineEffectSourceChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+          sourceSelect(d, cfg),
+        '</select></div>',
+        traitSelectHTML,
+      '</div>',
+      '<div data-wrap="effect-source-other" '+otherWrap+'>',
+        '<label class="block text-xs text-gray-400 mb-1">Other Roll Text</label>',
+        '<input type="text" name="effect_other" value="'+esc(d.other_roll_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+      '</div>',
+      '<div data-wrap="effect-source-previous" '+prevWrap+'>',
+        '<label class="block text-xs text-gray-400 mb-1">Previous Reference</label>',
+        '<input type="text" name="effect_other" value="'+esc(d.other_roll_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+      '</div>',
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+        intSelectFlat('effect_flat', 'Flat Bonus', 0, 20, d.flat_bonus || 0, cumCostFn(0, findPerk(cfg.perks, 'flat_bonus'))),
+        '<div><label class="block text-xs text-gray-400 mb-1">Medicine</label>',
+          '<select name="effect_medicine" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+            opt('None', '', d.medicine_trait, 0, 0)+
+            (function(){ var c = perkCost(cfg.perks, 'medicine_trait'); return opt('Medicine (1d10)', 'Medicine', d.medicine_trait, c.add, c.energy); })() +
+          '</select></div>',
+      '</div>',
+    ].join('\n');
+  }
+
+  function renderInlineMovementBody(d, cfg) {
+    cfg = cfg || {};
+    var dirs = d.directions && d.directions.length ? d.directions : ['Away'];
+    var originMode = d.origin_mode || 'engager';
+    var otherOrigin = perkCost(cfg.perks, 'other_origin');
+    return [
+      '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">',
+        checkbox('effect_always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
+        '<div><label class="block text-xs text-gray-400 mb-1">Origin</label>',
+          '<select name="effect_origin_mode" onchange="onInlineEffectOriginModeChange(this)" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+            opt('Engager', 'engager', originMode, 0, 0)+
+            opt('Other Origin', 'other', originMode, otherOrigin.add, otherOrigin.energy)+
+          '</select></div>',
+      '</div>',
+      '<div data-wrap="effect-origin" '+hiddenIf(originMode === 'other')+'>',
+        '<label class="block text-xs text-gray-400 mb-1">Origin Text</label>',
+        '<input type="text" name="effect_origin_text" value="'+esc(d.origin_text||'')+'" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">',
+      '</div>',
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+        intSelect('effect_distance', 'Distance', 1, 10, d.distance || 1, 'm', cumCostFn(1, cfg.distance_cost)),
+        '<div>',
+          '<div class="flex items-center justify-between mb-1"><span class="text-xs text-gray-400">Directions</span>',
+            '<button type="button" onclick="addInlineEffectDirection(this)" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded text-xs">+ Direction</button>',
+          '</div>',
+          inlineEffectDirectionsList(dirs, cfg),
+      '</div>',
+    ].join('\n');
+  }
+  function inlineEffectDirectionsList(dirs, cfg) {
+    var freeDir = perkCost((cfg||{}).perks, 'free_direction');
+    var rows = dirs.map(function(dir){
+      var opts = D.directionOptions.map(function(o){
+        if (o === 'Free') return opt(o, o, dir, freeDir.add, freeDir.energy);
+        return opt(o, o, dir, 0, 0);
+      }).join('');
+      return '<div class="flex items-center gap-2">'+
+        '<select name="effect_direction" onchange="recalcAll()" class="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+opts+'</select>'+
+        '<button type="button" onclick="this.parentElement.remove();recalcAll()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">−</button>'+
+      '</div>';
+    }).join('');
+    return '<div data-list="effect-directions" class="space-y-1">'+rows+'</div>';
+  }
+
+  function renderInlineProfShiftBody(d, cfg) {
+    cfg = cfg || {};
+    return [
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">',
+        checkbox('effect_always', 'Will always resolve', d.always, perkCost(cfg.perks, 'always_resolve')),
+      '</div>',
+      '<div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">',
+        '<div><label class="block text-xs text-gray-400 mb-1">Trait</label>',
+          '<select name="effect_shifted_trait" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+            '<option value="">-- Select --</option>' + traitOptionsGrouped(d.shifted_trait),
+          '</select></div>',
+        '<div><label class="block text-xs text-gray-400 mb-1">Direction</label>',
+          '<select name="effect_shift_dir" onchange="recalcAll()" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+
+            D.shiftDirectionOptions.map(function(t){return '<option value="'+esc(t)+'" '+selected(d.shift_dir,t)+'>'+esc(t)+'</option>';}).join(''),
+          '</select></div>',
+        intSelectFlat('effect_shift_amount', 'Amount', 1, 5, d.shift_amount || 1, cumCostFn(1, cfg.shift_amount_cost)),
+        intSelectFlat('effect_shift_uses', 'Uses', 1, 5, d.shift_uses || 1, cumCostFn(1, cfg.shift_uses_cost)),
+      '</div>',
+    ].join('\n');
+  }
+
+  // Swap the inline effect editor when the "Applies" dropdown changes.
+  // Caches the entered data per chosen effect_type on the card dataset so
+  // switching back to a previously edited effect restores its values.
+  // Accepts either a <select> element (legacy non-generic renderer) or a
+  // card element (generic renderer) for flexibility.
+  window.onPersistentEffectTypeChange = function (sel) {
+    var card = sel.closest ? sel.closest('.section-card') : sel;
+    if (!card) return;
+    return swapInlineEffectEditor(card);
+  };
+
+  function swapInlineEffectEditor(card) {
+    var sel = card.querySelector('[name="effect_type"]');
+    if (!sel) return;
+    var effectType = sel.value;
+    var body = card.querySelector('[data-inline-effect-body]');
+    var title = card.querySelector('[data-inline-effect-title]');
+    if (!body) return;
+    // Persist current inline values back into the cache for the previously
+    // selected effect type, so switching back later restores them.
+    var prev = card.dataset.effectType || '';
+    if (prev) {
+      var prevCache = readInlineEffectData(card, prev);
+      var allCache = readInlineEffectCache(card);
+      allCache[prev] = prevCache;
+      card.dataset.effectCache = JSON.stringify(allCache);
+    }
+    var cache = readInlineEffectCache(card);
+    var data = (effectType && cache[effectType]) || {};
+    // The inline editor mirrors the chosen enactment's config (Damage,
+    // Healing, Movement, Proficiency Shift) so its dropdowns and perk costs
+    // match the standalone enactments 1:1.
+    var inlineCfg = effectType ? getEnactConfig(effectType) : {};
+    body.innerHTML = renderInlineEffectEditor(effectType, data, inlineCfg);
+    if (title) {
+      title.textContent = effectType
+        ? 'Inline Effect — ' + effectType.replace(/^Enact /, '')
+        : 'Inline Effect';
+    }
+    card.dataset.effectType = effectType;
+    recalcAll();
+  };
+
+  // Read currently-entered values from the inline effect editor for the
+  // given (or current) effect type.
+  function readInlineEffectData(card, effectType) {
+    effectType = effectType || (card.querySelector('[name="effect_type"]') || {}).value || '';
+    var out = { effect_type: effectType };
+    if (!effectType) return out;
+    function v(name) { var el = card.querySelector('[name="'+name+'"]'); return el ? el.value : ''; }
+    function b(name) { var el = card.querySelector('[name="'+name+'"]'); return el ? !!el.checked : false; }
+    out.always = b('effect_always');
+    if (effectType === 'Enact Damage' || effectType === 'Enact Healing') {
+      out.source = v('effect_source');
+      out.source_trait = v('effect_source_trait');
+      out.source_category = v('effect_source_category');
+      out.other_roll_text = v('effect_other');
+      out.flat_bonus = Number(v('effect_flat')) || 0;
+      if (effectType === 'Enact Damage') {
+        out.offensive_trait = v('effect_offense');
+      } else {
+        out.medicine_trait = v('effect_medicine');
+      }
+    } else if (effectType === 'Enact Movement') {
+      out.origin_mode = v('effect_origin_mode');
+      out.origin_text = v('effect_origin_text');
+      out.distance = Number(v('effect_distance')) || 1;
+      out.directions = Array.from(card.querySelectorAll('[name="effect_direction"]')).map(function(s){return s.value;}).filter(Boolean);
+    } else if (effectType === 'Enact Proficiency Shift') {
+      out.shifted_trait = v('effect_shifted_trait');
+      out.shift_dir = v('effect_shift_dir');
+      out.shift_amount = Number(v('effect_shift_amount')) || 1;
+      out.shift_uses = Number(v('effect_shift_uses')) || 1;
+    }
+    return out;
+  }
+  function readInlineEffectCache(card) {
+    try { return JSON.parse(card.dataset.effectCache || '{}') || {}; }
+    catch (e) { return {}; }
+  }
+
+  window.addInlineEffectDirection = function (btn) {
+    var list = btn.parentElement.parentElement.querySelector('[data-list="effect-directions"]');
+    if (!list) return;
+    var first = list.querySelector('select[name="effect_direction"]');
+    var val = first ? first.value : 'Away';
+    var card = btn.closest('.section-card');
+    // The Directions UI only appears when the chosen effect is Movement, so
+    // use the Movement config (same as the standalone Enact Movement card).
+    var cfg = getEnactConfig('Enact Movement');
+    var freeDir = perkCost(cfg.perks, 'free_direction');
+    var opts = D.directionOptions.map(function(o){
+      if (o === 'Free') return opt(o, o, val, freeDir.add, freeDir.energy);
+      return opt(o, o, val, 0, 0);
+    }).join('');
+    var row = document.createElement('div');
+    row.className = 'flex items-center gap-2';
+    row.innerHTML =
+      '<select name="effect_direction" onchange="recalcAll()" class="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-white">'+opts+'</select>'+
+      '<button type="button" onclick="this.parentElement.remove();recalcAll()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">−</button>';
+    list.appendChild(row);
+    recalcAll();
+  };
   function solutionsList(sols) {
     var rows = sols.map(function(s){
       var opts = '<option value="">-- Select --</option>' + traitOptionsGrouped(s);
@@ -1908,6 +2242,18 @@
     recalcAll();
   };
 
+  // Inline-effect equivalents of the change handlers. These mirror the
+  // standalone ones but operate on the `effect_`-prefixed name and wrap
+  // attributes used by the persistent-effect inline editor.
+  window.onInlineEffectSourceChange = function (sel) {
+    var c = sel.closest('.section-card');
+    var v = sel.value;
+    setWrap(c, 'effect-source-trait', v === 'trait');
+    setWrap(c, 'effect-source-other', v === 'other');
+    setWrap(c, 'effect-source-previous', v === 'previous');
+    recalcAll();
+  };
+
   window.onSourceTraitChange = function (sel) {
     var c = sel.closest('.section-card');
     var hidden = c.querySelector('[name="source_category"]');
@@ -1915,9 +2261,22 @@
     recalcAll();
   };
 
+  window.onInlineEffectSourceTraitChange = function (sel) {
+    var c = sel.closest('.section-card');
+    var hidden = c.querySelector('[name="effect_source_category"]');
+    if (hidden) hidden.value = categoryOfTrait(sel.value);
+    recalcAll();
+  };
+
   window.onOriginModeChange = function (sel) {
     var c = sel.closest('.section-card');
     setWrap(c, 'origin', sel.value === 'other');
+    recalcAll();
+  };
+
+  window.onInlineEffectOriginModeChange = function (sel) {
+    var c = sel.closest('.section-card');
+    setWrap(c, 'effect-origin', sel.value === 'other');
     recalcAll();
   };
 
@@ -2272,6 +2631,102 @@
     });
   }
 
+  // Computes the source/flat/offense/medicine/distance/shift cost contribution
+  // for a set of fields on a card. `prefix` is either '' (standalone
+  // enactment) or 'effect_' (persistent-effect inline editor). The returned
+  // object mutates `acc` and pushes human-readable lines into `lines`.
+  function calcEnactFieldCosts(card, cfg, prefix, acc, lines) {
+    prefix = prefix || '';
+    var build = 0, energy = 0;
+
+    var srcEl = card.querySelector('[name="'+prefix+'source"]');
+    if (srcEl) {
+      var s = srcEl.value;
+      var tiers = cfg.dice_tiers || {d4:0,d6:1,d8:2,d10:3,d12:4};
+      var tierCost = cfg.dice_tier_cost || {add_cost:0, energy_cost:0};
+      if (tiers[s] !== undefined) {
+        var tier = tiers[s] || 0;
+        build += tier * tierCost.add_cost;
+        energy += tier * tierCost.energy_cost;
+        lines.push('Source 1'+s+' (add '+(tier*tierCost.add_cost)+', energy '+(tier*tierCost.energy_cost)+')');
+      } else if (s === 'trait') {
+        var cat = (card.querySelector('[name="'+prefix+'source_category"]') || {}).value || 'offense';
+        var traitCost = findPerk(cfg.perks, 'trait_source');
+        var traitAdd = traitCost ? traitCost.add_cost : 0;
+        if (cat === 'general') {
+          build += traitAdd + 1; // legacy general trait extra cost
+          lines.push('Use general trait as source (add '+(traitAdd+1)+', extra cost)');
+        } else {
+          build += traitAdd;
+          lines.push('Use trait as source (add '+traitAdd+')');
+        }
+      } else if (s === 'previous') {
+        var prevCost = findPerk(cfg.perks, 'use_previous');
+        build += prevCost ? prevCost.add_cost : 0;
+        energy += prevCost ? prevCost.energy_cost : 0;
+        lines.push('Use result of previous enactment (add '+(prevCost?prevCost.add_cost:0)+', energy '+(prevCost?prevCost.energy_cost:0)+')');
+      } else if (s === 'other') {
+        var otherCost = findPerk(cfg.perks, 'use_previous');
+        build += otherCost ? otherCost.add_cost : 0;
+        energy += otherCost ? otherCost.energy_cost : 0;
+        lines.push('Use another roll result (add '+(otherCost?otherCost.add_cost:0)+', energy '+(otherCost?otherCost.energy_cost:0)+')');
+      }
+    }
+
+    var flatEl = card.querySelector('[name="'+prefix+'flat"]');
+    if (flatEl) {
+      var flat = Number(flatEl.value) || 0;
+      var flatCost = findPerk(cfg.perks, 'flat_bonus');
+      var flatAdd = flatCost ? flatCost.add_cost : 0;
+      var flatEnergy = flatCost ? flatCost.energy_cost : 0;
+      if (flat > 0) { build += flat * flatAdd; energy += flat * flatEnergy; lines.push('Flat +'+flat+' (add '+(flat*flatAdd)+', energy '+(flat*flatEnergy)+')'); }
+    }
+
+    var offenseEl = card.querySelector('[name="'+prefix+'offense"]');
+    if (offenseEl && offenseEl.value) {
+      var off = findPerk(cfg.perks, 'offensive_trait');
+      build += off ? off.add_cost : 0;
+      energy += off ? off.energy_cost : 0;
+      lines.push('Offensive trait die ('+offenseEl.value+') (add '+(off?off.add_cost:0)+', energy '+(off?off.energy_cost:0)+')');
+    }
+    var medEl = card.querySelector('[name="'+prefix+'medicine"]');
+    if (medEl && medEl.value) {
+      var med = findPerk(cfg.perks, 'medicine_trait');
+      build += med ? med.add_cost : 0;
+      energy += med ? med.energy_cost : 0;
+      lines.push('Medicine trait (add '+(med?med.add_cost:0)+', energy '+(med?med.energy_cost:0)+')');
+    }
+
+    var distanceEl = card.querySelector('[name="'+prefix+'distance"]');
+    if (distanceEl) {
+      var dist = Number(distanceEl.value) || 1;
+      var dirArr = Array.from(card.querySelectorAll('[name="'+prefix+'direction"]')).map(function(x){return x.value;}).filter(Boolean);
+      var originMode = (card.querySelector('[name="'+prefix+'origin_mode"]')||{}).value;
+      var distCost = cfg.distance_cost || {add_cost:0, energy_cost:0};
+      if (dist > 1) { build += (dist-1) * distCost.add_cost; energy += (dist-1) * distCost.energy_cost; lines.push('Distance +'+(dist-1)+'m (add '+((dist-1)*distCost.add_cost)+', energy '+((dist-1)*distCost.energy_cost)+')'); }
+      var originCost = findPerk(cfg.perks, 'other_origin');
+      if (originMode === 'other') { build += originCost ? originCost.add_cost : 0; energy += originCost ? originCost.energy_cost : 0; lines.push('Other origin (add '+(originCost?originCost.add_cost:0)+', energy '+(originCost?originCost.energy_cost:0)+')'); }
+      var extraDir = findPerk(cfg.perks, 'extra_direction');
+      if (dirArr.length > 1) { build += (dirArr.length-1) * (extraDir?extraDir.add_cost:0); energy += (dirArr.length-1) * (extraDir?extraDir.energy_cost:0); lines.push('Extra direction '+(dirArr.length-1)+' (add '+((dirArr.length-1)*(extraDir?extraDir.add_cost:0))+', energy '+((dirArr.length-1)*(extraDir?extraDir.energy_cost:0))+')'); }
+      var freeDir = findPerk(cfg.perks, 'free_direction');
+      var freeCount = dirArr.filter(function(d){return d==='Free';}).length;
+      if (freeCount > 0) { build += freeCount * (freeDir?freeDir.add_cost:0); energy += freeCount * (freeDir?freeDir.energy_cost:0); lines.push('Free direction '+freeCount+'x (add '+(freeCount*(freeDir?freeDir.add_cost:0))+', energy '+(freeCount*(freeDir?freeDir.energy_cost:0))+')'); }
+    }
+
+    var shiftTraitEl = card.querySelector('[name="'+prefix+'shifted_trait"]');
+    if (shiftTraitEl) {
+      var amt   = Number((card.querySelector('[name="'+prefix+'shift_amount"]')||{}).value) || 1;
+      var uses  = Number((card.querySelector('[name="'+prefix+'shift_uses"]')||{}).value) || 1;
+      var amtCost = cfg.shift_amount_cost || {add_cost:0, energy_cost:0};
+      var usesCost = cfg.shift_uses_cost || {add_cost:0, energy_cost:0};
+      if (amt > 1) { build += (amt-1) * amtCost.add_cost; energy += (amt-1) * amtCost.energy_cost; lines.push('Shift amount +'+(amt-1)+' (add '+((amt-1)*amtCost.add_cost)+', energy '+((amt-1)*amtCost.energy_cost)+')'); }
+      if (uses > 1) { build += (uses-1) * usesCost.add_cost; energy += (uses-1) * usesCost.energy_cost; lines.push('Shift uses +'+(uses-1)+' (add '+((uses-1)*usesCost.add_cost)+', energy '+((uses-1)*usesCost.energy_cost)+')'); }
+    }
+
+    acc.build += build;
+    acc.energy += energy;
+  }
+
   function calcEnact(card) {
     if (!card) return;
     var cfg = getEnactConfig(card.dataset.enactType);
@@ -2302,8 +2757,23 @@
         return;
       }
       var res = genericCalcJS(cfg, values);
-      card.dataset.build = res.build;
-      card.dataset.cast = res.cast;
+      var totalBuild = res.build;
+      var totalCast = res.cast;
+      // Enact Persistent Effect: if an inline effect has been chosen, add
+      // its per-field costs (source dice, flat, offense, medicine,
+      // distance, shift) using the matching enactment's config. The
+      // base cost of the inline effect is already covered by the
+      // effect_type dropdown's cost in the generic fields.
+      if (card.dataset.enactType === 'Enact Persistent Effect' && PERSISTENT_TO_ENACT[values.effect_type || '']) {
+        var inlineCfg = getEnactConfig(values.effect_type);
+        var inlineAcc = { build: 0, energy: 0 };
+        var inlineLines = [];
+        calcEnactFieldCosts(card, inlineCfg, 'effect_', inlineAcc, inlineLines);
+        totalBuild += inlineAcc.build;
+        totalCast += inlineAcc.energy;
+      }
+      card.dataset.build = totalBuild;
+      card.dataset.cast = totalCast;
       return;
     }
 
@@ -2318,105 +2788,60 @@
       lines.push('Always resolve (add '+(always.add_cost||0)+', energy '+(always.energy_cost||0)+')');
     }
 
+    var acc = { build: 0, energy: 0 };
+    calcEnactFieldCosts(card, cfg, '', acc, lines);
+    build += acc.build;
+    energy += acc.energy;
+
     var srcEl = card.querySelector('[name="source"]');
     if (srcEl) {
       var s = srcEl.value;
       var tiers = cfg.dice_tiers || {d4:0,d6:1,d8:2,d10:3,d12:4};
-      var tierCost = cfg.dice_tier_cost || {add_cost:0, energy_cost:0};
       if (tiers[s] !== undefined) {
-        var tier = tiers[s] || 0;
         formula = '1'+s;
-        build += tier * tierCost.add_cost;
-        energy += tier * tierCost.energy_cost;
-        lines.push('Source 1'+s+' (add '+(tier*tierCost.add_cost)+', energy '+(tier*tierCost.energy_cost)+')');
       } else if (s === 'trait') {
         var cat = (card.querySelector('[name="source_category"]') || {}).value || 'offense';
-        var tName = (card.querySelector('[name="source_trait"]') || {}).value || '(trait)';
         formula = '1d10 ('+cat+' trait)';
-        var traitCost = findPerk(cfg.perks, 'trait_source');
-        var traitAdd = traitCost ? traitCost.add_cost : 0;
-        if (cat === 'general') {
-          build += traitAdd + 1; // legacy general trait extra cost
-          lines.push('Use general trait as source (add '+(traitAdd+1)+', extra cost)');
-        } else {
-          build += traitAdd;
-          lines.push('Use trait as source (add '+traitAdd+')');
-        }
       } else if (s === 'previous') {
-        var prevCost = findPerk(cfg.perks, 'use_previous');
         formula = 'previous enactment result';
-        build += prevCost ? prevCost.add_cost : 0;
-        energy += prevCost ? prevCost.energy_cost : 0;
-        lines.push('Use result of previous enactment (add '+(prevCost?prevCost.add_cost:0)+', energy '+(prevCost?prevCost.energy_cost:0)+')');
       } else if (s === 'other') {
         var txt = (card.querySelector('[name="other"]')||{}).value || '';
         formula = txt || '(other roll result)';
-        var otherCost = findPerk(cfg.perks, 'use_previous'); // use previous perk for other rolls
-        build += otherCost ? otherCost.add_cost : 0;
-        energy += otherCost ? otherCost.energy_cost : 0;
-        lines.push('Use another roll result (add '+(otherCost?otherCost.add_cost:0)+', energy '+(otherCost?otherCost.energy_cost:0)+')');
       }
+      var flatEl = card.querySelector('[name="flat"]');
+      if (flatEl) {
+        var flat = Number(flatEl.value) || 0;
+        if (flat > 0) formula += ' + '+flat;
+      }
+      var offenseEl = card.querySelector('[name="offense"]');
+      if (offenseEl && offenseEl.value) formula += ' + 1d8 ('+offenseEl.value+')';
+      var medEl = card.querySelector('[name="medicine"]');
+      if (medEl && medEl.value) formula += ' + 1d10 (Medicine)';
     }
-
-    var flatEl = card.querySelector('[name="flat"]');
-    if (flatEl) {
-      var flat = readNumber(card, 'flat', 0);
-      var flatCost = findPerk(cfg.perks, 'flat_bonus');
-      var flatAdd = flatCost ? flatCost.add_cost : 0;
-      var flatEnergy = flatCost ? flatCost.energy_cost : 0;
-      if (flat > 0) { formula += ' + '+flat; build += flat * flatAdd; energy += flat * flatEnergy; lines.push('Flat +'+flat+' (add '+(flat*flatAdd)+', energy '+(flat*flatEnergy)+')'); }
-    }
-
-    var offenseEl = card.querySelector('[name="offense"]');
-    if (offenseEl && offenseEl.value) {
-      var off = findPerk(cfg.perks, 'offensive_trait');
-      build += off ? off.add_cost : 0;
-      energy += off ? off.energy_cost : 0;
-      lines.push('Offensive trait die ('+offenseEl.value+') (add '+(off?off.add_cost:0)+', energy '+(off?off.energy_cost:0)+')');
-      formula += ' + 1d8 ('+offenseEl.value+')';
-    }
-    var medEl = card.querySelector('[name="medicine"]');
-    if (medEl && medEl.value) {
-      var med = findPerk(cfg.perks, 'medicine_trait');
-      build += med ? med.add_cost : 0;
-      energy += med ? med.energy_cost : 0;
-      lines.push('Medicine trait (add '+(med?med.add_cost:0)+', energy '+(med?med.energy_cost:0)+')');
-      formula += ' + 1d10 (Medicine)';
-    }
-
     var distanceEl = card.querySelector('[name="distance"]');
     if (distanceEl) {
-      var dist = readNumber(card, 'distance', 1);
-      var dirArr = Array.from(card.querySelectorAll('[name="direction"]')).map(function(s){return s.value;}).filter(Boolean);
+      var dist = Number(distanceEl.value) || 1;
+      var dirArr = Array.from(card.querySelectorAll('[name="direction"]')).map(function(x){return x.value;}).filter(Boolean);
       var originMode = (card.querySelector('[name="origin_mode"]')||{}).value;
-      var distCost = cfg.distance_cost || {add_cost:0, energy_cost:0};
-      if (dist > 1) { build += (dist-1) * distCost.add_cost; energy += (dist-1) * distCost.energy_cost; lines.push('Distance +'+(dist-1)+'m (add '+((dist-1)*distCost.add_cost)+', energy '+((dist-1)*distCost.energy_cost)+')'); }
       var origin = originMode === 'other' ? (card.querySelector('[name="origin_text"]')||{}).value || '(other)' : 'Engager';
-      var originCost = findPerk(cfg.perks, 'other_origin');
-      if (originMode === 'other') { build += originCost ? originCost.add_cost : 0; energy += originCost ? originCost.energy_cost : 0; lines.push('Other origin (add '+(originCost?originCost.add_cost:0)+', energy '+(originCost?originCost.energy_cost:0)+')'); }
-      var extraDir = findPerk(cfg.perks, 'extra_direction');
-      if (dirArr.length > 1) { build += (dirArr.length-1) * (extraDir?extraDir.add_cost:0); energy += (dirArr.length-1) * (extraDir?extraDir.energy_cost:0); lines.push('Extra direction '+(dirArr.length-1)+' (add '+((dirArr.length-1)*(extraDir?extraDir.add_cost:0))+', energy '+((dirArr.length-1)*(extraDir?extraDir.energy_cost:0))+')'); }
-      var freeDir = findPerk(cfg.perks, 'free_direction');
-      var freeCount = dirArr.filter(function(d){return d==='Free';}).length;
-      if (freeCount > 0) { build += freeCount * (freeDir?freeDir.add_cost:0); energy += freeCount * (freeDir?freeDir.energy_cost:0); lines.push('Free direction '+freeCount+'x (add '+(freeCount*(freeDir?freeDir.add_cost:0))+', energy '+(freeCount*(freeDir?freeDir.energy_cost:0))+')'); }
       formula = 'Move target '+dist+'m '+(dirArr.join(' or '))+' from '+origin;
     }
-
     var shiftTraitEl = card.querySelector('[name="shifted_trait"]');
     if (shiftTraitEl) {
       var trait = shiftTraitEl.value || '(trait)';
       var dir   = (card.querySelector('[name="shift_dir"]')||{}).value || 'UP';
-      var amt   = readNumber(card, 'shift_amount', 1);
-      var uses  = readNumber(card, 'shift_uses', 1);
-      var amtCost = cfg.shift_amount_cost || {add_cost:0, energy_cost:0};
-      var usesCost = cfg.shift_uses_cost || {add_cost:0, energy_cost:0};
-      if (amt > 1) { build += (amt-1) * amtCost.add_cost; energy += (amt-1) * amtCost.energy_cost; lines.push('Shift amount +'+(amt-1)+' (add '+((amt-1)*amtCost.add_cost)+', energy '+((amt-1)*amtCost.energy_cost)+')'); }
-      if (uses > 1) { build += (uses-1) * usesCost.add_cost; energy += (uses-1) * usesCost.energy_cost; lines.push('Shift uses +'+(uses-1)+' (add '+((uses-1)*usesCost.add_cost)+', energy '+((uses-1)*usesCost.energy_cost)+')'); }
+      var amt   = Number((card.querySelector('[name="shift_amount"]')||{}).value) || 1;
+      var uses  = Number((card.querySelector('[name="shift_uses"]')||{}).value) || 1;
       formula = 'Shift '+trait+' '+dir+' by '+amt+' for '+uses+' uses';
     }
 
     var effName = card.querySelector('[name="effect_name"]');
     if (effName) {
+      // Persistent effect: base energy from the persistent config's base_cost,
+      // plus duration step, plus the chosen effect type's flat cost, plus the
+      // inline editor's per-field costs (read with the 'effect_' prefix from
+      // the matching enactment config), plus always on the persistent card.
+      build = 0;
       energy = cfg.base_cost ? (cfg.base_cost.energy_cost || 0) : 0;
       if (always && readBool(card, 'always')) {
         build += always.add_cost || 0;
@@ -2445,6 +2870,27 @@
         build += effCfg.add_cost || 0;
         energy += effCfg.energy_cost || 0;
         lines.push('Effect '+effType+' (add '+(effCfg.add_cost||0)+', energy '+(effCfg.energy_cost||0)+')');
+      }
+      // If an inline effect is configured, add its per-field costs using the
+      // matching enactment config. The base cost for the inline effect is
+      // already covered by the effCfg surcharge above; this only contributes
+      // the dice/flat/offense/medicine/distance/shift-style per-field costs.
+      if (effType && PERSISTENT_TO_ENACT[effType]) {
+        var inlineCfg = getEnactConfig(effType);
+        var inlineAcc = { build: 0, energy: 0 };
+        var inlineLines = [];
+        calcEnactFieldCosts(card, inlineCfg, 'effect_', inlineAcc, inlineLines);
+        // Inline always is counted inside the field-cost helper via the
+        // `effect_always` checkbox; add it explicitly to be safe.
+        if (always && (card.querySelector('[name="effect_always"]') || {}).checked) {
+          inlineAcc.build += always.add_cost || 0;
+          inlineAcc.energy += always.energy_cost || 0;
+        }
+        build += inlineAcc.build;
+        energy += inlineAcc.energy;
+        for (var ili = 0; ili < inlineLines.length; ili++) {
+          lines.push('  '+inlineLines[ili]);
+        }
       }
       formula = (effName.value||'Effect')+' applies '+effType+' for '+dur+' rounds, solutions: '+(sols.join(' or ')||'(none)');
     }
