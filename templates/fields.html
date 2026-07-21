@@ -1,0 +1,112 @@
+{{ define "field" }}
+{{/* data: dict with .Cfg .Field .Prefix */}}
+{{ $cfg := .Cfg }}
+{{ $f := .Field }}
+{{ $prefix := .Prefix }}
+{{ $name := printf "%s%s" $prefix $f.Key }}
+<div class="field field-{{ $f.Type }}"
+     data-field-key="{{ $f.Key }}"
+     {{ if $f.VisibilityWhen }}data-visibility-when="{{ $prefix }}{{ $f.VisibilityWhen }}" data-show-when="{{ $f.ShowWhen }}"{{ end }}>
+  <label>{{ $f.Label }}
+    {{ if eq $f.Type "free_number" }}{{ with perStepHint $f.PerStep }}<span class="cost-hint">{{ . }}</span>{{ end }}{{ end }}
+    {{ if eq $f.Type "checkbox" }}{{ with costHint $f.Cost }}<span class="cost-hint">{{ . }}</span>{{ end }}{{ end }}
+    {{ if eq $f.Type "dropdown" }}{{ with costHint $f.Cost }}<span class="cost-hint">{{ . }}</span>{{ end }}{{ end }}
+  </label>
+
+  {{ if eq $f.Type "free_text" }}
+  <input type="text" name="{{ $name }}" value="{{ $f.Default }}">
+  {{ else if eq $f.Type "free_number" }}
+  <select name="{{ $name }}" class="number-select">
+    {{ range numberRange $f }}
+    <option value="{{ . }}" {{ if eq . $f.Default }}selected{{ end }}>{{ if gt . 0 }}+{{ end }}{{ . }}</option>
+    {{ end }}
+  </select>
+  {{ else if eq $f.Type "checkbox" }}
+  <input type="checkbox" name="{{ $name }}" {{ if eq (printf "%v" $f.Default) "true" }}checked{{ end }}>
+  {{ else if eq $f.Type "dropdown" }}
+  {{ $default := str $f.Default }}
+  <select name="{{ $name }}">
+    <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
+    {{ range $grp := resolveOptionGroups $cfg $f }}
+    {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
+    {{ range $grp.Options }}
+    <option value="{{ .Value }}" {{ if eq .Value $default }}selected{{ end }}>{{ if .Label }}{{ .Label }}{{ else }}{{ .Value }}{{ end }}{{ with costHint .Cost }} {{ . }}{{ end }}</option>
+    {{ end }}
+    {{ if $grp.Label }}</optgroup>{{ end }}
+    {{ end }}
+  </select>
+
+  {{ else if or (eq $f.Type "solutions") (eq $f.Type "states") }}
+  <div class="rows" data-rows-name="{{ $name }}">
+    <input type="hidden" name="{{ $name }}_count" class="rows-count" value="{{ $f.DefaultCount }}">
+    <div class="rows-body">
+      {{ range $ri := seq $f.DefaultCount }}
+      <div class="row">
+        {{ range $rf := $f.RowFields }}
+        <span class="row-field">
+          <label class="row-label">{{ $rf.Label }}</label>
+          {{ $rname := printf "%s_%d_%s" $name $ri $rf.Key }}
+          {{ if eq $rf.Type "dropdown" }}
+          {{ $rdef := str $rf.Default }}
+          <select name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
+            <option value="" {{ if eq $rdef "" }}selected{{ end }}>&lt;none&gt;</option>
+            {{ range $grp := resolveOptionGroups $cfg $rf }}
+            {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
+            {{ range $grp.Options }}
+            <option value="{{ .Value }}" {{ if eq .Value $rdef }}selected{{ end }}>{{ if .Label }}{{ .Label }}{{ else }}{{ .Value }}{{ end }}{{ with costHint .Cost }} {{ . }}{{ end }}</option>
+            {{ end }}
+            {{ if $grp.Label }}</optgroup>{{ end }}
+            {{ end }}
+          </select>
+
+          {{ else if eq $rf.Type "free_number" }}
+          <select name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
+            {{ range numberRange $rf }}<option value="{{ . }}">{{ . }}</option>{{ end }}
+          </select>
+          {{ else }}
+          <input type="text" name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
+          {{ end }}
+        </span>
+        {{ end }}
+        <button type="button" class="btn small danger remove-row">x</button>
+      </div>
+      {{ end }}
+    </div>
+
+    <button type="button" class="btn small add-row"
+            data-rows-name="{{ $name }}"
+            data-row-template="{{ $name }}-row-tpl">+ Add</button>
+    <template id="{{ $name }}-row-tpl">
+      <div class="row">
+        {{ range $f.RowFields }}
+        <span class="row-field">
+          <label class="row-label">{{ .Label }}</label>
+          {{ if eq .Type "dropdown" }}
+          <select data-row-key="{{ .Key }}">
+            <option value="">&lt;none&gt;</option>
+            {{ range $grp := resolveOptionGroups $cfg . }}
+            {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
+            {{ range $grp.Options }}
+            <option value="{{ .Value }}">{{ if .Label }}{{ .Label }}{{ else }}{{ .Value }}{{ end }}{{ with costHint .Cost }} {{ . }}{{ end }}</option>
+            {{ end }}
+            {{ if $grp.Label }}</optgroup>{{ end }}
+            {{ end }}
+          </select>
+
+          {{ else if eq .Type "free_number" }}
+          <select data-row-key="{{ .Key }}">
+            {{ range numberRange . }}<option value="{{ . }}">{{ . }}</option>{{ end }}
+          </select>
+          {{ else }}
+          <input type="text" data-row-key="{{ .Key }}">
+          {{ end }}
+        </span>
+        {{ end }}
+        <button type="button" class="btn small danger remove-row">x</button>
+      </div>
+    </template>
+  </div>
+  {{ end }}
+  {{ if $f.Description }}<small class="muted">{{ $f.Description }}</small>{{ end }}
+</div>
+{{ end }}

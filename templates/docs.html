@@ -1,4 +1,4 @@
-{{ define "head" }}
+{{ define "docs.html" }}
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -10,21 +10,15 @@
 </head>
 <body>
   <header class="topbar">
-    <a href="/" class="brand">{{ .Cfg.Title }}</a>
+    <a href="/" class="brand">Home</a>
     <nav>
-      <a href="/docs">Docs</a>
+      <a href="/docs/markdown">Download Markdown</a>
+      <button type="button" class="btn" onclick="window.print()">Print / Save PDF</button>
       <button id="theme-toggle" type="button" title="Toggle theme">&#9788;</button>
     </nav>
   </header>
-  {{ if .Breadcrumbs }}
-  <nav class="breadcrumbs">
-    {{ range $i, $c := .Breadcrumbs }}{{ if $i }} <span class="sep">/</span> {{ end }}<a href="{{ $c.URL }}">{{ $c.Label }}</a>{{ end }}
-  </nav>
-  {{ end }}
-  <main class="content">
-{{ end }}
-
-{{ define "foot" }}
+  <main class="content docs">
+    {{ .Content }}
   </main>
   <script src="/static/js/app.js"></script>
 </body>

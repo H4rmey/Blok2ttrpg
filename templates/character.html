@@ -1,200 +1,79 @@
-{{define "title"}}Character Sheet{{end}}
-
-{{define "content"}}
-<script>window.CHARACTER_DATA = {{.CharacterDataJSON}};</script>
-<div class="space-y-8">
-    <div class="flex items-center justify-between">
-        <h1 class="text-3xl font-bold text-white">
-            {{if .IsNew}}New Character{{else}}{{if .Character.Name}}{{.Character.Name}}{{else}}Character Sheet{{end}}{{end}}
-        </h1>
-        {{if not .IsNew}}
-            <div class="flex items-center gap-2">
-                <a href="/characters/{{.Character.ID}}/pdf" target="_blank"
-                   class="bg-indigo-700 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
-                    PDF
-                </a>
-                <a href="/characters/{{.Character.ID}}/export"
-                   class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
-                    Export YAML
-                </a>
-                <a href="/characters/{{.Character.ID}}/abilities"
-                   class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
-                    View Abilities ({{len .Character.Abilities}})
-                </a>
-            </div>
-        {{end}}
-    </div>
-
-    <form method="POST"
-          action="{{if .IsNew}}/characters{{else}}/characters/{{.Character.ID}}{{end}}"
-          class="space-y-8" id="character-form">
-
-        {{template "points_bar.html" .}}
-
-        <!-- Basic Info -->
-        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <h2 class="text-lg font-semibold text-indigo-400 mb-4">Basic Information</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Name</label>
-                    <input type="text" name="name" value="{{.Character.Name}}"
-                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Age</label>
-                    <input type="text" name="age" value="{{.Character.Age}}"
-                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Size</label>
-                    <input type="text" name="size" value="{{.Character.Size}}"
-                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Alignment</label>
-                    <input type="text" name="alignment" value="{{.Character.Alignment}}"
-                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Occupation</label>
-                    <input type="text" name="occupation" value="{{.Character.Occupation}}"
-                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Appearance</label>
-                    <input type="text" name="appearance" value="{{.Character.Appearance}}"
-                           class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                </div>
-            </div>
-            <div class="grid grid-cols-1 gap-4 mt-4">
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Backstory</label>
-                    <textarea name="backstory" rows="2"
-                              class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">{{.Character.Backstory}}</textarea>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Personality</label>
-                    <textarea name="personality" rows="2"
-                              class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">{{.Character.Personality}}</textarea>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm text-gray-400 mb-1">Hobbies</label>
-                        <input type="text" name="hobbies" value="{{.Character.Hobbies}}"
-                               class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-400 mb-1">Quirks</label>
-                        <input type="text" name="quirks" value="{{.Character.Quirks}}"
-                               class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Inventory</label>
-                    <textarea name="inventory" rows="2"
-                              class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:border-indigo-500 focus:outline-none">{{.Character.Inventory}}</textarea>
-                </div>
-            </div>
-        </section>
-
-        <!-- General Traits -->
-        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <h2 class="text-lg font-semibold text-indigo-400 mb-4">General Traits</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {{range .GeneralTraitNames}}
-                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
-                    <label class="text-sm text-gray-300 font-medium">{{.}}</label>
-                    <select name="general_{{.}}"
-                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
-                        {{$current := index $.Character.GeneralTraits .}}
-                        {{range $.ProficiencyOptions}}
-                        <option value="{{.Value}}" {{if eq .Value $current}}selected{{end}}>{{.Label}}</option>
-                        {{end}}
-                    </select>
-                </div>
-                {{end}}
-            </div>
-        </section>
-
-        <!-- Combative Traits -->
-        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <h2 class="text-lg font-semibold text-indigo-400 mb-4">Combative Traits</h2>
-
-            <h3 class="text-sm font-semibold text-red-400 uppercase tracking-wide mb-3">Offense</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                {{range .OffenseTraitNames}}
-                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
-                    <label class="text-sm text-gray-300 font-medium">{{.}}</label>
-                    <select name="offense_{{.}}"
-                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
-                        {{$current := index $.Character.OffenseTraits .}}
-                        {{range $.ProficiencyOptions}}
-                        <option value="{{.Value}}" {{if eq .Value $current}}selected{{end}}>{{.Label}}</option>
-                        {{end}}
-                    </select>
-                </div>
-                {{end}}
-            </div>
-
-            <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wide mb-3">Defense</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {{range .DefenseTraitNames}}
-                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
-                    <label class="text-sm text-gray-300 font-medium">{{.}}</label>
-                    <select name="defense_{{.}}"
-                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
-                        {{$current := index $.Character.DefenseTraits .}}
-                        {{range $.ProficiencyOptions}}
-                        <option value="{{.Value}}" {{if eq .Value $current}}selected{{end}}>{{.Label}}</option>
-                        {{end}}
-                    </select>
-                </div>
-                {{end}}
-            </div>
-        </section>
-
-        <!-- Vital Stats -->
-        <section class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <h2 class="text-lg font-semibold text-indigo-400 mb-4">Vital Stats</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
-                    <label class="text-sm text-gray-300 font-medium">HP</label>
-                    <select name="vital_hp"
-                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
-                        {{range .VitalHPOptions}}
-                        <option value="{{.Value}}" {{if eq .Value $.Character.VitalHP}}selected{{end}}>{{.Label}}</option>
-                        {{end}}
-                    </select>
-                </div>
-                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
-                    <label class="text-sm text-gray-300 font-medium">Movement</label>
-                    <select name="vital_movement"
-                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
-                        {{range .VitalMovementOptions}}
-                        <option value="{{.Value}}" {{if eq .Value $.Character.VitalMovement}}selected{{end}}>{{.Label}}</option>
-                        {{end}}
-                    </select>
-                </div>
-                <div class="flex items-center justify-between bg-gray-750 rounded px-3 py-2">
-                    <label class="text-sm text-gray-300 font-medium">Energy</label>
-                    <select name="vital_energy"
-                            class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white focus:border-indigo-500 focus:outline-none">
-                        {{range .VitalEnergyOptions}}
-                        <option value="{{.Value}}" {{if eq .Value $.Character.VitalEnergy}}selected{{end}}>{{.Label}}</option>
-                        {{end}}
-                    </select>
-                </div>
-            </div>
-        </section>
-
-        <!-- Submit -->
-        <div class="flex items-center gap-4">
-            <button type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-lg font-medium transition">
-                {{if .IsNew}}Create Character{{else}}Save Changes{{end}}
-            </button>
-            <a href="/" class="text-gray-400 hover:text-white transition">Cancel</a>
-        </div>
-    </form>
+{{ template "head" . }}
+{{ $c := .Character }}
+<div class="page-head">
+  <h1>{{ if $c.ID }}{{ $c.Name }}{{ else }}New Character{{ end }}</h1>
+  {{ if $c.ID }}
+  <div class="actions">
+    <a class="btn" href="/characters/{{ $c.ID }}/abilities">Abilities ({{ len $c.Abilities }})</a>
+    <a class="btn" href="/characters/{{ $c.ID }}/export">Export YAML</a>
+    <a class="btn" href="/characters/{{ $c.ID }}/pdf" target="_blank">PDF</a>
+    <button class="btn danger" hx-delete="/characters/{{ $c.ID }}" hx-confirm="Delete this character?">Delete</button>
+  </div>
+  {{ end }}
 </div>
-{{end}}
+
+<div class="cost-cards">
+  <div class="cost-card">
+    <span class="cost-card-label">Level</span>
+    <span class="cost-card-value">{{ $c.Level }}</span>
+  </div>
+  <div class="cost-card">
+    <span class="cost-card-label">Ability Points</span>
+    <span class="cost-card-value {{ if gt .AbilityUsed .AbilityBudget }}over{{ else }}ok{{ end }}">{{ .AbilityUsed }} / {{ .AbilityBudget }}</span>
+  </div>
+  <div class="cost-card">
+    <span class="cost-card-label">Trait Points</span>
+    <span class="cost-card-value {{ if gt .TraitUsed .TraitBudget }}over{{ else }}ok{{ end }}">{{ .TraitUsed }} / {{ .TraitBudget }}</span>
+  </div>
+  <div class="cost-card">
+    <span class="cost-card-label">Abilities</span>
+    <span class="cost-card-value">{{ len $c.Abilities }}</span>
+  </div>
+</div>
+
+<form method="post" action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}">
+  <div class="field">
+    <label>Level</label>
+    <input type="number" name="level" min="1" value="{{ $c.Level }}">
+  </div>
+
+
+  {{ range attributes .Cfg }}
+  <fieldset>
+    <legend>{{ .Label }}</legend>
+    {{ range .Fields }}
+    <div class="field">
+      <label>{{ .Label }}</label>
+      <input type="text" name="attr_{{ .Key }}" value="{{ attrStr $c .Key }}">
+    </div>
+    {{ end }}
+  </fieldset>
+  {{ end }}
+
+  {{ range traitGroups .Cfg }}
+
+  {{ $g := . }}
+  <fieldset>
+    <legend>{{ .Label }}</legend>
+    <div class="trait-grid">
+      {{ range .Traits }}
+      <div class="field">
+        <label>{{ . }}</label>
+        <select name="trait_{{ $g.ID }}_{{ . }}">
+          {{ $current := traitProf $c $g.ID . }}
+          {{ range $.Cfg.Proficiencies }}
+          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profLabel . $g.ID }}</option>
+          {{ end }}
+        </select>
+      </div>
+      {{ end }}
+    </div>
+  </fieldset>
+  {{ end }}
+
+  <div class="toolbar">
+    <button class="btn primary" type="submit">Save</button>
+    <a class="btn" href="/">Cancel</a>
+  </div>
+</form>
+{{ template "foot" . }}

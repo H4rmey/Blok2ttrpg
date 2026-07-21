@@ -1,0 +1,44 @@
+{
+  "char-1784631504682831000": {
+    "id": "char-1784631504682831000",
+    "level": 1,
+    "attributes": {
+      "age": "",
+      "alignment": "",
+      "appearance": "",
+      "backstory": "",
+      "hobbies": "",
+      "inventory": "",
+      "name": "",
+      "occupation": "",
+      "personality": "",
+      "quirks": "",
+      "size": ""
+    },
+    "traits": {
+      "defense.Constitution": "untrained",
+      "defense.Magic": "untrained",
+      "defense.Mind": "untrained",
+      "defense.Reflex": "expert",
+      "general.Crafting": "untrained",
+      "general.Dexterity": "untrained",
+      "general.Knowledge": "untrained",
+      "general.Magic": "untrained",
+      "general.Nature": "untrained",
+      "general.People Skill": "untrained",
+      "general.Perception": "untrained",
+      "general.Performance": "untrained",
+      "general.Stealth": "untrained",
+      "general.Strength": "untrained",
+      "general.Thievery": "untrained",
+      "offense.Magic": "untrained",
+      "offense.Mind": "untrained",
+      "offense.Power": "untrained",
+      "offense.Precision": "untrained",
+      "vital.Energy": "untrained",
+      "vital.HP": "untrained",
+      "vital.Movement": "untrained"
+    },
+    "abilities": []
+  }
+}

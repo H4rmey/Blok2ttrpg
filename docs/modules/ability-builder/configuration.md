@@ -423,7 +423,10 @@ Cost calculation is server-authoritative:
 Rules:
 
 - Enactments and interactions start from `base_cost`.
+- The first enactment added to an ability is free: its component `base_cost` is waived, so adding the first enactment costs no build or energy. Field-driven costs on that first enactment (checkboxes, dropdowns, numbers, states, etc.) still apply normally.
+- Each enactment beyond the first pays its full `base_cost` plus the `additional_enactment` surcharge from `general.yaml`.
 - Ability types start from `base_energy` and `base_action` where applicable.
+
 - `checkbox` cost applies only when checked.
 - `dropdown` field-level `cost` applies when the selected value is non-empty.
 - Inline dropdown option `cost` also applies for the selected option.

@@ -7,22 +7,22 @@ ability_types:
     step_costs:
       energy:
         increase:
-          add_cost: -2
+          build_cost: -2
           energy_cost: 1
         decrease:
-          add_cost: 3
+          build_cost: 3
           energy_cost: -1
       action:
         increase:
-          add_cost: -2
+          build_cost: -2
           energy_cost: 0
         decrease:
-          add_cost: 4
+          build_cost: 4
           energy_cost: 1
     perks:
       - id: item_dependency
         description: "Has item dependency"
-        add_cost: -1
+        build_cost: -1
         energy_cost: 0
     compatible_enactments:
       - Enact Damage
@@ -35,7 +35,7 @@ ability_types:
         label: "Has Item Dependency"
         type: checkbox
         cost:
-          add_cost: -1
+          build_cost: -1
           energy_cost: 0
       - key: item_name
         label: "Item Name"
@@ -51,10 +51,10 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: -2
+            build_cost: -2
             energy_cost: 1
           decrease:
-            add_cost: 3
+            build_cost: 3
             energy_cost: -1
       - key: action_steps
         label: "Action +/-"
@@ -65,10 +65,10 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: -2
+            build_cost: -2
             energy_cost: 0
           decrease:
-            add_cost: 4
+            build_cost: 4
             energy_cost: 1
 
   reaction:
@@ -79,104 +79,104 @@ ability_types:
     base_range: 1
     base_uses: 1
     range_cost:
-      add_cost: 1
+      build_cost: 1
       energy_cost: 0
     uses_cost:
-      add_cost: 4
+      build_cost: 4
       energy_cost: 1
     step_costs:
       energy:
         increase:
-          add_cost: -2
+          build_cost: -2
           energy_cost: 1
         decrease:
-          add_cost: 3
+          build_cost: 3
           energy_cost: -1
     perks:
       - id: item_dependency
         description: "Has item dependency"
-        add_cost: -1
+        build_cost: -1
         energy_cost: 0
     triggers:
       - id: "Target moves away from engager"
         description: "Someone runs away from you"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target moves towards engager"
         description: "Someone runs towards you"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target moves past engager"
         description: "Someone moves past you"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Engager gets healed by target"
         description: "Someone gets healed"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target damages engager"
         description: "Someone takes damage"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target makes a trait check"
         description: "Someone does a skill check"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target starts casting an ability"
         description: "Someone starts casting an ability"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target ends their turn within range"
         description: "A turn ends within range"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target enters interaction range"
         description: "Someone enters range"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target leaves interaction range"
         description: "Someone leaves range"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target fails a validation"
         description: "Someone fails a validation"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target succeeds on a validation"
         description: "Someone succeeds on a validation"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Target becomes affected by an enactment"
         description: "Someone becomes affected by an enactment"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Engager takes damage"
         description: "You take damage"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Engager gets targeted by an ability"
         description: "You are targeted by an ability"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Ally within range takes damage"
         description: "An ally within range takes damage"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "Ally within range gets healed"
         description: "An ally within range gets healed"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "A target is moved by an effect"
         description: "Someone is moved by an effect"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "A persistent effect triggers"
         description: "A persistent effect triggers"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: "A minion is summoned within range"
         description: "A minion is summoned within range"
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
     compatible_enactments:
       - Enact Damage
@@ -189,7 +189,7 @@ ability_types:
         label: "Has Item Dependency"
         type: checkbox
         cost:
-          add_cost: -1
+          build_cost: -1
           energy_cost: 0
       - key: item_name
         label: "Item Name"
@@ -201,7 +201,7 @@ ability_types:
         type: dropdown
         options_source: reaction_triggers
         cost:
-          add_cost: 2
+          build_cost: 2
           energy_cost: 0
       - key: trigger_trait
         label: "Trigger Trait"
@@ -218,7 +218,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: 1
+            build_cost: 1
             energy_cost: 0
       - key: uses
         label: "Uses"
@@ -229,7 +229,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: 4
+            build_cost: 4
             energy_cost: 1
 
   phase:
@@ -240,100 +240,100 @@ ability_types:
     base_duration: 2
     base_reverse_duration: 2
     duration_cost:
-      add_cost: 2
+      build_cost: 2
       energy_cost: 1
     reverse_duration_refund:
-      add_cost: 4
+      build_cost: 4
       energy_cost: 0
     perks:
       - id: all_knockouts_req
         description: "All knockout requirements have to be met"
-        add_cost: 3
+        build_cost: 3
         energy_cost: 0
       - id: reverse_knockout
         description: "Knockout can be used on the reverse phase"
-        add_cost: 3
+        build_cost: 3
         energy_cost: 0
       - id: no_knockout
         description: "No knockout possible"
-        add_cost: 5
+        build_cost: 5
         energy_cost: 0
       - id: item_dependency
         description: "Has item dependency"
-        add_cost: -1
+        build_cost: -1
         energy_cost: 0
     step_costs:
       energy:
         increase:
-          add_cost: -2
+          build_cost: -2
           energy_cost: 1
         decrease:
-          add_cost: 3
+          build_cost: 3
           energy_cost: -1
     knockout_requirements:
       - id: "None"
         description: "None"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager takes damage"
         description: "You take damage"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager falls unconscious"
         description: "You fall unconscious"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager dies"
         description: "You die"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager gets grabbed or restrained"
         description: "You get grabbed or restrained"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager moves voluntarily"
         description: "You move voluntarily"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager is moved by another effect"
         description: "You are moved by another effect"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager fails a validation"
         description: "You fail a validation"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager uses another phase"
         description: "You use another phase"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager loses line of sight to target"
         description: "You lose line of sight to target"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Target moves out of range"
         description: "Target moves out of range"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Target falls unconscious"
         description: "Target falls unconscious"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Target dies"
         description: "Target dies"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Target succeeds on a counter roll"
         description: "Target succeeds on a counter roll"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Phase duration expires"
         description: "Phase duration expires"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
       - id: "Engager runs out of energy"
         description: "You run out of energy"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
     compatible_enactments:
       - Enact Damage
@@ -342,14 +342,14 @@ ability_types:
     bad_enactments:
       - id: reverse_default
         description: "Reverse of the original Enactment"
-        add_cost: 0
+        build_cost: 0
         energy_cost: 0
     fields:
       - key: item_dep
         label: "Has Item Dependency"
         type: checkbox
         cost:
-          add_cost: -1
+          build_cost: -1
           energy_cost: 0
       - key: item_name
         label: "Item Name"
@@ -365,7 +365,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: 2
+            build_cost: 2
             energy_cost: 1
       - key: reverse_rounds
         label: "Reverse Rounds"
@@ -376,28 +376,28 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: 4
+            build_cost: 4
             energy_cost: 0
           decrease:
-            add_cost: -4
+            build_cost: -4
             energy_cost: 0
       - key: all_req
         label: "All knockout requirements have to be met"
         type: checkbox
         cost:
-          add_cost: 3
+          build_cost: 3
           energy_cost: 0
       - key: reverse_knockout
         label: "Knockout can be used on the reverse phase"
         type: checkbox
         cost:
-          add_cost: 3
+          build_cost: 3
           energy_cost: 0
       - key: no_knockout
         label: "No knockout possible"
         type: checkbox
         cost:
-          add_cost: 5
+          build_cost: 5
           energy_cost: 0
       - key: knockout
         label: "Knockout Requirements"
@@ -411,10 +411,10 @@ ability_types:
             options_source: knockout_options
         per_item:
           increase:
-            add_cost: -1
+            build_cost: -1
             energy_cost: 0
           decrease:
-            add_cost: 0
+            build_cost: 0
             energy_cost: 0
 
   minion:
@@ -424,23 +424,23 @@ ability_types:
     base_health: 10
     base_lifetime: 3
     health_bonus_cost:
-      add_cost: 1
+      build_cost: 1
       energy_cost: 0
     lifetime_bonus_cost:
-      add_cost: 1
+      build_cost: 1
       energy_cost: 1
     perks:
       - id: item_dependency
         description: "Has item dependency"
-        add_cost: -1
+        build_cost: -1
         energy_cost: 0
     step_costs:
       energy:
         increase:
-          add_cost: -2
+          build_cost: -2
           energy_cost: 1
         decrease:
-          add_cost: 3
+          build_cost: 3
           energy_cost: -1
     compatible_enactments:
       - Enact Damage
@@ -453,7 +453,7 @@ ability_types:
         label: "Has Item Dependency"
         type: checkbox
         cost:
-          add_cost: -1
+          build_cost: -1
           energy_cost: 0
       - key: item_name
         label: "Item Name"
@@ -469,7 +469,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: 1
+            build_cost: 1
             energy_cost: 0
       - key: life
         label: "Extra Lifetime"
@@ -480,7 +480,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: 1
+            build_cost: 1
             energy_cost: 1
 
   preparation:
@@ -491,30 +491,30 @@ ability_types:
     base_range: 1
     base_uses: 1
     range_cost:
-      add_cost: 1
+      build_cost: 1
       energy_cost: 0
     uses_cost:
-      add_cost: 4
+      build_cost: 4
       energy_cost: 1
     step_costs:
       action:
         increase:
-          add_cost: -2
+          build_cost: -2
           energy_cost: 0
         decrease:
-          add_cost: 1
+          build_cost: 1
           energy_cost: 4
       energy:
         increase:
-          add_cost: -2
+          build_cost: -2
           energy_cost: 1
         decrease:
-          add_cost: 3
+          build_cost: 3
           energy_cost: -1
     perks:
       - id: item_dependency
         description: "Has item dependency"
-        add_cost: -1
+        build_cost: -1
         energy_cost: 0
     compatible_enactments:
       - Enact Damage
@@ -527,7 +527,7 @@ ability_types:
         label: "Has Item Dependency"
         type: checkbox
         cost:
-          add_cost: -1
+          build_cost: -1
           energy_cost: 0
       - key: item_name
         label: "Item Name"
@@ -539,7 +539,7 @@ ability_types:
         type: dropdown
         options_source: reaction_triggers
         cost:
-          add_cost: 2
+          build_cost: 2
           energy_cost: 0
       - key: trigger_trait
         label: "Trigger Trait"
@@ -556,7 +556,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: 1
+            build_cost: 1
             energy_cost: 0
       - key: uses
         label: "Uses"
@@ -567,7 +567,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: 4
+            build_cost: 4
             energy_cost: 1
       - key: action_steps
         label: "Action +/-"
@@ -578,10 +578,10 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: -2
+            build_cost: -2
             energy_cost: 0
           decrease:
-            add_cost: 1
+            build_cost: 1
             energy_cost: 4
       - key: energy_steps
         label: "Energy +/-"
@@ -592,10 +592,10 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: -2
+            build_cost: -2
             energy_cost: 1
           decrease:
-            add_cost: 3
+            build_cost: 3
             energy_cost: -1
 
   concentration:
@@ -608,27 +608,27 @@ ability_types:
     step_costs:
       energy:
         increase:
-          add_cost: -2
+          build_cost: -2
           energy_cost: 1
         decrease:
-          add_cost: 3
+          build_cost: 3
           energy_cost: -1
     perks:
       - id: effortless
         description: "Upkeep no longer costs an Action or Energy; it just requires focus."
-        add_cost: 3
+        build_cost: 3
         energy_cost: 0
       - id: iron_will
         description: "When rolling to maintain Concentration after taking damage, you may shift your Counter Roll up one Dice Tier."
-        add_cost: 2
+        build_cost: 2
         energy_cost: 0
       - id: dual_focus
         description: "You can have a second Concentration Ability active, but the upkeep for both doubles."
-        add_cost: 5
+        build_cost: 5
         energy_cost: 0
       - id: item_dependency
         description: "Has item dependency"
-        add_cost: -1
+        build_cost: -1
         energy_cost: 0
     compatible_enactments:
       - Enact Damage
@@ -642,7 +642,7 @@ ability_types:
         label: "Has Item Dependency"
         type: checkbox
         cost:
-          add_cost: -1
+          build_cost: -1
           energy_cost: 0
       - key: item_name
         label: "Item Name"
@@ -658,26 +658,26 @@ ability_types:
         step: 1
         per_step:
           increase:
-            add_cost: -2
+            build_cost: -2
             energy_cost: 1
           decrease:
-            add_cost: 3
+            build_cost: 3
             energy_cost: -1
       - key: effortless
         label: "Effortless (upkeep is free)"
         type: checkbox
         cost:
-          add_cost: 3
+          build_cost: 3
           energy_cost: 0
       - key: iron_will
         label: "Iron Will (shift counter roll up on damage)"
         type: checkbox
         cost:
-          add_cost: 2
+          build_cost: 2
           energy_cost: 0
       - key: dual_focus
         label: "Dual Focus (allow a second Concentration)"
         type: checkbox
         cost:
-          add_cost: 5
+          build_cost: 5
           energy_cost: 0

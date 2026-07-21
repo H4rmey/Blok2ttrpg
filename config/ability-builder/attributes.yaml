@@ -1,0 +1,30 @@
+# Character attribute sections. These are free-form character sheet fields
+# stored generically on the character. They do not affect ability cost.
+attributes:
+  identity:
+    label: "Identity"
+    fields:
+      - key: name
+        label: "Name"
+        type: free_text
+      - key: player
+        label: "Player"
+        type: free_text
+      - key: ancestry
+        label: "Ancestry"
+        type: free_text
+      - key: archetype
+        label: "Archetype"
+        type: free_text
+  description:
+    label: "Description"
+    fields:
+      - key: appearance
+        label: "Appearance"
+        type: free_text
+      - key: backstory
+        label: "Backstory"
+        type: free_text
+      - key: notes
+        label: "Notes"
+        type: free_text

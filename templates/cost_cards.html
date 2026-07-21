@@ -1,0 +1,18 @@
+{{ define "cost_cards" }}
+{{ $remaining := sub .Budget .Cost.Build }}
+<div class="cost-card">
+  <span class="cost-card-label">Ability Points</span>
+  <span class="cost-card-value {{ if lt $remaining 0 }}over{{ else }}ok{{ end }}">
+    <span id="cost-remaining">{{ $remaining }}</span>/<span id="cost-budget">{{ .Budget }}</span>
+  </span>
+</div>
+<div class="cost-card">
+  <span class="cost-card-label">Build Cost</span>
+  <span class="cost-card-value build" id="cost-build">{{ .Cost.Build }}</span>
+</div>
+<div class="cost-card">
+  <span class="cost-card-label">Total Energy Cost</span>
+  <span class="cost-card-value energy" id="cost-energy">{{ .Cost.Energy }}</span>
+</div>
+{{ if .OverBudget }}<div class="cost-warning" id="cost-warn">Out of ability points (allowed)</div>{{ end }}
+{{ end }}

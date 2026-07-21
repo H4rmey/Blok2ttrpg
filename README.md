@@ -1,174 +1,99 @@
-# Blok2 TTRPG — Ability Builder
+# Blok2ttrpg v5
 
-A Go web application for building TTRPG abilities using cascading dropdowns, managing character sheets, and exporting abilities as YAML.
+A config-driven tabletop RPG character and ability builder. Written in Go with
+`html/template` + [HTMX](https://htmx.org). No Node, no npm, no build step.
 
-## Prerequisites
+## Why v5
 
-- [Go 1.23+](https://go.dev/dl/)
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/) (optional)
+This is a from-scratch rebuild focused on one idea: **the config leads.**
+Everything the app renders and costs is derived from a directory of YAML files.
+There are no hardcoded ability types, enactments, traits, or character
+attributes anywhere in the Go code.
 
-## Quick Start
+### Kept from earlier versions
+- Config files render the pages.
+- Export documentation (Markdown + browser-print PDF).
+- Export character sheets (YAML + browser-print PDF).
+- Export abilities as YAML.
+- YAML import/export of characters.
+- Go + templates + HTMX, dark/light mode, breadcrumb navigation.
+- Live cost calculation while building.
+- JSON persistence of all characters.
+- Adding/removing traits in config updates the builder everywhere.
+- Documentation generated from the same config the app uses, so docs and
+  behaviour stay in sync.
 
-```bash
-cd ability-builder
+### Fixed in v5
+- **No Node dependency.** PDFs are produced by the browser's own
+  `window.print()` (print-friendly pages), so `puppeteer-core` and
+  `node_modules` are gone entirely.
+- **Config-driven character attributes.** Add or change attributes in YAML;
+  the character model stores everything generically.
+- **Less verbose code.** A single generic `Component` type backs ability
+  types, enactments, and interactions, and a single generic `Field` type
+  drives both the UI and the cost engine.
+- **Zero hardcoded type names.** All ability types, enactments, interactions,
+  proficiencies, and traits come from config.
+- **Cost is advisory, never blocking.** You can always save an ability even if
+  it is over budget; the UI just flags it.
 
-# Download dependencies
-go mod tidy
+## Running
 
-# Run the server
-go run main.go
+```sh
+go run .
 ```
 
-Then open [http://localhost:8080](http://localhost:8080) in your browser.
+Then open http://localhost:8080.
 
-## Docker
+### Flags / environment
+- `-config` (or `CONFIG`): config directory or file. Default `config/default`.
+- `-templates`: template directory. Default `templates`.
+- `PORT`: listen port. Default `8080`.
 
-The application can be containerized using Docker.
-
-### Build the Docker Image
-
-```bash
-docker build -t blok2ttrpg-ability-builder .
-```
-
-### Run the Container
-
-```bash
-docker run -d -p 8080:8080 --name ability-builder blok2ttrpg-ability-builder
-```
-
-### Docker Configuration
-
-The container supports the following configuration via environment variables:
-
-| Environment Variable | Default | Description |
-|---------------------|---------|-------------|
-| `PORT` | `8080` | Server port |
-| `ABILITY_BUILDER_CONFIG` | `/app/config/ability-builder.yaml` | Path to config file |
-
-### Running with Custom Configuration
-
-To use a custom configuration file, mount it as a volume:
-
-```bash
-docker run -d -p 8080:8080 \
-  -v /path/to/your/config/ability-builder:/app/config/ability-builder \
-  --name ability-builder blok2ttrpg-ability-builder
-```
-
-### Running with Persistent Data
-
-To persist character data, mount a data directory:
-
-```bash
-docker run -d -p 8080:8080 \
-  -v /path/to/your/data:/app/data \
-  --name ability-builder blok2ttrpg-ability-builder
-```
-
-### Combined Example
-
-```bash
-docker run -d -p 8080:8080 \
-  -v ./config/ability-builder:/app/config/ability-builder \
-  -v ./data:/app/data \
-  --name ability-builder \
-  blok2ttrpg-ability-builder
-```
-
-Then open [http://localhost:8080](http://localhost:8080) in your browser.
-
-## Docker Compose
-
-For easier management with persistent data, use Docker Compose:
-
-### Start with Docker Compose
-
-```bash
-docker compose up -d
-```
-
-This starts the container with:
-- Config, data, and docs mounted as volumes for persistence
-- Automatic restart on failure
-
-### Manage the Container
-
-```bash
-# Stop
-docker compose down
-
-# Restart
-docker compose restart
-
-# View logs
-docker compose logs -f
-```
-
-## Features
-
-### Character Sheet
-- Create and manage characters with full trait proficiency configuration
-- General Traits: Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic
-- Combative Traits: Offense (Precision, Power, Mind, Magic) and Defense (Reflex, Constitution, Mind, Magic)
-- Vital Stats: HP, Movement, Energy
-
-### Ability Builder
-- Cascading dropdown form powered by HTMX
-- 4 Ability Types: Execution, Reaction, Phase, Minion
-- 5 Enactment Types: Damage, Healing, Movement, Proficiency Shift, Persistent Effect
-- 5 Interaction Types: Self, Direct, Ranged, Area, Area of Effect
-- Validation configuration with Engagement and Counter rolls
-- Perk system at every level with cost tracking
-
-### Ability List
-- Browse all abilities for a character
-- View ability details with YAML output
-- Export abilities as YAML files
-- Delete abilities
-
-## Project Structure
-
-```
-ability-builder/
-├── main.go                          # Entry point, router
-├── internal/
-│   ├── handlers/                    # HTTP handlers
-│   ├── models/                      # Data models + reference data
-│   ├── storage/                     # JSON file persistence
-│   ├── session/                     # In-memory builder session
-│   └── export/                      # YAML export
-├── templates/                       # HTML templates
-│   └── partials/                    # HTMX partial templates
-├── static/                          # CSS
-└── data/                            # JSON data files
-```
-
-## Tech Stack
-
-- **Go** stdlib `net/http` — no framework
-- **html/template** — server-side rendering
-- **HTMX** — dynamic UI without JavaScript framework
-- **Tailwind CSS** (CDN) — styling
-- **JSON files** — persistence
+Characters are stored in `data/<profile_id>/characters.json`.
 
 ## Configuration
 
-The ability-builder config is a directory (`config/ability-builder/`) containing:
-- `general.yaml` — version, profile_id, combat, additional_enactment, dice, validations
-- `file_order.yaml` — documentation file order for YAML output
-- `ability_types.yaml` — Execution, Reaction, Phase, Minion, Preparation, Concentration
-- `enactments.yaml` — Damage, Healing, Movement, Proficiency Shift, Persistent Effect, State
-- `interactions.yaml` — Self, Direct, Ranged, Area, Area of Effect
-- `proficiencies.yaml` — Proficiency tiers and dice
-- `traits.yaml` — General, Offense, Defense, Vital trait lists
-- `leveling.yaml` — Leveling tables for trait/ability points
-- `states.yaml` — State definitions (General and Specific states)
+A ruleset is a directory of YAML files, merged in filename order. See
+`config/default/` for the reference ruleset:
 
-See `docs/modules/ability-builder/configuration.md` for the detailed schema reference.
+| File | Purpose |
+| --- | --- |
+| `01-general.yaml` | version, profile id, title, leveling, proficiencies |
+| `02-attributes.yaml` | character attribute groups/fields |
+| `03-traits.yaml` | trait groups and reusable option lists |
+| `04-ability-types.yaml` | ability types |
+| `05-enactments.yaml` | enactment building blocks |
+| `06-interactions.yaml` | interaction building blocks + docs order |
 
-| Environment Variable | Default | Description |
-|---------------------|---------|-------------|
-| `PORT` | `8080` | Server port |
-| `ABILITY_BUILDER_CONFIG` | `config/ability-builder` | Path to config directory |
+To make your own ruleset, copy `config/default` to a new directory, edit the
+YAML, and run with `-config path/to/your-ruleset`.
+
+### Field types
+A `Field` uses a `type` discriminator: `text`, `textarea`, `number`,
+`checkbox`, `dropdown`, `list`. Costs can attach at the field level (`cost`),
+per number step (`per_step`), per dropdown option (`options[].cost`), or per
+list row (`per_item`). Fields can be conditionally shown with `show_when`.
+
+## Documentation
+
+Visit `/docs` for HTML docs generated from the config (with a print/PDF
+button), or `/docs/markdown` to download the Markdown. The docs templates in
+`config/<ruleset>/docs/` iterate over the same `Config` the app runs on, so
+they never drift out of sync.
+
+## Project layout
+
+```
+main.go                 entrypoint / flags
+internal/config         schema, loading/merging, validation, lookups
+internal/model          generic Character / Ability model
+internal/store          JSON-backed character store
+internal/engine         advisory cost calculation
+internal/docs           config -> markdown/HTML docs
+internal/export         YAML import/export
+internal/web            HTTP handlers, routing, template funcs
+templates               html/template views
+static                  css, app.js, vendored htmx
+config/default          reference ruleset
+```

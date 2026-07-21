@@ -1,0 +1,341 @@
+:root {
+  --bg: #111827;
+  --surface: #1f2937;
+  --surface-2: #374151;
+  --border: #374151;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --accent: #818cf8;
+  --accent-strong: #4f46e5;
+  --danger: #f87171;
+  --warn: #fbbf24;
+  --cyan: #22d3ee;
+  --radius: 8px;
+}
+[data-theme="dark"] { color-scheme: dark; }
+
+
+[data-theme="light"] {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --border: #d7dce3;
+  --text: #1b1f26;
+  --muted: #5c6675;
+  --accent: #2f6fed;
+  --accent-strong: #1f5be0;
+  --danger: #d13b3b;
+  --warn: #b5720a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.topbar .brand { font-weight: 700; font-size: 1.1rem; color: var(--text); }
+.topbar nav { display: flex; align-items: center; gap: 1rem; }
+
+.breadcrumbs {
+  padding: 0.5rem 1.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.breadcrumbs .sep { margin: 0 0.25rem; }
+
+.content {
+  max-width: 900px;
+  margin: 1.5rem auto;
+  padding: 0 1.25rem;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.page-head h1 { margin: 0; }
+
+.actions, .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.toolbar { margin-top: 1.5rem; }
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+}
+legend { padding: 0 0.5rem; font-weight: 700; color: var(--accent); font-size: 1.05rem; }
+
+
+.field { margin-bottom: 0.85rem; }
+.field label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+}
+input[type="checkbox"] { width: auto; }
+textarea { min-height: 5rem; resize: vertical; }
+
+.trait-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+}
+.btn:hover { border-color: var(--accent); text-decoration: none; }
+.btn.primary { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+.btn.danger { border-color: var(--danger); color: var(--danger); }
+.btn.small { padding: 0.2rem 0.5rem; font-size: 0.85rem; }
+
+#theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+  padding: 0.3rem 0.55rem;
+  font-size: 1rem;
+}
+
+.muted { color: var(--muted); font-size: 0.9rem; }
+.warn { color: var(--warn); font-weight: 600; }
+
+.cost-badge {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.cost-badge.warn { border-color: var(--warn); }
+
+/* Builder header with the live cost cards, matching the original layout. */
+.builder-head {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.builder-head h1 { margin: 0; font-size: 1.5rem; }
+.cost-cards { display: flex; align-items: stretch; gap: 0.6rem; flex-wrap: wrap; }
+.cost-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 96px;
+  padding: 0.35rem 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+}
+.cost-card-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.cost-card-value { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+.cost-card-value.ok { color: #4ade80; }
+.cost-card-value.over { color: var(--danger); }
+.cost-card-value.build { color: var(--accent); }
+.cost-card-value.energy { color: var(--cyan); }
+.cost-warning { color: var(--danger); font-size: 0.85rem; font-weight: 600; align-self: center; }
+
+
+.card-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+.card {
+  padding: 0.9rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.enactment {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.75rem;
+  background: var(--surface-2);
+}
+.enactment-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* Documentation */
+.docs h1, .docs h2, .docs h3 { margin-top: 1.5rem; }
+.docs table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+.docs th, .docs td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+.docs th { background: var(--surface-2); }
+.docs code {
+  background: var(--surface-2);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+/* Character sheet / PDF */
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+.ability-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+}
+.pdf-toolbar { padding: 1rem 1.25rem; }
+
+/* Enactment collapsible regions */
+.enactment { border-color: var(--accent-strong); }
+.collapse-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+.collapse-chevron { transition: transform 150ms ease-in-out; display: inline-block; }
+.collapse-toggle[aria-expanded="false"] .collapse-chevron { transform: rotate(-90deg); }
+.collapsible-content[hidden] { display: none; }
+
+.region {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  background: var(--surface);
+}
+.region-title {
+  margin: 0 0 0.6rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cyan);
+}
+
+/* Distinct accent per region so enactment / validation / interaction read as
+   clearly separate blocks. */
+.region-enactment {
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+.region-enactment .region-title { color: var(--accent); }
+
+.region-validation {
+  border-left: 3px solid var(--warn);
+  background: color-mix(in srgb, var(--warn) 8%, var(--surface));
+}
+.region-validation .region-title { color: var(--warn); }
+
+.region-interaction {
+  border-left: 3px solid var(--cyan);
+  background: color-mix(in srgb, var(--cyan) 8%, var(--surface));
+}
+.region-interaction .region-title { color: var(--cyan); }
+
+/* Inline per-option cost hints, e.g. "(-2 pt, +1 E)". */
+.cost-hint {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-left: 0.35rem;
+}
+
+/* Cast (energy) cost in the badge stands out in cyan. */
+#cost-energy { color: var(--cyan); font-weight: 700; }
+
+/* Required-field asterisk. */
+.req { color: var(--danger); font-weight: 700; }
+
+/* Name gate: the rest of the builder is dimmed and non-interactive until an
+   ability name has been entered. */
+#builder-gate.gated {
+  opacity: 0.4;
+  pointer-events: none;
+  filter: grayscale(0.5);
+  user-select: none;
+}
+#builder-gate { transition: opacity 150ms ease-in-out, filter 150ms ease-in-out; }
+
+
+
+/* Repeatable rows (solutions / states) */
+.rows { display: block; }
+.rows-body { display: grid; gap: 0.5rem; margin-bottom: 0.5rem; }
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+.row-field { display: flex; flex-direction: column; flex: 1 1 140px; }
+.row-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.15rem; }
+.number-select { max-width: 140px; }
+
+@media print {
+  .no-print, .topbar, .breadcrumbs { display: none !important; }
+  body { background: #fff; color: #000; }
+  .content { margin: 0; max-width: none; }
+}
