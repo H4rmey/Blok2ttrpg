@@ -119,6 +119,37 @@ function dispatchChange(el) {
     return parseInt(countInput.value || "0", 10);
   }
 
+  // Renumber every enactment block so their indices are contiguous starting
+  // at 0. This rewrites the "en<i>_" prefix on every named input/select and
+  // the hx-vals index, then syncs enactment_count to the real block count.
+  // Without this, removing a block leaves a gap (e.g. en0 removed, en1 kept)
+  // and the surcharge / first-free logic keys off the wrong slot, which
+  // caused removing and re-adding the first enactment to charge extra points.
+  function renumberEnactments() {
+    var blocks = container.querySelectorAll(".enactment");
+    blocks.forEach(function (block, i) {
+      block.setAttribute("data-index", String(i));
+      var label = block.querySelector(".enactment-head strong");
+      if (label) label.textContent = "Enactment " + i;
+      // The first enactment is always present and free; it cannot be removed,
+      // so hide its Remove button.
+      var removeBtn = block.querySelector(".remove-enactment");
+      if (removeBtn) removeBtn.style.display = i === 0 ? "none" : "";
+
+      block.querySelectorAll("[name]").forEach(function (input) {
+        input.name = input.name.replace(/^en\d+_/, "en" + i + "_");
+      });
+      block.querySelectorAll("[hx-vals]").forEach(function (el) {
+        try {
+          var v = JSON.parse(el.getAttribute("hx-vals"));
+          v.index = String(i);
+          el.setAttribute("hx-vals", JSON.stringify(v));
+        } catch (err) { /* leave as-is on parse error */ }
+      });
+    });
+    countInput.value = String(blocks.length);
+  }
+
   addBtn.addEventListener("click", function () {
     var index = nextIndex();
     var url = window.BUILDER.enactmentEndpoint + "?index=" + encodeURIComponent(index);
@@ -129,18 +160,32 @@ function dispatchChange(el) {
         wrap.innerHTML = html.trim();
         var node = wrap.firstElementChild;
         container.appendChild(node);
-        countInput.value = String(index + 1);
+        renumberEnactments();
         if (window.htmx) window.htmx.process(node);
         applyVisibility(node);
-        dispatchChange(node);
+        // Recompute cost now that a new enactment exists. Trigger the form's
+        // cost request directly so the freshly-added enactment (including the
+        // auto-added first one) is counted immediately, rather than only being
+        // reflected when the next enactment is added.
+        var form = document.getElementById("ability-form");
+        if (form && window.htmx) {
+          window.htmx.trigger(form, "change");
+        } else {
+          dispatchChange(node);
+        }
       });
+
   });
 
   container.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("remove-enactment")) {
       var block = e.target.closest(".enactment");
+      // Guard: never allow the first enactment (index 0) to be removed.
+      if (block && block === container.querySelector(".enactment")) return;
       if (block) {
         block.remove();
+
+        renumberEnactments();
         dispatchChange(container);
       }
     }
@@ -181,5 +226,3 @@ document.addEventListener("DOMContentLoaded", function () { applyVisibility(); }
   nameInput.addEventListener("change", syncGate);
   syncGate();
 })();
-
-
