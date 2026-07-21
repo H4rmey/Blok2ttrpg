@@ -41,4 +41,5 @@ Let's say you want to hit someone with a ice fist. You first roll your damage 1d
 
 ## Additional Enactments
 
-{{.AdditionalEnactmentTable}}
+{{enactmentSurchargeTable}}
+

@@ -10,17 +10,10 @@ Here, you'll find the guidelines and options for customizing your **Engagement a
 *   **Engagement Roll**: This is an Offensive Trait used to initiate actions against a target.
 *   **Counter Roll**: This involves two Defensive Traits, allowing the target to choose how they respond to the attack.
 
-## Engagement Roll Modes
+## Options
 
-{{.EngagementModesTable}}
+{{perksFields .Validations.Fields}}
 
-## Counter Roll Types
-
-{{.CounterTypesTable}}
-
-## Tier Shifts
-
-{{.TierShiftsTable}}
 
 ## Template
 

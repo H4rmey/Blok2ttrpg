@@ -6,11 +6,12 @@
 *   Has a Validation
 *   Engager is yourself
 *   Target is yourself
-*   Counter Roll is a {{.Self.DefaultCounter}}
+*   Counter Roll is replaced by a Generic Dice when the relevant perk is chosen.
 
 ## Perks
 
-{{.SelfPerksTable}}
+{{perksTable (interaction "self")}}
+
 
 ## Template
 

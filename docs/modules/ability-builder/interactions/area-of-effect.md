@@ -8,24 +8,25 @@ The effect of the **AoE** does not trigger immediately. Instead, it activates ei
 ## Rules
 
 *   **Validation**: The interaction must have a validation.
-*   **Radius**: The default radius is {{.AreaOfEffect.DefaultRadius}} meter.
-*   **Range**: The default range is {{.AreaOfEffect.DefaultRange}} meters.
+*   **Radius**: The default radius is {{fieldDefault (interaction "area_of_effect") "radius"}} meter.
+*   **Range**: The default range is {{fieldDefault (interaction "area_of_effect") "range"}} meters.
 *   **Origin**: The point of origin for the radius is the engager.
-*   **Duration**: The effect lasts for {{.AreaOfEffect.DefaultDuration}} rounds.
+*   **Duration**: The effect lasts for {{fieldDefault (interaction "area_of_effect") "duration"}} rounds.
 
 ## Perks
 
-{{.AreaOfEffectPerksTable}}
+{{perksTable (interaction "area_of_effect")}}
 
 ## Template
 
 ```yaml
 interactions:
   - type: Area of Effect
-    radius: {{.AreaOfEffect.DefaultRadius}}m
-    range: {{.AreaOfEffect.DefaultRange}}m
+    radius: {{fieldDefault (interaction "area_of_effect") "radius"}}m
+    range: {{fieldDefault (interaction "area_of_effect") "range"}}m
     origin: Engager
-    duration: {{.AreaOfEffect.DefaultDuration}} rounds
+    duration: {{fieldDefault (interaction "area_of_effect") "duration"}} rounds
+
     immunity: false
     trigger_conditions:
       - Entering the Area of Effect

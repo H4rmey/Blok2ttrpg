@@ -6,16 +6,12 @@ Execution is the most basic form for an Ability. It is simply the: "I want to do
 ## Rules
 
 *   **Enactments**: Has at least one Enactment (the first Enactment is free)
-*   **Actions**: Costs {{.Execution.BaseAction}} Actions to use
-*   **Energy**: Costs {{.Execution.BaseEnergy}} Energy to use
+*   **Actions**: Costs {{(abilityType "execution").BaseAction}} Actions to use
+*   **Energy**: Costs {{(abilityType "execution").BaseEnergy}} Energy to use
 
 ## Perks
 
-{{.ExecutionPerksTable}}
-
-## Compatible Enactments
-
-{{.ExecutionEnactmentsTable}}
+{{perksTable (abilityType "execution")}}
 
 ## Template
 
@@ -23,8 +19,8 @@ Execution is the most basic form for an Ability. It is simply the: "I want to do
 ability:
   type: Execution
   has_item_dependency: No # If yes, enter which item
-  energy_cost: {{.Execution.BaseEnergy}}
-  action_cost: {{.Execution.BaseAction}}
+  energy_cost: {{(abilityType "execution").BaseEnergy}}
+  action_cost: {{(abilityType "execution").BaseAction}}
   enactments:
     - Type:
   perks:

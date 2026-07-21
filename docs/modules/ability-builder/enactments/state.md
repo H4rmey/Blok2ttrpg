@@ -9,7 +9,8 @@ Enact State will apply a state to a target (e.g., prone, stunned, charmed).
 
 ## Perks
 
-{{.StatePerksTable}}
+{{perksTable (enactment "state")}}
+
 
 ## Template
 

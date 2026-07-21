@@ -5,11 +5,11 @@
 
 *   Has a Validation.
 *   Target is a single character.
-*   Target must be within {{.Direct.DefaultRange}}m of your character.
+*   Target must be within {{fieldDefault (interaction "direct") "range"}}m of your character.
 
 ## Perks
 
-{{.DirectPerksTable}}
+{{perksTable (interaction "direct")}}
 
 ## Template
 
@@ -17,8 +17,9 @@
 interactions:
   - type: Direct
     engager: Self
-    target_amount: {{.Direct.DefaultTargets}}
-    range: {{.Direct.DefaultRange}}m
+    target_amount: {{fieldDefault (interaction "direct") "targets"}}
+    range: {{fieldDefault (interaction "direct") "range"}}m
+
     perks:
       - description: <insert description of perk here>
         add_cost: <cost of the perk>

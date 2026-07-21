@@ -5,11 +5,12 @@ Enact Damage allows characters to inflict harm on their enemies.
 
 ## Rules
 
-*   **Damage Dice**: The default damage dice is {{.Damage.DefaultDice}}.
+*   **Damage Dice**: Choose a source die when building this enactment.
 
 ## Perks
 
-{{.DamagePerksTable}}
+{{perksTable (enactment "damage")}}
+
 
 ## Template
 

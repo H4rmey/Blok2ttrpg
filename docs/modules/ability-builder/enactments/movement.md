@@ -6,20 +6,23 @@
 ## Rules
 
 *   **Direction**: The target will move in one direction relative to an origin. Possible directions include Up, Down, Away, Towards, Forward, Left, Right, Free (extra cost).
-*   **Distance**: The target will move {{.Movement.DefaultDistance}} meter by default.
+*   **Distance**: The target will move {{fieldDefault (enactment "movement") "distance"}} meter by default.
+
 *   **Origin**: The default **Origin** is the **Engager** or item/location from previous enactment.
 *   **Obstacle**: If the Target moves into an obstacle, they take 1d4 damage.
 
 ## Perks
 
-{{.MovementPerksTable}}
+{{perksTable (enactment "movement")}}
+
 
 ## Template
 
 ```yaml
 enactments:
   - type: Enact Movement
-    minimal_distance: {{.Movement.DefaultDistance}}m
+    minimal_distance: {{fieldDefault (enactment "movement") "distance"}}m
+
     origin: engager
     direction_options:
       - <Direction>

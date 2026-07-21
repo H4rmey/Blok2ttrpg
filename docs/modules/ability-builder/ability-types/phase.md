@@ -5,9 +5,9 @@ Phases are a state or passive ability that lasts for a predefined amount of time
 
 ## Rules
 
-*   Costs {{.Phase.BaseEnergy}} Energy to Use.
-*   After activation, Phase is active for {{.Phase.BaseDuration}} rounds.
-*   Phase ends at the start of the {{.Phase.BaseDuration}}nd turn of the character.
+*   Costs {{(abilityType "phase").BaseEnergy}} Energy to Use.
+*   After activation, Phase is active for {{(abilityType "phase").BaseDuration}} rounds.
+*   Phase ends at the start of the {{(abilityType "phase").BaseDuration}}nd turn of the character.
 *   When Phase ends, the Reverse Phase starts.
 *   During the Reverse Phase, no new Phases can be started for the character.
 *   Phase will have an Enactment assigned to it.
@@ -22,25 +22,17 @@ Phases are a state or passive ability that lasts for a predefined amount of time
 
 ## Perks
 
-{{.PhasePerksTable}}
-
-## Knockout Requirements
-
-{{.PhaseKnockoutsTable}}
-
-## Compatible Enactments
-
-{{.PhaseEnactmentsTable}}
+{{perksTable (abilityType "phase")}}
 
 ## Template
 
 ```yaml
 ability:
   type: Phase
-  phase_duration: {{.Phase.BaseDuration}} rounds
-  reverse_phase_duration: {{.Phase.BaseReverseDuration}} rounds
+  phase_duration: {{(abilityType "phase").BaseDuration}} rounds
+  reverse_phase_duration: {{(abilityType "phase").BaseReverseDuration}} rounds
   has_item_dependency: No # If yes, enter which item
-  energy_cost: {{.Phase.BaseEnergy}}
+  energy_cost: {{(abilityType "phase").BaseEnergy}}
   enactments:
     - Type:
   Perks:

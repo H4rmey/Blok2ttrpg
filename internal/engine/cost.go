@@ -201,8 +201,17 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 		total.Build += c.Build
 		total.Energy += c.Energy
 	}
-	for i, en := range a.Enactments {
-		if i > 0 {
+	// Track the first *present* enactment rather than relying on slice index.
+	// Enactments can be removed and re-added in the builder, so the first slot
+	// is not guaranteed to hold the first real enactment. The additional-
+	// enactment surcharge and the first-enactment base-cost waiver both apply
+	// based on this running count of enactments that actually have a type.
+	present := 0
+	for _, en := range a.Enactments {
+		if en.Type == "" {
+			continue
+		}
+		if present > 0 {
 			total.plus(cfg.AdditionalEnactment.AsCost())
 		}
 		if ec, ok := cfg.Enactment(en.Type); ok {
@@ -210,13 +219,14 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 			// The first enactment is free to add: its component base_cost
 			// is waived (field-driven costs still apply). Subsequent
 			// enactments pay their full base cost.
-			if i == 0 {
+			if present == 0 {
 				c.Build -= ec.BaseCost.BuildCost
 				c.Energy -= ec.BaseCost.EnergyCost
 			}
 			total.Build += c.Build
 			total.Energy += c.Energy
 		}
+		present++
 
 		if en.Interaction != "" {
 			if ic, ok := cfg.Interaction(en.Interaction); ok {

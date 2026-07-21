@@ -1,16 +1,17 @@
 # negation
 ## Enact Negation
 
-Enact Negation allows characters to reduce incomming damage by default by {{.Negate.DefaultDice}}. This can also be used to remove a Persistant Effect.
+Enact Negation allows characters to reduce incomming damage by choosing a source die. This can also be used to remove a Persistant Effect.
 
 ## Rules
 
-*   **Negate Dice**: The default Negate roll is {{.Negate.DefaultDice}}.
+*   **Negate Dice**: Choose a source die when building this enactment.
 *   **Remove Persistant Effect**: Make the Negation roll, the damage of the persistant effect is reduced by this value. If the Negate roll is higher or equal then the Persistant Effect is removed.
 
 ## Perks
 
-{{.NegatePerksTable}}
+{{perksTable (enactment "negation")}}
+
 
 ## Template
 

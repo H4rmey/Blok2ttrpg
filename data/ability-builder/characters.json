@@ -1,7 +1,7 @@
 {
   "char-1784634713450921500": {
     "id": "char-1784634713450921500",
-    "level": 30,
+    "level": 10,
     "attributes": {
       "ancestry": "",
       "appearance": "",
@@ -36,44 +36,6 @@
       "vital.HP": "clumsy",
       "vital.Movement": "clumsy"
     },
-    "abilities": [
-      {
-        "id": "ability-1784637838977111900",
-        "name": "asfas",
-        "type": "execution",
-        "fields": {
-          "action_steps": 0,
-          "energy_steps": 0,
-          "item_dep": false,
-          "item_name": ""
-        },
-        "enactments": [
-          {
-            "type": "negation",
-            "fields": {
-              "always": false,
-              "counter_negation": false,
-              "flat": 17,
-              "full_counter": false,
-              "offense": "Reflex",
-              "other": "",
-              "source": "d6",
-              "source_trait": "Reflex"
-            },
-            "interaction": "self",
-            "interaction_data": {
-              "use_previous": false
-            },
-            "validation_data": {
-              "counter_trait": [],
-              "engage_die": 0,
-              "engage_mode": "generic",
-              "engage_other": "",
-              "engage_trait": "Strength"
-            }
-          }
-        ]
-      }
-    ]
+    "abilities": []
   }
 }

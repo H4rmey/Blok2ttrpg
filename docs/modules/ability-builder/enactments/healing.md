@@ -5,12 +5,14 @@ Enact Healing abilities allow characters to restore health to themselves or thei
 
 ## Rules
 
-*   **Healing Dice**: The default healing dice is {{.Healing.DefaultDice}}.
+*   **Healing Dice**: Choose a source die when building this enactment.
+
 *   **Interaction Type**: If the interaction type is Self or Direct, no validation is required.
 
 ## Perks
 
-{{.HealingPerksTable}}
+{{perksTable (enactment "healing")}}
+
 
 ## Template
 

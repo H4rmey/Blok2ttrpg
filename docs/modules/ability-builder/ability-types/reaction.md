@@ -7,33 +7,25 @@ Reactions are Abilities that trigger outside your normal action economy. Reactio
 
 *   Can only be used once per round.
 *   Does not cost an action.
-*   Costs {{.Reaction.BaseEnergy}} Energy to Use.
+*   Costs {{(abilityType "reaction").BaseEnergy}} Energy to Use.
 *   Always has at least one Trigger (Pick one from the list below, first one is free).
 *   Has at least one Enactment (the first Enactment is free)
-*   Only triggers when the triggering effect happens within {{.Reaction.BaseRange}}m of you.
+*   Only triggers when the triggering effect happens within {{(abilityType "reaction").BaseRange}}m of you.
 *   Target of Enactments is overwritten to the character that triggers the Reaction.
 
 ## Perks
 
-{{.ReactionPerksTable}}
-
-## Triggers
-
-{{.ReactionTriggersTable}}
-
-## Compatible Enactments
-
-{{.ReactionEnactmentsTable}}
+{{perksTable (abilityType "reaction")}}
 
 ## Template
 
 ```yaml
 ability:
   type: Reaction
-  range: {{.Reaction.BaseRange}}
-  uses: {{.Reaction.BaseUses}}
+  range: {{(abilityType "reaction").BaseRange}}
+  uses: {{(abilityType "reaction").BaseUses}}
   has_item_dependency: No # If yes, enter which item
-  energy_cost: {{.Reaction.BaseEnergy}}
+  energy_cost: {{(abilityType "reaction").BaseEnergy}}
   trigger: <trigger name here>
   enactments:
     - Type:

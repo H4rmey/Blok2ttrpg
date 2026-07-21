@@ -11,21 +11,22 @@ You can also assign the point of **Origin** to an object, but this must be discu
 ## Rules
 
 *   **Validation**: The interaction must have a validation.
-*   **Radius**: The default radius is {{.Area.DefaultRadius}} meter.
-*   **Range**: The default range is {{.Area.DefaultRange}} meters.
+*   **Radius**: The default radius is {{fieldDefault (interaction "area") "radius"}} meter.
+*   **Range**: The default range is {{fieldDefault (interaction "area") "range"}} meters.
 *   **Origin**: The point of origin for the radius is the engager or item/location from previous enactment.
 
 ## Perks
 
-{{.AreaPerksTable}}
+{{perksTable (interaction "area")}}
 
 ## Template
 
 ```yaml
 interactions:
   - type: Area
-    radius: {{.Area.DefaultRadius}}m # Default radius for Area interactions
-    range: {{.Area.DefaultRange}}m # Default range for Area interactions
+    radius: {{fieldDefault (interaction "area") "radius"}}m # Default radius for Area interactions
+    range: {{fieldDefault (interaction "area") "range"}}m # Default range for Area interactions
+
     origin: Engager # Point of origin is the Engager
     perks:
       - description: <insert description of perk here>

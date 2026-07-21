@@ -142,14 +142,32 @@ type SpecificState struct {
 // interaction. Legacy authoring blocks (step_costs, perks, triggers, etc.) are
 // intentionally not modelled here; they are ignored on load.
 type Component struct {
-	ID          string  `yaml:"-" json:"id"`
-	Name        string  `yaml:"name,omitempty" json:"name,omitempty"`
-	Type        string  `yaml:"type,omitempty" json:"type,omitempty"`
-	Description string  `yaml:"description,omitempty" json:"description,omitempty"`
-	BaseCost    Cost    `yaml:"base_cost,omitempty" json:"base_cost,omitempty"`
-	BaseEnergy  int     `yaml:"base_energy,omitempty" json:"base_energy,omitempty"`
-	BaseAction  int     `yaml:"base_action,omitempty" json:"base_action,omitempty"`
-	Fields      []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
+	ID          string `yaml:"-" json:"id"`
+	Name        string `yaml:"name,omitempty" json:"name,omitempty"`
+	Type        string `yaml:"type,omitempty" json:"type,omitempty"`
+	Description string `yaml:"description,omitempty" json:"description,omitempty"`
+	BaseCost    Cost   `yaml:"base_cost,omitempty" json:"base_cost,omitempty"`
+	BaseEnergy  int    `yaml:"base_energy,omitempty" json:"base_energy,omitempty"`
+	BaseAction  int    `yaml:"base_action,omitempty" json:"base_action,omitempty"`
+
+	// Ability-type base parameters. Not every component sets all of these;
+	// unset values decode as zero.
+	BaseRange           int `yaml:"base_range,omitempty" json:"base_range,omitempty"`
+	BaseUses            int `yaml:"base_uses,omitempty" json:"base_uses,omitempty"`
+	BaseDuration        int `yaml:"base_duration,omitempty" json:"base_duration,omitempty"`
+	BaseReverseDuration int `yaml:"base_reverse_duration,omitempty" json:"base_reverse_duration,omitempty"`
+	BaseHealth          int `yaml:"base_health,omitempty" json:"base_health,omitempty"`
+	BaseLifetime        int `yaml:"base_lifetime,omitempty" json:"base_lifetime,omitempty"`
+	BaseUpkeepAction    int `yaml:"base_upkeep_action,omitempty" json:"base_upkeep_action,omitempty"`
+	BaseUpkeepEnergy    int `yaml:"base_upkeep_energy,omitempty" json:"base_upkeep_energy,omitempty"`
+
+	// DefaultRange/DefaultTargets etc. are used by interaction components.
+	DefaultRange    int `yaml:"default_range,omitempty" json:"default_range,omitempty"`
+	DefaultTargets  int `yaml:"default_targets,omitempty" json:"default_targets,omitempty"`
+	DefaultRadius   int `yaml:"default_radius,omitempty" json:"default_radius,omitempty"`
+	DefaultDuration int `yaml:"default_duration,omitempty" json:"default_duration,omitempty"`
+
+	Fields []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
 }
 
 // DisplayName returns the human-facing label for a component. Ability types use

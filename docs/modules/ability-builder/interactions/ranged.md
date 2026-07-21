@@ -7,14 +7,14 @@
 
 *   Has a Validation
 *   Target is a single character.
-*   Target must be within {{.Ranged.DefaultRange}}m of your character.
+*   Target must be within {{fieldDefault (interaction "ranged") "range"}}m of your character.
 *   Target must be visible.
 *   Target must not be obstructed.
 *   Engagement roll result is lowered by 2
 
 ## Perks
 
-{{.RangedPerksTable}}
+{{perksTable (interaction "ranged")}}
 
 ## Template
 
@@ -22,8 +22,9 @@
 interactions:
   - type: Ranged
     engager: Self
-    target_amount: {{.Ranged.DefaultTargets}}
-    range: {{.Ranged.DefaultRange}}m # Default range for Ranged interactions
+    target_amount: {{fieldDefault (interaction "ranged") "targets"}}
+    range: {{fieldDefault (interaction "ranged") "range"}}m # Default range for Ranged interactions
+
     visibility: Visible # Target must be visible
     obstruction: Not obstructed # Target must not be obstructed
     perks:

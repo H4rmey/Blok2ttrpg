@@ -12,7 +12,7 @@
 
 ## Perks
 
-{{.ProficiencyShiftPerksTable}}
+{{perksTable (enactment "proficiency_shift")}}
 
 ## Template
 
@@ -21,8 +21,9 @@ enactments:
   - type: Enact Proficiency Shift
     shifted_trait: <trait here>
     shift_direction: <UP DOWN or>
-    shift_amount: {{.ProficiencyShift.DefaultShiftAmount}}
-    shift_uses: {{.ProficiencyShift.DefaultUses}}
+    shift_amount: {{fieldDefault (enactment "proficiency_shift") "shift_amount"}}
+    shift_uses: {{fieldDefault (enactment "proficiency_shift") "shift_uses"}}
+
     is_optional: False
     base_enactment_energy_cost: 0
     perks:
