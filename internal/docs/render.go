@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"text/template"
 
@@ -59,13 +60,14 @@ func funcMap(cfg *config.Config) template.FuncMap {
 			if comp == nil {
 				return "_No options configured._"
 			}
-			return fieldsTable(comp.Fields)
+			return fieldsTable(cfg, comp.Fields)
 		},
 		// perksFields renders the same table for an explicit field slice, used
 		// for sections like validations that live outside a component.
 		"perksFields": func(fields []config.Field) string {
-			return fieldsTable(fields)
+			return fieldsTable(cfg, fields)
 		},
+
 		// enactmentSurchargeTable renders the additional-enactment surcharge.
 		"enactmentSurchargeTable": func() string {
 			var b strings.Builder
@@ -93,49 +95,121 @@ func findField(fields []config.Field, key string) (config.Field, bool) {
 // fieldsTable builds a markdown table describing the cost-bearing options of a
 // set of fields. Fields without a direct cost (plain text/number without
 // per-step, or dropdowns without option costs) are still listed so the reader
-// sees the full option surface.
-func fieldsTable(fields []config.Field) string {
+// sees the full option surface. The config is used to resolve costed
+// options_source lists (e.g. per-trigger costs) and group offsets so those
+// stay in sync with the YAML automatically.
+func fieldsTable(cfg *config.Config, fields []config.Field) string {
 	if len(fields) == 0 {
 		return "_No options configured._"
 	}
 	var b strings.Builder
 	b.WriteString("| Option | Choice | Build Cost | Energy Cost |\n")
 	b.WriteString("| --- | --- | --- | --- |\n")
-	rows := 0
-	for _, f := range fields {
-		switch f.Type {
-		case "checkbox":
-			b.WriteString(fmt.Sprintf("| %s | Enabled | %s |\n", orDash(f.Label), costCells(f.Cost)))
-			rows++
-		case "dropdown":
-			if len(f.Options) > 0 {
-				for _, opt := range f.Options {
-					b.WriteString(fmt.Sprintf("| %s | %s | %s |\n", orDash(f.Label), orDash(optionLabel(opt)), costCells(opt.Cost)))
-					rows++
-				}
-			} else {
-				// options_source driven: no inline costs, but a flat field cost
-				// may still apply.
-				b.WriteString(fmt.Sprintf("| %s | Any | %s |\n", orDash(f.Label), costCells(f.Cost)))
-				rows++
-			}
-		case "free_number":
-			if f.PerStep != nil {
-				if f.PerStep.Increase != nil {
-					b.WriteString(fmt.Sprintf("| %s | Per step (increase) | %s |\n", orDash(f.Label), costCells(f.PerStep.Increase)))
-					rows++
-				}
-				if f.PerStep.Decrease != nil {
-					b.WriteString(fmt.Sprintf("| %s | Per step (decrease) | %s |\n", orDash(f.Label), costCells(f.PerStep.Decrease)))
-					rows++
-				}
-			}
-		}
-	}
+	rows := writeFieldRows(&b, cfg, fields, "")
 	if rows == 0 {
 		return "_No cost-bearing options configured._"
 	}
 	return b.String()
+}
+
+// writeFieldRows appends the cost rows for a field slice to b and returns how
+// many rows it wrote. labelPrefix is prepended to each option label so nested
+// per-row sub-fields (solutions/states) read as "<field>: <sub-field>".
+func writeFieldRows(b *strings.Builder, cfg *config.Config, fields []config.Field, labelPrefix string) int {
+	rows := 0
+	for _, f := range fields {
+		label := f.Label
+		if labelPrefix != "" {
+			label = labelPrefix + f.Label
+		}
+		switch f.Type {
+		case "checkbox":
+			b.WriteString(fmt.Sprintf("| %s | Enabled | %s |\n", orDash(label), costCells(f.Cost)))
+			rows++
+		case "dropdown":
+			if len(f.Options) > 0 {
+				for _, opt := range f.Options {
+					b.WriteString(fmt.Sprintf("| %s | %s | %s |\n", orDash(label), orDash(optionLabel(opt)), costCells(opt.Cost)))
+					rows++
+				}
+			} else if opts := resolveCostedOptions(cfg, f); len(opts) > 0 {
+				// options_source driven: list each resolved option with its
+				// per-entry cost so costed sources (e.g. reaction triggers)
+				// appear in the docs.
+				for _, opt := range opts {
+					b.WriteString(fmt.Sprintf("| %s | %s | %s |\n", orDash(label), orDash(optionLabel(opt)), costCells(opt.Cost)))
+					rows++
+				}
+			} else {
+				// A plain (uncosted) options_source: no inline costs, but a
+				// flat field cost may still apply.
+				b.WriteString(fmt.Sprintf("| %s | Any | %s |\n", orDash(label), costCells(f.Cost)))
+				rows++
+			}
+			// System 3: group offsets attach a cost to whole trait groups.
+			if f.GroupOffsets != nil {
+				for _, grp := range orderedGroups(f.GroupOffsets) {
+					b.WriteString(fmt.Sprintf("| %s | Group offset: %s | %s |\n",
+						orDash(label), grp, costCells(f.GroupOffsets.Offsets[grp])))
+					rows++
+				}
+			}
+		case "free_number":
+			if f.PerStep != nil {
+				if f.PerStep.Increase != nil {
+					b.WriteString(fmt.Sprintf("| %s | Per step (increase) | %s |\n", orDash(label), costCells(f.PerStep.Increase)))
+					rows++
+				}
+				if f.PerStep.Decrease != nil {
+					b.WriteString(fmt.Sprintf("| %s | Per step (decrease) | %s |\n", orDash(label), costCells(f.PerStep.Decrease)))
+					rows++
+				}
+			}
+		case "solutions", "states":
+			// System 2: per-entry costs live on the repeatable row sub-fields.
+			// Recurse so intensity/spreads-style options are documented.
+			rows += writeFieldRows(b, cfg, f.RowFields, orDash(f.Label)+": ")
+		}
+	}
+	return rows
+}
+
+// resolveCostedOptions returns the resolved options for an options_source-driven
+// field only when at least one option carries a non-zero cost. This keeps plain
+// (uncosted) sources rendering as a single "Any" row while costed sources such
+// as reaction triggers expand into a row per option.
+func resolveCostedOptions(cfg *config.Config, f config.Field) []config.Option {
+	if cfg == nil || f.OptionsSource == "" {
+		return nil
+	}
+	opts := cfg.OptionsFor(f.OptionsSource)
+	for _, o := range opts {
+		if o.Cost != nil && (o.Cost.BuildCost != 0 || o.Cost.EnergyCost != 0) {
+			return opts
+		}
+	}
+	return nil
+}
+
+// orderedGroups returns the group keys of a GroupOffsets in a stable order:
+// the default group first (when set), then the remaining keys sorted.
+func orderedGroups(g *config.GroupOffsets) []string {
+	seen := map[string]bool{}
+	var out []string
+	if g.DefaultGroup != "" {
+		if _, ok := g.Offsets[g.DefaultGroup]; ok {
+			out = append(out, g.DefaultGroup)
+			seen[g.DefaultGroup] = true
+		}
+	}
+	var rest []string
+	for k := range g.Offsets {
+		if !seen[k] {
+			rest = append(rest, k)
+		}
+	}
+	sort.Strings(rest)
+	return append(out, rest...)
 }
 
 func optionLabel(o config.Option) string {

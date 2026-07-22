@@ -1314,6 +1314,7 @@ Phases are a state or passive ability that lasts for a predefined amount of time
 | All knockout requirements have to be met | Enabled | 3 | 0 |
 | Knockout can be used on the reverse phase | Enabled | 3 | 0 |
 | No knockout possible | Enabled | 5 | 0 |
+| Knockout Requirements: Knockout | Any | 0 | 0 |
 
 
 ## Template
@@ -1340,7 +1341,8 @@ Just like a Reaction, a Preparation works outside the regular turn order. They f
 *   Can only be used once per round.
 *   Costs 2 actions.
 *   Costs 3 Energy to Use.
-*   Always has at least one Trigger (Pick one from the list below, first one is free).
+*   Always has at least one Trigger. Each trigger has its own build cost (see the Perks table below); more powerful triggers cost more.
+
 *   Has at least one Enactment (the first Enactment is free)
 *   Only triggers when the triggering effect happens within 1m of you.
 *   Target of Enactments is overwritten to the character that triggers the Reaction.
@@ -1350,7 +1352,26 @@ Just like a Reaction, a Preparation works outside the regular turn order. They f
 | Option | Choice | Build Cost | Energy Cost |
 | --- | --- | --- | --- |
 | Has Item Dependency | Enabled | -1 | 0 |
-| Trigger | Any | 2 | 0 |
+| Trigger | Target moves away from engager | 2 | 0 |
+| Trigger | Target moves towards engager | 2 | 0 |
+| Trigger | Target moves past engager | 2 | 0 |
+| Trigger | Engager gets healed by target | 1 | 0 |
+| Trigger | Target damages engager | 3 | 0 |
+| Trigger | Target makes a trait check | 2 | 0 |
+| Trigger | Target starts casting an ability | 4 | 1 |
+| Trigger | Target ends their turn within range | 2 | 0 |
+| Trigger | Target enters interaction range | 3 | 0 |
+| Trigger | Target leaves interaction range | 2 | 0 |
+| Trigger | Target fails a validation | 2 | 0 |
+| Trigger | Target succeeds on a validation | 2 | 0 |
+| Trigger | Target becomes affected by an enactment | 3 | 0 |
+| Trigger | Engager takes damage | 3 | 0 |
+| Trigger | Engager gets targeted by an ability | 4 | 1 |
+| Trigger | Ally within range takes damage | 2 | 0 |
+| Trigger | Ally within range gets healed | 1 | 0 |
+| Trigger | A target is moved by an effect | 2 | 0 |
+| Trigger | A persistent effect triggers | 2 | 0 |
+| Trigger | A minion is summoned within range | 1 | 0 |
 | Trigger Trait | Any | 0 | 0 |
 | Range | Per step (increase) | 1 | 0 |
 | Uses | Per step (increase) | 4 | 1 |
@@ -1386,7 +1407,8 @@ Reactions are Abilities that trigger outside your normal action economy. Reactio
 *   Can only be used once per round.
 *   Does not cost an action.
 *   Costs 3 Energy to Use.
-*   Always has at least one Trigger (Pick one from the list below, first one is free).
+*   Always has at least one Trigger. Each trigger has its own build cost (see the Perks table below); more powerful triggers cost more.
+
 *   Has at least one Enactment (the first Enactment is free)
 *   Only triggers when the triggering effect happens within 1m of you.
 *   Target of Enactments is overwritten to the character that triggers the Reaction.
@@ -1396,7 +1418,26 @@ Reactions are Abilities that trigger outside your normal action economy. Reactio
 | Option | Choice | Build Cost | Energy Cost |
 | --- | --- | --- | --- |
 | Has Item Dependency | Enabled | -1 | 0 |
-| Trigger | Any | 2 | 0 |
+| Trigger | Target moves away from engager | 2 | 0 |
+| Trigger | Target moves towards engager | 2 | 0 |
+| Trigger | Target moves past engager | 2 | 0 |
+| Trigger | Engager gets healed by target | 1 | 0 |
+| Trigger | Target damages engager | 3 | 0 |
+| Trigger | Target makes a trait check | 2 | 0 |
+| Trigger | Target starts casting an ability | 4 | 1 |
+| Trigger | Target ends their turn within range | 2 | 0 |
+| Trigger | Target enters interaction range | 3 | 0 |
+| Trigger | Target leaves interaction range | 2 | 0 |
+| Trigger | Target fails a validation | 2 | 0 |
+| Trigger | Target succeeds on a validation | 2 | 0 |
+| Trigger | Target becomes affected by an enactment | 3 | 0 |
+| Trigger | Engager takes damage | 3 | 0 |
+| Trigger | Engager gets targeted by an ability | 4 | 1 |
+| Trigger | Ally within range takes damage | 2 | 0 |
+| Trigger | Ally within range gets healed | 1 | 0 |
+| Trigger | A target is moved by an effect | 2 | 0 |
+| Trigger | A persistent effect triggers | 2 | 0 |
+| Trigger | A minion is summoned within range | 1 | 0 |
 | Trigger Trait | Any | 0 | 0 |
 | Range | Per step (increase) | 1 | 0 |
 | Uses | Per step (increase) | 4 | 1 |
@@ -1482,6 +1523,9 @@ Enact Damage allows characters to inflict harm on their enemies.
 | Source | Trait (1d10) | 3 | 0 |
 | Source | Another roll result | 3 | 1 |
 | Trait | Any | 0 | 0 |
+| Trait | Group offset: offense | 0 | 0 |
+| Trait | Group offset: defense | 4 | 1 |
+| Trait | Group offset: general | 2 | 0 |
 | Flat Bonus | Per step (increase) | 2 | 0 |
 | Offensive Trait (extra die) | Any | 4 | 2 |
 
@@ -1576,6 +1620,7 @@ enactments:
 | Origin | Engager | 0 | 0 |
 | Origin | Other Origin | 2 | 1 |
 | Distance | Per step (increase) | 1 | 0 |
+| Directions: Direction | Any | 0 | 0 |
 
 
 
@@ -1620,13 +1665,11 @@ The Enact Persistent Effect applies a lingering effect to a target, such as fire
 | Option | Choice | Build Cost | Energy Cost |
 | --- | --- | --- | --- |
 | Will always resolve | Enabled | 5 | 3 |
-| Applies | Enact Damage | 2 | 1 |
-| Applies | Enact Healing | 2 | 1 |
-| Applies | Enact Movement | 1 | 0 |
-| Applies | Enact Proficiency Shift | 2 | 1 |
+| Applies | Any | 0 | 0 |
 | Duration | Per step (increase) | 2 | 1 |
 | Trigger | Start of Target Turn | 0 | 0 |
 | Trigger | End of Engager Turn | 0 | 0 |
+| Solutions: Solution | Any | 0 | 0 |
 
 
 ## Template
@@ -1708,24 +1751,35 @@ Enact State will apply a state to a target (e.g., prone, stunned, charmed).
 
 ## Perks
 
-_No cost-bearing options configured._
+| Option | Choice | Build Cost | Energy Cost |
+| --- | --- | --- | --- |
+| States: State Type | Specific State | 0 | 0 |
+| States: State Type | General State (shift) | 0 | 0 |
+| States: Specific State | Any | 0 | 0 |
+| States: General State | Any | 0 | 0 |
+| States: Intensity | Minor | 1 | 0 |
+| States: Intensity | Severe | 4 | 2 |
+| States: Spreads to adjacent targets | Enabled | 3 | 1 |
+
 
 
 ## Template
 
+Each state row picks either a Specific State or a General State (which shifts a
+group of traits by an amount). Rows can add per-entry options such as an
+Intensity or spreading to adjacent targets; see the Perks table above for the
+cost of each choice.
+
 ```yaml
 enactments:
   - type: Enact State
-    state: <state here>
-    is_optional: False
-    base_enactment_energy_cost: 0
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
+    states:
+      - state_kind: specific        # or: general
+        specific_state: <state id>  # when state_kind = specific
+        # general_state: <state id> # when state_kind = general
+        # shift_amount: <amount>    # when state_kind = general
+        intensity: <minor|severe>   # optional per-entry option
+        spreads: <true|false>       # optional per-entry option
 ```
 
 # area
@@ -1980,6 +2034,7 @@ Here, you'll find the guidelines and options for customizing your **Engagement a
 | Engage Roll Type | Use result of previous interaction | 3 | 1 |
 | Trait | Any | 0 | 0 |
 | Generic Die | Any | 0 | 0 |
+| Counter Trait: Counter Trait | Any | 0 | 0 |
 
 
 

@@ -8,7 +8,8 @@ Just like a Reaction, a Preparation works outside the regular turn order. They f
 *   Can only be used once per round.
 *   Costs {{(abilityType "preparation").BaseAction}} actions.
 *   Costs {{(abilityType "preparation").BaseEnergy}} Energy to Use.
-*   Always has at least one Trigger (Pick one from the list below, first one is free).
+*   Always has at least one Trigger. Each trigger has its own build cost (see the Perks table below); more powerful triggers cost more.
+
 *   Has at least one Enactment (the first Enactment is free)
 *   Only triggers when the triggering effect happens within {{(abilityType "preparation").BaseRange}}m of you.
 *   Target of Enactments is overwritten to the character that triggers the Reaction.
