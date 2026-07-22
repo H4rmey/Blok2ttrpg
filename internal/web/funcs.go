@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"html/template"
+	"strings"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
@@ -82,6 +83,23 @@ func funcMap() template.FuncMap {
 			}
 			return p.Name
 		},
+		// profTraitLabel renders a proficiency choice for a specific trait. For
+		// vital traits it shows the numeric vital value (keyed by trait name)
+		// rather than a die; otherwise it falls back to the dice-based label.
+		"profTraitLabel": func(p config.Proficiency, groupID, trait string) string {
+			if groupID == "vital" {
+				key := strings.ToLower(trait)
+				if v, ok := p.Vitals[key]; ok {
+					return fmt.Sprintf("%s (%v)", p.Name, v)
+				}
+				return p.Name
+			}
+			if d, ok := p.Dice[groupID]; ok && d != "" {
+				return fmt.Sprintf("%s (%s)", p.Name, d)
+			}
+			return p.Name
+		},
+
 		// dict builds a map from alternating key/value pairs, for passing
 		// structured data into sub-templates.
 		"dict": func(kv ...any) map[string]any {

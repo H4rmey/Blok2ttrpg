@@ -1,0 +1,19 @@
+services:
+  blok2ttrpg:
+    build: .
+    image: blok2ttrpg:latest
+    container_name: blok2ttrpg
+    ports:
+      - "8080:8080"
+    environment:
+      # Port the server listens on inside the container.
+      PORT: "8080"
+      # Ruleset config directory (or file) to load.
+      CONFIG: "config/ability-builder"
+    volumes:
+      # Persist character data across container restarts/rebuilds.
+      - blok2-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  blok2-data:

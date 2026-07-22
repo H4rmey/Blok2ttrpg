@@ -1,0 +1,23 @@
+# Version control and IDE
+.git
+.gitignore
+.vscode
+.idea
+
+# Local data and logs (data is persisted via a named volume instead)
+data
+*.log
+server.log
+
+# Build artifacts
+blok2ttrpg
+*.exe
+
+# Docker files themselves
+Dockerfile
+docker-compose.yaml
+.dockerignore
+
+# Docs that are not needed at runtime
+README.md
+generated_docs.md

@@ -119,6 +119,32 @@ function dispatchChange(el) {
     return parseInt(countInput.value || "0", 10);
   }
 
+  // Recompute the whole ability cost from the current form state. The backend
+  // recalculates everything from scratch on each request, so we never do any
+  // incremental add/remove math on the client. We post the full form directly
+  // via htmx.ajax (rather than relying on the form's change-trigger) so the
+  // request always fires - including the very first auto-added enactment on
+  // page load - and so add/remove stay perfectly symmetric. Deferred to the
+  // next frame so the DOM mutation (append/remove + renumberEnactments) is
+  // fully applied before the form is serialized.
+  function recalcAbilityCost() {
+    var form = document.getElementById("ability-form");
+    if (!form) return;
+    requestAnimationFrame(function () {
+      if (window.htmx && window.htmx.ajax) {
+        window.htmx.ajax("POST", "/builder/cost", {
+          source: form,
+          target: "#cost-badge",
+          swap: "innerHTML",
+        });
+      } else {
+        dispatchChange(form);
+      }
+    });
+  }
+
+
+
   // Renumber every enactment block so their indices are contiguous starting
   // at 0. This rewrites the "en<i>_" prefix on every named input/select and
   // the hx-vals index, then syncs enactment_count to the real block count.
@@ -163,19 +189,10 @@ function dispatchChange(el) {
         renumberEnactments();
         if (window.htmx) window.htmx.process(node);
         applyVisibility(node);
-        // Recompute cost now that a new enactment exists. Trigger the form's
-        // cost request directly so the freshly-added enactment (including the
-        // auto-added first one) is counted immediately, rather than only being
-        // reflected when the next enactment is added.
-        var form = document.getElementById("ability-form");
-        if (form && window.htmx) {
-          window.htmx.trigger(form, "change");
-        } else {
-          dispatchChange(node);
-        }
+        recalcAbilityCost();
       });
-
   });
+
 
   container.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("remove-enactment")) {
@@ -184,12 +201,13 @@ function dispatchChange(el) {
       if (block && block === container.querySelector(".enactment")) return;
       if (block) {
         block.remove();
-
         renumberEnactments();
-        dispatchChange(container);
+        recalcAbilityCost();
       }
+
     }
   });
+
 
   // The first enactment is free and always present: load one automatically
   // when the builder opens with none yet.
@@ -202,6 +220,58 @@ function dispatchChange(el) {
 // Re-apply visibility after HTMX swaps (ability-type fields, enactment reloads).
 document.addEventListener("htmx:afterSwap", function () { applyVisibility(); });
 document.addEventListener("DOMContentLoaded", function () { applyVisibility(); });
+
+// ---------------------------------------------------------------------------
+// Character sheet: recalculate the whole stats bar (trait points, ability
+// points) on the server whenever any field changes. We always post the full
+// form (including the level input, which lives outside the form via the
+// form="" attribute) so the backend recomputes everything from scratch, just
+// like the ability builder does.
+// ---------------------------------------------------------------------------
+function recalcCharacterStats() {
+  var form = document.getElementById("character-form");
+  if (!form) return;
+  var url = form.getAttribute("data-stats-url");
+  if (!url) return;
+  var target = document.getElementById("stat-cards");
+  if (!target) return;
+  var levelInput = document.getElementById("character-level");
+
+  // Serialize the full form. The level input lives outside the <form> (it is
+  // linked via the form="" attribute) so we add it explicitly.
+  var data = new FormData(form);
+  if (levelInput) data.set("level", levelInput.value);
+  // Editable vital inputs (current HP/Energy) live in the stats bar, outside
+  // the form, linked via form="character-form". FormData does not include such
+  // associated elements, so add them explicitly.
+  document.querySelectorAll(".stats-bar [name^='current_']").forEach(function (el) {
+    data.set(el.name, el.value);
+  });
+  var body = new URLSearchParams(data).toString();
+
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: body,
+  })
+    .then(function (r) { return r.text(); })
+    .then(function (html) { target.innerHTML = html; });
+}
+
+// Delegated listeners so recalculation fires no matter when the elements were
+// added and regardless of event-bubbling quirks with the external level input.
+document.addEventListener("change", function (e) {
+  var t = e.target;
+  if (!t) return;
+  if (t.id === "character-level" || (t.closest && t.closest("#character-form"))) {
+    recalcCharacterStats();
+  }
+});
+document.addEventListener("input", function (e) {
+  if (e.target && e.target.id === "character-level") {
+    recalcCharacterStats();
+  }
+});
 
 // ---------------------------------------------------------------------------
 // Name gate: the rest of the builder stays disabled until the ability has a

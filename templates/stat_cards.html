@@ -1,0 +1,38 @@
+{{ define "stat_cards" }}
+{{ $abilityRemaining := sub .AbilityBudget .AbilityUsed }}
+{{ $traitRemaining := sub .TraitBudget .TraitUsed }}
+<div class="cost-card">
+  <span class="cost-card-label">Ability Points</span>
+
+  <span class="cost-card-value {{ if lt $abilityRemaining 0 }}over{{ else }}ok{{ end }}">
+    {{ $abilityRemaining }}/{{ .AbilityBudget }}
+  </span>
+</div>
+<div class="cost-card">
+  <span class="cost-card-label">Trait Points</span>
+  <span class="cost-card-value {{ if lt $traitRemaining 0 }}over{{ else }}ok{{ end }}">
+    {{ $traitRemaining }}/{{ .TraitBudget }}
+  </span>
+</div>
+<div class="cost-card">
+  <span class="cost-card-label">Abilities</span>
+  <span class="cost-card-value">{{ len .Character.Abilities }}</span>
+</div>
+{{ range .Vitals }}
+<div class="cost-card vital-card">
+  <span class="cost-card-label">{{ .Trait }}</span>
+  {{ if .Editable }}
+  <span class="cost-card-value vital-editable">
+    <input type="number" class="vital-current" name="current_{{ .Key }}"
+           value="{{ .Current }}" form="character-form" min="0">
+    <span class="vital-sep">/</span>
+    <span class="vital-max">{{ .Max }}</span>
+  </span>
+  {{ else }}
+  <span class="cost-card-value">{{ .Max }}</span>
+  {{ end }}
+</div>
+{{ end }}
+{{ end }}
+
+

@@ -168,6 +168,33 @@ textarea { min-height: 5rem; resize: vertical; }
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 .builder-head h1 { margin: 0; font-size: 1.5rem; }
+
+/* Sticky stats bar on the character sheet, mirroring .builder-head. */
+.stats-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.stats-bar-level { display: flex; flex-direction: column; min-width: 80px; }
+.stats-bar-level label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.2rem;
+}
+.stats-bar-level input { max-width: 90px; }
+
 .cost-cards { display: flex; align-items: stretch; gap: 0.6rem; flex-wrap: wrap; }
 .cost-card {
   display: flex;
@@ -191,6 +218,21 @@ textarea { min-height: 5rem; resize: vertical; }
 .cost-card-value.over { color: var(--danger); }
 .cost-card-value.build { color: var(--accent); }
 .cost-card-value.energy { color: var(--cyan); }
+.vital-editable { display: inline-flex; align-items: baseline; gap: 0.15rem; }
+.vital-editable .vital-current {
+  width: 3ch;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: right;
+  padding: 0 0.15rem;
+  border: 1px solid var(--border, #444);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+}
+.vital-editable .vital-sep { font-size: 1.2rem; opacity: 0.6; }
+.vital-editable .vital-max { font-size: 1.2rem; opacity: 0.75; }
+
 .cost-warning { color: var(--danger); font-size: 0.85rem; font-weight: 600; align-self: center; }
 
 

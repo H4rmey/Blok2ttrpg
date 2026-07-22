@@ -12,33 +12,24 @@
   {{ end }}
 </div>
 
-<div class="cost-cards">
-  <div class="cost-card">
-    <span class="cost-card-label">Level</span>
-    <span class="cost-card-value">{{ $c.Level }}</span>
+<div class="stats-bar">
+  <div class="stats-bar-level">
+    <label>Level</label>
+    <input type="number" name="level" min="1" value="{{ $c.Level }}"
+           form="character-form" id="character-level">
   </div>
-  <div class="cost-card">
-    <span class="cost-card-label">Ability Points</span>
-    <span class="cost-card-value {{ if gt .AbilityUsed .AbilityBudget }}over{{ else }}ok{{ end }}">{{ .AbilityUsed }} / {{ .AbilityBudget }}</span>
-  </div>
-  <div class="cost-card">
-    <span class="cost-card-label">Trait Points</span>
-    <span class="cost-card-value {{ if gt .TraitUsed .TraitBudget }}over{{ else }}ok{{ end }}">{{ .TraitUsed }} / {{ .TraitBudget }}</span>
-  </div>
-  <div class="cost-card">
-    <span class="cost-card-label">Abilities</span>
-    <span class="cost-card-value">{{ len $c.Abilities }}</span>
+
+  <div class="cost-cards" id="stat-cards">
+    {{ template "stat_cards" . }}
   </div>
 </div>
 
-<form method="post" action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}">
-  <div class="field">
-    <label>Level</label>
-    <input type="number" name="level" min="1" value="{{ $c.Level }}">
-  </div>
+<form method="post" id="character-form" action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
+      data-stats-url="/characters/{{ $c.ID }}/stats">
 
 
   {{ range attributes .Cfg }}
+
   <fieldset>
     <legend>{{ .Label }}</legend>
     {{ range .Fields }}
@@ -59,12 +50,14 @@
       {{ range .Traits }}
       <div class="field">
         <label>{{ . }}</label>
-        <select name="trait_{{ $g.ID }}_{{ . }}">
-          {{ $current := traitProf $c $g.ID . }}
+        {{ $trait := . }}
+        <select name="trait_{{ $g.ID }}_{{ $trait }}">
+          {{ $current := traitProf $c $g.ID $trait }}
           {{ range $.Cfg.Proficiencies }}
-          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profLabel . $g.ID }}</option>
+          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profTraitLabel . $g.ID $trait }}</option>
           {{ end }}
         </select>
+
       </div>
       {{ end }}
     </div>

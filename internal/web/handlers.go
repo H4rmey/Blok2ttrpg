@@ -27,6 +27,9 @@ type pageData struct {
 	TraitUsed     int
 	AbilityBudget int
 	AbilityUsed   int
+
+	// Vitals holds the computed vital stats (HP/Movement/Energy) for the sheet.
+	Vitals []engine.VitalStat
 }
 
 type crumb struct {
@@ -123,6 +126,21 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/x-yaml")
 		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", c.Name()+".yaml"))
 		w.Write(b)
+	case "stats":
+		// Recompute from the current (unsaved) form values so the bar reflects
+		// edits to level and trait dropdowns before saving.
+		a.applyCharacterForm(&c, r)
+		if lvl := r.URL.Query().Get("level"); lvl != "" {
+			if n, err := strconv.Atoi(lvl); err == nil && n >= 1 {
+				c.Level = n
+			}
+		}
+		data := a.characterPage(&c, false)
+		data.Cfg = a.Cfg.Config
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		if err := a.Tmpl.ExecuteTemplate(w, "stat_cards", data); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	case "pdf":
 		a.renderCharacterPDF(w, c)
 	case "abilities":
@@ -208,6 +226,15 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) {
 			}
 		}
 	}
+	// Current values for editable vitals (HP/Energy). Stored as attributes
+	// keyed "current_<vital>" so they persist alongside the character.
+	for _, trait := range a.Cfg.Traits.Items[engine.VitalGroupID] {
+		key := strings.ToLower(trait)
+		name := "current_" + key
+		if _, ok := r.Form[name]; ok {
+			c.Attributes[name] = r.FormValue(name)
+		}
+	}
 }
 
 func (a *App) characterPage(c *model.Character, isNew bool) pageData {
@@ -231,5 +258,6 @@ func (a *App) characterPage(c *model.Character, isNew bool) pageData {
 		TraitUsed:     engine.TraitPointsUsed(a.Cfg.Config, *c),
 		AbilityBudget: a.Cfg.AbilityPointBudget(c.Level),
 		AbilityUsed:   abilityUsed,
+		Vitals:        engine.CharacterVitals(a.Cfg.Config, *c),
 	}
 }

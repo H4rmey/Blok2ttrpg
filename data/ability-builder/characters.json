@@ -7,35 +7,73 @@
       "appearance": "",
       "archetype": "",
       "backstory": "",
-      "name": "",
+      "name": "fasdfasdf",
       "notes": "",
       "player": ""
     },
     "traits": {
       "defense.Constitution": "clumsy",
-      "defense.Magic": "clumsy",
+      "defense.Magic": "master",
       "defense.Mind": "clumsy",
       "defense.Reflex": "clumsy",
       "general.Crafting": "clumsy",
-      "general.Dexterity": "clumsy",
+      "general.Dexterity": "untrained",
       "general.Knowledge": "clumsy",
       "general.Magic": "clumsy",
       "general.Nature": "clumsy",
       "general.New Trait": "clumsy",
-      "general.People Skill": "expert",
+      "general.People Skill": "clumsy",
       "general.Perception": "clumsy",
       "general.Performance": "clumsy",
-      "general.Stealth": "clumsy",
-      "general.Strength": "banana",
+      "general.Stealth": "trained",
+      "general.Strength": "expert",
       "general.Thievery": "clumsy",
       "offense.Magic": "clumsy",
       "offense.Mind": "clumsy",
       "offense.Power": "clumsy",
-      "offense.Precision": "clumsy",
+      "offense.Precision": "untrained",
       "vital.Energy": "clumsy",
       "vital.HP": "clumsy",
       "vital.Movement": "clumsy"
     },
-    "abilities": []
+    "abilities": [
+      {
+        "id": "ability-1784712442374414900",
+        "name": "a",
+        "type": "execution",
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": ""
+        },
+        "enactments": [
+          {
+            "type": "negation",
+            "fields": {
+              "always": false,
+              "counter_negation": false,
+              "flat": 0,
+              "full_counter": false,
+              "offense": "",
+              "other": "",
+              "source": "",
+              "source_trait": ""
+            },
+            "interaction": "self",
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d6",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": ""
+            }
+          }
+        ]
+      }
+    ]
   }
 }
