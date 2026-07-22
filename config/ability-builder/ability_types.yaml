@@ -199,10 +199,9 @@ ability_types:
       - key: trigger
         label: "Trigger"
         type: dropdown
+        # Per-trigger build costs come from the costed option source; no flat
+        # field cost so the selected trigger's own cost is not double-counted.
         options_source: reaction_triggers
-        cost:
-          build_cost: 2
-          energy_cost: 0
       - key: trigger_trait
         label: "Trigger Trait"
         type: dropdown
@@ -233,6 +232,7 @@ ability_types:
             energy_cost: 1
 
   phase:
+
     name: "Phase"
     description: "Requires setup or charging time before execution."
     base_energy: 3
@@ -537,10 +537,9 @@ ability_types:
       - key: trigger
         label: "Trigger"
         type: dropdown
+        # Per-trigger build costs come from the costed option source; no flat
+        # field cost so the selected trigger's own cost is not double-counted.
         options_source: reaction_triggers
-        cost:
-          build_cost: 2
-          energy_cost: 0
       - key: trigger_trait
         label: "Trigger Trait"
         type: dropdown
@@ -570,6 +569,7 @@ ability_types:
             build_cost: 4
             energy_cost: 1
       - key: action_steps
+
         label: "Action +/-"
         type: free_number
         default: 0

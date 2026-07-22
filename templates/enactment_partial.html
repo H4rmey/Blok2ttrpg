@@ -3,7 +3,11 @@
 {{ $type := .Type }}
 {{ $interaction := .Interaction }}
 {{ $cfg := .Cfg }}
+{{ $fields := .Fields }}
+{{ $interactionData := .InteractionData }}
+{{ $validationData := .ValidationData }}
 {{ $prefix := printf "en%s_" $i }}
+
 <div class="enactment" data-index="{{ $i }}">
   <div class="enactment-head">
     <button type="button" class="collapse-toggle" aria-expanded="true">
@@ -33,8 +37,9 @@
         {{ range enactments $cfg }}
         {{ if eq .ID $type }}
           {{ range .Fields }}
-          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sf_" $prefix) }}
+          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sf_" $prefix) "Values" $fields }}
           {{ end }}
+
         {{ end }}
         {{ end }}
       </div>
@@ -43,8 +48,9 @@
     <div class="region region-validation">
       <h4 class="region-title">Validation</h4>
       {{ range validationFields $cfg }}
-      {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sv_" $prefix) }}
+      {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sv_" $prefix) "Values" $validationData }}
       {{ end }}
+
     </div>
 
     <div class="region region-interaction">
@@ -66,8 +72,9 @@
         {{ range interactions $cfg }}
         {{ if eq .ID $interaction }}
           {{ range .Fields }}
-          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%si_" $prefix) }}
+          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%si_" $prefix) "Values" $interactionData }}
           {{ end }}
+
         {{ end }}
         {{ end }}
       </div>

@@ -11,8 +11,82 @@ trait_categories:
   - general
   - offense
   - defense
+# System 1: costed option sources. Entries in these lists each carry their own
+# build/energy cost, so not all triggers cost the same. A field referencing one
+# of these names via options_source shows the (-/+x pt, -/+y E) hint per entry
+# and the engine adds the selected entry's cost. A costed source takes
+# precedence over a plain option_sources entry of the same name.
+option_sources_costed:
+  # Balanced per-trigger build costs for Reaction / Preparation abilities.
+  # Common or powerful reactive triggers cost more; situational or weak
+  # triggers cost less. Baseline is 2 build points.
+  reaction_triggers:
+    - value: "Target moves away from engager"
+      cost:
+        build_cost: 2
+    - value: "Target moves towards engager"
+      cost:
+        build_cost: 2
+    - value: "Target moves past engager"
+      cost:
+        build_cost: 2
+    - value: "Engager gets healed by target"
+      cost:
+        build_cost: 1
+    - value: "Target damages engager"
+      cost:
+        build_cost: 3
+    - value: "Target makes a trait check"
+      cost:
+        build_cost: 2
+    - value: "Target starts casting an ability"
+      cost:
+        build_cost: 4
+        energy_cost: 1
+    - value: "Target ends their turn within range"
+      cost:
+        build_cost: 2
+    - value: "Target enters interaction range"
+      cost:
+        build_cost: 3
+    - value: "Target leaves interaction range"
+      cost:
+        build_cost: 2
+    - value: "Target fails a validation"
+      cost:
+        build_cost: 2
+    - value: "Target succeeds on a validation"
+      cost:
+        build_cost: 2
+    - value: "Target becomes affected by an enactment"
+      cost:
+        build_cost: 3
+    - value: "Engager takes damage"
+      cost:
+        build_cost: 3
+    - value: "Engager gets targeted by an ability"
+      cost:
+        build_cost: 4
+        energy_cost: 1
+    - value: "Ally within range takes damage"
+      cost:
+        build_cost: 2
+    - value: "Ally within range gets healed"
+      cost:
+        build_cost: 1
+    - value: "A target is moved by an effect"
+      cost:
+        build_cost: 2
+    - value: "A persistent effect triggers"
+      cost:
+        build_cost: 2
+    - value: "A minion is summoned within range"
+      cost:
+        build_cost: 1
+
 option_sources:
   directions_all:
+
     - North
     - East
     - South

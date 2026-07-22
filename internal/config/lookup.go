@@ -96,14 +96,23 @@ func (c *Config) ResolveOptionGroups(f Field) []OptionGroup {
 		// option value is namespaced by category so the two are distinct.
 		for _, cat := range c.traitCategories() {
 			var opts []Option
+			// When the field defines group offsets, surface the group's
+			// offset cost on each option so the (-/+x pt, -/+y E) hint shows.
+			var groupCost *Cost
+			if f.GroupOffsets != nil {
+				if oc, ok := f.GroupOffsets.Offsets[cat]; ok {
+					groupCost = oc
+				}
+			}
 			for _, t := range c.Traits.Items[cat] {
-				opts = append(opts, Option{Value: cat + "." + t, Label: t})
+				opts = append(opts, Option{Value: cat + "." + t, Label: t, Cost: groupCost})
 			}
 			if len(opts) > 0 {
 				groups = append(groups, OptionGroup{Label: titleCase(cat), Options: opts})
 			}
 		}
 		return groups
+
 	}
 
 	return []OptionGroup{{Label: "", Options: c.ResolveOptions(f)}}
@@ -169,6 +178,11 @@ func (c *Config) OptionsFor(source string) []Option {
 	case "interaction_types":
 		return componentOptions(c.Interactions)
 	default:
+		// A costed source takes precedence over the plain string list so
+		// per-entry (e.g. per-trigger) build costs can be attached in YAML.
+		if opts, ok := c.OptionSourcesCosted[source]; ok {
+			return costedOptions(opts)
+		}
 		// Any other name is resolved from the config-driven option_sources
 		// map, so static lists (directions, trigger timings, reaction
 		// triggers, knockout options, etc.) live in YAML rather than Go.
@@ -177,6 +191,47 @@ func (c *Config) OptionsFor(source string) []Option {
 		}
 		return nil
 	}
+}
+
+// costedOptions normalizes a costed option list: an entry with an empty Label
+// falls back to its Value so the display stays populated.
+func costedOptions(opts []Option) []Option {
+	out := make([]Option, 0, len(opts))
+	for _, o := range opts {
+		if o.Label == "" {
+			o.Label = o.Value
+		}
+		out = append(out, o)
+	}
+	return out
+}
+
+// GroupOffsetFor returns the group-offset cost for a selected trait value on a
+// field, or nil when the field has no group offsets or the value's group has no
+// configured offset. The value is expected to be namespaced as "group.Trait"
+// (as produced by the traits_all source); a value without a prefix uses the
+// default group.
+func (c *Config) GroupOffsetFor(f Field, value string) *Cost {
+	if f.GroupOffsets == nil || value == "" {
+		return nil
+	}
+	group := f.GroupOffsets.DefaultGroup
+	if i := indexByte(value, '.'); i >= 0 {
+		group = value[:i]
+	}
+	if cost, ok := f.GroupOffsets.Offsets[group]; ok {
+		return cost
+	}
+	return nil
+}
+
+func indexByte(s string, b byte) int {
+	for i := 0; i < len(s); i++ {
+		if s[i] == b {
+			return i
+		}
+	}
+	return -1
 }
 
 func strOptions(vals []string) []Option {

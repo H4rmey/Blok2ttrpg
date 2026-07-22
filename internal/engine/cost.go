@@ -47,7 +47,14 @@ func FieldsCost(cfg *config.Config, fields []config.Field, values map[string]any
 			}
 		case "dropdown":
 			val := asString(values[f.Key])
-			for _, opt := range f.Options {
+			// Resolve options including any options_source reference so costed
+			// sources (e.g. per-trigger costs) contribute, not just inline
+			// options defined directly on the field.
+			opts := f.Options
+			if cfg != nil {
+				opts = cfg.ResolveOptions(f)
+			}
+			for _, opt := range opts {
 				if opt.Value == val {
 					if opt.Cost != nil {
 						total.plus(*opt.Cost)
@@ -60,9 +67,15 @@ func FieldsCost(cfg *config.Config, fields []config.Field, values map[string]any
 					}
 				}
 			}
+
 			if f.Cost != nil && val != "" {
 				total.plus(*f.Cost)
 			}
+			// Trait group offsets: leaning cost applied per selected group.
+			if off := cfg.GroupOffsetFor(f, val); off != nil {
+				total.plus(*off)
+			}
+
 			// An inline_builder dropdown spawns a nested component builder.
 			// Its cost is field-driven only: the referenced component's
 			// base_cost is intentionally NOT added, only the cost of the
@@ -192,6 +205,14 @@ func addStatesCost(cfg *config.Config, total Cost, f config.Field, raw any) Cost
 					total.plusN(s.ShiftCost, shift)
 				}
 			}
+		}
+		// Row sub-fields (dropdowns/checkboxes/etc.) can carry their own
+		// per-entry costs. Reuse the generic field coster so any extra
+		// options attached to a state row contribute their configured cost.
+		if len(f.RowFields) > 0 {
+			rc := FieldsCost(cfg, f.RowFields, row)
+			total.Build += rc.Build
+			total.Energy += rc.Energy
 		}
 	}
 	return total

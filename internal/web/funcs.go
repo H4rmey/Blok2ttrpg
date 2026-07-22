@@ -151,7 +151,118 @@ func funcMap() template.FuncMap {
 			}
 			return out
 		},
+
+		// fvalStr returns the stored value for key from a values map rendered as
+		// a string, falling back to def when there is no stored value (or it is
+		// empty). Used by the builder to re-populate fields on edit/import.
+		"fvalStr": func(values map[string]any, key, def string) string {
+			if values != nil {
+				if v, ok := values[key]; ok && v != nil {
+					if s := fmt.Sprintf("%v", v); s != "" {
+						return s
+					}
+				}
+			}
+			return def
+		},
+		// fvalBool returns the stored bool value for key, falling back to def.
+		// Accepts native bools and the string forms "true"/"on".
+		"fvalBool": func(values map[string]any, key string, def bool) bool {
+			if values != nil {
+				if v, ok := values[key]; ok {
+					switch t := v.(type) {
+					case bool:
+						return t
+					case string:
+						return t == "true" || t == "on"
+					}
+				}
+			}
+			return def
+		},
+		// fvalMap returns a nested values map stored under key (used by the
+		// inline_builder to re-populate its nested component fields).
+		"fvalMap": func(values map[string]any, key string) map[string]any {
+			return asValuesMap(mapGet(values, key))
+		},
+		// resolveRows returns the row value maps a solutions/states field should
+		// render: the stored rows when present, otherwise the configured
+		// defaults (row_defaults / field defaults up to default_count).
+		"resolveRows": func(f config.Field, values map[string]any) []map[string]any {
+			return resolveRows(f, values)
+		},
 	}
+}
+
+// mapGet safely reads a key from a values map, returning nil when absent.
+func mapGet(values map[string]any, key string) any {
+	if values == nil {
+		return nil
+	}
+	return values[key]
+}
+
+// asValuesMap coerces a stored value into a map[string]any. It accepts the
+// native map[string]any as well as YAML's map[string]interface{} and
+// map[interface{}]interface{} shapes.
+func asValuesMap(v any) map[string]any {
+	switch m := v.(type) {
+	case map[string]any:
+		return m
+	case map[interface{}]interface{}:
+		out := map[string]any{}
+		for k, val := range m {
+			out[fmt.Sprintf("%v", k)] = val
+		}
+		return out
+	}
+	return nil
+}
+
+// resolveRows produces the row value maps to render for a repeatable field.
+// Stored rows (from a saved/imported ability) take precedence; otherwise the
+// configured row defaults are used, one map per default row.
+func resolveRows(f config.Field, values map[string]any) []map[string]any {
+	if raw := mapGet(values, f.Key); raw != nil {
+		if rows := normalizeRows(raw); len(rows) > 0 {
+			return rows
+		}
+	}
+	out := []map[string]any{}
+	for i := 0; i < f.DefaultCount; i++ {
+		row := map[string]any{}
+		for _, rf := range f.RowFields {
+			val := ""
+			if i < len(f.RowDefaults) {
+				val = f.RowDefaults[i][rf.Key]
+			}
+			if val == "" && rf.Default != nil {
+				val = fmt.Sprintf("%v", rf.Default)
+			}
+			row[rf.Key] = val
+		}
+		out = append(out, row)
+	}
+	return out
+}
+
+// normalizeRows coerces a stored rows value into []map[string]any. It accepts
+// the native []map[string]any as well as the []interface{} of maps that YAML
+// unmarshalling produces.
+func normalizeRows(v any) []map[string]any {
+	switch rows := v.(type) {
+	case []map[string]any:
+		return rows
+	case []interface{}:
+		out := make([]map[string]any, 0, len(rows))
+		for _, r := range rows {
+			if m := asValuesMap(r); m != nil {
+				out = append(out, m)
+			}
+		}
+		return out
+	}
+	return nil
 }
 
 // costHintStr formats a flat cost into a short inline hint like "(-2 pt, +1 E)".

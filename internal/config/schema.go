@@ -38,6 +38,12 @@ type Config struct {
 	// a plain string list; the value and the label are the same string.
 	OptionSources map[string][]string `yaml:"option_sources,omitempty" json:"option_sources,omitempty"`
 
+	// OptionSourcesCosted holds named option lists whose entries each carry
+	// their own cost. This backs per-trigger build costs: a source referenced
+	// via options_source can have distinct build/energy costs per entry. When a
+	// source name exists in both maps, the costed variant takes precedence.
+	OptionSourcesCosted map[string][]Option `yaml:"option_sources_costed,omitempty" json:"option_sources_costed,omitempty"`
+
 	// TraitCategories lists the trait group ids that make up the "traits_all"
 	// option source and its grouped display. When empty the app falls back to
 	// the historical general/offense/defense set.
@@ -236,6 +242,23 @@ type Field struct {
 	// component's own fields render underneath the dropdown and contribute
 	// their (field-driven) cost to the total.
 	InlineBuilder *InlineBuilder `yaml:"inline_builder,omitempty" json:"inline_builder,omitempty"`
+
+	// GroupOffsets applies a per-trait-group cost offset on a dropdown backed
+	// by a multi-group trait source (traits_all). The selected option value is
+	// namespaced as "group.Trait"; the group prefix selects which offset to
+	// add. This lets a field "lean" toward a preferred trait group: picking a
+	// trait outside the leaning group can cost extra (or a preferred group can
+	// cost less).
+	GroupOffsets *GroupOffsets `yaml:"group_offsets,omitempty" json:"group_offsets,omitempty"`
+}
+
+// GroupOffsets configures per-trait-group cost offsets for a trait dropdown.
+// DefaultGroup names the preferred (leaning) group; Offsets maps each trait
+// group id to the cost added when a trait from that group is selected. Groups
+// not present in Offsets contribute no offset.
+type GroupOffsets struct {
+	DefaultGroup string           `yaml:"default_group,omitempty" json:"default_group,omitempty"`
+	Offsets      map[string]*Cost `yaml:"offsets,omitempty" json:"offsets,omitempty"`
 }
 
 // InlineBuilder configures a dropdown field to render a nested component

@@ -130,6 +130,14 @@ func merge(base, in *Config) {
 			base.OptionSources[k] = v
 		}
 	}
+	if len(in.OptionSourcesCosted) > 0 {
+		if base.OptionSourcesCosted == nil {
+			base.OptionSourcesCosted = map[string][]Option{}
+		}
+		for k, v := range in.OptionSourcesCosted {
+			base.OptionSourcesCosted[k] = v
+		}
+	}
 	if len(in.TraitCategories) > 0 {
 		base.TraitCategories = in.TraitCategories
 	}

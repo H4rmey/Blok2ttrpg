@@ -209,12 +209,17 @@ function dispatchChange(el) {
   });
 
 
-  // The first enactment is free and always present: load one automatically
-  // when the builder opens with none yet.
-  if (container.children.length === 0 && nextIndex() === 0) {
+  // When editing/importing an existing ability the enactments are rendered on
+  // the server, so normalize their indices and Remove-button visibility once
+  // on load. Otherwise (a brand-new ability) the first enactment is free and
+  // always present: load one automatically.
+  if (container.querySelectorAll(".enactment").length > 0) {
+    renumberEnactments();
+  } else if (nextIndex() === 0) {
     addBtn.click();
   }
 })();
+
 
 
 // ---------------------------------------------------------------------------

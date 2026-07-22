@@ -38,33 +38,31 @@
     },
     "abilities": [
       {
-        "id": "ability-1784712442374414900",
+        "id": "ability-1784744950944806700",
         "name": "a",
-        "type": "execution",
+        "type": "preparation",
         "fields": {
           "action_steps": 0,
           "energy_steps": 0,
           "item_dep": false,
-          "item_name": ""
+          "item_name": "",
+          "range": 4,
+          "trigger": "Engager takes damage",
+          "trigger_trait": "",
+          "uses": 2
         },
         "enactments": [
           {
-            "type": "persistent_effect",
+            "type": "negation",
             "fields": {
               "always": false,
-              "duration": 2,
-              "effect_name": "Effect",
-              "effect_type": "damage",
-              "effect_type_ib": {
-                "always": false,
-                "flat": 2,
-                "offense": "Precision",
-                "other": "",
-                "source": "d6",
-                "source_trait": ""
-              },
-              "solution": [],
-              "trigger_timing": ""
+              "counter_negation": false,
+              "flat": 0,
+              "full_counter": false,
+              "offense": "",
+              "other": "",
+              "source": "",
+              "source_trait": ""
             },
             "interaction": "self",
             "interaction_data": {

@@ -51,7 +51,7 @@
       {{ range abilityTypes .Cfg }}
       {{ if eq .ID $ab.Type }}
         {{ range .Fields }}
-        {{ template "field" dict "Cfg" $.Cfg "Field" . "Prefix" "atype_" }}
+        {{ template "field" dict "Cfg" $.Cfg "Field" . "Prefix" "atype_" "Values" $ab.Fields }}
         {{ end }}
       {{ end }}
       {{ end }}
@@ -61,10 +61,22 @@
   <fieldset>
     <legend>Enactments</legend>
     <p class="muted">The first enactment is free; each additional enactment costs extra build points.</p>
-    <div id="enactments"></div>
-    <input type="hidden" name="enactment_count" id="enactment_count" value="0">
+    <div id="enactments">
+      {{ range $ei, $en := $ab.Enactments }}
+      {{ template "enactment_partial.html" dict
+          "Cfg" $.Cfg
+          "Index" (str $ei)
+          "Type" $en.Type
+          "Interaction" $en.Interaction
+          "Fields" $en.Fields
+          "InteractionData" $en.InteractionData
+          "ValidationData" $en.ValidationData }}
+      {{ end }}
+    </div>
+    <input type="hidden" name="enactment_count" id="enactment_count" value="{{ len $ab.Enactments }}">
     <button type="button" class="btn" id="add-enactment">+ Add Enactment</button>
   </fieldset>
+
 
   </div>
 

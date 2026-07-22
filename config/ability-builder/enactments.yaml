@@ -151,7 +151,19 @@ enactments:
       - key: source_trait
         label: "Trait"
         type: dropdown
-        options_source: traits_offense
+        options_source: traits_all
+        # System 3: this enactment leans toward offensive traits. Picking an
+        # offensive trait is free; defensive/general traits cost extra.
+        group_offsets:
+          default_group: offense
+          offsets:
+            offense:
+              build_cost: 0
+            general:
+              build_cost: 2
+            defense:
+              build_cost: 4
+              energy_cost: 1
         visibility_when: source
         show_when: trait
       - key: other
@@ -177,6 +189,7 @@ enactments:
         cost:
           build_cost: 4
           energy_cost: 2
+
 
   healing:
     type: "Enact Healing"
@@ -482,3 +495,27 @@ enactments:
             step: 1
             visibility_when: state_kind
             show_when: general
+          # System 2: per-entry costs on state sub-fields. Each row can carry
+          # extra dropdowns/checkboxes whose selected entry has its own cost.
+          - key: intensity
+            label: "Intensity"
+            type: dropdown
+            default: ""
+            options:
+              - value: minor
+                label: "Minor"
+                cost:
+                  build_cost: 1
+              - value: severe
+                label: "Severe"
+                cost:
+                  build_cost: 4
+                  energy_cost: 2
+          - key: spreads
+            label: "Spreads to adjacent targets"
+            type: checkbox
+            cost:
+              build_cost: 3
+              energy_cost: 1
+
+

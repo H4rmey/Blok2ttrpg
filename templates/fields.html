@@ -1,8 +1,9 @@
 {{ define "field" }}
-{{/* data: dict with .Cfg .Field .Prefix */}}
+{{/* data: dict with .Cfg .Field .Prefix (optional .Values map of stored values) */}}
 {{ $cfg := .Cfg }}
 {{ $f := .Field }}
 {{ $prefix := .Prefix }}
+{{ $values := .Values }}
 {{ $name := printf "%s%s" $prefix $f.Key }}
 <div class="field field-{{ $f.Type }}"
      data-field-key="{{ $f.Key }}"
@@ -14,17 +15,18 @@
   </label>
 
   {{ if eq $f.Type "free_text" }}
-  <input type="text" name="{{ $name }}" value="{{ $f.Default }}">
+  <input type="text" name="{{ $name }}" value="{{ fvalStr $values $f.Key (str $f.Default) }}">
   {{ else if eq $f.Type "free_number" }}
+  {{ $numsel := fvalStr $values $f.Key (str $f.Default) }}
   <select name="{{ $name }}" class="number-select">
     {{ range numberRange $f }}
-    <option value="{{ . }}" {{ if eq . $f.Default }}selected{{ end }}>{{ if gt . 0 }}+{{ end }}{{ . }}</option>
+    <option value="{{ . }}" {{ if eq (str .) $numsel }}selected{{ end }}>{{ if gt . 0 }}+{{ end }}{{ . }}</option>
     {{ end }}
   </select>
   {{ else if eq $f.Type "checkbox" }}
-  <input type="checkbox" name="{{ $name }}" {{ if eq (printf "%v" $f.Default) "true" }}checked{{ end }}>
+  <input type="checkbox" name="{{ $name }}" {{ if fvalBool $values $f.Key (eq (printf "%v" $f.Default) "true") }}checked{{ end }}>
   {{ else if eq $f.Type "dropdown" }}
-  {{ $default := str $f.Default }}
+  {{ $default := fvalStr $values $f.Key (str $f.Default) }}
   {{ if $f.InlineBuilder }}
   <select name="{{ $name }}"
           hx-get="/builder/inline-fields"
@@ -45,8 +47,9 @@
     {{ if $default }}
     {{ $comp := componentByKind $cfg $f.InlineBuilder.Kind $default }}
     {{ if $comp }}
+    {{ $ibvals := fvalMap $values (printf "%s_ib" $f.Key) }}
     {{ range $comp.Fields }}
-    {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%s_ib_" $name) }}
+    {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%s_ib_" $name) "Values" $ibvals }}
     {{ end }}
     {{ end }}
     {{ end }}
@@ -66,19 +69,18 @@
 
   {{ else if or (eq $f.Type "solutions") (eq $f.Type "states") }}
 
+  {{ $rows := resolveRows $f $values }}
   <div class="rows" data-rows-name="{{ $name }}">
-    <input type="hidden" name="{{ $name }}_count" class="rows-count" value="{{ $f.DefaultCount }}">
+    <input type="hidden" name="{{ $name }}_count" class="rows-count" value="{{ len $rows }}">
     <div class="rows-body">
-      {{ range $ri := seq $f.DefaultCount }}
+      {{ range $ri, $row := $rows }}
       <div class="row">
         {{ range $rf := $f.RowFields }}
         <span class="row-field">
           <label class="row-label">{{ $rf.Label }}</label>
           {{ $rname := printf "%s_%d_%s" $name $ri $rf.Key }}
-          {{ $rowDef := rowDefault $f $ri $rf.Key }}
+          {{ $rdef := fvalStr $row $rf.Key (str $rf.Default) }}
           {{ if eq $rf.Type "dropdown" }}
-          {{ $rdef := str $rf.Default }}
-          {{ if $rowDef }}{{ $rdef = $rowDef }}{{ end }}
           <select name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
             <option value="" {{ if eq $rdef "" }}selected{{ end }}>&lt;none&gt;</option>
             {{ range $grp := resolveOptionGroups $cfg $rf }}
@@ -92,10 +94,12 @@
 
           {{ else if eq $rf.Type "free_number" }}
           <select name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
-            {{ range numberRange $rf }}<option value="{{ . }}" {{ if eq (str .) $rowDef }}selected{{ end }}>{{ . }}</option>{{ end }}
+            {{ range numberRange $rf }}<option value="{{ . }}" {{ if eq (str .) $rdef }}selected{{ end }}>{{ . }}</option>{{ end }}
           </select>
+          {{ else if eq $rf.Type "checkbox" }}
+          <input type="checkbox" name="{{ $rname }}" data-row-key="{{ $rf.Key }}" {{ if fvalBool $row $rf.Key false }}checked{{ end }}>
           {{ else }}
-          <input type="text" name="{{ $rname }}" data-row-key="{{ $rf.Key }}" value="{{ $rowDef }}">
+          <input type="text" name="{{ $rname }}" data-row-key="{{ $rf.Key }}" value="{{ $rdef }}">
           {{ end }}
         </span>
         {{ end }}
@@ -129,6 +133,8 @@
           <select data-row-key="{{ .Key }}">
             {{ range numberRange . }}<option value="{{ . }}">{{ . }}</option>{{ end }}
           </select>
+          {{ else if eq .Type "checkbox" }}
+          <input type="checkbox" data-row-key="{{ .Key }}">
           {{ else }}
           <input type="text" data-row-key="{{ .Key }}">
           {{ end }}
