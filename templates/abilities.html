@@ -2,8 +2,15 @@
 {{ $c := .Character }}
 <div class="page-head">
   <h1>{{ $c.Name }} &mdash; Abilities</h1>
-  <a class="btn primary" href="/characters/{{ $c.ID }}/abilities/new">+ New Ability</a>
+  <div class="toolbar">
+    <a class="btn primary" href="/characters/{{ $c.ID }}/abilities/new">+ New Ability</a>
+    <button class="btn" type="button" onclick="document.getElementById('ability-import-input').click()">Import</button>
+    <form id="ability-import-form" action="/characters/{{ $c.ID }}/abilities/import" method="post" enctype="multipart/form-data" hidden>
+      <input id="ability-import-input" type="file" name="file" accept=".yaml,.yml" onchange="this.form.submit()">
+    </form>
+  </div>
 </div>
+
 
 {{ if $c.Abilities }}
 <ul class="card-grid">

@@ -49,23 +49,36 @@
         },
         "enactments": [
           {
-            "type": "negation",
+            "type": "persistent_effect",
             "fields": {
               "always": false,
-              "counter_negation": false,
-              "flat": 0,
-              "full_counter": false,
-              "offense": "",
-              "other": "",
-              "source": "",
-              "source_trait": ""
+              "duration": 2,
+              "effect_name": "Effect",
+              "effect_type": "damage",
+              "effect_type_ib": {
+                "always": false,
+                "flat": 2,
+                "offense": "Precision",
+                "other": "",
+                "source": "d6",
+                "source_trait": ""
+              },
+              "solution": [],
+              "trigger_timing": ""
             },
             "interaction": "self",
             "interaction_data": {
               "use_previous": false
             },
             "validation_data": {
-              "counter_trait": [],
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
               "engage_die": "d6",
               "engage_mode": "trait",
               "engage_other": "",

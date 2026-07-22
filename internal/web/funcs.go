@@ -36,6 +36,15 @@ func funcMap() template.FuncMap {
 		"resolveOptionGroups": func(cfg *config.Config, f config.Field) []config.OptionGroup {
 			return cfg.ResolveOptionGroups(f)
 		},
+		// componentByKind resolves a component (enactment/interaction/ability
+		// type) by kind and id for the inline builder. Returns nil when not
+		// found so the template can guard with `if`.
+		"componentByKind": func(cfg *config.Config, kind, id string) *config.Component {
+			if comp, ok := cfg.ComponentByKind(kind, id); ok {
+				return &comp
+			}
+			return nil
+		},
 
 		// abilityTypes/enactments/interactions expose the ordered component
 		// lists so templates can range over them.
@@ -113,6 +122,15 @@ func funcMap() template.FuncMap {
 		},
 		"add": func(a, b int) int { return a + b },
 		"sub": func(a, b int) int { return a - b },
+		// rowDefault returns the pre-fill value for a given row index and
+		// row-field key, from a field's row_defaults config. Empty when none.
+		"rowDefault": func(f config.Field, row int, key string) string {
+			if row < 0 || row >= len(f.RowDefaults) {
+				return ""
+			}
+			return f.RowDefaults[row][key]
+		},
+
 		// str renders any value as a string ("" for nil), used to compare a
 		// field's default against dropdown option values in templates.
 		"str": func(v any) string {

@@ -19,23 +19,25 @@
       <div class="field">
         <label>Enactment Type</label>
         <select name="{{ $prefix }}type"
-                hx-get="/builder/enactment"
-                hx-target="closest .enactment"
-                hx-swap="outerHTML"
-                hx-include="closest .enactment"
-                hx-vals='{"index": "{{ $i }}"}'>
+                hx-get="/builder/enactment-fields"
+                hx-target="#{{ $prefix }}enactment-fields"
+                hx-swap="innerHTML"
+                hx-vals='{"index": "{{ $i }}"}'
+                hx-trigger="change">
           {{ range enactments $cfg }}
           <option value="{{ .ID }}" {{ if eq .ID $type }}selected{{ end }}>{{ .DisplayName }}</option>
           {{ end }}
         </select>
       </div>
-      {{ range enactments $cfg }}
-      {{ if eq .ID $type }}
-        {{ range .Fields }}
-        {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sf_" $prefix) }}
+      <div id="{{ $prefix }}enactment-fields">
+        {{ range enactments $cfg }}
+        {{ if eq .ID $type }}
+          {{ range .Fields }}
+          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sf_" $prefix) }}
+          {{ end }}
         {{ end }}
-      {{ end }}
-      {{ end }}
+        {{ end }}
+      </div>
     </div>
 
     <div class="region region-validation">
@@ -50,23 +52,25 @@
       <div class="field">
         <label>Interaction Type</label>
         <select name="{{ $prefix }}interaction"
-                hx-get="/builder/enactment"
-                hx-target="closest .enactment"
-                hx-swap="outerHTML"
-                hx-include="closest .enactment"
-                hx-vals='{"index": "{{ $i }}", "type": "{{ $type }}"}'>
+                hx-get="/builder/interaction-fields"
+                hx-target="#{{ $prefix }}interaction-fields"
+                hx-swap="innerHTML"
+                hx-vals='{"index": "{{ $i }}"}'
+                hx-trigger="change">
           {{ range interactions $cfg }}
           <option value="{{ .ID }}" {{ if eq .ID $interaction }}selected{{ end }}>{{ .DisplayName }}</option>
           {{ end }}
         </select>
       </div>
-      {{ range interactions $cfg }}
-      {{ if eq .ID $interaction }}
-        {{ range .Fields }}
-        {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%si_" $prefix) }}
+      <div id="{{ $prefix }}interaction-fields">
+        {{ range interactions $cfg }}
+        {{ if eq .ID $interaction }}
+          {{ range .Fields }}
+          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%si_" $prefix) }}
+          {{ end }}
         {{ end }}
-      {{ end }}
-      {{ end }}
+        {{ end }}
+      </div>
     </div>
   </div>
 </div>

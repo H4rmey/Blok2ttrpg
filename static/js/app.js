@@ -217,8 +217,58 @@ function dispatchChange(el) {
 })();
 
 
+// ---------------------------------------------------------------------------
+// Ability builder autosave. Whenever the builder form changes we POST the full
+// form to /builder/autosave (debounced). The server persists the ability and
+// returns its id; we write that back into the hidden ability_id input so a
+// brand-new ability keeps updating the same record on subsequent saves.
+// Autosave is skipped until the ability has a name (the server enforces this
+// too, returning 204 No Content).
+// ---------------------------------------------------------------------------
+(function () {
+  var timer = null;
+  function scheduleAutosave() {
+    var form = document.getElementById("ability-form");
+    if (!form) return;
+    var nameInput = document.getElementById("ability-name");
+    if (nameInput && nameInput.value.trim().length === 0) return;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      var data = new FormData(form);
+      var body = new URLSearchParams(data).toString();
+      fetch("/builder/autosave", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body,
+      })
+        .then(function (r) {
+          if (r.status === 204) return null;
+          var hid = r.headers.get("X-Ability-ID");
+          if (hid) {
+            var idInput = document.getElementById("ability-id");
+            if (idInput) idInput.value = hid;
+          }
+          return null;
+        })
+        .catch(function () { /* ignore transient autosave errors */ });
+    }, 600);
+  }
+
+  document.addEventListener("change", function (e) {
+    if (e.target && e.target.closest && e.target.closest("#ability-form")) {
+      scheduleAutosave();
+    }
+  });
+  document.addEventListener("input", function (e) {
+    if (e.target && e.target.closest && e.target.closest("#ability-form")) {
+      scheduleAutosave();
+    }
+  });
+})();
+
 // Re-apply visibility after HTMX swaps (ability-type fields, enactment reloads).
 document.addEventListener("htmx:afterSwap", function () { applyVisibility(); });
+
 document.addEventListener("DOMContentLoaded", function () { applyVisibility(); });
 
 // ---------------------------------------------------------------------------

@@ -63,6 +63,20 @@ func FieldsCost(cfg *config.Config, fields []config.Field, values map[string]any
 			if f.Cost != nil && val != "" {
 				total.plus(*f.Cost)
 			}
+			// An inline_builder dropdown spawns a nested component builder.
+			// Its cost is field-driven only: the referenced component's
+			// base_cost is intentionally NOT added, only the cost of the
+			// nested field values selected within it. The nested values are
+			// stored under "<key>_ib" by the form parser.
+			if f.InlineBuilder != nil && val != "" && cfg != nil {
+				if comp, ok := cfg.ComponentByKind(f.InlineBuilder.Kind, val); ok {
+					if nested, ok := values[f.Key+"_ib"].(map[string]any); ok {
+						ic := FieldsCost(cfg, comp.Fields, nested)
+						total.Build += ic.Build
+						total.Energy += ic.Energy
+					}
+				}
+			}
 		case "free_number":
 			total = addNumberCost(total, f, values[f.Key])
 		case "solutions":

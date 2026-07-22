@@ -33,6 +33,16 @@ type Config struct {
 	Dice                Dice                `yaml:"dice,omitempty" json:"dice,omitempty"`
 	Validations         Validations         `yaml:"validations,omitempty" json:"validations,omitempty"`
 
+	// OptionSources holds named static option lists so any field can reference
+	// them via options_source without hardcoding the list in Go. Each entry is
+	// a plain string list; the value and the label are the same string.
+	OptionSources map[string][]string `yaml:"option_sources,omitempty" json:"option_sources,omitempty"`
+
+	// TraitCategories lists the trait group ids that make up the "traits_all"
+	// option source and its grouped display. When empty the app falls back to
+	// the historical general/offense/defense set.
+	TraitCategories []string `yaml:"trait_categories,omitempty" json:"trait_categories,omitempty"`
+
 	// Character attributes and traits are fully config-driven, keyed by id.
 	Attributes AttributeMap `yaml:"attributes,omitempty" json:"attributes,omitempty"`
 	Traits     TraitMap     `yaml:"traits,omitempty" json:"traits,omitempty"`
@@ -211,11 +221,30 @@ type Field struct {
 	RowFields    []Field  `yaml:"row_fields,omitempty" json:"row_fields,omitempty"`
 	DefaultCount int      `yaml:"default_count,omitempty" json:"default_count,omitempty"`
 	PerItem      *PerStep `yaml:"per_item,omitempty" json:"per_item,omitempty"`
+	// RowDefaults pre-fills the initial rows of a solutions/states field. Each
+	// entry is a map of row_field key -> default value for that row, applied in
+	// order to the first rows rendered.
+	RowDefaults []map[string]string `yaml:"row_defaults,omitempty" json:"row_defaults,omitempty"`
 
 	// Conditional visibility: show this field only when the field named
 	// VisibilityWhen currently equals ShowWhen.
 	VisibilityWhen string `yaml:"visibility_when,omitempty" json:"visibility_when,omitempty"`
 	ShowWhen       string `yaml:"show_when,omitempty" json:"show_when,omitempty"`
+
+	// InlineBuilder, when set on a dropdown field, spawns a nested inline
+	// builder for the component the selected value refers to. The referenced
+	// component's own fields render underneath the dropdown and contribute
+	// their (field-driven) cost to the total.
+	InlineBuilder *InlineBuilder `yaml:"inline_builder,omitempty" json:"inline_builder,omitempty"`
+}
+
+// InlineBuilder configures a dropdown field to render a nested component
+// builder for whatever option value is selected. It is fully generic so any
+// dropdown in any component can opt in.
+type InlineBuilder struct {
+	// Kind selects which component map the selected value resolves against:
+	// "enactment", "interaction" or "ability_type".
+	Kind string `yaml:"kind" json:"kind"`
 }
 
 // Option is a dropdown choice which may carry its own cost and nested fields.

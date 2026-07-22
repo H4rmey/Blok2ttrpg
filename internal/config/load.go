@@ -122,6 +122,17 @@ func merge(base, in *Config) {
 	if len(in.Validations.Fields) > 0 {
 		base.Validations = in.Validations
 	}
+	if len(in.OptionSources) > 0 {
+		if base.OptionSources == nil {
+			base.OptionSources = map[string][]string{}
+		}
+		for k, v := range in.OptionSources {
+			base.OptionSources[k] = v
+		}
+	}
+	if len(in.TraitCategories) > 0 {
+		base.TraitCategories = in.TraitCategories
+	}
 
 	mergeAttributeMap(&base.Attributes, in.Attributes)
 	mergeTraitMap(&base.Traits, in.Traits)

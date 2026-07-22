@@ -24,6 +24,22 @@ func (c *Config) Interaction(id string) (Component, bool) {
 	return Component{}, false
 }
 
+// ComponentByKind resolves a component id against the map named by kind. It
+// backs the generic inline_builder feature so a dropdown can reference any
+// enactment, interaction or ability type.
+func (c *Config) ComponentByKind(kind, id string) (Component, bool) {
+	switch kind {
+	case "enactment":
+		return c.Enactment(id)
+	case "interaction":
+		return c.Interaction(id)
+	case "ability_type":
+		return c.AbilityType(id)
+	default:
+		return Component{}, false
+	}
+}
+
 // Proficiency returns the proficiency tier with the given id.
 func (c *Config) Proficiency(id string) (Proficiency, bool) {
 	for _, p := range c.Proficiencies {
@@ -74,15 +90,14 @@ type OptionGroup struct {
 func (c *Config) ResolveOptionGroups(f Field) []OptionGroup {
 	if f.OptionsSource == "traits_all" {
 		var groups []OptionGroup
-		seen := map[string]bool{}
-		for _, cat := range []string{"general", "offense", "defense"} {
+		// Do not deduplicate across categories: a trait such as "Magic" or
+		// "Mind" legitimately exists in more than one category (e.g. offense
+		// and defense), and each category's entry must remain selectable. The
+		// option value is namespaced by category so the two are distinct.
+		for _, cat := range c.traitCategories() {
 			var opts []Option
 			for _, t := range c.Traits.Items[cat] {
-				if seen[t] {
-					continue
-				}
-				seen[t] = true
-				opts = append(opts, Option{Value: t, Label: t})
+				opts = append(opts, Option{Value: cat + "." + t, Label: t})
 			}
 			if len(opts) > 0 {
 				groups = append(groups, OptionGroup{Label: titleCase(cat), Options: opts})
@@ -90,7 +105,18 @@ func (c *Config) ResolveOptionGroups(f Field) []OptionGroup {
 		}
 		return groups
 	}
+
 	return []OptionGroup{{Label: "", Options: c.ResolveOptions(f)}}
+}
+
+// traitCategories returns the ordered trait group ids that make up "traits_all".
+// It is config-driven via trait_categories, falling back to the historical
+// general/offense/defense set when unset.
+func (c *Config) traitCategories() []string {
+	if len(c.TraitCategories) > 0 {
+		return c.TraitCategories
+	}
+	return []string{"general", "offense", "defense"}
 }
 
 // OptionsFor resolves a named options_source into a concrete option list. All
@@ -110,7 +136,7 @@ func (c *Config) OptionsFor(source string) []Option {
 		// Vitals (HP/Movement/Energy) are not selectable as traits.
 		var all []string
 		seen := map[string]bool{}
-		for _, cat := range []string{"general", "offense", "defense"} {
+		for _, cat := range c.traitCategories() {
 			for _, t := range c.Traits.Items[cat] {
 				if !seen[t] {
 					seen[t] = true
@@ -136,74 +162,25 @@ func (c *Config) OptionsFor(source string) []Option {
 			out = append(out, Option{Value: s.ID, Label: s.Name})
 		}
 		return out
-	case "directions_all", "directions":
-		return strOptions([]string{"North", "East", "South", "West", "Up", "Down", "Any"})
-	case "shift_directions":
-		return strOptions([]string{"UP", "DOWN"})
 	case "ability_types":
 		return componentOptions(c.AbilityTypes)
 	case "enactment_types":
 		return componentOptions(c.Enactments)
 	case "interaction_types":
 		return componentOptions(c.Interactions)
-	case "aoe_trigger_timings", "trigger_timings":
-		return strOptions([]string{"Start of Target Turn", "End of Engager Turn"})
-	case "reaction_triggers":
-		return strOptions(reactionTriggers)
-	case "knockout_options":
-		return strOptions(knockoutOptions)
 	default:
+		// Any other name is resolved from the config-driven option_sources
+		// map, so static lists (directions, trigger timings, reaction
+		// triggers, knockout options, etc.) live in YAML rather than Go.
+		if vals, ok := c.OptionSources[source]; ok {
+			return strOptions(vals)
+		}
 		return nil
 	}
 }
 
-// reactionTriggers is the static list of reaction trigger events. These were
-// previously derived from a legacy "triggers" block that has been removed.
-var reactionTriggers = []string{
-	"Target moves away from engager",
-	"Target moves towards engager",
-	"Target moves past engager",
-	"Engager gets healed by target",
-	"Target damages engager",
-	"Target makes a trait check",
-	"Target starts casting an ability",
-	"Target ends their turn within range",
-	"Target enters interaction range",
-	"Target leaves interaction range",
-	"Target fails a validation",
-	"Target succeeds on a validation",
-	"Target becomes affected by an enactment",
-	"Engager takes damage",
-	"Engager gets targeted by an ability",
-	"Ally within range takes damage",
-	"Ally within range gets healed",
-	"A target is moved by an effect",
-	"A persistent effect triggers",
-	"A minion is summoned within range",
-}
-
-// knockoutOptions is the static list of phase knockout requirements. These were
-// previously derived from a legacy "knockout_requirements" block.
-var knockoutOptions = []string{
-	"None",
-	"Engager takes damage",
-	"Engager falls unconscious",
-	"Engager dies",
-	"Engager gets grabbed or restrained",
-	"Engager moves voluntarily",
-	"Engager is moved by another effect",
-	"Engager fails a validation",
-	"Engager uses another phase",
-	"Engager loses line of sight to target",
-	"Target moves out of range",
-	"Target falls unconscious",
-	"Target dies",
-	"Target succeeds on a counter roll",
-	"Phase duration expires",
-	"Engager runs out of energy",
-}
-
 func strOptions(vals []string) []Option {
+
 	out := make([]Option, 0, len(vals))
 	for _, v := range vals {
 		out = append(out, Option{Value: v, Label: v})

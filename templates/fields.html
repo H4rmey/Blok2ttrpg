@@ -25,6 +25,33 @@
   <input type="checkbox" name="{{ $name }}" {{ if eq (printf "%v" $f.Default) "true" }}checked{{ end }}>
   {{ else if eq $f.Type "dropdown" }}
   {{ $default := str $f.Default }}
+  {{ if $f.InlineBuilder }}
+  <select name="{{ $name }}"
+          hx-get="/builder/inline-fields"
+          hx-target="#{{ $name }}_inline"
+          hx-swap="innerHTML"
+          hx-vals='{"name": "{{ $name }}", "kind": "{{ $f.InlineBuilder.Kind }}"}'
+          hx-trigger="change">
+    <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
+    {{ range $grp := resolveOptionGroups $cfg $f }}
+    {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
+    {{ range $grp.Options }}
+    <option value="{{ .Value }}" {{ if eq .Value $default }}selected{{ end }}>{{ if .Label }}{{ .Label }}{{ else }}{{ .Value }}{{ end }}{{ with costHint .Cost }} {{ . }}{{ end }}</option>
+    {{ end }}
+    {{ if $grp.Label }}</optgroup>{{ end }}
+    {{ end }}
+  </select>
+  <div class="inline-builder" id="{{ $name }}_inline">
+    {{ if $default }}
+    {{ $comp := componentByKind $cfg $f.InlineBuilder.Kind $default }}
+    {{ if $comp }}
+    {{ range $comp.Fields }}
+    {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%s_ib_" $name) }}
+    {{ end }}
+    {{ end }}
+    {{ end }}
+  </div>
+  {{ else }}
   <select name="{{ $name }}">
     <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
     {{ range $grp := resolveOptionGroups $cfg $f }}
@@ -35,8 +62,10 @@
     {{ if $grp.Label }}</optgroup>{{ end }}
     {{ end }}
   </select>
+  {{ end }}
 
   {{ else if or (eq $f.Type "solutions") (eq $f.Type "states") }}
+
   <div class="rows" data-rows-name="{{ $name }}">
     <input type="hidden" name="{{ $name }}_count" class="rows-count" value="{{ $f.DefaultCount }}">
     <div class="rows-body">
@@ -46,8 +75,10 @@
         <span class="row-field">
           <label class="row-label">{{ $rf.Label }}</label>
           {{ $rname := printf "%s_%d_%s" $name $ri $rf.Key }}
+          {{ $rowDef := rowDefault $f $ri $rf.Key }}
           {{ if eq $rf.Type "dropdown" }}
           {{ $rdef := str $rf.Default }}
+          {{ if $rowDef }}{{ $rdef = $rowDef }}{{ end }}
           <select name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
             <option value="" {{ if eq $rdef "" }}selected{{ end }}>&lt;none&gt;</option>
             {{ range $grp := resolveOptionGroups $cfg $rf }}
@@ -61,16 +92,17 @@
 
           {{ else if eq $rf.Type "free_number" }}
           <select name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
-            {{ range numberRange $rf }}<option value="{{ . }}">{{ . }}</option>{{ end }}
+            {{ range numberRange $rf }}<option value="{{ . }}" {{ if eq (str .) $rowDef }}selected{{ end }}>{{ . }}</option>{{ end }}
           </select>
           {{ else }}
-          <input type="text" name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
+          <input type="text" name="{{ $rname }}" data-row-key="{{ $rf.Key }}" value="{{ $rowDef }}">
           {{ end }}
         </span>
         {{ end }}
         <button type="button" class="btn small danger remove-row">x</button>
       </div>
       {{ end }}
+
     </div>
 
     <button type="button" class="btn small add-row"

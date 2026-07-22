@@ -396,27 +396,9 @@ enactments:
       - key: effect_type
         label: "Applies"
         type: dropdown
-        options:
-          - value: "Enact Damage"
-            label: "Enact Damage"
-            cost:
-              build_cost: 2
-              energy_cost: 1
-          - value: "Enact Healing"
-            label: "Enact Healing"
-            cost:
-              build_cost: 2
-              energy_cost: 1
-          - value: "Enact Movement"
-            label: "Enact Movement"
-            cost:
-              build_cost: 1
-              energy_cost: 0
-          - value: "Enact Proficiency Shift"
-            label: "Enact Proficiency Shift"
-            cost:
-              build_cost: 2
-              energy_cost: 1
+        options_source: enactment_types
+        inline_builder:
+          kind: enactment
       - key: duration
         label: "Duration"
         type: free_number

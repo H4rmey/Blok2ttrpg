@@ -43,7 +43,13 @@ func (a *App) Router() http.Handler {
 
 	// Builder partials (HTMX).
 	mux.HandleFunc("/builder/enactment", a.handleBuilderEnactment)
+	mux.HandleFunc("/builder/enactment-fields", a.handleEnactmentFields)
+	mux.HandleFunc("/builder/interaction-fields", a.handleInteractionFields)
+	mux.HandleFunc("/builder/inline-fields", a.handleInlineFields)
+
 	mux.HandleFunc("/builder/cost", a.handleBuilderCost)
+	mux.HandleFunc("/builder/autosave", a.handleBuilderAutosave)
+
 	mux.HandleFunc("/builder/ability-type-fields", a.handleAbilityTypeFields)
 
 	// Docs.

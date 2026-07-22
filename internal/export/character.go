@@ -62,3 +62,13 @@ func UnmarshalCharacter(data []byte) (model.Character, error) {
 func MarshalAbility(a model.Ability) ([]byte, error) {
 	return yaml.Marshal(a)
 }
+
+// UnmarshalAbility parses YAML bytes into a single ability. The id may be
+// overridden by the caller after import.
+func UnmarshalAbility(data []byte) (model.Ability, error) {
+	var a model.Ability
+	if err := yaml.Unmarshal(data, &a); err != nil {
+		return model.Ability{}, fmt.Errorf("parsing ability yaml: %w", err)
+	}
+	return a, nil
+}
