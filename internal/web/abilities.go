@@ -1,6 +1,7 @@
 package web
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"net/http"
@@ -293,16 +294,23 @@ func (a *App) handleBuilderEnactment(w http.ResponseWriter, r *http.Request) {
 	if interaction == "" {
 		interaction = firstInteractionID(a.Cfg.Config)
 	}
-	data := struct {
-		Cfg         *config.Config
-		Index       string
-		Type        string
-		Interaction string
-	}{a.Cfg.Config, idx, etype, interaction}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	if err := a.Tmpl.ExecuteTemplate(w, "enactment_partial.html", data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	data := map[string]any{
+		"Cfg":             a.Cfg.Config,
+		"Index":           idx,
+		"Type":            etype,
+		"Interaction":     interaction,
+		"Fields":          map[string]any{},
+		"InteractionData": map[string]any{},
+		"ValidationData":  map[string]any{},
 	}
+	var buf bytes.Buffer
+
+	if err := a.Tmpl.ExecuteTemplate(&buf, "enactment_partial.html", data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	_, _ = buf.WriteTo(w)
 }
 
 // handleEnactmentFields renders just the config-driven fields for the selected

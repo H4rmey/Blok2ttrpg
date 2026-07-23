@@ -9,6 +9,7 @@ Execution is the most basic form for an Ability. It is simply the: "I want to do
 *   **Actions**: Costs {{(abilityType "execution").BaseAction}} Actions to use
 *   **Energy**: Costs {{(abilityType "execution").BaseEnergy}} Energy to use
 
+
 ## Perks
 
 {{perksTable (abilityType "execution")}}
@@ -21,6 +22,7 @@ ability:
   has_item_dependency: No # If yes, enter which item
   energy_cost: {{(abilityType "execution").BaseEnergy}}
   action_cost: {{(abilityType "execution").BaseAction}}
+
   enactments:
     - Type:
   perks:

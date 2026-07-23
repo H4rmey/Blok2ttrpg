@@ -80,9 +80,8 @@ func loadDir(dir string, cfg *Config) error {
 }
 
 // loadFile decodes one YAML file into cfg. Each file contributes the sections
-// it defines. Legacy authoring blocks that are not modelled by the schema are
-// ignored (KnownFields is off) so hundreds of lines of legacy YAML need not be
-// deleted from the original config.
+// it defines. KnownFields is on, so any key not modelled by the schema is a
+// hard error; this keeps the config from accumulating dead/misspelled keys.
 func loadFile(path string, cfg *Config) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -90,7 +89,8 @@ func loadFile(path string, cfg *Config) error {
 	}
 	var incoming Config
 	dec := yaml.NewDecoder(bytes.NewReader(data))
-	dec.KnownFields(false)
+	dec.KnownFields(true)
+
 	if err := dec.Decode(&incoming); err != nil {
 		return fmt.Errorf("parsing %q: %w", path, err)
 	}

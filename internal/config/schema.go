@@ -155,8 +155,11 @@ type SpecificState struct {
 }
 
 // Component is a generic ability building block: an ability type, enactment or
-// interaction. Legacy authoring blocks (step_costs, perks, triggers, etc.) are
-// intentionally not modelled here; they are ignored on load.
+// interaction. Fields drive the builder UI and the cost engine; BaseCost is the
+// flat component cost. The Base*/Default* values are advisory rule parameters
+// (starting energy, action, range, etc.) surfaced by the documentation and
+// character sheet. Nothing is special-cased by component id in Go, so new types
+// can be added purely in YAML.
 type Component struct {
 	ID          string `yaml:"-" json:"id"`
 	Name        string `yaml:"name,omitempty" json:"name,omitempty"`

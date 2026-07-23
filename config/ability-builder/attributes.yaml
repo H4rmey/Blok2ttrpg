@@ -27,4 +27,4 @@ attributes:
         type: free_text
       - key: notes
         label: "Notes"
-        type: free_text
+        type: free_text 

@@ -62,7 +62,7 @@ proficiencies:
       offense: "+3"
       defense: "+3"
     vitals:
-      hp: 25.5
+      hp: 26
       movement: 12
       energy: 70
   - id: legendary

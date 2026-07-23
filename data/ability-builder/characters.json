@@ -7,6 +7,9 @@
       "appearance": "",
       "archetype": "",
       "backstory": "",
+      "bnananan": "",
+      "current_energy": "5",
+      "current_hp": "8",
       "name": "fasdfasdf",
       "notes": "",
       "player": ""
@@ -17,16 +20,16 @@
       "defense.Mind": "clumsy",
       "defense.Reflex": "clumsy",
       "general.Crafting": "clumsy",
-      "general.Dexterity": "untrained",
+      "general.Dexterity": "trained",
       "general.Knowledge": "clumsy",
-      "general.Magic": "clumsy",
+      "general.Magic": "banana",
       "general.Nature": "clumsy",
       "general.New Trait": "clumsy",
       "general.People Skill": "clumsy",
       "general.Perception": "clumsy",
       "general.Performance": "clumsy",
       "general.Stealth": "trained",
-      "general.Strength": "expert",
+      "general.Strength": "clumsy",
       "general.Thievery": "clumsy",
       "offense.Magic": "clumsy",
       "offense.Mind": "clumsy",
@@ -38,34 +41,37 @@
     },
     "abilities": [
       {
-        "id": "ability-1784744950944806700",
+        "id": "ability-1784809354528817800",
         "name": "a",
-        "type": "preparation",
+        "type": "reaction",
         "fields": {
-          "action_steps": 0,
-          "energy_steps": 0,
           "item_dep": false,
           "item_name": "",
-          "range": 4,
-          "trigger": "Engager takes damage",
+          "range": 1,
+          "trigger": "",
           "trigger_trait": "",
-          "uses": 2
+          "uses": 1
         },
         "enactments": [
           {
-            "type": "negation",
+            "type": "damage",
             "fields": {
               "always": false,
-              "counter_negation": false,
               "flat": 0,
-              "full_counter": false,
               "offense": "",
               "other": "",
               "source": "",
               "source_trait": ""
             },
-            "interaction": "self",
+            "interaction": "area_of_effect",
             "interaction_data": {
+              "duration": 2,
+              "immune": false,
+              "origin_mode": "engager",
+              "origin_text": "",
+              "radius": 1,
+              "range": 0,
+              "timing": "Start of Target Turn",
               "use_previous": false
             },
             "validation_data": {
@@ -74,7 +80,7 @@
                   "value": "defense.Reflex"
                 },
                 {
-                  "value": "defense.Constitution"
+                  "value": "defense.Reflex"
                 }
               ],
               "engage_die": "d6",

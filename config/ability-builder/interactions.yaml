@@ -2,19 +2,6 @@ interactions:
   self:
     type: "Self"
     description: "Targets the Ability user."
-    perks:
-      - id: generic_counter
-        description: "Validation counter roll is replaced by a Generic Dice: d8"
-        build_cost: 2
-        energy_cost: 0
-      - id: always_resolve
-        description: "Will always resolve"
-        build_cost: 5
-        energy_cost: 3
-      - id: use_previous
-        description: "Use the result of another roll for this entry"
-        build_cost: 3
-        energy_cost: 1
     base_cost:
       build_cost: 0
       energy_cost: 0
@@ -31,25 +18,11 @@ interactions:
     description: "Affects a single target within 1m."
     default_range: 1
     default_targets: 1
-    range_cost:
-      build_cost: 1
-      energy_cost: 0
-    target_cost:
-      build_cost: 3
-      energy_cost: 2
-    perks:
-      - id: always_resolve
-        description: "Will always resolve"
-        build_cost: 5
-        energy_cost: 3
-      - id: use_previous
-        description: "Use the result of another roll for this entry"
-        build_cost: 3
-        energy_cost: 1
     base_cost:
       build_cost: 0
       energy_cost: 0
     fields:
+
       - key: range
         label: "Range"
         type: free_number
@@ -84,40 +57,11 @@ interactions:
     description: "Affects a single target at range with visibility requirements."
     default_range: 10
     default_targets: 1
-    default_visible: true
-    default_obstructed: false
-    range_extension_cost:
-      build_cost: 1
-      energy_cost: 0
-      step: 2
-    target_cost:
-      build_cost: 3
-      energy_cost: 2
-    perks:
-      - id: not_visible
-        description: "Engagement does not have to be visible"
-        build_cost: 3
-        energy_cost: 1
-      - id: obstructed
-        description: "Engagement may be obstructed"
-        build_cost: 3
-        energy_cost: 1
-      - id: remove_penalty
-        description: "Remove the Engagement Roll Penalty"
-        build_cost: 3
-        energy_cost: 1
-      - id: always_resolve
-        description: "Will always resolve"
-        build_cost: 5
-        energy_cost: 3
-      - id: use_previous
-        description: "Use the result of another roll for this entry"
-        build_cost: 3
-        energy_cost: 1
     base_cost:
       build_cost: 0
       energy_cost: 0
     fields:
+
       - key: range
         label: "Range"
         type: free_number
@@ -174,30 +118,11 @@ interactions:
     description: "Affects a radius at a point within range."
     default_radius: 1
     default_range: 0
-    radius_cost:
-      build_cost: 2
-      energy_cost: 1
-    range_cost:
-      build_cost: 1
-      energy_cost: 0
-      step: 2
-    perks:
-      - id: other_origin
-        description: "Change Origin to something else"
-        build_cost: 2
-        energy_cost: 1
-      - id: always_resolve
-        description: "Will always resolve"
-        build_cost: 5
-        energy_cost: 3
-      - id: use_previous
-        description: "Use the result of another roll for this entry"
-        build_cost: 3
-        energy_cost: 1
     base_cost:
       build_cost: 0
       energy_cost: 0
     fields:
+
       - key: radius
         label: "Radius"
         type: free_number
@@ -253,37 +178,11 @@ interactions:
     default_radius: 1
     default_range: 0
     default_duration: 2
-    radius_cost:
-      build_cost: 2
-      energy_cost: 1
-    range_cost:
-      build_cost: 1
-      energy_cost: 0
-      step: 2
-    duration_cost:
-      build_cost: 2
-      energy_cost: 1
-    perks:
-      - id: immune
-        description: "Engager is immune to the effect"
-        build_cost: 2
-        energy_cost: 0
-      - id: other_origin
-        description: "Change Origin to something else"
-        build_cost: 2
-        energy_cost: 1
-      - id: always_resolve
-        description: "Will always resolve"
-        build_cost: 5
-        energy_cost: 3
-      - id: use_previous
-        description: "Use the result of another roll for this entry"
-        build_cost: 3
-        energy_cost: 1
     base_cost:
       build_cost: 0
       energy_cost: 0
     fields:
+
       - key: radius
         label: "Radius"
         type: free_number
