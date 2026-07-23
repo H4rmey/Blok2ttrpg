@@ -19,5 +19,5 @@ Movement costs one action; it is fully allowed to just keep using actions just t
 
 Oppenents are not willing to get hit by your attacks/abilities. That is why when attacking an opponent you make an **Attack Roll** to a **Target**. In the chapter about [Dice Rolling](dice-rolling.md) We already dicussed Engegement Rolls and Counter Rolls. An **Attack Roll** is a type of **Engegment Roll**.
 
-When Attacking/Healing/Prepping/Anythinging you always first roll what the result will be if you succeed. Afterwards you make the **Engegement Rolls** and **Counter Rolls**. 
+When Attacking/Healing/Prepping/Anythinging you always first roll the Engagement Roll to see if you hit, then you resolve the action/enactment/thing.
 
