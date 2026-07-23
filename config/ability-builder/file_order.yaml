@@ -14,7 +14,7 @@ file_order:
   - ./docs/core/leveling.md
   - ./docs/modules/ability-builder/introduction.md
   - ./docs/modules/ability-builder/configuration.md
-  - ./docs/modules/ability-builder/guide.md
+  - ./docs/modules/ability-builder/ability-creation-guide.md
   - ./docs/modules/ability-builder/ability-types/execution.md
   - ./docs/modules/ability-builder/ability-types/minion.md
   - ./docs/modules/ability-builder/ability-types/phase.md
@@ -35,9 +35,9 @@ file_order:
   - ./docs/modules/ability-builder/validations.md
   - ./docs/modules/ability-builder/leveling.md
   - ./docs/modules/ability-builder/enactments/negation.md
-  - ./docs/modules/skill-trees.md
-  - ./docs/modules/world/culture.md
-  - ./docs/modules/world/world.md
-  - ./docs/modules/magic-system/curses.md
-  - ./docs/modules/magic-system/imbuing.md
-  - ./docs/modules/magic-system/magic-system.md
+#  - ./docs/modules/skill-trees.md
+#  - ./docs/modules/world/culture.md
+#  - ./docs/modules/world/world.md
+#  - ./docs/modules/magic-system/curses.md
+#  - ./docs/modules/magic-system/imbuing.md
+#  - ./docs/modules/magic-system/magic-system.md
