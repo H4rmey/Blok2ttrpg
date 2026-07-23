@@ -33,11 +33,12 @@ Then there is the **Energy Cost**. This cost is used to use your ability. Someti
 
 So an **Ability** is made up from Enactments. Each of these Enactments describe what they do. The order in which you execute the Enactment is a bit odd compared to other systems. The order goes as follows:
 
-1.  Resolve the **Enactment** → Check what the will be if the **Validation** succeeds.
-2.  Resolve the **Interaction** → Which targets are going to be affected by this **Enactment.**
-3.  Resolve the **Validation** → Are the targets going to be affected by this **Enactment.**
+1.  Resolve the **Interaction** → Which targets are going to be affected by this **Enactment.**
+2.  Resolve the **Validation** → Are the targets going to be affected by this **Enactment.**
+3.  Resolve the **Enactment** → Check what the will be if the **Validation** succeeds.
+   
 
-Let's say you want to hit someone with a ice fist. You first roll your damage 1d8 for example. This is the damage you are going to deal if you hit. Then you check, who are you going to hit, you choose the person right in front of you. Then you check if you are going to hit. So you make a **Enagement Roll** and the Target makes a **Counter Roll** of their choice.
+Let's say you want to hit someone with a an **Damage Enactment**. You first check, who am i going to target. You first make your **Enactment Roll**. You then make each of your **Targets** make a **Counter Roll**. Those who fail the **Counter Roll** get damaged by the **Enactment**. 
 
 ## Additional Enactments
 
