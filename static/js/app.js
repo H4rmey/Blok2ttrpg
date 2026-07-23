@@ -229,34 +229,74 @@ function dispatchChange(el) {
 // brand-new ability keeps updating the same record on subsequent saves.
 // Autosave is skipped until the ability has a name (the server enforces this
 // too, returning 204 No Content).
+//
+// Two things prevent the "save creates a duplicate" bug:
+//   1. We assign a stable ability id on the client at load time, so every
+//      request (autosave AND the manual Save submit) carries the same id from
+//      the very first keystroke. Even if Save fires before an autosave response
+//      returns, the server updates the one record instead of appending a new
+//      one.
+//   2. Autosaves are serialized: only one request is in flight at a time, so
+//      two concurrent autosaves can never both create a record.
 // ---------------------------------------------------------------------------
 (function () {
   var timer = null;
+  var inFlight = false;
+  var pending = false;
+
+  // Give a brand-new ability a stable id up front. Editing an existing ability
+  // already has its server id in the hidden field, so we only fill it if empty.
+  (function ensureAbilityID() {
+    var idInput = document.getElementById("ability-id");
+    if (idInput && !idInput.value) {
+      idInput.value = "ability-" + Date.now() + "-" + Math.floor(Math.random() * 1e9);
+    }
+  })();
+
   function scheduleAutosave() {
+    var nameInput = document.getElementById("ability-name");
+    if (nameInput && nameInput.value.trim().length === 0) return;
+    if (!document.getElementById("ability-form")) return;
+    clearTimeout(timer);
+    timer = setTimeout(runAutosave, 600);
+  }
+
+  function runAutosave() {
     var form = document.getElementById("ability-form");
     if (!form) return;
     var nameInput = document.getElementById("ability-name");
     if (nameInput && nameInput.value.trim().length === 0) return;
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-      var data = new FormData(form);
-      var body = new URLSearchParams(data).toString();
-      fetch("/builder/autosave", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body,
+    if (inFlight) {
+      // A save is already running; run once more when it returns so the latest
+      // form state is still persisted.
+      pending = true;
+      return;
+    }
+    inFlight = true;
+    var data = new FormData(form);
+    var body = new URLSearchParams(data).toString();
+    fetch("/builder/autosave", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body,
+    })
+      .then(function (r) {
+        if (r.status === 204) return null;
+        var hid = r.headers.get("X-Ability-ID");
+        if (hid) {
+          var idInput = document.getElementById("ability-id");
+          if (idInput) idInput.value = hid;
+        }
+        return null;
       })
-        .then(function (r) {
-          if (r.status === 204) return null;
-          var hid = r.headers.get("X-Ability-ID");
-          if (hid) {
-            var idInput = document.getElementById("ability-id");
-            if (idInput) idInput.value = hid;
-          }
-          return null;
-        })
-        .catch(function () { /* ignore transient autosave errors */ });
-    }, 600);
+      .catch(function () { /* ignore transient autosave errors */ })
+      .then(function () {
+        inFlight = false;
+        if (pending) {
+          pending = false;
+          runAutosave();
+        }
+      });
   }
 
   document.addEventListener("change", function (e) {

@@ -41,37 +41,30 @@
     },
     "abilities": [
       {
-        "id": "ability-1784809354528817800",
-        "name": "a",
-        "type": "reaction",
+        "id": "ability-1784833740904-22268492",
+        "name": "ffadgf",
+        "type": "execution",
         "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
           "item_dep": false,
-          "item_name": "",
-          "range": 1,
-          "trigger": "",
-          "trigger_trait": "",
-          "uses": 1
+          "item_name": ""
         },
         "enactments": [
           {
-            "type": "damage",
+            "type": "negation",
             "fields": {
               "always": false,
+              "counter_negation": false,
               "flat": 0,
+              "full_counter": false,
               "offense": "",
               "other": "",
               "source": "",
               "source_trait": ""
             },
-            "interaction": "area_of_effect",
+            "interaction": "self",
             "interaction_data": {
-              "duration": 2,
-              "immune": false,
-              "origin_mode": "engager",
-              "origin_text": "",
-              "radius": 1,
-              "range": 0,
-              "timing": "Start of Target Turn",
               "use_previous": false
             },
             "validation_data": {
@@ -80,7 +73,7 @@
                   "value": "defense.Reflex"
                 },
                 {
-                  "value": "defense.Reflex"
+                  "value": "defense.Constitution"
                 }
               ],
               "engage_die": "d6",

@@ -169,6 +169,10 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 // never validated here; over-budget abilities are allowed by design.
 func (a *App) saveAbility(w http.ResponseWriter, r *http.Request, c *model.Character, existingID string) {
 	_ = r.ParseForm()
+	if existingID == "" {
+		existingID = r.FormValue("ability_id")
+	}
+	_ = r.ParseForm()
 	ab := model.Ability{
 		ID:          existingID,
 		Name:        r.FormValue("name"),
