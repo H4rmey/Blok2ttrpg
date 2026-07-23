@@ -54,17 +54,6 @@ proficiencies:
       hp: 24
       movement: 7
       energy: 20
-  - id: banana
-    name: "banana"
-    cost: 1
-    dice:
-      general: "+3"
-      offense: "+3"
-      defense: "+3"
-    vitals:
-      hp: 26
-      movement: 12
-      energy: 70
   - id: legendary
     name: "Legendary"
     cost: 0

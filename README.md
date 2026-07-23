@@ -162,6 +162,6 @@ docs/                   hand-written system documentation
 ## A note on authorship
 
 The system documentation is written by hand. The application code is largely
-AI-assisted - I would rather spend my limited free time on the rules and my
+AI-assisted - I would rather spend my limited free time on my
 friends and family than hand-writing all the tooling - but it is heavily steered
 and managed by me.
