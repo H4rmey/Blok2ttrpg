@@ -7,10 +7,15 @@ import (
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
 
-// Cost is the running total of build points and energy for something.
+// Cost is the running total of build points, energy and actions for something.
 type Cost struct {
 	Build  int `json:"build"`
 	Energy int `json:"energy"`
+	// Action is the number of actions it takes to use the ability. It is only
+	// meaningful for ability types that actually cost actions (base_action > 0);
+	// reactions and similar zero-action types leave this at 0. When set it is
+	// clamped to a minimum of 1 action.
+	Action int `json:"action"`
 }
 
 func (c *Cost) plus(x config.Cost) {
@@ -280,7 +285,20 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 		c := ComponentCost(cfg, at, a.Fields)
 		total.Build += c.Build
 		total.Energy += c.Energy
+		// Action count is only meaningful for ability types that actually cost
+		// actions to use (base_action > 0). Reactions and similar zero-action
+		// types leave Action at 0 so the builder can hide the badge. The
+		// "action_steps" perk field (if present) adjusts the count relative to
+		// the base, and the result is clamped to a minimum of 1 action.
+		if at.BaseAction > 0 {
+			action := at.BaseAction + asInt(a.Fields["action_steps"])
+			if action < 1 {
+				action = 1
+			}
+			total.Action = action
+		}
 	}
+
 	// Track the first *present* enactment rather than relying on slice index.
 	// Enactments can be removed and re-added in the builder, so the first slot
 	// is not guaranteed to hold the first real enactment. The additional-

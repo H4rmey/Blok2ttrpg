@@ -146,6 +146,21 @@ ability_types:
           decrease:
             build_cost: -4
             energy_cost: 0
+      - key: action_steps
+        label: "Action +/-"
+        type: free_number
+        default: 0
+        min: -1
+        max: 1
+        step: 1
+        per_step:
+          increase:
+            build_cost: -2
+            energy_cost: 0
+          decrease:
+            build_cost: 4
+            energy_cost: 1
+
       - key: all_req
         label: "All knockout requirements have to be met"
         type: checkbox
@@ -304,7 +319,7 @@ ability_types:
 
   concentration:
     name: "Concentration"
-    description: "An effect that persists over multiple rounds as long as the Engager maintains focus."
+    description: "An effect that persists over multiple rounds as long as the Engager maintains focus. It costs Actions and Energy to initiate, then re-triggers its Enactments every round at the chosen point in the turn as long as the upkeep is paid."
     base_energy: 3
     base_action: 2
     base_upkeep_action: 1
@@ -322,6 +337,15 @@ ability_types:
         type: free_text
         visibility_when: item_dep
         show_when: "true"
+      - key: trigger_timing
+
+        label: "Re-trigger Timing"
+        type: dropdown
+        options_source: concentration_timings
+      - key: upkeep_cost
+        label: "Upkeep Cost"
+        type: dropdown
+        options_source: concentration_upkeep
       - key: energy_steps
         label: "Energy +/-"
         type: free_number
@@ -336,7 +360,22 @@ ability_types:
           decrease:
             build_cost: 3
             energy_cost: -1
+      - key: action_steps
+        label: "Action +/-"
+        type: free_number
+        default: 0
+        min: -1
+        max: 1
+        step: 1
+        per_step:
+          increase:
+            build_cost: -2
+            energy_cost: 0
+          decrease:
+            build_cost: 4
+            energy_cost: 1
       - key: effortless
+
         label: "Effortless (upkeep is free)"
         type: checkbox
         cost:

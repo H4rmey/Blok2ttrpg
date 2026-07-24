@@ -218,6 +218,9 @@ textarea { min-height: 5rem; resize: vertical; }
 .cost-card-value.over { color: var(--danger); }
 .cost-card-value.build { color: var(--accent); }
 .cost-card-value.energy { color: var(--cyan); }
+.cost-card-value.action { color: var(--warn); }
+
+
 .vital-editable { display: inline-flex; align-items: baseline; gap: 0.15rem; }
 .vital-editable .vital-current {
   width: 3ch;

@@ -10,6 +10,13 @@
   <span class="cost-card-label">Build Cost</span>
   <span class="cost-card-value build" id="cost-build">{{ .Cost.Build }}</span>
 </div>
+{{ if gt .Cost.Action 0 }}
+<div class="cost-card">
+  <span class="cost-card-label">Actions to Use</span>
+  <span class="cost-card-value action" id="cost-action">{{ .Cost.Action }}</span>
+</div>
+{{ end }}
+
 <div class="cost-card">
   <span class="cost-card-label">Total Energy Cost</span>
   <span class="cost-card-value energy" id="cost-energy">{{ .Cost.Energy }}</span>

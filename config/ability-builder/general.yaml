@@ -164,7 +164,17 @@ option_sources:
   aoe_trigger_timings:
     - Start of Target Turn
     - End of Engager Turn
+  # When a Concentration ability re-triggers its Enactments each round.
+  concentration_timings:
+    - Start of Engager Turn
+    - End of Engager Turn
+  # How the per-round upkeep of a Concentration ability is paid.
+  concentration_upkeep:
+    - 1 Action or 1 Energy
+    - 1 Action
+    - 1 Energy
 dice:
+
   damage:
     - "d4"
     - "d6"
