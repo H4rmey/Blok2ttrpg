@@ -16,7 +16,7 @@ So yes, i used AI for the coding part. Yes, i am a programmer by trade. So also 
 Oh right, i also never playtested this, so there is that.
 
 uuuuh, anything else?
-i'm probably still missing a brunch of mechanics
+i'm probably still missing a bunch of mechanics
 
 ## subpages
 
@@ -24,44 +24,28 @@ The subpages are modules that can be used int he Blok2ttrpg. The following Modul
 
 *   Character Creation (core)
 *   Ability Builder
-*   Leveling
+*   Lore (WIP)
 
 ## Planned Modules:
 
-### character presets (races/classes)
+### Character Presets (races/classes)
 
-basically preset values that are usable by users to have a quick start. mimicing races/classes.
+Basically preset traits that are usable by users to have a quick start. maybe even adding specific level up charts for thoses classes/races. Also maybe make it so there are abilities you get by selecting a specific race/class. But i never want to make abilities be tied to anything, anyone should be able to cast a fireball, that should not be a Wizard exclusive ability. 
 
-### **Predefined Ability Templates**
+### Predefined Abilities
 
-things like templates for a bomb or an area of effect. These templates do not have any flavour but are described
+A list of abilities that can be used by any character. These will costs ability points and are created using the ability creator, so they can also be upgraded. But i think i will also add abilities at different levels/tiers. So fireball level 1 just deals damage, level 2 will also apply burn effect and level 3 will explode after hitting for example.
 
-### **Skill Trees**
+### Items list
 
-like in most videogames, abilities that are predefined and stuff
+Same as predifined abilities, but they can not be upgraded. They might even have different rules from the specific ability creator. These will have a huge reduction on the energy cost and also do not need ability points to obtain.
 
-### **Items list**
+### MOAR ENACTMENTS
 
-kind of like ability templates but for tools, idk yet
+The current list of enactments is great but it's missing a ton of features, currently i have the following enactments planned: 
+*   Enact Teleportation
+*   Enact Message
+*   Enact Illusion
 
-### **Predefined Abilities with skill trees**
+Luckely the configuration is flexible enough that adding these should not be so hard.
 
-some abilities can not be created with the current ability builder, because some abilities are to vague and have no hard rules or include a concept that cannot be worked upon. These are abilities like Message and read minds or stuff like that. So i want to create Abilities that have their effect predefined but can still be modified a bit.
-
-So like message would be like:
-
-you cast a message into someones mind
-
-default rules would be:
-
-*   no reply possible
-*   only use 6 words
-*   only withing 10m
-
-and perks would be:
-
-*   double the word count
-*   reply is possible
-*   range increased
-
-This kinda ties in with skill trees i think, but idk yet
