@@ -225,6 +225,12 @@ type Field struct {
 	Options       []Option `yaml:"options,omitempty" json:"options,omitempty"`
 	OptionsSource string   `yaml:"options_source,omitempty" json:"options_source,omitempty"`
 
+	// ShiftKey, on a state_select field, names the sibling field that holds
+	// the per-state shift amount for general states. Defaults to
+	// "shift_amount" when unset. The general state's shift_cost is multiplied
+	// by the absolute shift value read from that sibling field.
+	ShiftKey string `yaml:"shift_key,omitempty" json:"shift_key,omitempty"`
+
 	// solutions/states: a repeatable set of rows built from RowFields. PerItem
 	// is the cost delta per row relative to DefaultCount.
 	RowFields    []Field  `yaml:"row_fields,omitempty" json:"row_fields,omitempty"`

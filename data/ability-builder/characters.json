@@ -52,16 +52,19 @@
         },
         "enactments": [
           {
-            "type": "negation",
+            "type": "state",
             "fields": {
-              "always": false,
-              "counter_negation": false,
-              "flat": 0,
-              "full_counter": false,
-              "offense": "",
-              "other": "",
-              "source": "",
-              "source_trait": ""
+              "duration": "unlimited",
+              "shift_amount": -6,
+              "solution": [
+                {
+                  "value": "offense.Power"
+                },
+                {
+                  "value": "offense.Mind"
+                }
+              ],
+              "state": "general.frightened"
             },
             "interaction": "self",
             "interaction_data": {

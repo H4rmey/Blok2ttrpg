@@ -52,12 +52,13 @@ func (c *Config) Validate() error {
 }
 
 var validFieldTypes = map[string]bool{
-	"checkbox":    true,
-	"dropdown":    true,
-	"free_text":   true,
-	"free_number": true,
-	"solutions":   true,
-	"states":      true,
+	"checkbox":     true,
+	"dropdown":     true,
+	"free_text":    true,
+	"free_number":  true,
+	"solutions":    true,
+	"states":       true,
+	"state_select": true,
 }
 
 func validateFields(scope string, fields []Field) error {

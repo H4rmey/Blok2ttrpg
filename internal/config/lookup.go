@@ -40,8 +40,50 @@ func (c *Config) ComponentByKind(kind, id string) (Component, bool) {
 	}
 }
 
+// GeneralStateByID returns the general state with the given id.
+func (c *Config) GeneralStateByID(id string) (GeneralState, bool) {
+	for _, s := range c.GeneralStates {
+		if s.ID == id {
+			return s, true
+		}
+	}
+	return GeneralState{}, false
+}
+
+// SpecificStateByID returns the specific state with the given id.
+func (c *Config) SpecificStateByID(id string) (SpecificState, bool) {
+	for _, s := range c.SpecificStates {
+		if s.ID == id {
+			return s, true
+		}
+	}
+	return SpecificState{}, false
+}
+
+// ShiftOptionsFor returns the discrete non-zero shift values a general state
+// may take, from its configured min_shift..max_shift range. Zero is skipped
+// because applying a state with no shift is meaningless.
+func (c *Config) ShiftOptionsFor(generalID string) []int {
+	s, ok := c.GeneralStateByID(generalID)
+	if !ok {
+		return nil
+	}
+	min, max := s.MinShift, s.MaxShift
+	if min == 0 && max == 0 {
+		min, max = -6, 6
+	}
+	var out []int
+	for v := min; v <= max; v++ {
+		if v != 0 {
+			out = append(out, v)
+		}
+	}
+	return out
+}
+
 // Proficiency returns the proficiency tier with the given id.
 func (c *Config) Proficiency(id string) (Proficiency, bool) {
+
 	for _, p := range c.Proficiencies {
 		if p.ID == id {
 			return p, true
@@ -88,8 +130,29 @@ type OptionGroup struct {
 // large dropdown stays readable; every other source becomes one unlabelled
 // group.
 func (c *Config) ResolveOptionGroups(f Field) []OptionGroup {
+	if f.OptionsSource == "states_all" {
+		var groups []OptionGroup
+		var gen []Option
+		for _, s := range c.GeneralStates {
+			gen = append(gen, Option{Value: "general." + s.ID, Label: s.Name})
+		}
+		if len(gen) > 0 {
+			groups = append(groups, OptionGroup{Label: "General", Options: gen})
+		}
+		var spec []Option
+		for _, s := range c.SpecificStates {
+			cost := &Cost{BuildCost: s.BuildCost, EnergyCost: s.EnergyCost}
+			spec = append(spec, Option{Value: "specific." + s.ID, Label: s.Name, Cost: cost})
+		}
+		if len(spec) > 0 {
+			groups = append(groups, OptionGroup{Label: "Specific", Options: spec})
+		}
+		return groups
+	}
+
 	if f.OptionsSource == "traits_all" {
 		var groups []OptionGroup
+
 		// Do not deduplicate across categories: a trait such as "Magic" or
 		// "Mind" legitimately exists in more than one category (e.g. offense
 		// and defense), and each category's entry must remain selectable. The

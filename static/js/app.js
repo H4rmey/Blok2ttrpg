@@ -169,6 +169,9 @@ function dispatchChange(el) {
         try {
           var v = JSON.parse(el.getAttribute("hx-vals"));
           v.index = String(i);
+          ["name", "shift_name"].forEach(function (k) {
+            if (typeof v[k] === "string") { v[k] = v[k].replace(/en\d+_/, "en" + i + "_"); }
+          });
           el.setAttribute("hx-vals", JSON.stringify(v));
         } catch (err) { /* leave as-is on parse error */ }
       });

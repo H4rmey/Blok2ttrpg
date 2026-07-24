@@ -96,9 +96,54 @@ func FieldsCost(cfg *config.Config, fields []config.Field, values map[string]any
 			total = addRowsCost(cfg, total, f, values[f.Key])
 		case "states":
 			total = addStatesCost(cfg, total, f, values[f.Key])
+		case "state_select":
+			total = addStateSelectCost(cfg, total, f, values)
 		}
 	}
 	return total
+}
+
+// addStateSelectCost handles a single-state selector field. The selected value
+// is namespaced "general.<id>" or "specific.<id>". A specific state adds its
+// fixed cost; a general state adds its per-shift cost times the absolute shift
+// amount read from the sibling field named by ShiftKey (default
+// "shift_amount"). Only one state can be applied, so there is no additional-
+// state surcharge here.
+func addStateSelectCost(cfg *config.Config, total Cost, f config.Field, values map[string]any) Cost {
+	val := asString(values[f.Key])
+	if val == "" || cfg == nil {
+		return total
+	}
+	kind, id := val, ""
+	if i := indexByteStr(val, '.'); i >= 0 {
+		kind, id = val[:i], val[i+1:]
+	}
+	switch kind {
+	case "specific":
+		if s, ok := cfg.SpecificStateByID(id); ok {
+			total.Build += s.BuildCost
+			total.Energy += s.EnergyCost
+		}
+	case "general":
+		if s, ok := cfg.GeneralStateByID(id); ok {
+			shiftKey := f.ShiftKey
+			if shiftKey == "" {
+				shiftKey = "shift_amount"
+			}
+			shift := abs(asInt(values[shiftKey]))
+			total.plusN(s.ShiftCost, shift)
+		}
+	}
+	return total
+}
+
+func indexByteStr(s string, b byte) int {
+	for i := 0; i < len(s); i++ {
+		if s[i] == b {
+			return i
+		}
+	}
+	return -1
 }
 
 func controllingDefault(fields []config.Field, key string) string {

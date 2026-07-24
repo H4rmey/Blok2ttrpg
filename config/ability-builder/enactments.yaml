@@ -431,19 +431,33 @@ enactments:
             label: "Start of Target Turn"
           - value: "End of Engager Turn"
             label: "End of Engager Turn"
+      # Solutions mirror the validation counter-trait selector (traits_all,
+      # same defaults and per-item costs) but are labelled "Solutions".
       - key: solution
         label: "Solutions"
         type: solutions
         default_count: 2
-        options_source: traits_general
+        options_source: traits_all
+        row_defaults:
+          - value: "defense.Reflex"
+          - value: "defense.Constitution"
         row_fields:
           - key: value
             label: "Solution"
             type: dropdown
-            options_source: traits_general
+            options_source: traits_all
+            group_offsets:
+              default_group: defense
+              offsets:
+                defense:
+                  build_cost: 0
+                offense:
+                  build_cost: 2
+                general:
+                  build_cost: 2
         per_item:
           increase:
-            build_cost: -1
+            build_cost: 0
             energy_cost: 0
           decrease:
             build_cost: 3
@@ -456,66 +470,79 @@ enactments:
       build_cost: 0
       energy_cost: 0
     fields:
-      - key: states
-        label: "States"
-        type: states
-        default_count: 1
-        row_fields:
-          - key: state_kind
-            label: "State Type"
-            type: dropdown
-            default: ""
-            options:
-              - value: specific
-                label: "Specific State"
-                cost:
-                  build_cost: 0
-                  energy_cost: 0
-              - value: general
-                label: "General State (shift)"
-                cost:
-                  build_cost: 0
-                  energy_cost: 0
-          - key: specific_state
-            label: "Specific State"
-            type: dropdown
-            options_source: states_specific
-            visibility_when: state_kind
-            show_when: specific
-          - key: general_state
-            label: "General State"
-            type: dropdown
-            options_source: states_general
-            visibility_when: state_kind
-            show_when: general
-          - key: shift_amount
-            label: "Shift Amount"
-            type: free_number
-            default: 1
-            step: 1
-            visibility_when: state_kind
-            show_when: general
-          # System 2: per-entry costs on state sub-fields. Each row can carry
-          # extra dropdowns/checkboxes whose selected entry has its own cost.
-          - key: intensity
-            label: "Intensity"
-            type: dropdown
-            default: ""
-            options:
-              - value: minor
-                label: "Minor"
-                cost:
-                  build_cost: 1
-              - value: severe
-                label: "Severe"
-                cost:
-                  build_cost: 4
-                  energy_cost: 2
-          - key: spreads
-            label: "Spreads to adjacent targets"
-            type: checkbox
+      # A single state is applied at a time. The one big dropdown groups every
+      # state into General and Specific (like traits_all). Selecting a general
+      # state reveals a per-state shift dropdown (its configured min..max range)
+      # via HTMX; the shift value is read from the sibling "shift_amount" field.
+      - key: state
+        label: "State"
+        type: state_select
+        options_source: states_all
+        shift_key: shift_amount
+      # The per-state shift dropdown is injected by /builder/state-shift only
+      # when a general state is chosen (so it is only visible then). Its value
+      # posts back under "shift_amount"; the cost engine reads it there. It is
+      # intentionally NOT a standalone field to avoid an always-visible dup.
+      - key: duration
+        label: "Duration (turns)"
+        type: dropdown
+        default: "1"
+        options:
+          - value: "1"
+            label: "1 turn"
+          - value: "2"
+            label: "2 turns"
+            cost:
+              build_cost: 1
+          - value: "3"
+            label: "3 turns"
+            cost:
+              build_cost: 2
+          - value: "4"
+            label: "4 turns"
             cost:
               build_cost: 3
-              energy_cost: 1
-
-
+          - value: "5"
+            label: "5 turns"
+            cost:
+              build_cost: 4
+          - value: "6"
+            label: "6 turns"
+            cost:
+              build_cost: 5
+          - value: "unlimited"
+            label: "Unlimited"
+            cost:
+              build_cost: 15
+              energy_cost: 5
+      # Solutions mirror the validation counter-trait selector (traits_all,
+      # same defaults and per-item costs) but are labelled "Solutions".
+      - key: solution
+        label: "Solutions"
+        type: solutions
+        default_count: 2
+        options_source: traits_all
+        row_defaults:
+          - value: "defense.Reflex"
+          - value: "defense.Constitution"
+        row_fields:
+          - key: value
+            label: "Solution"
+            type: dropdown
+            options_source: traits_all
+            group_offsets:
+              default_group: defense
+              offsets:
+                defense:
+                  build_cost: 0
+                offense:
+                  build_cost: 2
+                general:
+                  build_cost: 2
+        per_item:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 3
+            energy_cost: 1

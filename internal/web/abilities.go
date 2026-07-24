@@ -235,7 +235,21 @@ func readFieldValues(cfg *config.Config, fields []config.Field, prefix string, r
 			out[f.Key] = n
 		case "solutions", "states":
 			out[f.Key] = readRowValues(f, name, r)
+		case "state_select":
+			out[f.Key] = r.FormValue(name)
+			// The per-state shift dropdown is injected by HTMX only for general
+			// states, so it is not a standalone config field. Capture its posted
+			// value under the sibling shift key so the cost engine can read it.
+			shiftKey := f.ShiftKey
+			if shiftKey == "" {
+				shiftKey = "shift_amount"
+			}
+			if v := r.FormValue(prefix + shiftKey); v != "" {
+				n, _ := strconv.Atoi(v)
+				out[shiftKey] = n
+			}
 		case "dropdown":
+
 			val := r.FormValue(name)
 			out[f.Key] = val
 			// An inline_builder dropdown carries a nested component builder.
@@ -397,6 +411,61 @@ func (a *App) handleInlineFields(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+}
+
+// handleStateShift renders the shift-amount dropdown for a state_select field.
+// The selected state (posted under the field's own name, namespaced as
+// "general.<id>" or "specific.<id>") drives what is returned: for a general
+// state the field shows a dropdown of that state's configured non-zero shift
+// range; for a specific state (or none) nothing is rendered, so the shift row
+// disappears. The dropdown is named "<name>_shift" so it posts as the sibling
+// shift field the cost engine reads (ShiftKey defaults to "shift_amount", and
+// the field name is "<prefix>shift_amount").
+func (a *App) handleStateShift(w http.ResponseWriter, r *http.Request) {
+	_ = r.ParseForm()
+	name := r.URL.Query().Get("name")
+	shiftName := r.URL.Query().Get("shift_name")
+	value := r.FormValue(name)
+	if value == "" {
+		value = r.URL.Query().Get("value")
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if !strings.HasPrefix(value, "general.") {
+		// Specific state or none: no shift dropdown.
+		return
+	}
+	id := strings.TrimPrefix(value, "general.")
+	shifts := a.Cfg.ShiftOptionsFor(id)
+	if len(shifts) == 0 {
+		return
+	}
+	cost := ""
+	if s, ok := a.Cfg.GeneralStateByID(id); ok {
+		cost = costHintStr(&s.ShiftCost)
+	}
+	var buf bytes.Buffer
+	buf.WriteString(`<label>Shift Amount `)
+	if cost != "" {
+		buf.WriteString(`<span class="cost-hint">` + cost + ` / shift</span>`)
+	}
+	buf.WriteString(`</label>`)
+	buf.WriteString(`<select name="` + name2attr(shiftName) + `">`)
+	for _, n := range shifts {
+		sign := ""
+		if n > 0 {
+			sign = "+"
+		}
+		buf.WriteString(fmt.Sprintf(`<option value="%d">%s%d</option>`, n, sign, n))
+	}
+	buf.WriteString(`</select>`)
+	_, _ = buf.WriteTo(w)
+}
+
+// name2attr is a tiny guard that keeps a form-field name safe for direct
+// embedding in an HTML attribute. Builder field names are already limited to
+// [A-Za-z0-9_], so this only strips the double-quote character defensively.
+func name2attr(s string) string {
+	return strings.ReplaceAll(s, `"`, "")
 }
 
 // handleAbilityTypeFields renders the config-driven fields for the selected

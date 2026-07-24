@@ -46,6 +46,7 @@ func (a *App) Router() http.Handler {
 	mux.HandleFunc("/builder/enactment-fields", a.handleEnactmentFields)
 	mux.HandleFunc("/builder/interaction-fields", a.handleInteractionFields)
 	mux.HandleFunc("/builder/inline-fields", a.handleInlineFields)
+	mux.HandleFunc("/builder/state-shift", a.handleStateShift)
 
 	mux.HandleFunc("/builder/cost", a.handleBuilderCost)
 	mux.HandleFunc("/builder/autosave", a.handleBuilderAutosave)

@@ -67,6 +67,31 @@
   </select>
   {{ end }}
 
+  {{ else if eq $f.Type "state_select" }}
+  {{/* One big grouped dropdown of all states (General/Specific). Selecting a
+       general state loads its per-state shift dropdown into the sibling
+       container via HTMX. */}}
+  {{ $default := fvalStr $values $f.Key (str $f.Default) }}
+  {{ $shiftKey := $f.ShiftKey }}
+  {{ if eq $shiftKey "" }}{{ $shiftKey = "shift_amount" }}{{ end }}
+  {{ $shiftName := printf "%s%s" $prefix $shiftKey }}
+  <select name="{{ $name }}"
+          hx-get="/builder/state-shift"
+          hx-target="#{{ $name }}_shift"
+          hx-swap="innerHTML"
+          hx-vals='{"name": "{{ $name }}", "shift_name": "{{ $shiftName }}"}'
+          hx-trigger="change">
+    <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
+    {{ range $grp := resolveOptionGroups $cfg $f }}
+    {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
+    {{ range $grp.Options }}
+    <option value="{{ .Value }}" {{ if eq .Value $default }}selected{{ end }}>{{ if .Label }}{{ .Label }}{{ else }}{{ .Value }}{{ end }}{{ with costHint .Cost }} {{ . }}{{ end }}</option>
+    {{ end }}
+    {{ if $grp.Label }}</optgroup>{{ end }}
+    {{ end }}
+  </select>
+  <div class="state-shift" id="{{ $name }}_shift"></div>
+
   {{ else if or (eq $f.Type "solutions") (eq $f.Type "states") }}
 
   {{ $rows := resolveRows $f $values }}
