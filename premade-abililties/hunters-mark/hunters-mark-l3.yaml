@@ -1,0 +1,39 @@
+id: ability-hunters-mark-l3
+name: Hunter's Mark (Level 3)
+description: Mark a target so all effects against it are amplified.
+type: concentration
+fields:
+  item_dep: false
+  item_name: ''
+  trigger_timing: Start of Engager Turn
+  upkeep_cost: ''
+  energy_steps: 0
+  action_steps: 0
+  effortless: false
+  iron_will: false
+  dual_focus: false
+enactments:
+- type: state
+  fields:
+    state: marked
+    shift_amount: 0
+    duration: '3'
+    solution:
+    - value: defense.Reflex
+    - value: defense.Constitution
+  interaction: ranged
+  interactiondata:
+    range: 14
+    targets: 1
+    visible: false
+    obstructed: false
+    remove_penalty: false
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Reflex
+    - value: defense.Constitution
+    engage_die: d10
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Precision

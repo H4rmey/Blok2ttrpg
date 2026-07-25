@@ -1,0 +1,33 @@
+id: ability-fireball-l5
+name: Fireball (Level 5)
+description: A roaring explosion of flame that engulfs an area.
+type: execution
+fields:
+  item_dep: false
+  item_name: ''
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: damage
+  fields:
+    always: false
+    source: d12
+    source_trait: ''
+    other: ''
+    flat: 4
+    offense: offense.Magic
+  interaction: area
+  interactiondata:
+    radius: 5
+    range: 12
+    origin_mode: engager
+    origin_text: ''
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Reflex
+    - value: defense.Constitution
+    engage_die: d10
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Magic

@@ -1,0 +1,58 @@
+id: ability-ice-lance-l5
+name: Ice Lance (Level 5)
+description: A shard of ice that pierces a foe and chills them, slowing movement.
+type: execution
+fields:
+  item_dep: false
+  item_name: ''
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: damage
+  fields:
+    always: false
+    source: d12
+    source_trait: ''
+    other: ''
+    flat: 4
+    offense: offense.Magic
+  interaction: ranged
+  interactiondata:
+    range: 18
+    targets: 1
+    visible: false
+    obstructed: false
+    remove_penalty: false
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Reflex
+    - value: defense.Constitution
+    engage_die: d10
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Magic
+- type: state
+  fields:
+    state: slowed
+    shift_amount: 0
+    duration: '3'
+    solution:
+    - value: defense.Reflex
+    - value: defense.Constitution
+  interaction: ranged
+  interactiondata:
+    range: 18
+    targets: 1
+    visible: false
+    obstructed: false
+    remove_penalty: false
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Reflex
+    - value: defense.Constitution
+    engage_die: d10
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Magic

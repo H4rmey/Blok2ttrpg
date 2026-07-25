@@ -1,0 +1,34 @@
+id: ability-magic-missile-l1
+name: Magic Missile (Level 1)
+description: Darts of force that unerringly strike their targets.
+type: execution
+fields:
+  item_dep: false
+  item_name: ''
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: damage
+  fields:
+    always: true
+    source: d4
+    source_trait: ''
+    other: ''
+    flat: 0
+    offense: ''
+  interaction: ranged
+  interactiondata:
+    range: 10
+    targets: 1
+    visible: false
+    obstructed: false
+    remove_penalty: false
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Reflex
+    - value: defense.Constitution
+    engage_die: d10
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Magic

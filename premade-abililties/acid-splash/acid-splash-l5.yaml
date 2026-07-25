@@ -1,0 +1,34 @@
+id: ability-acid-splash-l5
+name: Acid Splash (Level 5)
+description: Throw a glob of corrosive acid at a target at range.
+type: execution
+fields:
+  item_dep: false
+  item_name: ''
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: damage
+  fields:
+    always: false
+    source: d12
+    source_trait: ''
+    other: ''
+    flat: 4
+    offense: offense.Magic
+  interaction: ranged
+  interactiondata:
+    range: 18
+    targets: 2
+    visible: false
+    obstructed: false
+    remove_penalty: false
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Reflex
+    - value: defense.Constitution
+    engage_die: d10
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Magic

@@ -1,0 +1,30 @@
+id: ability-divine-blessing-l4
+name: Divine Blessing (Level 4)
+description: Bless a creature, improving its next rolls.
+type: execution
+fields:
+  item_dep: false
+  item_name: ''
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: proficiency_shift
+  fields:
+    always: false
+    shifted_trait: offense.Precision
+    shift_dir: UP
+    shift_amount: 2
+    shift_uses: 4
+  interaction: direct
+  interactiondata:
+    range: 5
+    targets: 1
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Reflex
+    - value: defense.Constitution
+    engage_die: d10
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Magic
