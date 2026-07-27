@@ -145,6 +145,8 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 		a.renderCharacterPDF(w, c)
 	case "abilities":
 		a.handleAbilities(w, r, &c, parts[2:])
+	case "packages":
+		a.handlePackages(w, r, &c, parts[2:])
 	default:
 		http.NotFound(w, r)
 	}

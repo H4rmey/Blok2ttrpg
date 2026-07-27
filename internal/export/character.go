@@ -13,11 +13,12 @@ import (
 // intentionally mirrors the generic model so any config's attributes survive a
 // round trip without code changes.
 type CharacterYAML struct {
-	ID         string            `yaml:"id,omitempty"`
-	Level      int               `yaml:"level"`
-	Attributes map[string]any    `yaml:"attributes,omitempty"`
-	Traits     map[string]string `yaml:"traits,omitempty"`
-	Abilities  []model.Ability   `yaml:"abilities,omitempty"`
+	ID         string                   `yaml:"id,omitempty"`
+	Level      int                      `yaml:"level"`
+	Attributes map[string]any           `yaml:"attributes,omitempty"`
+	Traits     map[string]string        `yaml:"traits,omitempty"`
+	Abilities  []model.Ability          `yaml:"abilities,omitempty"`
+	Packages   []model.InstalledPackage `yaml:"packages,omitempty"`
 }
 
 // MarshalCharacter serializes a character to YAML bytes.
@@ -28,6 +29,7 @@ func MarshalCharacter(c model.Character) ([]byte, error) {
 		Attributes: c.Attributes,
 		Traits:     c.Traits,
 		Abilities:  c.Abilities,
+		Packages:   c.Packages,
 	}
 	return yaml.Marshal(out)
 }
@@ -45,6 +47,7 @@ func UnmarshalCharacter(data []byte) (model.Character, error) {
 		Attributes: in.Attributes,
 		Traits:     in.Traits,
 		Abilities:  in.Abilities,
+		Packages:   in.Packages,
 	}
 	if c.Level < 1 {
 		c.Level = 1

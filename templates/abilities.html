@@ -4,12 +4,23 @@
   <h1>{{ $c.Name }} &mdash; Abilities</h1>
   <div class="toolbar">
     <a class="btn primary" href="/characters/{{ $c.ID }}/abilities/new">+ New Ability</a>
-    <button class="btn" type="button" onclick="document.getElementById('ability-import-input').click()">Import</button>
-    <form id="ability-import-form" action="/characters/{{ $c.ID }}/abilities/import" method="post" enctype="multipart/form-data" hidden>
+    <button class="btn" type="button"
+            hx-get="/abilities/library?character={{ $c.ID }}"
+            hx-target="#ability-modal-body" hx-swap="innerHTML"
+            onclick="openAbilityModal()">Import</button>
+    <button class="btn" type="button"
+            onclick="document.getElementById('ability-import-input').click()">Import Custom</button>
+    <form id="ability-import-form" action="/characters/{{ $c.ID }}/abilities/import-custom" method="post" enctype="multipart/form-data" hidden>
       <input id="ability-import-input" type="file" name="file" accept=".yaml,.yml" onchange="this.form.submit()">
     </form>
   </div>
 </div>
+
+<div id="ability-modal" class="modal" hidden>
+  <div class="modal-backdrop" onclick="closeAbilityModal()"></div>
+  <div class="modal-content" id="ability-modal-body"></div>
+</div>
+
 
 
 {{ if $c.Abilities }}

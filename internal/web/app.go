@@ -8,23 +8,26 @@ import (
 	"path/filepath"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
+	"github.com/harmey/blok2ttrpg-v5/internal/premade"
 	"github.com/harmey/blok2ttrpg-v5/internal/store"
 )
 
 // App holds the shared dependencies for all handlers.
 type App struct {
-	Cfg   *config.Loaded
-	Store *store.Store
-	Tmpl  *template.Template
+	Cfg     *config.Loaded
+	Store   *store.Store
+	Tmpl    *template.Template
+	Library *premade.Library
 }
 
-// NewApp parses templates and returns a ready App.
-func NewApp(cfg *config.Loaded, st *store.Store, templateDir string) (*App, error) {
+// NewApp parses templates and returns a ready App. libraryRoot points at the
+// built-in content library (packages and abilities) that ships with the app.
+func NewApp(cfg *config.Loaded, st *store.Store, templateDir, libraryRoot string) (*App, error) {
 	tmpl, err := template.New("").Funcs(funcMap()).ParseGlob(filepath.Join(templateDir, "*.html"))
 	if err != nil {
 		return nil, err
 	}
-	return &App{Cfg: cfg, Store: st, Tmpl: tmpl}, nil
+	return &App{Cfg: cfg, Store: st, Tmpl: tmpl, Library: premade.New(libraryRoot)}, nil
 }
 
 // Router builds the HTTP mux for the app.
@@ -52,6 +55,10 @@ func (a *App) Router() http.Handler {
 	mux.HandleFunc("/builder/autosave", a.handleBuilderAutosave)
 
 	mux.HandleFunc("/builder/ability-type-fields", a.handleAbilityTypeFields)
+
+	// Package and ability library browsers (built-in content).
+	mux.HandleFunc("/packages/library", a.handlePackageLibrary)
+	mux.HandleFunc("/abilities/library", a.handleAbilityLibrary)
 
 	// Docs.
 	mux.HandleFunc("/docs", a.handleDocs)

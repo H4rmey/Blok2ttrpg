@@ -69,4 +69,57 @@
     <a class="btn" href="/">Cancel</a>
   </div>
 </form>
+
+{{ if $c.ID }}
+<section class="packages">
+  <h2>Packages</h2>
+  <p class="muted">Packages bundle proficiency shifts and abilities. Removing a
+    package undoes exactly what it added.</p>
+
+  <div class="toolbar">
+    <button class="btn primary" type="button"
+            hx-get="/packages/library?character={{ $c.ID }}"
+            hx-target="#package-modal-body" hx-swap="innerHTML"
+            onclick="openPackageModal()">Import Package</button>
+    <button class="btn" type="button"
+            onclick="document.getElementById('package-import-input').click()">Import Custom Package</button>
+    <form id="package-import-form" action="/characters/{{ $c.ID }}/packages/import-custom"
+          method="post" enctype="multipart/form-data" hidden>
+      <input id="package-import-input" type="file" name="file" accept=".yaml,.yml"
+             onchange="this.form.submit()">
+    </form>
+  </div>
+
+  <h3>Imported Packages</h3>
+  {{ if $c.Packages }}
+  <ul class="installed-packages">
+    {{ range $c.Packages }}
+    <li class="installed-package">
+      <div class="installed-package-info">
+        <span class="pkg-name">{{ .Name }}</span>
+        {{ if .Shifts }}
+        <div class="pkg-shifts">
+          {{ range $trait, $delta := .Shifts }}
+          <span class="pkg-shift">{{ $trait }} {{ printf "%+d" $delta }}</span>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+      <button class="btn danger" type="button"
+              hx-delete="/characters/{{ $c.ID }}/packages/{{ .ID }}"
+              hx-confirm="Remove this package and everything it added?">X</button>
+    </li>
+    {{ end }}
+  </ul>
+
+  {{ else }}
+  <p class="muted">No packages imported yet.</p>
+  {{ end }}
+</section>
+
+<div id="package-modal" class="modal" hidden>
+  <div class="modal-backdrop" onclick="closePackageModal()"></div>
+  <div class="modal-content" id="package-modal-body"></div>
+</div>
+{{ end }}
 {{ template "foot" . }}

@@ -1,3 +1,28 @@
+// ---------------------------------------------------------------------------
+// Package import modal. The Import Package button loads the built-in package
+// browser into the modal body via HTMX; these helpers just toggle visibility.
+// ---------------------------------------------------------------------------
+function openPackageModal() {
+  var modal = document.getElementById("package-modal");
+  if (modal) modal.hidden = false;
+}
+function closePackageModal() {
+  var modal = document.getElementById("package-modal");
+  if (modal) modal.hidden = true;
+}
+
+// Ability import modal. The Import button loads the built-in ability browser
+// into the modal body via HTMX; these helpers just toggle visibility.
+function openAbilityModal() {
+  var modal = document.getElementById("ability-modal");
+  if (modal) modal.hidden = false;
+}
+function closeAbilityModal() {
+  var modal = document.getElementById("ability-modal");
+  if (modal) modal.hidden = true;
+}
+
+
 // Theme toggle with persistence.
 (function () {
   var KEY = "blok2-theme";

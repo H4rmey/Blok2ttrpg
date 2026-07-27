@@ -35,8 +35,14 @@ func (a *App) handleAbilities(w http.ResponseWriter, r *http.Request, c *model.C
 		return
 	}
 
-	// /abilities/import -> import an ability from an uploaded YAML file
+	// /abilities/import        -> import a built-in ability by library id
 	if rest[0] == "import" {
+		a.importBuiltinAbility(w, r, c)
+		return
+	}
+
+	// /abilities/import-custom -> import an ability from an uploaded YAML file
+	if rest[0] == "import-custom" {
 		a.importAbility(w, r, c)
 		return
 	}
@@ -113,6 +119,55 @@ func (a *App) importAbility(w http.ResponseWriter, r *http.Request, c *model.Cha
 	}
 	// Always assign a fresh id so an imported ability never collides with an
 	// existing one on the character.
+	ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
+	c.Abilities = append(c.Abilities, ab)
+	if err := a.Store.Save(*c); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/characters/"+c.ID+"/abilities", http.StatusSeeOther)
+}
+
+// abilityLibraryPage is the data envelope for the built-in ability browser.
+type abilityLibraryPage struct {
+	CharacterID string
+	Abilities   []model.Ability
+}
+
+// handleAbilityLibrary renders the built-in ability browser. It expects a
+// "character" query parameter so the import buttons post to the right route.
+func (a *App) handleAbilityLibrary(w http.ResponseWriter, r *http.Request) {
+	charID := r.URL.Query().Get("character")
+	abs, err := a.Library.ListAbilities()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	data := abilityLibraryPage{CharacterID: charID, Abilities: abs}
+	if err := a.Tmpl.ExecuteTemplate(w, "ability_library", data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+// importBuiltinAbility copies a built-in ability (by library id) onto the
+// character with a fresh id and redirects back to the ability list.
+func (a *App) importBuiltinAbility(w http.ResponseWriter, r *http.Request, c *model.Character) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	_ = r.ParseForm()
+	id := r.FormValue("ability_id")
+	if id == "" {
+		http.Error(w, "missing ability id", http.StatusBadRequest)
+		return
+	}
+	ab, err := a.Library.GetAbility(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
 	c.Abilities = append(c.Abilities, ab)
 	if err := a.Store.Save(*c); err != nil {

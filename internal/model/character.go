@@ -16,6 +16,21 @@ type Character struct {
 	Traits map[string]string `json:"traits"`
 
 	Abilities []Ability `json:"abilities"`
+
+	// Packages lists the currently installed content packages. Each records
+	// exactly what it applied (proficiency shifts) so removal is precise and
+	// reversible even when multiple packages stack shifts on the same trait.
+	Packages []InstalledPackage `json:"packages,omitempty"`
+}
+
+// InstalledPackage is the record of a package imported onto a character. It is
+// the source of truth for undoing a package: Shifts holds the proficiency
+// deltas that were applied, and abilities added by the package carry a matching
+// PackageID so they can be removed together.
+type InstalledPackage struct {
+	ID     string         `json:"id"`
+	Name   string         `json:"name"`
+	Shifts map[string]int `json:"shifts,omitempty"`
 }
 
 // Name returns a display name, falling back to the id.
@@ -55,6 +70,12 @@ type Ability struct {
 	Fields map[string]any `json:"fields,omitempty"`
 
 	Enactments []Enactment `json:"enactments,omitempty"`
+
+	// PackageID, when set, records the package this ability was imported from.
+	// It is used only for package removal: deleting a package removes every
+	// ability tagged with its id. Editing the ability never touches the
+	// package definition, so the tag stays purely for ownership tracking.
+	PackageID string `json:"package_id,omitempty"`
 }
 
 // Enactment is one effect attached to an ability. Type is an enactment

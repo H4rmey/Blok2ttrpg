@@ -20,6 +20,7 @@ func main() {
 	configPath := flag.String("config", "config/ability-builder", "path to ruleset config directory or file")
 
 	templateDir := flag.String("templates", "templates", "path to HTML templates")
+	libraryDir := flag.String("library", "library", "path to the built-in content library (packages and abilities)")
 	flag.Parse()
 
 	port := "8080"
@@ -41,7 +42,7 @@ func main() {
 		log.Fatalf("opening store: %v", err)
 	}
 
-	app, err := web.NewApp(loaded, st, *templateDir)
+	app, err := web.NewApp(loaded, st, *templateDir, *libraryDir)
 	if err != nil {
 		log.Fatalf("initializing app: %v", err)
 	}

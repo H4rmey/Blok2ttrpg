@@ -1,0 +1,29 @@
+{{ define "ability_library" }}
+<div class="pkg-library">
+  <div class="pkg-library-head">
+    <h2>Ability Library</h2>
+    <button class="btn" type="button" onclick="closeAbilityModal()">Close</button>
+  </div>
+
+  {{ if .Abilities }}
+  <ul class="pkg-list">
+    {{ $charID := .CharacterID }}
+    {{ range .Abilities }}
+    <li class="pkg-card">
+      <div class="pkg-card-head">
+        <strong>{{ .Name }}</strong>
+        <form action="/characters/{{ $charID }}/abilities/import" method="post">
+          <input type="hidden" name="ability_id" value="{{ .ID }}">
+          <button class="btn primary" type="submit">Import</button>
+        </form>
+      </div>
+      <p class="muted">{{ .Type }} &middot; {{ len .Enactments }} enactment(s)</p>
+      {{ if .Description }}<p class="muted">{{ .Description }}</p>{{ end }}
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <p class="muted">No built-in abilities are available.</p>
+  {{ end }}
+</div>
+{{ end }}

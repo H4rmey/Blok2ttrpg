@@ -1,0 +1,13 @@
+id: elementalist
+name: Elementalist
+description: Master of many elements, blending fire, ice, and lightning into a
+  versatile arcane arsenal.
+shifts:
+  offense.Magic: +3
+  general.Magic: +1
+  defense.Reflex: +1
+imports:
+  - fireball
+  - ice-lance
+  - thunder-chain-prison
+  - acid-splash

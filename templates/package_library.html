@@ -1,0 +1,44 @@
+{{ define "package_library" }}
+<div class="pkg-library">
+  <div class="pkg-library-head">
+    <h2>Package Library</h2>
+    <button class="btn" type="button" onclick="closePackageModal()">Close</button>
+  </div>
+
+  {{ if .Packages }}
+  <ul class="pkg-list">
+    {{ $charID := .CharacterID }}
+    {{ range .Packages }}
+    <li class="pkg-card">
+      <div class="pkg-card-head">
+        <strong>{{ .Name }}</strong>
+        <form action="/characters/{{ $charID }}/packages/import" method="post">
+          <input type="hidden" name="package_id" value="{{ .ID }}">
+          <button class="btn primary" type="submit">Import</button>
+        </form>
+      </div>
+      {{ if .Description }}<p class="muted">{{ .Description }}</p>{{ end }}
+      {{ if .Shifts }}
+      <div class="pkg-shifts">
+        <span class="pkg-label">Proficiency shifts:</span>
+        {{ range $trait, $delta := .Shifts }}
+        <span class="pkg-shift">{{ $trait }} {{ printf "%+d" $delta }}</span>
+        {{ end }}
+      </div>
+      {{ end }}
+      {{ if .Abilities }}
+      <div class="pkg-abilities">
+        <span class="pkg-label">Abilities:</span>
+        {{ range .Abilities }}
+        <span class="pkg-ability">{{ .Name }}</span>
+        {{ end }}
+      </div>
+      {{ end }}
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <p class="muted">No built-in packages are available.</p>
+  {{ end }}
+</div>
+{{ end }}

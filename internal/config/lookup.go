@@ -109,6 +109,39 @@ func (c *Config) DefaultProficiencyID() string {
 	return ""
 }
 
+// proficiencyIndex returns the position of a proficiency id within the ordered
+// ladder, or -1 when it is not found.
+func (c *Config) proficiencyIndex(id string) int {
+	for i, p := range c.Proficiencies {
+		if p.ID == id {
+			return i
+		}
+	}
+	return -1
+}
+
+// ShiftProficiency moves a proficiency id up or down the ordered ladder by
+// delta rungs and returns the resulting id. The result is clamped to the ends
+// of the ladder. An unknown current id is treated as the first (default) tier
+// so a shift still produces a sensible result.
+func (c *Config) ShiftProficiency(current string, delta int) string {
+	if len(c.Proficiencies) == 0 {
+		return current
+	}
+	idx := c.proficiencyIndex(current)
+	if idx < 0 {
+		idx = 0
+	}
+	idx += delta
+	if idx < 0 {
+		idx = 0
+	}
+	if idx > len(c.Proficiencies)-1 {
+		idx = len(c.Proficiencies) - 1
+	}
+	return c.Proficiencies[idx].ID
+}
+
 // ResolveOptions returns the concrete option list for a field, expanding an
 // options_source reference server-side when present.
 func (c *Config) ResolveOptions(f Field) []Option {
