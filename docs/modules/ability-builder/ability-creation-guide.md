@@ -49,6 +49,7 @@ Only use the other Ability Types when you specifically want special timing or be
 | Preparation | Spend actions now, trigger later |
 | Concentration | Keep doing thing every round |
 | Phase | Gain something now, pay for it later |
+| Passive | Always on, free to use, triggers whenever |
 | Minion | Create another dude |
 
 ---

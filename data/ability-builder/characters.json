@@ -43,17 +43,15 @@
       {
         "id": "ability-1784833740904-22268492",
         "name": "ffadgf",
-        "type": "concentration",
+        "type": "passive",
         "fields": {
-          "action_steps": -1,
-          "dual_focus": false,
-          "effortless": false,
           "energy_steps": 0,
-          "iron_will": false,
           "item_dep": false,
           "item_name": "",
-          "trigger_timing": "",
-          "upkeep_cost": ""
+          "range": 1,
+          "trigger": "A minion is summoned within range",
+          "trigger_trait": "",
+          "uses": 1
         },
         "enactments": [
           {

@@ -63,7 +63,7 @@ The list must be exhaustive: every `.md` file under `./docs/` must appear exactl
 
 ### `ability_types.yaml`
 
-Defines ability type display names, descriptions, base energy/action values, legacy cost settings, compatible enactments, and generic `fields` for Execution, Reaction, Phase, Minion, Preparation, and Concentration.
+Defines ability type display names, descriptions, base energy/action values, legacy cost settings, compatible enactments, and generic `fields` for Execution, Reaction, Phase, Minion, Preparation, Concentration, and Passive.
 
 Example:
 

@@ -100,6 +100,20 @@ ability_types:
           increase:
             build_cost: 4
             energy_cost: 1
+      - key: energy_steps
+        label: "Energy +/-"
+        type: free_number
+        default: 0
+        min: -2
+        max: 2
+        step: 1
+        per_step:
+          increase:
+            build_cost: -2
+            energy_cost: 1
+          decrease:
+            build_cost: 3
+            energy_cost: -1
 
   phase:
     name: "Phase"
@@ -393,3 +407,74 @@ ability_types:
         cost:
           build_cost: 5
           energy_cost: 0
+
+  passive:
+    name: "Passive"
+    description: "An always-on effect that costs no Energy or Actions to use and can trigger whenever its condition is met. In exchange for being free to use it carries a higher base build cost."
+    base_energy: 0
+    base_action: 0
+    base_range: 1
+    base_uses: 1
+    base_cost:
+      build_cost: 8
+    fields:
+
+      - key: item_dep
+        label: "Has Item Dependency"
+        type: checkbox
+        cost:
+          build_cost: -1
+          energy_cost: 0
+      - key: item_name
+        label: "Item Name"
+        type: free_text
+        visibility_when: item_dep
+        show_when: "true"
+      - key: trigger
+        label: "Trigger"
+        type: dropdown
+        # Per-trigger build costs come from the costed option source; no flat
+        # field cost so the selected trigger's own cost is not double-counted.
+        options_source: reaction_triggers
+      - key: trigger_trait
+        label: "Trigger Trait"
+        type: dropdown
+        options_source: traits_defense
+        visibility_when: trigger
+        show_when: "Target makes a trait check"
+      - key: range
+        label: "Range"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 1
+            energy_cost: 0
+      - key: uses
+        label: "Uses"
+        type: free_number
+        default: 1
+        min: 1
+        max: 3
+        step: 1
+        per_step:
+          increase:
+            build_cost: 4
+            energy_cost: 1
+      - key: energy_steps
+        label: "Energy +/-"
+        type: free_number
+        default: 0
+        min: -2
+        max: 2
+        step: 1
+        per_step:
+          increase:
+            build_cost: -2
+            energy_cost: 1
+          decrease:
+            build_cost: 3
+            energy_cost: -1

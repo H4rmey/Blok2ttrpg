@@ -26,7 +26,7 @@ So yes, i used AI for the coding part. Yes, i am a programmer by trade. So also 
 Oh right, i also never playtested this, so there is that.
 
 uuuuh, anything else?
-i'm probably still missing a brunch of mechanics
+i'm probably still missing a bunch of mechanics
 
 ## subpages
 
@@ -34,47 +34,30 @@ The subpages are modules that can be used int he Blok2ttrpg. The following Modul
 
 *   Character Creation (core)
 *   Ability Builder
-*   Leveling
+*   Lore (WIP)
 
 ## Planned Modules:
 
-### character presets (races/classes)
+### Character Presets (races/classes)
 
-basically preset values that are usable by users to have a quick start. mimicing races/classes.
+Basically preset traits that are usable by users to have a quick start. maybe even adding specific level up charts for thoses classes/races. Also maybe make it so there are abilities you get by selecting a specific race/class. But i never want to make abilities be tied to anything, anyone should be able to cast a fireball, that should not be a Wizard exclusive ability. 
 
-### **Predefined Ability Templates**
+### Predefined Abilities
 
-things like templates for a bomb or an area of effect. These templates do not have any flavour but are described
+A list of abilities that can be used by any character. These will costs ability points and are created using the ability creator, so they can also be upgraded. But i think i will also add abilities at different levels/tiers. So fireball level 1 just deals damage, level 2 will also apply burn effect and level 3 will explode after hitting for example.
 
-### **Skill Trees**
+### Items list
 
-like in most videogames, abilities that are predefined and stuff
+Same as predifined abilities, but they can not be upgraded. They might even have different rules from the specific ability creator. These will have a huge reduction on the energy cost and also do not need ability points to obtain.
 
-### **Items list**
+### MOAR ENACTMENTS
 
-kind of like ability templates but for tools, idk yet
+The current list of enactments is great but it's missing a ton of features, currently i have the following enactments planned: 
+*   Enact Teleportation
+*   Enact Message
+*   Enact Illusion
 
-### **Predefined Abilities with skill trees**
-
-some abilities can not be created with the current ability builder, because some abilities are to vague and have no hard rules or include a concept that cannot be worked upon. These are abilities like Message and read minds or stuff like that. So i want to create Abilities that have their effect predefined but can still be modified a bit.
-
-So like message would be like:
-
-you cast a message into someones mind
-
-default rules would be:
-
-*   no reply possible
-*   only use 6 words
-*   only withing 10m
-
-and perks would be:
-
-*   double the word count
-*   reply is possible
-*   range increased
-
-This kinda ties in with skill trees i think, but idk yet
+Luckely the configuration is flexible enough that adding these should not be so hard.
 
 # character-attributes
 ## Character Attributes
@@ -710,7 +693,7 @@ The list must be exhaustive: every `.md` file under `./docs/` must appear exactl
 
 ### `ability_types.yaml`
 
-Defines ability type display names, descriptions, base energy/action values, legacy cost settings, compatible enactments, and generic `fields` for Execution, Reaction, Phase, Minion, Preparation, and Concentration.
+Defines ability type display names, descriptions, base energy/action values, legacy cost settings, compatible enactments, and generic `fields` for Execution, Reaction, Phase, Minion, Preparation, Concentration, and Passive.
 
 Example:
 
@@ -1253,7 +1236,741 @@ go run ./cmd/docs
 - Field keys are persisted in generic `Fields` maps, so renaming a field key changes saved-data compatibility.
 - Config-defined type lists are used by the builder, but model/export compatibility may still depend on existing typed fields for some paths.
 
+# Ability Creation Guide
 
+## Ability Creation Guide
+
+So you've read the docs and now you're staring at the Ability Builder thinking:
+
+> "Cool, but how do I actually make a good ability?"
+
+Yeah, that's fair.
+
+The Builder is intentionally mechanical and flavorless. It doesn't care if you're casting a fireball, performing a monk punch, firing a laser cannon, throwing an angry goose, or summoning a giant rubber duck.
+
+What matters is:
+
+- What happens? (**Enactments**)
+- Who does it happen to? (**Interactions**)
+- How do we determine success? (**Validations**)
+- When does it happen? (**Ability Type**)
+
+Everything else is flavor.
+
+A sword slash and a laser beam can easily be the exact same Ability mechanically.
+
+---
+
+# Step 1 - Pick an Ability Type
+
+Most people should start with **Execution**.
+
+Execution simply means:
+
+> I want thing happen now.
+
+Examples:
+
+- Fireball
+- Sword Slash
+- Healing Touch
+- Stunning Strike
+- Dash Attack
+- Throw Rock
+
+Only use the other Ability Types when you specifically want special timing or behavior.
+
+| Ability Type | What It Really Means |
+|-------------|----------------------|
+| Execution | Do thing now |
+| Reaction | Do thing when something happens |
+| Preparation | Spend actions now, trigger later |
+| Concentration | Keep doing thing every round |
+| Phase | Gain something now, pay for it later |
+| Passive | Always on, free to use, triggers whenever |
+| Minion | Create another dude |
+
+---
+
+# Step 2 - Pick the Main Enactment
+
+This is the actual effect.
+
+Ask yourself:
+
+> What should my ability do?
+
+Usually the answer is one of these:
+
+| Goal | Enactment |
+|--------|--------|
+| Hurt someone | Damage |
+| Heal someone | Healing |
+| Move something | Movement |
+| Apply a condition | State |
+| Buff/Nerf a roll | Proficiency Shift |
+| Create an ongoing effect | Persistent Effect |
+| Block or reduce something | Negation |
+
+Think of Enactments as LEGO blocks.
+
+Most abilities are simply multiple Enactments chained together.
+
+## Example - Acid Splash
+
+### D&D
+
+Throw acid at somebody.
+
+### Builder Version
+
+```text
+Execution
+  Damage
+    Ranged Interaction
+```
+
+Done.
+
+---
+
+## Example - Stunning Strike
+
+### D&D
+
+Punch someone and potentially stun them.
+
+### Builder Version
+
+```text
+Execution
+  Damage
+  State(Stunned)
+```
+
+Damage happens first.
+
+State happens second.
+
+Simple.
+
+---
+
+# Step 3 - Combine Enactments
+
+This is where the fun starts.
+
+Most iconic abilities are just multiple Enactments chained together.
+
+## Ice Lance
+
+Deals damage and slows.
+
+```text
+Execution
+  Damage
+  State(Slowed)
+```
+
+---
+
+## Explosive Arrow
+
+Deals damage and pushes people away.
+
+```text
+Execution
+  Damage
+  Movement(Away)
+```
+
+---
+
+## Vampiric Touch
+
+Deals damage and heals the caster.
+
+```text
+Execution
+  Damage
+  Healing(Self)
+```
+
+---
+
+## Hook Shot
+
+Pulls an enemy towards you.
+
+```text
+Execution
+  Damage
+  Movement(Towards)
+```
+
+---
+
+## Divine Blessing
+
+Buff an ally's next roll.
+
+```text
+Execution
+  Proficiency Shift(UP)
+```
+
+---
+
+## Poison Blade
+
+Deals damage and applies poison.
+
+```text
+Execution
+  Damage
+  Persistent Effect
+    Damage
+```
+
+---
+
+# Understanding Enactment Chains
+
+By default, Enactments are executed in order.
+
+If an Enactment fails its Validation, the chain stops.
+
+## Example
+
+```text
+Execution
+  Damage
+  State(Stunned)
+  Movement(Away)
+```
+
+Suppose the Damage Enactment fails.
+
+Result:
+
+```text
+Damage    -> Failed
+State     -> Not Executed
+Movement  -> Not Executed
+```
+
+The chain ends.
+
+---
+
+# Understanding "Will Always Resolve"
+
+A common misunderstanding is:
+
+> Will Always Resolve = Automatically Hits
+
+That is **not** how it works.
+
+Validation still happens normally.
+
+Counter Rolls still happen normally.
+
+The target can still resist the effect.
+
+The only thing this perk changes is:
+
+> The Enactment is processed even if previous Enactments failed.
+
+## Example
+
+```text
+Execution
+  Damage
+  State(Stunned)
+    Will Always Resolve
+```
+
+Suppose Damage fails.
+
+Normally the chain would end.
+
+Instead:
+
+```text
+Damage -> Failed
+State  -> Still Executed
+```
+
+The State still attempts to resolve.
+
+Its own Validation still happens.
+
+The target can still resist it.
+
+The perk only ignores failures from earlier Enactments.
+
+---
+
+## Example - Stunning Strike
+
+```text
+Execution
+  Damage
+  State(Stunned)
+    Will Always Resolve
+```
+
+The punch can fail.
+
+The stun attempt still occurs.
+
+---
+
+## Example - Lingering Acid
+
+```text
+Execution
+  Damage
+
+  Persistent Effect
+    Damage
+    Will Always Resolve
+```
+
+Even if the direct acid splash doesn't land, the acid pool may still be created.
+
+---
+
+# Design Philosophy
+
+## Without Always Resolve
+
+```text
+Damage
+  ↓
+State
+  ↓
+Movement
+```
+
+Failure stops the chain.
+
+---
+
+## With Always Resolve
+
+```text
+Damage -> Failed
+
+State -> Still Executed
+
+Movement -> Still Executed
+```
+
+This allows utility effects to continue even when earlier effects fail.
+
+---
+
+# Examples From Other Systems
+
+## Magic Missile
+
+### D&D
+
+Automatically damages a target.
+
+### Builder Version
+
+```text
+Execution
+  Damage
+    Reliable Validation
+```
+
+---
+
+## Fireball
+
+### D&D
+
+Explosion at range.
+
+### Builder Version
+
+```text
+Execution
+  Damage
+    Area Interaction
+```
+
+---
+
+## Thunderwave
+
+### D&D
+
+Deals damage and pushes.
+
+### Builder Version
+
+```text
+Execution
+  Damage
+  Movement(Away)
+```
+
+---
+
+## Guiding Bolt
+
+### D&D
+
+Damage and easier to hit afterwards.
+
+### Builder Version
+
+```text
+Execution
+  Damage
+  State(Marked)
+```
+
+---
+
+## Hold Person
+
+### D&D
+
+Prevents movement.
+
+### Builder Version
+
+```text
+Execution
+  State(Paralyzed)
+```
+
+---
+
+## Haste
+
+### D&D
+
+Moves faster and acts faster.
+
+### Builder Version
+
+```text
+Phase
+  State(Hastened)
+
+Reverse
+  State(Fatigued)
+```
+
+---
+
+## Hunter's Mark
+
+### D&D
+
+Extra damage against one target.
+
+### Builder Version
+
+```text
+Concentration
+  State(Marked)
+```
+
+---
+
+## Shield
+
+### D&D
+
+Protects when attacked.
+
+### Builder Version
+
+```text
+Reaction
+  Negation
+```
+
+---
+
+# Step 4 - Choose Timing
+
+The effect itself does **not** determine the Ability Type.
+
+The timing does.
+
+---
+
+## Opportunity Attack
+
+```text
+Reaction
+  Damage
+```
+
+Trigger:
+
+```text
+Target moves away
+```
+
+---
+
+## Trap
+
+```text
+Preparation
+  Damage
+```
+
+Trigger:
+
+```text
+Target enters area
+```
+
+---
+
+## Flame Beam
+
+```text
+Concentration
+  Damage
+```
+
+Maintains continuous damage.
+
+---
+
+## Rage
+
+```text
+Phase
+  Proficiency Shift UP
+
+Reverse Phase
+  Proficiency Shift DOWN
+```
+
+Gain power now.
+
+Pay for it later.
+
+---
+
+# Example For Every Enactment
+
+## Damage
+
+```text
+Execution
+  Damage
+```
+
+*Sword Slash*
+
+---
+
+## Healing
+
+```text
+Execution
+  Healing
+```
+
+*Healing Word*
+
+---
+
+## Movement
+
+```text
+Execution
+  Movement(Away)
+```
+
+*Force Push*
+
+---
+
+## State
+
+```text
+Execution
+  State(Anchored)
+```
+
+*Root*
+
+---
+
+## Persistent Effect
+
+```text
+Execution
+  Persistent Effect
+    Damage
+```
+
+*Poison*
+
+---
+
+## Proficiency Shift
+
+```text
+Execution
+  Proficiency Shift UP
+```
+
+*Bless*
+
+---
+
+## Negation
+
+```text
+Reaction
+  Negation
+```
+
+*Shield*
+
+---
+
+# Example For Every Ability Type
+
+## Execution
+
+### Fireball
+
+```text
+Execution
+  Damage
+```
+
+---
+
+## Reaction
+
+### Riposte
+
+```text
+Reaction
+  Damage
+```
+
+Trigger:
+
+```text
+Target damages engager
+```
+
+---
+
+## Preparation
+
+### Land Mine
+
+```text
+Preparation
+  Damage
+  Movement(Away)
+```
+
+---
+
+## Concentration
+
+### Mind Prison
+
+```text
+Concentration
+  State(Anchored)
+```
+
+Reapplies every round.
+
+---
+
+## Phase
+
+### Battle Trance
+
+```text
+Phase
+  Proficiency Shift UP
+
+Reverse
+  Proficiency Shift DOWN
+```
+
+---
+
+## Minion
+
+### Wolf Companion
+
+```text
+Minion
+
+Bite:
+  Damage
+
+Howl:
+  State(Frightened)
+```
+
+---
+
+# Full Example Using Almost Everything
+
+Let's make something stupid.
+
+## Thunder Chain Prison
+
+You throw magical chains.
+
+If they hit:
+
+- Deal damage
+- Pull target closer
+- Restrain them
+- Continuously shock them
+
+### Builder Version
+
+```text
+Concentration
+  Damage
+
+  Movement
+    Direction: Towards
+
+  State(Restrained)
+
+  Persistent Effect
+    Damage
+```
+
+This combines:
+
+- ✅ Damage
+- ✅ Movement
+- ✅ State
+- ✅ Persistent Effect
+- ✅ Concentration
+
+All in a single ability.
+
+---
 
 # execution
 ## Execution
@@ -1332,6 +2049,8 @@ Phases are a state or passive ability that lasts for a predefined amount of time
 | Phase Duration | Per step (increase) | 2 | 1 |
 | Reverse Rounds | Per step (increase) | 4 | 0 |
 | Reverse Rounds | Per step (decrease) | -4 | 0 |
+| Action +/- | Per step (increase) | -2 | 0 |
+| Action +/- | Per step (decrease) | 4 | 1 |
 | All knockout requirements have to be met | Enabled | 3 | 0 |
 | Knockout can be used on the reverse phase | Enabled | 3 | 0 |
 | No knockout possible | Enabled | 5 | 0 |
@@ -1482,6 +2201,8 @@ Reactions are Abilities that trigger outside your normal action economy. Reactio
 | Trigger Trait | Any | 0 | 0 |
 | Range | Per step (increase) | 1 | 0 |
 | Uses | Per step (increase) | 4 | 1 |
+| Energy +/- | Per step (increase) | -2 | 1 |
+| Energy +/- | Per step (decrease) | 3 | -1 |
 
 
 ## Template
@@ -1508,22 +2229,28 @@ Concentration is an Ability Type that allows an effect to persist over multiple 
 ## Rules
 
 *   **Single Focus**: You can only have one Concentration Ability active at a time. If you cast another Ability with the Concentration type, the first one immediately ends.
-*   **Initial Cost**: Costs 2 Actions and 3 Energy to initiate.
-*   **Upkeep Cost**: At the start of your turn, you must spend either 1 Action or 1 Energy to maintain the Concentration. If you cannot (or choose not to) pay this upkeep, the Ability ends immediately.
+*   **Initial Cost**: Costs 2 Actions and 3 Energy to initiate. Both the Action and Energy cost can be adjusted with the Action +/- and Energy +/- perks (the Action cost is always at least 1).
+*   **Re-trigger Timing**: When building the Ability you choose whether its Enactments re-trigger at the **Start of your Turn** or the **End of your Turn**. This fires every round while Concentration is maintained.
+*   **Upkeep Cost**: Each round you must pay the chosen upkeep cost (1 Action or 1 Energy by default) to maintain the Concentration. If you cannot (or choose not to) pay this upkeep, the Ability ends immediately.
 *   **Voluntary End**: You can drop Concentration at any time as a free action.
 *   **Breaking Focus**: If you take damage or are hit by an Enact State that restricts your mind or movement (like Stunned or Paralyzed), you must make a Validation check to keep focus.
     *   Make a Counter Roll (using your Mind or Constitution Trait).
     *   Compare it to the attacker's original Engagement Roll.
     *   If your roll is equal to or higher, you maintain Concentration. If lower, the Ability ends.
-*   **Persistent Enactments**: Any Enactments attached to this Ability re-trigger automatically on your Target(s) at the start of your turn, right after you pay the upkeep cost.
+*   **Persistent Enactments**: Any Enactments attached to this Ability re-trigger automatically on your Target(s) every round at the chosen timing (start or end of your turn), right after you pay the upkeep cost.
+
 
 ## Perks
 
 | Option | Choice | Build Cost | Energy Cost |
 | --- | --- | --- | --- |
 | Has Item Dependency | Enabled | -1 | 0 |
+| Re-trigger Timing | Any | 0 | 0 |
+| Upkeep Cost | Any | 0 | 0 |
 | Energy +/- | Per step (increase) | -2 | 1 |
 | Energy +/- | Per step (decrease) | 3 | -1 |
+| Action +/- | Per step (increase) | -2 | 0 |
+| Action +/- | Per step (decrease) | 4 | 1 |
 | Effortless (upkeep is free) | Enabled | 3 | 0 |
 | Iron Will (shift counter roll up on damage) | Enabled | 2 | 0 |
 | Dual Focus (allow a second Concentration) | Enabled | 5 | 0 |
@@ -1538,6 +2265,73 @@ ability:
   energy_cost: 3
   action_cost: 2
   upkeep_cost: 1 Action or 1 Energy
+  enactments:
+    - Type:
+  perks:
+```
+
+# passive
+## Passive
+
+Passives are Abilities that are always on. They work just like a Reaction, they trigger when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself.
+
+Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build. This higher base build cost is the price you pay for never having to spend Energy or Actions on it.
+
+## Rules
+
+*   Does not cost an Action.
+*   Does not cost any Energy to use.
+*   Has a higher base build cost of 8 build points.
+
+*   Always has at least one Trigger. Each trigger has its own build cost (see the Perks table below); more powerful triggers cost more.
+
+*   Has at least one Enactment (the first Enactment is free)
+*   Only triggers when the triggering effect happens within 1m of you.
+
+*   Target of Enactments is overwritten to the character that triggers the Passive.
+
+## Perks
+
+| Option | Choice | Build Cost | Energy Cost |
+| --- | --- | --- | --- |
+| Has Item Dependency | Enabled | -1 | 0 |
+| Trigger | Target moves away from engager | 2 | 0 |
+| Trigger | Target moves towards engager | 2 | 0 |
+| Trigger | Target moves past engager | 2 | 0 |
+| Trigger | Engager gets healed by target | 1 | 0 |
+| Trigger | Target damages engager | 3 | 0 |
+| Trigger | Target makes a trait check | 2 | 0 |
+| Trigger | Target starts casting an ability | 4 | 1 |
+| Trigger | Target ends their turn within range | 2 | 0 |
+| Trigger | Target enters interaction range | 3 | 0 |
+| Trigger | Target leaves interaction range | 2 | 0 |
+| Trigger | Target fails a validation | 2 | 0 |
+| Trigger | Target succeeds on a validation | 2 | 0 |
+| Trigger | Target becomes affected by an enactment | 3 | 0 |
+| Trigger | Engager takes damage | 3 | 0 |
+| Trigger | Engager gets targeted by an ability | 4 | 1 |
+| Trigger | Ally within range takes damage | 2 | 0 |
+| Trigger | Ally within range gets healed | 1 | 0 |
+| Trigger | A target is moved by an effect | 2 | 0 |
+| Trigger | A persistent effect triggers | 2 | 0 |
+| Trigger | A minion is summoned within range | 1 | 0 |
+| Trigger Trait | Any | 0 | 0 |
+| Range | Per step (increase) | 1 | 0 |
+| Uses | Per step (increase) | 4 | 1 |
+| Energy +/- | Per step (increase) | -2 | 1 |
+| Energy +/- | Per step (decrease) | 3 | -1 |
+
+
+## Template
+
+```yaml
+ability:
+  type: Passive
+  range: 1
+  uses: 1
+  has_item_dependency: No # If yes, enter which item
+
+  trigger: <trigger name here>
   enactments:
     - Type:
   perks:
