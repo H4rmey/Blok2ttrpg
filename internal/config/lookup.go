@@ -100,13 +100,28 @@ func (c *Config) ProficiencyCost(id string) int {
 	return 0
 }
 
-// DefaultProficiencyID returns the id of the first proficiency, used as the
-// starting tier for new characters.
+// DefaultProficiencyID returns the id of the tier new characters start every
+// trait at. When default_proficiency is configured and valid it is used;
+// otherwise the first proficiency in the ladder is the default.
 func (c *Config) DefaultProficiencyID() string {
+	if c.DefaultProficiency != "" {
+		if c.proficiencyIndex(c.DefaultProficiency) >= 0 {
+			return c.DefaultProficiency
+		}
+	}
 	if len(c.Proficiencies) > 0 {
 		return c.Proficiencies[0].ID
 	}
 	return ""
+}
+
+// DefaultProficiencyIndex returns the ladder position of the default tier, or 0
+// when it cannot be resolved.
+func (c *Config) DefaultProficiencyIndex() int {
+	if idx := c.proficiencyIndex(c.DefaultProficiencyID()); idx >= 0 {
+		return idx
+	}
+	return 0
 }
 
 // proficiencyIndex returns the position of a proficiency id within the ordered

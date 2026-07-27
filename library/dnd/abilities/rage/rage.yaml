@@ -1,0 +1,47 @@
+id: ability-rage
+name: Rage
+description: You give in to primal fury, bolstering your strength and toughness for the fight.
+type: concentration
+fields:
+  item_dep: false
+  item_name: ''
+  trigger_timing: Start of Engager Turn
+  upkeep_cost: 1 Energy
+  energy_steps: 0
+  action_steps: 0
+  effortless: false
+  iron_will: true
+  dual_focus: false
+enactments:
+- type: proficiency_shift
+  fields:
+    always: true
+    shifted_trait: offense.Strength
+    shift_dir: UP
+    shift_amount: 2
+    shift_uses: 1
+  interaction: self
+  interactiondata:
+    use_previous: false
+  validationdata:
+    counter_trait: []
+    engage_die: d20
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Strength
+- type: proficiency_shift
+  fields:
+    always: true
+    shifted_trait: defense.Constitution
+    shift_dir: UP
+    shift_amount: 2
+    shift_uses: 1
+  interaction: self
+  interactiondata:
+    use_previous: false
+  validationdata:
+    counter_trait: []
+    engage_die: d20
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Strength

@@ -1,0 +1,10 @@
+id: ranger
+name: Ranger
+description: A skilled hunter and tracker who blends martial prowess with nature magic.
+shifts:
+  offense.Dexterity: +3
+  general.Dexterity: +2
+  general.Perception: +2
+  general.Stealth: +1
+  offense.Wisdom: +1
+imports: []

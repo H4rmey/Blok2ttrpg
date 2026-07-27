@@ -1,0 +1,8 @@
+id: dragonborn
+name: Dragonborn
+description: Proud draconic humanoids who wield a breath weapon born of their heritage.
+shifts:
+  general.Strength: +2
+  offense.Strength: +1
+  general.Charisma: +1
+imports: []

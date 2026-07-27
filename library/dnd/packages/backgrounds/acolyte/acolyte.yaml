@@ -1,0 +1,8 @@
+id: acolyte
+name: Acolyte
+description: You served in a temple, learning religious rites and how to read people's needs.
+shifts:
+  general.Insight: +2
+  general.Medicine: +1
+  general.Wisdom: +1
+imports: []

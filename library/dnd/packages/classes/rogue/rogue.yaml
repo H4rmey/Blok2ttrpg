@@ -1,0 +1,10 @@
+id: rogue
+name: Rogue
+description: A cunning skirmisher who relies on stealth, precision, and guile.
+shifts:
+  offense.Dexterity: +3
+  general.Dexterity: +2
+  general.Stealth: +2
+  general.Acrobatics: +1
+  general.Perception: +1
+imports: []

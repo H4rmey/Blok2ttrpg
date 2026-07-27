@@ -1,0 +1,13 @@
+# Order in which markdown files under ./docs are appended to the generated
+# documentation output for the D&D system. Paths are relative to the repo docs
+# root. The D&D system reuses the shared core documentation.
+file_order:
+  - ./docs/blok2ttrpg.md
+  - ./docs/core/character-attributes.md
+  - ./docs/core/character-traits.md
+  - ./docs/core/dice-rolling.md
+  - ./docs/core/combat.md
+  - ./docs/core/states.md
+  - ./docs/core/abilities.md
+  - ./docs/core/items.md
+  - ./docs/core/leveling.md

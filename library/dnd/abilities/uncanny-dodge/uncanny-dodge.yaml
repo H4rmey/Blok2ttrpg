@@ -1,0 +1,31 @@
+id: ability-uncanny-dodge
+name: Uncanny Dodge
+description: When an attacker you can see hits you, you can use your reaction to halve the damage.
+type: reaction
+fields:
+  item_dep: false
+  item_name: ''
+  trigger: Target damages engager
+  range: 1
+  uses: 1
+  energy_steps: 0
+enactments:
+- type: negation
+  fields:
+    always: false
+    source: d8
+    source_trait: ''
+    other: ''
+    flat: 0
+    offense: ''
+    counter_negation: false
+    full_counter: false
+  interaction: self
+  interactiondata:
+    use_previous: false
+  validationdata:
+    counter_trait: []
+    engage_die: d20
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: defense.Dexterity

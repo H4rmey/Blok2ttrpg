@@ -363,11 +363,13 @@ func TraitPointsUsed(cfg *config.Config, c model.Character) int {
 
 // cumulativeTraitCost returns the total points needed to raise a trait from the
 // default tier to the given proficiency tier. Tiers are ordered by their
-// position in cfg.Proficiencies; the default tier (index 0) is free. The cost
+// position in cfg.Proficiencies; the configured default tier is free. The cost
 // is the sum of the per-tier `cost` values for each tier strictly above the
-// default up to and including the selected tier. Selecting a tier below the
-// default (or the default itself) costs zero.
+// default up to and including the selected tier. Selecting a tier at or below
+// the default costs zero, so tiers below the default (e.g. negative modifiers)
+// are free choices rather than discounts.
 func cumulativeTraitCost(cfg *config.Config, profID string) int {
+	base := cfg.DefaultProficiencyIndex()
 	target := -1
 	for i, p := range cfg.Proficiencies {
 		if p.ID == profID {
@@ -375,11 +377,11 @@ func cumulativeTraitCost(cfg *config.Config, profID string) int {
 			break
 		}
 	}
-	if target <= 0 {
+	if target <= base {
 		return 0
 	}
 	sum := 0
-	for i := 1; i <= target && i < len(cfg.Proficiencies); i++ {
+	for i := base + 1; i <= target && i < len(cfg.Proficiencies); i++ {
 		sum += cfg.Proficiencies[i].Cost
 	}
 	return sum

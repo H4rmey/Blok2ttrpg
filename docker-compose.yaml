@@ -8,8 +8,13 @@ services:
     environment:
       # Port the server listens on inside the container.
       PORT: "8080"
-      # Ruleset config directory (or file) to load.
-      CONFIG: "config/ability-builder"
+      # Game system to load. This selects both the ruleset (config/<system>)
+      # and the built-in library (library/<system>). Set to "dnd" to run the
+      # D&D system instead of the default ability-builder.
+      SYSTEM: "ability-builder"
+      # Optional: point at an explicit config path (overrides SYSTEM).
+      # CONFIG: "config/ability-builder"
+
     volumes:
       # Persist character data across container restarts/rebuilds.
       - blok2-data:/app/data

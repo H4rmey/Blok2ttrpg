@@ -1,0 +1,10 @@
+id: fighter
+name: Fighter
+description: A master of martial combat, skilled with weapons and armor.
+shifts:
+  offense.Strength: +3
+  general.Strength: +2
+  general.Athletics: +2
+  defense.Constitution: +2
+  defense.Strength: +1
+imports: []

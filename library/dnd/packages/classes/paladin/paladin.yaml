@@ -1,0 +1,11 @@
+id: paladin
+name: Paladin
+description: A holy warrior bound by a sacred oath, blending martial skill and divine magic.
+shifts:
+  offense.Strength: +3
+  general.Strength: +1
+  general.Persuasion: +1
+  defense.Charisma: +2
+  offense.Charisma: +1
+imports:
+  - cure-wounds

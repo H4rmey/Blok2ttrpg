@@ -1,0 +1,10 @@
+id: bard
+name: Bard
+description: A charismatic performer who weaves magic through music and words.
+shifts:
+  offense.Charisma: +3
+  general.Charisma: +2
+  general.Persuasion: +2
+  defense.Charisma: +1
+  general.Dexterity: +1
+imports: []

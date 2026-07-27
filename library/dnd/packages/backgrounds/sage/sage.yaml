@@ -1,0 +1,8 @@
+id: sage
+name: Sage
+description: You spent years among books and scholars, gathering arcane and worldly lore.
+shifts:
+  general.Arcana: +2
+  general.Intelligence: +1
+  general.Insight: +1
+imports: []

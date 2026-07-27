@@ -141,6 +141,9 @@ func merge(base, in *Config) {
 	if len(in.TraitCategories) > 0 {
 		base.TraitCategories = in.TraitCategories
 	}
+	if in.DefaultProficiency != "" {
+		base.DefaultProficiency = in.DefaultProficiency
+	}
 
 	mergeAttributeMap(&base.Attributes, in.Attributes)
 	mergeTraitMap(&base.Traits, in.Traits)

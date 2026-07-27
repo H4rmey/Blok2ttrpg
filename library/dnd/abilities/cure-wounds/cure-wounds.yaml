@@ -1,0 +1,29 @@
+id: ability-cure-wounds
+name: Cure Wounds
+description: A touch that channels healing energy to restore a creature's vitality.
+type: execution
+fields:
+  item_dep: false
+  item_name: ''
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: healing
+  fields:
+    always: true
+    source: d8
+    source_trait: ''
+    other: ''
+    flat: 0
+    medicine: ''
+  interaction: direct
+  interactiondata:
+    range: 1
+    targets: 1
+    use_previous: false
+  validationdata:
+    counter_trait: []
+    engage_die: d20
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Wisdom

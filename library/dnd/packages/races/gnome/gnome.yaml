@@ -1,0 +1,8 @@
+id: gnome
+name: Gnome
+description: Small, inventive folk with sharp minds and boundless curiosity.
+shifts:
+  general.Intelligence: +2
+  general.Arcana: +1
+  defense.Intelligence: +1
+imports: []

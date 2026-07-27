@@ -1,0 +1,8 @@
+id: hermit
+name: Hermit
+description: You lived in seclusion, seeking insight and tending to your own needs.
+shifts:
+  general.Medicine: +2
+  general.Insight: +1
+  general.Wisdom: +1
+imports: []

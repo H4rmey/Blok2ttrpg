@@ -1,0 +1,8 @@
+id: half-orc
+name: Half-Orc
+description: Powerful and fierce, half-orcs combine raw strength with relentless endurance.
+shifts:
+  general.Strength: +2
+  offense.Strength: +1
+  general.Constitution: +1
+imports: []

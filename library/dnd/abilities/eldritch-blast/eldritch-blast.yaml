@@ -1,0 +1,33 @@
+id: ability-eldritch-blast
+name: Eldritch Blast
+description: A beam of crackling energy streaks toward a creature within range.
+type: execution
+fields:
+  item_dep: false
+  item_name: ''
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: damage
+  fields:
+    always: false
+    source: d10
+    source_trait: ''
+    other: ''
+    flat: 0
+    offense: ''
+  interaction: ranged
+  interactiondata:
+    range: 16
+    targets: 1
+    visible: false
+    obstructed: false
+    remove_penalty: false
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Dexterity
+    engage_die: d20
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Charisma

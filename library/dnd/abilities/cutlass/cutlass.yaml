@@ -1,0 +1,30 @@
+id: ability-cutlass
+name: Cutlass
+description: A short, curved slashing sword favored by sailors and raiders.
+type: execution
+fields:
+  item_dep: true
+  item_name: 'Cutlass'
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: damage
+  fields:
+    always: false
+    source: d6
+    source_trait: ''
+    other: ''
+    flat: 0
+    offense: ''
+  interaction: direct
+  interactiondata:
+    range: 1
+    targets: 1
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Dexterity
+    engage_die: d20
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Strength

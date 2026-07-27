@@ -1,0 +1,8 @@
+id: elf
+name: Elf
+description: Graceful, long-lived people with keen senses and a natural affinity for magic.
+shifts:
+  general.Dexterity: +2
+  offense.Dexterity: +1
+  general.Perception: +1
+imports: []

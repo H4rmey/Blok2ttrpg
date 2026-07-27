@@ -56,6 +56,12 @@ type Config struct {
 	// Proficiency tiers referenced by traits.
 	Proficiencies []Proficiency `yaml:"proficiencies,omitempty" json:"proficiencies,omitempty"`
 
+	// DefaultProficiency names the proficiency tier id that new characters
+	// start every trait at (the "free" baseline). When empty the first tier in
+	// the Proficiencies list is used. Tiers below the default are free; tiers
+	// above the default accrue their cumulative per-tier cost.
+	DefaultProficiency string `yaml:"default_proficiency,omitempty" json:"default_proficiency,omitempty"`
+
 	// Leveling budgets, given as per-level tables.
 	Leveling Leveling `yaml:"leveling,omitempty" json:"leveling,omitempty"`
 

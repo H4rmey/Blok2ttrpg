@@ -1,0 +1,8 @@
+id: halfling
+name: Halfling
+description: Small, nimble, and lucky folk with a knack for staying out of trouble.
+shifts:
+  general.Dexterity: +2
+  general.Acrobatics: +1
+  general.Stealth: +1
+imports: []

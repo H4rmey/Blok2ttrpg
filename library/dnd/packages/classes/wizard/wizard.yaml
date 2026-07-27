@@ -1,0 +1,11 @@
+id: wizard
+name: Wizard
+description: An arcane spellcaster who shapes reality through study. Shifts mental abilities and grants a starting spell.
+shifts:
+  offense.Intelligence: +3
+  general.Intelligence: +2
+  general.Arcana: +2
+  defense.Intelligence: +1
+  offense.Strength: -1
+imports:
+  - firebolt

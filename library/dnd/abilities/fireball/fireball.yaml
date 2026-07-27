@@ -1,0 +1,32 @@
+id: ability-fireball
+name: Fireball
+description: A bright streak flashes to a point and blossoms into an explosion of flame.
+type: execution
+fields:
+  item_dep: false
+  item_name: ''
+  energy_steps: 0
+  action_steps: 0
+enactments:
+- type: damage
+  fields:
+    always: false
+    source: d12
+    source_trait: ''
+    other: ''
+    flat: 0
+    offense: ''
+  interaction: area
+  interactiondata:
+    radius: 3
+    range: 10
+    origin_mode: other
+    origin_text: 'A point you can see within range'
+    use_previous: false
+  validationdata:
+    counter_trait:
+    - value: defense.Dexterity
+    engage_die: d20
+    engage_mode: trait
+    engage_other: ''
+    engage_trait: offense.Charisma

@@ -1,0 +1,8 @@
+id: entertainer
+name: Entertainer
+description: You thrived in front of crowds, performing with charm and acrobatic flair.
+shifts:
+  general.Acrobatics: +2
+  general.Persuasion: +1
+  general.Charisma: +1
+imports: []

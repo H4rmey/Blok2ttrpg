@@ -24,11 +24,18 @@ COPY --from=build /src/config /app/config
 COPY --from=build /src/templates /app/templates
 COPY --from=build /src/static /app/static
 COPY --from=build /src/docs /app/docs
+COPY --from=build /src/library /app/library
 
 # Character data is persisted here; mount a volume to keep it across restarts.
 RUN mkdir -p /app/data
 
 ENV PORT=8080
+# SYSTEM selects which ruleset (config/<system>) and library (library/<system>)
+# to load on startup. Override it at run time to switch systems, e.g.
+#   docker run -e SYSTEM=dnd ...
+ENV SYSTEM=ability-builder
 EXPOSE 8080
 
 ENTRYPOINT ["/app/blok2ttrpg"]
+
+
