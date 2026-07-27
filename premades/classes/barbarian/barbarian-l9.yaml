@@ -1,0 +1,28 @@
+level: 9
+attributes:
+  name: Barbarian (Level 9)
+  archetype: Barbarian
+  notes: Premade Barbarian trait preset for level 9.
+traits:
+  general.Strength: master
+  general.Dexterity: clumsy
+  general.Stealth: clumsy
+  general.Perception: clumsy
+  general.Nature: clumsy
+  general.Crafting: clumsy
+  general.People Skill: clumsy
+  general.Performance: clumsy
+  general.Thievery: clumsy
+  general.Knowledge: clumsy
+  general.Magic: clumsy
+  offense.Precision: clumsy
+  offense.Power: master
+  offense.Mind: clumsy
+  offense.Magic: clumsy
+  defense.Reflex: trained
+  defense.Constitution: expert
+  defense.Mind: clumsy
+  defense.Magic: clumsy
+  vital.HP: master
+  vital.Movement: trained
+  vital.Energy: clumsy

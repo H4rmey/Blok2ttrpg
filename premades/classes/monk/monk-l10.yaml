@@ -1,0 +1,28 @@
+level: 10
+attributes:
+  name: Monk (Level 10)
+  archetype: Monk
+  notes: Premade Monk trait preset for level 10.
+traits:
+  general.Strength: untrained
+  general.Dexterity: master
+  general.Stealth: untrained
+  general.Perception: untrained
+  general.Nature: untrained
+  general.Crafting: untrained
+  general.People Skill: untrained
+  general.Performance: trained
+  general.Thievery: untrained
+  general.Knowledge: untrained
+  general.Magic: untrained
+  offense.Precision: untrained
+  offense.Power: master
+  offense.Mind: untrained
+  offense.Magic: untrained
+  defense.Reflex: master
+  defense.Constitution: trained
+  defense.Mind: untrained
+  defense.Magic: untrained
+  vital.HP: untrained
+  vital.Movement: master
+  vital.Energy: trained

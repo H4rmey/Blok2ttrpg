@@ -1,0 +1,28 @@
+level: 7
+attributes:
+  name: Barbarian (Level 7)
+  archetype: Barbarian
+  notes: Premade Barbarian trait preset for level 7.
+traits:
+  general.Strength: expert
+  general.Dexterity: clumsy
+  general.Stealth: clumsy
+  general.Perception: clumsy
+  general.Nature: clumsy
+  general.Crafting: clumsy
+  general.People Skill: clumsy
+  general.Performance: clumsy
+  general.Thievery: clumsy
+  general.Knowledge: clumsy
+  general.Magic: clumsy
+  offense.Precision: clumsy
+  offense.Power: expert
+  offense.Mind: clumsy
+  offense.Magic: clumsy
+  defense.Reflex: untrained
+  defense.Constitution: expert
+  defense.Mind: clumsy
+  defense.Magic: clumsy
+  vital.HP: expert
+  vital.Movement: untrained
+  vital.Energy: clumsy

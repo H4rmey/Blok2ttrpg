@@ -1,0 +1,28 @@
+level: 3
+attributes:
+  name: Rogue (Level 3)
+  archetype: Rogue
+  notes: Premade Rogue trait preset for level 3.
+traits:
+  general.Strength: clumsy
+  general.Dexterity: untrained
+  general.Stealth: untrained
+  general.Perception: clumsy
+  general.Nature: clumsy
+  general.Crafting: clumsy
+  general.People Skill: clumsy
+  general.Performance: clumsy
+  general.Thievery: untrained
+  general.Knowledge: clumsy
+  general.Magic: clumsy
+  offense.Precision: untrained
+  offense.Power: clumsy
+  offense.Mind: clumsy
+  offense.Magic: clumsy
+  defense.Reflex: untrained
+  defense.Constitution: clumsy
+  defense.Mind: clumsy
+  defense.Magic: clumsy
+  vital.HP: clumsy
+  vital.Movement: clumsy
+  vital.Energy: clumsy

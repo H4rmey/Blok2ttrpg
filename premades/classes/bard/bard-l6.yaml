@@ -1,0 +1,28 @@
+level: 6
+attributes:
+  name: Bard (Level 6)
+  archetype: Bard
+  notes: Premade Bard trait preset for level 6.
+traits:
+  general.Strength: clumsy
+  general.Dexterity: clumsy
+  general.Stealth: clumsy
+  general.Perception: clumsy
+  general.Nature: clumsy
+  general.Crafting: clumsy
+  general.People Skill: expert
+  general.Performance: expert
+  general.Thievery: clumsy
+  general.Knowledge: untrained
+  general.Magic: trained
+  offense.Precision: clumsy
+  offense.Power: clumsy
+  offense.Mind: trained
+  offense.Magic: untrained
+  defense.Reflex: clumsy
+  defense.Constitution: clumsy
+  defense.Mind: untrained
+  defense.Magic: clumsy
+  vital.HP: clumsy
+  vital.Movement: clumsy
+  vital.Energy: clumsy

@@ -1,0 +1,28 @@
+level: 6
+attributes:
+  name: Cleric (Level 6)
+  archetype: Cleric
+  notes: Premade Cleric trait preset for level 6.
+traits:
+  general.Strength: clumsy
+  general.Dexterity: clumsy
+  general.Stealth: clumsy
+  general.Perception: clumsy
+  general.Nature: clumsy
+  general.Crafting: clumsy
+  general.People Skill: trained
+  general.Performance: clumsy
+  general.Thievery: clumsy
+  general.Knowledge: untrained
+  general.Magic: clumsy
+  offense.Precision: clumsy
+  offense.Power: clumsy
+  offense.Mind: clumsy
+  offense.Magic: expert
+  defense.Reflex: clumsy
+  defense.Constitution: untrained
+  defense.Mind: trained
+  defense.Magic: expert
+  vital.HP: untrained
+  vital.Movement: clumsy
+  vital.Energy: clumsy

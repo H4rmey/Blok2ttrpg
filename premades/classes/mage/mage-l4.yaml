@@ -1,0 +1,28 @@
+level: 4
+attributes:
+  name: Mage (Level 4)
+  archetype: Mage
+  notes: Premade Mage trait preset for level 4.
+traits:
+  general.Strength: clumsy
+  general.Dexterity: clumsy
+  general.Stealth: clumsy
+  general.Perception: clumsy
+  general.Nature: clumsy
+  general.Crafting: clumsy
+  general.People Skill: clumsy
+  general.Performance: clumsy
+  general.Thievery: clumsy
+  general.Knowledge: trained
+  general.Magic: trained
+  offense.Precision: clumsy
+  offense.Power: clumsy
+  offense.Mind: trained
+  offense.Magic: trained
+  defense.Reflex: clumsy
+  defense.Constitution: clumsy
+  defense.Mind: clumsy
+  defense.Magic: clumsy
+  vital.HP: clumsy
+  vital.Movement: clumsy
+  vital.Energy: trained

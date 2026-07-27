@@ -1,0 +1,28 @@
+level: 10
+attributes:
+  name: Cleric (Level 10)
+  archetype: Cleric
+  notes: Premade Cleric trait preset for level 10.
+traits:
+  general.Strength: untrained
+  general.Dexterity: untrained
+  general.Stealth: untrained
+  general.Perception: untrained
+  general.Nature: untrained
+  general.Crafting: untrained
+  general.People Skill: master
+  general.Performance: untrained
+  general.Thievery: untrained
+  general.Knowledge: trained
+  general.Magic: untrained
+  offense.Precision: untrained
+  offense.Power: untrained
+  offense.Mind: untrained
+  offense.Magic: master
+  defense.Reflex: untrained
+  defense.Constitution: trained
+  defense.Mind: master
+  defense.Magic: master
+  vital.HP: trained
+  vital.Movement: untrained
+  vital.Energy: untrained

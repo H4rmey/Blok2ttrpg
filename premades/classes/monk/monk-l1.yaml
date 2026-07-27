@@ -1,0 +1,28 @@
+level: 1
+attributes:
+  name: Monk (Level 1)
+  archetype: Monk
+  notes: Premade Monk trait preset for level 1.
+traits:
+  general.Strength: clumsy
+  general.Dexterity: untrained
+  general.Stealth: clumsy
+  general.Perception: clumsy
+  general.Nature: clumsy
+  general.Crafting: clumsy
+  general.People Skill: clumsy
+  general.Performance: clumsy
+  general.Thievery: clumsy
+  general.Knowledge: clumsy
+  general.Magic: clumsy
+  offense.Precision: clumsy
+  offense.Power: untrained
+  offense.Mind: clumsy
+  offense.Magic: clumsy
+  defense.Reflex: untrained
+  defense.Constitution: clumsy
+  defense.Mind: clumsy
+  defense.Magic: clumsy
+  vital.HP: clumsy
+  vital.Movement: untrained
+  vital.Energy: clumsy

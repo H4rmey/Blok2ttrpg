@@ -1,0 +1,28 @@
+level: 5
+attributes:
+  name: Rogue (Level 5)
+  archetype: Rogue
+  notes: Premade Rogue trait preset for level 5.
+traits:
+  general.Strength: clumsy
+  general.Dexterity: trained
+  general.Stealth: trained
+  general.Perception: untrained
+  general.Nature: clumsy
+  general.Crafting: clumsy
+  general.People Skill: clumsy
+  general.Performance: clumsy
+  general.Thievery: trained
+  general.Knowledge: clumsy
+  general.Magic: clumsy
+  offense.Precision: trained
+  offense.Power: clumsy
+  offense.Mind: clumsy
+  offense.Magic: clumsy
+  defense.Reflex: trained
+  defense.Constitution: clumsy
+  defense.Mind: clumsy
+  defense.Magic: clumsy
+  vital.HP: clumsy
+  vital.Movement: untrained
+  vital.Energy: clumsy
