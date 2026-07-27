@@ -66,18 +66,107 @@ ability_types:
         type: free_text
         visibility_when: item_dep
         show_when: "true"
-      - key: trigger
-        label: "Trigger"
-        type: dropdown
-        # Per-trigger build costs come from the costed option source; no flat
-        # field cost so the selected trigger's own cost is not double-counted.
-        options_source: reaction_triggers
-      - key: trigger_trait
-        label: "Trigger Trait"
-        type: dropdown
-        options_source: traits_defense
-        visibility_when: trigger
-        show_when: "Target makes a trait check"
+      # Triggers are a repeatable set of rows. Each row is a Subject
+      # (You / An Ally / An Opponent / Someone Else) plus an Event. Per-event
+      # build costs come from the costed option source (trigger_events); every
+      # "of a type" event cascades into a per-row follow-up dropdown
+      # (damage/weapon/ability/enactment/trait/state) via visibility_when,
+      # which resolves against the sibling "event" row field. Adding extra
+      # trigger rows beyond the first costs additional build points.
+      - key: triggers
+        label: "Triggers"
+        type: solutions
+        default_count: 1
+        per_item:
+          increase:
+            build_cost: 2
+        row_fields:
+          - key: subject
+            label: "Subject"
+            type: dropdown
+            options_source: trigger_subjects
+          - key: event
+            label: "Event"
+            type: dropdown
+            options_source: trigger_events
+          - key: damage_type_hit
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "gets hit by damage of a type"
+          - key: damage_type_dealt
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "deals damage of a type"
+          - key: weapon_type
+            label: "Weapon Type"
+            type: dropdown
+            options_source: weapon_types
+            visibility_when: event
+            show_when: "gets hit by a weapon of a type"
+          - key: heal_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets healed by an ability of a type"
+          - key: cast_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "starts casting an ability of a type"
+          - key: targeted_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets targeted by an ability of a type"
+          - key: enactment_type_hit
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "gets hit with an enactment of a type"
+          - key: enactment_type_resolved
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "resolves an enactment of a type"
+          - key: trait
+            label: "Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "makes a trait check of a type"
+          - key: fail_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "fails a validation of a type"
+          - key: succeed_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "succeeds on a validation of a type"
+          - key: state_applied
+            label: "State"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "becomes affected by a state of a type"
+          - key: state_recovered
+            label: "State"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "recovers from a state of a type"
       - key: range
         label: "Range"
         type: free_number
@@ -268,18 +357,102 @@ ability_types:
         type: free_text
         visibility_when: item_dep
         show_when: "true"
-      - key: trigger
-        label: "Trigger"
-        type: dropdown
-        # Per-trigger build costs come from the costed option source; no flat
-        # field cost so the selected trigger's own cost is not double-counted.
-        options_source: reaction_triggers
-      - key: trigger_trait
-        label: "Trigger Trait"
-        type: dropdown
-        options_source: traits_defense
-        visibility_when: trigger
-        show_when: "Target makes a trait check"
+      # Triggers are a repeatable set of rows; see the Reaction ability type
+      # for the full trigger cascade design notes. Extra rows cost extra.
+      - key: triggers
+        label: "Triggers"
+        type: solutions
+        default_count: 1
+        per_item:
+          increase:
+            build_cost: 2
+        row_fields:
+          - key: subject
+            label: "Subject"
+            type: dropdown
+            options_source: trigger_subjects
+          - key: event
+            label: "Event"
+            type: dropdown
+            options_source: trigger_events
+          - key: damage_type_hit
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "gets hit by damage of a type"
+          - key: damage_type_dealt
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "deals damage of a type"
+          - key: weapon_type
+            label: "Weapon Type"
+            type: dropdown
+            options_source: weapon_types
+            visibility_when: event
+            show_when: "gets hit by a weapon of a type"
+          - key: heal_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets healed by an ability of a type"
+          - key: cast_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "starts casting an ability of a type"
+          - key: targeted_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets targeted by an ability of a type"
+          - key: enactment_type_hit
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "gets hit with an enactment of a type"
+          - key: enactment_type_resolved
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "resolves an enactment of a type"
+          - key: trait
+            label: "Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "makes a trait check of a type"
+          - key: fail_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "fails a validation of a type"
+          - key: succeed_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "succeeds on a validation of a type"
+          - key: state_applied
+            label: "State"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "becomes affected by a state of a type"
+          - key: state_recovered
+            label: "State"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "recovers from a state of a type"
       - key: range
         label: "Range"
         type: free_number
@@ -430,18 +603,102 @@ ability_types:
         type: free_text
         visibility_when: item_dep
         show_when: "true"
-      - key: trigger
-        label: "Trigger"
-        type: dropdown
-        # Per-trigger build costs come from the costed option source; no flat
-        # field cost so the selected trigger's own cost is not double-counted.
-        options_source: reaction_triggers
-      - key: trigger_trait
-        label: "Trigger Trait"
-        type: dropdown
-        options_source: traits_defense
-        visibility_when: trigger
-        show_when: "Target makes a trait check"
+      # Triggers are a repeatable set of rows; see the Reaction ability type
+      # for the full trigger cascade design notes. Extra rows cost extra.
+      - key: triggers
+        label: "Triggers"
+        type: solutions
+        default_count: 1
+        per_item:
+          increase:
+            build_cost: 2
+        row_fields:
+          - key: subject
+            label: "Subject"
+            type: dropdown
+            options_source: trigger_subjects
+          - key: event
+            label: "Event"
+            type: dropdown
+            options_source: trigger_events
+          - key: damage_type_hit
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "gets hit by damage of a type"
+          - key: damage_type_dealt
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "deals damage of a type"
+          - key: weapon_type
+            label: "Weapon Type"
+            type: dropdown
+            options_source: weapon_types
+            visibility_when: event
+            show_when: "gets hit by a weapon of a type"
+          - key: heal_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets healed by an ability of a type"
+          - key: cast_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "starts casting an ability of a type"
+          - key: targeted_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets targeted by an ability of a type"
+          - key: enactment_type_hit
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "gets hit with an enactment of a type"
+          - key: enactment_type_resolved
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "resolves an enactment of a type"
+          - key: trait
+            label: "Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "makes a trait check of a type"
+          - key: fail_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "fails a validation of a type"
+          - key: succeed_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "succeeds on a validation of a type"
+          - key: state_applied
+            label: "State"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "becomes affected by a state of a type"
+          - key: state_recovered
+            label: "State"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "recovers from a state of a type"
       - key: range
         label: "Range"
         type: free_number

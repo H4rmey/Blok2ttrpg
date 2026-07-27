@@ -22,7 +22,12 @@ Because a Passive is free to use and can trigger whenever, it is the most expens
 
 {{perksTable (abilityType "passive")}}
 
+Triggers work exactly like a Reaction's: each is a Subject paired with an Event,
+the first Trigger is included, and additional Triggers cost extra. See the
+Trigger Events table under Reaction for the per-Event costs.
+
 ## Template
+
 
 ```yaml
 ability:

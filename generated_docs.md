@@ -1986,13 +1986,15 @@ Execution is the most basic form for an Ability. It is simply the: "I want to do
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Has Item Dependency | Enabled | -1 | 0 |
-| Energy +/- | Per step (increase) | -2 | 1 |
-| Energy +/- | Per step (decrease) | 3 | -1 |
-| Action +/- | Per step (increase) | -2 | 0 |
-| Action +/- | Per step (decrease) | 4 | 1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Has Item Dependency | -1 build (refund) |
+| Each +1 to Energy +/- | -2 build (refund), 1 energy |
+| Each -1 to Energy +/- | 3 build, -1 energy |
+| Each +1 to Action +/- | -2 build (refund) |
+| Each -1 to Action +/- | 4 build, 1 energy |
 
 
 ## Template
@@ -2043,33 +2045,35 @@ Phases are a state or passive ability that lasts for a predefined amount of time
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Has Item Dependency | Enabled | -1 | 0 |
-| Phase Duration | Per step (increase) | 2 | 1 |
-| Reverse Rounds | Per step (increase) | 4 | 0 |
-| Reverse Rounds | Per step (decrease) | -4 | 0 |
-| Action +/- | Per step (increase) | -2 | 0 |
-| Action +/- | Per step (decrease) | 4 | 1 |
-| All knockout requirements have to be met | Enabled | 3 | 0 |
-| Knockout can be used on the reverse phase | Enabled | 3 | 0 |
-| No knockout possible | Enabled | 5 | 0 |
-| Knockout Requirements: Knockout | None | 3 | 0 |
-| Knockout Requirements: Knockout | Engager takes damage | -1 | 0 |
-| Knockout Requirements: Knockout | Engager falls unconscious | 0 | 0 |
-| Knockout Requirements: Knockout | Engager dies | 1 | 0 |
-| Knockout Requirements: Knockout | Engager gets grabbed or restrained | -1 | 0 |
-| Knockout Requirements: Knockout | Engager moves voluntarily | -2 | 0 |
-| Knockout Requirements: Knockout | Engager is moved by another effect | -1 | 0 |
-| Knockout Requirements: Knockout | Engager fails a validation | -1 | 0 |
-| Knockout Requirements: Knockout | Engager uses another phase | 0 | 0 |
-| Knockout Requirements: Knockout | Engager loses line of sight to target | -1 | 0 |
-| Knockout Requirements: Knockout | Target moves out of range | -1 | 0 |
-| Knockout Requirements: Knockout | Target falls unconscious | 0 | 0 |
-| Knockout Requirements: Knockout | Target dies | 0 | 0 |
-| Knockout Requirements: Knockout | Target succeeds on a counter roll | -1 | 0 |
-| Knockout Requirements: Knockout | Phase duration expires | -2 | 0 |
-| Knockout Requirements: Knockout | Engager runs out of energy | -1 | 0 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Has Item Dependency | -1 build (refund) |
+| Each +1 to Phase Duration | 2 build, 1 energy |
+| Each +1 to Reverse Rounds | 4 build |
+| Each -1 to Reverse Rounds | -4 build (refund) |
+| Each +1 to Action +/- | -2 build (refund) |
+| Each -1 to Action +/- | 4 build, 1 energy |
+| Enable: All knockout requirements have to be met | 3 build |
+| Enable: Knockout can be used on the reverse phase | 3 build |
+| Enable: No knockout possible | 5 build |
+| Knockout: None | 3 build |
+| Knockout: Engager takes damage | -1 build (refund) |
+| Knockout: Engager falls unconscious | Free |
+| Knockout: Engager dies | 1 build |
+| Knockout: Engager gets grabbed or restrained | -1 build (refund) |
+| Knockout: Engager moves voluntarily | -2 build (refund) |
+| Knockout: Engager is moved by another effect | -1 build (refund) |
+| Knockout: Engager fails a validation | -1 build (refund) |
+| Knockout: Engager uses another phase | Free |
+| Knockout: Engager loses line of sight to target | -1 build (refund) |
+| Knockout: Target moves out of range | -1 build (refund) |
+| Knockout: Target falls unconscious | Free |
+| Knockout: Target dies | Free |
+| Knockout: Target succeeds on a counter roll | -1 build (refund) |
+| Knockout: Phase duration expires | -2 build (refund) |
+| Knockout: Engager runs out of energy | -1 build (refund) |
 
 
 ## Template
@@ -2106,39 +2110,26 @@ Just like a Reaction, a Preparation works outside the regular turn order. They f
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Has Item Dependency | Enabled | -1 | 0 |
-| Trigger | Target moves away from engager | 2 | 0 |
-| Trigger | Target moves towards engager | 2 | 0 |
-| Trigger | Target moves past engager | 2 | 0 |
-| Trigger | Engager gets healed by target | 1 | 0 |
-| Trigger | Target damages engager | 3 | 0 |
-| Trigger | Target makes a trait check | 2 | 0 |
-| Trigger | Target starts casting an ability | 4 | 1 |
-| Trigger | Target ends their turn within range | 2 | 0 |
-| Trigger | Target enters interaction range | 3 | 0 |
-| Trigger | Target leaves interaction range | 2 | 0 |
-| Trigger | Target fails a validation | 2 | 0 |
-| Trigger | Target succeeds on a validation | 2 | 0 |
-| Trigger | Target becomes affected by an enactment | 3 | 0 |
-| Trigger | Engager takes damage | 3 | 0 |
-| Trigger | Engager gets targeted by an ability | 4 | 1 |
-| Trigger | Ally within range takes damage | 2 | 0 |
-| Trigger | Ally within range gets healed | 1 | 0 |
-| Trigger | A target is moved by an effect | 2 | 0 |
-| Trigger | A persistent effect triggers | 2 | 0 |
-| Trigger | A minion is summoned within range | 1 | 0 |
-| Trigger Trait | Any | 0 | 0 |
-| Range | Per step (increase) | 1 | 0 |
-| Uses | Per step (increase) | 4 | 1 |
-| Action +/- | Per step (increase) | -2 | 0 |
-| Action +/- | Per step (decrease) | 1 | 4 |
-| Energy +/- | Per step (increase) | -2 | 1 |
-| Energy +/- | Per step (decrease) | 3 | -1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
 
+| Perk | Cost |
+| --- | --- |
+| Enable: Has Item Dependency | -1 build (refund) |
+| Each additional Trigger | 2 build |
+| Each +1 to Range | 1 build |
+| Each +1 to Uses | 4 build, 1 energy |
+| Each +1 to Action +/- | -2 build (refund) |
+| Each -1 to Action +/- | 1 build, 4 energy |
+| Each +1 to Energy +/- | -2 build (refund), 1 energy |
+| Each -1 to Energy +/- | 3 build, -1 energy |
+
+
+Triggers work exactly like a Reaction's: each is a Subject paired with an Event,
+the first Trigger is included, and additional Triggers cost extra. See the
+Trigger Events table under Reaction for the per-Event costs.
 
 ## Template
+
 
 ```yaml
 ability:
@@ -2175,37 +2166,65 @@ Reactions are Abilities that trigger outside your normal action economy. Reactio
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Has Item Dependency | Enabled | -1 | 0 |
-| Trigger | Target moves away from engager | 2 | 0 |
-| Trigger | Target moves towards engager | 2 | 0 |
-| Trigger | Target moves past engager | 2 | 0 |
-| Trigger | Engager gets healed by target | 1 | 0 |
-| Trigger | Target damages engager | 3 | 0 |
-| Trigger | Target makes a trait check | 2 | 0 |
-| Trigger | Target starts casting an ability | 4 | 1 |
-| Trigger | Target ends their turn within range | 2 | 0 |
-| Trigger | Target enters interaction range | 3 | 0 |
-| Trigger | Target leaves interaction range | 2 | 0 |
-| Trigger | Target fails a validation | 2 | 0 |
-| Trigger | Target succeeds on a validation | 2 | 0 |
-| Trigger | Target becomes affected by an enactment | 3 | 0 |
-| Trigger | Engager takes damage | 3 | 0 |
-| Trigger | Engager gets targeted by an ability | 4 | 1 |
-| Trigger | Ally within range takes damage | 2 | 0 |
-| Trigger | Ally within range gets healed | 1 | 0 |
-| Trigger | A target is moved by an effect | 2 | 0 |
-| Trigger | A persistent effect triggers | 2 | 0 |
-| Trigger | A minion is summoned within range | 1 | 0 |
-| Trigger Trait | Any | 0 | 0 |
-| Range | Per step (increase) | 1 | 0 |
-| Uses | Per step (increase) | 4 | 1 |
-| Energy +/- | Per step (increase) | -2 | 1 |
-| Energy +/- | Per step (decrease) | 3 | -1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Has Item Dependency | -1 build (refund) |
+| Each additional Trigger | 2 build |
+| Each +1 to Range | 1 build |
+| Each +1 to Uses | 4 build, 1 energy |
+| Each +1 to Energy +/- | -2 build (refund), 1 energy |
+| Each -1 to Energy +/- | 3 build, -1 energy |
+
+
+## Trigger Events
+
+Every Trigger is a Subject (You, An Ally, An Opponent, Someone Else) paired with
+one of the Events below. The first Trigger is included; each additional Trigger
+costs extra (see the Perks table above). The build cost of a Trigger depends on
+the Event chosen:
+
+| Choice | Cost |
+| --- | --- |
+| moves away from you | 2 build |
+| moves towards you | 2 build |
+| moves past you | 2 build |
+| enters interaction range | 3 build |
+| leaves interaction range | 2 build |
+| ends their turn within range | 2 build |
+| is moved by an effect | 2 build |
+| gets hit by damage of a type | 3 build |
+| deals damage of a type | 3 build |
+| gets healed by an ability of a type | 2 build |
+| gets hit by a weapon of a type | 2 build |
+| starts casting an ability of a type | 4 build, 1 energy |
+| gets targeted by an ability of a type | 4 build, 1 energy |
+| gets hit with an enactment of a type | 3 build |
+| resolves an enactment of a type | 3 build |
+| makes a trait check of a type | 2 build |
+| fails a validation of a type | 2 build |
+| succeeds on a validation of a type | 2 build |
+| becomes affected by a state of a type | 3 build |
+| recovers from a state of a type | 2 build |
+| falls unconscious | 1 build |
+| dies | 1 build |
+| moves | 2 build |
+| takes any damage | 4 build |
+| deals any damage | 4 build |
+| gets healed | 3 build |
+| casts any ability | 5 build, 1 energy |
+| gets targeted by any ability | 5 build, 1 energy |
+| is hit by any enactment | 4 build |
+| makes any trait check | 3 build |
+| fails any validation | 3 build |
+| succeeds on any validation | 3 build |
+| becomes affected by any state | 4 build |
+| recovers from any state | 3 build |
 
 
 ## Template
+
 
 ```yaml
 ability:
@@ -2242,18 +2261,18 @@ Concentration is an Ability Type that allows an effect to persist over multiple 
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Has Item Dependency | Enabled | -1 | 0 |
-| Re-trigger Timing | Any | 0 | 0 |
-| Upkeep Cost | Any | 0 | 0 |
-| Energy +/- | Per step (increase) | -2 | 1 |
-| Energy +/- | Per step (decrease) | 3 | -1 |
-| Action +/- | Per step (increase) | -2 | 0 |
-| Action +/- | Per step (decrease) | 4 | 1 |
-| Effortless (upkeep is free) | Enabled | 3 | 0 |
-| Iron Will (shift counter roll up on damage) | Enabled | 2 | 0 |
-| Dual Focus (allow a second Concentration) | Enabled | 5 | 0 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Has Item Dependency | -1 build (refund) |
+| Each +1 to Energy +/- | -2 build (refund), 1 energy |
+| Each -1 to Energy +/- | 3 build, -1 energy |
+| Each +1 to Action +/- | -2 build (refund) |
+| Each -1 to Action +/- | 4 build, 1 energy |
+| Enable: Effortless (upkeep is free) | 3 build |
+| Enable: Iron Will (shift counter roll up on damage) | 2 build |
+| Enable: Dual Focus (allow a second Concentration) | 5 build |
 
 
 ## Template
@@ -2292,37 +2311,24 @@ Because a Passive is free to use and can trigger whenever, it is the most expens
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Has Item Dependency | Enabled | -1 | 0 |
-| Trigger | Target moves away from engager | 2 | 0 |
-| Trigger | Target moves towards engager | 2 | 0 |
-| Trigger | Target moves past engager | 2 | 0 |
-| Trigger | Engager gets healed by target | 1 | 0 |
-| Trigger | Target damages engager | 3 | 0 |
-| Trigger | Target makes a trait check | 2 | 0 |
-| Trigger | Target starts casting an ability | 4 | 1 |
-| Trigger | Target ends their turn within range | 2 | 0 |
-| Trigger | Target enters interaction range | 3 | 0 |
-| Trigger | Target leaves interaction range | 2 | 0 |
-| Trigger | Target fails a validation | 2 | 0 |
-| Trigger | Target succeeds on a validation | 2 | 0 |
-| Trigger | Target becomes affected by an enactment | 3 | 0 |
-| Trigger | Engager takes damage | 3 | 0 |
-| Trigger | Engager gets targeted by an ability | 4 | 1 |
-| Trigger | Ally within range takes damage | 2 | 0 |
-| Trigger | Ally within range gets healed | 1 | 0 |
-| Trigger | A target is moved by an effect | 2 | 0 |
-| Trigger | A persistent effect triggers | 2 | 0 |
-| Trigger | A minion is summoned within range | 1 | 0 |
-| Trigger Trait | Any | 0 | 0 |
-| Range | Per step (increase) | 1 | 0 |
-| Uses | Per step (increase) | 4 | 1 |
-| Energy +/- | Per step (increase) | -2 | 1 |
-| Energy +/- | Per step (decrease) | 3 | -1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
 
+| Perk | Cost |
+| --- | --- |
+| Enable: Has Item Dependency | -1 build (refund) |
+| Each additional Trigger | 2 build |
+| Each +1 to Range | 1 build |
+| Each +1 to Uses | 4 build, 1 energy |
+| Each +1 to Energy +/- | -2 build (refund), 1 energy |
+| Each -1 to Energy +/- | 3 build, -1 energy |
+
+
+Triggers work exactly like a Reaction's: each is a Subject paired with an Event,
+the first Trigger is included, and additional Triggers cost extra. See the
+Trigger Events table under Reaction for the per-Event costs.
 
 ## Template
+
 
 ```yaml
 ability:
@@ -2348,22 +2354,40 @@ Enact Damage allows characters to inflict harm on their enemies.
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Will always resolve | Enabled | 5 | 3 |
-| Source | 1d4 | 0 | 0 |
-| Source | 1d6 | 2 | 1 |
-| Source | 1d8 | 4 | 2 |
-| Source | 1d10 | 6 | 3 |
-| Source | 1d12 | 8 | 4 |
-| Source | Trait (1d10) | 3 | 0 |
-| Source | Another roll result | 3 | 1 |
-| Trait | Any | 0 | 0 |
-| Trait | Group offset: offense | 0 | 0 |
-| Trait | Group offset: defense | 4 | 1 |
-| Trait | Group offset: general | 2 | 0 |
-| Flat Bonus | Per step (increase) | 2 | 0 |
-| Offensive Trait (extra die) | Any | 4 | 2 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Will always resolve | 5 build, 3 energy |
+| Source: 1d4 | Free |
+| Source: 1d6 | 2 build, 1 energy |
+| Source: 1d8 | 4 build, 2 energy |
+| Source: 1d10 | 6 build, 3 energy |
+| Source: 1d12 | 8 build, 4 energy |
+| Source: Trait (1d10) | 3 build |
+| Source: Another roll result | 3 build, 1 energy |
+| Each +1 to Flat Bonus | 2 build |
+| Offensive Trait (extra die) | 4 build, 2 energy |
+| Each additional Damage Type | 2 build |
+| Damage Type: Physical | Free |
+| Damage Type: Slashing | Free |
+| Damage Type: Piercing | Free |
+| Damage Type: Bludgeoning | Free |
+| Damage Type: Fire | 2 build |
+| Damage Type: Cold | 2 build |
+| Damage Type: Lightning | 2 build |
+| Damage Type: Thunder | 2 build |
+| Damage Type: Acid | 3 build |
+| Damage Type: Poison | 3 build |
+| Damage Type: Psychic | 4 build |
+| Damage Type: Necrotic | 4 build |
+| Damage Type: Radiant | 4 build |
+| Damage Type: Force | 5 build |
+| Damage Type: Arcane | 5 build |
+| Damage Type: Nature | 3 build |
+| Damage Type: Holy | 5 build |
+| Damage Type: Shadow | 5 build |
+| Damage Type: Chaos | 6 build |
 
 
 
@@ -2400,19 +2424,20 @@ Enact Healing abilities allow characters to restore health to themselves or thei
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Will always resolve | Enabled | 4 | 2 |
-| Source | 1d4 | 0 | 0 |
-| Source | 1d6 | 2 | 1 |
-| Source | 1d8 | 4 | 2 |
-| Source | 1d10 | 6 | 3 |
-| Source | 1d12 | 8 | 4 |
-| Source | Trait (1d10) | 3 | 0 |
-| Source | Another roll result | 3 | 1 |
-| Trait | Any | 0 | 0 |
-| Flat Bonus | Per step (increase) | 2 | 0 |
-| Medicine Trait | Any | 3 | 1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Will always resolve | 4 build, 2 energy |
+| Source: 1d4 | Free |
+| Source: 1d6 | 2 build, 1 energy |
+| Source: 1d8 | 4 build, 2 energy |
+| Source: 1d10 | 6 build, 3 energy |
+| Source: 1d12 | 8 build, 4 energy |
+| Source: Trait (1d10) | 3 build |
+| Source: Another roll result | 3 build, 1 energy |
+| Each +1 to Flat Bonus | 2 build |
+| Medicine Trait | 3 build, 1 energy |
 
 
 
@@ -2450,13 +2475,14 @@ enactments:
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Will always resolve | Enabled | 3 | 1 |
-| Origin | Engager | 0 | 0 |
-| Origin | Other Origin | 2 | 1 |
-| Distance | Per step (increase) | 1 | 0 |
-| Directions: Direction | Any | 0 | 0 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Will always resolve | 3 build, 1 energy |
+| Origin: Engager | Free |
+| Origin: Other Origin | 2 build, 1 energy |
+| Each +1 to Distance | 1 build |
 
 
 
@@ -2498,17 +2524,35 @@ The Enact Persistent Effect applies a lingering effect to a target, such as fire
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Will always resolve | Enabled | 5 | 3 |
-| Applies | Any | 0 | 0 |
-| Duration | Per step (increase) | 2 | 1 |
-| Trigger | Start of Target Turn | 0 | 0 |
-| Trigger | End of Engager Turn | 0 | 0 |
-| Solutions: Solution | Any | 0 | 0 |
-| Solutions: Solution | Group offset: defense | 0 | 0 |
-| Solutions: Solution | Group offset: general | 2 | 0 |
-| Solutions: Solution | Group offset: offense | 2 | 0 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Will always resolve | 5 build, 3 energy |
+| Each +1 to Duration | 2 build, 1 energy |
+| Each removed Solution | 3 build, 1 energy |
+| Use a General trait for Solution | 2 build |
+| Use an Offensive trait for Solution | 2 build |
+| Each additional Damage Type | 2 build |
+| Damage Type: Physical | Free |
+| Damage Type: Slashing | Free |
+| Damage Type: Piercing | Free |
+| Damage Type: Bludgeoning | Free |
+| Damage Type: Fire | 2 build |
+| Damage Type: Cold | 2 build |
+| Damage Type: Lightning | 2 build |
+| Damage Type: Thunder | 2 build |
+| Damage Type: Acid | 3 build |
+| Damage Type: Poison | 3 build |
+| Damage Type: Psychic | 4 build |
+| Damage Type: Necrotic | 4 build |
+| Damage Type: Radiant | 4 build |
+| Damage Type: Force | 5 build |
+| Damage Type: Arcane | 5 build |
+| Damage Type: Nature | 3 build |
+| Damage Type: Holy | 5 build |
+| Damage Type: Shadow | 5 build |
+| Damage Type: Chaos | 6 build |
 
 
 ## Template
@@ -2545,14 +2589,13 @@ enactment:
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Will always resolve | Enabled | 4 | 2 |
-| Trait | Any | 0 | 0 |
-| Direction | UP | 0 | 0 |
-| Direction | DOWN | 0 | 0 |
-| Amount | Per step (increase) | 3 | 1 |
-| Uses | Per step (increase) | 3 | 1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Will always resolve | 4 build, 2 energy |
+| Each +1 to Amount | 3 build, 1 energy |
+| Each +1 to Uses | 3 build, 1 energy |
 
 
 ## Template
@@ -2590,19 +2633,20 @@ Enact State will apply a state to a target (e.g., prone, stunned, charmed).
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Duration (turns) | 1 turn | 0 | 0 |
-| Duration (turns) | 2 turns | 1 | 0 |
-| Duration (turns) | 3 turns | 2 | 0 |
-| Duration (turns) | 4 turns | 3 | 0 |
-| Duration (turns) | 5 turns | 4 | 0 |
-| Duration (turns) | 6 turns | 5 | 0 |
-| Duration (turns) | Unlimited | 15 | 5 |
-| Solutions: Solution | Any | 0 | 0 |
-| Solutions: Solution | Group offset: defense | 0 | 0 |
-| Solutions: Solution | Group offset: general | 2 | 0 |
-| Solutions: Solution | Group offset: offense | 2 | 0 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Duration (turns): 1 turn | Free |
+| Duration (turns): 2 turns | 1 build |
+| Duration (turns): 3 turns | 2 build |
+| Duration (turns): 4 turns | 3 build |
+| Duration (turns): 5 turns | 4 build |
+| Duration (turns): 6 turns | 5 build |
+| Duration (turns): Unlimited | 15 build, 5 energy |
+| Each removed Solution | 3 build, 1 energy |
+| Use a General trait for Solution | 2 build |
+| Use an Offensive trait for Solution | 2 build |
 
 
 
@@ -2644,13 +2688,15 @@ You can also assign the point of **Origin** to an object, but this must be discu
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Radius | Per step (increase) | 2 | 1 |
-| Range | Per step (increase) | 1 | 0 |
-| Origin | Engager | 0 | 0 |
-| Origin | Other Origin | 2 | 1 |
-| Use result of previous interaction/validation | Enabled | 3 | 1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Each +1 to Radius | 2 build, 1 energy |
+| Each +1 to Range | 1 build |
+| Origin: Engager | Free |
+| Origin: Other Origin | 2 build, 1 energy |
+| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
 
 
 ## Template
@@ -2691,16 +2737,17 @@ The effect of the **AoE** does not trigger immediately. Instead, it activates ei
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Radius | Per step (increase) | 2 | 1 |
-| Range | Per step (increase) | 1 | 0 |
-| Duration | Per step (increase) | 2 | 1 |
-| Trigger Timing | Any | 0 | 0 |
-| Origin | Engager | 0 | 0 |
-| Origin | Other Origin | 2 | 1 |
-| Engager is immune | Enabled | 2 | 0 |
-| Use result of previous interaction/validation | Enabled | 3 | 1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Each +1 to Radius | 2 build, 1 energy |
+| Each +1 to Range | 1 build |
+| Each +1 to Duration | 2 build, 1 energy |
+| Origin: Engager | Free |
+| Origin: Other Origin | 2 build, 1 energy |
+| Enable: Engager is immune | 2 build |
+| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
 
 
 ## Template
@@ -2740,11 +2787,13 @@ interactions:
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Range | Per step (increase) | 1 | 0 |
-| Targets | Per step (increase) | 3 | 2 |
-| Use result of previous interaction/validation | Enabled | 3 | 1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Each +1 to Range | 1 build |
+| Each +1 to Targets | 3 build, 2 energy |
+| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
 
 
 ## Template
@@ -2784,15 +2833,16 @@ interactions:
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Range | Per step (increase) | 1 | 0 |
-| Range | Per step (decrease) | 0 | 0 |
-| Targets | Per step (increase) | 3 | 2 |
-| Target may be not visible | Enabled | 3 | 1 |
-| Target may be obstructed | Enabled | 3 | 1 |
-| Remove engagement penalty | Enabled | 3 | 1 |
-| Use result of previous interaction/validation | Enabled | 3 | 1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Each +1 to Range | 1 build |
+| Each +1 to Targets | 3 build, 2 energy |
+| Enable: Target may be not visible | 3 build, 1 energy |
+| Enable: Target may be obstructed | 3 build, 1 energy |
+| Enable: Remove engagement penalty | 3 build, 1 energy |
+| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
 
 
 ## Template
@@ -2830,9 +2880,11 @@ interactions:
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Use result of previous interaction/validation | Enabled | 3 | 1 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
 
 
 
@@ -2869,24 +2921,17 @@ Here, you'll find the guidelines and options for customizing your **Engagement a
 
 ## Options
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Engage Roll Type | Trait Roll | 0 | 0 |
-| Engage Roll Type | Generic Roll | -2 | 0 |
-| Engage Roll Type | Another roll result | 3 | 1 |
-| Engage Roll Type | Use result of previous interaction | 3 | 1 |
-| Trait | Any | 0 | 0 |
-| Trait | Group offset: offense | 0 | 0 |
-| Trait | Group offset: defense | 2 | 0 |
-| Trait | Group offset: general | 2 | 0 |
-| Generic Die | d6 | 0 | 0 |
-| Generic Die | d8 | 1 | 0 |
-| Generic Die | d10 | 2 | 0 |
-| Generic Die | d12 | 3 | 0 |
-| Counter Trait: Counter Trait | Any | 0 | 0 |
-| Counter Trait: Counter Trait | Group offset: defense | 0 | 0 |
-| Counter Trait: Counter Trait | Group offset: general | 2 | 0 |
-| Counter Trait: Counter Trait | Group offset: offense | 2 | 0 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Engage Roll Type: Trait Roll | Free |
+| Engage Roll Type: Generic Roll | -2 build (refund) |
+| Engage Roll Type: Another roll result | 3 build, 1 energy |
+| Engage Roll Type: Use result of previous interaction | 3 build, 1 energy |
+| Each removed Counter Trait | 3 build, 1 energy |
+| Use a General trait for Counter Trait | 2 build |
+| Use an Offensive trait for Counter Trait | 2 build |
 
 
 
@@ -2961,22 +3006,22 @@ Enact Negation allows characters to reduce incomming damage by choosing a source
 
 ## Perks
 
-| Option | Choice | Build Cost | Energy Cost |
-| --- | --- | --- | --- |
-| Will always resolve | Enabled | 5 | 3 |
-| Source | 1d4 | 0 | 0 |
-| Source | 1d6 | 2 | 1 |
-| Source | 1d8 | 4 | 2 |
-| Source | 1d10 | 6 | 3 |
-| Source | 1d12 | 8 | 4 |
-| Source | Trait (1d10) | 3 | 0 |
-| Source | Another roll result | 3 | 1 |
-| Trait | Any | 0 | 0 |
-| Flat Bonus | Per step (increase) | 2 | 0 |
-| Flat Bonus | Per step (decrease) | 0 | 0 |
-| Defensive Trait (extra die) | Any | 4 | 2 |
-| Apply Negation to counter roll | Enabled | 4 | 2 |
-| Ability hits Engager instead | Enabled | 4 | 2 |
+The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+
+| Perk | Cost |
+| --- | --- |
+| Enable: Will always resolve | 5 build, 3 energy |
+| Source: 1d4 | Free |
+| Source: 1d6 | 2 build, 1 energy |
+| Source: 1d8 | 4 build, 2 energy |
+| Source: 1d10 | 6 build, 3 energy |
+| Source: 1d12 | 8 build, 4 energy |
+| Source: Trait (1d10) | 3 build |
+| Source: Another roll result | 3 build, 1 energy |
+| Each +1 to Flat Bonus | 2 build |
+| Defensive Trait (extra die) | 4 build, 2 energy |
+| Enable: Apply Negation to counter roll | 4 build, 2 energy |
+| Enable: Ability hits Engager instead | 4 build, 2 energy |
 
 
 

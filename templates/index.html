@@ -1,13 +1,25 @@
 {{ template "head" . }}
 <h1>Characters</h1>
 <div class="toolbar">
-  <a class="btn" href="/characters/new">+ New Character</a>
+  <button class="btn" type="button" onclick="document.getElementById('new-character-modal').showModal()">+ New Character</button>
   <button class="btn" type="button" onclick="document.getElementById('character-import-input').click()">Import YAML</button>
   <form id="character-import-form" action="/characters/import" method="post" enctype="multipart/form-data" hidden>
     <input id="character-import-input" type="file" name="file" accept=".yaml,.yml" onchange="this.form.submit()">
   </form>
 
 </div>
+
+<dialog id="new-character-modal">
+  <form method="post" action="/characters/create">
+    <h2>New Character</h2>
+    <label for="new-character-name">Name</label>
+    <input id="new-character-name" type="text" name="attr_name" placeholder="Character name" required autofocus>
+    <div class="toolbar">
+      <button class="btn primary" type="submit">Create</button>
+      <button class="btn" type="button" onclick="document.getElementById('new-character-modal').close()">Cancel</button>
+    </div>
+  </form>
+</dialog>
 
 {{ if .Characters }}
 <ul class="card-grid">

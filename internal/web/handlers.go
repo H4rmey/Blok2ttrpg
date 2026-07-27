@@ -77,6 +77,11 @@ func (a *App) handleCreateCharacter(w http.ResponseWriter, r *http.Request) {
 	id := fmt.Sprintf("char-%d", time.Now().UnixNano())
 	c := a.blankCharacter(id)
 	a.applyCharacterForm(&c, r)
+	// Ensure the name provided in the creation modal is always stored, even if
+	// "name" is not a configured attribute field.
+	if name := r.FormValue("attr_name"); name != "" {
+		c.Attributes["name"] = name
+	}
 	if err := a.Store.Save(c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -189,9 +189,27 @@ enactments:
         cost:
           build_cost: 4
           energy_cost: 2
+      - key: damage_type
+        label: "Damage Types"
+        type: solutions
+        default_count: 1
+        options_source: damage_types
+        row_fields:
+          - key: value
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+        per_item:
+          increase:
+            build_cost: 2
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
 
 
   healing:
+
     type: "Enact Healing"
     description: "Restores health to a target."
     base_cost:
@@ -462,8 +480,26 @@ enactments:
           decrease:
             build_cost: 3
             energy_cost: 1
+      - key: damage_type
+        label: "Damage Types"
+        type: solutions
+        default_count: 1
+        options_source: damage_types
+        row_fields:
+          - key: value
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+        per_item:
+          increase:
+            build_cost: 2
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
 
   state:
+
     type: "Enact State"
     description: "Applies a state or condition to a target."
     base_cost:

@@ -644,4 +644,54 @@ textarea { min-height: 5rem; resize: vertical; }
   border: 1px solid var(--border);
 }
 
+/* New Character modal dialog */
+dialog {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 0;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  max-width: 420px;
+  width: calc(100% - 2rem);
+}
+dialog::backdrop {
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(2px);
+}
+dialog form {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+dialog h2 {
+  margin: 0;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+dialog label {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+dialog input[type="text"] {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+}
+dialog input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-strong);
+}
+dialog .toolbar {
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+
 

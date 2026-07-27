@@ -20,7 +20,12 @@ Just like a Reaction, a Preparation works outside the regular turn order. They f
 
 {{perksTable (abilityType "preparation")}}
 
+Triggers work exactly like a Reaction's: each is a Subject paired with an Event,
+the first Trigger is included, and additional Triggers cost extra. See the
+Trigger Events table under Reaction for the per-Event costs.
+
 ## Template
+
 
 ```yaml
 ability:

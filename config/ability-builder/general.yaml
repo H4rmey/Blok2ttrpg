@@ -17,6 +17,80 @@ trait_categories:
 # entry's cost. A costed source takes precedence over a plain option_sources
 # entry of the same name.
 option_sources_costed:
+  # Per-damage-type build cost for the follow-up dropdown of typed damage
+  # triggers. Common/mundane damage is cheap (+0); rarer or more potent
+  # elemental/exotic damage costs more, on a +0..+6 scale.
+  damage_types:
+    - value: "Physical"
+      cost: { build_cost: 0 }
+    - value: "Slashing"
+      cost: { build_cost: 0 }
+    - value: "Piercing"
+      cost: { build_cost: 0 }
+    - value: "Bludgeoning"
+      cost: { build_cost: 0 }
+    - value: "Fire"
+      cost: { build_cost: 2 }
+    - value: "Cold"
+      cost: { build_cost: 2 }
+    - value: "Lightning"
+      cost: { build_cost: 2 }
+    - value: "Thunder"
+      cost: { build_cost: 2 }
+    - value: "Acid"
+      cost: { build_cost: 3 }
+    - value: "Poison"
+      cost: { build_cost: 3 }
+    - value: "Psychic"
+      cost: { build_cost: 4 }
+    - value: "Necrotic"
+      cost: { build_cost: 4 }
+    - value: "Radiant"
+      cost: { build_cost: 4 }
+    - value: "Force"
+      cost: { build_cost: 5 }
+    - value: "Arcane"
+      cost: { build_cost: 5 }
+    - value: "Nature"
+      cost: { build_cost: 3 }
+    - value: "Holy"
+      cost: { build_cost: 5 }
+    - value: "Shadow"
+      cost: { build_cost: 5 }
+    - value: "Chaos"
+      cost: { build_cost: 6 }
+
+  # Per-weapon-type build cost for the "gets hit by a weapon of a type"
+  # follow-up dropdown. Common weapons are cheap; specialised/ranged/exotic
+  # weapons cost more, on a +0..+6 scale.
+  weapon_types:
+    - value: "Unarmed"
+      cost: { build_cost: 0 }
+    - value: "Sword"
+      cost: { build_cost: 0 }
+    - value: "Axe"
+      cost: { build_cost: 0 }
+    - value: "Mace"
+      cost: { build_cost: 0 }
+    - value: "Spear"
+      cost: { build_cost: 1 }
+    - value: "Dagger"
+      cost: { build_cost: 1 }
+    - value: "Bow"
+      cost: { build_cost: 2 }
+    - value: "Crossbow"
+      cost: { build_cost: 2 }
+    - value: "Thrown"
+      cost: { build_cost: 2 }
+    - value: "Firearm"
+      cost: { build_cost: 4 }
+    - value: "Staff"
+      cost: { build_cost: 3 }
+    - value: "Wand"
+      cost: { build_cost: 3 }
+    - value: "Shield"
+      cost: { build_cost: 2 }
+
   # Balanced per-knockout costs for Phase abilities. A knockout is a condition
   # that interrupts an active Phase, so it is a drawback: the more easily a
   # knockout can be triggered, the larger the build discount it grants. "None"
@@ -71,75 +145,179 @@ option_sources_costed:
       cost:
         build_cost: -1
 
-  # Balanced per-trigger build costs for Reaction / Preparation abilities.
-  # Common or powerful reactive triggers cost more; situational or weak
-  # triggers cost less. Baseline is 2 build points.
-  reaction_triggers:
-    - value: "Target moves away from engager"
+  # Balanced per-event build costs for the reactive Trigger Event dropdown.
+  # A trigger is described as a Subject (You / An Ally / An Opponent /
+  # Someone Else) plus one of these subject-agnostic events. Common or
+  # powerful reactive events cost more; situational or weak events cost less.
+  # Baseline is 2 build points. Some events cascade into a follow-up dropdown
+  # (damage type, enactment type, trait, state) via visibility_when.
+  trigger_events:
+    # Movement
+    - value: "moves away from you"
       cost:
         build_cost: 2
-    - value: "Target moves towards engager"
+    - value: "moves towards you"
       cost:
         build_cost: 2
-    - value: "Target moves past engager"
+    - value: "moves past you"
       cost:
         build_cost: 2
-    - value: "Engager gets healed by target"
-      cost:
-        build_cost: 1
-    - value: "Target damages engager"
+    - value: "enters interaction range"
       cost:
         build_cost: 3
-    - value: "Target makes a trait check"
+    - value: "leaves interaction range"
       cost:
         build_cost: 2
-    - value: "Target starts casting an ability"
+    - value: "ends their turn within range"
+      cost:
+        build_cost: 2
+    - value: "is moved by an effect"
+      cost:
+        build_cost: 2
+    # Damage & healing - typed variants keep triggers specific instead of
+    # firing on any damage/heal at all.
+    - value: "gets hit by damage of a type"
+      cost:
+        build_cost: 3
+    - value: "deals damage of a type"
+      cost:
+        build_cost: 3
+    - value: "gets healed by an ability of a type"
+      cost:
+        build_cost: 2
+    - value: "gets hit by a weapon of a type"
+      cost:
+        build_cost: 2
+    # Abilities & enactments - typed variants for enactment / ability type.
+    - value: "starts casting an ability of a type"
       cost:
         build_cost: 4
         energy_cost: 1
-    - value: "Target ends their turn within range"
-      cost:
-        build_cost: 2
-    - value: "Target enters interaction range"
-      cost:
-        build_cost: 3
-    - value: "Target leaves interaction range"
-      cost:
-        build_cost: 2
-    - value: "Target fails a validation"
-      cost:
-        build_cost: 2
-    - value: "Target succeeds on a validation"
-      cost:
-        build_cost: 2
-    - value: "Target becomes affected by an enactment"
-      cost:
-        build_cost: 3
-    - value: "Engager takes damage"
-      cost:
-        build_cost: 3
-    - value: "Engager gets targeted by an ability"
+    - value: "gets targeted by an ability of a type"
       cost:
         build_cost: 4
         energy_cost: 1
-    - value: "Ally within range takes damage"
+    - value: "gets hit with an enactment of a type"
+      cost:
+        build_cost: 3
+    - value: "resolves an enactment of a type"
+      cost:
+        build_cost: 3
+    # Checks, validations & state - typed variants.
+    - value: "makes a trait check of a type"
       cost:
         build_cost: 2
-    - value: "Ally within range gets healed"
+    - value: "fails a validation of a type"
+      cost:
+        build_cost: 2
+    - value: "succeeds on a validation of a type"
+      cost:
+        build_cost: 2
+    - value: "becomes affected by a state of a type"
+      cost:
+        build_cost: 3
+    - value: "recovers from a state of a type"
+      cost:
+        build_cost: 2
+    # Status changes.
+    - value: "falls unconscious"
       cost:
         build_cost: 1
-    - value: "A target is moved by an effect"
-      cost:
-        build_cost: 2
-    - value: "A persistent effect triggers"
-      cost:
-        build_cost: 2
-    - value: "A minion is summoned within range"
+    - value: "dies"
       cost:
         build_cost: 1
+    # Non-typed "any" events. These fire on the broad category regardless of
+    # type, so they have no follow-up dropdown and cost slightly more than the
+    # typed variants (a broader trigger is more useful).
+    - value: "moves"
+      cost:
+        build_cost: 2
+    - value: "takes any damage"
+      cost:
+        build_cost: 4
+    - value: "deals any damage"
+      cost:
+        build_cost: 4
+    - value: "gets healed"
+      cost:
+        build_cost: 3
+    - value: "casts any ability"
+      cost:
+        build_cost: 5
+        energy_cost: 1
+    - value: "gets targeted by any ability"
+      cost:
+        build_cost: 5
+        energy_cost: 1
+    - value: "is hit by any enactment"
+      cost:
+        build_cost: 4
+    - value: "makes any trait check"
+      cost:
+        build_cost: 3
+    - value: "fails any validation"
+      cost:
+        build_cost: 3
+    - value: "succeeds on any validation"
+      cost:
+        build_cost: 3
+    - value: "becomes affected by any state"
+      cost:
+        build_cost: 4
+    - value: "recovers from any state"
+      cost:
+        build_cost: 3
+
+
 
 option_sources:
+  # Who the reactive trigger watches. Paired with a trigger_events entry to
+  # form a full trigger, e.g. "An Opponent" + "gets hit by damage of a type".
+  trigger_subjects:
+    - You
+    - An Ally
+    - An Opponent
+    - Someone Else
+  # Broad weapon categories, used by the "gets hit by a weapon of a type"
+  # trigger.
+  weapon_types:
+    - Unarmed
+    - Sword
+    - Axe
+    - Mace
+    - Spear
+    - Dagger
+    - Bow
+    - Crossbow
+    - Thrown
+    - Firearm
+    - Staff
+    - Wand
+    - Shield
+  damage_types:
+
+    - Physical
+
+    - Slashing
+    - Piercing
+    - Bludgeoning
+    - Fire
+    - Cold
+    - Lightning
+    - Thunder
+    - Acid
+    - Poison
+    - Psychic
+    - Necrotic
+    - Radiant
+    - Force
+    - Arcane
+    - Nature
+    - Holy
+    - Shadow
+    - Chaos
   directions_all:
+
     - North
     - East
     - South

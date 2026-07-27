@@ -20,7 +20,17 @@ Reactions are Abilities that trigger outside your normal action economy. Reactio
 
 {{perksTable (abilityType "reaction")}}
 
+## Trigger Events
+
+Every Trigger is a Subject (You, An Ally, An Opponent, Someone Else) paired with
+one of the Events below. The first Trigger is included; each additional Trigger
+costs extra (see the Perks table above). The build cost of a Trigger depends on
+the Event chosen:
+
+{{costedOptionsTable "trigger_events"}}
+
 ## Template
+
 
 ```yaml
 ability:

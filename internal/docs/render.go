@@ -68,6 +68,24 @@ func funcMap(cfg *config.Config) template.FuncMap {
 			return fieldsTable(cfg, fields)
 		},
 
+		// costedOptionsTable renders a standalone reference table for a costed
+		// option source (e.g. "trigger_events"), one row per option with its
+		// cost in words. It is meant to be printed once and referenced from the
+		// ability types that use the source, so the large list is not repeated.
+		"costedOptionsTable": func(source string) string {
+			opts := cfg.OptionsFor(source)
+			if len(opts) == 0 {
+				return "_No options configured._"
+			}
+			var b strings.Builder
+			b.WriteString("| Choice | Cost |\n")
+			b.WriteString("| --- | --- |\n")
+			for _, opt := range opts {
+				b.WriteString(fmt.Sprintf("| %s | %s |\n", orDash(optionLabel(opt)), costWords(opt.Cost)))
+			}
+			return b.String()
+		},
+
 		// enactmentSurchargeTable renders the additional-enactment surcharge.
 		"enactmentSurchargeTable": func() string {
 			var b strings.Builder
@@ -92,92 +110,216 @@ func findField(fields []config.Field, key string) (config.Field, bool) {
 	return config.Field{}, false
 }
 
-// fieldsTable builds a markdown table describing the cost-bearing options of a
-// set of fields. Fields without a direct cost (plain text/number without
-// per-step, or dropdowns without option costs) are still listed so the reader
-// sees the full option surface. The config is used to resolve costed
-// options_source lists (e.g. per-trigger costs) and group offsets so those
-// stay in sync with the YAML automatically.
+// sharedListSources names option sources that are large and reused across
+// several components. Rather than repeat them inline in every Perks table,
+// each is printed once in a shared reference table and skipped here.
+var sharedListSources = map[string]bool{
+	"trigger_events": true,
+}
+
+// fieldsTable builds a reader-friendly markdown table describing the perks a
+// component offers. Each row is a plain-language description of a choice plus
+// its cost in words (e.g. "4 build, 2 energy" or "Free"), so the docs read as a
+// standalone rulebook rather than a dump of the builder's form fields. Purely
+// cosmetic selectors that carry no cost are omitted (they belong in the Rules
+// prose), and large shared option lists are referenced instead of repeated.
 func fieldsTable(cfg *config.Config, fields []config.Field) string {
 	if len(fields) == 0 {
 		return "_No options configured._"
 	}
 	var b strings.Builder
-	b.WriteString("| Option | Choice | Build Cost | Energy Cost |\n")
-	b.WriteString("| --- | --- | --- | --- |\n")
-	rows := writeFieldRows(&b, cfg, fields, "")
+	intro := "The following perks can be added when building or upgrading this component. " +
+		"Build points are spent when the ability is created or upgraded; energy is paid each time it is used.\n\n"
+	b.WriteString(intro)
+	b.WriteString("| Perk | Cost |\n")
+	b.WriteString("| --- | --- |\n")
+	rows := writeFieldRows(&b, cfg, fields, false)
 	if rows == 0 {
-		return "_No cost-bearing options configured._"
+		return "_This component has no cost-bearing perks; see the Rules above._"
 	}
 	return b.String()
 }
 
-// writeFieldRows appends the cost rows for a field slice to b and returns how
-// many rows it wrote. labelPrefix is prepended to each option label so nested
-// per-row sub-fields (solutions/states) read as "<field>: <sub-field>".
-func writeFieldRows(b *strings.Builder, cfg *config.Config, fields []config.Field, labelPrefix string) int {
+// writeFieldRows appends perk rows for a field slice to b and returns how many
+// rows it wrote. When nested is true the fields are the row sub-fields of a
+// solutions/states block, in which case conditional follow-ups and purely
+// cosmetic selectors are skipped.
+func writeFieldRows(b *strings.Builder, cfg *config.Config, fields []config.Field, nested bool) int {
 	rows := 0
+	seenSources := map[string]bool{}
 	for _, f := range fields {
-		label := f.Label
-		if labelPrefix != "" {
-			label = labelPrefix + f.Label
+		// Conditional follow-up fields only appear in the builder after a
+		// specific parent choice; they are documented via their parent, so
+		// they never belong in a flat perks table.
+		if f.VisibilityWhen != "" {
+			continue
 		}
 		switch f.Type {
 		case "checkbox":
-			b.WriteString(fmt.Sprintf("| %s | Enabled | %s |\n", orDash(label), costCells(f.Cost)))
-			rows++
-		case "dropdown":
-			if len(f.Options) > 0 {
-				for _, opt := range f.Options {
-					b.WriteString(fmt.Sprintf("| %s | %s | %s |\n", orDash(label), orDash(optionLabel(opt)), costCells(opt.Cost)))
-					rows++
-				}
-			} else if opts := resolveCostedOptions(cfg, f); len(opts) > 0 {
-				// options_source driven: list each resolved option with its
-				// per-entry cost so costed sources (e.g. reaction triggers)
-				// appear in the docs.
-				for _, opt := range opts {
-					b.WriteString(fmt.Sprintf("| %s | %s | %s |\n", orDash(label), orDash(optionLabel(opt)), costCells(opt.Cost)))
-					rows++
-				}
-			} else {
-				// A plain (uncosted) options_source: no inline costs, but a
-				// flat field cost may still apply.
-				b.WriteString(fmt.Sprintf("| %s | Any | %s |\n", orDash(label), costCells(f.Cost)))
+			// A checkbox is only a perk when toggling it changes the cost.
+			if hasCost(f.Cost) {
+				b.WriteString(row("Enable: "+orDash(f.Label), costWords(f.Cost)))
 				rows++
 			}
-			// System 3: group offsets attach a cost to whole trait groups.
-			if f.GroupOffsets != nil {
-				for _, grp := range orderedGroups(f.GroupOffsets) {
-					b.WriteString(fmt.Sprintf("| %s | Group offset: %s | %s |\n",
-						orDash(label), grp, costCells(f.GroupOffsets.Offsets[grp])))
-					rows++
-				}
-			}
+		case "dropdown":
+			rows += writeDropdownRows(b, cfg, f, nested, seenSources)
 		case "free_number":
 			if f.PerStep != nil {
-				if f.PerStep.Increase != nil {
-					b.WriteString(fmt.Sprintf("| %s | Per step (increase) | %s |\n", orDash(label), costCells(f.PerStep.Increase)))
+				if f.PerStep.Increase != nil && hasCost(f.PerStep.Increase) {
+					b.WriteString(row("Each +1 to "+orDash(f.Label), costWords(f.PerStep.Increase)))
 					rows++
 				}
-				if f.PerStep.Decrease != nil {
-					b.WriteString(fmt.Sprintf("| %s | Per step (decrease) | %s |\n", orDash(label), costCells(f.PerStep.Decrease)))
+				if f.PerStep.Decrease != nil && hasCost(f.PerStep.Decrease) {
+					b.WriteString(row("Each -1 to "+orDash(f.Label), costWords(f.PerStep.Decrease)))
 					rows++
 				}
 			}
 		case "solutions", "states":
-			// System 2: per-entry costs live on the repeatable row sub-fields.
-			// Recurse so intensity/spreads-style options are documented.
-			rows += writeFieldRows(b, cfg, f.RowFields, orDash(f.Label)+": ")
+			single := singular(f.Label)
+			if f.PerItem != nil {
+				if f.PerItem.Increase != nil && hasCost(f.PerItem.Increase) {
+					b.WriteString(row("Each additional "+single, costWords(f.PerItem.Increase)))
+					rows++
+				}
+				if f.PerItem.Decrease != nil && hasCost(f.PerItem.Decrease) {
+					b.WriteString(row("Each removed "+single, costWords(f.PerItem.Decrease)))
+					rows++
+				}
+			}
+			rows += writeFieldRows(b, cfg, f.RowFields, true)
 		}
 	}
 	return rows
 }
 
+// writeDropdownRows renders the perk rows for a single dropdown field.
+func writeDropdownRows(b *strings.Builder, cfg *config.Config, f config.Field, nested bool, seenSources map[string]bool) int {
+	rows := 0
+	// Inline options with their own costs: list them all (including the free
+	// baseline) so the reader sees the full choice, each with its cost.
+	if len(f.Options) > 0 {
+		if !anyOptionCosted(f.Options) && !hasCost(f.Cost) {
+			// A pure "pick one, no cost difference" selector: not a perk.
+			return 0
+		}
+		for _, opt := range f.Options {
+			b.WriteString(row(f.Label+": "+orDash(optionLabel(opt)), costWords(opt.Cost)))
+			rows++
+		}
+		return rows
+	}
+
+	// options_source driven. Skip the big shared lists (documented once
+	// elsewhere) but still surface the group offsets below.
+	if !sharedListSources[f.OptionsSource] {
+		if opts := resolveCostedOptions(cfg, f); len(opts) > 0 {
+			if !seenSources[f.OptionsSource] {
+				seenSources[f.OptionsSource] = true
+				for _, opt := range opts {
+					b.WriteString(row(f.Label+": "+orDash(optionLabel(opt)), costWords(opt.Cost)))
+					rows++
+				}
+			}
+		} else if !nested && hasCost(f.Cost) {
+			// A flat field cost applies whenever this selector is used.
+			b.WriteString(row(f.Label, costWords(f.Cost)))
+			rows++
+		}
+	}
+
+	// Group offsets attach a cost to picking a trait from a given group.
+	if f.GroupOffsets != nil {
+		for _, grp := range orderedGroups(f.GroupOffsets) {
+			c := f.GroupOffsets.Offsets[grp]
+			if !hasCost(c) {
+				continue // the preferred group is free; not worth a row.
+			}
+			b.WriteString(row("Use "+groupPhrase(grp)+" trait for "+orDash(f.Label), costWords(c)))
+			rows++
+		}
+	}
+	return rows
+}
+
+// row formats one "| perk | cost |" markdown line.
+func row(perk, cost string) string {
+	return fmt.Sprintf("| %s | %s |\n", perk, cost)
+}
+
+// hasCost reports whether a cost is present and non-zero.
+func hasCost(c *config.Cost) bool {
+	return c != nil && (c.BuildCost != 0 || c.EnergyCost != 0)
+}
+
+// anyOptionCosted reports whether any option in the list carries a cost.
+func anyOptionCosted(opts []config.Option) bool {
+	for _, o := range opts {
+		if hasCost(o.Cost) {
+			return true
+		}
+	}
+	return false
+}
+
+// costWords renders a cost in plain language, e.g. "Free", "2 build",
+// "4 build, 2 energy", or "-1 build (refund)".
+func costWords(c *config.Cost) string {
+	if c == nil || (c.BuildCost == 0 && c.EnergyCost == 0) {
+		return "Free"
+	}
+	var parts []string
+	if c.BuildCost != 0 {
+		s := fmt.Sprintf("%d build", c.BuildCost)
+		if c.BuildCost < 0 {
+			s += " (refund)"
+		}
+		parts = append(parts, s)
+	}
+	if c.EnergyCost != 0 {
+		parts = append(parts, fmt.Sprintf("%d energy", c.EnergyCost))
+	}
+	return strings.Join(parts, ", ")
+}
+
+// groupPhrase turns a trait group id into a readable article + adjective, e.g.
+// "offense" -> "an Offensive", "defense" -> "a Defensive".
+func groupPhrase(group string) string {
+	switch group {
+	case "offense":
+		return "an Offensive"
+	case "defense":
+		return "a Defensive"
+	case "general":
+		return "a General"
+	default:
+		return "a " + titleCaseWord(group)
+	}
+}
+
+// singular strips a trailing plural "s" from a label for "Each additional X"
+// phrasing. It is deliberately simple; irregular plurals are rare here.
+func singular(label string) string {
+	l := strings.TrimSpace(label)
+	if strings.HasSuffix(l, "ies") {
+		return l[:len(l)-3] + "y"
+	}
+	if strings.HasSuffix(l, "s") && !strings.HasSuffix(l, "ss") {
+		return l[:len(l)-1]
+	}
+	return l
+}
+
+func titleCaseWord(s string) string {
+	if s == "" {
+		return s
+	}
+	return strings.ToUpper(s[:1]) + s[1:]
+}
+
 // resolveCostedOptions returns the resolved options for an options_source-driven
 // field only when at least one option carries a non-zero cost. This keeps plain
-// (uncosted) sources rendering as a single "Any" row while costed sources such
-// as reaction triggers expand into a row per option.
+// (uncosted) sources from rendering while costed sources such as reaction
+// triggers expand into a row per option.
 func resolveCostedOptions(cfg *config.Config, f config.Field) []config.Option {
 	if cfg == nil || f.OptionsSource == "" {
 		return nil
@@ -217,14 +359,6 @@ func optionLabel(o config.Option) string {
 		return o.Label
 	}
 	return o.Value
-}
-
-// costCells returns the "build | energy" cells for a table row.
-func costCells(c *config.Cost) string {
-	if c == nil {
-		return "0 | 0"
-	}
-	return fmt.Sprintf("%d | %d", c.BuildCost, c.EnergyCost)
 }
 
 func orDash(s string) string {

@@ -62,7 +62,20 @@ function applyVisibility(root) {
     var cur = fieldControlValue(ctrl);
     el.style.display = cur === want ? "" : "none";
   });
+  // Per-row cascade: a repeatable-row field carries data-row-visibility-when
+  // set to a sibling row_field key (not a prefixed name), because row input
+  // names are renumbered by index. Resolve the controlling input within the
+  // same .row via its data-row-key so each row cascades independently.
+  scope.querySelectorAll("[data-row-visibility-when]").forEach(function (el) {
+    var ctrlKey = el.getAttribute("data-row-visibility-when");
+    var want = el.getAttribute("data-show-when");
+    var row = el.closest(".row");
+    var ctrl = row ? row.querySelector('[data-row-key="' + ctrlKey + '"]') : null;
+    var cur = fieldControlValue(ctrl);
+    el.style.display = cur === want ? "" : "none";
+  });
 }
+
 
 document.addEventListener("change", function () { applyVisibility(); });
 document.addEventListener("input", function () { applyVisibility(); });
