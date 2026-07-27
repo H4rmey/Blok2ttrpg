@@ -109,7 +109,7 @@ func (a *App) applyPackage(c *model.Character, pkg *premade.Package) []string {
 func packageRedirect(w http.ResponseWriter, r *http.Request, charID string, clamped []string) {
 	target := "/characters/" + charID
 	if len(clamped) > 0 {
-		msg := fmt.Sprintf("Some proficiencies hit the top or bottom of the ladder and could not shift the full amount: %s", strings.Join(clamped, ", "))
+		msg := fmt.Sprintf("Some proficiencies hit the top or bottom of the ladder and could not shift the full amount: %s. Please verify your imported packages and remove the troublemaker(s).", strings.Join(clamped, ", "))
 		target += "?warn=" + url.QueryEscape(msg)
 	}
 	http.Redirect(w, r, target, http.StatusSeeOther)
