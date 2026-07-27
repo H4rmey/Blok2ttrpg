@@ -1,0 +1,13 @@
+id: cleric
+name: Cleric
+description: A divine servant channeling holy power to bless allies and smite the wicked.
+shifts:
+  general.Magic: +2
+  general.Knowledge: +1
+  general.People Skill: +1
+  offense.Magic: +1
+  defense.Magic: +2
+  defense.Constitution: +1
+imports:
+  - divine-blessing
+  - hold-person

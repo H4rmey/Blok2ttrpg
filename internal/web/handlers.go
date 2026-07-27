@@ -30,6 +30,10 @@ type pageData struct {
 
 	// Vitals holds the computed vital stats (HP/Movement/Energy) for the sheet.
 	Vitals []engine.VitalStat
+
+	// Warning is a non-blocking notice shown at the top of the page, e.g. when
+	// a package shift was clamped at the ends of the proficiency ladder.
+	Warning string
 }
 
 type crumb struct {
@@ -98,7 +102,12 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 	if len(parts) == 1 {
 		switch r.Method {
 		case http.MethodGet:
-			a.render(w, "character.html", a.characterPage(&c, false))
+			data := a.characterPage(&c, false)
+			if warn := r.URL.Query().Get("warn"); warn != "" {
+				data.Warning = warn
+			}
+			a.render(w, "character.html", data)
+
 		case http.MethodPost:
 			a.applyCharacterForm(&c, r)
 			if err := a.Store.Save(c); err != nil {

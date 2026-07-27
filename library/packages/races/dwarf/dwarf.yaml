@@ -1,0 +1,9 @@
+id: dwarf
+name: Dwarf
+description: Stout and hardy, dwarves are master crafters with exceptional resilience.
+shifts:
+  defense.Constitution: +2
+  general.Crafting: +2
+  general.Strength: +1
+  defense.Magic: +1
+  general.Dexterity: -1

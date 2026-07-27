@@ -1,0 +1,7 @@
+id: scholar
+name: Scholar
+description: A lifetime spent among books and academies granting deep knowledge and reasoning.
+shifts:
+  general.Knowledge: +2
+  offense.Mind: +1
+  general.Magic: +1

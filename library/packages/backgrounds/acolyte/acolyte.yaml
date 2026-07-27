@@ -1,0 +1,8 @@
+id: acolyte
+name: Acolyte
+description: Raised within a temple, you learned devotion, ritual, and the comfort of faith.
+shifts:
+  general.Knowledge: +1
+  general.People Skill: +1
+  defense.Magic: +1
+  general.Magic: +1

@@ -1,0 +1,7 @@
+id: artisan
+name: Artisan
+description: A skilled maker of goods, disciplined at the workbench and the marketplace alike.
+shifts:
+  general.Crafting: +2
+  general.People Skill: +1
+  general.Knowledge: +1

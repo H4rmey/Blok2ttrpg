@@ -1,0 +1,9 @@
+id: orc
+name: Orc
+description: Powerful and ferocious, orcs are born warriors with imposing physical might.
+shifts:
+  general.Strength: +2
+  offense.Power: +2
+  defense.Constitution: +1
+  general.People Skill: -1
+  general.Magic: -1

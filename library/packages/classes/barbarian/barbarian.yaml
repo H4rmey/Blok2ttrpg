@@ -1,0 +1,12 @@
+id: barbarian
+name: Barbarian
+description: A savage warrior who overwhelms foes with brute force and unbreakable endurance.
+shifts:
+  general.Strength: +3
+  offense.Power: +2
+  defense.Constitution: +2
+  general.Nature: +1
+  defense.Reflex: -1
+  general.Magic: -2
+imports:
+  - stunning-strike

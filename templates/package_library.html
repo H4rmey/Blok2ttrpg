@@ -6,37 +6,52 @@
   </div>
 
   {{ if .Packages }}
-  <ul class="pkg-list">
+  <div class="pkg-cats">
     {{ $charID := .CharacterID }}
+    {{ $lastCat := "" }}
     {{ range .Packages }}
-    <li class="pkg-card">
-      <div class="pkg-card-head">
-        <strong>{{ .Name }}</strong>
-        <form action="/characters/{{ $charID }}/packages/import" method="post">
-          <input type="hidden" name="package_id" value="{{ .ID }}">
-          <button class="btn primary" type="submit">Import</button>
-        </form>
+    {{ if ne .Category $lastCat }}
+    {{ if ne $lastCat "" }}
       </div>
-      {{ if .Description }}<p class="muted">{{ .Description }}</p>{{ end }}
-      {{ if .Shifts }}
-      <div class="pkg-shifts">
-        <span class="pkg-label">Proficiency shifts:</span>
-        {{ range $trait, $delta := .Shifts }}
-        <span class="pkg-shift">{{ $trait }} {{ printf "%+d" $delta }}</span>
-        {{ end }}
-      </div>
-      {{ end }}
-      {{ if .Abilities }}
-      <div class="pkg-abilities">
-        <span class="pkg-label">Abilities:</span>
-        {{ range .Abilities }}
-        <span class="pkg-ability">{{ .Name }}</span>
-        {{ end }}
-      </div>
-      {{ end }}
-    </li>
+    </details>
     {{ end }}
-  </ul>
+    <details class="pkg-cat">
+      <summary class="pkg-cat-head">{{ .Category }}</summary>
+      <div class="pkg-cat-body">
+    {{ $lastCat = .Category }}
+    {{ end }}
+        <div class="pkg-card">
+          <div class="pkg-card-head">
+            <strong>{{ .Name }}</strong>
+            <form action="/characters/{{ $charID }}/packages/import" method="post">
+              <input type="hidden" name="package_id" value="{{ .ID }}">
+              <button class="btn primary" type="submit">Import</button>
+            </form>
+          </div>
+          {{ if .Description }}<p class="muted">{{ .Description }}</p>{{ end }}
+          {{ if .Shifts }}
+          <div class="pkg-shifts">
+            <span class="pkg-label">Proficiency shifts:</span>
+            {{ range $trait, $delta := .Shifts }}
+            <span class="pkg-shift">{{ $trait }} {{ printf "%+d" $delta }}</span>
+            {{ end }}
+          </div>
+          {{ end }}
+          {{ if .Abilities }}
+          <div class="pkg-abilities">
+            <span class="pkg-label">Abilities:</span>
+            {{ range .Abilities }}
+            <span class="pkg-ability">{{ .Name }}</span>
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+    {{ end }}
+    {{ if ne $lastCat "" }}
+      </div>
+    </details>
+    {{ end }}
+  </div>
   {{ else }}
   <p class="muted">No built-in packages are available.</p>
   {{ end }}

@@ -1,7 +1,6 @@
 id: mage
 name: Mage
-description: Core arcane training. Shifts magic-focused traits and grants a
-  foundational spell kit.
+description: Core arcane training. Shifts magic-focused traits and grants a foundational spell kit.
 shifts:
   general.Magic: +2
   general.Knowledge: +1

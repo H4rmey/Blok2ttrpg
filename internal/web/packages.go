@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
@@ -59,13 +61,19 @@ func (a *App) handlePackages(w http.ResponseWriter, r *http.Request, c *model.Ch
 // applyPackage applies a loaded package to a character: it shifts the relevant
 // traits, copies the package's abilities in (each with a fresh id and a
 // PackageID tag), and records an InstalledPackage so removal is exact.
-func (a *App) applyPackage(c *model.Character, pkg *premade.Package) {
+//
+// It returns the list of trait keys whose shift was clamped at an end of the
+// proficiency ladder (i.e. the requested delta could not be fully applied).
+// The caller uses this to surface a non-blocking warning; the stored delta is
+// left as requested per the "just warn" policy.
+func (a *App) applyPackage(c *model.Character, pkg *premade.Package) []string {
 	if c.Traits == nil {
 		c.Traits = map[string]string{}
 	}
 	// Only record shifts we actually applied so removal reverses exactly what
 	// was done.
 	applied := map[string]int{}
+	var clamped []string
 	for traitKey, delta := range pkg.Shifts {
 		if delta == 0 {
 			continue
@@ -73,6 +81,9 @@ func (a *App) applyPackage(c *model.Character, pkg *premade.Package) {
 		current, ok := c.Traits[traitKey]
 		if !ok {
 			current = a.Cfg.DefaultProficiencyID()
+		}
+		if a.Cfg.ShiftClamped(current, delta) {
+			clamped = append(clamped, traitKey)
 		}
 		c.Traits[traitKey] = a.Cfg.ShiftProficiency(current, delta)
 		applied[traitKey] = delta
@@ -90,6 +101,18 @@ func (a *App) applyPackage(c *model.Character, pkg *premade.Package) {
 		Name:   pkg.Name,
 		Shifts: applied,
 	})
+	return clamped
+}
+
+// packageRedirect sends the user back to the character sheet after an import,
+// attaching a non-blocking warning about any clamped trait shifts.
+func packageRedirect(w http.ResponseWriter, r *http.Request, charID string, clamped []string) {
+	target := "/characters/" + charID
+	if len(clamped) > 0 {
+		msg := fmt.Sprintf("Some proficiencies hit the top or bottom of the ladder and could not shift the full amount: %s", strings.Join(clamped, ", "))
+		target += "?warn=" + url.QueryEscape(msg)
+	}
+	http.Redirect(w, r, target, http.StatusSeeOther)
 }
 
 func (a *App) importBuiltinPackage(w http.ResponseWriter, r *http.Request, c *model.Character) {
@@ -108,12 +131,12 @@ func (a *App) importBuiltinPackage(w http.ResponseWriter, r *http.Request, c *mo
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	a.applyPackage(c, pkg)
+	clamped := a.applyPackage(c, pkg)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID, http.StatusSeeOther)
+	packageRedirect(w, r, c.ID, clamped)
 }
 
 func (a *App) importCustomPackage(w http.ResponseWriter, r *http.Request, c *model.Character) {
@@ -140,12 +163,12 @@ func (a *App) importCustomPackage(w http.ResponseWriter, r *http.Request, c *mod
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	a.applyPackage(c, pkg)
+	clamped := a.applyPackage(c, pkg)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID, http.StatusSeeOther)
+	packageRedirect(w, r, c.ID, clamped)
 }
 
 // removePackage undoes an installed package: it removes every ability tagged

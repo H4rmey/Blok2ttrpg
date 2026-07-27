@@ -1,0 +1,9 @@
+id: tiefling
+name: Tiefling
+description: Touched by infernal heritage, tieflings blend arcane talent with sharp cunning.
+shifts:
+  general.Magic: +1
+  offense.Magic: +1
+  general.People Skill: +1
+  defense.Magic: +1
+  general.Perception: -1

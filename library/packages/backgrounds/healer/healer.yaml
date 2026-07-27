@@ -1,0 +1,8 @@
+id: healer
+name: Healer
+description: A dedicated caretaker skilled in medicine, herbs, and calming the wounded.
+shifts:
+  general.Nature: +1
+  general.Knowledge: +1
+  general.Crafting: +1
+  defense.Mind: +1

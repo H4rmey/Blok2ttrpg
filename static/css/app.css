@@ -89,6 +89,45 @@ fieldset {
 }
 legend { padding: 0 0.5rem; font-weight: 700; color: var(--accent); font-size: 1.05rem; }
 
+/* Per-section color themes on the character sheet. Each fieldset gets a
+   colored border and a faint tinted background so the sections read as
+   distinct at a glance, reusing the same color-mix pattern as .region-*. */
+.section-attributes {
+  border-color: var(--warn);
+  border-left: 3px solid var(--warn);
+  background: color-mix(in srgb, var(--warn) 7%, var(--surface));
+}
+.section-attributes legend { color: var(--warn); }
+
+.section-general {
+  border-color: var(--accent);
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+}
+.section-general legend { color: var(--accent); }
+
+.section-offense {
+  border-color: var(--danger);
+  border-left: 3px solid var(--danger);
+  background: color-mix(in srgb, var(--danger) 7%, var(--surface));
+}
+.section-offense legend { color: var(--danger); }
+
+.section-defense {
+  border-color: var(--cyan);
+  border-left: 3px solid var(--cyan);
+  background: color-mix(in srgb, var(--cyan) 7%, var(--surface));
+}
+.section-defense legend { color: var(--cyan); }
+
+.section-vital {
+  border-color: #4ade80;
+  border-left: 3px solid #4ade80;
+  background: color-mix(in srgb, #4ade80 7%, var(--surface));
+}
+.section-vital legend { color: #4ade80; }
+
+
 
 .field { margin-bottom: 0.85rem; }
 .field label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
@@ -141,6 +180,19 @@ textarea { min-height: 5rem; resize: vertical; }
 
 .muted { color: var(--muted); font-size: 0.9rem; }
 .warn { color: var(--warn); font-weight: 600; }
+
+/* Non-blocking notice banner, e.g. clamped package shifts. */
+.notice-warn {
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--warn);
+  border-left: 3px solid var(--warn);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--warn) 12%, var(--surface));
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
 
 .cost-badge {
   padding: 0.4rem 0.75rem;
@@ -436,9 +488,13 @@ textarea { min-height: 5rem; resize: vertical; }
 /* Packages section on the character sheet and the package library modal. */
 .packages {
   margin-top: 2rem;
-  border-top: 1px solid var(--border);
-  padding-top: 1.25rem;
+  border: 1px solid var(--accent-strong);
+  border-left: 3px solid var(--accent-strong);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent-strong) 7%, var(--surface));
+  padding: 1.25rem;
 }
+
 .packages h2 { margin: 0 0 0.25rem; }
 .packages h3 { margin: 1.25rem 0 0.5rem; font-size: 1rem; }
 
@@ -507,8 +563,47 @@ textarea { min-height: 5rem; resize: vertical; }
 }
 .pkg-library-head h2 { margin: 0; }
 
+.pkg-cats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.pkg-cat {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.pkg-cat-head {
+  cursor: pointer;
+  list-style: none;
+  text-transform: capitalize;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  color: var(--text, #e5e7eb);
+  padding: 0.65rem 0.85rem;
+  user-select: none;
+}
+.pkg-cat-head::-webkit-details-marker { display: none; }
+.pkg-cat-head::before {
+  content: "\25B6";
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-size: 0.8em;
+  transition: transform 150ms ease-in-out;
+}
+.pkg-cat[open] > .pkg-cat-head::before { transform: rotate(90deg); }
+.pkg-cat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 0.85rem 0.85rem;
+}
+
+
 .pkg-list {
   list-style: none;
+
   padding: 0;
   margin: 0;
   display: flex;

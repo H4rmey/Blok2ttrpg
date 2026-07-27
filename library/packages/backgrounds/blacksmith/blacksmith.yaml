@@ -1,0 +1,7 @@
+id: blacksmith
+name: Blacksmith
+description: Long hours at the forge built strong arms and expert command of metal and tools.
+shifts:
+  general.Crafting: +2
+  general.Strength: +1
+  defense.Constitution: +1

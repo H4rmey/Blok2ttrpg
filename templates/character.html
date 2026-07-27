@@ -12,7 +12,12 @@
   {{ end }}
 </div>
 
+{{ if .Warning }}
+<div class="notice-warn">{{ .Warning }}</div>
+{{ end }}
+
 <div class="stats-bar">
+
   <div class="stats-bar-level">
     <label>Level</label>
     <input type="number" name="level" min="1" value="{{ $c.Level }}"
@@ -30,8 +35,9 @@
 
   {{ range attributes .Cfg }}
 
-  <fieldset>
+  <fieldset class="section section-attributes">
     <legend>{{ .Label }}</legend>
+
     {{ range .Fields }}
     <div class="field">
       <label>{{ .Label }}</label>
@@ -44,9 +50,11 @@
   {{ range traitGroups .Cfg }}
 
   {{ $g := . }}
-  <fieldset>
+  <fieldset class="section section-{{ $g.ID }}">
     <legend>{{ .Label }}</legend>
+
     <div class="trait-grid">
+
       {{ range .Traits }}
       <div class="field">
         <label>{{ . }}</label>

@@ -1,0 +1,7 @@
+id: spy
+name: Spy
+description: A trained agent of secrets, adept at infiltration, deception, and observation.
+shifts:
+  general.Stealth: +2
+  general.Perception: +1
+  general.People Skill: +1

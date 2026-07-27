@@ -1,0 +1,8 @@
+id: farmer
+name: Farmer
+description: A life of honest labor in the fields granted hardy strength and practical know-how.
+shifts:
+  general.Strength: +1
+  defense.Constitution: +1
+  general.Nature: +1
+  general.Crafting: +1

@@ -1,0 +1,7 @@
+id: soldier
+name: Soldier
+description: Years of military service instilled discipline, endurance, and martial skill.
+shifts:
+  general.Strength: +1
+  offense.Power: +1
+  defense.Constitution: +1

@@ -1,0 +1,8 @@
+id: guard
+name: Guard
+description: Years standing watch built vigilance, discipline, and steady defensive instincts.
+shifts:
+  general.Perception: +1
+  defense.Constitution: +1
+  defense.Reflex: +1
+  general.People Skill: +1

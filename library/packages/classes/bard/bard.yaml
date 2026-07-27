@@ -1,0 +1,13 @@
+id: bard
+name: Bard
+description: A charismatic performer weaving magic through song, wit, and social mastery.
+shifts:
+  general.Performance: +2
+  general.People Skill: +2
+  general.Magic: +1
+  general.Knowledge: +1
+  offense.Mind: +1
+  general.Strength: -1
+imports:
+  - haste
+  - hold-person

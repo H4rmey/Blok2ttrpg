@@ -29,10 +29,12 @@ type PackageYAML struct {
 }
 
 // Package is a loaded package: its metadata, the proficiency shifts it applies,
-// and the fully-parsed abilities it provides.
+// and the fully-parsed abilities it provides. Category is the library
+// subfolder it lives in (e.g. "classes", "races", "backgrounds").
 type Package struct {
 	ID          string
 	Name        string
+	Category    string
 	Description string
 	Shifts      map[string]int
 	Abilities   []model.Ability
@@ -54,20 +56,19 @@ func (l *Library) packagesDir() string {
 	return filepath.Join(l.Root, "packages")
 }
 
-// CustomBaseDir returns the base directory used to resolve imports for an
-// uploaded (custom) package. It mirrors the on-disk layout of a built-in
-// package (library/packages/<name>) so short-name imports still resolve to
-// library/abilities/<name>/<name>.yaml.
+// CustomBaseDir returns the abilities directory that short-name imports in an
+// uploaded (custom) package resolve against.
 func (l *Library) CustomBaseDir() string {
-	return filepath.Join(l.packagesDir(), "_custom")
+	return l.abilitiesDir()
 }
 
-// ListPackages scans the packages directory and returns every loadable package,
-// sorted by name. Individual packages that fail to parse are skipped so one bad
-// file does not break the whole browser.
+// ListPackages scans the packages directory (recursively through category
+// subfolders like classes/races/backgrounds) and returns every loadable
+// package, sorted by category then name. Packages that fail to parse are
+// skipped so one bad file does not break the whole browser.
 func (l *Library) ListPackages() ([]Package, error) {
 	dir := l.packagesDir()
-	entries, err := os.ReadDir(dir)
+	cats, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return nil, nil
@@ -75,30 +76,75 @@ func (l *Library) ListPackages() ([]Package, error) {
 		return nil, fmt.Errorf("reading packages dir: %w", err)
 	}
 	var out []Package
-	for _, e := range entries {
-		if !e.IsDir() {
+	for _, cat := range cats {
+		if !cat.IsDir() {
 			continue
 		}
-		name := e.Name()
-		path := filepath.Join(dir, name, name+".yaml")
-		if _, err := os.Stat(path); err != nil {
-			continue
-		}
-		pkg, err := LoadPackage(path)
+		catDir := filepath.Join(dir, cat.Name())
+		entries, err := os.ReadDir(catDir)
 		if err != nil {
 			continue
 		}
-		out = append(out, *pkg)
+		for _, e := range entries {
+			if !e.IsDir() {
+				continue
+			}
+			name := e.Name()
+			path := filepath.Join(catDir, name, name+".yaml")
+			if _, err := os.Stat(path); err != nil {
+				continue
+			}
+			pkg, err := l.loadPackage(path)
+			if err != nil {
+				continue
+			}
+			pkg.Category = cat.Name()
+			out = append(out, *pkg)
+		}
 	}
-	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
+	sort.Slice(out, func(i, j int) bool {
+		if out[i].Category != out[j].Category {
+			return out[i].Category < out[j].Category
+		}
+		return out[i].Name < out[j].Name
+	})
 	return out, nil
 }
 
-// GetPackage loads a single built-in package by its id (which matches the
-// directory name).
+// GetPackage loads a single built-in package by its id by searching every
+// category subfolder for a matching directory.
 func (l *Library) GetPackage(id string) (*Package, error) {
-	path := filepath.Join(l.packagesDir(), id, id+".yaml")
-	return LoadPackage(path)
+	dir := l.packagesDir()
+	cats, err := os.ReadDir(dir)
+	if err != nil {
+		return nil, fmt.Errorf("reading packages dir: %w", err)
+	}
+	for _, cat := range cats {
+		if !cat.IsDir() {
+			continue
+		}
+		path := filepath.Join(dir, cat.Name(), id, id+".yaml")
+		if _, err := os.Stat(path); err != nil {
+			continue
+		}
+		pkg, err := l.loadPackage(path)
+		if err != nil {
+			return nil, err
+		}
+		pkg.Category = cat.Name()
+		return pkg, nil
+	}
+	return nil, fmt.Errorf("package %q not found", id)
+}
+
+// loadPackage reads a package file and resolves its imports against the
+// library's abilities directory.
+func (l *Library) loadPackage(path string) (*Package, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("reading package %q: %w", path, err)
+	}
+	return ParsePackage(data, l.abilitiesDir())
 }
 
 // abilitiesDir is the directory holding the built-in ability definitions.
@@ -152,20 +198,10 @@ func (l *Library) GetAbility(id string) (model.Ability, error) {
 	return export.UnmarshalAbility(data)
 }
 
-// LoadPackage parses a package YAML file and resolves its ability imports into
-// fully-parsed abilities. Import entries may be short names or explicit paths,
-// both resolved relative to the package file's directory.
-func LoadPackage(path string) (*Package, error) {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("reading package %q: %w", path, err)
-	}
-	return ParsePackage(data, filepath.Dir(path))
-}
-
 // ParsePackage parses package YAML bytes and resolves imports relative to
-// baseDir. It is separated from LoadPackage so custom (uploaded) package files
-// can be parsed with a caller-supplied base directory.
+// baseDir (the abilities directory). It is exported so custom (uploaded)
+// package files can be parsed with a caller-supplied abilities directory.
+
 func ParsePackage(data []byte, baseDir string) (*Package, error) {
 	var in PackageYAML
 	if err := yaml.Unmarshal(data, &in); err != nil {
@@ -195,16 +231,16 @@ func ParsePackage(data []byte, baseDir string) (*Package, error) {
 	return pkg, nil
 }
 
-// resolveImport turns an import entry into an absolute-ish path relative to the
-// package's directory. A short name like "fireball" resolves to
-// "../../abilities/fireball/fireball.yaml"; anything containing a path
-// separator or a ".yaml" suffix is treated as an explicit relative path.
+// resolveImport turns an import entry into a path relative to baseDir (the
+// abilities directory). A short name like "fireball" resolves to
+// "<baseDir>/fireball/fireball.yaml"; anything containing a path separator or a
+// ".yaml" suffix is treated as an explicit relative path.
 func resolveImport(imp, baseDir string) string {
 	if filepath.Ext(imp) == ".yaml" || filepath.Ext(imp) == ".yml" ||
 		containsSep(imp) {
 		return filepath.Join(baseDir, imp)
 	}
-	return filepath.Join(baseDir, "..", "..", "abilities", imp, imp+".yaml")
+	return filepath.Join(baseDir, imp, imp+".yaml")
 }
 
 func containsSep(s string) bool {

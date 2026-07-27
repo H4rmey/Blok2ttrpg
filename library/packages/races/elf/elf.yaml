@@ -1,0 +1,9 @@
+id: elf
+name: Elf
+description: Graceful and long-lived, elves excel at dexterity, perception, and arcane attunement.
+shifts:
+  general.Dexterity: +2
+  general.Perception: +1
+  general.Magic: +1
+  defense.Reflex: +1
+  defense.Constitution: -1

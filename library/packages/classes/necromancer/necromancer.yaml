@@ -1,0 +1,13 @@
+id: necromancer
+name: Necromancer
+description: A dark spellcaster who drains life and bends death to their will.
+shifts:
+  general.Magic: +2
+  offense.Magic: +2
+  general.Knowledge: +1
+  offense.Mind: +1
+  defense.Constitution: +1
+  general.People Skill: -1
+imports:
+  - vampiric-touch
+  - hold-person

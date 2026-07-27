@@ -142,7 +142,24 @@ func (c *Config) ShiftProficiency(current string, delta int) string {
 	return c.Proficiencies[idx].ID
 }
 
+// ShiftClamped reports whether shifting the given proficiency id by delta
+// rungs would run off either end of the ladder (i.e. the requested delta could
+// not be fully applied). It is used to surface a non-blocking warning when a
+// package pushes a trait above or below the possible range.
+func (c *Config) ShiftClamped(current string, delta int) bool {
+	if len(c.Proficiencies) == 0 || delta == 0 {
+		return false
+	}
+	idx := c.proficiencyIndex(current)
+	if idx < 0 {
+		idx = 0
+	}
+	target := idx + delta
+	return target < 0 || target > len(c.Proficiencies)-1
+}
+
 // ResolveOptions returns the concrete option list for a field, expanding an
+
 // options_source reference server-side when present.
 func (c *Config) ResolveOptions(f Field) []Option {
 	if f.OptionsSource != "" {

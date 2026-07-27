@@ -1,0 +1,7 @@
+id: noble
+name: Noble
+description: Born to privilege, you command respect and move easily through high society.
+shifts:
+  general.People Skill: +2
+  general.Knowledge: +1
+  general.Performance: +1

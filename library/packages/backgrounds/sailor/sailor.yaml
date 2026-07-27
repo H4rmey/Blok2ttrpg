@@ -1,0 +1,8 @@
+id: sailor
+name: Sailor
+description: Life at sea toughened your body and taught you to read weather and waves.
+shifts:
+  general.Strength: +1
+  general.Perception: +1
+  defense.Constitution: +1
+  general.Nature: +1

@@ -1,0 +1,9 @@
+id: dragonborn
+name: Dragonborn
+description: Proud descendants of dragons, dragonborn combine physical power with elemental breath.
+shifts:
+  general.Strength: +2
+  offense.Power: +1
+  general.Magic: +1
+  defense.Constitution: +1
+  general.Stealth: -1

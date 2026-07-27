@@ -1,0 +1,8 @@
+id: pilgrim
+name: Pilgrim
+description: A long journey of faith built endurance, worldly knowledge, and inner calm.
+shifts:
+  defense.Constitution: +1
+  general.Knowledge: +1
+  defense.Mind: +1
+  general.People Skill: +1
