@@ -33,7 +33,8 @@ ENV PORT=8080
 # SYSTEM selects which ruleset (config/<system>) and library (library/<system>)
 # to load on startup. Override it at run time to switch systems, e.g.
 #   docker run -e SYSTEM=dnd ...
-ENV SYSTEM=ability-builder
+ENV SYSTEM=Blok2Simplified
+
 EXPOSE 8080
 
 ENTRYPOINT ["/app/blok2ttrpg"]

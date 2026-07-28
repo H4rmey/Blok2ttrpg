@@ -10,10 +10,12 @@ services:
       PORT: "8080"
       # Game system to load. This selects both the ruleset (config/<system>)
       # and the built-in library (library/<system>). Set to "dnd" to run the
-      # D&D system instead of the default ability-builder.
-      SYSTEM: "ability-builder"
+      # D&D system, or "ability-builder" for the original ruleset, instead of
+      # the default Blok2Simplified.
+      SYSTEM: "Blok2Simplified"
       # Optional: point at an explicit config path (overrides SYSTEM).
-      # CONFIG: "config/ability-builder"
+      # CONFIG: "config/Blok2Simplified"
+
 
     volumes:
       # Persist character data across container restarts/rebuilds.
