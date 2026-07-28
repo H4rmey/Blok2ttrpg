@@ -145,17 +145,17 @@ ability_types:
             visibility_when: event
             show_when: "succeeds on a validation of a type"
           - key: state_applied
-            label: "State"
+            label: "Condition"
             type: dropdown
             options_source: states_all
             visibility_when: event
-            show_when: "becomes affected by a state of a type"
+            show_when: "becomes affected by a condition of a type"
           - key: state_recovered
-            label: "State"
+            label: "Condition"
             type: dropdown
             options_source: states_all
             visibility_when: event
-            show_when: "recovers from a state of a type"
+            show_when: "recovers from a condition of a type"
       - key: range
         label: "Range"
         type: free_number
@@ -178,18 +178,6 @@ ability_types:
           increase:
             build_cost: 4
             energy_cost: 1
-
-  phase:
-    name: "Phase (Deprecated)"
-    description: "Deprecated. Kept for backward compatibility only."
-    base_energy: 3
-    base_action: 2
-    base_duration: 2
-    base_reverse_duration: 2
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
 
   minion:
     name: "Minion (Deprecated)"
@@ -324,17 +312,17 @@ ability_types:
             visibility_when: event
             show_when: "succeeds on a validation of a type"
           - key: state_applied
-            label: "State"
+            label: "Condition"
             type: dropdown
             options_source: states_all
             visibility_when: event
-            show_when: "becomes affected by a state of a type"
+            show_when: "becomes affected by a condition of a type"
           - key: state_recovered
-            label: "State"
+            label: "Condition"
             type: dropdown
             options_source: states_all
             visibility_when: event
-            show_when: "recovers from a state of a type"
+            show_when: "recovers from a condition of a type"
       - key: range
         label: "Range"
         type: free_number
@@ -518,17 +506,17 @@ ability_types:
             visibility_when: event
             show_when: "succeeds on a validation of a type"
           - key: state_applied
-            label: "State"
+            label: "Condition"
             type: dropdown
             options_source: states_all
             visibility_when: event
-            show_when: "becomes affected by a state of a type"
+            show_when: "becomes affected by a condition of a type"
           - key: state_recovered
-            label: "State"
+            label: "Condition"
             type: dropdown
             options_source: states_all
             visibility_when: event
-            show_when: "recovers from a state of a type"
+            show_when: "recovers from a condition of a type"
       - key: range
         label: "Range"
         type: free_number

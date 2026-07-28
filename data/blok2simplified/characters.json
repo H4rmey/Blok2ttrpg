@@ -33,27 +33,21 @@
       {
         "id": "ability-1785224139837-937440089",
         "name": "asdfasdf",
-        "type": "passive",
+        "type": "concentration",
         "fields": {
+          "action_steps": 0,
           "comment": "",
+          "effortless": false,
           "energy_steps": 0,
-          "range": 1,
-          "triggers": [],
-          "uses": 1
+          "upkeep_cost": ""
         },
         "enactments": [
           {
-            "type": "persistent_effect",
+            "type": "condition",
             "fields": {
               "comment": "",
-              "damage_type": [],
-              "effect_name": "Effect",
-              "effect_type": "movement",
-              "effect_type_ib": {
-                "comment": "",
-                "direction": [],
-                "distance": 1
-              },
+              "condition": "specific.isolated",
+              "duration": "1",
               "solution": [
                 {
                   "value": "defense.Reflex"

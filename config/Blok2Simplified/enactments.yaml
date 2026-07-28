@@ -1,4 +1,73 @@
 enactments:
+  phase:
+    name: "Enact Phase"
+    description: "Enter a Phase, on phase end, the effect reverses"
+    base_energy: 3
+    base_action: 2
+    base_duration: 2
+    base_reverse_duration: 2
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: phase-duration
+        label: "Duration (rounds)"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 1
+            energy_cost: 4
+      - key: shift_amount
+        label: "Shift -/+"
+        type: free_number
+        default: 0
+        min: -6
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 3
+            energy_cost: 1
+          decrease:
+            build_cost: 3
+            energy_cost: 1
+      - key: affected_traits
+        label: "Affected Trait(s)"
+        type: solutions
+        default_count: 2
+        options_source: traits_all
+        row_defaults:
+          - value: "offense.precision"
+          - value: "offense.power"
+        row_fields:
+          - key: value
+            label: "Affected Trait"
+            type: dropdown
+            options_source: traits_all
+            group_offsets:
+              default_group: defense
+              offsets:
+                defense:
+                  build_cost: 2
+                offense:
+                  build_cost: 2
+                general:
+                  build_cost: 2
+        per_item:
+          increase:
+            build_cost: 1
+            energy_cost: 1
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+
   negation:
     type: "Enact  Negation"
     description: "Nullify an ability completely"
@@ -17,7 +86,7 @@ enactments:
           energy_cost: 2
   mitigation:
     type: "Enact  Mitigation"
-    description: "reduce the effect of an incomming ability"
+    description: "Reduce the effect of an incomming ability"
     base_cost:
       build_cost: 2
       energy_cost: 1
@@ -295,9 +364,9 @@ enactments:
             build_cost: 0
             energy_cost: 0
 
-  state:
-    type: "Enact State"
-    description: "Applies a state or condition to a target."
+  condition:
+    type: "Enact Condition"
+    description: "Applies a condition or condition to a target."
     base_cost:
       build_cost: 0
       energy_cost: 0
@@ -305,8 +374,8 @@ enactments:
       - key: comment
         label: "Comment"
         type: free_text
-      - key: state
-        label: "State"
+      - key: condition
+        label: "Condition"
         type: state_select
         options_source: states_all
         shift_key: shift_amount

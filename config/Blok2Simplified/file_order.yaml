@@ -12,6 +12,7 @@ file_order:
   - ./docs/core/abilities.md
   - ./docs/core/items.md
   - ./docs/core/leveling.md
+  - ./docs/modules/ability-builder/cheatsheet.md
   - ./docs/modules/ability-builder/introduction.md
   - ./docs/modules/ability-builder/configuration.md
   - ./docs/modules/ability-builder/ability-creation-guide.md
@@ -27,7 +28,7 @@ file_order:
   - ./docs/modules/ability-builder/enactments/movement.md
   - ./docs/modules/ability-builder/enactments/persistent-effect.md
   - ./docs/modules/ability-builder/enactments/proficiency-shift.md
-  - ./docs/modules/ability-builder/enactments/state.md
+  - ./docs/modules/ability-builder/enactments/condition.md
   - ./docs/modules/ability-builder/interactions/area.md
   - ./docs/modules/ability-builder/interactions/area-of-effect.md
   - ./docs/modules/ability-builder/interactions/direct.md
