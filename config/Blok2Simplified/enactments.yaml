@@ -1,7 +1,23 @@
 enactments:
   negation:
-    type: "Enact Negation"
-    description: "Negate an ability"
+    type: "Enact  Negation"
+    description: "Nullify an ability completely"
+    base_cost:
+      build_cost: 4
+      energy_cost: 2
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: full_counter
+        label: "Ability hits Engager instead"
+        type: checkbox
+        cost:
+          build_cost: 4
+          energy_cost: 2
+  mitigation:
+    type: "Enact  Mitigation"
+    description: "reduce the effect of an incomming ability"
     base_cost:
       build_cost: 2
       energy_cost: 1
@@ -9,9 +25,6 @@ enactments:
       - key: comment
         label: "Comment"
         type: free_text
-      # Combined source: a "Generic" group of costed dice followed by the
-      # trait categories (General/Offense/Defense). Trait cost is applied via
-      # group_offsets.
       - key: source
         label: "Source"
         type: dropdown
@@ -40,12 +53,6 @@ enactments:
           decrease:
             build_cost: 0
             energy_cost: 0
-      - key: full_counter
-        label: "Ability hits Engager instead"
-        type: checkbox
-        cost:
-          build_cost: 4
-          energy_cost: 2
 
   damage:
     type: "Enact Damage"
@@ -57,9 +64,6 @@ enactments:
       - key: comment
         label: "Comment"
         type: free_text
-      # Combined source: a "Generic" group of costed dice followed by the
-      # trait categories (General/Offense/Defense). Trait cost is applied via
-      # group_offsets.
       - key: source
         label: "Source"
         type: dropdown
@@ -113,9 +117,6 @@ enactments:
       - key: comment
         label: "Comment"
         type: free_text
-      # Combined source: a "Generic" group of costed dice followed by the
-      # trait categories (General/Offense/Defense). Trait cost is applied via
-      # group_offsets.
       - key: source
         label: "Source"
         type: dropdown
@@ -195,7 +196,6 @@ enactments:
         label: "Trait"
         type: dropdown
         options_source: traits_all
-      # Signed shift value: negative weakens, positive enhances.
       - key: shift_amount
         label: "Shift -/+"
         type: free_number
@@ -248,7 +248,6 @@ enactments:
             label: "Move"
         inline_builder:
           kind: enactment
-      # Solutions mirror the validation counter-trait selector.
       - key: solution
         label: "Solutions"
         type: solutions

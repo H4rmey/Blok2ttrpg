@@ -22,7 +22,7 @@ option_sources_costed:
   # Dice half of the combined roll source. Referenced by the special "roll_all"
   # source (see engine) which renders these as a "Generic" optgroup and then
   # appends the trait categories as grouped optgroups. Used by Damage/Heal/
-  # Negation "Source" and the Validation "Engage" dropdown. Dice scale in cost
+  #  Mitigation "Source" and the Validation "Engage" dropdown. Dice scale in cost
   # with size; trait cost comes from the field's group_offsets.
   roll_dice:
     - value: "d4"
