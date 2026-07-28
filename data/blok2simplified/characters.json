@@ -1,0 +1,165 @@
+{
+  "char-1785224135588941100": {
+    "id": "char-1785224135588941100",
+    "level": 1,
+    "attributes": {
+      "name": "new char"
+    },
+    "traits": {
+      "defense.Constitution": "clumsy",
+      "defense.Magic": "clumsy",
+      "defense.Mind": "clumsy",
+      "defense.Reflex": "clumsy",
+      "general.Crafting": "clumsy",
+      "general.Dexterity": "clumsy",
+      "general.Knowledge": "clumsy",
+      "general.Magic": "clumsy",
+      "general.Nature": "clumsy",
+      "general.People Skill": "clumsy",
+      "general.Perception": "clumsy",
+      "general.Performance": "clumsy",
+      "general.Stealth": "clumsy",
+      "general.Strength": "clumsy",
+      "general.Thievery": "clumsy",
+      "offense.Magic": "clumsy",
+      "offense.Mind": "clumsy",
+      "offense.Power": "clumsy",
+      "offense.Precision": "clumsy",
+      "vital.Energy": "clumsy",
+      "vital.HP": "clumsy",
+      "vital.Movement": "clumsy"
+    },
+    "abilities": [
+      {
+        "id": "ability-1785224139837-937440089",
+        "name": "asdfasdf",
+        "type": "passive",
+        "fields": {
+          "comment": "",
+          "energy_steps": 0,
+          "range": 1,
+          "triggers": [],
+          "uses": 1
+        },
+        "enactments": [
+          {
+            "type": "persistent_effect",
+            "fields": {
+              "comment": "",
+              "damage_type": [],
+              "effect_name": "Effect",
+              "effect_type": "movement",
+              "effect_type_ib": {
+                "comment": "",
+                "direction": [],
+                "distance": 1
+              },
+              "solution": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ]
+            },
+            "interaction": "self",
+            "interaction_data": {
+              "comment": ""
+            },
+            "validation_data": {
+              "comment": "",
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "engage": "d6"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ability-1785225689051-20338923",
+        "name": "s",
+        "type": "passive",
+        "fields": {
+          "comment": "",
+          "energy_steps": 0,
+          "range": 1,
+          "triggers": [],
+          "uses": 1
+        },
+        "enactments": [
+          {
+            "type": "negation",
+            "fields": {
+              "comment": "",
+              "flat": 0,
+              "full_counter": false,
+              "source": ""
+            },
+            "interaction": "self",
+            "interaction_data": {
+              "comment": ""
+            },
+            "validation_data": {
+              "comment": "",
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "engage": "d6"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ability-1785226064145-70336009",
+        "name": "a",
+        "type": "reaction",
+        "fields": {
+          "comment": "",
+          "energy_steps": 0,
+          "range": 1,
+          "triggers": [],
+          "uses": 1
+        },
+        "enactments": [
+          {
+            "type": "negation",
+            "fields": {
+              "comment": "",
+              "flat": 0,
+              "full_counter": false,
+              "source": "d6"
+            },
+            "interaction": "self",
+            "interaction_data": {
+              "comment": ""
+            },
+            "validation_data": {
+              "comment": "",
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "engage": ""
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

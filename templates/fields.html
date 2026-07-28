@@ -8,11 +8,17 @@
 <div class="field field-{{ $f.Type }}"
      data-field-key="{{ $f.Key }}"
      {{ if $f.VisibilityWhen }}data-visibility-when="{{ $prefix }}{{ $f.VisibilityWhen }}" data-show-when="{{ $f.ShowWhen }}"{{ end }}>
+  {{ if eq $f.Type "checkbox" }}
+  <label class="checkbox-label">
+    <input type="checkbox" name="{{ $name }}" {{ if fvalBool $values $f.Key (eq (printf "%v" $f.Default) "true") }}checked{{ end }}>
+    <span>{{ $f.Label }}{{ with costHint $f.Cost }} <span class="cost-hint">{{ . }}</span>{{ end }}</span>
+  </label>
+  {{ else }}
   <label>{{ $f.Label }}
     {{ if eq $f.Type "free_number" }}{{ with perStepHint $f.PerStep }}<span class="cost-hint">{{ . }}</span>{{ end }}{{ end }}
-    {{ if eq $f.Type "checkbox" }}{{ with costHint $f.Cost }}<span class="cost-hint">{{ . }}</span>{{ end }}{{ end }}
     {{ if eq $f.Type "dropdown" }}{{ with costHint $f.Cost }}<span class="cost-hint">{{ . }}</span>{{ end }}{{ end }}
   </label>
+  {{ end }}
 
   {{ if eq $f.Type "free_text" }}
   <input type="text" name="{{ $name }}" value="{{ fvalStr $values $f.Key (str $f.Default) }}">
@@ -24,8 +30,8 @@
     {{ end }}
   </select>
   {{ else if eq $f.Type "checkbox" }}
-  <input type="checkbox" name="{{ $name }}" {{ if fvalBool $values $f.Key (eq (printf "%v" $f.Default) "true") }}checked{{ end }}>
   {{ else if eq $f.Type "dropdown" }}
+
   {{ $default := fvalStr $values $f.Key (str $f.Default) }}
   {{ if $f.InlineBuilder }}
   <select name="{{ $name }}"

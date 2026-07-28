@@ -215,6 +215,32 @@ func (c *Config) ResolveOptionGroups(f Field) []OptionGroup {
 		return groups
 	}
 
+	if f.OptionsSource == "roll_all" {
+		// Combined roll source: a "Generic" group of costed dice followed by
+		// the trait categories (namespaced "group.Trait" with group offsets),
+		// mirroring the grouped layout of traits_all.
+		var groups []OptionGroup
+		if dice := c.OptionsFor("roll_dice"); len(dice) > 0 {
+			groups = append(groups, OptionGroup{Label: "Generic", Options: dice})
+		}
+		for _, cat := range c.traitCategories() {
+			var opts []Option
+			var groupCost *Cost
+			if f.GroupOffsets != nil {
+				if oc, ok := f.GroupOffsets.Offsets[cat]; ok {
+					groupCost = oc
+				}
+			}
+			for _, t := range c.Traits.Items[cat] {
+				opts = append(opts, Option{Value: cat + "." + t, Label: t, Cost: groupCost})
+			}
+			if len(opts) > 0 {
+				groups = append(groups, OptionGroup{Label: titleCase(cat), Options: opts})
+			}
+		}
+		return groups
+	}
+
 	if f.OptionsSource == "traits_all" {
 		var groups []OptionGroup
 
@@ -283,8 +309,20 @@ func (c *Config) OptionsFor(source string) []Option {
 		}
 		return strOptions(all)
 
+	case "roll_all":
+		// Flattened form used by the cost engine: costed dice followed by the
+		// namespaced trait options ("group.Trait"). Trait group offsets are
+		// applied separately via GroupOffsetFor.
+		out := append([]Option{}, c.OptionsFor("roll_dice")...)
+		for _, cat := range c.traitCategories() {
+			for _, t := range c.Traits.Items[cat] {
+				out = append(out, Option{Value: cat + "." + t, Label: t})
+			}
+		}
+		return out
 	case "dice_damage":
 		return strOptions(c.Dice.Damage)
+
 	case "dice_generic":
 		return strOptions(c.Dice.Generic)
 	case "states_general":

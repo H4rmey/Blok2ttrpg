@@ -3,7 +3,8 @@
 <div class="page-head">
   <h1>{{ $c.Name }} &mdash; Abilities</h1>
   <div class="toolbar">
-    <a class="btn primary" href="/characters/{{ $c.ID }}/abilities/new">+ New Ability</a>
+    <button class="btn primary" type="button" onclick="document.getElementById('new-ability-modal').showModal()">+ New Ability</button>
+
     <button class="btn" type="button"
             hx-get="/abilities/library?character={{ $c.ID }}"
             hx-target="#ability-modal-body" hx-swap="innerHTML"
@@ -20,6 +21,19 @@
   <div class="modal-backdrop" onclick="closeAbilityModal()"></div>
   <div class="modal-content" id="ability-modal-body"></div>
 </div>
+
+<dialog id="new-ability-modal">
+  <form method="get" action="/characters/{{ $c.ID }}/abilities/new">
+    <h2>New Ability</h2>
+    <label for="new-ability-name">Name</label>
+    <input id="new-ability-name" type="text" name="name" placeholder="Ability name" required autofocus>
+    <div class="toolbar">
+      <button class="btn primary" type="submit">Create</button>
+      <button class="btn" type="button" onclick="document.getElementById('new-ability-modal').close()">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
 
 
 

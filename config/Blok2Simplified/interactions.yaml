@@ -1,0 +1,175 @@
+interactions:
+  self:
+    type: "Self"
+    description: "Targets the Ability user."
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+
+  direct:
+    type: "Direct"
+    description: "Affects a single target within 1m."
+    default_range: 1
+    default_targets: 1
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: targets
+        label: "Targets"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            build_cost: 3
+            energy_cost: 2
+
+  ranged:
+
+    type: "Ranged"
+    description: "Affects a single target at range."
+    default_range: 5
+    default_targets: 1
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: range
+        label: "Range"
+        type: dropdown
+        default: "5"
+        options:
+          - value: "5"
+            label: "5m (Close)"
+            cost:
+              build_cost: 0
+          - value: "25"
+            label: "25m (Medium)"
+            cost:
+              build_cost: 2
+          - value: "50"
+            label: "50m (Long)"
+            cost:
+              build_cost: 4
+      - key: targets
+        label: "Targets"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            build_cost: 3
+            energy_cost: 2
+
+  area:
+
+    type: "Area"
+    description: "Affects a radius at a point within range."
+    default_radius: 1
+    default_range: 5
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: radius
+        label: "Radius"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 2
+            energy_cost: 1
+      - key: range
+        label: "Range"
+        type: dropdown
+        default: "5"
+        options:
+          - value: "5"
+            label: "5m (Close)"
+            cost:
+              build_cost: 0
+          - value: "25"
+            label: "25m (Medium)"
+            cost:
+              build_cost: 2
+          - value: "50"
+            label: "50m (Long)"
+            cost:
+              build_cost: 4
+
+  area_of_effect:
+
+    type: "Area of Effect"
+    description: "A persistent area that triggers each round."
+    default_radius: 1
+    default_range: 5
+    default_duration: 2
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: radius
+        label: "Radius"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 2
+            energy_cost: 1
+      - key: range
+        label: "Range"
+        type: dropdown
+        default: "5"
+        options:
+          - value: "5"
+            label: "5m (Close)"
+            cost:
+              build_cost: 0
+          - value: "25"
+            label: "25m (Medium)"
+            cost:
+              build_cost: 2
+          - value: "50"
+            label: "50m (Long)"
+            cost:
+              build_cost: 4
+      - key: duration
+        label: "Duration"
+        type: free_number
+        default: 2
+        min: 2
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 2
+            energy_cost: 1
+
+

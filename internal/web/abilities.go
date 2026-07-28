@@ -54,9 +54,13 @@ func (a *App) handleAbilities(w http.ResponseWriter, r *http.Request, c *model.C
 			a.saveAbility(w, r, c, "")
 			return
 		}
-		blank := model.Ability{Type: firstAbilityTypeID(a.Cfg.Config)}
+		// The name is collected up front via a modal (mirroring the new
+		// character flow) and passed as a query parameter so the builder opens
+		// with the name already set and the rest of the form unlocked.
+		blank := model.Ability{Type: firstAbilityTypeID(a.Cfg.Config), Name: strings.TrimSpace(r.URL.Query().Get("name"))}
 		a.renderBuilder(w, c, &blank, true)
 		return
+
 	}
 
 	aid := rest[0]
@@ -696,5 +700,3 @@ func firstInteractionID(cfg *config.Config) string {
 	}
 	return ""
 }
-
-var _ = strings.TrimSpace

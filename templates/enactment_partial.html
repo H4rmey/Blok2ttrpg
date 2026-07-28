@@ -18,41 +18,6 @@
   </div>
 
   <div class="collapsible-content">
-    <div class="region region-enactment">
-      <h4 class="region-title">Enactment</h4>
-      <div class="field">
-        <label>Enactment Type</label>
-        <select name="{{ $prefix }}type"
-                hx-get="/builder/enactment-fields"
-                hx-target="#{{ $prefix }}enactment-fields"
-                hx-swap="innerHTML"
-                hx-vals='{"index": "{{ $i }}"}'
-                hx-trigger="change">
-          {{ range enactments $cfg }}
-          <option value="{{ .ID }}" {{ if eq .ID $type }}selected{{ end }}>{{ .DisplayName }}</option>
-          {{ end }}
-        </select>
-      </div>
-      <div id="{{ $prefix }}enactment-fields">
-        {{ range enactments $cfg }}
-        {{ if eq .ID $type }}
-          {{ range .Fields }}
-          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sf_" $prefix) "Values" $fields }}
-          {{ end }}
-
-        {{ end }}
-        {{ end }}
-      </div>
-    </div>
-
-    <div class="region region-validation">
-      <h4 class="region-title">Validation</h4>
-      {{ range validationFields $cfg }}
-      {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sv_" $prefix) "Values" $validationData }}
-      {{ end }}
-
-    </div>
-
     <div class="region region-interaction">
       <h4 class="region-title">Interaction</h4>
       <div class="field">
@@ -79,6 +44,42 @@
         {{ end }}
       </div>
     </div>
+
+    <div class="region region-validation">
+      <h4 class="region-title">Validation</h4>
+      {{ range validationFields $cfg }}
+      {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sv_" $prefix) "Values" $validationData }}
+      {{ end }}
+
+    </div>
+
+    <div class="region region-enactment">
+      <h4 class="region-title">Enactment</h4>
+      <div class="field">
+        <label>Enactment Type</label>
+        <select name="{{ $prefix }}type"
+                hx-get="/builder/enactment-fields"
+                hx-target="#{{ $prefix }}enactment-fields"
+                hx-swap="innerHTML"
+                hx-vals='{"index": "{{ $i }}"}'
+                hx-trigger="change">
+          {{ range enactments $cfg }}
+          <option value="{{ .ID }}" {{ if eq .ID $type }}selected{{ end }}>{{ .DisplayName }}</option>
+          {{ end }}
+        </select>
+      </div>
+      <div id="{{ $prefix }}enactment-fields">
+        {{ range enactments $cfg }}
+        {{ if eq .ID $type }}
+          {{ range .Fields }}
+          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sf_" $prefix) "Values" $fields }}
+          {{ end }}
+
+        {{ end }}
+        {{ end }}
+      </div>
+    </div>
   </div>
+
 </div>
 {{ end }}
