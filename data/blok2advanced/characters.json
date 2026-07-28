@@ -1,0 +1,308 @@
+{
+  "char-1784634713450921500": {
+    "id": "char-1784634713450921500",
+    "level": 10,
+    "attributes": {
+      "ancestry": "",
+      "appearance": "",
+      "archetype": "fa",
+      "backstory": "",
+      "bnananan": "",
+      "current_energy": "21",
+      "current_hp": "8",
+      "name": "fasdfasdf",
+      "notes": "",
+      "player": ""
+    },
+    "traits": {
+      "defense.Constitution": "trained",
+      "defense.Magic": "clumsy",
+      "defense.Mind": "clumsy",
+      "defense.Reflex": "clumsy",
+      "general.Crafting": "clumsy",
+      "general.Dexterity": "clumsy",
+      "general.Knowledge": "clumsy",
+      "general.Magic": "clumsy",
+      "general.Nature": "untrained",
+      "general.New Trait": "clumsy",
+      "general.People Skill": "clumsy",
+      "general.Perception": "clumsy",
+      "general.Performance": "clumsy",
+      "general.Stealth": "clumsy",
+      "general.Strength": "expert",
+      "general.Thievery": "clumsy",
+      "offense.Magic": "clumsy",
+      "offense.Mind": "clumsy",
+      "offense.Power": "trained",
+      "offense.Precision": "clumsy",
+      "vital.Energy": "clumsy",
+      "vital.HP": "clumsy",
+      "vital.Movement": "clumsy"
+    },
+    "abilities": [
+      {
+        "id": "ability-1785151395899622800",
+        "name": "Hunter's Mark (Level 1)",
+        "description": "Mark a target so all effects against it are amplified.",
+        "type": "reaction",
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "triggers": [],
+          "uses": 1
+        },
+        "enactments": [
+          {
+            "type": "damage",
+            "fields": {
+              "always": false,
+              "damage_type": [],
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "trait",
+              "source_trait": ""
+            },
+            "interaction": "area_of_effect",
+            "interaction_data": {
+              "duration": 2,
+              "immune": false,
+              "origin_mode": "",
+              "origin_text": "",
+              "radius": 1,
+              "range": 0,
+              "timing": "",
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "engage_die": "d10",
+              "engage_mode": "previous",
+              "engage_other": "",
+              "engage_trait": "offense.Precision"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ability-1785156117396471800",
+        "name": "Stunning Strike (Level 1)",
+        "description": "A precise blow that damages and may stun the target.",
+        "type": "execution",
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": ""
+        },
+        "enactments": [
+          {
+            "type": "damage",
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d4",
+              "source_trait": ""
+            },
+            "interaction": "direct",
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "engage_die": "d10",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Power"
+            }
+          },
+          {
+            "type": "state",
+            "fields": {
+              "duration": "1",
+              "shift_amount": 0,
+              "solution": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "state": "stunned"
+            },
+            "interaction": "direct",
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "engage_die": "d10",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Power"
+            }
+          }
+        ],
+        "package_id": "barbarian"
+      }
+    ],
+    "packages": [
+      {
+        "id": "barbarian",
+        "name": "Barbarian",
+        "shifts": {
+          "defense.Constitution": 2,
+          "defense.Reflex": -1,
+          "general.Magic": -2,
+          "general.Nature": 1,
+          "general.Strength": 3,
+          "offense.Power": 2
+        }
+      }
+    ]
+  },
+  "char-1785173914306962600": {
+    "id": "char-1785173914306962600",
+    "level": 1,
+    "attributes": {
+      "name": "pieter"
+    },
+    "traits": {
+      "defense.Constitution": "clumsy",
+      "defense.Magic": "clumsy",
+      "defense.Mind": "clumsy",
+      "defense.Reflex": "clumsy",
+      "general.Crafting": "clumsy",
+      "general.Dexterity": "clumsy",
+      "general.Knowledge": "clumsy",
+      "general.Magic": "clumsy",
+      "general.Nature": "clumsy",
+      "general.People Skill": "clumsy",
+      "general.Perception": "clumsy",
+      "general.Performance": "clumsy",
+      "general.Stealth": "clumsy",
+      "general.Strength": "clumsy",
+      "general.Thievery": "clumsy",
+      "offense.Magic": "clumsy",
+      "offense.Mind": "clumsy",
+      "offense.Power": "clumsy",
+      "offense.Precision": "clumsy",
+      "vital.Energy": "clumsy",
+      "vital.HP": "clumsy",
+      "vital.Movement": "clumsy"
+    },
+    "abilities": [
+      {
+        "id": "ability-1785175073622-440677659",
+        "name": "Harm Meyera",
+        "type": "reaction",
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "",
+          "trigger_trait": "",
+          "uses": 1
+        },
+        "enactments": [
+          {
+            "type": "state",
+            "fields": {
+              "duration": "1",
+              "solution": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "state": ""
+            },
+            "interaction": "self",
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "engage_die": "d6",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": ""
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "char-1785174147504647500": {
+    "id": "char-1785174147504647500",
+    "level": 1,
+    "attributes": {
+      "name": "char"
+    },
+    "traits": {
+      "defense.Constitution": "clumsy",
+      "defense.Magic": "clumsy",
+      "defense.Mind": "clumsy",
+      "defense.Reflex": "clumsy",
+      "general.Crafting": "clumsy",
+      "general.Dexterity": "clumsy",
+      "general.Knowledge": "clumsy",
+      "general.Magic": "clumsy",
+      "general.Nature": "clumsy",
+      "general.People Skill": "clumsy",
+      "general.Perception": "clumsy",
+      "general.Performance": "clumsy",
+      "general.Stealth": "clumsy",
+      "general.Strength": "clumsy",
+      "general.Thievery": "clumsy",
+      "offense.Magic": "clumsy",
+      "offense.Mind": "clumsy",
+      "offense.Power": "clumsy",
+      "offense.Precision": "clumsy",
+      "vital.Energy": "clumsy",
+      "vital.HP": "clumsy",
+      "vital.Movement": "clumsy"
+    },
+    "abilities": []
+  }
+}

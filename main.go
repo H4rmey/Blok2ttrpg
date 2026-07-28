@@ -22,7 +22,8 @@ func main() {
 	// system on startup. --config still allows pointing at an explicit config
 	// path (directory or file) and takes precedence when set to a non-default
 	// value.
-	system := flag.String("system", "ability-builder", "game system to load (subdirectory under config/ and library/)")
+	system := flag.String("system", "Blok2Simplified", "game system to load (subdirectory under config/ and library/)")
+
 	configPath := flag.String("config", "", "explicit path to ruleset config directory or file (overrides --system)")
 
 	templateDir := flag.String("templates", "templates", "path to HTML templates")
