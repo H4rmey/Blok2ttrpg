@@ -1,5 +1,9 @@
 package config
 
+import (
+	"fmt"
+)
+
 // AbilityType returns the ability-type component with the given id.
 func (c *Config) AbilityType(id string) (Component, bool) {
 	if comp, ok := c.AbilityTypes.Get(id); ok {
@@ -222,8 +226,15 @@ func (c *Config) ResolveOptionGroups(f Field) []OptionGroup {
 		var groups []OptionGroup
 		if dice := c.OptionsFor("roll_dice"); len(dice) > 0 {
 			groups = append(groups, OptionGroup{Label: "Generic", Options: dice})
+			for _, d := range dice {
+				if gc, ok := f.GroupOffsets.Offsets["generic"]; ok {
+					d.Cost.BuildCost += gc.BuildCost
+					d.Cost.EnergyCost += gc.EnergyCost
+				}
+			}
 		}
 		for _, cat := range c.traitCategories() {
+			fmt.Println(cat)
 			var opts []Option
 			var groupCost *Cost
 			if f.GroupOffsets != nil {

@@ -1,4 +1,43 @@
 enactments:
+  amplification:
+    name: "Enact Amplification"
+    description: "Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has a Amplification Die which determines the amplification of the effect."
+    base_energy: 3
+    base_action: 2
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: source
+        label: "Amplification"
+        type: dropdown
+        default: d4
+        options_source: roll_all
+        group_offsets:
+          default_group: offense
+          offsets:
+            generic:
+              build_cost: 3
+            offense:
+              build_cost: 2
+            general:
+              build_cost: 3
+            defense:
+              build_cost: 4
+      - key: flat
+        label: "Flat Bonus"
+        type: free_number
+        default: 0
+        min: 0
+        max: 20
+        step: 1
+        per_step:
+          increase:
+            build_cost: 2
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
   phase:
     name: "Enact Phase"
     description: "Enter a Phase, on phase end, the effect reverses"

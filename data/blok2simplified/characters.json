@@ -43,19 +43,11 @@
         },
         "enactments": [
           {
-            "type": "condition",
+            "type": "amplification",
             "fields": {
               "comment": "",
-              "condition": "specific.isolated",
-              "duration": "1",
-              "solution": [
-                {
-                  "value": "defense.Reflex"
-                },
-                {
-                  "value": "defense.Constitution"
-                }
-              ]
+              "flat": 0,
+              "source": "d4"
             },
             "interaction": "self",
             "interaction_data": {
@@ -71,7 +63,7 @@
                   "value": "defense.Constitution"
                 }
               ],
-              "engage": "d6"
+              "engage": ""
             }
           }
         ]

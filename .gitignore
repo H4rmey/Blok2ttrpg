@@ -2,3 +2,6 @@ err.log
 out.log
 server.log
 data/*/*json
+.kilo
+.vscode
+docs/!!!meta.json

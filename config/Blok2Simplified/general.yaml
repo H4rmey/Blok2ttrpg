@@ -2,17 +2,12 @@ version: 1
 profile_id: blok2simplified
 title: "Blok2 Simplified"
 combat:
-
   actions:
     amount: 3
 additional_enactment:
   build_cost: 1
   energy_cost: 1
   description: "Adding an additional Enactment beyond the first"
-trait_categories:
-  - general
-  - offense
-  - defense
 # System 1: costed option sources. Entries in these lists each carry their own
 # build/energy cost. A field referencing one of these names via options_source
 # shows the (-/+x pt, -/+y E) hint per entry and the engine adds the selected
@@ -42,7 +37,7 @@ option_sources_costed:
       cost: { build_cost: 8, energy_cost: 4 }
     - value: "d20"
       label: "1d20"
-      cost: { build_cost: 10, energy_cost: 5 }
+      cost: { build_cost: 14, energy_cost: 5 }
 
 
   # Per-damage-type build cost for the follow-up dropdown of typed damage
@@ -296,7 +291,13 @@ option_sources_costed:
     - value: "recovers from any state"
       cost:
         build_cost: 3
-
+  concentration_upkeep:
+    - value: "1 Action or 1 Energy"
+      cost: { build_cost: 3, energy_cost: 0 }
+    - value: "1 Action"
+      cost: { build_cost: 1, energy_cost: 0 }
+    - value: "1 Energy"
+      cost: { build_cost: 1, energy_cost: 0 }
 
 
 option_sources:
@@ -324,9 +325,7 @@ option_sources:
     - Wand
     - Shield
   damage_types:
-
     - Physical
-
     - Slashing
     - Piercing
     - Bludgeoning
@@ -346,58 +345,9 @@ option_sources:
     - Shadow
     - Chaos
   directions_all:
-
-    - North
-    - East
-    - South
-    - West
-    - Up
-    - Down
-    - Any
-  directions:
-    - North
-    - East
-    - South
-    - West
-    - Up
-    - Down
-    - Any
-  # Simplified movement directions.
-  directions_simple:
-    - Away
     - Towards
-
-  shift_directions:
-    - UP
-    - DOWN
-  trigger_timings:
-    - Start of Target Turn
-    - End of Engager Turn
-  aoe_trigger_timings:
-    - Start of Target Turn
-    - End of Engager Turn
-  # When a Concentration ability re-triggers its Enactments each round.
-  concentration_timings:
-    - Start of Engager Turn
-    - End of Engager Turn
+    - Away
   # How the per-round upkeep of a Concentration ability is paid.
-  concentration_upkeep:
-    - 1 Action or 1 Energy
-    - 1 Action
-    - 1 Energy
-dice:
-
-  damage:
-    - "d4"
-    - "d6"
-    - "d8"
-    - "d10"
-    - "d12"
-  generic:
-    - "d6"
-    - "d8"
-    - "d10"
-    - "d12"
 validations:
   fields:
     - key: comment
@@ -420,9 +370,7 @@ validations:
             build_cost: 3
           defense:
             build_cost: 3
-
     - key: counter_trait
-
       label: "Counter Trait"
       type: solutions
       default_count: 2
