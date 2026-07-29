@@ -15,21 +15,22 @@ concentration 	--> after activation & at the start of your turn
 
 The what part of the ability
 
-damage 		--> lose hp
-heal 		--> gain hp 
-movement 	--> move away/towards
-reduction 	--> reduce the effect of an enactment 
+damage 		    --> lose hp
+heal 		    --> gain hp 
+movement 	    --> move away/towards
+reduction 	    --> reduce the effect of an enactment 
+amplification 	--> reduce the effect of an enactment 
 
-condition	--> apply a condition to someone
-negation 	--> negate a condition completely
+condition	    --> apply a condition to someone
+negation 	    --> negate a condition completely
 
-effect 	    --> lose/gain hp over time or move over time
-shift       --> shift proficiencies now
-phase 		--> shift proficiencies now, reverse the proficiency later
+effect 	        --> lose/gain hp over time or move over time
+shift           --> shift proficiencies now
+phase 		    --> shift proficiencies now, reverse the proficiency later
 
-stack       --> stack points now, use them later for other abilities
+stack           --> stack points now, use them later for other abilities
 
-minion 		--> create a minion to fight for you
+minion 	        --> create a minion to fight for you
 
 ## Interactions
 

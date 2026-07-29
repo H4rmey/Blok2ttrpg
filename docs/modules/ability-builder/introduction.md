@@ -16,20 +16,20 @@ Definitions: 
 
 In turn each of these Components (Enactment, Validation, Interaction) has Rules and Perks:
 
-*   **Rules**  — define how the Component works by default.
+*   **Rules** — define how the Component works by default.
 *   **Perks** — modify the Rules to upgrade the Component.
 
 Every **Ability** must contain **at least one Enactment**. Additional Enactments may be added to create more complex effects, which are resolved **in sequence**. Each Enactment is evaluated independently unless explicitly overridden by a Perk.
 
 The Ability Builder is intentionally **system-agnostic** with regard to flavor. A fireball, a sword technique, a healing prayer, or a mechanical trap are all created using the same underlying rules. The narrative description of an Ability is left to the player and GM, while the mechanical behavior remains the same. So a shot from an arrow might be the same as a light beam in terms of Ability Components.
 
-## Costs
+## Costs (WIP)
 
 Applying perks has a cost. The first cost is the **Ability Cost** to add the Perk. Each level you gain **Ability Points** that can be spent to create abilities.
 
 Then there is the **Energy Cost**. This cost is used to use your ability. Sometimes you do not have enough energy to use your ability. In this system it is allowed to still use your ability, but there is a catch: either you take damage equal to the amount of energy you are missing, or you only partially use your ability. The latter is done by not executing all enactments of the ability. The fireball you cast will still burn someone, but will not explode on impact anymore because you don't have the energy for that.
 
-## Execution
+## Executing Abilities
 
 So an **Ability** is made up from Enactments. Each of these Enactments describe what they do. The order in which you execute the Enactment is a bit odd compared to other systems. The order goes as follows:
 
