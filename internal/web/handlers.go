@@ -244,7 +244,7 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) {
 	}
 	// Current values for editable vitals (HP/Energy). Stored as attributes
 	// keyed "current_<vital>" so they persist alongside the character.
-	for _, trait := range a.Cfg.Traits.Items[engine.VitalGroupID] {
+	for _, trait := range a.Cfg.Traits.Items[engine.VitalGroupID(a.Cfg.Config)] {
 		key := strings.ToLower(trait)
 		name := "current_" + key
 		if _, ok := r.Form[name]; ok {

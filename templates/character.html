@@ -62,7 +62,7 @@
         <select name="trait_{{ $g.ID }}_{{ $trait }}">
           {{ $current := traitProf $c $g.ID $trait }}
           {{ range $.Cfg.Proficiencies }}
-          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profTraitLabel . $g.ID $trait }}</option>
+          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profTraitLabel $.Cfg . $g.ID $trait }}</option>
           {{ end }}
         </select>
 

@@ -1,9 +1,5 @@
 package config
 
-import (
-	"fmt"
-)
-
 // AbilityType returns the ability-type component with the given id.
 func (c *Config) AbilityType(id string) (Component, bool) {
 	if comp, ok := c.AbilityTypes.Get(id); ok {
@@ -194,93 +190,92 @@ type OptionGroup struct {
 	Options []Option
 }
 
-// ResolveOptionGroups returns options grouped for display. Trait sources that
-// span multiple categories (traits_all) are grouped by category so a single
-// large dropdown stays readable; every other source becomes one unlabelled
-// group.
+// ResolveOptionGroups returns options grouped for display. When the field's
+// options_source names an entry in cfg.OptionGroups, that config-defined group
+// layout is expanded into <optgroup> blocks; otherwise the source resolves to a
+// single unlabelled group.
 func (c *Config) ResolveOptionGroups(f Field) []OptionGroup {
-	if f.OptionsSource == "conditions_all" {
-		var groups []OptionGroup
-		var gen []Option
-		for _, s := range c.GeneralConditions {
-			gen = append(gen, Option{Value: "general." + s.ID, Label: s.Name})
-		}
-		if len(gen) > 0 {
-			groups = append(groups, OptionGroup{Label: "General", Options: gen})
-		}
-		var spec []Option
-		for _, s := range c.SpecificConditions {
-			cost := &Cost{BuildCost: s.BuildCost, EnergyCost: s.EnergyCost}
-			spec = append(spec, Option{Value: "specific." + s.ID, Label: s.Name, Cost: cost})
-		}
-		if len(spec) > 0 {
-			groups = append(groups, OptionGroup{Label: "Specific", Options: spec})
-		}
-		return groups
+	if def, ok := c.OptionGroups[f.OptionsSource]; ok {
+		return c.expandOptionGroups(f, def)
 	}
-
-	if f.OptionsSource == "roll_all" {
-		// Combined roll source: a "Generic" group of costed dice followed by
-		// the trait categories (namespaced "group.Trait" with group offsets),
-		// mirroring the grouped layout of traits_all.
-		var groups []OptionGroup
-		if dice := c.OptionsFor("roll_dice"); len(dice) > 0 {
-			groups = append(groups, OptionGroup{Label: "Generic", Options: dice})
-			for _, d := range dice {
-				if gc, ok := f.GroupOffsets.Offsets["generic"]; ok {
-					d.Cost.BuildCost += gc.BuildCost
-					d.Cost.EnergyCost += gc.EnergyCost
-				}
-			}
-		}
-		for _, cat := range c.traitCategories() {
-			fmt.Println(cat)
-			var opts []Option
-			var groupCost *Cost
-			if f.GroupOffsets != nil {
-				if oc, ok := f.GroupOffsets.Offsets[cat]; ok {
-					groupCost = oc
-				}
-			}
-			for _, t := range c.Traits.Items[cat] {
-				opts = append(opts, Option{Value: cat + "." + t, Label: t, Cost: groupCost})
-			}
-			if len(opts) > 0 {
-				groups = append(groups, OptionGroup{Label: titleCase(cat), Options: opts})
-			}
-		}
-		return groups
-	}
-
-	if f.OptionsSource == "traits_all" {
-		var groups []OptionGroup
-
-		// Do not deduplicate across categories: a trait such as "Magic" or
-		// "Mind" legitimately exists in more than one category (e.g. offense
-		// and defense), and each category's entry must remain selectable. The
-		// option value is namespaced by category so the two are distinct.
-		for _, cat := range c.traitCategories() {
-			var opts []Option
-			// When the field defines group offsets, surface the group's
-			// offset cost on each option so the (-/+x pt, -/+y E) hint shows.
-			var groupCost *Cost
-			if f.GroupOffsets != nil {
-				if oc, ok := f.GroupOffsets.Offsets[cat]; ok {
-					groupCost = oc
-				}
-			}
-			for _, t := range c.Traits.Items[cat] {
-				opts = append(opts, Option{Value: cat + "." + t, Label: t, Cost: groupCost})
-			}
-			if len(opts) > 0 {
-				groups = append(groups, OptionGroup{Label: titleCase(cat), Options: opts})
-			}
-		}
-		return groups
-
-	}
-
 	return []OptionGroup{{Label: "", Options: c.ResolveOptions(f)}}
+}
+
+// expandOptionGroups turns a config-defined grouped source into labelled option
+// groups, applying per-group namespacing and group-offset costs.
+func (c *Config) expandOptionGroups(f Field, def OptionGroupDef) []OptionGroup {
+	var groups []OptionGroup
+	for _, m := range def.Groups {
+		opts := c.OptionsFor(m.Source)
+		if len(opts) == 0 {
+			continue
+		}
+		ns := m.Namespace
+		if ns == "" {
+			ns = traitCategoryOf(m.Source)
+		}
+		offsetKey := m.OffsetKey
+		if offsetKey == "" {
+			offsetKey = ns
+		}
+		var groupCost *Cost
+		if f.GroupOffsets != nil && offsetKey != "" {
+			if oc, ok := f.GroupOffsets.Offsets[offsetKey]; ok {
+				groupCost = oc
+			}
+		}
+		out := make([]Option, 0, len(opts))
+		for _, o := range opts {
+			if ns != "" {
+				o.Value = ns + "." + o.Value
+			}
+			// Merge any per-option cost with the group offset cost.
+			o.Cost = mergeCost(o.Cost, groupCost)
+			out = append(out, o)
+		}
+		label := m.Label
+		if label == "" {
+			label = c.groupLabel(m.Source)
+		}
+		groups = append(groups, OptionGroup{Label: label, Options: out})
+	}
+	return groups
+}
+
+// mergeCost returns the sum of two optional costs, or nil when both are nil.
+func mergeCost(a, b *Cost) *Cost {
+	if a == nil && b == nil {
+		return nil
+	}
+	out := Cost{}
+	if a != nil {
+		out.BuildCost += a.BuildCost
+		out.EnergyCost += a.EnergyCost
+	}
+	if b != nil {
+		out.BuildCost += b.BuildCost
+		out.EnergyCost += b.EnergyCost
+	}
+	return &out
+}
+
+// traitCategoryOf returns the trait category id when source is a dotted
+// "traits.<cat>" reference, or "" otherwise. The category id doubles as the
+// default namespace/offset key for a trait group.
+func traitCategoryOf(source string) string {
+	const prefix = "traits."
+	if len(source) > len(prefix) && source[:len(prefix)] == prefix {
+		return source[len(prefix):]
+	}
+	return ""
+}
+
+// groupLabel derives a default optgroup heading from a source name.
+func (c *Config) groupLabel(source string) string {
+	if cat := traitCategoryOf(source); cat != "" {
+		return titleCase(cat)
+	}
+	return titleCase(source)
 }
 
 // traitCategories returns the ordered trait group ids that make up "traits_all".
@@ -293,59 +288,31 @@ func (c *Config) traitCategories() []string {
 	return []string{"general", "offense", "defense"}
 }
 
-// OptionsFor resolves a named options_source into a concrete option list. All
-// dynamic sources are derived from the config (traits, dice, conditions); a handful
-// of small static lists are defined here.
+// OptionsFor resolves a named options_source into a concrete option list. It
+// understands dotted trait/dice references (traits.<cat>, dice.<kind>), the
+// built-in condition sources, component sources, config-defined grouped sources
+// (flattened for the cost engine), and the config-driven option_sources map.
 func (c *Config) OptionsFor(source string) []Option {
+	// Dotted references: "traits.<category>" and "dice.<kind>".
+	if cat := traitCategoryOf(source); cat != "" {
+		return strOptions(c.Traits.Items[cat])
+	}
 	switch source {
-	case "traits_general":
-		return strOptions(c.Traits.Items["general"])
-	case "traits_offense":
-		return strOptions(c.Traits.Items["offense"])
-	case "traits_defense":
-		return strOptions(c.Traits.Items["defense"])
-	case "traits_vital":
-		return strOptions(c.Traits.Items["vital"])
-	case "traits_all":
-		// Vitals (HP/Movement/Energy) are not selectable as traits.
-		var all []string
-		seen := map[string]bool{}
-		for _, cat := range c.traitCategories() {
-			for _, t := range c.Traits.Items[cat] {
-				if !seen[t] {
-					seen[t] = true
-					all = append(all, t)
-				}
-			}
-		}
-		return strOptions(all)
-
-	case "roll_all":
-		// Flattened form used by the cost engine: costed dice followed by the
-		// namespaced trait options ("group.Trait"). Trait group offsets are
-		// applied separately via GroupOffsetFor.
-		out := append([]Option{}, c.OptionsFor("roll_dice")...)
-		for _, cat := range c.traitCategories() {
-			for _, t := range c.Traits.Items[cat] {
-				out = append(out, Option{Value: cat + "." + t, Label: t})
-			}
-		}
-		return out
-	case "dice_damage":
+	case "dice.damage":
 		return strOptions(c.Dice.Damage)
-
-	case "dice_generic":
+	case "dice.generic":
 		return strOptions(c.Dice.Generic)
-	case "conditions_general":
+	case "general_conditions":
 		out := make([]Option, 0, len(c.GeneralConditions))
 		for _, s := range c.GeneralConditions {
 			out = append(out, Option{Value: s.ID, Label: s.Name})
 		}
 		return out
-	case "conditions_specific":
+	case "specific_conditions":
 		out := make([]Option, 0, len(c.SpecificConditions))
 		for _, s := range c.SpecificConditions {
-			out = append(out, Option{Value: s.ID, Label: s.Name})
+			cost := &Cost{BuildCost: s.BuildCost, EnergyCost: s.EnergyCost}
+			out = append(out, Option{Value: s.ID, Label: s.Name, Cost: cost})
 		}
 		return out
 	case "ability_types":
@@ -354,33 +321,40 @@ func (c *Config) OptionsFor(source string) []Option {
 		return componentOptions(c.Enactments)
 	case "interaction_types":
 		return componentOptions(c.Interactions)
-	default:
-		// A costed source takes precedence over the plain string list so
-		// per-entry (e.g. per-trigger) build costs can be attached in YAML.
-		if opts, ok := c.OptionSourcesCosted[source]; ok {
-			return costedOptions(opts)
-		}
-		// Any other name is resolved from the config-driven option_sources
-		// map, so static lists (directions, trigger timings, reaction
-		// triggers, knockout options, etc.) live in YAML rather than Go.
-		if vals, ok := c.OptionSources[source]; ok {
-			return strOptions(vals)
-		}
-		return nil
 	}
-}
 
-// costedOptions normalizes a costed option list: an entry with an empty Label
-// falls back to its Value so the display stays populated.
-func costedOptions(opts []Option) []Option {
-	out := make([]Option, 0, len(opts))
-	for _, o := range opts {
-		if o.Label == "" {
-			o.Label = o.Value
+	// A grouped source flattens to the concatenation of its member groups,
+	// namespaced the same way as the grouped display, so the cost engine can
+	// match posted values. Group-offset costs are applied via GroupOffsetFor.
+	if def, ok := c.OptionGroups[source]; ok {
+		var out []Option
+		for _, m := range def.Groups {
+			opts := c.OptionsFor(m.Source)
+			ns := m.Namespace
+			if ns == "" {
+				ns = traitCategoryOf(m.Source)
+			}
+			for _, o := range opts {
+				if ns != "" {
+					o.Value = ns + "." + o.Value
+				}
+				out = append(out, o)
+			}
 		}
-		out = append(out, o)
+		return out
 	}
-	return out
+
+	// A costed variant (legacy split map) takes precedence over the merged
+	// option_sources entry of the same name.
+	if opts, ok := c.OptionSourcesCosted[source]; ok {
+		return opts.Options()
+	}
+	// Config-driven named lists (directions, trigger events, reaction triggers,
+	// knockout options, etc.), each entry optionally carrying its own cost.
+	if opts, ok := c.OptionSources[source]; ok {
+		return opts.Options()
+	}
+	return nil
 }
 
 // GroupOffsetFor returns the group-offset cost for a selected trait value on a

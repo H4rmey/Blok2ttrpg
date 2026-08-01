@@ -124,7 +124,7 @@ func merge(base, in *Config) {
 	}
 	if len(in.OptionSources) > 0 {
 		if base.OptionSources == nil {
-			base.OptionSources = map[string][]string{}
+			base.OptionSources = map[string]OptionList{}
 		}
 		for k, v := range in.OptionSources {
 			base.OptionSources[k] = v
@@ -132,15 +132,27 @@ func merge(base, in *Config) {
 	}
 	if len(in.OptionSourcesCosted) > 0 {
 		if base.OptionSourcesCosted == nil {
-			base.OptionSourcesCosted = map[string][]Option{}
+			base.OptionSourcesCosted = map[string]OptionList{}
 		}
 		for k, v := range in.OptionSourcesCosted {
 			base.OptionSourcesCosted[k] = v
 		}
 	}
+	if len(in.OptionGroups) > 0 {
+		if base.OptionGroups == nil {
+			base.OptionGroups = map[string]OptionGroupDef{}
+		}
+		for k, v := range in.OptionGroups {
+			base.OptionGroups[k] = v
+		}
+	}
 	if len(in.TraitCategories) > 0 {
 		base.TraitCategories = in.TraitCategories
 	}
+	if in.VitalGroup != "" {
+		base.VitalGroup = in.VitalGroup
+	}
+
 	if in.DefaultProficiency != "" {
 		base.DefaultProficiency = in.DefaultProficiency
 	}

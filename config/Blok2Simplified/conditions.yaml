@@ -5,6 +5,28 @@ additional_condition:
   build_cost: 0
   energy_cost: 0
 
+# Config-defined grouped dropdown sources for conditions. Both group the
+# general and specific condition lists into labelled optgroups. "conditions_all"
+# backs the Enact Condition selector; "states_all" backs the reaction triggers'
+# condition follow-up dropdowns.
+option_groups:
+  conditions_all:
+    groups:
+      - source: general_conditions
+        namespace: general
+        label: "General"
+      - source: specific_conditions
+        namespace: specific
+        label: "Specific"
+  states_all:
+    groups:
+      - source: general_conditions
+        namespace: general
+        label: "General"
+      - source: specific_conditions
+        namespace: specific
+        label: "Specific"
+
 general_conditions:
   # General states apply trait shifts with per-shift cost
   - id: blinded

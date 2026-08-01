@@ -33,21 +33,33 @@ type Config struct {
 	Dice                Dice                `yaml:"dice,omitempty" json:"dice,omitempty"`
 	Validations         Validations         `yaml:"validations,omitempty" json:"validations,omitempty"`
 
-	// OptionSources holds named static option lists so any field can reference
-	// them via options_source without hardcoding the list in Go. Each entry is
-	// a plain string list; the value and the label are the same string.
-	OptionSources map[string][]string `yaml:"option_sources,omitempty" json:"option_sources,omitempty"`
+	// OptionSources holds named option lists so any field can reference them via
+	// options_source without hardcoding the list in Go. Each entry may be a
+	// plain string (value == label) or an object with an optional cost, so a
+	// single source can mix free and costed entries. This replaces the former
+	// split between option_sources and option_sources_costed.
+	OptionSources map[string]OptionList `yaml:"option_sources,omitempty" json:"option_sources,omitempty"`
 
-	// OptionSourcesCosted holds named option lists whose entries each carry
-	// their own cost. This backs per-trigger build costs: a source referenced
-	// via options_source can have distinct build/energy costs per entry. When a
-	// source name exists in both maps, the costed variant takes precedence.
-	OptionSourcesCosted map[string][]Option `yaml:"option_sources_costed,omitempty" json:"option_sources_costed,omitempty"`
+	// OptionSourcesCosted is retained only for backwards compatibility with
+	// profiles that still split costed entries into their own map. New configs
+	// should attach costs inline in option_sources instead. When a source name
+	// exists in both maps, this variant takes precedence.
+	OptionSourcesCosted map[string]OptionList `yaml:"option_sources_costed,omitempty" json:"option_sources_costed,omitempty"`
+
+	// OptionGroups defines named grouped dropdown sources. A field referencing
+	// one of these names via options_source is rendered as <optgroup> blocks in
+	// author order, and its flattened option list backs the cost engine. This
+	// replaces the hardcoded traits_all/roll_all/conditions_all grouping.
+	OptionGroups map[string]OptionGroupDef `yaml:"option_groups,omitempty" json:"option_groups,omitempty"`
 
 	// TraitCategories lists the trait group ids that make up the "traits_all"
 	// option source and its grouped display. When empty the app falls back to
 	// the historical general/offense/defense set.
 	TraitCategories []string `yaml:"trait_categories,omitempty" json:"trait_categories,omitempty"`
+
+	// VitalGroup names the trait group id whose traits (HP, Movement, Energy)
+	// map to numeric vital values rather than dice. Defaults to "vital".
+	VitalGroup string `yaml:"vital_group,omitempty" json:"vital_group,omitempty"`
 
 	// Character attributes and traits are fully config-driven, keyed by id.
 	Attributes AttributeMap `yaml:"attributes,omitempty" json:"attributes,omitempty"`
@@ -71,7 +83,7 @@ type Config struct {
 	Interactions ComponentMap `yaml:"interactions,omitempty" json:"interactions,omitempty"`
 
 	// Conditions for the "Enact Condition" enactment.
-	AdditionalCondition Cost            `yaml:"additional_condition,omitempty" json:"additional_condition,omitempty"`
+	AdditionalCondition Cost                `yaml:"additional_condition,omitempty" json:"additional_condition,omitempty"`
 	GeneralConditions   []GeneralCondition  `yaml:"general_conditions,omitempty" json:"general_conditions,omitempty"`
 	SpecificConditions  []SpecificCondition `yaml:"specific_conditions,omitempty" json:"specific_conditions,omitempty"`
 
@@ -112,12 +124,27 @@ type Validations struct {
 
 // Proficiency is a single skill tier.
 type Proficiency struct {
-	ID     string            `yaml:"id" json:"id"`
-	Name   string            `yaml:"name" json:"name"`
-	Cost   int               `yaml:"cost" json:"cost"`
-	Note   string            `yaml:"note,omitempty" json:"note,omitempty"`
+	ID   string `yaml:"id" json:"id"`
+	Name string `yaml:"name" json:"name"`
+	Cost int    `yaml:"cost" json:"cost"`
+	Note string `yaml:"note,omitempty" json:"note,omitempty"`
+	// Die is the fallback die used for every dice-backed trait group at this
+	// tier. Per-group overrides in Dice take precedence when present, so a tier
+	// only needs the verbose Dice map when a group differs from the rest.
+	Die    string            `yaml:"die,omitempty" json:"die,omitempty"`
 	Dice   map[string]string `yaml:"dice,omitempty" json:"dice,omitempty"`
 	Vitals map[string]any    `yaml:"vitals,omitempty" json:"vitals,omitempty"`
+}
+
+// DieFor returns the die this tier grants for a trait group: the per-group
+// override in Dice when present, otherwise the shared Die fallback.
+func (p Proficiency) DieFor(group string) string {
+	if p.Dice != nil {
+		if d, ok := p.Dice[group]; ok && d != "" {
+			return d
+		}
+	}
+	return p.Die
 }
 
 // Leveling describes the point budgets available to a character by level.

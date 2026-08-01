@@ -1,6 +1,13 @@
 version: 1
 profile_id: blok2simplified
 title: "Blok2 Simplified"
+# The trait group treated as vitals (HP/Movement/Energy) rather than dice.
+vital_group: vital
+# Ordered trait categories that make up the grouped "traits_all" source.
+trait_categories:
+  - general
+  - offense
+  - defense
 combat:
   actions:
     amount: 3
@@ -8,16 +15,17 @@ additional_enactment:
   build_cost: 1
   energy_cost: 1
   description: "Adding an additional Enactment beyond the first"
-# System 1: costed option sources. Entries in these lists each carry their own
-# build/energy cost. A field referencing one of these names via options_source
-# shows the (-/+x pt, -/+y E) hint per entry and the engine adds the selected
-# entry's cost. A costed source takes precedence over a plain option_sources
-# entry of the same name.
-option_sources_costed:
-  # Dice half of the combined roll source. Referenced by the special "roll_all"
-  # source (see engine) which renders these as a "Generic" optgroup and then
-  # appends the trait categories as grouped optgroups. Used by Damage/Heal/
-  #  Mitigation "Source" and the Validation "Engage" dropdown. Dice scale in cost
+
+# Named option sources. Each entry may be authored as a bare string
+# (value == label, no cost) or as a full object with an optional label and
+# cost. A field referencing a source via options_source shows the
+# (-/+x pt, -/+y E) hint per entry and the engine adds the selected entry's
+# cost.
+option_sources:
+  # Dice half of the combined roll source. Referenced by the "roll_all" grouped
+  # source (see option_groups) which renders these as a "Generic" optgroup and
+  # then appends the trait categories as grouped optgroups. Used by Damage/Heal/
+  # Mitigation "Source" and the Validation "Engage" dropdown. Dice scale in cost
   # with size; trait cost comes from the field's group_offsets.
   roll_dice:
     - value: "d4"
@@ -39,9 +47,7 @@ option_sources_costed:
       label: "1d20"
       cost: { build_cost: 14, energy_cost: 5 }
 
-
   # Per-damage-type build cost for the follow-up dropdown of typed damage
-
   # triggers. Common/mundane damage is cheap (+0); rarer or more potent
   # elemental/exotic damage costs more, on a +0..+6 scale.
   damage_types:
@@ -291,6 +297,8 @@ option_sources_costed:
     - value: "recovers from any condition"
       cost:
         build_cost: 3
+
+  # How the per-round upkeep of a Concentration ability is paid.
   concentration_upkeep:
     - value: "1 Action or 1 Energy"
       cost: { build_cost: 3, energy_cost: 0 }
@@ -299,8 +307,6 @@ option_sources_costed:
     - value: "1 Energy"
       cost: { build_cost: 1, energy_cost: 0 }
 
-
-option_sources:
   # Who the reactive trigger watches. Paired with a trigger_events entry to
   # form a full trigger, e.g. "An Opponent" + "gets hit by damage of a type".
   trigger_subjects:
@@ -308,46 +314,40 @@ option_sources:
     - An Ally
     - An Opponent
     - Someone Else
-  # Broad weapon categories, used by the "gets hit by a weapon of a type"
-  # trigger.
-  weapon_types:
-    - Unarmed
-    - Sword
-    - Axe
-    - Mace
-    - Spear
-    - Dagger
-    - Bow
-    - Crossbow
-    - Thrown
-    - Firearm
-    - Staff
-    - Wand
-    - Shield
-  damage_types:
-    - Physical
-    - Slashing
-    - Piercing
-    - Bludgeoning
-    - Fire
-    - Cold
-    - Lightning
-    - Thunder
-    - Acid
-    - Poison
-    - Psychic
-    - Necrotic
-    - Radiant
-    - Force
-    - Arcane
-    - Nature
-    - Holy
-    - Shadow
-    - Chaos
   directions_all:
     - Towards
     - Away
-  # How the per-round upkeep of a Concentration ability is paid.
+  directions_simple:
+    - Towards
+    - Away
+
+# Config-defined grouped dropdown sources. Each names an ordered set of member
+# groups, replacing the previously hardcoded traits_all/roll_all grouping.
+option_groups:
+  # All trait categories, grouped by category. Trait cost comes from a field's
+  # group_offsets keyed on the category id (general/offense/defense).
+  traits_all:
+    groups:
+      - source: traits.general
+        label: "General"
+      - source: traits.offense
+        label: "Offense"
+      - source: traits.defense
+        label: "Defense"
+  # A "Generic" group of costed dice followed by the trait categories. Dice
+  # carry no namespace (so bare defaults like d6 keep matching); traits are
+  # namespaced by category so group_offsets apply.
+  roll_all:
+    groups:
+      - source: roll_dice
+        label: "Generic"
+      - source: traits.general
+        label: "General"
+      - source: traits.offense
+        label: "Offense"
+      - source: traits.defense
+        label: "Defense"
+
 validations:
   fields:
     - key: comment
@@ -401,6 +401,3 @@ validations:
         decrease:
           build_cost: 3
           energy_cost: 1
-
-
-

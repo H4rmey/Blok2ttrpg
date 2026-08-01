@@ -8,9 +8,18 @@ import (
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
 
-// VitalGroupID is the trait group id whose traits (HP, Movement, Energy, ...)
-// map to numeric vital values rather than dice.
-const VitalGroupID = "vital"
+// defaultVitalGroupID is the fallback trait group id whose traits (HP,
+// Movement, Energy, ...) map to numeric vital values rather than dice, used
+// when the config does not set vital_group.
+const defaultVitalGroupID = "vital"
+
+// VitalGroupID returns the configured vital trait group id, or the default.
+func VitalGroupID(cfg *config.Config) string {
+	if cfg != nil && cfg.VitalGroup != "" {
+		return cfg.VitalGroup
+	}
+	return defaultVitalGroupID
+}
 
 // VitalStat is a computed vital value for a character. Max is the value granted
 // by the selected proficiency tier for that vital trait. For editable vitals
@@ -33,13 +42,15 @@ var editableVitals = map[string]bool{"hp": true, "energy": true}
 // from the character attribute "current_<key>"; if unset it defaults to Max.
 func CharacterVitals(cfg *config.Config, c model.Character) []VitalStat {
 	var out []VitalStat
-	traits, ok := cfg.Traits.Items[VitalGroupID]
+	vg := VitalGroupID(cfg)
+	traits, ok := cfg.Traits.Items[vg]
 	if !ok {
 		return out
 	}
 	for _, trait := range traits {
 		key := strings.ToLower(trait)
-		profID := c.Traits[model.TraitKey(VitalGroupID, trait)]
+		profID := c.Traits[model.TraitKey(vg, trait)]
+
 		max := ""
 		if p, ok := cfg.Proficiency(profID); ok {
 			if v, ok := p.Vitals[key]; ok {
@@ -82,8 +93,9 @@ func formatVital(v any) string {
 // formatted for display. Empty when the trait has no vital value.
 func VitalValue(cfg *config.Config, c model.Character, trait string) string {
 	key := strings.ToLower(trait)
-	profID := c.Traits[model.TraitKey(VitalGroupID, trait)]
+	profID := c.Traits[model.TraitKey(VitalGroupID(cfg), trait)]
 	if p, ok := cfg.Proficiency(profID); ok {
+
 		if v, ok := p.Vitals[key]; ok {
 			return formatVital(v)
 		}

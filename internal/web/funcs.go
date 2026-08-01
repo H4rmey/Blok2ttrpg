@@ -83,7 +83,7 @@ func funcMap() template.FuncMap {
 		// profLabel renders a proficiency choice with its dice value for the
 		// given trait group, e.g. "Trained (d8)".
 		"profLabel": func(p config.Proficiency, groupID string) string {
-			if d, ok := p.Dice[groupID]; ok && d != "" {
+			if d := p.DieFor(groupID); d != "" {
 				return fmt.Sprintf("%s (%s)", p.Name, d)
 			}
 			// Vital traits show hp/movement/energy rather than dice.
@@ -95,15 +95,21 @@ func funcMap() template.FuncMap {
 		// profTraitLabel renders a proficiency choice for a specific trait. For
 		// vital traits it shows the numeric vital value (keyed by trait name)
 		// rather than a die; otherwise it falls back to the dice-based label.
-		"profTraitLabel": func(p config.Proficiency, groupID, trait string) string {
-			if groupID == "vital" {
+		// The configured vital group id (cfg.VitalGroup) selects which trait
+		// group is treated as vitals.
+		"profTraitLabel": func(cfg *config.Config, p config.Proficiency, groupID, trait string) string {
+			vitalGroup := "vital"
+			if cfg != nil && cfg.VitalGroup != "" {
+				vitalGroup = cfg.VitalGroup
+			}
+			if groupID == vitalGroup {
 				key := strings.ToLower(trait)
 				if v, ok := p.Vitals[key]; ok {
 					return fmt.Sprintf("%s (%v)", p.Name, v)
 				}
 				return p.Name
 			}
-			if d, ok := p.Dice[groupID]; ok && d != "" {
+			if d := p.DieFor(groupID); d != "" {
 				return fmt.Sprintf("%s (%s)", p.Name, d)
 			}
 			return p.Name

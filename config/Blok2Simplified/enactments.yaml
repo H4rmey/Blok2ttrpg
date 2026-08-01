@@ -127,7 +127,7 @@ enactments:
       - key: source
         label: "Source"
         type: dropdown
-        options_source: traits_offense
+        options_source: traits.offense
       - key: flat
         label: "Flat Bonus"
         type: free_number
