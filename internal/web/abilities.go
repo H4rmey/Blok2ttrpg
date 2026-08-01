@@ -489,19 +489,29 @@ func (a *App) handleConditionShift(w http.ResponseWriter, r *http.Request) {
 		value = r.URL.Query().Get("value")
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	if !strings.HasPrefix(value, "general.") {
-		// Specific condition or none: no shift dropdown.
+	if value == "" {
 		return
 	}
-	id := strings.TrimPrefix(value, "general.")
+	// Legacy namespaced values use a "general."/"specific." prefix; unified
+	// values are bare condition ids. Specific (fixed-cost) conditions have no
+	// shift dropdown, so strip a "general." prefix and reject "specific.".
+	id := value
+	if strings.HasPrefix(value, "specific.") {
+		return
+	}
+	id = strings.TrimPrefix(id, "general.")
 	shifts := a.Cfg.ShiftOptionsFor(id)
 	if len(shifts) == 0 {
+		// Fixed-cost condition (or unknown): no shift dropdown.
 		return
 	}
 	cost := ""
 	if s, ok := a.Cfg.GeneralConditionByID(id); ok {
 		cost = costHintStr(&s.ShiftCost)
+	} else if u, ok := a.Cfg.ConditionByID(id); ok {
+		cost = costHintStr(&u.ShiftCost)
 	}
+
 	var buf bytes.Buffer
 	buf.WriteString(`<label>Shift Amount `)
 	if cost != "" {

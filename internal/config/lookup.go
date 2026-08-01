@@ -60,18 +60,36 @@ func (c *Config) SpecificConditionByID(id string) (SpecificCondition, bool) {
 	return SpecificCondition{}, false
 }
 
+// ConditionByID returns the unified condition with the given id.
+func (c *Config) ConditionByID(id string) (Condition, bool) {
+	for _, s := range c.Conditions {
+		if s.ID == id {
+			return s, true
+		}
+	}
+	return Condition{}, false
+}
+
 // ShiftOptionsFor returns the discrete non-zero shift values a general condition
 // may take, from its configured min_shift..max_shift range. Zero is skipped
 // because applying a condition with no shift is meaningless.
 func (c *Config) ShiftOptionsFor(generalID string) []int {
-	s, ok := c.GeneralConditionByID(generalID)
-	if !ok {
+	var min, max int
+	if s, ok := c.GeneralConditionByID(generalID); ok {
+		min, max = s.MinShift, s.MaxShift
+	} else if u, ok := c.ConditionByID(generalID); ok {
+		if !u.Shiftable() {
+			// Fixed-cost unified condition: no shift dropdown.
+			return nil
+		}
+		min, max = u.MinShift, u.MaxShift
+	} else {
 		return nil
 	}
-	min, max := s.MinShift, s.MaxShift
 	if min == 0 && max == 0 {
 		min, max = -6, 6
 	}
+
 	var out []int
 	for v := min; v <= max; v++ {
 		if v != 0 {
@@ -315,8 +333,23 @@ func (c *Config) OptionsFor(source string) []Option {
 			out = append(out, Option{Value: s.ID, Label: s.Name, Cost: cost})
 		}
 		return out
+	case "conditions":
+		out := make([]Option, 0, len(c.Conditions))
+		for _, s := range c.Conditions {
+			// Shiftable conditions charge per-shift (handled by the cost
+			// engine via ConditionByID), so they carry no flat option cost.
+			// Fixed-cost conditions attach their build/energy cost so the
+			// dropdown option contributes directly.
+			var cost *Cost
+			if !s.Shiftable() && (s.BuildCost != 0 || s.EnergyCost != 0) {
+				cost = &Cost{BuildCost: s.BuildCost, EnergyCost: s.EnergyCost}
+			}
+			out = append(out, Option{Value: s.ID, Label: s.Name, Cost: cost})
+		}
+		return out
 	case "ability_types":
 		return componentOptions(c.AbilityTypes)
+
 	case "enactment_types":
 		return componentOptions(c.Enactments)
 	case "interaction_types":

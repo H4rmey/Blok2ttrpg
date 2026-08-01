@@ -173,8 +173,10 @@ func merge(base, in *Config) {
 	if (in.AdditionalCondition != Cost{}) {
 		base.AdditionalCondition = in.AdditionalCondition
 	}
+	base.Conditions = append(base.Conditions, in.Conditions...)
 	base.GeneralConditions = append(base.GeneralConditions, in.GeneralConditions...)
 	base.SpecificConditions = append(base.SpecificConditions, in.SpecificConditions...)
+
 }
 
 func mergeComponentMap(base *ComponentMap, in ComponentMap) {

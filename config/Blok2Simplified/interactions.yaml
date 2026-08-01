@@ -35,7 +35,6 @@ interactions:
             energy_cost: 2
 
   ranged:
-
     type: "Ranged"
     description: "Affects a single target at range."
     default_range: 5
@@ -77,7 +76,6 @@ interactions:
             energy_cost: 2
 
   area:
-
     type: "Area"
     description: "Affects a radius at a point within range."
     default_radius: 1

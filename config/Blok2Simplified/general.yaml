@@ -13,7 +13,7 @@ combat:
     amount: 3
 additional_enactment:
   build_cost: 1
-  energy_cost: 1
+  energy_cost: 0
   description: "Adding an additional Enactment beyond the first"
 
 # Named option sources. Each entry may be authored as a bare string
@@ -314,10 +314,8 @@ option_sources:
     - An Ally
     - An Opponent
     - Someone Else
-  directions_all:
-    - Towards
-    - Away
-  directions_simple:
+    
+  directions:
     - Towards
     - Away
 

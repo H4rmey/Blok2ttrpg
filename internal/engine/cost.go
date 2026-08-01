@@ -119,6 +119,26 @@ func addConditionSelectCost(cfg *config.Config, total Cost, f config.Field, valu
 	if val == "" || cfg == nil {
 		return total
 	}
+	shiftKey := f.ShiftKey
+	if shiftKey == "" {
+		shiftKey = "shift_amount"
+	}
+	// A bare (non-namespaced) value refers to a unified condition. Resolve it
+	// directly: a shiftable condition pays its per-shift cost, otherwise it
+	// pays its flat build/energy cost.
+	if indexByteStr(val, '.') < 0 {
+		if u, ok := cfg.ConditionByID(val); ok {
+			if u.Shiftable() {
+				shift := abs(asInt(values[shiftKey]))
+				total.plusN(u.ShiftCost, shift)
+			} else {
+				total.Build += u.BuildCost
+				total.Energy += u.EnergyCost
+			}
+		}
+		return total
+	}
+	// Legacy namespaced values: "specific.<id>" / "general.<id>".
 	kind, id := val, ""
 	if i := indexByteStr(val, '.'); i >= 0 {
 		kind, id = val[:i], val[i+1:]
@@ -131,15 +151,12 @@ func addConditionSelectCost(cfg *config.Config, total Cost, f config.Field, valu
 		}
 	case "general":
 		if s, ok := cfg.GeneralConditionByID(id); ok {
-			shiftKey := f.ShiftKey
-			if shiftKey == "" {
-				shiftKey = "shift_amount"
-			}
 			shift := abs(asInt(values[shiftKey]))
 			total.plusN(s.ShiftCost, shift)
 		}
 	}
 	return total
+
 }
 
 func indexByteStr(s string, b byte) int {

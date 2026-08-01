@@ -83,9 +83,19 @@ type Config struct {
 	Interactions ComponentMap `yaml:"interactions,omitempty" json:"interactions,omitempty"`
 
 	// Conditions for the "Enact Condition" enactment.
-	AdditionalCondition Cost                `yaml:"additional_condition,omitempty" json:"additional_condition,omitempty"`
-	GeneralConditions   []GeneralCondition  `yaml:"general_conditions,omitempty" json:"general_conditions,omitempty"`
-	SpecificConditions  []SpecificCondition `yaml:"specific_conditions,omitempty" json:"specific_conditions,omitempty"`
+	AdditionalCondition Cost `yaml:"additional_condition,omitempty" json:"additional_condition,omitempty"`
+
+	// Conditions is the unified condition list. An entry is "shiftable" when it
+	// declares a shift range (min_shift/max_shift) and pays shift_cost per unit
+	// of shift; otherwise it is a fixed-cost condition paying build_cost/
+	// energy_cost. This replaces the former general/specific split.
+	Conditions []Condition `yaml:"conditions,omitempty" json:"conditions,omitempty"`
+
+	// GeneralConditions/SpecificConditions are retained for backwards
+	// compatibility with profiles that still split conditions into two lists.
+	// New configs should use the unified Conditions list instead.
+	GeneralConditions  []GeneralCondition  `yaml:"general_conditions,omitempty" json:"general_conditions,omitempty"`
+	SpecificConditions []SpecificCondition `yaml:"specific_conditions,omitempty" json:"specific_conditions,omitempty"`
 
 	// FileOrder lists the ordered markdown files for documentation, relative
 	// to the module root.
@@ -185,6 +195,33 @@ type SpecificCondition struct {
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 	BuildCost   int    `yaml:"build_cost,omitempty" json:"build_cost,omitempty"`
 	EnergyCost  int    `yaml:"energy_cost,omitempty" json:"energy_cost,omitempty"`
+}
+
+// Condition is a unified condition entry. It is "shiftable" when it declares a
+// non-empty shift range (min_shift/max_shift), in which case it pays ShiftCost
+// per unit of applied shift; otherwise it is a fixed-cost condition paying
+// BuildCost/EnergyCost. This single type replaces the former general/specific
+// split.
+type Condition struct {
+	ID          string `yaml:"id" json:"id"`
+	Name        string `yaml:"name" json:"name"`
+	Description string `yaml:"description,omitempty" json:"description,omitempty"`
+
+	// Fixed-cost fields (non-shiftable conditions).
+	BuildCost  int `yaml:"build_cost,omitempty" json:"build_cost,omitempty"`
+	EnergyCost int `yaml:"energy_cost,omitempty" json:"energy_cost,omitempty"`
+
+	// Shiftable fields. When MinShift or MaxShift is non-zero the condition is
+	// treated as shiftable and ShiftCost is charged per unit of shift.
+	MinShift  int  `yaml:"min_shift,omitempty" json:"min_shift,omitempty"`
+	MaxShift  int  `yaml:"max_shift,omitempty" json:"max_shift,omitempty"`
+	ShiftCost Cost `yaml:"shift_cost,omitempty" json:"shift_cost,omitempty"`
+}
+
+// Shiftable reports whether the condition applies a trait shift (and therefore
+// pays a per-shift cost) rather than a flat build/energy cost.
+func (c Condition) Shiftable() bool {
+	return c.MinShift != 0 || c.MaxShift != 0
 }
 
 // Component is a generic ability building block: an ability type, enactment or
