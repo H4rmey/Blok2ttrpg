@@ -43,11 +43,12 @@
         },
         "enactments": [
           {
-            "type": "amplification",
+            "type": "shift",
             "fields": {
               "comment": "",
-              "flat": 0,
-              "source": "d4"
+              "shift_amount": 0,
+              "shift_uses": 1,
+              "shifted_trait": "offense.Mind"
             },
             "interaction": "self",
             "interaction_data": {

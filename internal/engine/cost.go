@@ -99,22 +99,22 @@ func FieldsCost(cfg *config.Config, fields []config.Field, values map[string]any
 			total = addNumberCost(total, f, values[f.Key])
 		case "solutions":
 			total = addRowsCost(cfg, total, f, values[f.Key])
-		case "states":
-			total = addStatesCost(cfg, total, f, values[f.Key])
-		case "state_select":
-			total = addStateSelectCost(cfg, total, f, values)
+		case "conditions":
+			total = addConditionsCost(cfg, total, f, values[f.Key])
+		case "condition_select":
+			total = addConditionSelectCost(cfg, total, f, values)
 		}
 	}
 	return total
 }
 
-// addStateSelectCost handles a single-state selector field. The selected value
-// is namespaced "general.<id>" or "specific.<id>". A specific state adds its
-// fixed cost; a general state adds its per-shift cost times the absolute shift
+// addConditionSelectCost handles a single-condition selector field. The selected value
+// is namespaced "general.<id>" or "specific.<id>". A specific condition adds its
+// fixed cost; a general condition adds its per-shift cost times the absolute shift
 // amount read from the sibling field named by ShiftKey (default
-// "shift_amount"). Only one state can be applied, so there is no additional-
-// state surcharge here.
-func addStateSelectCost(cfg *config.Config, total Cost, f config.Field, values map[string]any) Cost {
+// "shift_amount"). Only one condition can be applied, so there is no additional-
+// condition surcharge here.
+func addConditionSelectCost(cfg *config.Config, total Cost, f config.Field, values map[string]any) Cost {
 	val := asString(values[f.Key])
 	if val == "" || cfg == nil {
 		return total
@@ -125,12 +125,12 @@ func addStateSelectCost(cfg *config.Config, total Cost, f config.Field, values m
 	}
 	switch kind {
 	case "specific":
-		if s, ok := cfg.SpecificStateByID(id); ok {
+		if s, ok := cfg.SpecificConditionByID(id); ok {
 			total.Build += s.BuildCost
 			total.Energy += s.EnergyCost
 		}
 	case "general":
-		if s, ok := cfg.GeneralStateByID(id); ok {
+		if s, ok := cfg.GeneralConditionByID(id); ok {
 			shiftKey := f.ShiftKey
 			if shiftKey == "" {
 				shiftKey = "shift_amount"
@@ -229,28 +229,28 @@ func addRowsCost(cfg *config.Config, total Cost, f config.Field, raw any) Cost {
 	return total
 }
 
-// addStatesCost handles a "states" field. Each row references either a specific
-// state (fixed cost) or a general state (per-shift cost). Additional rows beyond
-// the first incur the config-wide additional_state surcharge.
-func addStatesCost(cfg *config.Config, total Cost, f config.Field, raw any) Cost {
+// addConditionsCost handles a "conditions" field. Each row references either a specific
+// condition (fixed cost) or a general condition (per-shift cost). Additional rows beyond
+// the first incur the config-wide additional_condition surcharge.
+func addConditionsCost(cfg *config.Config, total Cost, f config.Field, raw any) Cost {
 	rows := asRows(raw)
 	for i, row := range rows {
 		if i > 0 {
-			total.plus(cfg.AdditionalState)
+			total.plus(cfg.AdditionalCondition)
 		}
-		switch asString(row["state_kind"]) {
+		switch asString(row["condition_kind"]) {
 		case "specific":
-			id := asString(row["specific_state"])
-			for _, s := range cfg.SpecificStates {
+			id := asString(row["specific_condition"])
+			for _, s := range cfg.SpecificConditions {
 				if s.ID == id {
 					total.Build += s.BuildCost
 					total.Energy += s.EnergyCost
 				}
 			}
 		case "general":
-			id := asString(row["general_state"])
+			id := asString(row["general_condition"])
 			shift := abs(asInt(row["shift_amount"]))
-			for _, s := range cfg.GeneralStates {
+			for _, s := range cfg.GeneralConditions {
 				if s.ID == id {
 					total.plusN(s.ShiftCost, shift)
 				}
@@ -258,7 +258,7 @@ func addStatesCost(cfg *config.Config, total Cost, f config.Field, raw any) Cost
 		}
 		// Row sub-fields (dropdowns/checkboxes/etc.) can carry their own
 		// per-entry costs. Reuse the generic field coster so any extra
-		// options attached to a state row contribute their configured cost.
+		// options attached to a condition row contribute their configured cost.
 		if len(f.RowFields) > 0 {
 			rc := FieldsCost(cfg, f.RowFields, row)
 			total.Build += rc.Build

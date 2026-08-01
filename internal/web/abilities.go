@@ -292,12 +292,12 @@ func readFieldValues(cfg *config.Config, fields []config.Field, prefix string, r
 		case "free_number":
 			n, _ := strconv.Atoi(r.FormValue(name))
 			out[f.Key] = n
-		case "solutions", "states":
+		case "solutions", "conditions":
 			out[f.Key] = readRowValues(f, name, r)
-		case "state_select":
+		case "condition_select":
 			out[f.Key] = r.FormValue(name)
-			// The per-state shift dropdown is injected by HTMX only for general
-			// states, so it is not a standalone config field. Capture its posted
+			// The per-condition shift dropdown is injected by HTMX only for general
+			// conditions, so it is not a standalone config field. Capture its posted
 			// value under the sibling shift key so the cost engine can read it.
 			shiftKey := f.ShiftKey
 			if shiftKey == "" {
@@ -327,7 +327,7 @@ func readFieldValues(cfg *config.Config, fields []config.Field, prefix string, r
 	return out
 }
 
-// readRowValues reads a solutions/states repeatable field from the form. Rows
+// readRowValues reads a solutions/conditions repeatable field from the form. Rows
 // are posted with an index in the name, e.g. "<name>_0_type", "<name>_0_value".
 // The posted "<name>_count" holds the number of rows.
 func readRowValues(f config.Field, name string, r *http.Request) []map[string]any {
@@ -472,15 +472,15 @@ func (a *App) handleInlineFields(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleStateShift renders the shift-amount dropdown for a state_select field.
-// The selected state (posted under the field's own name, namespaced as
+// handleConditionShift renders the shift-amount dropdown for a condition_select field.
+// The selected condition (posted under the field's own name, namespaced as
 // "general.<id>" or "specific.<id>") drives what is returned: for a general
-// state the field shows a dropdown of that state's configured non-zero shift
-// range; for a specific state (or none) nothing is rendered, so the shift row
+// condition the field shows a dropdown of that condition's configured non-zero shift
+// range; for a specific condition (or none) nothing is rendered, so the shift row
 // disappears. The dropdown is named "<name>_shift" so it posts as the sibling
 // shift field the cost engine reads (ShiftKey defaults to "shift_amount", and
 // the field name is "<prefix>shift_amount").
-func (a *App) handleStateShift(w http.ResponseWriter, r *http.Request) {
+func (a *App) handleConditionShift(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
 	name := r.URL.Query().Get("name")
 	shiftName := r.URL.Query().Get("shift_name")
@@ -490,7 +490,7 @@ func (a *App) handleStateShift(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if !strings.HasPrefix(value, "general.") {
-		// Specific state or none: no shift dropdown.
+		// Specific condition or none: no shift dropdown.
 		return
 	}
 	id := strings.TrimPrefix(value, "general.")
@@ -499,7 +499,7 @@ func (a *App) handleStateShift(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cost := ""
-	if s, ok := a.Cfg.GeneralStateByID(id); ok {
+	if s, ok := a.Cfg.GeneralConditionByID(id); ok {
 		cost = costHintStr(&s.ShiftCost)
 	}
 	var buf bytes.Buffer
@@ -655,7 +655,7 @@ func (a *App) handleBuilderCost(w http.ResponseWriter, r *http.Request) {
 	}
 	cost := engine.AbilityCost(a.Cfg.Config, ab)
 	// Budget for the over-budget hint; the character id is passed as a form
-	// value so this stateless partial can look it up.
+	// value so this conditionless partial can look it up.
 	budget := 0
 	if c, ok := a.Store.Get(r.FormValue("character_id")); ok {
 		budget = a.Cfg.AbilityPointBudget(c.Level)

@@ -174,7 +174,7 @@ option_sources_costed:
   # Someone Else) plus one of these subject-agnostic events. Common or
   # powerful reactive events cost more; situational or weak events cost less.
   # Baseline is 2 build points. Some events cascade into a follow-up dropdown
-  # (damage type, enactment type, trait, state) via visibility_when.
+  # (damage type, enactment type, trait, condition) via visibility_when.
   trigger_events:
     # Movement
     - value: "moves away from you"
@@ -227,7 +227,7 @@ option_sources_costed:
     - value: "resolves an enactment of a type"
       cost:
         build_cost: 3
-    # Checks, validations & state - typed variants.
+    # Checks, validations & condition - typed variants.
     - value: "makes a trait check of a type"
       cost:
         build_cost: 2
@@ -237,10 +237,10 @@ option_sources_costed:
     - value: "succeeds on a validation of a type"
       cost:
         build_cost: 2
-    - value: "becomes affected by a state of a type"
+    - value: "becomes affected by a condition of a type"
       cost:
         build_cost: 3
-    - value: "recovers from a state of a type"
+    - value: "recovers from a condition of a type"
       cost:
         build_cost: 2
     # Status changes.
@@ -285,10 +285,10 @@ option_sources_costed:
     - value: "succeeds on any validation"
       cost:
         build_cost: 3
-    - value: "becomes affected by any state"
+    - value: "becomes affected by any condition"
       cost:
         build_cost: 4
-    - value: "recovers from any state"
+    - value: "recovers from any condition"
       cost:
         build_cost: 3
   concentration_upkeep:

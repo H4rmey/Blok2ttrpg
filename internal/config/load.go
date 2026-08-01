@@ -158,11 +158,11 @@ func merge(base, in *Config) {
 		base.Leveling = in.Leveling
 	}
 
-	if (in.AdditionalState != Cost{}) {
-		base.AdditionalState = in.AdditionalState
+	if (in.AdditionalCondition != Cost{}) {
+		base.AdditionalCondition = in.AdditionalCondition
 	}
-	base.GeneralStates = append(base.GeneralStates, in.GeneralStates...)
-	base.SpecificStates = append(base.SpecificStates, in.SpecificStates...)
+	base.GeneralConditions = append(base.GeneralConditions, in.GeneralConditions...)
+	base.SpecificConditions = append(base.SpecificConditions, in.SpecificConditions...)
 }
 
 func mergeComponentMap(base *ComponentMap, in ComponentMap) {

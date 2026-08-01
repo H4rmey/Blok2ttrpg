@@ -57,8 +57,8 @@ var validFieldTypes = map[string]bool{
 	"free_text":    true,
 	"free_number":  true,
 	"solutions":    true,
-	"states":       true,
-	"state_select": true,
+	"conditions":       true,
+	"condition_select": true,
 }
 
 func validateFields(scope string, fields []Field) error {
@@ -77,7 +77,7 @@ func validateFields(scope string, fields []Field) error {
 		if len(f.Options) > 0 && f.OptionsSource != "" {
 			return fmt.Errorf("%s: field %q mixes options and options_source", scope, f.Key)
 		}
-		if f.Type == "solutions" || f.Type == "states" {
+		if f.Type == "solutions" || f.Type == "conditions" {
 			if len(f.RowFields) == 0 {
 				return fmt.Errorf("%s: %s field %q requires row_fields", scope, f.Type, f.Key)
 			}

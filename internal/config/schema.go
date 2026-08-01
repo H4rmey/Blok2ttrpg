@@ -70,10 +70,10 @@ type Config struct {
 	Enactments   ComponentMap `yaml:"enactments,omitempty" json:"enactments,omitempty"`
 	Interactions ComponentMap `yaml:"interactions,omitempty" json:"interactions,omitempty"`
 
-	// States for the "Enact State" enactment.
-	AdditionalState Cost            `yaml:"additional_state,omitempty" json:"additional_state,omitempty"`
-	GeneralStates   []GeneralState  `yaml:"general_states,omitempty" json:"general_states,omitempty"`
-	SpecificStates  []SpecificState `yaml:"specific_states,omitempty" json:"specific_states,omitempty"`
+	// Conditions for the "Enact Condition" enactment.
+	AdditionalCondition Cost            `yaml:"additional_condition,omitempty" json:"additional_condition,omitempty"`
+	GeneralConditions   []GeneralCondition  `yaml:"general_conditions,omitempty" json:"general_conditions,omitempty"`
+	SpecificConditions  []SpecificCondition `yaml:"specific_conditions,omitempty" json:"specific_conditions,omitempty"`
 
 	// FileOrder lists the ordered markdown files for documentation, relative
 	// to the module root.
@@ -141,8 +141,8 @@ type LevelEntry struct {
 	Total        int `yaml:"total" json:"total"`
 }
 
-// GeneralState is a shiftable state applied via the state enactment.
-type GeneralState struct {
+// GeneralCondition is a shiftable condition applied via the condition enactment.
+type GeneralCondition struct {
 	ID          string `yaml:"id" json:"id"`
 	Name        string `yaml:"name" json:"name"`
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
@@ -151,8 +151,8 @@ type GeneralState struct {
 	ShiftCost   Cost   `yaml:"shift_cost,omitempty" json:"shift_cost,omitempty"`
 }
 
-// SpecificState is a fixed-cost named condition.
-type SpecificState struct {
+// SpecificCondition is a fixed-cost named condition.
+type SpecificCondition struct {
 	ID          string `yaml:"id" json:"id"`
 	Name        string `yaml:"name" json:"name"`
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
@@ -211,7 +211,7 @@ func (c Component) DisplayName() string {
 type Field struct {
 	Key         string `yaml:"key" json:"key"`
 	Label       string `yaml:"label" json:"label"`
-	Type        string `yaml:"type" json:"type"` // checkbox, dropdown, free_text, free_number, solutions, states
+	Type        string `yaml:"type" json:"type"` // checkbox, dropdown, free_text, free_number, solutions, conditions
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 
 	Default any `yaml:"default,omitempty" json:"default,omitempty"`
@@ -231,18 +231,18 @@ type Field struct {
 	Options       []Option `yaml:"options,omitempty" json:"options,omitempty"`
 	OptionsSource string   `yaml:"options_source,omitempty" json:"options_source,omitempty"`
 
-	// ShiftKey, on a state_select field, names the sibling field that holds
-	// the per-state shift amount for general states. Defaults to
-	// "shift_amount" when unset. The general state's shift_cost is multiplied
+	// ShiftKey, on a condition_select field, names the sibling field that holds
+	// the per-condition shift amount for general conditions. Defaults to
+	// "shift_amount" when unset. The general condition's shift_cost is multiplied
 	// by the absolute shift value read from that sibling field.
 	ShiftKey string `yaml:"shift_key,omitempty" json:"shift_key,omitempty"`
 
-	// solutions/states: a repeatable set of rows built from RowFields. PerItem
+	// solutions/conditions: a repeatable set of rows built from RowFields. PerItem
 	// is the cost delta per row relative to DefaultCount.
 	RowFields    []Field  `yaml:"row_fields,omitempty" json:"row_fields,omitempty"`
 	DefaultCount int      `yaml:"default_count,omitempty" json:"default_count,omitempty"`
 	PerItem      *PerStep `yaml:"per_item,omitempty" json:"per_item,omitempty"`
-	// RowDefaults pre-fills the initial rows of a solutions/states field. Each
+	// RowDefaults pre-fills the initial rows of a solutions/conditions field. Each
 	// entry is a map of row_field key -> default value for that row, applied in
 	// order to the first rows rendered.
 	RowDefaults []map[string]string `yaml:"row_defaults,omitempty" json:"row_defaults,omitempty"`

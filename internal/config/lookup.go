@@ -44,31 +44,31 @@ func (c *Config) ComponentByKind(kind, id string) (Component, bool) {
 	}
 }
 
-// GeneralStateByID returns the general state with the given id.
-func (c *Config) GeneralStateByID(id string) (GeneralState, bool) {
-	for _, s := range c.GeneralStates {
+// GeneralConditionByID returns the general condition with the given id.
+func (c *Config) GeneralConditionByID(id string) (GeneralCondition, bool) {
+	for _, s := range c.GeneralConditions {
 		if s.ID == id {
 			return s, true
 		}
 	}
-	return GeneralState{}, false
+	return GeneralCondition{}, false
 }
 
-// SpecificStateByID returns the specific state with the given id.
-func (c *Config) SpecificStateByID(id string) (SpecificState, bool) {
-	for _, s := range c.SpecificStates {
+// SpecificConditionByID returns the specific condition with the given id.
+func (c *Config) SpecificConditionByID(id string) (SpecificCondition, bool) {
+	for _, s := range c.SpecificConditions {
 		if s.ID == id {
 			return s, true
 		}
 	}
-	return SpecificState{}, false
+	return SpecificCondition{}, false
 }
 
-// ShiftOptionsFor returns the discrete non-zero shift values a general state
+// ShiftOptionsFor returns the discrete non-zero shift values a general condition
 // may take, from its configured min_shift..max_shift range. Zero is skipped
-// because applying a state with no shift is meaningless.
+// because applying a condition with no shift is meaningless.
 func (c *Config) ShiftOptionsFor(generalID string) []int {
-	s, ok := c.GeneralStateByID(generalID)
+	s, ok := c.GeneralConditionByID(generalID)
 	if !ok {
 		return nil
 	}
@@ -199,17 +199,17 @@ type OptionGroup struct {
 // large dropdown stays readable; every other source becomes one unlabelled
 // group.
 func (c *Config) ResolveOptionGroups(f Field) []OptionGroup {
-	if f.OptionsSource == "states_all" {
+	if f.OptionsSource == "conditions_all" {
 		var groups []OptionGroup
 		var gen []Option
-		for _, s := range c.GeneralStates {
+		for _, s := range c.GeneralConditions {
 			gen = append(gen, Option{Value: "general." + s.ID, Label: s.Name})
 		}
 		if len(gen) > 0 {
 			groups = append(groups, OptionGroup{Label: "General", Options: gen})
 		}
 		var spec []Option
-		for _, s := range c.SpecificStates {
+		for _, s := range c.SpecificConditions {
 			cost := &Cost{BuildCost: s.BuildCost, EnergyCost: s.EnergyCost}
 			spec = append(spec, Option{Value: "specific." + s.ID, Label: s.Name, Cost: cost})
 		}
@@ -294,7 +294,7 @@ func (c *Config) traitCategories() []string {
 }
 
 // OptionsFor resolves a named options_source into a concrete option list. All
-// dynamic sources are derived from the config (traits, dice, states); a handful
+// dynamic sources are derived from the config (traits, dice, conditions); a handful
 // of small static lists are defined here.
 func (c *Config) OptionsFor(source string) []Option {
 	switch source {
@@ -336,15 +336,15 @@ func (c *Config) OptionsFor(source string) []Option {
 
 	case "dice_generic":
 		return strOptions(c.Dice.Generic)
-	case "states_general":
-		out := make([]Option, 0, len(c.GeneralStates))
-		for _, s := range c.GeneralStates {
+	case "conditions_general":
+		out := make([]Option, 0, len(c.GeneralConditions))
+		for _, s := range c.GeneralConditions {
 			out = append(out, Option{Value: s.ID, Label: s.Name})
 		}
 		return out
-	case "states_specific":
-		out := make([]Option, 0, len(c.SpecificStates))
-		for _, s := range c.SpecificStates {
+	case "conditions_specific":
+		out := make([]Option, 0, len(c.SpecificConditions))
+		for _, s := range c.SpecificConditions {
 			out = append(out, Option{Value: s.ID, Label: s.Name})
 		}
 		return out
