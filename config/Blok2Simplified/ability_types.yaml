@@ -17,11 +17,11 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: -2
-            energy_cost: 1
+            build_cost: 02
+            energy_cost: 0
           decrease:
-            build_cost: 3
-            energy_cost: -1
+            build_cost: 0
+            energy_cost: 01
       - key: action_steps
         label: "Action +/-"
         type: free_number
@@ -31,11 +31,11 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: -2
+            build_cost: 02
             energy_cost: 0
           decrease:
-            build_cost: 4
-            energy_cost: 1
+            build_cost: 0
+            energy_cost: 0
 
   reaction:
     name: "Reaction"
@@ -57,18 +57,18 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: -2
-            energy_cost: 1
+            build_cost: 02
+            energy_cost: 0
           decrease:
-            build_cost: 3
-            energy_cost: -1
+            build_cost: 0
+            energy_cost: 01
       - key: triggers
         label: "Triggers"
         type: solutions
         default_count: 1
         per_item:
           increase:
-            build_cost: 2
+            build_cost: 0
         row_fields:
           - key: subject
             label: "Subject"
@@ -165,7 +165,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 1
+            build_cost: 0
             energy_cost: 0
       - key: uses
         label: "Uses"
@@ -176,8 +176,8 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 4
-            energy_cost: 1
+            build_cost: 0
+            energy_cost: 0
 
   minion:
     name: "Minion (Deprecated)"
@@ -210,11 +210,11 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: -2
-            energy_cost: 1
+            build_cost: 02
+            energy_cost: 0
           decrease:
-            build_cost: 3
-            energy_cost: -1
+            build_cost: 0
+            energy_cost: 01
       - key: action_steps
         label: "Action +/-"
         type: free_number
@@ -224,18 +224,18 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: -2
+            build_cost: 02
             energy_cost: 0
           decrease:
-            build_cost: 1
-            energy_cost: 4
+            build_cost: 0
+            energy_cost: 0
       - key: triggers
         label: "Triggers"
         type: solutions
         default_count: 1
         per_item:
           increase:
-            build_cost: 2
+            build_cost: 0
         row_fields:
           - key: subject
             label: "Subject"
@@ -332,7 +332,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 1
+            build_cost: 0
             energy_cost: 0
       - key: uses
         label: "Uses"
@@ -343,8 +343,8 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 4
-            energy_cost: 1
+            build_cost: 0
+            energy_cost: 0
 
   concentration:
     name: "Concentration"
@@ -366,11 +366,11 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: -2
-            energy_cost: 1
+            build_cost: 02
+            energy_cost: 0
           decrease:
-            build_cost: 3
-            energy_cost: -1
+            build_cost: 0
+            energy_cost: 01
       - key: action_steps
         label: "Action +/-"
         type: free_number
@@ -380,11 +380,11 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: -2
+            build_cost: 02
             energy_cost: 0
           decrease:
-            build_cost: 4
-            energy_cost: 1
+            build_cost: 0
+            energy_cost: 0
       - key: upkeep_cost
         label: "Upkeep Cost"
         type: dropdown
@@ -393,7 +393,7 @@ ability_types:
         label: "Effortless (upkeep is free)"
         type: checkbox
         cost:
-          build_cost: 3
+          build_cost: 0
           energy_cost: 0
 
   passive:
@@ -404,7 +404,7 @@ ability_types:
     base_range: 1
     base_uses: 1
     base_cost:
-      build_cost: 8
+      build_cost: 0
     fields:
       - key: comment
         label: "Comment"
@@ -418,18 +418,18 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: -2
-            energy_cost: 1
+            build_cost: 02
+            energy_cost: 0
           decrease:
-            build_cost: 3
-            energy_cost: -1
+            build_cost: 0
+            energy_cost: 01
       - key: triggers
         label: "Triggers"
         type: solutions
         default_count: 1
         per_item:
           increase:
-            build_cost: 2
+            build_cost: 0
         row_fields:
           - key: subject
             label: "Subject"
@@ -526,7 +526,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 1
+            build_cost: 0
             energy_cost: 0
       - key: uses
         label: "Uses"
@@ -537,5 +537,5 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 4
-            energy_cost: 1
+            build_cost: 0
+            energy_cost: 0

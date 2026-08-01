@@ -1,22 +1,22 @@
 proficiencies:
-  - id: clumsy
-    name: "Clumsy"
+  - id: untrained
+    name: "Untrained"
     cost: 1
     die: "d4"
     vitals:
       hp: 8
       movement: 3
       energy: 5
-  - id: untrained
-    name: "Untrained"
+  - id: novice
+    name: "Novice"
     cost: 1
     die: "d6"
     vitals:
       hp: 12
       movement: 4
       energy: 8
-  - id: trained
-    name: "Trained"
+  - id: proficient
+    name: "Proficient"
     cost: 1
     die: "d8"
     vitals:
@@ -42,7 +42,6 @@ proficiencies:
   - id: legendary
     name: "Legendary"
     cost: 0
-    note: "Not purchasable via standard points"
     die: "d20"
     vitals:
       hp: 28

@@ -43,12 +43,11 @@
         },
         "enactments": [
           {
-            "type": "shift",
+            "type": "amplification",
             "fields": {
+              "amplification": "d20",
               "comment": "",
-              "shift_amount": 0,
-              "shift_uses": 1,
-              "shifted_trait": "offense.Mind"
+              "flat": -6
             },
             "interaction": "self",
             "interaction_data": {
@@ -64,7 +63,7 @@
                   "value": "defense.Constitution"
                 }
               ],
-              "engage": ""
+              "engage": "d6"
             }
           }
         ]

@@ -11,6 +11,7 @@ traits:
     - Thievery
     - Knowledge
     - Magic
+    - Medicine
   offense:
     - Precision
     - Power

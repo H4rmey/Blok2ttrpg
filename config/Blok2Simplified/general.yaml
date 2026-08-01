@@ -12,7 +12,7 @@ combat:
   actions:
     amount: 3
 additional_enactment:
-  build_cost: 1
+  build_cost: 0
   energy_cost: 0
   description: "Adding an additional Enactment beyond the first"
 
@@ -27,25 +27,25 @@ option_sources:
   # then appends the trait categories as grouped optgroups. Used by Damage/Heal/
   # Mitigation "Source" and the Validation "Engage" dropdown. Dice scale in cost
   # with size; trait cost comes from the field's group_offsets.
-  roll_dice:
+  roll_generic:
     - value: "d4"
       label: "1d4"
       cost: { build_cost: 0, energy_cost: 0 }
     - value: "d6"
       label: "1d6"
-      cost: { build_cost: 2, energy_cost: 1 }
+      cost: { build_cost: 0, energy_cost: 0 }
     - value: "d8"
       label: "1d8"
-      cost: { build_cost: 4, energy_cost: 2 }
+      cost: { build_cost: 0, energy_cost: 0 }
     - value: "d10"
       label: "1d10"
-      cost: { build_cost: 6, energy_cost: 3 }
+      cost: { build_cost: 0, energy_cost: 0 }
     - value: "d12"
       label: "1d12"
-      cost: { build_cost: 8, energy_cost: 4 }
+      cost: { build_cost: 0, energy_cost: 0 }
     - value: "d20"
       label: "1d20"
-      cost: { build_cost: 14, energy_cost: 5 }
+      cost: { build_cost: 0, energy_cost: 0 }
 
   # Per-damage-type build cost for the follow-up dropdown of typed damage
   # triggers. Common/mundane damage is cheap (+0); rarer or more potent
@@ -60,35 +60,35 @@ option_sources:
     - value: "Bludgeoning"
       cost: { build_cost: 0 }
     - value: "Fire"
-      cost: { build_cost: 2 }
+      cost: { build_cost: 0 }
     - value: "Cold"
-      cost: { build_cost: 2 }
+      cost: { build_cost: 0 }
     - value: "Lightning"
-      cost: { build_cost: 2 }
+      cost: { build_cost: 0 }
     - value: "Thunder"
-      cost: { build_cost: 2 }
+      cost: { build_cost: 0 }
     - value: "Acid"
-      cost: { build_cost: 3 }
+      cost: { build_cost: 0 }
     - value: "Poison"
-      cost: { build_cost: 3 }
+      cost: { build_cost: 0 }
     - value: "Psychic"
-      cost: { build_cost: 4 }
+      cost: { build_cost: 0 }
     - value: "Necrotic"
-      cost: { build_cost: 4 }
+      cost: { build_cost: 0 }
     - value: "Radiant"
-      cost: { build_cost: 4 }
+      cost: { build_cost: 0 }
     - value: "Force"
-      cost: { build_cost: 5 }
+      cost: { build_cost: 0 }
     - value: "Arcane"
-      cost: { build_cost: 5 }
+      cost: { build_cost: 0 }
     - value: "Nature"
-      cost: { build_cost: 3 }
+      cost: { build_cost: 0 }
     - value: "Holy"
-      cost: { build_cost: 5 }
+      cost: { build_cost: 0 }
     - value: "Shadow"
-      cost: { build_cost: 5 }
+      cost: { build_cost: 0 }
     - value: "Chaos"
-      cost: { build_cost: 6 }
+      cost: { build_cost: 0 }
 
   # Per-weapon-type build cost for the "gets hit by a weapon of a type"
   # follow-up dropdown. Common weapons are cheap; specialised/ranged/exotic
@@ -103,23 +103,23 @@ option_sources:
     - value: "Mace"
       cost: { build_cost: 0 }
     - value: "Spear"
-      cost: { build_cost: 1 }
+      cost: { build_cost: 0 }
     - value: "Dagger"
-      cost: { build_cost: 1 }
+      cost: { build_cost: 0 }
     - value: "Bow"
-      cost: { build_cost: 2 }
+      cost: { build_cost: 0 }
     - value: "Crossbow"
-      cost: { build_cost: 2 }
+      cost: { build_cost: 0 }
     - value: "Thrown"
-      cost: { build_cost: 2 }
+      cost: { build_cost: 0 }
     - value: "Firearm"
-      cost: { build_cost: 4 }
+      cost: { build_cost: 0 }
     - value: "Staff"
-      cost: { build_cost: 3 }
+      cost: { build_cost: 0 }
     - value: "Wand"
-      cost: { build_cost: 3 }
+      cost: { build_cost: 0 }
     - value: "Shield"
-      cost: { build_cost: 2 }
+      cost: { build_cost: 0 }
 
   # Balanced per-knockout costs for Phase abilities. A knockout is a condition
   # that interrupts an active Phase, so it is a drawback: the more easily a
@@ -128,37 +128,37 @@ option_sources:
   knockout_options:
     - value: "None"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "Engager takes damage"
       cost:
-        build_cost: -1
+        build_cost: 0
     - value: "Engager falls unconscious"
       cost:
         build_cost: 0
     - value: "Engager dies"
       cost:
-        build_cost: 1
+        build_cost: 0
     - value: "Engager gets grabbed or restrained"
       cost:
-        build_cost: -1
+        build_cost: 0
     - value: "Engager moves voluntarily"
       cost:
-        build_cost: -2
+        build_cost: 0
     - value: "Engager is moved by another effect"
       cost:
-        build_cost: -1
+        build_cost: 0
     - value: "Engager fails a validation"
       cost:
-        build_cost: -1
+        build_cost: 0
     - value: "Engager uses another phase"
       cost:
         build_cost: 0
     - value: "Engager loses line of sight to target"
       cost:
-        build_cost: -1
+        build_cost: 0
     - value: "Target moves out of range"
       cost:
-        build_cost: -1
+        build_cost: 0
     - value: "Target falls unconscious"
       cost:
         build_cost: 0
@@ -167,13 +167,13 @@ option_sources:
         build_cost: 0
     - value: "Target succeeds on a counter roll"
       cost:
-        build_cost: -1
+        build_cost: 0
     - value: "Phase duration expires"
       cost:
-        build_cost: -2
+        build_cost: 0
     - value: "Engager runs out of energy"
       cost:
-        build_cost: -1
+        build_cost: 0
 
   # Balanced per-event build costs for the reactive Trigger Event dropdown.
   # A trigger is described as a Subject (You / An Ally / An Opponent /
@@ -185,127 +185,127 @@ option_sources:
     # Movement
     - value: "moves away from you"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "moves towards you"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "moves past you"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "enters interaction range"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "leaves interaction range"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "ends their turn within range"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "is moved by an effect"
       cost:
-        build_cost: 2
+        build_cost: 0
     # Damage & healing - typed variants keep triggers specific instead of
     # firing on any damage/heal at all.
     - value: "gets hit by damage of a type"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "deals damage of a type"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "gets healed by an ability of a type"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "gets hit by a weapon of a type"
       cost:
-        build_cost: 2
+        build_cost: 0
     # Abilities & enactments - typed variants for enactment / ability type.
     - value: "starts casting an ability of a type"
       cost:
-        build_cost: 4
-        energy_cost: 1
+        build_cost: 0
+        energy_cost: 0
     - value: "gets targeted by an ability of a type"
       cost:
-        build_cost: 4
-        energy_cost: 1
+        build_cost: 0
+        energy_cost: 0
     - value: "gets hit with an enactment of a type"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "resolves an enactment of a type"
       cost:
-        build_cost: 3
+        build_cost: 0
     # Checks, validations & condition - typed variants.
     - value: "makes a trait check of a type"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "fails a validation of a type"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "succeeds on a validation of a type"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "becomes affected by a condition of a type"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "recovers from a condition of a type"
       cost:
-        build_cost: 2
+        build_cost: 0
     # Status changes.
     - value: "falls unconscious"
       cost:
-        build_cost: 1
+        build_cost: 0
     - value: "dies"
       cost:
-        build_cost: 1
+        build_cost: 0
     # Non-typed "any" events. These fire on the broad category regardless of
     # type, so they have no follow-up dropdown and cost slightly more than the
     # typed variants (a broader trigger is more useful).
     - value: "moves"
       cost:
-        build_cost: 2
+        build_cost: 0
     - value: "takes any damage"
       cost:
-        build_cost: 4
+        build_cost: 0
     - value: "deals any damage"
       cost:
-        build_cost: 4
+        build_cost: 0
     - value: "gets healed"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "casts any ability"
       cost:
-        build_cost: 5
-        energy_cost: 1
+        build_cost: 0
+        energy_cost: 0
     - value: "gets targeted by any ability"
       cost:
-        build_cost: 5
-        energy_cost: 1
+        build_cost: 0
+        energy_cost: 0
     - value: "is hit by any enactment"
       cost:
-        build_cost: 4
+        build_cost: 0
     - value: "makes any trait check"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "fails any validation"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "succeeds on any validation"
       cost:
-        build_cost: 3
+        build_cost: 0
     - value: "becomes affected by any condition"
       cost:
-        build_cost: 4
+        build_cost: 0
     - value: "recovers from any condition"
       cost:
-        build_cost: 3
+        build_cost: 0
 
   # How the per-round upkeep of a Concentration ability is paid.
   concentration_upkeep:
     - value: "1 Action or 1 Energy"
-      cost: { build_cost: 3, energy_cost: 0 }
+      cost: { build_cost: 0, energy_cost: 0 }
     - value: "1 Action"
-      cost: { build_cost: 1, energy_cost: 0 }
+      cost: { build_cost: 0, energy_cost: 0 }
     - value: "1 Energy"
-      cost: { build_cost: 1, energy_cost: 0 }
+      cost: { build_cost: 0, energy_cost: 0 }
 
   # Who the reactive trigger watches. Paired with a trigger_events entry to
   # form a full trigger, e.g. "An Opponent" + "gets hit by damage of a type".
@@ -324,6 +324,19 @@ option_sources:
 option_groups:
   # All trait categories, grouped by category. Trait cost comes from a field's
   # group_offsets keyed on the category id (general/offense/defense).
+  #roll_medicine:
+  #  groups:
+  #    - source: roll_generic
+  #      label: "Generic"
+  #    - source: traits.general.medicine
+  #      label: "General"
+
+  traits_general_defense:
+    groups:
+      - source: traits.general
+        label: "General"
+      - source: traits.defense
+        label: "Defense"
   traits_all:
     groups:
       - source: traits.general
@@ -337,7 +350,7 @@ option_groups:
   # namespaced by category so group_offsets apply.
   roll_all:
     groups:
-      - source: roll_dice
+      - source: roll_generic
         label: "Generic"
       - source: traits.general
         label: "General"
@@ -363,11 +376,11 @@ validations:
         default_group: offense
         offsets:
           offense:
-            build_cost: 3
+            build_cost: 0
           general:
-            build_cost: 3
+            build_cost: 0
           defense:
-            build_cost: 3
+            build_cost: 0
     - key: counter_trait
       label: "Counter Trait"
       type: solutions
@@ -389,13 +402,13 @@ validations:
               defense:
                 build_cost: 0
               offense:
-                build_cost: 2
+                build_cost: 0
               general:
-                build_cost: 2
+                build_cost: 0
       per_item:
         increase:
           build_cost: 0
           energy_cost: 0
         decrease:
-          build_cost: 3
-          energy_cost: 1
+          build_cost: 0
+          energy_cost: 0

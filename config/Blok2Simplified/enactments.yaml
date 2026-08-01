@@ -12,22 +12,13 @@ enactments:
         label: "Amplification"
         type: dropdown
         default: d4
-        options_source: roll_all
-        group_offsets:
-          default_group: offense
-          offsets:
-            offense:
-              build_cost: 0
-            general:
-              build_cost: 0
-            defense:
-              build_cost: 0
+        options_source: roll_generic
       - key: flat
         label: "Flat Bonus"
         type: free_number
         default: 0
         min: 0
-        max: 20
+        max: 8
         step: 1
         per_step:
           increase:
@@ -88,22 +79,14 @@ enactments:
         label: "Solutions"
         type: solutions
         default_count: 2
-        options_source: traits_all
-        row_defaults:
-          - value: "defense.Reflex"
-          - value: "defense.Constitution"
         row_fields:
           - key: value
             label: "Solution"
             type: dropdown
-            options_source: traits_all
+            options_source: traits_general_defense
             group_offsets:
               default_group: defense
               offsets:
-                defense:
-                  build_cost: 0
-                offense:
-                  build_cost: 0
                 general:
                   build_cost: 0
         per_item:
@@ -187,22 +170,14 @@ enactments:
         label: "Solutions"
         type: solutions
         default_count: 2
-        options_source: traits_all
-        row_defaults:
-          - value: "defense.Reflex"
-          - value: "defense.Constitution"
         row_fields:
           - key: value
             label: "Solution"
             type: dropdown
-            options_source: traits_all
+            options_source: traits_general_defense
             group_offsets:
               default_group: defense
               offsets:
-                defense:
-                  build_cost: 0
-                offense:
-                  build_cost: 0
                 general:
                   build_cost: 0
         per_item:
@@ -226,15 +201,11 @@ enactments:
       - key: source
         label: "Source"
         type: dropdown
-        default: d6
-        options_source: roll_all
+        default: d4
+        options_source: roll_medicine
         group_offsets:
-          default_group: offense
+          default_group: roll_generic
           offsets:
-            offense:
-              build_cost: 0
-            general:
-              build_cost: 0
             defense:
               build_cost: 0
       - key: flat
@@ -268,23 +239,19 @@ enactments:
         step: 1
         per_step:
           increase:
-            build_cost: 1
+            build_cost: 0
             energy_cost: 0
       - key: direction
         label: "Directions"
         type: solutions
         default_count: 1
-        options_source: directions_simple
         row_fields:
           - key: value
             label: "Direction"
             type: dropdown
-            options_source: directions_simple
+            options_source: directions
         per_item:
           increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
             build_cost: 0
             energy_cost: 0
 
@@ -311,6 +278,8 @@ enactments:
     base_cost:
       build_cost: 0
       energy_cost: 0
+    allowed_interactions:
+      - self
     fields:
       - key: comment
         label: "Comment"
@@ -322,25 +291,21 @@ enactments:
       - key: shift_amount
         label: "Shift -/+"
         type: free_number
-        default: 0
+        default: -1
         min: -6
-        max: 6
+        max: -1
         step: 1
         per_step:
           increase:
             build_cost: 0
             energy_cost: 0
           decrease:
-            build_cost: 0
+            build_cost: 01
             energy_cost: 0
 
   phase:
     name: "Enact Phase"
     description: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two round those traits are shifted down for 2 rounds."
-    base_energy: 0
-    base_action: 0
-    base_duration: 2
-    base_reverse_duration: 2
     fields:
       - key: comment
         label: "Comment"
@@ -371,7 +336,7 @@ enactments:
             build_cost: 0
             energy_cost: 0
           decrease:
-            build_cost: 0
+            build_cost: 01
             energy_cost: 0
       - key: affected_traits
         label: "Affected Trait(s)"
@@ -415,16 +380,11 @@ enactments:
       - key: amplification
         label: "Amplification"
         type: dropdown
-        default: d4
-        options_source: roll_all
+        options_source: traits_general_defense
         group_offsets:
-          default_group: offense
+          default_group: defense
           offsets:
-            offense:
-              build_cost: 0
             general:
-              build_cost: 0
-            defense:
               build_cost: 0
       - key: flat
         label: "Flat Bonus"
