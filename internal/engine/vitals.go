@@ -88,17 +88,3 @@ func formatVital(v any) string {
 		return asString(v)
 	}
 }
-
-// VitalValue returns the proficiency-granted value for a single vital trait,
-// formatted for display. Empty when the trait has no vital value.
-func VitalValue(cfg *config.Config, c model.Character, trait string) string {
-	key := strings.ToLower(trait)
-	profID := c.Traits[model.TraitKey(VitalGroupID(cfg), trait)]
-	if p, ok := cfg.Proficiency(profID); ok {
-
-		if v, ok := p.Vitals[key]; ok {
-			return formatVital(v)
-		}
-	}
-	return ""
-}

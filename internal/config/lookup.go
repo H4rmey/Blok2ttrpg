@@ -296,17 +296,8 @@ func (c *Config) groupLabel(source string) string {
 	return titleCase(source)
 }
 
-// traitCategories returns the ordered trait group ids that make up "traits_all".
-// It is config-driven via trait_categories, falling back to the historical
-// general/offense/defense set when unset.
-func (c *Config) traitCategories() []string {
-	if len(c.TraitCategories) > 0 {
-		return c.TraitCategories
-	}
-	return []string{"general", "offense", "defense"}
-}
-
 // OptionsFor resolves a named options_source into a concrete option list. It
+
 // understands dotted trait/dice references (traits.<cat>, dice.<kind>), the
 // built-in condition sources, component sources, config-defined grouped sources
 // (flattened for the cost engine), and the config-driven option_sources map.
