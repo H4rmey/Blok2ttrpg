@@ -191,7 +191,7 @@ enactments:
           energy_cost: 2
       - key: damage_type
         label: "Damage Types"
-        type: solutions
+        type: multiselect
         default_count: 1
         options_source: damage_types
         row_fields:
@@ -337,7 +337,7 @@ enactments:
             energy_cost: 0
       - key: direction
         label: "Directions"
-        type: solutions
+        type: multiselect
         default_count: 1
         options_source: directions_all
         row_fields:
@@ -453,7 +453,7 @@ enactments:
       # same defaults and per-item costs) but are labelled "Solutions".
       - key: solution
         label: "Solutions"
-        type: solutions
+        type: multiselect
         default_count: 2
         options_source: traits_all
         row_defaults:
@@ -482,7 +482,7 @@ enactments:
             energy_cost: 1
       - key: damage_type
         label: "Damage Types"
-        type: solutions
+        type: multiselect
         default_count: 1
         options_source: damage_types
         row_fields:
@@ -555,7 +555,7 @@ enactments:
       # same defaults and per-item costs) but are labelled "Solutions".
       - key: solution
         label: "Solutions"
-        type: solutions
+        type: multiselect
         default_count: 2
         options_source: traits_all
         row_defaults:

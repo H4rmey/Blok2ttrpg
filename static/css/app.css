@@ -468,7 +468,16 @@ textarea { min-height: 5rem; resize: vertical; }
   border-radius: var(--radius);
   background: var(--surface-2);
 }
+.conjunction {
+  align-self: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 0.25rem;
+}
 .row-field { display: flex; flex-direction: column; flex: 1 1 140px; }
+
 .row-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.15rem; }
 .number-select { max-width: 140px; }
 

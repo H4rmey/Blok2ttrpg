@@ -52,11 +52,11 @@ func (c *Config) Validate() error {
 }
 
 var validFieldTypes = map[string]bool{
-	"checkbox":     true,
-	"dropdown":     true,
-	"free_text":    true,
-	"free_number":  true,
-	"solutions":    true,
+	"checkbox":         true,
+	"dropdown":         true,
+	"free_text":        true,
+	"free_number":      true,
+	"multiselect":      true,
 	"conditions":       true,
 	"condition_select": true,
 }
@@ -77,7 +77,8 @@ func validateFields(scope string, fields []Field) error {
 		if len(f.Options) > 0 && f.OptionsSource != "" {
 			return fmt.Errorf("%s: field %q mixes options and options_source", scope, f.Key)
 		}
-		if f.Type == "solutions" || f.Type == "conditions" {
+		if f.Type == "multiselect" || f.Type == "conditions" {
+
 			if len(f.RowFields) == 0 {
 				return fmt.Errorf("%s: %s field %q requires row_fields", scope, f.Type, f.Key)
 			}

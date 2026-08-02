@@ -64,7 +64,7 @@ ability_types:
             energy_cost: 01
       - key: triggers
         label: "Triggers"
-        type: solutions
+        type: multiselect
         default_count: 1
         per_item:
           increase:
@@ -231,7 +231,7 @@ ability_types:
             energy_cost: 0
       - key: triggers
         label: "Triggers"
-        type: solutions
+        type: multiselect
         default_count: 1
         per_item:
           increase:
@@ -425,7 +425,7 @@ ability_types:
             energy_cost: 01
       - key: triggers
         label: "Triggers"
-        type: solutions
+        type: multiselect
         default_count: 1
         per_item:
           increase:

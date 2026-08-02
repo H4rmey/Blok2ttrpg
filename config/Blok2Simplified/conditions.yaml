@@ -16,10 +16,6 @@ option_groups:
     groups:
       - source: conditions
         label: "Conditions"
-  states_all:
-    groups:
-      - source: conditions
-        label: "Conditions"
 
 
 conditions:

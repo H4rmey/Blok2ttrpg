@@ -15,6 +15,12 @@ additional_enactment:
   build_cost: 0
   energy_cost: 0
   description: "Adding an additional Enactment beyond the first"
+  # The first enactment always shows an Interaction and Validation region.
+  # These flags control whether the second and following enactments must show
+  # them. Set to false to hide that region for enactments beyond the first.
+  require_interaction: false
+  require_validation: false
+
 
 # Named option sources. Each entry may be authored as a bare string
 # (value == label, no cost) or as a full object with an optional label and
@@ -319,17 +325,23 @@ option_sources:
     - Towards
     - Away
 
+  roll_medicine:
+    - value: "medicine"
+      label: "Medicine"
+      cost: { build_cost: 0, energy_cost: 0 }
+
+
 # Config-defined grouped dropdown sources. Each names an ordered set of member
 # groups, replacing the previously hardcoded traits_all/roll_all grouping.
 option_groups:
   # All trait categories, grouped by category. Trait cost comes from a field's
   # group_offsets keyed on the category id (general/offense/defense).
-  #roll_medicine:
-  #  groups:
-  #    - source: roll_generic
-  #      label: "Generic"
-  #    - source: traits.general.medicine
-  #      label: "General"
+  roll_heal:
+    groups:
+      - source: roll_generic
+        label: "Generic"
+      - source: roll_medicine
+        label: "Medicine"
 
   traits_general_defense:
     groups:
@@ -383,7 +395,7 @@ validations:
             build_cost: 0
     - key: counter_trait
       label: "Counter Trait"
-      type: solutions
+      type: multiselect
       default_count: 2
       options_source: traits_all
       row_defaults:

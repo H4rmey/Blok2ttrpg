@@ -43,11 +43,11 @@
         },
         "enactments": [
           {
-            "type": "amplification",
+            "type": "nerf",
             "fields": {
-              "amplification": "d20",
               "comment": "",
-              "flat": -6
+              "shift_amount": -1,
+              "shifted_trait": ""
             },
             "interaction": "self",
             "interaction_data": {

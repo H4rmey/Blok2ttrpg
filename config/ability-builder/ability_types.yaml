@@ -75,7 +75,7 @@ ability_types:
       # trigger rows beyond the first costs additional build points.
       - key: triggers
         label: "Triggers"
-        type: solutions
+        type: multiselect
         default_count: 1
         per_item:
           increase:
@@ -284,7 +284,7 @@ ability_types:
           energy_cost: 0
       - key: knockout
         label: "Knockout Requirements"
-        type: solutions
+        type: multiselect
         default_count: 1
         options_source: knockout_options
         row_fields:
@@ -361,7 +361,7 @@ ability_types:
       # for the full trigger cascade design notes. Extra rows cost extra.
       - key: triggers
         label: "Triggers"
-        type: solutions
+        type: multiselect
         default_count: 1
         per_item:
           increase:
@@ -607,7 +607,7 @@ ability_types:
       # for the full trigger cascade design notes. Extra rows cost extra.
       - key: triggers
         label: "Triggers"
-        type: solutions
+        type: multiselect
         default_count: 1
         per_item:
           increase:

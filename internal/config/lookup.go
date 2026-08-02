@@ -24,7 +24,134 @@ func (c *Config) Interaction(id string) (Component, bool) {
 	return Component{}, false
 }
 
+// filterByList applies the allow/block UI-filtering rule to an ordered id
+// list. When allowed is non-empty only those ids (in their allowed order) are
+// kept; otherwise when blocked is non-empty everything except the blocked ids
+// is kept (in the input order); otherwise the input is returned unchanged.
+// This is display-only and never enforced on save.
+func filterByList(ids, allowed, blocked []string) []string {
+	if len(allowed) > 0 {
+		have := map[string]bool{}
+		for _, id := range ids {
+			have[id] = true
+		}
+		out := make([]string, 0, len(allowed))
+		for _, id := range allowed {
+			if have[id] {
+				out = append(out, id)
+			}
+		}
+		return out
+	}
+	if len(blocked) > 0 {
+		block := map[string]bool{}
+		for _, id := range blocked {
+			block[id] = true
+		}
+		out := make([]string, 0, len(ids))
+		for _, id := range ids {
+			if !block[id] {
+				out = append(out, id)
+			}
+		}
+		return out
+	}
+	return ids
+}
+
+// InteractionsFor returns the interaction components visible for the given
+// enactment id, filtered by that enactment's allowed_interactions/
+// blocked_interactions lists. Filtering is UI-only. An unknown enactment id
+// yields the full interaction list.
+func (c *Config) InteractionsFor(enactmentID string) []*Component {
+	all := c.Interactions.List()
+	comp, ok := c.Enactments.Get(enactmentID)
+	if !ok {
+		return all
+	}
+	ids := make([]string, 0, len(all))
+	for _, ic := range all {
+		ids = append(ids, ic.ID)
+	}
+	keep := filterByList(ids, comp.AllowedInteractions, comp.BlockedInteractions)
+	out := make([]*Component, 0, len(keep))
+	for _, id := range keep {
+		if ic, ok := c.Interactions.Get(id); ok {
+			out = append(out, ic)
+		}
+	}
+	return out
+}
+
+// ValidationFieldsFor returns the validation fields visible for the given
+// enactment id, filtered by that enactment's allowed_validations/
+// blocked_validations lists (keyed by field key). Filtering is UI-only. An
+// unknown enactment id yields the full validation field list.
+func (c *Config) ValidationFieldsFor(enactmentID string) []Field {
+	all := c.Validations.Fields
+	comp, ok := c.Enactments.Get(enactmentID)
+	if !ok {
+		return all
+	}
+	ids := make([]string, 0, len(all))
+	for _, f := range all {
+		ids = append(ids, f.Key)
+	}
+	keep := filterByList(ids, comp.AllowedValidations, comp.BlockedValidations)
+	keepSet := map[string]bool{}
+	for _, k := range keep {
+		keepSet[k] = true
+	}
+	// Preserve the config order of the surviving fields when using a block
+	// list; use the allowed order when an allow list is set.
+	if len(comp.AllowedValidations) > 0 {
+		byKey := map[string]Field{}
+		for _, f := range all {
+			byKey[f.Key] = f
+		}
+		out := make([]Field, 0, len(keep))
+		for _, k := range keep {
+			if f, ok := byKey[k]; ok {
+				out = append(out, f)
+			}
+		}
+		return out
+	}
+	out := make([]Field, 0, len(all))
+	for _, f := range all {
+		if keepSet[f.Key] {
+			out = append(out, f)
+		}
+	}
+	return out
+}
+
+// EnactmentsFor returns the enactment components visible for the given
+// ability-type id, filtered by that ability type's allowed_enactments/
+// blocked_enactments lists. Filtering is UI-only. An unknown ability-type id
+// yields the full enactment list.
+func (c *Config) EnactmentsFor(abilityTypeID string) []*Component {
+	all := c.Enactments.List()
+	comp, ok := c.AbilityTypes.Get(abilityTypeID)
+	if !ok {
+		return all
+	}
+	ids := make([]string, 0, len(all))
+	for _, ec := range all {
+		ids = append(ids, ec.ID)
+	}
+	keep := filterByList(ids, comp.AllowedEnactments, comp.BlockedEnactments)
+	out := make([]*Component, 0, len(keep))
+	for _, id := range keep {
+		if ec, ok := c.Enactments.Get(id); ok {
+			out = append(out, ec)
+		}
+	}
+	return out
+}
+
 // ComponentByKind resolves a component id against the map named by kind. It
+
 // backs the generic inline_builder feature so a dropdown can reference any
 // enactment, interaction or ability type.
 func (c *Config) ComponentByKind(kind, id string) (Component, bool) {

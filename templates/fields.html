@@ -98,15 +98,18 @@
   </select>
   <div class="state-shift" id="{{ $name }}_shift"></div>
 
-  {{ else if or (eq $f.Type "solutions") (eq $f.Type "states") }}
+  {{ else if eq $f.Type "multiselect" }}
 
   {{ $rows := resolveRows $f $values }}
-  <div class="rows" data-rows-name="{{ $name }}">
+  {{ $conj := $f.Conjunction }}{{ if eq $conj "" }}{{ $conj = "or" }}{{ end }}
+  <div class="rows" data-rows-name="{{ $name }}" data-conjunction="{{ $conj }}">
     <input type="hidden" name="{{ $name }}_count" class="rows-count" value="{{ len $rows }}">
     <div class="rows-body">
       {{ range $ri, $row := $rows }}
       <div class="row">
+        {{ if gt $ri 0 }}<span class="conjunction">{{ $conj }}</span>{{ end }}
         {{ range $rf := $f.RowFields }}
+
         <span class="row-field"{{ if $rf.VisibilityWhen }} data-row-visibility-when="{{ $rf.VisibilityWhen }}" data-show-when="{{ $rf.ShowWhen }}"{{ end }}>
           <label class="row-label">{{ $rf.Label }}</label>
           {{ $rname := printf "%s_%d_%s" $name $ri $rf.Key }}
@@ -145,7 +148,9 @@
             data-row-template="{{ $name }}-row-tpl">+ Add</button>
     <template id="{{ $name }}-row-tpl">
       <div class="row">
+        <span class="conjunction">{{ $conj }}</span>
         {{ range $f.RowFields }}
+
         <span class="row-field"{{ if .VisibilityWhen }} data-row-visibility-when="{{ .VisibilityWhen }}" data-show-when="{{ .ShowWhen }}"{{ end }}>
           <label class="row-label">{{ .Label }}</label>
           {{ if eq .Type "dropdown" }}

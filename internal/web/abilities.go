@@ -292,8 +292,9 @@ func readFieldValues(cfg *config.Config, fields []config.Field, prefix string, r
 		case "free_number":
 			n, _ := strconv.Atoi(r.FormValue(name))
 			out[f.Key] = n
-		case "solutions", "conditions":
+		case "multiselect", "conditions":
 			out[f.Key] = readRowValues(f, name, r)
+
 		case "condition_select":
 			out[f.Key] = r.FormValue(name)
 			// The per-condition shift dropdown is injected by HTMX only for general
@@ -327,7 +328,8 @@ func readFieldValues(cfg *config.Config, fields []config.Field, prefix string, r
 	return out
 }
 
-// readRowValues reads a solutions/conditions repeatable field from the form. Rows
+// readRowValues reads a multiselect/conditions repeatable field from the form. Rows
+
 // are posted with an index in the name, e.g. "<name>_0_type", "<name>_0_value".
 // The posted "<name>_count" holds the number of rows.
 func readRowValues(f config.Field, name string, r *http.Request) []map[string]any {
@@ -371,15 +373,24 @@ func (a *App) handleBuilderEnactment(w http.ResponseWriter, r *http.Request) {
 	if interaction == "" {
 		interaction = firstInteractionID(a.Cfg.Config)
 	}
+	// The ability type drives which enactments are offered (allowed/blocked
+	// filtering) and, for enactments beyond the first, whether the Interaction
+	// and Validation regions are shown.
+	atype := r.URL.Query().Get("atype")
+	if atype == "" {
+		atype = r.FormValue("type")
+	}
 	data := map[string]any{
 		"Cfg":             a.Cfg.Config,
 		"Index":           idx,
+		"AbilityType":     atype,
 		"Type":            etype,
 		"Interaction":     interaction,
 		"Fields":          map[string]any{},
 		"InteractionData": map[string]any{},
 		"ValidationData":  map[string]any{},
 	}
+
 	var buf bytes.Buffer
 
 	if err := a.Tmpl.ExecuteTemplate(&buf, "enactment_partial.html", data); err != nil {

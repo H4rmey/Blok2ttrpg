@@ -97,8 +97,9 @@ func FieldsCost(cfg *config.Config, fields []config.Field, values map[string]any
 			}
 		case "free_number":
 			total = addNumberCost(total, f, values[f.Key])
-		case "solutions":
+		case "multiselect":
 			total = addRowsCost(cfg, total, f, values[f.Key])
+
 		case "conditions":
 			total = addConditionsCost(cfg, total, f, values[f.Key])
 		case "condition_select":
@@ -223,7 +224,8 @@ func stepsFor(delta, step int, rounding string) int {
 	}
 }
 
-// addRowsCost handles a "solutions" field: a repeatable set of rows. PerItem
+// addRowsCost handles a "multiselect" field: a repeatable set of rows. PerItem
+
 // adjusts cost per row relative to the default count (increase when there are
 // more rows than default, decrease when fewer). Each row's fields also cost.
 func addRowsCost(cfg *config.Config, total Cost, f config.Field, raw any) Cost {

@@ -142,7 +142,8 @@ func fieldsTable(cfg *config.Config, fields []config.Field) string {
 
 // writeFieldRows appends perk rows for a field slice to b and returns how many
 // rows it wrote. When nested is true the fields are the row sub-fields of a
-// solutions/conditions block, in which case conditional follow-ups and purely
+// multiselect/conditions block, in which case conditional follow-ups and purely
+
 // cosmetic selectors are skipped.
 func writeFieldRows(b *strings.Builder, cfg *config.Config, fields []config.Field, nested bool) int {
 	rows := 0
@@ -174,8 +175,9 @@ func writeFieldRows(b *strings.Builder, cfg *config.Config, fields []config.Fiel
 					rows++
 				}
 			}
-		case "solutions", "conditions":
+		case "multiselect", "conditions":
 			single := singular(f.Label)
+
 			if f.PerItem != nil {
 				if f.PerItem.Increase != nil && hasCost(f.PerItem.Increase) {
 					b.WriteString(row("Each additional "+single, costWords(f.PerItem.Increase)))

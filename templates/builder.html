@@ -66,8 +66,10 @@
       {{ template "enactment_partial.html" dict
           "Cfg" $.Cfg
           "Index" (str $ei)
+          "AbilityType" $ab.Type
           "Type" $en.Type
           "Interaction" $en.Interaction
+
           "Fields" $en.Fields
           "InteractionData" $en.InteractionData
           "ValidationData" $en.ValidationData }}

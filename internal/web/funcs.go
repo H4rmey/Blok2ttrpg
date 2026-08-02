@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"html/template"
+	"strconv"
 	"strings"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
@@ -53,9 +54,33 @@ func funcMap() template.FuncMap {
 		"interactions": func(cfg *config.Config) []*config.Component { return cfg.Interactions.List() },
 		"attributes":   func(cfg *config.Config) []*config.AttributeGroup { return cfg.Attributes.List() },
 		"traitGroups":  func(cfg *config.Config) []config.TraitGroup { return cfg.Traits.List() },
+		// enactmentsFor/interactionsFor/validationFieldsFor apply the UI-only
+		// allowed/blocked filtering for a given ability-type or enactment id.
+		"enactmentsFor": func(cfg *config.Config, abilityTypeID string) []*config.Component {
+			return cfg.EnactmentsFor(abilityTypeID)
+		},
+		"interactionsFor": func(cfg *config.Config, enactmentID string) []*config.Component {
+			return cfg.InteractionsFor(enactmentID)
+		},
+		"validationFieldsFor": func(cfg *config.Config, enactmentID string) []config.Field {
+			return cfg.ValidationFieldsFor(enactmentID)
+		},
 		// validationFields exposes the engagement/counter (validation) fields so
 		// each enactment can render its own validation region.
 		"validationFields": func(cfg *config.Config) []config.Field { return cfg.Validations.Fields },
+
+		// showInteraction/showValidation report whether the Interaction /
+		// Validation region should be shown for the enactment at the given
+		// index. The first enactment (index 0) always shows both; enactments
+		// beyond the first consult additional_enactment.require_interaction /
+		// require_validation (default true when unset).
+		"showInteraction": func(cfg *config.Config, index int) bool {
+			return index == 0 || cfg.AdditionalEnactment.RequiresInteraction()
+		},
+		"showValidation": func(cfg *config.Config, index int) bool {
+			return index == 0 || cfg.AdditionalEnactment.RequiresValidation()
+		},
+
 		// costHint formats a flat cost into a short inline hint such as
 		// "(-2 pt, +1 E)". Zero components are omitted; an all-zero cost yields
 		// an empty string so nothing is shown.
@@ -128,6 +153,14 @@ func funcMap() template.FuncMap {
 		},
 		"add": func(a, b int) int { return a + b },
 		"sub": func(a, b int) int { return a - b },
+		// atoi parses a string index into an int (0 on failure), so the
+		// enactment partial can turn its string ".Index" into a number for the
+		// showInteraction/showValidation guards.
+		"atoi": func(s string) int {
+			n, _ := strconv.Atoi(s)
+			return n
+		},
+
 		// rowDefault returns the pre-fill value for a given row index and
 		// row-field key, from a field's row_defaults config. Empty when none.
 		"rowDefault": func(f config.Field, row int, key string) string {

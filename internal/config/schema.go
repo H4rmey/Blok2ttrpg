@@ -114,11 +114,32 @@ type AdditionalEnactment struct {
 	BuildCost   int    `yaml:"build_cost,omitempty" json:"build_cost,omitempty"`
 	EnergyCost  int    `yaml:"energy_cost,omitempty" json:"energy_cost,omitempty"`
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
+
+	// RequireInteraction/RequireValidation control whether the second and
+	// following enactments must display an Interaction / Validation region.
+	// The first enactment always shows both. These are pointers so an unset
+	// value defaults to true (preserving the historical mandatory behaviour);
+	// setting either to false hides that region for enactments beyond the
+	// first.
+	RequireInteraction *bool `yaml:"require_interaction,omitempty" json:"require_interaction,omitempty"`
+	RequireValidation  *bool `yaml:"require_validation,omitempty" json:"require_validation,omitempty"`
 }
 
 // AsCost converts the surcharge into a plain Cost.
 func (a AdditionalEnactment) AsCost() Cost {
 	return Cost{BuildCost: a.BuildCost, EnergyCost: a.EnergyCost}
+}
+
+// RequiresInteraction reports whether enactments beyond the first must show an
+// Interaction region. Defaults to true when unset.
+func (a AdditionalEnactment) RequiresInteraction() bool {
+	return a.RequireInteraction == nil || *a.RequireInteraction
+}
+
+// RequiresValidation reports whether enactments beyond the first must show a
+// Validation region. Defaults to true when unset.
+func (a AdditionalEnactment) RequiresValidation() bool {
+	return a.RequireValidation == nil || *a.RequireValidation
 }
 
 // Dice lists the die tiers available for damage and generic rolls.
@@ -256,6 +277,22 @@ type Component struct {
 	DefaultRadius   int `yaml:"default_radius,omitempty" json:"default_radius,omitempty"`
 	DefaultDuration int `yaml:"default_duration,omitempty" json:"default_duration,omitempty"`
 
+	// Allowed/blocked lists drive UI filtering only; they are never enforced
+	// on save. The rule is: when the allowed list is non-empty only those ids
+	// are shown (in config order); otherwise when the blocked list is
+	// non-empty everything except those ids is shown; otherwise everything is
+	// shown. AllowedInteractions/BlockedInteractions and AllowedValidations/
+	// BlockedValidations apply to enactment components (filtering the
+	// interaction dropdown and validation fields shown for that enactment).
+	// AllowedEnactments/BlockedEnactments apply to ability-type components
+	// (filtering the enactment dropdown shown for that ability type).
+	AllowedInteractions []string `yaml:"allowed_interactions,omitempty" json:"allowed_interactions,omitempty"`
+	BlockedInteractions []string `yaml:"blocked_interactions,omitempty" json:"blocked_interactions,omitempty"`
+	AllowedValidations  []string `yaml:"allowed_validations,omitempty" json:"allowed_validations,omitempty"`
+	BlockedValidations  []string `yaml:"blocked_validations,omitempty" json:"blocked_validations,omitempty"`
+	AllowedEnactments   []string `yaml:"allowed_enactments,omitempty" json:"allowed_enactments,omitempty"`
+	BlockedEnactments   []string `yaml:"blocked_enactments,omitempty" json:"blocked_enactments,omitempty"`
+
 	Fields []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
 }
 
@@ -273,9 +310,10 @@ func (c Component) DisplayName() string {
 
 // Field drives both the builder UI and the cost engine.
 type Field struct {
-	Key         string `yaml:"key" json:"key"`
-	Label       string `yaml:"label" json:"label"`
-	Type        string `yaml:"type" json:"type"` // checkbox, dropdown, free_text, free_number, solutions, conditions
+	Key   string `yaml:"key" json:"key"`
+	Label string `yaml:"label" json:"label"`
+	Type  string `yaml:"type" json:"type"` // checkbox, dropdown, free_text, free_number, multiselect, conditions
+
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 
 	Default any `yaml:"default,omitempty" json:"default,omitempty"`
@@ -301,15 +339,20 @@ type Field struct {
 	// by the absolute shift value read from that sibling field.
 	ShiftKey string `yaml:"shift_key,omitempty" json:"shift_key,omitempty"`
 
-	// solutions/conditions: a repeatable set of rows built from RowFields. PerItem
-	// is the cost delta per row relative to DefaultCount.
+	// multiselect/conditions: a repeatable set of rows built from RowFields.
+	// PerItem is the cost delta per row relative to DefaultCount.
 	RowFields    []Field  `yaml:"row_fields,omitempty" json:"row_fields,omitempty"`
 	DefaultCount int      `yaml:"default_count,omitempty" json:"default_count,omitempty"`
 	PerItem      *PerStep `yaml:"per_item,omitempty" json:"per_item,omitempty"`
-	// RowDefaults pre-fills the initial rows of a solutions/conditions field. Each
-	// entry is a map of row_field key -> default value for that row, applied in
-	// order to the first rows rendered.
+	// RowDefaults pre-fills the initial rows of a multiselect/conditions field.
+	// Each entry is a map of row_field key -> default value for that row,
+	// applied in order to the first rows rendered.
 	RowDefaults []map[string]string `yaml:"row_defaults,omitempty" json:"row_defaults,omitempty"`
+
+	// Conjunction is the small joining word rendered to the left of each
+	// multiselect row after the first ("and" or "or"). It is display-only and
+	// defaults to "or" when unset.
+	Conjunction string `yaml:"conjunction,omitempty" json:"conjunction,omitempty"`
 
 	// Conditional visibility: show this field only when the field named
 	// VisibilityWhen currently equals ShowWhen.

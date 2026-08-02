@@ -220,7 +220,15 @@ function dispatchChange(el) {
   addBtn.addEventListener("click", function () {
     var index = nextIndex();
     var url = window.BUILDER.enactmentEndpoint + "?index=" + encodeURIComponent(index);
+    // Pass the current ability type so the new enactment's dropdowns apply the
+    // ability-type allowed/blocked enactment filtering (and Feature 4 region
+    // toggles) consistently with the server-rendered blocks.
+    var typeSel = document.querySelector('#ability-form select[name="type"]');
+    if (typeSel && typeSel.value) {
+      url += "&atype=" + encodeURIComponent(typeSel.value);
+    }
     fetch(url)
+
       .then(function (r) { return r.text(); })
       .then(function (html) {
         var wrap = document.createElement("div");

@@ -40,7 +40,7 @@ enactments:
         type: free_text
       - key: condition
         label: "Condition"
-        type: condition_select
+        type: dropdown
         options_source: conditions_all
         shift_key: shift_amount
       - key: duration
@@ -77,7 +77,7 @@ enactments:
               energy_cost: 0
       - key: solution
         label: "Solutions"
-        type: solutions
+        type: multiselect
         default_count: 2
         row_fields:
           - key: value
@@ -124,7 +124,7 @@ enactments:
             energy_cost: 0
       - key: damage_type
         label: "Damage Types"
-        type: solutions
+        type: multiselect
         default_count: 1
         options_source: damage_types
         row_fields:
@@ -168,7 +168,7 @@ enactments:
           kind: enactment
       - key: solution
         label: "Solutions"
-        type: solutions
+        type: multiselect
         default_count: 2
         row_fields:
           - key: value
@@ -202,7 +202,7 @@ enactments:
         label: "Source"
         type: dropdown
         default: d4
-        options_source: roll_medicine
+        options_source: roll_heal
         group_offsets:
           default_group: roll_generic
           offsets:
@@ -243,7 +243,7 @@ enactments:
             energy_cost: 0
       - key: direction
         label: "Directions"
-        type: solutions
+        type: multiselect
         default_count: 1
         row_fields:
           - key: value
@@ -340,7 +340,7 @@ enactments:
             energy_cost: 0
       - key: affected_traits
         label: "Affected Trait(s)"
-        type: solutions
+        type: multiselect
         default_count: 2
         options_source: traits_all
         row_defaults:
@@ -377,21 +377,17 @@ enactments:
       - key: comment
         label: "Comment"
         type: free_text
-      - key: amplification
-        label: "Amplification"
+      - key: reduction
+        label: "Reduction"
         type: dropdown
-        options_source: traits_general_defense
-        group_offsets:
-          default_group: defense
-          offsets:
-            general:
-              build_cost: 0
+        default: d4
+        options_source: roll_generic
       - key: flat
         label: "Flat Bonus"
         type: free_number
         default: 0
         min: 0
-        max: 20
+        max: 8
         step: 1
         per_step:
           increase:
