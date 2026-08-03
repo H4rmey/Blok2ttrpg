@@ -150,7 +150,13 @@ type Dice struct {
 
 // Validations captures the engagement/counter configuration and its fields.
 type Validations struct {
-	Fields []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
+	// Information is optional section-level help text. By default it renders as
+	// plain text between the Validation header and the first field; when
+	// RenderInformation is true it collapses into a hover "i" badge next to the
+	// header instead.
+	Information       string  `yaml:"information,omitempty" json:"information,omitempty"`
+	RenderInformation bool    `yaml:"render_information,omitempty" json:"render_information,omitempty"`
+	Fields            []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
 }
 
 // Proficiency is a single skill tier.
@@ -256,9 +262,16 @@ type Component struct {
 	Name        string `yaml:"name,omitempty" json:"name,omitempty"`
 	Type        string `yaml:"type,omitempty" json:"type,omitempty"`
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
-	BaseCost    Cost   `yaml:"base_cost,omitempty" json:"base_cost,omitempty"`
-	BaseEnergy  int    `yaml:"base_energy,omitempty" json:"base_energy,omitempty"`
-	BaseAction  int    `yaml:"base_action,omitempty" json:"base_action,omitempty"`
+	// Information is optional help text surfaced as a hover tooltip via a small
+	// "i" indicator next to the component in the builder UI.
+	Information string `yaml:"information,omitempty" json:"information,omitempty"`
+	// RenderInformation, when true, renders Information as plain text between
+	// the component header and its dropdown instead of behind a hover "i".
+	RenderInformation bool `yaml:"render_information,omitempty" json:"render_information,omitempty"`
+	BaseCost          Cost `yaml:"base_cost,omitempty" json:"base_cost,omitempty"`
+
+	BaseEnergy int `yaml:"base_energy,omitempty" json:"base_energy,omitempty"`
+	BaseAction int `yaml:"base_action,omitempty" json:"base_action,omitempty"`
 
 	// Ability-type base parameters. Not every component sets all of these;
 	// unset values decode as zero.
@@ -315,6 +328,13 @@ type Field struct {
 	Type  string `yaml:"type" json:"type"` // checkbox, dropdown, free_text, free_number, multiselect, conditions
 
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
+
+	// Information is optional help text surfaced as a hover tooltip via a small
+	// "i" indicator next to the field label in the builder UI.
+	Information string `yaml:"information,omitempty" json:"information,omitempty"`
+	// RenderInformation, when true, renders Information as plain text below the
+	// field instead of behind a hover "i".
+	RenderInformation bool `yaml:"render_information,omitempty" json:"render_information,omitempty"`
 
 	Default any `yaml:"default,omitempty" json:"default,omitempty"`
 
@@ -394,10 +414,17 @@ type InlineBuilder struct {
 
 // Option is a dropdown choice which may carry its own cost and nested fields.
 type Option struct {
-	Value  string  `yaml:"value" json:"value"`
-	Label  string  `yaml:"label,omitempty" json:"label,omitempty"`
-	Cost   *Cost   `yaml:"cost,omitempty" json:"cost,omitempty"`
-	Fields []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
+	Value string `yaml:"value" json:"value"`
+	Label string `yaml:"label,omitempty" json:"label,omitempty"`
+	// Information is optional help text surfaced as a native hover tooltip on
+	// the dropdown option (rendered via the option's title attribute).
+	Information string `yaml:"information,omitempty" json:"information,omitempty"`
+	// RenderInformation, when true, renders this option's Information as plain
+	// text below the dropdown once selected instead of behind the trailing
+	// "i" indicator.
+	RenderInformation bool    `yaml:"render_information,omitempty" json:"render_information,omitempty"`
+	Cost              *Cost   `yaml:"cost,omitempty" json:"cost,omitempty"`
+	Fields            []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
 }
 
 // AttributeGroup is a titled section of character fields.
@@ -412,6 +439,15 @@ type AttributeGroup struct {
 type ComponentMap struct {
 	Order []string
 	Items map[string]*Component
+	// Information is optional map-level help text. It is set from a reserved
+	// top-level "information" key inside the mapping (e.g. directly under
+	// ability_types:), and is not treated as a component.
+	Information string
+	// RenderInformation, when true, renders the map-level Information as plain
+	// text between the section header and the first field instead of behind a
+	// hover "i" badge next to the header. It is set from a reserved top-level
+	// "render_information" key inside the mapping and is not a component.
+	RenderInformation bool
 }
 
 // UnmarshalYAML decodes a mapping node into an ordered ComponentMap.
@@ -424,7 +460,19 @@ func (m *ComponentMap) UnmarshalYAML(n *yaml.Node) error {
 	}
 	for i := 0; i+1 < len(n.Content); i += 2 {
 		key := n.Content[i].Value
+		// "information" is a reserved map-level key, not a component.
+		if key == "information" {
+			m.Information = n.Content[i+1].Value
+			continue
+		}
+		// "render_information" is a reserved map-level key, not a component.
+		if key == "render_information" {
+			m.RenderInformation = n.Content[i+1].Value == "true"
+			continue
+		}
+
 		var comp Component
+
 		if err := n.Content[i+1].Decode(&comp); err != nil {
 			return fmt.Errorf("component %q: %w", key, err)
 		}

@@ -81,6 +81,51 @@ document.addEventListener("change", function () { applyVisibility(); });
 document.addEventListener("input", function () { applyVisibility(); });
 
 // ---------------------------------------------------------------------------
+// Selected-option information indicator.
+// A dropdown rendered with class "opt-select" lives inside a ".field" and is
+// paired with a trailing ".option-info" (little "i") and a ".option-info-text"
+// (below the select). When an option carries data-info:
+//   - data-render-info="true"  -> render the info as text below the select
+//                                  (via .option-info-text), hide the "i".
+//   - otherwise                -> populate the "i" tooltip and show it.
+// Options with no info clear both. The native <option> title attribute still
+// provides a hover tooltip on each item in the open list.
+// ---------------------------------------------------------------------------
+function syncOptionInfo(sel) {
+  var field = sel.closest(".field");
+  if (!field) return;
+  var icon = field.querySelector(".option-info");
+  var text = field.querySelector(".option-info-text");
+  var opt = sel.options[sel.selectedIndex];
+  var info = opt ? (opt.getAttribute("data-info") || "") : "";
+  var renderBelow = opt && opt.getAttribute("data-render-info") === "true";
+  if (icon) { icon.hidden = true; }
+  if (text) { text.hidden = true; text.textContent = ""; }
+  if (!info) return;
+  if (renderBelow) {
+    if (text) { text.textContent = info; text.hidden = false; }
+  } else if (icon) {
+    icon.setAttribute("data-tooltip", info);
+    icon.hidden = false;
+  }
+}
+
+function syncAllOptionInfo(root) {
+  var scope = root || document;
+  scope.querySelectorAll("select.opt-select").forEach(function (sel) {
+    syncOptionInfo(sel);
+  });
+}
+
+document.addEventListener("change", function (e) {
+  var t = e.target;
+  if (t && t.matches && t.matches("select.opt-select")) {
+    syncOptionInfo(t);
+  }
+});
+
+
+// ---------------------------------------------------------------------------
 // Collapsible sections.
 // ---------------------------------------------------------------------------
 document.addEventListener("click", function (e) {
@@ -361,9 +406,16 @@ function dispatchChange(el) {
 })();
 
 // Re-apply visibility after HTMX swaps (ability-type fields, enactment reloads).
-document.addEventListener("htmx:afterSwap", function () { applyVisibility(); });
+document.addEventListener("htmx:afterSwap", function (e) {
+  applyVisibility();
+  syncAllOptionInfo(e && e.target ? e.target : document);
+});
 
-document.addEventListener("DOMContentLoaded", function () { applyVisibility(); });
+document.addEventListener("DOMContentLoaded", function () {
+  applyVisibility();
+  syncAllOptionInfo();
+});
+
 
 // ---------------------------------------------------------------------------
 // Character sheet: recalculate the whole stats bar (trait points, ability

@@ -705,5 +705,94 @@ dialog .toolbar {
   margin-top: 0.5rem;
 }
 
+/* Info icon + hover tooltip for fields and component selects. The small "i"
+   badge sits next to a label; hovering (or focusing) it reveals data-tooltip. */
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  position: relative;
+  vertical-align: middle;
+  user-select: none;
+}
+.info-icon:hover,
+.info-icon:focus {
+  background: var(--accent);
+  color: #fff;
+  outline: none;
+}
+.info-icon[data-tooltip]:hover::after,
+.info-icon[data-tooltip]:focus::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 260px;
+  white-space: normal;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  background: #0b1220;
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Plain-text information line (render_information: true) rendered below a
+   field/dropdown, or below a dropdown for the selected option. */
+.field-info {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+  max-width: 480px;
+}
+.field-info[hidden] { display: none; }
+
+/* Component information rendered between a component header/label and its
+   dropdown (render_information: true on an ability type / enactment /
+   interaction). */
+.component-info {
+  display: block;
+  margin: 0.1rem 0 0.4rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+  max-width: 480px;
+}
+
+/* Flex wrapper pairing a dropdown with its trailing selected-option "i". */
+.select-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.select-row .info-icon.option-info { flex: 0 0 auto; }
+.info-icon.option-info[hidden] { display: none; }
+
+
+
+
 
 

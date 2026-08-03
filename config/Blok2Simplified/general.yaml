@@ -66,8 +66,10 @@ option_sources:
     - value: "Bludgeoning"
       cost: { build_cost: 0 }
     - value: "Fire"
+      information: "Burning damage. Often ignites flammable objects and can leave lingering burn effects."
       cost: { build_cost: 0 }
     - value: "Cold"
+      information: "Freezing damage. Commonly slows or hampers movement of the target."
       cost: { build_cost: 0 }
     - value: "Lightning"
       cost: { build_cost: 0 }
@@ -372,6 +374,7 @@ option_groups:
         label: "Defense"
 
 validations:
+  information: "What rolls are needed?"
   fields:
     - key: comment
       label: "Comment"

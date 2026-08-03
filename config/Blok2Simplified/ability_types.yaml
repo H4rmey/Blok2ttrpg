@@ -1,7 +1,9 @@
 ability_types:
+  information: "Decide the timing of when the ability triggers"
   execution:
     name: "Execution"
-    description: "Performed instantly during a character's turn."
+    information: "Execution is the most basic form for an Ability. It is simply the: \"I want to do this now\" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry."
+    render_information: true
     base_energy: 3
     base_action: 2
     fields:
@@ -11,27 +13,29 @@ ability_types:
       - key: energy_steps
         label: "Energy +/-"
         type: free_number
+        information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
         default: 0
         min: -2
         max: 2
         step: 1
         per_step:
           increase:
-            build_cost: 02
+            build_cost: 2
             energy_cost: 0
           decrease:
             build_cost: 0
-            energy_cost: 01
+            energy_cost: 1
       - key: action_steps
         label: "Action +/-"
         type: free_number
+        information: "Adjust the amount of Actions it will cost to use this ability"
         default: 0
         min: -1
         max: 1
         step: 1
         per_step:
           increase:
-            build_cost: 02
+            build_cost: 2
             energy_cost: 0
           decrease:
             build_cost: 0
@@ -40,6 +44,8 @@ ability_types:
   reaction:
     name: "Reaction"
     description: "Triggered in response to an event or enemy action."
+    information: "Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed. For example, you could have a reaction that triggers whenever someone runs towards you, Enacting a healing effect on yourself."
+    render_information: false
     base_energy: 3
     base_action: 0
     base_range: 1
@@ -193,6 +199,9 @@ ability_types:
   preparation:
     name: "Preparation"
     description: "Works like a Reaction but must be prepared with an action."
+    information: "Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation will cost an action to prepare, but in turn cost far less Energy to use."
+    render_information: true
+
     base_energy: 3
     base_action: 2
     base_range: 1
@@ -349,7 +358,10 @@ ability_types:
   concentration:
     name: "Concentration"
     description: "An effect that persists over multiple rounds as long as the Engager maintains focus. It costs Actions and Energy to initiate, then re-triggers its Enactments every round as long as the upkeep is paid."
+    information: "Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep."
+    render_information: true
     base_energy: 3
+
     base_action: 2
     base_upkeep_action: 1
     base_upkeep_energy: 1
@@ -399,7 +411,10 @@ ability_types:
   passive:
     name: "Passive"
     description: "An always-on effect that costs no Energy or Actions to use and can trigger whenever its condition is met. In exchange for being free to use it carries a higher base build cost."
+    information: "Passives are Abilities that are always on. They work just like a Reaction, they trigger when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself. Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build."
+    render_information: true
     base_energy: 0
+
     base_action: 0
     base_range: 1
     base_uses: 1

@@ -11,14 +11,17 @@
   {{ if eq $f.Type "checkbox" }}
   <label class="checkbox-label">
     <input type="checkbox" name="{{ $name }}" {{ if fvalBool $values $f.Key (eq (printf "%v" $f.Default) "true") }}checked{{ end }}>
-    <span>{{ $f.Label }}{{ with costHint $f.Cost }} <span class="cost-hint">{{ . }}</span>{{ end }}</span>
+    <span>{{ $f.Label }}{{ if and $f.Information (not $f.RenderInformation) }} <span class="info-icon" tabindex="0" data-tooltip="{{ $f.Information }}">i</span>{{ end }}{{ with costHint $f.Cost }} <span class="cost-hint">{{ . }}</span>{{ end }}</span>
   </label>
   {{ else }}
   <label>{{ $f.Label }}
+    {{ if and $f.Information (not $f.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $f.Information }}">i</span>{{ end }}
     {{ if eq $f.Type "free_number" }}{{ with perStepHint $f.PerStep }}<span class="cost-hint">{{ . }}</span>{{ end }}{{ end }}
     {{ if eq $f.Type "dropdown" }}{{ with costHint $f.Cost }}<span class="cost-hint">{{ . }}</span>{{ end }}{{ end }}
   </label>
   {{ end }}
+  {{ if and $f.Information $f.RenderInformation }}<small class="field-info">{{ $f.Information }}</small>{{ end }}
+
 
   {{ if eq $f.Type "free_text" }}
   <input type="text" name="{{ $name }}" value="{{ fvalStr $values $f.Key (str $f.Default) }}">
@@ -61,17 +64,22 @@
     {{ end }}
   </div>
   {{ else }}
-  <select name="{{ $name }}">
-    <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
-    {{ range $grp := resolveOptionGroups $cfg $f }}
-    {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
-    {{ range $grp.Options }}
-    <option value="{{ .Value }}" {{ if eq .Value $default }}selected{{ end }}>{{ if .Label }}{{ .Label }}{{ else }}{{ .Value }}{{ end }}{{ with costHint .Cost }} {{ . }}{{ end }}</option>
-    {{ end }}
-    {{ if $grp.Label }}</optgroup>{{ end }}
-    {{ end }}
-  </select>
+  <div class="select-row">
+    <select name="{{ $name }}" class="opt-select">
+      <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
+      {{ range $grp := resolveOptionGroups $cfg $f }}
+      {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
+      {{ range $grp.Options }}
+      <option value="{{ .Value }}"{{ if .Information }} title="{{ .Information }}" data-info="{{ .Information }}" data-render-info="{{ if .RenderInformation }}true{{ else }}false{{ end }}"{{ end }} {{ if eq .Value $default }}selected{{ end }}>{{ if .Label }}{{ .Label }}{{ else }}{{ .Value }}{{ end }}{{ with costHint .Cost }} {{ . }}{{ end }}</option>
+      {{ end }}
+      {{ if $grp.Label }}</optgroup>{{ end }}
+      {{ end }}
+    </select>
+    <span class="info-icon option-info" tabindex="0" data-tooltip="" hidden>i</span>
+  </div>
+  <small class="field-info option-info-text" hidden></small>
   {{ end }}
+
 
   {{ else if eq $f.Type "state_select" }}
   {{/* One big grouped dropdown of all states (General/Specific). Selecting a

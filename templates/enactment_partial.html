@@ -24,18 +24,30 @@
     <div class="region region-interaction">
       <h4 class="region-title">Interaction</h4>
       <div class="field">
-        <label>Interaction Type</label>
-        <select name="{{ $prefix }}interaction"
-                hx-get="/builder/interaction-fields"
-                hx-target="#{{ $prefix }}interaction-fields"
-                hx-swap="innerHTML"
-                hx-vals='{"index": "{{ $i }}"}'
-                hx-trigger="change">
-          {{ range interactionsFor $cfg $type }}
-          <option value="{{ .ID }}" {{ if eq .ID $interaction }}selected{{ end }}>{{ .DisplayName }}</option>
-          {{ end }}
-        </select>
+        <label>Interaction Type
+          {{ if and $cfg.Interactions.Information $cfg.Interactions.RenderInformation }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Interactions.Information }}">i</span>{{ end }}
+          {{ range interactionsFor $cfg $type }}{{ if eq .ID $interaction }}{{ if and .Information (not .RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Information }}">i</span>{{ end }}{{ end }}{{ end }}
+        </label>
+        {{ if and $cfg.Interactions.Information (not $cfg.Interactions.RenderInformation) }}<small class="component-info">{{ $cfg.Interactions.Information }}</small>{{ end }}
+
+
+        <div class="select-row">
+          <select name="{{ $prefix }}interaction" class="opt-select"
+
+                  hx-get="/builder/interaction-fields"
+                  hx-target="#{{ $prefix }}interaction-fields"
+                  hx-swap="innerHTML"
+                  hx-vals='{"index": "{{ $i }}"}'
+                  hx-trigger="change">
+            {{ range interactionsFor $cfg $type }}
+            <option value="{{ .ID }}"{{ if .Information }} title="{{ .Information }}" data-info="{{ .Information }}" data-render-info="{{ if .RenderInformation }}true{{ else }}false{{ end }}"{{ end }} {{ if eq .ID $interaction }}selected{{ end }}>{{ .DisplayName }}</option>
+            {{ end }}
+          </select>
+          <span class="info-icon option-info" tabindex="0" data-tooltip="" hidden>i</span>
+        </div>
+        <small class="field-info option-info-text" hidden></small>
       </div>
+
       <div id="{{ $prefix }}interaction-fields">
         {{ range interactionsFor $cfg $type }}
         {{ if eq .ID $interaction }}
@@ -51,8 +63,12 @@
 
     {{ if showValidation $cfg $idx }}
     <div class="region region-validation">
-      <h4 class="region-title">Validation</h4>
+      <h4 class="region-title">Validation
+        {{ if and $cfg.Validations.Information $cfg.Validations.RenderInformation }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Validations.Information }}">i</span>{{ end }}
+      </h4>
+      {{ if and $cfg.Validations.Information (not $cfg.Validations.RenderInformation) }}<small class="component-info">{{ $cfg.Validations.Information }}</small>{{ end }}
       {{ range validationFieldsFor $cfg $type }}
+
       {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sv_" $prefix) "Values" $validationData }}
       {{ end }}
 
@@ -62,19 +78,31 @@
     <div class="region region-enactment">
       <h4 class="region-title">Enactment</h4>
       <div class="field">
-        <label>Enactment Type</label>
-        <select name="{{ $prefix }}type"
-                hx-get="/builder/enactment"
-                hx-target="closest .enactment"
-                hx-swap="outerHTML"
-                hx-vals='{"index": "{{ $i }}", "atype": "{{ $atype }}"}'
-                hx-trigger="change"
-                hx-include="closest .enactment">
-          {{ range enactmentsFor $cfg $atype }}
-          <option value="{{ .ID }}" {{ if eq .ID $type }}selected{{ end }}>{{ .DisplayName }}</option>
-          {{ end }}
-        </select>
+        <label>Enactment Type
+          {{ if and $cfg.Enactments.Information $cfg.Enactments.RenderInformation }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Enactments.Information }}">i</span>{{ end }}
+          {{ range enactmentsFor $cfg $atype }}{{ if eq .ID $type }}{{ if and .Information (not .RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Information }}">i</span>{{ end }}{{ end }}{{ end }}
+        </label>
+        {{ if and $cfg.Enactments.Information (not $cfg.Enactments.RenderInformation) }}<small class="component-info">{{ $cfg.Enactments.Information }}</small>{{ end }}
+
+
+        <div class="select-row">
+          <select name="{{ $prefix }}type" class="opt-select"
+
+                  hx-get="/builder/enactment"
+                  hx-target="closest .enactment"
+                  hx-swap="outerHTML"
+                  hx-vals='{"index": "{{ $i }}", "atype": "{{ $atype }}"}'
+                  hx-trigger="change"
+                  hx-include="closest .enactment">
+            {{ range enactmentsFor $cfg $atype }}
+            <option value="{{ .ID }}"{{ if .Information }} title="{{ .Information }}" data-info="{{ .Information }}" data-render-info="{{ if .RenderInformation }}true{{ else }}false{{ end }}"{{ end }} {{ if eq .ID $type }}selected{{ end }}>{{ .DisplayName }}</option>
+            {{ end }}
+          </select>
+          <span class="info-icon option-info" tabindex="0" data-tooltip="" hidden>i</span>
+        </div>
+        <small class="field-info option-info-text" hidden></small>
       </div>
+
       <div id="{{ $prefix }}enactment-fields">
         {{ range enactmentsFor $cfg $atype }}
         {{ if eq .ID $type }}

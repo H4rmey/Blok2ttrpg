@@ -34,19 +34,31 @@
 
   <div id="builder-gate" {{ if not $ab.Name }}class="gated"{{ end }}>
   <fieldset>
-    <legend>Ability Type</legend>
+    <legend>Ability Type
+      {{ if and .Cfg.AbilityTypes.Information .Cfg.AbilityTypes.RenderInformation }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Cfg.AbilityTypes.Information }}">i</span>{{ end }}
+      {{ range abilityTypes .Cfg }}{{ if eq .ID $ab.Type }}{{ if and .Information (not .RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Information }}">i</span>{{ end }}{{ end }}{{ end }}
+    </legend>
+    {{ if and .Cfg.AbilityTypes.Information (not .Cfg.AbilityTypes.RenderInformation) }}<small class="component-info">{{ .Cfg.AbilityTypes.Information }}</small>{{ end }}
+
     <div class="field">
+
       <label>Type</label>
-      <select name="type"
-              hx-get="/builder/ability-type-fields"
-              hx-target="#ability-type-fields"
-              hx-swap="innerHTML"
-              hx-trigger="change">
-        {{ range abilityTypes .Cfg }}
-        <option value="{{ .ID }}" {{ if eq .ID $ab.Type }}selected{{ end }}>{{ .DisplayName }}</option>
-        {{ end }}
-      </select>
+      <div class="select-row">
+
+        <select name="type" class="opt-select"
+                hx-get="/builder/ability-type-fields"
+                hx-target="#ability-type-fields"
+                hx-swap="innerHTML"
+                hx-trigger="change">
+          {{ range abilityTypes .Cfg }}
+          <option value="{{ .ID }}"{{ if .Information }} title="{{ .Information }}" data-info="{{ .Information }}" data-render-info="{{ if .RenderInformation }}true{{ else }}false{{ end }}"{{ end }} {{ if eq .ID $ab.Type }}selected{{ end }}>{{ .DisplayName }}</option>
+          {{ end }}
+        </select>
+        <span class="info-icon option-info" tabindex="0" data-tooltip="" hidden>i</span>
+      </div>
+      <small class="field-info option-info-text" hidden></small>
     </div>
+
     <div id="ability-type-fields">
       {{ range abilityTypes .Cfg }}
       {{ if eq .ID $ab.Type }}

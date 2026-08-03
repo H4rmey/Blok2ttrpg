@@ -1,8 +1,12 @@
 enactments:
+  information: "What is this going to do?"
   amplification:
     name: "Enact Amplification"
     description: "Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has a Amplification Die which determines the amplification of the effect."
+    information: "Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has an Amplification Die which determines the amplification of the effect."
+    render_information: true
     base_energy: 0
+
     base_action: 0
     fields:
       - key: comment
@@ -13,6 +17,7 @@ enactments:
         type: dropdown
         default: d4
         options_source: roll_generic
+        information: "The die rolled to determine how much the target effect is amplified. Larger dice amplify more but cost more to build."
       - key: flat
         label: "Flat Bonus"
         type: free_number
@@ -31,7 +36,10 @@ enactments:
   condition:
     type: "Enact Condition"
     description: "Enact State will apply a conditon to a target (e.g., prone, stunned, charmed). A Condition will always have a value"
+    information: "Enact State will apply a condition to a target (e.g., prone, stunned, charmed). A Condition will always have a value."
+    render_information: true
     base_cost:
+
       build_cost: 0
       energy_cost: 0
     fields:
@@ -100,7 +108,10 @@ enactments:
   damage:
     type: "Enact Damage"
     description: "Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonusses."
+    information: "Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses."
+    render_information: true
     base_cost:
+
       build_cost: 0
       energy_cost: 0
     fields:
@@ -111,6 +122,7 @@ enactments:
         label: "Source"
         type: dropdown
         options_source: traits.offense
+        information: "The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die."
       - key: flat
         label: "Flat Bonus"
         type: free_number
@@ -143,7 +155,10 @@ enactments:
   persistent_effect:
     type: "Enact Effect"
     description: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for {{fieldDefault (enactment \"effect\") \"duration\"}} rounds and triggers at either the start of the target's turn. On the targets turn they can re-roll the solution again to get rid fo the effect or take an action to remove it."
+    information: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for a few rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it."
+    render_information: true
     base_cost:
+
       build_cost: 0
       energy_cost: 0
     fields:
@@ -191,7 +206,10 @@ enactments:
   healing:
     type: "Enact Healing"
     description: "Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain onter bonusses."
+    information: "Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses."
+    render_information: true
     base_cost:
+
       build_cost: 0
       energy_cost: 0
     fields:
@@ -223,7 +241,10 @@ enactments:
   movement:
     type: "Enact Movement"
     description: "Enact Movement allows you to move a Target up to a preset amount of meters."
+    information: "Enact Movement allows you to move a Target up to a preset amount of meters."
+    render_information: true
     base_cost:
+
       build_cost: 0
       energy_cost: 0
     fields:
@@ -258,7 +279,10 @@ enactments:
   negation:
     type: "Enact Negation"
     description: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
+    information: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
+    render_information: true
     base_cost:
+
       build_cost: 0
       energy_cost: 0
     fields:
@@ -275,7 +299,10 @@ enactments:
   nerf:
     type: "Enact Nerf"
     description: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
+    information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
+    render_information: true
     base_cost:
+
       build_cost: 0
       energy_cost: 0
     allowed_interactions:
@@ -306,7 +333,10 @@ enactments:
   phase:
     name: "Enact Phase"
     description: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two round those traits are shifted down for 2 rounds."
+    information: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds."
+    render_information: true
     fields:
+
       - key: comment
         label: "Comment"
         type: free_text
@@ -371,7 +401,10 @@ enactments:
   reduction:
     type: "Enact Reduction"
     description: "Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect."
+    information: "Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect."
+    render_information: true
     base_energy: 0
+
     base_action: 0
     fields:
       - key: comment
@@ -401,7 +434,10 @@ enactments:
   shift:
     type: "Enact Shift"
     description: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value rangeing from -6 to 6, which decide how much and in what direction the shift happens."
+    information: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens."
+    render_information: true
     base_cost:
+
       build_cost: 0
       energy_cost: 0
     fields:

@@ -33,25 +33,24 @@
       {
         "id": "ability-1785224139837-937440089",
         "name": "asdfasdf",
-        "type": "concentration",
+        "type": "execution",
         "fields": {
           "action_steps": 0,
           "comment": "",
-          "effortless": false,
-          "energy_steps": 0,
-          "upkeep_cost": ""
+          "energy_steps": 0
         },
         "enactments": [
           {
-            "type": "nerf",
+            "type": "amplification",
             "fields": {
+              "amplification": "d4",
               "comment": "",
-              "shift_amount": -1,
-              "shifted_trait": ""
+              "flat": 0
             },
-            "interaction": "self",
+            "interaction": "direct",
             "interaction_data": {
-              "comment": ""
+              "comment": "",
+              "targets": 1
             },
             "validation_data": {
               "comment": "",

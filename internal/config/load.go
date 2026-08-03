@@ -180,10 +180,20 @@ func merge(base, in *Config) {
 }
 
 func mergeComponentMap(base *ComponentMap, in ComponentMap) {
+	// Map-level help text is carried on the map itself, not on a component, so
+	// it must be copied across even when the incoming map declares no ordered
+	// components. Non-empty incoming values overwrite the base.
+	if in.Information != "" {
+		base.Information = in.Information
+	}
+	if in.RenderInformation {
+		base.RenderInformation = in.RenderInformation
+	}
 	if len(in.Order) == 0 {
 		return
 	}
 	if base.Items == nil {
+
 		base.Items = map[string]*Component{}
 	}
 	for _, k := range in.Order {
