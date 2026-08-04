@@ -152,7 +152,7 @@ enactments:
       - key: source
         label: "Source"
         type: dropdown
-        options_source: traits.offense
+        options_source: traits_generic_offense
         information: "The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die."
       - key: flat
         label: "Flat Bonus"

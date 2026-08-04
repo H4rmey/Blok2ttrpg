@@ -43,21 +43,31 @@
         },
         "enactments": [
           {
-            "type": "condition",
+            "type": "damage",
             "fields": {
-              "comment": "Snared by grasping plants.",
-              "condition": "slowed",
-              "duration": "2",
-              "solution": [
+              "comment": "",
+              "damage_type": [],
+              "flat": 0,
+              "source": ""
+            },
+            "interaction": "ranged",
+            "interaction_data": {
+              "comment": "",
+              "range": "5",
+              "targets": 1
+            },
+            "validation_data": {
+              "comment": "",
+              "counter_trait": [
                 {
                   "value": "defense.Reflex"
                 },
                 {
                   "value": "defense.Constitution"
                 }
-              ]
-            },
-            "interaction": "ranged"
+              ],
+              "engage": "d6"
+            }
           }
         ]
       },

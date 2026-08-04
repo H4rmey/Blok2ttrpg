@@ -345,12 +345,20 @@ option_groups:
       - source: roll_medicine
         label: "Medicine"
 
+  traits_generic_offense:
+    groups:
+      - source: roll_generic
+        label: "Generic"
+      - source: traits.offense
+        label: "Defense"
+
   traits_general_defense:
     groups:
       - source: traits.general
         label: "General"
       - source: traits.defense
         label: "Defense"
+
   traits_all:
     groups:
       - source: traits.general
