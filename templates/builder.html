@@ -36,7 +36,6 @@
   <fieldset>
     <legend>Ability Type
       {{ if and .Cfg.AbilityTypes.Information (not .Cfg.AbilityTypes.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Cfg.AbilityTypes.Information }}">i</span>{{ end }}
-      {{ range abilityTypes .Cfg }}{{ if eq .ID $ab.Type }}{{ if and .Information (not .RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Information }}">i</span>{{ end }}{{ end }}{{ end }}
     </legend>
     {{ if and .Cfg.AbilityTypes.Information .Cfg.AbilityTypes.RenderInformation }}<small class="component-info">{{ .Cfg.AbilityTypes.Information }}</small>{{ end }}
 
