@@ -9,20 +9,10 @@ Attributes define a character, situation, or environment by providing specific, 
 
 ## Character Attributes
 
-A character’s attributes describe their traits, background, and abilities. Not all attributes need to be filled in, but they should be unique and avoid duplication. Below are common attribute categories for characters:
+A character’s attributes describe their traits, background, and abilities. Not all attributes need to be filled in, but they should be unique and avoid duplication. Below are the attribute sections a character sheet is organised into:
 
-*   **Name**
-*   **Age**
-*   **Size**
-*   **Alignment**
-*   **Backstory**
-*   **Personality**
-*   **Traits**
-*   **Appearance**
-*   **Hobbies**
-*   **Occupation**
-*   **Inventory**
-*   **Quirks**
+{{ attributeSections }}
+
 
 ---
 

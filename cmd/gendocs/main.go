@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	loaded, err := config.Load("config/ability-builder")
+	loaded, err := config.Load("config/Blok2Simplified")
 	if err != nil {
 		log.Fatalf("loading config: %v", err)
 	}

@@ -1,3 +1,7 @@
-## Enact Amplification
+## Enact Nerf
 
-Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has a Amplification Die which determines the amplification of the effect.
+Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy.
+
+Enact Nerf can only target yourself.
+
+{{buildGuide (enactment "nerf")}}

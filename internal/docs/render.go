@@ -54,6 +54,43 @@ func funcMap(cfg *config.Config) template.FuncMap {
 			}
 			return ""
 		},
+		// buildGuide renders a self-contained, numbered "How to build it"
+		// walkthrough for a component: every field with its range/default and
+		// every concrete choice listed, so a reader can build the ability by
+		// hand without the application.
+		"buildGuide": func(comp *config.Component) string {
+			return buildGuide(cfg, comp)
+		},
+		// validationsGuide renders the same numbered "How to build it"
+		// walkthrough for the validation fields, which live outside a
+		// component. It returns "" when nothing is configured so the doc's
+		// prose stands on its own.
+		"validationsGuide": func() string {
+			return buildGuideFields(cfg, cfg.Validations.Fields)
+		},
+		// conditionsTable renders the full list of conditions defined in the
+		// config as reader-facing markdown tables: shiftable conditions (those
+		// that move traits up or down within a shift range) are listed with
+		// their range, and fixed conditions are listed with their effect. This
+		// keeps the rulebook's condition list in sync with the config.
+		"conditionsTable": func() string {
+			return conditionsTable(cfg)
+		},
+		// traitsTable renders the trait roster from the config: one table per
+		// dice-backed trait group (general, offense, defense) showing the die
+		// each proficiency tier grants, plus a vital table showing the numeric
+		// values each tier grants for HP, Movement and Energy. This keeps the
+		// trait list and its tier progression in sync with the config.
+		"traitsTable": func() string {
+			return traitsTable(cfg)
+		},
+		// attributeSections renders the character attribute sheet sections from
+		// the config: one bulleted list per section (Identity, Description,
+		// etc.) with each field's label.
+		"attributeSections": func() string {
+			return attributeSections(cfg)
+		},
+
 		// perksTable renders a markdown table of every cost-bearing choice on a
 		// component: checkboxes, dropdown options, and per-step number fields.
 		"perksTable": func(comp *config.Component) string {
@@ -99,6 +136,10 @@ func funcMap(cfg *config.Config) template.FuncMap {
 		},
 	}
 }
+
+// FuncMapForTest exposes the template helpers for out-of-package verification
+// tools. It is a thin wrapper over the unexported funcMap.
+func FuncMapForTest(cfg *config.Config) template.FuncMap { return funcMap(cfg) }
 
 // findField returns a field by key from a slice.
 func findField(fields []config.Field, key string) (config.Field, bool) {
@@ -302,6 +343,10 @@ func groupPhrase(group string) string {
 // phrasing. It is deliberately simple; irregular plurals are rare here.
 func singular(label string) string {
 	l := strings.TrimSpace(label)
+	// Strip an explicit "(s)" plural marker, e.g. "Affected Trait(s)".
+	if strings.HasSuffix(l, "(s)") {
+		return strings.TrimSpace(l[:len(l)-3])
+	}
 	if strings.HasSuffix(l, "ies") {
 		return l[:len(l)-3] + "y"
 	}

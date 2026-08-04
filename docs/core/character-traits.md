@@ -21,39 +21,9 @@ By the time you level up, you gain additional Trait Points. You can also gain Tr
 
 ---
 
-## General Traits
+## Trait List
 
-| Cost | 1 | 1 | 1 | 1 | 1 | n/p |
-| --- | --- | --- | --- | --- | --- | --- |
-| **Traits** | **Clumsy** | **Untrained** | **Trained** | **Expert** | **Master** | **Legendary** |
-| Strength | d4 | d6 | d8 | d10 | d12 | d20 |
-| Dexterity | d4 | d6 | d8 | d10 | d12 | d20 |
-| Stealth | d4 | d6 | d8 | d10 | d12 | d20 |
-| Perception | d4 | d6 | d8 | d10 | d12 | d20 |
-| Nature | d4 | d6 | d8 | d10 | d12 | d20 |
-| Crafting | d4 | d6 | d8 | d10 | d12 | d20 |
-| People Skill | d4 | d6 | d8 | d10 | d12 | d20 |
-| Performance | d4 | d6 | d8 | d10 | d12 | d20 |
-| Thievery | d4 | d6 | d8 | d10 | d12 | d20 |
-| Knowledge | d4 | d6 | d8 | d10 | d12 | d20 |
-| Magic | d4 | d6 | d8 | d10 | d12 | d20 |
+Each Trait is rated by a Proficiency tier. Dice-backed Traits roll the die shown for their tier; Vital Traits use the numeric value shown instead. The *Cost* row is the Trait Point cost to raise a Trait into that tier.
 
-## Combative Traits
+{{ traitsTable }}
 
-| Cost | 1 | 1 | 1 | 1 | 1 | n/p |
-| --- | --- | --- | --- | --- | --- | --- |
-| **Traits** | **Clumsy** | **Untrained** | **Trained** | **Expert** | **Master** | **Legendary** |
-| **Offense** |  |  |  |  |  |  |
-| Precision | d4 | d6 | d8 | d10 | d12 | d20 |
-| Power | d4 | d6 | d8 | d10 | d12 | d20 |
-| Mind | d4 | d6 | d8 | d10 | d12 | d20 |
-| Magic | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Defense** |  |  |  |  |  |  |
-| Reflex | d4 | d6 | d8 | d10 | d12 | d20 |
-| Constitution | d4 | d6 | d8 | d10 | d12 | d20 |
-| Mind | d4 | d6 | d8 | d10 | d12 | d20 |
-| Magic | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Vital** |  |  |  |  |  |  |
-| HP | 8 | 12 | 16 | 20 | 24 | 28 |
-| Movement | 3 | 4 | 5 | 6 | 7 | 8 |
-| Energy | 3 | 4 | 5 | 6 | 7 | 8 |

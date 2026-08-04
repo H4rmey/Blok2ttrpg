@@ -1,12 +1,16 @@
-- [x] general combat page
- - [x] states verder uitwerken
- - [x] state enactment verder uitwerken
- - [ ] minion implementation
- - [x] misschien geen skill trees, want states zijn best lit
- - [ ] premade abilities --> teleport, message etc...
- - [ ] premade items
- - [ ] create simple guide on how to make abilities
- - [x] Concentration rules
+- [ ] healing traits.general.medicine doesn't work
+- [ ] cost for adding solution
+- [ ] rename solution to multiselect 
+- [ ] multiselect add small or/and to lef of items
+- [ ] multiselect allow for non dropdowns
+- [ ] add special case for nerf where you do not need validation or interaction because it is always applied to yourself
+- [ ] allow for enactments to specify what validations and what interactions are allowed/blocked. when you allow something it will only show what is on the allowed list. when you block something it will only show everything except what is on the block list
+```yaml
+allowed_validations:
+blocked_validations:
+allowed_interactions:
+blocked_interactions:
+```
 
 # blok2ttrpg
 ## Blok2ttrpg
@@ -70,20 +74,21 @@ Attributes define a character, situation, or environment by providing specific, 
 
 ## Character Attributes
 
-A character’s attributes describe their traits, background, and abilities. Not all attributes need to be filled in, but they should be unique and avoid duplication. Below are common attribute categories for characters:
+A character’s attributes describe their traits, background, and abilities. Not all attributes need to be filled in, but they should be unique and avoid duplication. Below are the attribute sections a character sheet is organised into:
 
-*   **Name**
-*   **Age**
-*   **Size**
-*   **Alignment**
-*   **Backstory**
-*   **Personality**
-*   **Traits**
-*   **Appearance**
-*   **Hobbies**
-*   **Occupation**
-*   **Inventory**
-*   **Quirks**
+**Identity**
+
+*   Name
+*   Player
+*   Ancestry
+*   Archetype
+
+**Description**
+
+*   Appearance
+*   Backstory
+*   Notes
+
 
 ---
 
@@ -223,42 +228,57 @@ By the time you level up, you gain additional Trait Points. You can also gain Tr
 
 ---
 
-## General Traits
+## Trait List
 
-| Cost | 1 | 1 | 1 | 1 | 1 | n/p |
+Each Trait is rated by a Proficiency tier. Dice-backed Traits roll the die shown for their tier; Vital Traits use the numeric value shown instead. The *Cost* row is the Trait Point cost to raise a Trait into that tier.
+
+### General Traits
+
+| Trait | Untrained | Novice | Proficient | Expert | Master | Legendary |
 | --- | --- | --- | --- | --- | --- | --- |
-| **Traits** | **Clumsy** | **Untrained** | **Trained** | **Expert** | **Master** | **Legendary** |
-| Strength | d4 | d6 | d8 | d10 | d12 | d20 |
-| Dexterity | d4 | d6 | d8 | d10 | d12 | d20 |
-| Stealth | d4 | d6 | d8 | d10 | d12 | d20 |
-| Perception | d4 | d6 | d8 | d10 | d12 | d20 |
-| Nature | d4 | d6 | d8 | d10 | d12 | d20 |
-| Crafting | d4 | d6 | d8 | d10 | d12 | d20 |
-| People Skill | d4 | d6 | d8 | d10 | d12 | d20 |
-| Performance | d4 | d6 | d8 | d10 | d12 | d20 |
-| Thievery | d4 | d6 | d8 | d10 | d12 | d20 |
-| Knowledge | d4 | d6 | d8 | d10 | d12 | d20 |
-| Magic | d4 | d6 | d8 | d10 | d12 | d20 |
+| *Cost* | 1 | 1 | 1 | 1 | 1 | 0 |
+| **Strength** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Dexterity** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Stealth** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Perception** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Nature** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Crafting** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **People Skill** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Performance** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Thievery** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Knowledge** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Magic** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Medicine** | d4 | d6 | d8 | d10 | d12 | d20 |
 
-## Combative Traits
+### Offense Traits
 
-| Cost | 1 | 1 | 1 | 1 | 1 | n/p |
+| Trait | Untrained | Novice | Proficient | Expert | Master | Legendary |
 | --- | --- | --- | --- | --- | --- | --- |
-| **Traits** | **Clumsy** | **Untrained** | **Trained** | **Expert** | **Master** | **Legendary** |
-| **Offense** |  |  |  |  |  |  |
-| Precision | d4 | d6 | d8 | d10 | d12 | d20 |
-| Power | d4 | d6 | d8 | d10 | d12 | d20 |
-| Mind | d4 | d6 | d8 | d10 | d12 | d20 |
-| Magic | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Defense** |  |  |  |  |  |  |
-| Reflex | d4 | d6 | d8 | d10 | d12 | d20 |
-| Constitution | d4 | d6 | d8 | d10 | d12 | d20 |
-| Mind | d4 | d6 | d8 | d10 | d12 | d20 |
-| Magic | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Vital** |  |  |  |  |  |  |
-| HP | 8 | 12 | 16 | 20 | 24 | 28 |
-| Movement | 3 | 4 | 5 | 6 | 7 | 8 |
-| Energy | 3 | 4 | 5 | 6 | 7 | 8 |
+| *Cost* | 1 | 1 | 1 | 1 | 1 | 0 |
+| **Precision** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Power** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Mind** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Magic** | d4 | d6 | d8 | d10 | d12 | d20 |
+
+### Defense Traits
+
+| Trait | Untrained | Novice | Proficient | Expert | Master | Legendary |
+| --- | --- | --- | --- | --- | --- | --- |
+| *Cost* | 1 | 1 | 1 | 1 | 1 | 0 |
+| **Reflex** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Constitution** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Mind** | d4 | d6 | d8 | d10 | d12 | d20 |
+| **Magic** | d4 | d6 | d8 | d10 | d12 | d20 |
+
+### Vital Traits
+
+These traits use numeric values rather than dice.
+
+| Trait | Untrained | Novice | Proficient | Expert | Master | Legendary |
+| --- | --- | --- | --- | --- | --- | --- |
+| **HP** | 8 | 12 | 16 | 20 | 24 | 28 |
+| **Movement** | 3 | 4 | 5 | 6 | 7 | 8 |
+| **Energy** | 5 | 8 | 12 | 16 | 20 | 25 |
 
 # dice-rolling
 ## Dice Rolling
@@ -378,61 +398,63 @@ Oppenents are not willing to get hit by your attacks/abilities. That is why when
 
 When Attacking/Healing/Prepping/Anythinging you always first roll the Engagement Roll to see if you hit, then you resolve the action/enactment/thing.
 
-# States.md
+# Conditions
 
-## States
+## Conditions
 
-**States** can either boost or limit your character. They can either be a collection of nerf/buffs to your **Traits**, have some special properties or be a combination of both. 
+**Conditions** can either boost or limit your character. They can either be a collection of nerfs/buffs to your **Traits**, have some special properties, or be a combination of both.
 
-We seperate them into two groups: **General States** and **Specific States**.
+We separate them into two groups: **Shifting Conditions** and **Fixed Conditions**.
 
-**General States**: States that are flexible in their use. They only **Shift** a collection of Traits up or down by x amount. For example, Blinded, Encumbered, Encouraged or Frightened.
+**Shifting Conditions**: Conditions that are flexible in their use. They only **Shift** a collection of Traits up or down by x amount. For example, Blinded, Encumbered, Encouraged or Frightened.
 
-**Specific States**: States that impact something other then the Traits, like action economie or character behaviour. For example: When you are stunned you lose one of your actions. When you are Taunted, you may only attack one preset Target.
+**Fixed Conditions**: Conditions that impact something other than the Traits, like action economy or character behaviour. For example: When you are Stunned you lose one of your actions. When you are Taunted, you may only attack one preset Target.
 
-When a **State** has impact on your **Traits** they always have a value ranging from -6 to +6 representing **Die Shifts** in your **Traits**. So each States shifts x amount of traits in your character a y amount. This can either be temporary or permanent, depending on how the **State** was applied and what was discussed with the DM. 
+When a **Condition** has impact on your **Traits** it always has a value representing **Die Shifts** in your **Traits**. So each Condition shifts x amount of traits in your character a y amount. This can either be temporary or permanent, depending on how the **Condition** was applied and what was discussed with the DM.
 
-> **Example:** Your character gets **Blinded** by a flash of light because you failed a **Counter Roll**. The DM tells you that you are now **Blinded -2**. You now have **-2 Die Shift** on **Offensive Presicion Rolls** and **Defensive Reflex Rolls**. The DM now rules that you will be blinded for 2 rounds.
+> **Example:** Your character gets **Blinded** by a flash of light because you failed a **Counter Roll**. The DM tells you that you are now **Blinded -2**. You now have **-2 Die Shift** on **Offensive Precision Rolls** and **Defensive Reflex Rolls**. The DM now rules that you will be blinded for 2 rounds.
 
 > [!NOTE]
-> As the number and type of **Traits** can differ between games, the DM or group may need to tweak what a state applies to. For example, in some games you may not have a **Crafting Trait**. Because it is highly encouraged to create your own list of **Traits**, We cannot make a clear definition of what does what. Adding to that, i also won't list what **States** do exactly what, because that highly depends on the scenario. The Amount of States you have in a game might also differ quite a lot from game to game. If your game, does not have a "Magic" component, then the whole list of **States** will have to be re-created for that. There is also the issue that **States** are not always aplicable to all scenario's. 
+> As the number and type of **Traits** can differ between games, the DM or group may need to tweak what a Condition applies to. For example, in some games you may not have a **Crafting Trait**. Because it is highly encouraged to create your own list of **Traits**, we cannot make a clear definition of what does what. There is also the issue that **Conditions** are not always applicable to all scenarios.
 
-> **Example:** You are Frightened can be either you are scared in the dark or you have are afraid of public speaking. 
+> **Example:** Being **Frightened** can be either you are scared in the dark, or you are afraid of public speaking.
 
-> **Example:** Being Encumbered might is a state that applies to all movement type traits but also strength. As you carry to much you also do not have any strength left to lift anything else, it will therefor also impact your Offensive power stat. At least that is how i would maybe rule it, but another DM/group, might not agree. It is also highly depended on how you are Encumbered. So the removal method might change depended on the situation.
+> **Example:** Being **Encumbered** might be a Condition that applies to all movement type traits but also strength. As you carry too much you also do not have any strength left to lift anything else, so it will also impact your Offensive Power stat. At least that is how I would maybe rule it, but another DM/group might not agree. It is also highly dependent on how you are Encumbered, so the removal method might change depending on the situation.
 
-## Specific States
+## Condition List
 
-Below is a list of the specific **States** and what they do. Note that i will not list what **Traits** they target, that is up to the DM to decide and is depended on the situation.
+The following Conditions are available. For Shifting Conditions the affected Traits are up to the DM to decide and depend on the situation.
 
-### Targeting & Perception Mechanics
+### Shifting Conditions
 
-| Status Condition | In-Game Effect (Player POV) |
-| :--- | :--- |
+These conditions raise or lower a collection of traits. The value is a number of die shifts within the range shown; which traits are affected is decided at the table.
+
+| Condition | Shift Range | Effect |
+| --- | --- | --- |
+| **Blinded** | -6 to 0 | Reduces certain trait rolls |
+| **Encumbered** | -6 to 0 | Reduces movement and relevant traits |
+| **Encouraged** | +1 to +6 | Positive trait shifts |
+| **Frightened** | -6 to 0 | Negative trait shifts |
+
+### Fixed Conditions
+
+These conditions apply a set effect rather than a trait shift.
+
+| Condition | Effect |
+| --- | --- |
 | **Taunted** | You can only target a preset Target. |
 | **Swayed** | You cannot target a preset Target anymore. |
-| **Untouchable** | You cannot be targeted |
+| **Untouchable** | You cannot be targeted. |
 | **Ignored** | You cannot be targeted, but you can still get hit. |
 | **Confused** | You indiscriminately target anyone. |
 | **Vengeful** | You can only target the last entity that dealt damage to you. |
-| **Distracted** | If you change your current target to a new one, your rolls will shift one down for that new  target |
+| **Distracted** | If you change your current target to a new one, your rolls will shift one down for that new target. |
 | **Isolated** | You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent. |
-| **Magnetized** | All projectiles go towards you. |
-
-### Mind Control & Behavioral Constraints
-
-| Status Condition | In-Game Effect (Player POV) |
-| :--- | :--- |
 | **Charmed** | You must do what the Charmer says. |
 | **Hypnotized** | You mimic the exact movement and action of the person who hypnotized you on their last turn. |
 | **Stubborn** | You cannot repeat the same action or use the same ability two turns in a row. |
 | **Paranoid** | You refuse help from anyone. |
-| **Insane** | At the start of your turn, roll a die (d4) to determine if you attack an ally, attack an opponent, skip your turn, or hit yourself. |
-
-### Action & Ability Inhibitors
-
-| Status Condition | In-Game Effect (Player POV) |
-| :--- | :--- |
+| **Insane** | At the start of your turn, roll a die (d4) to determine random behavior. |
 | **Stunned** | You are stunned; you lose one of your actions. |
 | **Paralyzed** | Lose your turn. |
 | **Pacified** | You can no longer attack any Target. |
@@ -442,21 +464,11 @@ Below is a list of the specific **States** and what they do. Note that i will no
 | **Deafened** | You can no longer listen. |
 | **Stifled** | Your hands are bound; you cannot use items, potions, or consumables from your inventory. |
 | **Staggered** | You can no longer use Reactions or your Preparation is cancelled. |
-
-### Movement & Positioning
-
-| Status Condition | In-Game Effect (Player POV) |
-| :--- | :--- |
 | **Prone** | You are knocked on the ground; use one of your actions to get up. |
 | **Anchored** | You can no longer move. |
 | **Restrained** | You can no longer use your hands. |
 | **Slowed** | Movement speed shifted one down. |
 | **Terrified** | You move 1m away from the target (or take 1d4 damage). |
-
-### Dice & Stats Modifications
-
-| Status Condition | In-Game Effect (Player POV) |
-| :--- | :--- |
 | **Weakened** | Damaging rolls are shifted one die down. |
 | **Fragile** | Engager that targets you, may shift their damage die by +1. |
 | **Cursed** | Die shifts up are converted to die shifts down. |
@@ -464,26 +476,11 @@ Below is a list of the specific **States** and what they do. Note that i will no
 | **Hesitant** | Your Engagement Roll must be rolled twice. |
 | **Broken Gear** | Rolls for this gear are reduced by one die shift. |
 | **Amplified Gear** | Rolls for this gear are upgraded by one die shift. |
-
-### Energy & Resource Manipulation
-
-| Status Condition | In-Game Effect (Player POV) |
-| :--- | :--- |
 | **Fatigued** | Energy cost of abilities is increased by 1. |
 | **Energized** | Energy cost of abilities is reduced by 1. |
-
-### Time & Round Economy
-
-| Status Condition | In-Game Effect (Player POV) |
-| :--- | :--- |
 | **Delayed** | You move down one in the turn order. |
 | **Hastened** | You move up one in the turn order. |
 | **Echoed** | Whatever action you took last round will be executed automatically next round. |
-
-### Health, Death & Reality Alterations
-
-| Status Condition | In-Game Effect (Player POV) |
-| :--- | :--- |
 | **Dying** | Your HP went below 0; you are out of combat until revived by an ally. |
 | **Doomed** | You will move to Dying in x turns. |
 | **Invincible** | You cannot be damaged. |
@@ -573,12 +570,60 @@ You can also dynamically gain Trait Points by lowering your Proficiency. For ins
 
 | Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Clumsy | 1 | <no value> | <no value> | <no value> | 8 | 3 | 5 |
-| Untrained | 1 | <no value> | <no value> | <no value> | 12 | 4 | 8 |
-| Trained | 1 | <no value> | <no value> | <no value> | 16 | 5 | 12 |
+| Untrained | 1 | <no value> | <no value> | <no value> | 8 | 3 | 5 |
+| Novice | 1 | <no value> | <no value> | <no value> | 12 | 4 | 8 |
+| Proficient | 1 | <no value> | <no value> | <no value> | 16 | 5 | 12 |
 | Expert | 1 | <no value> | <no value> | <no value> | 20 | 6 | 16 |
 | Master | 1 | <no value> | <no value> | <no value> | 24 | 7 | 20 |
 | Legendary | 0 | <no value> | <no value> | <no value> | 28 | 8 | 25 |
+
+# cheat-sheet
+## Cheat Sheet
+
+## Ability Types
+
+The when part of the ability
+
+passive 		--> when the trigger condition is met, at any time 
+reaction 		--> when the trigger condition is met, only once per turn, during combat 
+preparation 	--> when the trigger condition is met, only once per preperation
+execution 		--> right now
+concentration 	--> after activation & at the start of your turn
+
+## Enactments
+
+The what part of the ability
+
+damage 		    --> lose hp
+heal 		    --> gain hp 
+movement 	    --> move away/towards
+reduction 	    --> reduce the effect of an enactment 
+amplification 	--> reduce the effect of an enactment 
+
+condition	    --> apply a condition to someone
+negation 	    --> negate a condition completely
+
+effect 	        --> lose/gain hp over time or move over time
+shift           --> shift proficiencies now
+phase 		    --> shift proficiencies now, reverse the proficiency later
+
+stack           --> stack points now, use them later for other abilities
+
+minion 	        --> create a minion to fight for you
+
+## Interactions
+
+The who part of the ability
+
+Self    --> Target yourself (no validation needed)
+Direct  --> right next to you
+Ranged  --> within range
+Area    --> Around a specific area triggers once
+AoE     --> Around a specific area hangs around for a while
+
+## Validation
+
+Will it hit or miss? I guess they never miss huh?
 
 # introduction
 ## Ability Builder
@@ -598,20 +643,20 @@ Definitions: 
 
 In turn each of these Components (Enactment, Validation, Interaction) has Rules and Perks:
 
-*   **Rules**  — define how the Component works by default.
+*   **Rules** — define how the Component works by default.
 *   **Perks** — modify the Rules to upgrade the Component.
 
 Every **Ability** must contain **at least one Enactment**. Additional Enactments may be added to create more complex effects, which are resolved **in sequence**. Each Enactment is evaluated independently unless explicitly overridden by a Perk.
 
 The Ability Builder is intentionally **system-agnostic** with regard to flavor. A fireball, a sword technique, a healing prayer, or a mechanical trap are all created using the same underlying rules. The narrative description of an Ability is left to the player and GM, while the mechanical behavior remains the same. So a shot from an arrow might be the same as a light beam in terms of Ability Components.
 
-## Costs
+## Costs (WIP)
 
 Applying perks has a cost. The first cost is the **Ability Cost** to add the Perk. Each level you gain **Ability Points** that can be spent to create abilities.
 
 Then there is the **Energy Cost**. This cost is used to use your ability. Sometimes you do not have enough energy to use your ability. In this system it is allowed to still use your ability, but there is a catch: either you take damage equal to the amount of energy you are missing, or you only partially use your ability. The latter is done by not executing all enactments of the ability. The fireball you cast will still burn someone, but will not explode on impact anymore because you don't have the energy for that.
 
-## Execution
+## Executing Abilities
 
 So an **Ability** is made up from Enactments. Each of these Enactments describe what they do. The order in which you execute the Enactment is a bit odd compared to other systems. The order goes as follows:
 
@@ -626,7 +671,7 @@ Let's say you want to hit someone with a an **Damage Enactment**. You first chec
 
 | Build Cost | Energy Cost | Description |
 | --- | --- | --- |
-| 1 | 1 | Adding an additional Enactment beyond the first |
+| 0 | 0 | Adding an additional Enactment beyond the first |
 
 # Ability Builder Configuration
 
@@ -1972,704 +2017,376 @@ All in a single ability.
 
 ---
 
-# execution
 ## Execution
 
-Execution is the most basic form for an Ability. It is simply the: "I want to do this now" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
+Execution is the most basic form for an Ability. It is simply the "I want to do this now" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
 
-## Rules
+**How to build it**
 
-*   **Enactments**: Has at least one Enactment (the first Enactment is free)
-*   **Actions**: Costs 2 Actions to use
-*   **Energy**: Costs 3 Energy to use
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Energy +/-** - Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some. Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
+3. **Action +/-** - Adjust the amount of Actions it will cost to use this ability. Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
 
-
-## Perks
-
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Enable: Has Item Dependency | -1 build (refund) |
-| Each +1 to Energy +/- | -2 build (refund), 1 energy |
-| Each -1 to Energy +/- | 3 build, -1 energy |
-| Each +1 to Action +/- | -2 build (refund) |
-| Each -1 to Action +/- | 4 build, 1 energy |
-
-
-## Template
-
-```yaml
-ability:
-  type: Execution
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
-  action_cost: 2
-
-  enactments:
-    - Type:
-  perks:
-```
-
-# minion
-## Minion
-
-Minions are entities that players can create, summon, and control. They have default stats and actions, and can use Enactments created by the user if the appropriate perk is selected. Minions follow specific rules within the action economy.
-
-## Rules
-
-*   Minions have their own turn in the action economy.
-*   Minions
-
-# phase
-## Phase
-
-Phases are a state or passive ability that lasts for a predefined amount of time. They exist to buff or nerf someone for a specific number of rounds. A Phase lasts for a few rounds, after which the Reverse Phase starts and lasts just as long as the original phase did.
-
-## Rules
-
-*   Costs 3 Energy to Use.
-*   After activation, Phase is active for 2 rounds.
-*   Phase ends at the start of the 2nd turn of the character.
-*   When Phase ends, the Reverse Phase starts.
-*   During the Reverse Phase, no new Phases can be started for the character.
-*   Phase will have an Enactment assigned to it.
-*   The Enactment can be triggered as a free action at the end of the character's turn.
-*   Reverse Phase will have a Bad Enactment assigned to it.
-*   Bad Enactment will be applied to the character.
-*   Bad Enactment must be used at the end of the character's turn as a free action.
-*   If no Bad Enactment is chosen, the Bad Enactment will be the reverse of the original Enactment.
-*   Phase has a knockout requirement.
-*   If any knockout requirement is met, the Phase ends (and the "Bad Enactment" starts).
-*   The Reverse Phase cannot be cancelled by the knockout.
-
-## Perks
-
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Enable: Has Item Dependency | -1 build (refund) |
-| Each +1 to Phase Duration | 2 build, 1 energy |
-| Each +1 to Reverse Rounds | 4 build |
-| Each -1 to Reverse Rounds | -4 build (refund) |
-| Each +1 to Action +/- | -2 build (refund) |
-| Each -1 to Action +/- | 4 build, 1 energy |
-| Enable: All knockout requirements have to be met | 3 build |
-| Enable: Knockout can be used on the reverse phase | 3 build |
-| Enable: No knockout possible | 5 build |
-| Knockout: None | 3 build |
-| Knockout: Engager takes damage | -1 build (refund) |
-| Knockout: Engager falls unconscious | Free |
-| Knockout: Engager dies | 1 build |
-| Knockout: Engager gets grabbed or restrained | -1 build (refund) |
-| Knockout: Engager moves voluntarily | -2 build (refund) |
-| Knockout: Engager is moved by another effect | -1 build (refund) |
-| Knockout: Engager fails a validation | -1 build (refund) |
-| Knockout: Engager uses another phase | Free |
-| Knockout: Engager loses line of sight to target | -1 build (refund) |
-| Knockout: Target moves out of range | -1 build (refund) |
-| Knockout: Target falls unconscious | Free |
-| Knockout: Target dies | Free |
-| Knockout: Target succeeds on a counter roll | -1 build (refund) |
-| Knockout: Phase duration expires | -2 build (refund) |
-| Knockout: Engager runs out of energy | -1 build (refund) |
-
-
-## Template
-
-```yaml
-ability:
-  type: Phase
-  phase_duration: 2 rounds
-  reverse_phase_duration: 2 rounds
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
-  enactments:
-    - Type:
-  Perks:
-```
-
-# preparation
 ## Preparation
 
-Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation will cost an action to prepare, but in turn cost far less to use.
+Just like a Reaction, a Preparation works outside the regular turn order. It follows the exact same rules as a Reaction, but instead of passively sitting in the background, a Preparation costs an action to prepare, and in turn costs far less Energy to use.
 
-## Rules
+**How to build it**
 
-*   Can only be used once per round.
-*   Costs 2 actions.
-*   Costs 3 Energy to Use.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
+3. **Action +/-** - Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
+4. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
 
-*   Always has at least one Trigger. Each trigger has its own build cost (see the Perks table below); more powerful triggers cost more.
+   For each trigger, choose one of:
+   - You, An Ally, An Opponent, Someone Else
 
-*   Has at least one Enactment (the first Enactment is free)
-*   Only triggers when the triggering effect happens within 1m of you.
+   For each trigger, choose one of:
+   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
 
-*   Target of Enactments is overwritten to the character that triggers the Reaction.
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
 
-## Perks
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+   For each trigger, choose one of:
+   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
 
-| Perk | Cost |
-| --- | --- |
-| Enable: Has Item Dependency | -1 build (refund) |
-| Each additional Trigger | 2 build |
-| Each +1 to Range | 1 build |
-| Each +1 to Uses | 4 build, 1 energy |
-| Each +1 to Action +/- | -2 build (refund) |
-| Each -1 to Action +/- | 1 build, 4 energy |
-| Each +1 to Energy +/- | -2 build (refund), 1 energy |
-| Each -1 to Energy +/- | 3 build, -1 energy |
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
-Triggers work exactly like a Reaction's: each is a Subject paired with an Event,
-the first Trigger is included, and additional Triggers cost extra. See the
-Trigger Events table under Reaction for the per-Event costs.
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
-## Template
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
 
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
 
-```yaml
-ability:
-  type: Preparation
-  range: 1
-  uses: 1
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
-  action_cost: 2
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-  trigger: <trigger name here>
-  enactments:
-    - Type:
-  Perks:
-```
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-# reaction
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+
+   For each trigger, choose one of:
+   - 
+
+   For each trigger, choose one of:
+   - 
+5. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
+6. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
+
 ## Reaction
 
 Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed. For example, you could have a reaction that triggers whenever someone runs towards you, Enacting a healing effect on yourself.
 
-## Rules
+**How to build it**
 
-*   Can only be used once per round.
-*   Does not cost an action.
-*   Costs 3 Energy to Use.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
+3. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
 
-*   Always has at least one Trigger. Each trigger has its own build cost (see the Perks table below); more powerful triggers cost more.
+   For each trigger, choose one of:
+   - You, An Ally, An Opponent, Someone Else
 
-*   Has at least one Enactment (the first Enactment is free)
-*   Only triggers when the triggering effect happens within 1m of you.
+   For each trigger, choose one of:
+   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
 
-*   Target of Enactments is overwritten to the character that triggers the Reaction.
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
 
-## Perks
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+   For each trigger, choose one of:
+   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
 
-| Perk | Cost |
-| --- | --- |
-| Enable: Has Item Dependency | -1 build (refund) |
-| Each additional Trigger | 2 build |
-| Each +1 to Range | 1 build |
-| Each +1 to Uses | 4 build, 1 energy |
-| Each +1 to Energy +/- | -2 build (refund), 1 energy |
-| Each -1 to Energy +/- | 3 build, -1 energy |
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
-## Trigger Events
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
-Every Trigger is a Subject (You, An Ally, An Opponent, Someone Else) paired with
-one of the Events below. The first Trigger is included; each additional Trigger
-costs extra (see the Perks table above). The build cost of a Trigger depends on
-the Event chosen:
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
 
-| Choice | Cost |
-| --- | --- |
-| moves away from you | 2 build |
-| moves towards you | 2 build |
-| moves past you | 2 build |
-| enters interaction range | 3 build |
-| leaves interaction range | 2 build |
-| ends their turn within range | 2 build |
-| is moved by an effect | 2 build |
-| gets hit by damage of a type | 3 build |
-| deals damage of a type | 3 build |
-| gets healed by an ability of a type | 2 build |
-| gets hit by a weapon of a type | 2 build |
-| starts casting an ability of a type | 4 build, 1 energy |
-| gets targeted by an ability of a type | 4 build, 1 energy |
-| gets hit with an enactment of a type | 3 build |
-| resolves an enactment of a type | 3 build |
-| makes a trait check of a type | 2 build |
-| fails a validation of a type | 2 build |
-| succeeds on a validation of a type | 2 build |
-| becomes affected by a state of a type | 3 build |
-| recovers from a state of a type | 2 build |
-| falls unconscious | 1 build |
-| dies | 1 build |
-| moves | 2 build |
-| takes any damage | 4 build |
-| deals any damage | 4 build |
-| gets healed | 3 build |
-| casts any ability | 5 build, 1 energy |
-| gets targeted by any ability | 5 build, 1 energy |
-| is hit by any enactment | 4 build |
-| makes any trait check | 3 build |
-| fails any validation | 3 build |
-| succeeds on any validation | 3 build |
-| becomes affected by any state | 4 build |
-| recovers from any state | 3 build |
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
 
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-## Template
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-```yaml
-ability:
-  type: Reaction
-  range: 1
-  uses: 1
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
+   For each trigger, choose one of:
+   - 
 
-  trigger: <trigger name here>
-  enactments:
-    - Type:
-  Perks:
-```
+   For each trigger, choose one of:
+   - 
+4. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
+5. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
 
-# concentration
 ## Concentration
 
-Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It acts like a continuous Execution. You can use it to maintain a beam of fire, hold an enemy in a telekinetic grip, or keep a protective shield active.
+Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep.
 
-## Rules
+**How to build it**
 
-*   **Single Focus**: You can only have one Concentration Ability active at a time. If you cast another Ability with the Concentration type, the first one immediately ends.
-*   **Initial Cost**: Costs 2 Actions and 3 Energy to initiate. Both the Action and Energy cost can be adjusted with the Action +/- and Energy +/- perks (the Action cost is always at least 1).
-*   **Re-trigger Timing**: When building the Ability you choose whether its Enactments re-trigger at the **Start of your Turn** or the **End of your Turn**. This fires every round while Concentration is maintained.
-*   **Upkeep Cost**: Each round you must pay the chosen upkeep cost (1 Action or 1 Energy by default) to maintain the Concentration. If you cannot (or choose not to) pay this upkeep, the Ability ends immediately.
-*   **Voluntary End**: You can drop Concentration at any time as a free action.
-*   **Breaking Focus**: If you take damage or are hit by an Enact State that restricts your mind or movement (like Stunned or Paralyzed), you must make a Validation check to keep focus.
-    *   Make a Counter Roll (using your Mind or Constitution Trait).
-    *   Compare it to the attacker's original Engagement Roll.
-    *   If your roll is equal to or higher, you maintain Concentration. If lower, the Ability ends.
-*   **Persistent Enactments**: Any Enactments attached to this Ability re-trigger automatically on your Target(s) every round at the chosen timing (start or end of your turn), right after you pay the upkeep cost.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
+3. **Action +/-** - Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
+4. **Upkeep Cost** - Choose one of:
+   - 1 Action or 1 Energy, 1 Action, 1 Energy
+5. **Effortless (upkeep is free)** - Enable Effortless (upkeep is free). Cost: Free.
 
-
-## Perks
-
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Enable: Has Item Dependency | -1 build (refund) |
-| Each +1 to Energy +/- | -2 build (refund), 1 energy |
-| Each -1 to Energy +/- | 3 build, -1 energy |
-| Each +1 to Action +/- | -2 build (refund) |
-| Each -1 to Action +/- | 4 build, 1 energy |
-| Enable: Effortless (upkeep is free) | 3 build |
-| Enable: Iron Will (shift counter roll up on damage) | 2 build |
-| Enable: Dual Focus (allow a second Concentration) | 5 build |
-
-
-## Template
-
-```yaml
-ability:
-  type: Concentration
-  has_item_dependency: No # If yes, enter which item
-  energy_cost: 3
-  action_cost: 2
-  upkeep_cost: 1 Action or 1 Energy
-  enactments:
-    - Type:
-  perks:
-```
-
-# passive
 ## Passive
 
-Passives are Abilities that are always on. They work just like a Reaction, they trigger when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself.
+Passives are Abilities that are always on. They work just like a Reaction, triggering when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself. Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build. This higher base build cost is the price you pay for never having to spend Energy or Actions on it.
 
-Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build. This higher base build cost is the price you pay for never having to spend Energy or Actions on it.
+**How to build it**
 
-## Rules
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
+3. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
 
-*   Does not cost an Action.
-*   Does not cost any Energy to use.
-*   Has a higher base build cost of 8 build points.
+   For each trigger, choose one of:
+   - You, An Ally, An Opponent, Someone Else
 
-*   Always has at least one Trigger. Each trigger has its own build cost (see the Perks table below); more powerful triggers cost more.
+   For each trigger, choose one of:
+   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
 
-*   Has at least one Enactment (the first Enactment is free)
-*   Only triggers when the triggering effect happens within 1m of you.
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
 
-*   Target of Enactments is overwritten to the character that triggers the Passive.
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
 
-## Perks
+   For each trigger, choose one of:
+   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
-| Perk | Cost |
-| --- | --- |
-| Enable: Has Item Dependency | -1 build (refund) |
-| Each additional Trigger | 2 build |
-| Each +1 to Range | 1 build |
-| Each +1 to Uses | 4 build, 1 energy |
-| Each +1 to Energy +/- | -2 build (refund), 1 energy |
-| Each -1 to Energy +/- | 3 build, -1 energy |
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
 
-Triggers work exactly like a Reaction's: each is a Subject paired with an Event,
-the first Trigger is included, and additional Triggers cost extra. See the
-Trigger Events table under Reaction for the per-Event costs.
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
 
-## Template
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
 
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-```yaml
-ability:
-  type: Passive
-  range: 1
-  uses: 1
-  has_item_dependency: No # If yes, enter which item
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-  trigger: <trigger name here>
-  enactments:
-    - Type:
-  perks:
-```
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-# damage
+   For each trigger, choose one of:
+   - 
+
+   For each trigger, choose one of:
+   - 
+4. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
+5. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
+
+## Enact Amplification
+
+Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has an Amplification Die which determines the amplification of the effect.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Amplification Mode** - Choose how the amplification is determined: a fixed die-size shift up/down the die ladder, or a die roll. Choose one of:
+   - Die Shift, Die Roll
+3. **Flat Bonus** - Any whole number from **0 to 8** (starts at 0). Cost: Free per +1.
+
+## Enact Condition
+
+Enact Condition applies a condition to a target (e.g., prone, stunned, charmed). A Condition always has a value. See the Conditions chapter for the full list of conditions and their effects.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Condition** - Choose one of:
+   - *Conditions:* Blinded, Encumbered, Encouraged, Frightened, Taunted, Swayed, Untouchable, Ignored, Confused, Vengeful, Distracted, Isolated, Charmed, Hypnotized, Stubborn, Paranoid, Insane, Stunned, Paralyzed, Pacified, Enraged, Disarmed, Silenced, Deafened, Stifled, Staggered, Prone, Anchored, Restrained, Slowed, Terrified, Weakened, Fragile, Cursed, Blessed, Hesitant, Broken Gear, Amplified Gear, Fatigued, Energized, Delayed, Hastened, Echoed, Dying, Doomed, Invincible, Zombified, Linked, Incorporeal, Marked
+3. **Duration (turns)** - Choose one of:
+   - 1 turn, 2 turns, 3 turns, 4 turns, 5 turns, 6 turns, Unlimited
+4. **Solutions** - You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
+
+   For each solution, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Defense:* Reflex, Constitution, Mind, Magic
+
 ## Enact Damage
 
-Enact Damage allows characters to inflict harm on their enemies.
+Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses.
 
-## Rules
+**How to build it**
 
-*   **Damage Dice**: Choose a source die when building this enactment.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Source** - The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die. Choose one of:
+   - Precision, Power, Mind, Magic
+3. **Flat Bonus** - Any whole number from **0 to 20** (starts at 0). Cost: Free per +1.
+4. **Damage Types** - You start with **one** damage type and may add or remove damage types. Cost: Free per damage type.
 
-## Perks
+   For each damage type, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+## Enact Effect
 
-| Perk | Cost |
-| --- | --- |
-| Enable: Will always resolve | 5 build, 3 energy |
-| Source: 1d4 | Free |
-| Source: 1d6 | 2 build, 1 energy |
-| Source: 1d8 | 4 build, 2 energy |
-| Source: 1d10 | 6 build, 3 energy |
-| Source: 1d12 | 8 build, 4 energy |
-| Source: Trait (1d10) | 3 build |
-| Source: Another roll result | 3 build, 1 energy |
-| Each +1 to Flat Bonus | 2 build |
-| Offensive Trait (extra die) | 4 build, 2 energy |
-| Each additional Damage Type | 2 build |
-| Damage Type: Physical | Free |
-| Damage Type: Slashing | Free |
-| Damage Type: Piercing | Free |
-| Damage Type: Bludgeoning | Free |
-| Damage Type: Fire | 2 build |
-| Damage Type: Cold | 2 build |
-| Damage Type: Lightning | 2 build |
-| Damage Type: Thunder | 2 build |
-| Damage Type: Acid | 3 build |
-| Damage Type: Poison | 3 build |
-| Damage Type: Psychic | 4 build |
-| Damage Type: Necrotic | 4 build |
-| Damage Type: Radiant | 4 build |
-| Damage Type: Force | 5 build |
-| Damage Type: Arcane | 5 build |
-| Damage Type: Nature | 3 build |
-| Damage Type: Holy | 5 build |
-| Damage Type: Shadow | 5 build |
-| Damage Type: Chaos | 6 build |
+The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for  rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it.
 
+**How to build it**
 
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Name** *(optional)* - A note you can write on the ability. No cost.
+3. **Applies** - Choose one of:
+   - Damage, Heal, Move
+4. **Solutions** - You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
 
-## Template
+   For each solution, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-```yaml
-enactments:
-  - type: Enact Damage
-    damage_dice: <dice here>
-    is_optional: False # First enactment is usually mandatory
-    base_enactment_energy_cost: 0 # 0 if first enactment, otherwise 1
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Add Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-      - type:
-          validation:
-```
-
-# healing
 ## Enact Healing
 
-Enact Healing abilities allow characters to restore health to themselves or their allies. These abilities can be used to mend wounds, cure ailments, and provide vital support during combat.
+Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses.
 
-## Rules
+**How to build it**
 
-*   **Healing Dice**: Choose a source die when building this enactment.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Source** - Choose one of:
+   - *Generic:* 1d4, 1d6, 1d8, 1d10, 1d12, 1d20
+   - *Medicine:* Medicine
+3. **Flat Bonus** - Any whole number from **0 to 20** (starts at 0). Cost: Free per +1.
 
-*   **Interaction Type**: If the interaction type is Self or Direct, no validation is required.
+## Enact Minion
 
-## Perks
+Creates a minion to fight for you. By default the minion does not have any traits, has 1hp and no movement or energy. This can be upgraded.
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Enable: Will always resolve | 4 build, 2 energy |
-| Source: 1d4 | Free |
-| Source: 1d6 | 2 build, 1 energy |
-| Source: 1d8 | 4 build, 2 energy |
-| Source: 1d10 | 6 build, 3 energy |
-| Source: 1d12 | 8 build, 4 energy |
-| Source: Trait (1d10) | 3 build |
-| Source: Another roll result | 3 build, 1 energy |
-| Each +1 to Flat Bonus | 2 build |
-| Medicine Trait | 3 build, 1 energy |
-
-
-
-## Template
-
-```yaml
-enactments:
-  - type: Enact Healing
-    healing_dice: <dice here>
-    is_optional: False
-    base_enactment_energy_cost: 0
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-        validation:
-```
-
-# movement
 ## Enact Movement
 
-**Enact Movement** abilities allow characters to manipulate the position of themselves or their targets. These abilities can be used to push enemies away, pull allies closer, or reposition oneself strategically. Movement abilities add a dynamic element to gameplay, enabling tactical maneuvers and creative solutions to challenges. Additionally, the **Origin** of the movement can be assigned to an object or another person, allowing for even more creative and strategic uses. For example, you could attach the **Origin** to an arrow or a device, and then use a **Ranged Interaction** to throw it and pull the **Target** towards it.
+Enact Movement allows you to move a Target up to a preset amount of meters.
 
-## Rules
+**How to build it**
 
-*   **Direction**: The target will move in one direction relative to an origin. Possible directions include Up, Down, Away, Towards, Forward, Left, Right, Free (extra cost).
-*   **Distance**: The target will move 1 meter by default.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Distance** - Any whole number from **1 to 20** (starts at 1). Cost: Free per meter.
+3. **Directions** - You start with **one** direction and may add or remove directions. Cost: Free per direction.
 
-*   **Origin**: The default **Origin** is the **Engager** or item/location from previous enactment.
-*   **Obstacle**: If the Target moves into an obstacle, they take 1d4 damage.
+   For each direction, choose one of:
+   - Towards, Away
 
-## Perks
+## Enact Negation
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+Enact Negation allows characters to ignore or nullify the effects of an enactment you or someone else are the target for.
 
-| Perk | Cost |
-| --- | --- |
-| Enable: Will always resolve | 3 build, 1 energy |
-| Origin: Engager | Free |
-| Origin: Other Origin | 2 build, 1 energy |
-| Each +1 to Distance | 1 build |
+**How to build it**
 
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Ability hits Engager instead** - Enable Ability hits Engager instead. Cost: Free.
 
+## Enact Nerf
 
-## Template
+Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy.
 
-```yaml
-enactments:
-  - type: Enact Movement
-    minimal_distance: 1m
+Enact Nerf can only target yourself.
 
-    origin: engager
-    direction_options:
-      - <Direction>
-    is_optional: False
-    base_enactment_energy_cost: 0
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-      - type:
-          validation:
-```
+**How to build it**
 
-# persistent-effect
-## Enact Persistent Effect
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Trait** - Choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+3. **Shift -/+** - Any whole number from **-6 to -1** (starts at -1). Cost: Free per step.
 
-The Enact Persistent Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for 2 rounds and triggers at either the start of the target's turn or the end of the engager's turn.
+## Enact Phase
 
-## Rules
+Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds.
 
-*   **Duration**: Lasts 2 rounds by default.
-*   **Trigger Timing**: The effect triggers at either the start of the target's turn or the end of the engager's turn.
-*   **Solutions**: Targets can spend one action to attempt to remove the effect using the provided solution. There must be two solutions, which can be any Trait Roll.
-*   **Applies a Single Enactment**: The persistent effect applies a single other Enactment (e.g., Enact Damage, Enact Healing).
+**How to build it**
 
-## Perks
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Duration (rounds)** - Any whole number from **1 to 5** (starts at 1). Cost: Free per round.
+3. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: Free per step.
+4. **Affected Trait(s)** - You start with **two** affected traits (Precision and Power) and may add or remove affected traits. Cost: Free per affected trait.
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+   For each affected trait, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
-| Perk | Cost |
-| --- | --- |
-| Enable: Will always resolve | 5 build, 3 energy |
-| Each +1 to Duration | 2 build, 1 energy |
-| Each removed Solution | 3 build, 1 energy |
-| Use a General trait for Solution | 2 build |
-| Use an Offensive trait for Solution | 2 build |
-| Each additional Damage Type | 2 build |
-| Damage Type: Physical | Free |
-| Damage Type: Slashing | Free |
-| Damage Type: Piercing | Free |
-| Damage Type: Bludgeoning | Free |
-| Damage Type: Fire | 2 build |
-| Damage Type: Cold | 2 build |
-| Damage Type: Lightning | 2 build |
-| Damage Type: Thunder | 2 build |
-| Damage Type: Acid | 3 build |
-| Damage Type: Poison | 3 build |
-| Damage Type: Psychic | 4 build |
-| Damage Type: Necrotic | 4 build |
-| Damage Type: Radiant | 4 build |
-| Damage Type: Force | 5 build |
-| Damage Type: Arcane | 5 build |
-| Damage Type: Nature | 3 build |
-| Damage Type: Holy | 5 build |
-| Damage Type: Shadow | 5 build |
-| Damage Type: Chaos | 6 build |
+## Enact Reduction
 
+Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect.
 
-## Template
+**How to build it**
 
-```yaml
-enactment:
-  - type: Enact Persistent Effect
-    duration: 2 rounds
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Reduction Mode** - Choose how the reduction is determined: a fixed die-size shift up/down the die ladder, or a die roll. Choose one of:
+   - Die Shift, Die Roll
+3. **Flat Bonus** - Any whole number from **0 to 8** (starts at 0). Cost: Free per +1.
 
-    trigger_timing: Start of Target's Turn or The end of the engager's turn.
-    solutions:
-      - Dexterity
-      - Constitution
-    is_optional: True
-    base_enactment_energy_cost: 2
-    effects:
-      - type: <Enactment here type>
-    interactions:
-      - type:
-          validation:
-```
+## Enact Shift
 
-# proficiency-shift
-## Enact Proficiency Shift
+Enact Shift allows you to temporarily enhance or weaken Traits. It always has a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens.
 
-**Enact Proficiency Shift** abilities allow characters to temporarily enhance or weaken Traits. These abilities can be used to boost a character's **Proficiency** in a specific area or to hinder an opponent's effectiveness. 
+**How to build it**
 
-## Rules
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Trait** - Choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+3. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: Free per step.
+4. **Uses** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
 
-*   **Shift Direction**: Shift a Proficiency Tier from a Trait either up or down.
-*   **Single Use**: The shift only has one use.
-*   **Trait Check**: The next time a Trait check is made with the shifted Trait, you must use the shifted Proficiency.
-*   **Reset**: Using the shifted Proficiency resets the Trait back to its original Proficiency.
+## Enact Stack
 
-## Perks
+Enact Stack (WIP)
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Enable: Will always resolve | 4 build, 2 energy |
-| Each +1 to Amount | 3 build, 1 energy |
-| Each +1 to Uses | 3 build, 1 energy |
-
-
-## Template
-
-```yaml
-enactments:
-  - type: Enact Proficiency Shift
-    shifted_trait: <trait here>
-    shift_direction: <UP DOWN or>
-    shift_amount: 1
-    shift_uses: 1
-
-    is_optional: False
-    base_enactment_energy_cost: 0
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-      - type:
-          validation:
-```
-
-# state
-## Enact State
-
-Enact State will apply a state to a target (e.g., prone, stunned, charmed). 
-
-## Rules
-
-*   **State**: Applies a condition to the target.
-
-## Perks
-
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Duration (turns): 1 turn | Free |
-| Duration (turns): 2 turns | 1 build |
-| Duration (turns): 3 turns | 2 build |
-| Duration (turns): 4 turns | 3 build |
-| Duration (turns): 5 turns | 4 build |
-| Duration (turns): 6 turns | 5 build |
-| Duration (turns): Unlimited | 15 build, 5 energy |
-| Each removed Solution | 3 build, 1 energy |
-| Use a General trait for Solution | 2 build |
-| Use an Offensive trait for Solution | 2 build |
-
-
-
-## Template
-
-Each state row picks either a Specific State or a General State (which shifts a
-group of traits by an amount). Rows can add per-entry options such as an
-Intensity or spreading to adjacent targets; see the Perks table above for the
-cost of each choice.
-
-```yaml
-enactments:
-  - type: Enact State
-    states:
-      - state_kind: specific        # or: general
-        specific_state: <state id>  # when state_kind = specific
-        # general_state: <state id> # when state_kind = general
-        # shift_amount: <amount>    # when state_kind = general
-        intensity: <minor|severe>   # optional per-entry option
-        spreads: <true|false>       # optional per-entry option
-```
-
-# area
 ## Area
 
 **Area Interactions** encompass actions like bombs, splash potions, and traps. These interactions always have a defined **Radius** and **Range**:
@@ -2679,276 +2396,76 @@ enactments:
 
 You can also assign the point of **Origin** to an object, but this must be discussed with the GM beforehand. So you could put the point of **Origin** to an arrow or a device you’ve made. Then use a **Ranged Interaction** to throw it.
 
-## Rules
+**How to build it**
 
-*   **Validation**: The interaction must have a validation.
-*   **Radius**: The default radius is 1 meter.
-*   **Range**: The default range is 0 meters.
-*   **Origin**: The point of origin for the radius is the engager or item/location from previous enactment.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Radius** - Any whole number from **1 to 6** (starts at 1). Cost: Free per step.
+3. **Range** - Choose one of:
+   - 5m (Close), 25m (Medium), 50m (Long)
 
-## Perks
-
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Each +1 to Radius | 2 build, 1 energy |
-| Each +1 to Range | 1 build |
-| Origin: Engager | Free |
-| Origin: Other Origin | 2 build, 1 energy |
-| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
-
-
-## Template
-
-```yaml
-interactions:
-  - type: Area
-    radius: 1m # Default radius for Area interactions
-    range: 0m # Default range for Area interactions
-
-    origin: Engager # Point of origin is the Engager
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait>
-      counter_roll: <pick two Defensive Traits>
-```
-
-# area-of-effect
 ## Area of Effect
 
 An **Area of Effect (AoE)** Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. While an **Area Interaction** might be like a single-use bomb, an **AoE** Interaction is akin to a bomb that detonates every round. Alternatively, it could represent a healing circle, where characters gain health each round they remain within the **AoE**. The possibilities are endless, so get creative!
 
 The effect of the **AoE** does not trigger immediately. Instead, it activates either at the start of a character's turn within the **AoE** or at the end of the **Engager**'s turn.
 
-## Rules
+**How to build it**
 
-*   **Validation**: The interaction must have a validation.
-*   **Radius**: The default radius is 1 meter.
-*   **Range**: The default range is 0 meters.
-*   **Origin**: The point of origin for the radius is the engager.
-*   **Duration**: The effect lasts for 2 rounds.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Radius** - Any whole number from **1 to 6** (starts at 1). Cost: Free per step.
+3. **Range** - Choose one of:
+   - 5m (Close), 25m (Medium), 50m (Long)
+4. **Duration** - Any whole number from **2 to 6** (starts at 2). Cost: Free per round.
 
-## Perks
-
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Each +1 to Radius | 2 build, 1 energy |
-| Each +1 to Range | 1 build |
-| Each +1 to Duration | 2 build, 1 energy |
-| Origin: Engager | Free |
-| Origin: Other Origin | 2 build, 1 energy |
-| Enable: Engager is immune | 2 build |
-| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
-
-
-## Template
-
-```yaml
-interactions:
-  - type: Area of Effect
-    radius: 1m
-    range: 0m
-    origin: Engager
-    duration: 2 rounds
-
-    immunity: false
-    trigger_conditions:
-      - Entering the Area of Effect
-      - Start of character's turn within the Area of Effect
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait>
-      counter_roll: <pick two Defensive Traits>
-```
-
-# direct
 ## Direct
 
-## Rules
+Direct interactions are done by targeting those who are near you. They have to be within 1 meter of you in order for your enactment to execute.
 
-*   Has a Validation.
-*   Target is a single character.
-*   Target must be within 1m of your character.
+**How to build it**
 
-## Perks
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Targets** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Each +1 to Range | 1 build |
-| Each +1 to Targets | 3 build, 2 energy |
-| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
-
-
-## Template
-
-```yaml
-interactions:
-  - type: Direct
-    engager: Self
-    target_amount: 1
-    range: 1m
-
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost of this perk = cost * amount>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait>
-      counter_roll: <pick two Defensive Traits>
-```
-
-# ranged
 ## Ranged
 
 **Ranged** **Interactions** include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to **Direct** Interactions but come with a lower success rate due to a penalty on the **Engagement Roll**. Additionally, the target must not be obstructed or invisible to the **Engager** by default.
 
-## Rules
+**How to build it**
 
-*   Has a Validation
-*   Target is a single character.
-*   Target must be within 10m of your character.
-*   Target must be visible.
-*   Target must not be obstructed.
-*   Engagement roll result is lowered by 2
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Range** - Choose one of:
+   - 5m (Close), 25m (Medium), 50m (Long)
+3. **Targets** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
 
-## Perks
-
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Each +1 to Range | 1 build |
-| Each +1 to Targets | 3 build, 2 energy |
-| Enable: Target may be not visible | 3 build, 1 energy |
-| Enable: Target may be obstructed | 3 build, 1 energy |
-| Enable: Remove engagement penalty | 3 build, 1 energy |
-| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
-
-
-## Template
-
-```yaml
-interactions:
-  - type: Ranged
-    engager: Self
-    target_amount: 1
-    range: 10m # Default range for Ranged interactions
-
-    visibility: Visible # Target must be visible
-    obstruction: Not obstructed # Target must not be obstructed
-    perks:
-      - description: <insert description of perk here>
-        add_cost: <cost of the perk>
-        amount: <amount of times the perk is chosen>
-        total_add_cost: <total add cost>
-        energy_cost: <energy cost to use>
-        is_optional: <True/False>
-    validation:
-      engagement_roll: <pick an Offensive Trait> - 2
-      counter_roll: <pick two Defensive Traits>
-```
-
-# self
 ## Self
 
-## Rules
+Self Interactions apply to your own character. They do require a validation still. But the Counter roll is a Generic Die instead. This means that you are still the Enagager and the DM makes the Counter Roll.
 
-*   Has a Validation
-*   Engager is yourself
-*   Target is yourself
-*   Counter Roll is replaced by a Generic Dice when the relevant perk is chosen.
+**How to build it**
 
-## Perks
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Enable: Use result of previous interaction/validation | 3 build, 1 energy |
-
-
-
-## Template
-
-```yaml
-interactions:
-  - type: Self
-    engager: Self
-    target: Self
-    validation:
-      engagement_roll: Power
-      counter_roll: d8 # d8 is default
-      perks:
-        - description: <Perk Description>
-          add_cost: <Cost>
-          amount: <Amount>
-          total_add_cost: <Total Add Cost>
-          energy_cost: <Total Cost Energy>
-          is_optional: <True/False>
-```
-
-# validations
 ## Validations
 
-## Introduction
-
-Here, you'll find the guidelines and options for customizing your **Engagement and Counter Rolls**.
-
-## Rules
+Here, you'll find the guidelines and options for customizing your **Engagement** and **Counter Rolls**.
 
 *   **Engagement Roll**: This is an Offensive Trait used to initiate actions against a target.
 *   **Counter Roll**: This involves two Defensive Traits, allowing the target to choose how they respond to the attack.
 
-## Options
+**How to build it**
 
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Engage** - Choose one of:
+   - *Generic:* 1d4, 1d6, 1d8, 1d10, 1d12, 1d20
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+3. **Counter Trait** - You start with **two** counter traits (Reflex and Constitution) and may add or remove counter traits. Cost: Free per counter trait.
 
-| Perk | Cost |
-| --- | --- |
-| Engage Roll Type: Trait Roll | Free |
-| Engage Roll Type: Generic Roll | -2 build (refund) |
-| Engage Roll Type: Another roll result | 3 build, 1 energy |
-| Engage Roll Type: Use result of previous interaction | 3 build, 1 energy |
-| Each removed Counter Trait | 3 build, 1 energy |
-| Use a General trait for Counter Trait | 2 build |
-| Use an Offensive trait for Counter Trait | 2 build |
-
-
-
-## Template
-
-```yaml
-validation:
-  engagement_roll: <pick an offensive trait>
-  counter_roll: <pick two defensive traits>
-  perks:
-    - description: <insert description of perk here>
-      add_cost: <cost of the perk>
-      amount: <amount of times the perk is chosen>
-      total_add_cost: <total add cost of this perk = cost * amount>
-      energy_cost: <total energy cost>
-      is_optional: <True/False>
-```
+   For each counter trait, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
 
 # leveling
 ## Ability Builder Leveling
@@ -2993,54 +2510,3 @@ By **Level 5**, you will have earned 11 additional Ability Points. You could spe
 | **8** | +2 | 28 |
 | **9** | +3 | 31 |
 | **10** | +5 | 36 |
-
-# negation
-## Enact Negation
-
-Enact Negation allows characters to reduce incomming damage by choosing a source die. This can also be used to remove a Persistant Effect.
-
-## Rules
-
-*   **Negate Dice**: Choose a source die when building this enactment.
-*   **Remove Persistant Effect**: Make the Negation roll, the damage of the persistant effect is reduced by this value. If the Negate roll is higher or equal then the Persistant Effect is removed.
-
-## Perks
-
-The following perks can be added when building or upgrading this component. Build points are spent when the ability is created or upgraded; energy is paid each time it is used.
-
-| Perk | Cost |
-| --- | --- |
-| Enable: Will always resolve | 5 build, 3 energy |
-| Source: 1d4 | Free |
-| Source: 1d6 | 2 build, 1 energy |
-| Source: 1d8 | 4 build, 2 energy |
-| Source: 1d10 | 6 build, 3 energy |
-| Source: 1d12 | 8 build, 4 energy |
-| Source: Trait (1d10) | 3 build |
-| Source: Another roll result | 3 build, 1 energy |
-| Each +1 to Flat Bonus | 2 build |
-| Defensive Trait (extra die) | 4 build, 2 energy |
-| Enable: Apply Negation to counter roll | 4 build, 2 energy |
-| Enable: Ability hits Engager instead | 4 build, 2 energy |
-
-
-
-## Template
-
-```yaml
-enactments:
-  - type: Enact Damage
-    damage_dice: <dice here>
-    is_optional: False # First enactment is usually mandatory
-    base_enactment_energy_cost: 0 # 0 if first enactment, otherwise 1
-    perks:
-      - description: <Perk Description>
-        add_cost: <Cost>
-        amount: <Amount>
-        total_add_cost: <Total Add Cost>
-        energy_cost: <Total Cost Energy>
-        is_optional: <True/False>
-    interactions:
-      - type:
-          validation:
-```
