@@ -1,0 +1,24 @@
+name: Dagger
+description: A light, concealable blade rewarding precision and speed. A weapon is a type of ability - a quick, accurate stab.
+type: execution
+fields:
+  comment: A fast, precise thrust with a light blade.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Piercing stab from the dagger.
+      source: offense.Precision
+      flat: 0
+      damage_type:
+        - value: Piercing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

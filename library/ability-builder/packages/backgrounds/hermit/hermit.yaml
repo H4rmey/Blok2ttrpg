@@ -1,7 +1,0 @@
-id: hermit
-name: Hermit
-description: Solitary years in the wilds gave you insight into nature and inner focus.
-shifts:
-  general.Nature: +2
-  general.Knowledge: +1
-  defense.Mind: +1

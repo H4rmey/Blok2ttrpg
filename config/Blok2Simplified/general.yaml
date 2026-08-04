@@ -375,6 +375,7 @@ option_groups:
 
 validations:
   information: "What rolls are needed?"
+  render_information: false
   fields:
     - key: comment
       label: "Comment"

@@ -1,0 +1,7 @@
+id: outlander
+name: Outlander
+description: You grew up in the wilds, at home with nature and hardship.
+shifts:
+  general.Nature: 2
+  general.Perception: 1
+  defense.Constitution: 1

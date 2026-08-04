@@ -1,0 +1,25 @@
+name: Staff
+description: An arcane conduit that amplifies magical attacks. A weapon is a type of ability - channel a bolt of force through the staff.
+type: execution
+fields:
+  comment: A focused blast of arcane energy channeled through the staff.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Force blast from the staff.
+      source: offense.Magic
+      flat: 0
+      damage_type:
+        - value: Force
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Magic

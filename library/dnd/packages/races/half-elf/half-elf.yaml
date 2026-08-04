@@ -1,8 +1,0 @@
-id: half-elf
-name: Half-Elf
-description: Charismatic wanderers who blend human ambition with elven grace.
-shifts:
-  general.Charisma: +2
-  general.Persuasion: +1
-  general.Dexterity: +1
-imports: []

@@ -1,0 +1,7 @@
+name: Power Strike
+description: A forceful melee blow that channels raw strength into a single attack.
+type: execution
+fields:
+  comment: A heavy swing meant to overwhelm a single target.
+  energy_steps: 0
+  action_steps: 0

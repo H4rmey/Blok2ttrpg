@@ -1,0 +1,7 @@
+id: orc
+name: Half-Orc
+description: Powerful and fierce, half-orcs are built for brutal physical combat.
+shifts:
+  general.Strength: 2
+  offense.Power: 1
+  defense.Constitution: 1

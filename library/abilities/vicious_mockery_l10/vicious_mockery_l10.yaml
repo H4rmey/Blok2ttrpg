@@ -1,0 +1,43 @@
+name: Vicious Mockery (L10)
+description: A devastating tirade of magically empowered scorn that lances the mind, shatters composure, and leaves the target frightened and reeling.
+type: execution
+fields:
+  comment: A withering, mind-flaying tirade.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Heavy psychic damage from cruel words.
+      source: offense.Mind
+      flat: 6
+      damage_type:
+        - value: Psychic
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "50"
+      targets: 2
+    validation_data:
+      comment: ""
+      engage: d12
+      counter_trait:
+        - value: defense.Mind
+  - type: condition
+    fields:
+      comment: Composure shattered.
+      condition: frightened
+      shift_amount: -2
+      duration: "2"
+      solution:
+        - value: defense.Mind
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "50"
+      targets: 2
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Mind

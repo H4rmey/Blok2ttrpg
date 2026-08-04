@@ -1,0 +1,6 @@
+id: entertainer
+name: Entertainer
+description: You made your living on stage, thriving on crowds and applause.
+shifts:
+  general.Performance: 2
+  general.People Skill: 1

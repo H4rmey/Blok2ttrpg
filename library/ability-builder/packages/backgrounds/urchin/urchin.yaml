@@ -1,8 +1,0 @@
-id: urchin
-name: Urchin
-description: You grew up on the streets, surviving on quick hands, quick feet, and sharp eyes.
-shifts:
-  general.Stealth: +1
-  general.Thievery: +1
-  general.Dexterity: +1
-  general.Perception: +1

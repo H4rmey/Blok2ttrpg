@@ -1,0 +1,41 @@
+name: Healing Word (L10)
+description: A radiant benediction that surges through multiple allies, mending grievous wounds and lending them courage.
+type: execution
+fields:
+  comment: A powerful blessing that heals several allies.
+  energy_steps: 1
+  action_steps: 0
+enactments:
+  - type: healing
+    fields:
+      comment: Strong group heal.
+      source: d12
+      flat: 6
+    interaction: area
+    interaction_data:
+      comment: ""
+      radius: 2
+      range: "25"
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Mind
+  - type: condition
+    fields:
+      comment: Allies are emboldened.
+      condition: encouraged
+      shift_amount: 1
+      duration: "2"
+      solution:
+        - value: defense.Mind
+    interaction: area
+    interaction_data:
+      comment: ""
+      radius: 2
+      range: "25"
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Mind

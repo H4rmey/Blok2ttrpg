@@ -1,0 +1,40 @@
+name: Sneak Attack (L10)
+description: A master assassin's strike that finds a fatal gap, dealing devastating damage and leaving the victim bleeding and weakened.
+type: execution
+fields:
+  comment: A lethal, deeply placed strike.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Devastating precision strike.
+      source: offense.Precision
+      flat: 8
+      damage_type:
+        - value: Piercing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d12
+      counter_trait:
+        - value: defense.Reflex
+  - type: persistent_effect
+    fields:
+      comment: Deep wound bleeds out.
+      effect_name: Bleeding
+      effect_type: damage
+      solution:
+        - value: defense.Constitution
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Constitution

@@ -1,0 +1,24 @@
+name: Longsword
+description: A versatile blade favoring strength and power in melee. A weapon is a type of ability - swing it to strike a single foe.
+type: execution
+fields:
+  comment: A sweeping melee cut with a heavy blade.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Slashing blow from the blade.
+      source: offense.Power
+      flat: 0
+      damage_type:
+        - value: Slashing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d8
+      counter_trait:
+        - value: defense.Reflex

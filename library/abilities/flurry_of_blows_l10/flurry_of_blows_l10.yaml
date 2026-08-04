@@ -1,0 +1,41 @@
+name: Flurry of Blows (L10)
+description: A whirlwind of lightning-fast strikes that batters multiple foes and can knock the wind out of them, leaving them staggered.
+type: execution
+fields:
+  comment: A blistering storm of strikes.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Storm of unarmed strikes.
+      source: offense.Precision
+      flat: 6
+      damage_type:
+        - value: Bludgeoning
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 2
+    validation_data:
+      comment: ""
+      engage: d12
+      counter_trait:
+        - value: defense.Reflex
+  - type: condition
+    fields:
+      comment: Wind knocked out of them.
+      condition: staggered
+      duration: "1"
+      solution:
+        - value: defense.Reflex
+        - value: defense.Constitution
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 2
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Constitution

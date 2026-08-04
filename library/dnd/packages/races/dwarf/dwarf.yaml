@@ -1,8 +1,0 @@
-id: dwarf
-name: Dwarf
-description: Hardy and resilient folk of the mountains, known for their endurance.
-shifts:
-  general.Constitution: +2
-  defense.Constitution: +2
-  general.Strength: +1
-imports: []

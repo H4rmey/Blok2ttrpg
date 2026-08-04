@@ -1,10 +1,11 @@
 interactions:
   information: "Who are we hitting?"
+  render_information: false
   self:
     type: "Self"
     description: "Targets the Ability user."
     information: "Self Interactions apply to your own character. They do require a validation still. But the Counter roll is a Generic Die instead. This means that you are still the Engager and the DM makes the Counter Roll."
-    render_information: true
+    render_information: false
     base_cost:
 
       build_cost: 0
@@ -18,7 +19,7 @@ interactions:
     type: "Direct"
     description: "Affects a single target within 1m."
     information: "Direct interactions are done by targeting those who are near you. They have to be within 1 meter of you in order for your enactment to execute."
-    render_information: true
+    render_information: false
     default_range: 1
 
     default_targets: 1
@@ -45,7 +46,7 @@ interactions:
     type: "Ranged"
     description: "Affects a single target at range."
     information: "Ranged Interactions include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to Direct Interactions but come with a lower success rate due to a penalty on the Engagement Roll. Additionally, the target must not be obstructed or invisible to the Engager by default."
-    render_information: true
+    render_information: false
     default_range: 5
 
     default_targets: 1
@@ -89,7 +90,7 @@ interactions:
     type: "Area"
     description: "Affects a radius at a point within range."
     information: "Area Interactions encompass actions like bombs, splash potions, and traps. These interactions always have a defined Radius and Range. Radius determines the area where the Enactment will take effect; Range specifies how far from the user the point of origin is set."
-    render_information: true
+    render_information: false
     default_radius: 1
 
     default_range: 5
@@ -133,7 +134,7 @@ interactions:
     type: "Zone"
     description: "A persistent area that triggers each round."
     information: "An Area of Effect (AoE) Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. The effect does not trigger immediately; it activates at the start of a character's turn within the AoE or at the end of the Engager's turn."
-    render_information: true
+    render_information: false
     default_radius: 1
 
     default_range: 5

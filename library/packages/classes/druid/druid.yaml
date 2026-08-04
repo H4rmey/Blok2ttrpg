@@ -1,0 +1,9 @@
+id: druid
+name: Druid
+description: A keeper of the wild who commands nature's magic and shape of the land.
+shifts:
+  general.Nature: 3
+  general.Magic: 2
+  offense.Magic: 1
+imports:
+  - entangle_l1

@@ -1,0 +1,7 @@
+id: gnome
+name: Gnome
+description: Curious and clever, gnomes are inventive tinkerers with sharp minds.
+shifts:
+  general.Knowledge: 1
+  general.Crafting: 1
+  defense.Mind: 1

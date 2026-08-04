@@ -1,0 +1,7 @@
+id: acolyte
+name: Acolyte
+description: Raised in a temple, you learned faith, lore, and the healing arts.
+shifts:
+  general.Medicine: 1
+  general.Knowledge: 1
+  defense.Mind: 1

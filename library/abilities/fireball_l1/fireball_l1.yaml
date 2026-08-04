@@ -1,0 +1,26 @@
+name: Fireball (L1)
+description: A small burst of flame hurled at a target. The early expression of the classic evocation - a single scorching blast.
+type: execution
+fields:
+  comment: A fist-sized ball of fire that detonates on impact.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Initial fire blast.
+      source: offense.Magic
+      flat: 0
+      damage_type:
+        - value: Fire
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
+        - value: defense.Constitution

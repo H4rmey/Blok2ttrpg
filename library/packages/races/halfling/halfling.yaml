@@ -1,0 +1,7 @@
+id: halfling
+name: Halfling
+description: Small, lucky, and light-footed, halflings are nimble and hard to pin down.
+shifts:
+  general.Dexterity: 1
+  general.Stealth: 1
+  defense.Reflex: 1

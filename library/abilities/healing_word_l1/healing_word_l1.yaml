@@ -1,0 +1,23 @@
+name: Healing Word (L1)
+description: A quick word of divine power that mends a wounded ally from afar.
+type: execution
+fields:
+  comment: A whispered blessing that closes wounds.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: healing
+    fields:
+      comment: Ranged heal for an ally.
+      source: d6
+      flat: 2
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "25"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Mind

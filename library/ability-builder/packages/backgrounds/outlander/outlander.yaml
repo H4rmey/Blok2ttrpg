@@ -1,7 +1,0 @@
-id: outlander
-name: Outlander
-description: Raised far from civilization, you thrive in the wilds and endure harsh conditions.
-shifts:
-  general.Nature: +2
-  general.Strength: +1
-  defense.Constitution: +1

@@ -1,9 +1,0 @@
-id: gnome
-name: Gnome
-description: Curious tinkerers with keen minds, gnomes shine at crafting and clever invention.
-shifts:
-  general.Crafting: +2
-  general.Knowledge: +2
-  general.Magic: +1
-  offense.Mind: +1
-  general.Strength: -1

@@ -1,0 +1,6 @@
+id: artisan
+name: Guild Artisan
+description: A trained crafter with a keen eye for quality work and trade.
+shifts:
+  general.Crafting: 2
+  general.People Skill: 1

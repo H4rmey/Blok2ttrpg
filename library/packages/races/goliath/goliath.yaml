@@ -1,0 +1,6 @@
+id: goliath
+name: Goliath
+description: Towering mountain folk of immense strength and hardiness.
+shifts:
+  general.Strength: 2
+  defense.Constitution: 2

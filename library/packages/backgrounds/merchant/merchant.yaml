@@ -1,0 +1,6 @@
+id: merchant
+name: Merchant
+description: A shrewd trader skilled in negotiation and reading people.
+shifts:
+  general.People Skill: 2
+  general.Performance: 1

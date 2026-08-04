@@ -1,0 +1,25 @@
+name: Magic Missile (L10)
+description: A volley of force darts that split across multiple foes, each striking true.
+type: execution
+fields:
+  comment: A barrage of unerring force darts.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Volley of force darts.
+      source: offense.Magic
+      flat: 5
+      damage_type:
+        - value: Force
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "50"
+      targets: 3
+    validation_data:
+      comment: Reliable - hard to avoid.
+      engage: d12
+      counter_trait:
+        - value: defense.Reflex

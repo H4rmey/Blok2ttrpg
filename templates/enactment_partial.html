@@ -22,13 +22,14 @@
   <div class="collapsible-content">
     {{ if showInteraction $cfg $idx }}
     <div class="region region-interaction">
-      <h4 class="region-title">Interaction</h4>
+      <h4 class="region-title">Interaction{{ if and $cfg.Interactions.Information (not $cfg.Interactions.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Interactions.Information }}">i</span>{{ end }}</h4>
       <div class="field">
         <label>Interaction Type
-          {{ if and $cfg.Interactions.Information $cfg.Interactions.RenderInformation }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Interactions.Information }}">i</span>{{ end }}
           {{ range interactionsFor $cfg $type }}{{ if eq .ID $interaction }}{{ if and .Information (not .RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Information }}">i</span>{{ end }}{{ end }}{{ end }}
         </label>
-        {{ if and $cfg.Interactions.Information (not $cfg.Interactions.RenderInformation) }}<small class="component-info">{{ $cfg.Interactions.Information }}</small>{{ end }}
+
+        {{ if and $cfg.Interactions.Information $cfg.Interactions.RenderInformation }}<small class="component-info">{{ $cfg.Interactions.Information }}</small>{{ end }}
+
 
 
         <div class="select-row">
@@ -63,10 +64,11 @@
 
     {{ if showValidation $cfg $idx }}
     <div class="region region-validation">
-      <h4 class="region-title">Validation
-        {{ if and $cfg.Validations.Information $cfg.Validations.RenderInformation }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Validations.Information }}">i</span>{{ end }}
-      </h4>
-      {{ if and $cfg.Validations.Information (not $cfg.Validations.RenderInformation) }}<small class="component-info">{{ $cfg.Validations.Information }}</small>{{ end }}
+      <h4 class="region-title">Validation{{ if and $cfg.Validations.Information (not $cfg.Validations.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Validations.Information }}">i</span>{{ end }}</h4>
+
+
+      {{ if and $cfg.Validations.Information $cfg.Validations.RenderInformation }}<small class="component-info">{{ $cfg.Validations.Information }}</small>{{ end }}
+
       {{ range validationFieldsFor $cfg $type }}
 
       {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sv_" $prefix) "Values" $validationData }}
@@ -76,13 +78,14 @@
     {{ end }}
 
     <div class="region region-enactment">
-      <h4 class="region-title">Enactment</h4>
+      <h4 class="region-title">Enactment{{ if and $cfg.Enactments.Information (not $cfg.Enactments.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Enactments.Information }}">i</span>{{ end }}</h4>
       <div class="field">
         <label>Enactment Type
-          {{ if and $cfg.Enactments.Information $cfg.Enactments.RenderInformation }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Enactments.Information }}">i</span>{{ end }}
           {{ range enactmentsFor $cfg $atype }}{{ if eq .ID $type }}{{ if and .Information (not .RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Information }}">i</span>{{ end }}{{ end }}{{ end }}
         </label>
-        {{ if and $cfg.Enactments.Information (not $cfg.Enactments.RenderInformation) }}<small class="component-info">{{ $cfg.Enactments.Information }}</small>{{ end }}
+
+        {{ if and $cfg.Enactments.Information $cfg.Enactments.RenderInformation }}<small class="component-info">{{ $cfg.Enactments.Information }}</small>{{ end }}
+
 
 
         <div class="select-row">

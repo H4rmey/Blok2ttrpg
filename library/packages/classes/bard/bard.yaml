@@ -1,0 +1,9 @@
+id: bard
+name: Bard
+description: A charismatic performer whose words and music can wound minds and inspire allies.
+shifts:
+  general.Performance: 3
+  general.People Skill: 2
+  offense.Mind: 2
+imports:
+  - vicious_mockery_l1

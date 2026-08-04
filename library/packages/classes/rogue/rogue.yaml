@@ -1,0 +1,10 @@
+id: rogue
+name: Rogue
+description: A nimble skirmisher relying on speed, stealth, and pinpoint precision.
+shifts:
+  general.Dexterity: 2
+  general.Stealth: 2
+  offense.Precision: 2
+imports:
+  - quick_dodge
+  - sneak_attack_l1

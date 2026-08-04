@@ -1,8 +1,0 @@
-id: folk-hero
-name: Folk Hero
-description: You rose from humble origins to champion the common people.
-shifts:
-  general.Athletics: +2
-  general.Strength: +1
-  general.Persuasion: +1
-imports: []

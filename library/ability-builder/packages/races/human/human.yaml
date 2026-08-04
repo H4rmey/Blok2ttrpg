@@ -1,8 +1,0 @@
-id: human
-name: Human
-description: Versatile and adaptable, humans gain modest bonuses across a broad range of skills.
-shifts:
-  general.People Skill: +1
-  general.Crafting: +1
-  general.Knowledge: +1
-  defense.Reflex: +1

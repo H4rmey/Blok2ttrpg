@@ -1,0 +1,38 @@
+name: Rage (L10)
+description: An unstoppable primal fury that massively boosts strength and power and steels the barbarian against pain, at the cost of a heavy crash afterward.
+type: phase
+fields:
+  comment: Unleash a towering, sustained fury.
+enactments:
+  - type: phase
+    fields:
+      comment: Major power boost now, heavy crash after.
+      phase-duration: 3
+      shift_amount: 3
+      affected_traits:
+        - value: offense.Power
+        - value: general.Strength
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Constitution
+  - type: condition
+    fields:
+      comment: Fury makes them harder to bring down.
+      condition: encouraged
+      shift_amount: 2
+      duration: "3"
+      solution:
+        - value: defense.Constitution
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Constitution

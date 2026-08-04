@@ -1,8 +1,0 @@
-id: soldier
-name: Soldier
-description: You trained and fought in an army, hardened by discipline and battle.
-shifts:
-  general.Athletics: +2
-  general.Strength: +1
-  defense.Constitution: +1
-imports: []

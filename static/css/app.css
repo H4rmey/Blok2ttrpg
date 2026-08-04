@@ -708,7 +708,10 @@ dialog .toolbar {
 /* Info icon + hover tooltip for fields and component selects. The small "i"
    badge sits next to a label; hovering (or focusing) it reveals data-tooltip. */
 .info-icon {
+  text-transform: none;
+  letter-spacing: normal;
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
   width: 15px;
@@ -796,3 +799,8 @@ dialog .toolbar {
 
 
 
+
+.pkg-toggle { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+.pkg-toggle input { cursor: pointer; }
+.installed-package.pkg-disabled { opacity: 0.55; }
+.installed-package.pkg-disabled .pkg-name { text-decoration: line-through; }

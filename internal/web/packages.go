@@ -49,6 +49,11 @@ func (a *App) handlePackages(w http.ResponseWriter, r *http.Request, c *model.Ch
 		// Import a package uploaded from disk.
 		a.importCustomPackage(w, r, c)
 	default:
+		// /packages/{pkgId}/toggle enables or disables a toggleable package.
+		if len(rest) >= 2 && rest[1] == "toggle" {
+			a.togglePackage(w, r, c, rest[0])
+			return
+		}
 		// /packages/{pkgId} with DELETE removes the package.
 		if r.Method == http.MethodDelete {
 			a.removePackage(w, r, c, rest[0])
@@ -97,11 +102,110 @@ func (a *App) applyPackage(c *model.Character, pkg *premade.Package) []string {
 		time.Sleep(time.Nanosecond)
 	}
 	c.Packages = append(c.Packages, model.InstalledPackage{
-		ID:     pkg.ID,
-		Name:   pkg.Name,
-		Shifts: applied,
+		ID:         pkg.ID,
+		Name:       pkg.Name,
+		Shifts:     applied,
+		Toggleable: premade.Toggleable(pkg.Category),
+		Enabled:    true,
 	})
 	return clamped
+}
+
+// applyPackageEffects re-applies a package's proficiency shifts and abilities
+// without appending a new InstalledPackage record. It is used when re-enabling
+// a package that was previously disabled; the caller owns the existing record
+// and updates its recorded shifts from the returned map.
+func (a *App) applyPackageEffects(c *model.Character, pkg *premade.Package) map[string]int {
+	if c.Traits == nil {
+		c.Traits = map[string]string{}
+	}
+	applied := map[string]int{}
+	for traitKey, delta := range pkg.Shifts {
+		if delta == 0 {
+			continue
+		}
+		current, ok := c.Traits[traitKey]
+		if !ok {
+			current = a.Cfg.DefaultProficiencyID()
+		}
+		c.Traits[traitKey] = a.Cfg.ShiftProficiency(current, delta)
+		applied[traitKey] = delta
+	}
+	for _, ab := range pkg.Abilities {
+		ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
+		ab.PackageID = pkg.ID
+		c.Abilities = append(c.Abilities, ab)
+		time.Sleep(time.Nanosecond)
+	}
+	return applied
+}
+
+// reversePackageEffects reverses the recorded proficiency shifts and removes
+// all abilities tagged with the package id, leaving the InstalledPackage record
+// in place. It is used when disabling a toggleable package.
+func (a *App) reversePackageEffects(c *model.Character, rec *model.InstalledPackage) {
+	for traitKey, delta := range rec.Shifts {
+		current, ok := c.Traits[traitKey]
+		if !ok {
+			current = a.Cfg.DefaultProficiencyID()
+		}
+		c.Traits[traitKey] = a.Cfg.ShiftProficiency(current, -delta)
+	}
+	kept := c.Abilities[:0]
+	for _, ab := range c.Abilities {
+		if ab.PackageID == rec.ID {
+			continue
+		}
+		kept = append(kept, ab)
+	}
+	c.Abilities = kept
+}
+
+// togglePackage enables or disables a toggleable package. Disabling reverses
+// the package's effects (shifts + abilities) but keeps the record so it can be
+// re-enabled; enabling re-applies the effects from the library definition.
+// Class, race, and background packages are not toggleable and are rejected.
+func (a *App) togglePackage(w http.ResponseWriter, r *http.Request, c *model.Character, pkgID string) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	var rec *model.InstalledPackage
+	for i := range c.Packages {
+		if c.Packages[i].ID == pkgID {
+			rec = &c.Packages[i]
+			break
+		}
+	}
+	if rec == nil {
+		http.NotFound(w, r)
+		return
+	}
+	if !rec.Toggleable {
+		http.Error(w, "package is not toggleable", http.StatusBadRequest)
+		return
+	}
+
+	if rec.Enabled {
+		// Disable: reverse effects but keep the record.
+		a.reversePackageEffects(c, rec)
+		rec.Enabled = false
+	} else {
+		// Enable: re-apply effects from the library definition.
+		pkg, err := a.Library.GetPackage(pkgID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		rec.Shifts = a.applyPackageEffects(c, pkg)
+		rec.Enabled = true
+	}
+
+	if err := a.Store.Save(*c); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("HX-Redirect", "/characters/"+c.ID)
 }
 
 // packageRedirect sends the user back to the character sheet after an import,

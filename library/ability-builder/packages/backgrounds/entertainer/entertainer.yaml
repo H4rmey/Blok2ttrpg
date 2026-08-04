@@ -1,7 +1,0 @@
-id: entertainer
-name: Entertainer
-description: A career on stage honed your charisma, showmanship, and crowd-working charm.
-shifts:
-  general.Performance: +2
-  general.People Skill: +1
-  general.Dexterity: +1

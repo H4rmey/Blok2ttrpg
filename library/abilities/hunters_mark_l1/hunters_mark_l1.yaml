@@ -1,0 +1,25 @@
+name: Hunter's Mark (L1)
+description: The ranger marks a quarry, focusing their aim to deal extra harm against that one foe.
+type: concentration
+fields:
+  comment: Mark a single target as your quarry.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Target is marked as prey.
+      condition: marked
+      duration: unlimited
+      solution:
+        - value: defense.Reflex
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "25"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

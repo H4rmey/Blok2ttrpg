@@ -1,0 +1,7 @@
+id: dragonborn
+name: Dragonborn
+description: Proud draconic warriors with a powerful build and elemental breath.
+shifts:
+  general.Strength: 1
+  offense.Power: 1
+  defense.Constitution: 1

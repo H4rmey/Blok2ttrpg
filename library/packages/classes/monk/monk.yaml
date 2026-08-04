@@ -1,0 +1,9 @@
+id: monk
+name: Monk
+description: A martial artist who strikes with disciplined speed and unarmed precision.
+shifts:
+  general.Dexterity: 2
+  offense.Precision: 2
+  defense.Reflex: 2
+imports:
+  - flurry_of_blows_l1

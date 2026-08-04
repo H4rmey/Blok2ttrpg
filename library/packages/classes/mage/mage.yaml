@@ -1,0 +1,11 @@
+id: mage
+name: Wizard
+description: A scholarly spellcaster wielding potent arcane evocations.
+shifts:
+  general.Magic: 2
+  offense.Magic: 2
+  general.Knowledge: 2
+imports:
+  - arcane_focus
+  - fireball_l1
+  - magic_missile_l1

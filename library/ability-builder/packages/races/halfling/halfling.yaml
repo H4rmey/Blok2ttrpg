@@ -1,9 +1,0 @@
-id: halfling
-name: Halfling
-description: Small, nimble, and improbably lucky, halflings excel at stealth and sleight of hand.
-shifts:
-  general.Stealth: +2
-  general.Dexterity: +1
-  general.Thievery: +1
-  defense.Reflex: +1
-  general.Strength: -1

@@ -1,0 +1,8 @@
+name: Quick Dodge
+description: A reflexive movement that lets you slip out of harm's way.
+type: reaction
+fields:
+  comment: Triggered when an attack is aimed your way.
+  energy_steps: 0
+  range: 1
+  uses: 1

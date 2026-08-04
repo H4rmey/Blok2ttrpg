@@ -1,0 +1,9 @@
+id: cleric
+name: Cleric
+description: A divine caster who channels the power of a deity to heal and protect.
+shifts:
+  general.Medicine: 2
+  general.Magic: 1
+  defense.Mind: 2
+imports:
+  - healing_word_l1

@@ -1,0 +1,6 @@
+id: healing_potion
+name: Healing Potion
+description: A restorative brew that bolsters vitality and recovery.
+shifts:
+  general.Medicine: 1
+  vital.HP: 1

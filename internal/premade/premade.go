@@ -51,6 +51,22 @@ func New(root string) *Library {
 	return &Library{Root: root}
 }
 
+// permanentCategories are the package categories that represent a character's
+// core identity. Packages in these categories are always applied and cannot be
+// toggled off; every other category (items, etc.) is toggleable.
+var permanentCategories = map[string]bool{
+	"classes":     true,
+	"races":       true,
+	"backgrounds": true,
+}
+
+// Toggleable reports whether a package in the given category can be enabled and
+// disabled by the user. Identity packages (class/race/background) are permanent
+// and therefore not toggleable.
+func Toggleable(category string) bool {
+	return !permanentCategories[category]
+}
+
 // packagesDir is the directory holding package definitions.
 func (l *Library) packagesDir() string {
 	return filepath.Join(l.Root, "packages")

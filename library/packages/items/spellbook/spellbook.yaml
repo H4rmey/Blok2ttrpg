@@ -1,0 +1,6 @@
+id: spellbook
+name: Spellbook
+description: A tome of arcane knowledge expanding your magical repertoire.
+shifts:
+  general.Knowledge: 1
+  general.Magic: 1

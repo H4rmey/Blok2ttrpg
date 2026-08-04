@@ -1,0 +1,7 @@
+id: dwarf
+name: Dwarf
+description: Hardy and resolute, dwarves are master crafters and stalwart defenders.
+shifts:
+  general.Strength: 1
+  general.Crafting: 1
+  defense.Constitution: 1

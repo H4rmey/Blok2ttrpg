@@ -1,0 +1,6 @@
+id: criminal
+name: Criminal
+description: A life in the underworld honed your stealth and light fingers.
+shifts:
+  general.Stealth: 2
+  general.Thievery: 2

@@ -1,0 +1,7 @@
+id: human
+name: Human
+description: Adaptable and versatile, humans excel through broad competence.
+shifts:
+  general.People Skill: 1
+  general.Crafting: 1
+  general.Knowledge: 1

@@ -1,0 +1,45 @@
+name: Entangle (L10)
+description: A writhing thicket bursts across a wide area, rooting all caught within it and crushing them with thorned vines.
+type: concentration
+fields:
+  comment: A field of grasping, thorned vines.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Rooted in place by the thicket.
+      condition: anchored
+      duration: "unlimited"
+      solution:
+        - value: defense.Reflex
+        - value: general.Strength
+    interaction: zone
+    interaction_data:
+      comment: ""
+      radius: 3
+      range: "25"
+      duration: 3
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Reflex
+  - type: persistent_effect
+    fields:
+      comment: Thorns tear at the trapped.
+      effect_name: Thorns
+      effect_type: damage
+      solution:
+        - value: defense.Constitution
+    interaction: zone
+    interaction_data:
+      comment: ""
+      radius: 3
+      range: "25"
+      duration: 3
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Constitution

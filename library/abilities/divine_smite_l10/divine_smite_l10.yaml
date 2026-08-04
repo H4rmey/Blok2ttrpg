@@ -1,0 +1,42 @@
+name: Divine Smite (L10)
+description: A blazing pillar of divine wrath crashes through the target, dealing tremendous radiant damage and leaving the wicked blinded by holy light.
+type: execution
+fields:
+  comment: An overwhelming strike of divine judgment.
+  energy_steps: 1
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Overwhelming radiant smite.
+      source: offense.Power
+      flat: 8
+      damage_type:
+        - value: Radiant
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d12
+      counter_trait:
+        - value: defense.Constitution
+  - type: condition
+    fields:
+      comment: Seared by holy light.
+      condition: blinded
+      shift_amount: -2
+      duration: "2"
+      solution:
+        - value: defense.Constitution
+        - value: defense.Mind
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Mind

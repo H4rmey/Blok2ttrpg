@@ -102,9 +102,17 @@
   {{ if $c.Packages }}
   <ul class="installed-packages">
     {{ range $c.Packages }}
-    <li class="installed-package">
+    <li class="installed-package{{ if and .Toggleable (not .Enabled) }} pkg-disabled{{ end }}">
       <div class="installed-package-info">
+        {{ if .Toggleable }}
+        <label class="pkg-toggle">
+          <input type="checkbox" {{ if .Enabled }}checked{{ end }}
+                 hx-post="/characters/{{ $c.ID }}/packages/{{ .ID }}/toggle">
+          <span class="pkg-name">{{ .Name }}</span>
+        </label>
+        {{ else }}
         <span class="pkg-name">{{ .Name }}</span>
+        {{ end }}
         {{ if .Shifts }}
         <div class="pkg-shifts">
           {{ range $trait, $delta := .Shifts }}
@@ -117,6 +125,7 @@
               hx-delete="/characters/{{ $c.ID }}/packages/{{ .ID }}"
               hx-confirm="Remove this package and everything it added?">X</button>
     </li>
+
     {{ end }}
   </ul>
 

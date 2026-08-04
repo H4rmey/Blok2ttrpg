@@ -1,0 +1,25 @@
+name: Vicious Mockery (L1)
+description: A string of cutting insults laced with magic that wounds the mind and rattles a foe's focus.
+type: execution
+fields:
+  comment: A magically barbed insult.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Psychic sting from cruel words.
+      source: offense.Mind
+      flat: 1
+      damage_type:
+        - value: Psychic
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "25"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Mind

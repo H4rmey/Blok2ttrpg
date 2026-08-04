@@ -1,0 +1,7 @@
+id: tiefling
+name: Tiefling
+description: Marked by infernal heritage, tieflings carry innate magic and resilience.
+shifts:
+  general.Magic: 1
+  offense.Magic: 1
+  general.People Skill: 1

@@ -1,0 +1,9 @@
+id: ranger
+name: Ranger
+description: A wilderness hunter and skilled marksman who tracks and marks prey.
+shifts:
+  general.Perception: 2
+  general.Nature: 2
+  offense.Precision: 2
+imports:
+  - hunters_mark_l1

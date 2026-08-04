@@ -1,0 +1,37 @@
+name: Second Wind (L10)
+description: A veteran fighter's iron will floods them with vigor, restoring significant health and steeling them against the next blow.
+type: execution
+fields:
+  comment: A surge of battle-hardened resolve.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: healing
+    fields:
+      comment: Strong self heal.
+      source: d12
+      flat: 6
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d8
+      counter_trait:
+        - value: defense.Constitution
+  - type: condition
+    fields:
+      comment: Braced against the next blow.
+      condition: encouraged
+      shift_amount: 2
+      duration: "2"
+      solution:
+        - value: defense.Constitution
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d8
+      counter_trait:
+        - value: defense.Constitution

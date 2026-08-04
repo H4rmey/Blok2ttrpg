@@ -1,0 +1,21 @@
+name: Second Wind (L1)
+description: A fighter digs deep and shrugs off a bit of harm, recovering a small amount of health.
+type: execution
+fields:
+  comment: A quick burst of resolve to recover health.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: healing
+    fields:
+      comment: Self heal from sheer grit.
+      source: d6
+      flat: 2
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

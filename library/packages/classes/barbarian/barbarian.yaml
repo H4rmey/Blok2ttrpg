@@ -1,0 +1,9 @@
+id: barbarian
+name: Barbarian
+description: A ferocious warrior who channels primal fury into overwhelming strength.
+shifts:
+  general.Strength: 3
+  offense.Power: 2
+  defense.Constitution: 2
+imports:
+  - rage_l1

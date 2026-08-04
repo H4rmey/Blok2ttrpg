@@ -1,0 +1,45 @@
+name: Fireball (L10)
+description: The iconic roaring explosion. A massive fiery detonation that engulfs an area and leaves survivors burning.
+type: execution
+fields:
+  comment: A roaring explosion that fills a wide radius with fire.
+  energy_steps: 1
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Explosive fire blast in an area.
+      source: offense.Magic
+      flat: 6
+      damage_type:
+        - value: Fire
+    interaction: area
+    interaction_data:
+      comment: ""
+      radius: 3
+      range: "25"
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Reflex
+        - value: defense.Constitution
+  - type: persistent_effect
+    fields:
+      comment: Lingering flames scorch those caught in the blast.
+      effect_name: Burning
+      effect_type: damage
+      solution:
+        - value: defense.Reflex
+        - value: defense.Constitution
+    interaction: area
+    interaction_data:
+      comment: ""
+      radius: 3
+      range: "25"
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Reflex
+        - value: defense.Constitution

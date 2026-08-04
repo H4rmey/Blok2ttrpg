@@ -1,0 +1,25 @@
+name: Magic Missile (L1)
+description: A single dart of pure force that reliably strikes its target.
+type: execution
+fields:
+  comment: One unerring bolt of arcane force.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Reliable force dart.
+      source: offense.Magic
+      flat: 2
+      damage_type:
+        - value: Force
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "25"
+      targets: 1
+    validation_data:
+      comment: Reliable - hard to avoid.
+      engage: d8
+      counter_trait:
+        - value: defense.Reflex

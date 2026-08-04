@@ -1,0 +1,9 @@
+id: paladin
+name: Paladin
+description: A holy warrior who smites foes with divine power and shields allies.
+shifts:
+  general.Strength: 2
+  offense.Power: 2
+  defense.Mind: 1
+imports:
+  - divine_smite_l1

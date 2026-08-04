@@ -1,0 +1,7 @@
+name: Arcane Focus
+description: A sustained channeling of magical energy that empowers your spells.
+type: concentration
+fields:
+  comment: Maintain focus each round to keep the magic flowing.
+  energy_steps: 0
+  action_steps: 0

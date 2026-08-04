@@ -1,0 +1,7 @@
+id: hermit
+name: Hermit
+description: Years of solitude gave you deep knowledge and self-reliance.
+shifts:
+  general.Knowledge: 1
+  general.Medicine: 1
+  general.Nature: 1

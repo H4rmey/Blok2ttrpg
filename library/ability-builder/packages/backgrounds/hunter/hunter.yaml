@@ -1,8 +1,0 @@
-id: hunter
-name: Hunter
-description: A patient tracker of beasts, at home in the wild and deadly with a ranged weapon.
-shifts:
-  general.Perception: +1
-  general.Nature: +1
-  offense.Precision: +1
-  general.Stealth: +1

@@ -1,0 +1,10 @@
+id: warrior
+name: Fighter
+description: A disciplined frontline combatant who excels with weapons and raw endurance.
+shifts:
+  general.Strength: 2
+  offense.Power: 2
+  defense.Constitution: 2
+imports:
+  - power_strike
+  - second_wind_l1

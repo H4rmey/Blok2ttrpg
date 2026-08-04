@@ -1,0 +1,6 @@
+id: soldier
+name: Soldier
+description: A veteran of military service, disciplined in combat and endurance.
+shifts:
+  general.Strength: 1
+  defense.Constitution: 1

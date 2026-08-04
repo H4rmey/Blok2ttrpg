@@ -11,139 +11,138 @@
       "defense.Mind": "clumsy",
       "defense.Reflex": "clumsy",
       "general.Crafting": "clumsy",
-      "general.Dexterity": "clumsy",
-      "general.Knowledge": "clumsy",
-      "general.Magic": "clumsy",
+      "general.Dexterity": "novice",
+      "general.Knowledge": "untrained",
+      "general.Magic": "untrained",
+      "general.Medicine": "novice",
       "general.Nature": "clumsy",
-      "general.People Skill": "clumsy",
+      "general.People Skill": "novice",
       "general.Perception": "clumsy",
-      "general.Performance": "clumsy",
+      "general.Performance": "proficient",
       "general.Stealth": "clumsy",
       "general.Strength": "clumsy",
       "general.Thievery": "clumsy",
       "offense.Magic": "clumsy",
       "offense.Mind": "clumsy",
       "offense.Power": "clumsy",
-      "offense.Precision": "clumsy",
+      "offense.Precision": "novice",
       "vital.Energy": "clumsy",
-      "vital.HP": "clumsy",
+      "vital.HP": "novice",
       "vital.Movement": "clumsy"
     },
     "abilities": [
       {
-        "id": "ability-1785224139837-937440089",
-        "name": "asdfasdf",
+        "id": "ability-1785832679027312800",
+        "name": "Entangle (L1)",
+        "description": "Grasping vines erupt from the ground, snaring a foe and hampering its movement.",
         "type": "execution",
         "fields": {
           "action_steps": 0,
-          "comment": "",
+          "comment": "Vines grab at the target's legs.",
           "energy_steps": 0
         },
         "enactments": [
           {
-            "type": "amplification",
+            "type": "condition",
             "fields": {
-              "amplification": "d4",
-              "comment": "",
-              "flat": 0
-            },
-            "interaction": "direct",
-            "interaction_data": {
-              "comment": "",
-              "targets": 1
-            },
-            "validation_data": {
-              "comment": "",
-              "counter_trait": [
+              "comment": "Snared by grasping plants.",
+              "condition": "slowed",
+              "duration": "2",
+              "solution": [
                 {
                   "value": "defense.Reflex"
                 },
                 {
                   "value": "defense.Constitution"
                 }
-              ],
-              "engage": "d6"
-            }
+              ]
+            },
+            "interaction": "ranged"
           }
         ]
       },
       {
-        "id": "ability-1785225689051-20338923",
-        "name": "s",
-        "type": "passive",
+        "id": "ability-1785832683527970800",
+        "name": "Entangle (L10)",
+        "description": "A writhing thicket bursts across a wide area, rooting all caught within it and crushing them with thorned vines.",
+        "type": "concentration",
         "fields": {
-          "comment": "",
-          "energy_steps": 0,
-          "range": 1,
-          "triggers": [],
-          "uses": 1
+          "action_steps": 0,
+          "comment": "A field of grasping, thorned vines.",
+          "energy_steps": 0
         },
         "enactments": [
           {
-            "type": "negation",
+            "type": "condition",
             "fields": {
-              "comment": "",
-              "flat": 0,
-              "full_counter": false,
-              "source": ""
-            },
-            "interaction": "self",
-            "interaction_data": {
-              "comment": ""
-            },
-            "validation_data": {
-              "comment": "",
-              "counter_trait": [
+              "comment": "Rooted in place by the thicket.",
+              "condition": "anchored",
+              "duration": "unlimited",
+              "solution": [
                 {
                   "value": "defense.Reflex"
                 },
                 {
+                  "value": "general.Strength"
+                }
+              ]
+            },
+            "interaction": "zone"
+          },
+          {
+            "type": "persistent_effect",
+            "fields": {
+              "comment": "Thorns tear at the trapped.",
+              "effect_name": "Thorns",
+              "effect_type": "damage",
+              "solution": [
+                {
                   "value": "defense.Constitution"
                 }
-              ],
-              "engage": "d6"
-            }
+              ]
+            },
+            "interaction": "zone"
           }
         ]
+      }
+    ],
+    "packages": [
+      {
+        "id": "entertainer",
+        "name": "Entertainer",
+        "shifts": {
+          "general.People Skill": 1,
+          "general.Performance": 2
+        },
+        "enabled": false
       },
       {
-        "id": "ability-1785226064145-70336009",
-        "name": "a",
-        "type": "reaction",
-        "fields": {
-          "comment": "",
-          "energy_steps": 0,
-          "range": 1,
-          "triggers": [],
-          "uses": 1
+        "id": "dagger",
+        "name": "Dagger",
+        "shifts": {
+          "general.Dexterity": 1,
+          "offense.Precision": 1
         },
-        "enactments": [
-          {
-            "type": "negation",
-            "fields": {
-              "comment": "",
-              "flat": 0,
-              "full_counter": false,
-              "source": "d6"
-            },
-            "interaction": "self",
-            "interaction_data": {
-              "comment": ""
-            },
-            "validation_data": {
-              "comment": "",
-              "counter_trait": [
-                {
-                  "value": "defense.Reflex"
-                },
-                {
-                  "value": "defense.Constitution"
-                }
-              ],
-              "engage": ""
-            }
-          }
-        ]
+        "enabled": false
+      },
+      {
+        "id": "healing_potion",
+        "name": "Healing Potion",
+        "shifts": {
+          "general.Medicine": 1,
+          "vital.HP": 1
+        },
+        "enabled": false
+      },
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "shifts": {
+          "general.Knowledge": 1,
+          "general.Magic": 1
+        },
+        "toggleable": true,
+        "enabled": false
       }
     ]
   }

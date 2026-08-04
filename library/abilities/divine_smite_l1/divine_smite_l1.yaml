@@ -1,0 +1,24 @@
+name: Divine Smite (L1)
+description: The paladin channels holy power into a weapon strike, searing the target with radiant energy.
+type: execution
+fields:
+  comment: A weapon blow wreathed in holy light.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Radiant smite.
+      source: offense.Power
+      flat: 3
+      damage_type:
+        - value: Radiant
+    interaction: direct
+    interaction_data:
+      comment: ""
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d8
+      counter_trait:
+        - value: defense.Constitution

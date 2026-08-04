@@ -1,8 +1,0 @@
-id: gladiator
-name: Gladiator
-description: A seasoned arena fighter who blends martial prowess with a flair for the crowd.
-shifts:
-  offense.Power: +1
-  offense.Precision: +1
-  general.Performance: +1
-  defense.Reflex: +1

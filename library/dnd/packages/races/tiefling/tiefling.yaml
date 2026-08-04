@@ -1,8 +1,0 @@
-id: tiefling
-name: Tiefling
-description: Bearers of infernal heritage, marked by horns and a talent for guile and fire.
-shifts:
-  general.Charisma: +2
-  general.Intelligence: +1
-  offense.Charisma: +1
-imports: []

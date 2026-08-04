@@ -1,8 +1,0 @@
-id: noble
-name: Noble
-description: You were born to privilege, versed in courtly manners and persuasion.
-shifts:
-  general.Persuasion: +2
-  general.Charisma: +1
-  general.Insight: +1
-imports: []

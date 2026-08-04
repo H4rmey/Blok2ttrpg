@@ -1,6 +1,0 @@
-id: criminal
-name: Criminal
-description: A past in the underworld sharpened your instincts for stealth and larceny.
-shifts:
-  general.Stealth: +2
-  general.Thievery: +1

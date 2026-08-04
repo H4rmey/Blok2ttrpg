@@ -1,9 +1,0 @@
-id: goliath
-name: Goliath
-description: Towering mountain dwellers, goliaths possess immense strength and rugged endurance.
-shifts:
-  general.Strength: +3
-  defense.Constitution: +2
-  general.Nature: +1
-  general.Magic: -1
-  general.Stealth: -1

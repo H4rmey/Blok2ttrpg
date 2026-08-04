@@ -1,0 +1,7 @@
+id: elf
+name: Elf
+description: Graceful and perceptive, elves are attuned to nature and magic.
+shifts:
+  general.Dexterity: 1
+  general.Perception: 1
+  general.Magic: 1

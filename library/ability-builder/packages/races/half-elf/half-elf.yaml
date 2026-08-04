@@ -1,8 +1,0 @@
-id: half-elf
-name: Half-Elf
-description: Blending human ambition with elven grace, half-elves are natural diplomats.
-shifts:
-  general.People Skill: +2
-  general.Dexterity: +1
-  general.Perception: +1
-  general.Magic: +1

@@ -1,8 +1,0 @@
-id: criminal
-name: Criminal
-description: You lived by breaking the law, gaining a talent for stealth and deception.
-shifts:
-  general.Stealth: +2
-  general.Dexterity: +1
-  general.Insight: +1
-imports: []

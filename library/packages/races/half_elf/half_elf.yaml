@@ -1,0 +1,6 @@
+id: half_elf
+name: Half-Elf
+description: Blending human ambition and elven grace, half-elves are charming and versatile.
+shifts:
+  general.People Skill: 2
+  general.Perception: 1

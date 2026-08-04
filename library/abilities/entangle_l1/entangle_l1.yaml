@@ -1,0 +1,26 @@
+name: Entangle (L1)
+description: Grasping vines erupt from the ground, snaring a foe and hampering its movement.
+type: execution
+fields:
+  comment: Vines grab at the target's legs.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Snared by grasping plants.
+      condition: slowed
+      duration: "2"
+      solution:
+        - value: defense.Reflex
+        - value: defense.Constitution
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "25"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

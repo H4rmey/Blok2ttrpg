@@ -31,6 +31,17 @@ type InstalledPackage struct {
 	ID     string         `json:"id"`
 	Name   string         `json:"name"`
 	Shifts map[string]int `json:"shifts,omitempty"`
+
+	// Toggleable marks a package whose effects can be turned on and off by the
+	// user (e.g. items). Class, race, and background packages are permanent and
+	// are not toggleable.
+	Toggleable bool `json:"toggleable,omitempty"`
+
+	// Enabled reports whether a toggleable package's effects are currently
+	// applied. Non-toggleable packages are always enabled. When a toggleable
+	// package is disabled its proficiency shifts are reversed and its abilities
+	// are removed, but the record is kept so it can be re-enabled later.
+	Enabled bool `json:"enabled"`
 }
 
 // Name returns a display name, falling back to the id.

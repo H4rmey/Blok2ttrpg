@@ -1,0 +1,42 @@
+name: Hunter's Mark (L10)
+description: A master hunter brands their quarry with lethal focus, marking it and adding a stinging burst of damage the moment the mark takes hold.
+type: concentration
+fields:
+  comment: Brand a quarry and punish it relentlessly.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Target is marked as prey.
+      condition: marked
+      duration: unlimited
+      solution:
+        - value: defense.Reflex
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "50"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Reflex
+  - type: damage
+    fields:
+      comment: Bonus damage on the marked quarry.
+      source: offense.Precision
+      flat: 4
+      damage_type:
+        - value: Piercing
+    interaction: ranged
+    interaction_data:
+      comment: ""
+      range: "50"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d10
+      counter_trait:
+        - value: defense.Reflex

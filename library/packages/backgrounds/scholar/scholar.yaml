@@ -1,0 +1,6 @@
+id: scholar
+name: Scholar
+description: A lifelong learner steeped in books, lore, and research.
+shifts:
+  general.Knowledge: 2
+  general.Magic: 1

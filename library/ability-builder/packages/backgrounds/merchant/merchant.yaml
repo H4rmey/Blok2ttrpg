@@ -1,7 +1,0 @@
-id: merchant
-name: Merchant
-description: A shrewd trader with a silver tongue and an eye for value and opportunity.
-shifts:
-  general.People Skill: +2
-  general.Knowledge: +1
-  general.Perception: +1

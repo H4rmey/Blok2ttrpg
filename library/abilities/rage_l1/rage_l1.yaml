@@ -1,0 +1,22 @@
+name: Rage (L1)
+description: The barbarian erupts into fury, hitting harder for a short time before the exhaustion sets in.
+type: phase
+fields:
+  comment: Enter a battle fury, then pay for it after.
+enactments:
+  - type: phase
+    fields:
+      comment: Boost power now, weaken after.
+      phase-duration: 2
+      shift_amount: 1
+      affected_traits:
+        - value: offense.Power
+        - value: general.Strength
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
