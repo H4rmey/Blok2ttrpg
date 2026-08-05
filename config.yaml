@@ -1,0 +1,2238 @@
+traits:
+  general:
+    - Strength
+    - Dexterity
+    - Stealth
+    - Perception
+    - Nature
+    - Crafting
+    - People Skill
+    - Performance
+    - Thievery
+    - Knowledge
+    - Magic
+    - Medicine
+  offense:
+    - Precision
+    - Power
+    - Mind
+    - Magic
+  defense:
+    - Reflex
+    - Constitution
+    - Mind
+    - Magic
+  vital:
+    - HP
+    - Movement
+    - Energy
+# States configuration for Enact State enactment type.
+# Placeholders: costs are tunable and represent WIP values.
+
+additional_condition:
+  build_cost: 0
+  energy_cost: 0
+
+# Config-defined grouped dropdown sources for conditions. Both wrap the single
+# unified conditions list in one labelled optgroup. Options use bare condition
+# ids (no namespace), which the cost engine resolves via ConditionByID:
+# shiftable conditions charge per-shift, fixed conditions charge build/energy.
+# "conditions_all" backs the Enact Condition selector; "states_all" backs the
+# reaction triggers' condition follow-up dropdowns.
+option_groups:
+  conditions_all:
+    groups:
+      - source: conditions
+        label: "Conditions"
+
+
+conditions:
+  # General states apply trait shifts with per-shift cost
+  - id: blinded
+    name: "Blinded"
+    description: "Reduces certain trait rolls"
+    min_shift: -6
+    max_shift: 0
+    shift_cost:
+      build_cost: 0
+      energy_cost: 0
+  - id: encumbered
+    name: "Encumbered"
+    description: "Reduces movement and relevant traits"
+    min_shift: -6
+    max_shift: 0
+    shift_cost:
+      build_cost: 0
+      energy_cost: 0
+  - id: encouraged
+    name: "Encouraged"
+    description: "Positive trait shifts"
+    min_shift: 1
+    max_shift: 6
+    shift_cost:
+      build_cost: 0
+      energy_cost: 0
+  - id: frightened
+    name: "Frightened"
+    description: "Negative trait shifts"
+    min_shift: -6
+    max_shift: 0
+    shift_cost:
+      build_cost: 0
+      energy_cost: 0
+  # Targeting & Perception Mechanics
+  - id: taunted
+    name: "Taunted"
+    description: "You can only target a preset Target."
+    build_cost: 0
+    energy_cost: 0
+  - id: swayed
+    name: "Swayed"
+    description: "You cannot target a preset Target anymore."
+    build_cost: 0
+    energy_cost: 0
+  - id: untargetable
+    name: "Untouchable"
+    description: "You cannot be targeted."
+    build_cost: 0
+    energy_cost: 0
+  - id: ignored
+    name: "Ignored"
+    description: "You cannot be targeted, but you can still get hit."
+    build_cost: 0
+    energy_cost: 0
+  - id: confused
+    name: "Confused"
+    description: "You indiscriminately target anyone."
+    build_cost: 0
+    energy_cost: 0
+  - id: vengeful
+    name: "Vengeful"
+    description: "You can only target the last entity that dealt damage to you."
+    build_cost: 0
+    energy_cost: 0
+  - id: distracted
+    name: "Distracted"
+    description: "If you change your current target to a new one, your rolls will shift one down for that new target."
+    build_cost: 0
+    energy_cost: 0
+  - id: isolated
+    name: "Isolated"
+    description: "You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent."
+    build_cost: 0
+    energy_cost: 0
+
+  # Mind Control & Behavioral Constraints
+  - id: charmed
+    name: "Charmed"
+    description: "You must do what the Charmer says."
+    build_cost: 0
+    energy_cost: 0
+  - id: hypnotized
+    name: "Hypnotized"
+    description: "You mimic the exact movement and action of the person who hypnotized you on their last turn."
+    build_cost: 0
+    energy_cost: 0
+  - id: stubborn
+    name: "Stubborn"
+    description: "You cannot repeat the same action or use the same ability two turns in a row."
+    build_cost: 0
+    energy_cost: 0
+  - id: paranoid
+    name: "Paranoid"
+    description: "You refuse help from anyone."
+    build_cost: 0
+    energy_cost: 0
+  - id: insane
+    name: "Insane"
+    description: "At the start of your turn, roll a die (d4) to determine random behavior."
+    build_cost: 0
+    energy_cost: 0
+
+  # Action & Ability Inhibitors
+  - id: stunned
+    name: "Stunned"
+    description: "You are stunned; you lose one of your actions."
+    build_cost: 0
+    energy_cost: 0
+  - id: paralyzed
+    name: "Paralyzed"
+    description: "Lose your turn."
+    build_cost: 0
+    energy_cost: 0
+  - id: pacified
+    name: "Pacified"
+    description: "You can no longer attack any Target."
+    build_cost: 0
+    energy_cost: 0
+  - id: enraged
+    name: "Enraged"
+    description: "You can no longer use weapons."
+    build_cost: 0
+    energy_cost: 0
+  - id: disarmed
+    name: "Disarmed"
+    description: "You no longer have a weapon."
+    build_cost: 0
+    energy_cost: 0
+  - id: silenced
+    name: "Silenced"
+    description: "You can no longer talk."
+    build_cost: 0
+    energy_cost: 0
+  - id: deafened
+    name: "Deafened"
+    description: "You can no longer listen."
+    build_cost: 0
+    energy_cost: 0
+  - id: stifled
+    name: "Stifled"
+    description: "Your hands are bound; you cannot use items, potions, or consumables from your inventory."
+    build_cost: 0
+    energy_cost: 0
+  - id: staggered
+    name: "Staggered"
+    description: "You can no longer use Reactions or your Preparation is cancelled."
+    build_cost: 0
+    energy_cost: 0
+
+  # Movement & Positioning
+  - id: prone
+    name: "Prone"
+    description: "You are knocked on the ground; use one of your actions to get up."
+    build_cost: 0
+    energy_cost: 0
+  - id: anchored
+    name: "Anchored"
+    description: "You can no longer move."
+    build_cost: 0
+    energy_cost: 0
+  - id: restrained
+    name: "Restrained"
+    description: "You can no longer use your hands."
+    build_cost: 0
+    energy_cost: 0
+  - id: slowed
+    name: "Slowed"
+    description: "Movement speed shifted one down."
+    build_cost: 0
+    energy_cost: 0
+  - id: terrified
+    name: "Terrified"
+    description: "You move 1m away from the target (or take 1d4 damage)."
+    build_cost: 0
+    energy_cost: 0
+
+  # Dice & Stats Modifications
+  - id: weakened
+    name: "Weakened"
+    description: "Damaging rolls are shifted one die down."
+    build_cost: 0
+    energy_cost: 0
+  - id: fragile
+    name: "Fragile"
+    description: "Engager that targets you, may shift their damage die by +1."
+    build_cost: 0
+    energy_cost: 0
+  - id: cursed
+    name: "Cursed"
+    description: "Die shifts up are converted to die shifts down."
+    build_cost: 0
+    energy_cost: 0
+  - id: blessed
+    name: "Blessed"
+    description: "Die shifts down are converted to die shifts up."
+    build_cost: 0
+    energy_cost: 0
+  - id: hesitant
+    name: "Hesitant"
+    description: "Your Engagement Roll must be rolled twice."
+    build_cost: 0
+    energy_cost: 0
+  - id: broken_gear
+    name: "Broken Gear"
+    description: "Rolls for this gear are reduced by one die shift."
+    build_cost: 0
+    energy_cost: 0
+  - id: amplified_gear
+    name: "Amplified Gear"
+    description: "Rolls for this gear are upgraded by one die shift."
+    build_cost: 0
+    energy_cost: 0
+
+  # Energy & Resource Manipulation
+  - id: fatigued
+    name: "Fatigued"
+    description: "Energy cost of abilities is increased by 1."
+    build_cost: 0
+    energy_cost: 0
+  - id: energized
+    name: "Energized"
+    description: "Energy cost of abilities is reduced by 1."
+    build_cost: 0
+    energy_cost: 0
+
+  # Time & Round Economy
+  - id: delayed
+    name: "Delayed"
+    description: "You move down one in the turn order."
+    build_cost: 0
+    energy_cost: 0
+  - id: hastened
+    name: "Hastened"
+    description: "You move up one in the turn order."
+    build_cost: 0
+    energy_cost: 0
+  - id: echoed
+    name: "Echoed"
+    description: "Whatever action you took last round will be executed automatically next round."
+    build_cost: 0
+    energy_cost: 0
+
+  # Health, Death & Reality Alterations
+  - id: dying
+    name: "Dying"
+    description: "Your HP went below 0; you are out of combat until revived by an ally."
+    build_cost: 0
+    energy_cost: 0
+  - id: doomed
+    name: "Doomed"
+    description: "You will move to Dying in x turns."
+    build_cost: 0
+    energy_cost: 0
+  - id: invincible
+    name: "Invincible"
+    description: "You cannot be damaged."
+    build_cost: 0
+    energy_cost: 0
+  - id: zombified
+    name: "Zombified"
+    description: "Healing damages instead; Damage heals instead."
+    build_cost: 0
+    energy_cost: 0
+  - id: linked
+    name: "Linked"
+    description: "You are linked to a Target; what happens to you happens to the linked Target. This links per Trait."
+    build_cost: 0
+    energy_cost: 0
+  - id: incorporeal
+    name: "Incorporeal"
+    description: "Phase through walls."
+    build_cost: 0
+    energy_cost: 0
+  - id: marked
+    name: "Marked"
+    description: "Everything that happens to you is buffed or nerfed (pick one)."
+    build_cost: 0
+    energy_cost: 0
+proficiencies:
+  - id: untrained
+    name: "Untrained"
+    cost: 1
+    die: "d4"
+    vitals:
+      hp: 8
+      movement: 3
+      energy: 5
+  - id: novice
+    name: "Novice"
+    cost: 1
+    die: "d6"
+    vitals:
+      hp: 12
+      movement: 4
+      energy: 8
+  - id: proficient
+    name: "Proficient"
+    cost: 1
+    die: "d8"
+    vitals:
+      hp: 16
+      movement: 5
+      energy: 12
+  - id: expert
+    name: "Expert"
+    cost: 1
+    die: "d10"
+    vitals:
+      hp: 20
+      movement: 6
+      energy: 16
+  - id: master
+    name: "Master"
+    cost: 1
+    die: "d12"
+    vitals:
+      hp: 24
+      movement: 7
+      energy: 20
+  - id: legendary
+    name: "Legendary"
+    cost: 0
+    die: "d20"
+    vitals:
+      hp: 28
+      movement: 8
+      energy: 25
+enactments:
+  information: "What is this going to do?"
+  render_information: false
+  amplification:
+    name: "Enact Amplification"
+    description: "Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has a Amplification Die which determines the amplification of the effect."
+    information: "Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has an Amplification Die which determines the amplification of the effect."
+    render_information: false
+    base_energy: 0
+
+    base_action: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: mode
+        label: "Amplification Mode"
+        type: dropdown
+        default: die_roll
+        information: "Choose how the amplification is determined: a fixed die-size shift up/down the die ladder, or a die roll."
+        options:
+          - value: die_shift
+            label: "Die Shift"
+          - value: die_roll
+            label: "Die Roll"
+      - key: shift_amount
+        label: "Die Shift -/+"
+        type: free_number
+        default: 0
+        min: -6
+        max: 6
+        step: 1
+        visibility_when: mode
+        show_when: die_shift
+        information: "How many die-sizes the target effect is shifted up (+) or down (-)."
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+      - key: amplification
+        label: "Amplification"
+        type: dropdown
+        default: d4
+        options_source: roll_generic
+        visibility_when: mode
+        show_when: die_roll
+        information: "The die rolled to determine how much the target effect is amplified. Larger dice amplify more but cost more to build."
+      - key: flat
+
+        label: "Flat Bonus"
+        type: free_number
+        default: 0
+        min: 0
+        max: 8
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+
+  condition:
+    type: "Enact Condition"
+    description: "Enact State will apply a conditon to a target (e.g., prone, stunned, charmed). A Condition will always have a value"
+    information: "Enact State will apply a condition to a target (e.g., prone, stunned, charmed). A Condition will always have a value."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: condition
+        label: "Condition"
+        type: dropdown
+        options_source: conditions_all
+        shift_key: shift_amount
+      - key: duration
+        label: "Duration (turns)"
+        type: dropdown
+        default: "1"
+        options:
+          - value: "1"
+            label: "1 turn"
+          - value: "2"
+            label: "2 turns"
+            cost:
+              build_cost: 0
+          - value: "3"
+            label: "3 turns"
+            cost:
+              build_cost: 0
+          - value: "4"
+            label: "4 turns"
+            cost:
+              build_cost: 0
+          - value: "5"
+            label: "5 turns"
+            cost:
+              build_cost: 0
+          - value: "6"
+            label: "6 turns"
+            cost:
+              build_cost: 0
+          - value: "unlimited"
+            label: "Unlimited"
+            cost:
+              build_cost: 0
+              energy_cost: 0
+      - key: solution
+        label: "Solutions"
+        type: multiselect
+        default_count: 2
+        row_fields:
+          - key: value
+            label: "Solution"
+            type: dropdown
+            options_source: traits_general_defense
+            group_offsets:
+              default_group: defense
+              offsets:
+                general:
+                  build_cost: 0
+        per_item:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+
+  damage:
+    type: "Enact Damage"
+    description: "Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonusses."
+    information: "Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: source
+        label: "Source"
+        type: dropdown
+        options_source: traits_generic_offense
+        information: "The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die."
+      - key: flat
+        label: "Flat Bonus"
+        type: free_number
+        default: 0
+        min: 0
+        max: 20
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+      - key: damage_type
+        label: "Damage Types"
+        type: multiselect
+        default_count: 1
+        options_source: damage_types
+        row_fields:
+          - key: value
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+        per_item:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+
+  persistent_effect:
+    type: "Enact Effect"
+    description: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for {{fieldDefault (enactment \"effect\") \"duration\"}} rounds and triggers at either the start of the target's turn. On the targets turn they can re-roll the solution again to get rid fo the effect or take an action to remove it."
+    information: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for a few rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: effect_name
+        label: "Name"
+        type: free_text
+        default: "Effect"
+      - key: effect_type
+        label: "Applies"
+        type: dropdown
+        options:
+          - value: damage
+            label: "Damage"
+          - value: healing
+            label: "Heal"
+          - value: movement
+            label: "Move"
+        inline_builder:
+          kind: enactment
+      - key: solution
+        label: "Solutions"
+        type: multiselect
+        default_count: 2
+        row_fields:
+          - key: value
+            label: "Solution"
+            type: dropdown
+            options_source: traits_general_defense
+            group_offsets:
+              default_group: defense
+              offsets:
+                general:
+                  build_cost: 0
+        per_item:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+
+  healing:
+    type: "Enact Healing"
+    description: "Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain onter bonusses."
+    information: "Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: source
+        label: "Source"
+        type: dropdown
+        default: d4
+        options_source: roll_heal
+        group_offsets:
+          default_group: roll_generic
+          offsets:
+            defense:
+              build_cost: 0
+      - key: flat
+        label: "Flat Bonus"
+        type: free_number
+        default: 0
+        min: 0
+        max: 20
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+
+  movement:
+    type: "Enact Movement"
+    description: "Enact Movement allows you to move a Target up to a preset amount of meters."
+    information: "Enact Movement allows you to move a Target up to a preset amount of meters."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: distance
+        label: "Distance"
+        type: free_number
+        default: 1
+        min: 1
+        max: 20
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+      - key: direction
+        label: "Directions"
+        type: multiselect
+        default_count: 1
+        row_fields:
+          - key: value
+            label: "Direction"
+            type: dropdown
+            options_source: directions
+        per_item:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+
+  negation:
+    type: "Enact Negation"
+    description: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
+    information: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: full_counter
+        label: "Ability hits Engager instead"
+        type: checkbox
+        cost:
+          build_cost: 0
+          energy_cost: 0
+
+  nerf:
+    type: "Enact Nerf"
+    description: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
+    information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    allowed_interactions:
+      - self
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: shifted_trait
+        label: "Trait"
+        type: dropdown
+        options_source: traits_all
+      - key: shift_amount
+        label: "Shift -/+"
+        type: free_number
+        default: -1
+        min: -6
+        max: -1
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 01
+            energy_cost: 0
+
+  phase:
+    name: "Enact Phase"
+    description: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two round those traits are shifted down for 2 rounds."
+    information: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds."
+    render_information: false
+    fields:
+
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: phase-duration
+        label: "Duration (rounds)"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+      - key: shift_amount
+        label: "Shift -/+"
+        type: free_number
+        default: 0
+        min: -6
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 01
+            energy_cost: 0
+      - key: affected_traits
+        label: "Affected Trait(s)"
+        type: multiselect
+        default_count: 2
+        options_source: traits_all
+        row_defaults:
+          - value: "offense.precision"
+          - value: "offense.power"
+        row_fields:
+          - key: value
+            label: "Affected Trait"
+            type: dropdown
+            options_source: traits_all
+            group_offsets:
+              default_group: defense
+              offsets:
+                defense:
+                  build_cost: 0
+                offense:
+                  build_cost: 0
+                general:
+                  build_cost: 0
+        per_item:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+
+  reduction:
+    type: "Enact Reduction"
+    description: "Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect."
+    information: "Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect."
+    render_information: false
+    base_energy: 0
+
+    base_action: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: mode
+        label: "Reduction Mode"
+        type: dropdown
+        default: die_roll
+        information: "Choose how the reduction is determined: a fixed die-size shift up/down the die ladder, or a die roll."
+        options:
+          - value: die_shift
+            label: "Die Shift"
+          - value: die_roll
+            label: "Die Roll"
+      - key: shift_amount
+        label: "Die Shift -/+"
+        type: free_number
+        default: 0
+        min: -6
+        max: 6
+        step: 1
+        visibility_when: mode
+        show_when: die_shift
+        information: "How many die-sizes the target effect is shifted up (+) or down (-)."
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+      - key: reduction
+        label: "Reduction"
+        type: dropdown
+        default: d4
+        options_source: roll_generic
+        visibility_when: mode
+        show_when: die_roll
+      - key: flat
+
+        label: "Flat Bonus"
+        type: free_number
+        default: 0
+        min: 0
+        max: 8
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+
+
+  shift:
+    type: "Enact Shift"
+    description: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value rangeing from -6 to 6, which decide how much and in what direction the shift happens."
+    information: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: shifted_trait
+        label: "Trait"
+        type: dropdown
+        options_source: traits_all
+      - key: shift_amount
+        label: "Shift -/+"
+        type: free_number
+        default: 0
+        min: -6
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+      - key: shift_uses
+        label: "Uses"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+interactions:
+  information: "Who are we hitting?"
+  render_information: false
+  self:
+    type: "Self"
+    description: "Targets the Ability user."
+    information: "Self Interactions apply to your own character. They do require a validation still. But the Counter roll is a Generic Die instead. This means that you are still the Engager and the DM makes the Counter Roll."
+    render_information: false
+    base_cost:
+
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+
+  direct:
+    type: "Direct"
+    description: "Affects a single target within 1m."
+    information: "Direct interactions are done by targeting those who are near you. They have to be within 1 meter of you in order for your enactment to execute."
+    render_information: false
+    default_range: 1
+
+    default_targets: 1
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: targets
+        label: "Targets"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+
+  ranged:
+    type: "Ranged"
+    description: "Affects a single target at range."
+    information: "Ranged Interactions include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to Direct Interactions but come with a lower success rate due to a penalty on the Engagement Roll. Additionally, the target must not be obstructed or invisible to the Engager by default."
+    render_information: false
+    default_range: 5
+
+    default_targets: 1
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: range
+        label: "Range"
+        type: dropdown
+        default: "5"
+        options:
+          - value: "5"
+            label: "5m (Close)"
+            cost:
+              build_cost: 0
+          - value: "25"
+            label: "25m (Medium)"
+            cost:
+              build_cost: 0
+          - value: "50"
+            label: "50m (Long)"
+            cost:
+              build_cost: 0
+      - key: targets
+        label: "Targets"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+
+  area:
+    type: "Area"
+    description: "Affects a radius at a point within range."
+    information: "Area Interactions encompass actions like bombs, splash potions, and traps. These interactions always have a defined Radius and Range. Radius determines the area where the Enactment will take effect; Range specifies how far from the user the point of origin is set."
+    render_information: false
+    default_radius: 1
+
+    default_range: 5
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: radius
+        label: "Radius"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+      - key: range
+        label: "Range"
+        type: dropdown
+        default: "5"
+        options:
+          - value: "5"
+            label: "5m (Close)"
+            cost:
+              build_cost: 0
+          - value: "25"
+            label: "25m (Medium)"
+            cost:
+              build_cost: 0
+          - value: "50"
+            label: "50m (Long)"
+            cost:
+              build_cost: 0
+
+  zone:
+    type: "Zone"
+    description: "A persistent area that triggers each round."
+    information: "An Area of Effect (AoE) Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. The effect does not trigger immediately; it activates at the start of a character's turn within the AoE or at the end of the Engager's turn."
+    render_information: false
+    default_radius: 1
+
+    default_range: 5
+    default_duration: 2
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: radius
+        label: "Radius"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+      - key: range
+        label: "Range"
+        type: dropdown
+        default: "5"
+        options:
+          - value: "5"
+            label: "5m (Close)"
+            cost:
+              build_cost: 0
+          - value: "25"
+            label: "25m (Medium)"
+            cost:
+              build_cost: 0
+          - value: "50"
+            label: "50m (Long)"
+            cost:
+              build_cost: 0
+      - key: duration
+        label: "Duration"
+        type: free_number
+        default: 2
+        min: 2
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+
+
+version: 1
+profile_id: blok2simplified
+title: "Blok2 Simplified"
+# The trait group treated as vitals (HP/Movement/Energy) rather than dice.
+vital_group: vital
+# Ordered trait categories that make up the grouped "traits_all" source.
+trait_categories:
+  - general
+  - offense
+  - defense
+combat:
+  actions:
+    amount: 3
+additional_enactment:
+  build_cost: 0
+  energy_cost: 0
+  description: "Adding an additional Enactment beyond the first"
+  # The first enactment always shows an Interaction and Validation region.
+  # These flags control whether the second and following enactments must show
+  # them. Set to false to hide that region for enactments beyond the first.
+  require_interaction: false
+  require_validation: false
+
+
+# Named option sources. Each entry may be authored as a bare string
+# (value == label, no cost) or as a full object with an optional label and
+# cost. A field referencing a source via options_source shows the
+# (-/+x pt, -/+y E) hint per entry and the engine adds the selected entry's
+# cost.
+option_sources:
+  # Dice half of the combined roll source. Referenced by the "roll_all" grouped
+  # source (see option_groups) which renders these as a "Generic" optgroup and
+  # then appends the trait categories as grouped optgroups. Used by Damage/Heal/
+  # Mitigation "Source" and the Validation "Engage" dropdown. Dice scale in cost
+  # with size; trait cost comes from the field's group_offsets.
+  roll_generic:
+    - value: "d4"
+      label: "1d4"
+      cost: { build_cost: 0, energy_cost: 0 }
+    - value: "d6"
+      label: "1d6"
+      cost: { build_cost: 0, energy_cost: 0 }
+    - value: "d8"
+      label: "1d8"
+      cost: { build_cost: 0, energy_cost: 0 }
+    - value: "d10"
+      label: "1d10"
+      cost: { build_cost: 0, energy_cost: 0 }
+    - value: "d12"
+      label: "1d12"
+      cost: { build_cost: 0, energy_cost: 0 }
+    - value: "d20"
+      label: "1d20"
+      cost: { build_cost: 0, energy_cost: 0 }
+
+  # Per-damage-type build cost for the follow-up dropdown of typed damage
+  # triggers. Common/mundane damage is cheap (+0); rarer or more potent
+  # elemental/exotic damage costs more, on a +0..+6 scale.
+  damage_types:
+    - value: "Physical"
+      cost: { build_cost: 0 }
+    - value: "Slashing"
+      cost: { build_cost: 0 }
+    - value: "Piercing"
+      cost: { build_cost: 0 }
+    - value: "Bludgeoning"
+      cost: { build_cost: 0 }
+    - value: "Fire"
+      information: "Burning damage. Often ignites flammable objects and can leave lingering burn effects."
+      cost: { build_cost: 0 }
+    - value: "Cold"
+      information: "Freezing damage. Commonly slows or hampers movement of the target."
+      cost: { build_cost: 0 }
+    - value: "Lightning"
+      cost: { build_cost: 0 }
+    - value: "Thunder"
+      cost: { build_cost: 0 }
+    - value: "Acid"
+      cost: { build_cost: 0 }
+    - value: "Poison"
+      cost: { build_cost: 0 }
+    - value: "Psychic"
+      cost: { build_cost: 0 }
+    - value: "Necrotic"
+      cost: { build_cost: 0 }
+    - value: "Radiant"
+      cost: { build_cost: 0 }
+    - value: "Force"
+      cost: { build_cost: 0 }
+    - value: "Arcane"
+      cost: { build_cost: 0 }
+    - value: "Nature"
+      cost: { build_cost: 0 }
+    - value: "Holy"
+      cost: { build_cost: 0 }
+    - value: "Shadow"
+      cost: { build_cost: 0 }
+    - value: "Chaos"
+      cost: { build_cost: 0 }
+
+  # Per-weapon-type build cost for the "gets hit by a weapon of a type"
+  # follow-up dropdown. Common weapons are cheap; specialised/ranged/exotic
+  # weapons cost more, on a +0..+6 scale.
+  weapon_types:
+    - value: "Unarmed"
+      cost: { build_cost: 0 }
+    - value: "Sword"
+      cost: { build_cost: 0 }
+    - value: "Axe"
+      cost: { build_cost: 0 }
+    - value: "Mace"
+      cost: { build_cost: 0 }
+    - value: "Spear"
+      cost: { build_cost: 0 }
+    - value: "Dagger"
+      cost: { build_cost: 0 }
+    - value: "Bow"
+      cost: { build_cost: 0 }
+    - value: "Crossbow"
+      cost: { build_cost: 0 }
+    - value: "Thrown"
+      cost: { build_cost: 0 }
+    - value: "Firearm"
+      cost: { build_cost: 0 }
+    - value: "Staff"
+      cost: { build_cost: 0 }
+    - value: "Wand"
+      cost: { build_cost: 0 }
+    - value: "Shield"
+      cost: { build_cost: 0 }
+
+  # Balanced per-knockout costs for Phase abilities. A knockout is a condition
+  # that interrupts an active Phase, so it is a drawback: the more easily a
+  # knockout can be triggered, the larger the build discount it grants. "None"
+  # (no way to interrupt) is a benefit and therefore costs build points.
+  knockout_options:
+    - value: "None"
+      cost:
+        build_cost: 0
+    - value: "Engager takes damage"
+      cost:
+        build_cost: 0
+    - value: "Engager falls unconscious"
+      cost:
+        build_cost: 0
+    - value: "Engager dies"
+      cost:
+        build_cost: 0
+    - value: "Engager gets grabbed or restrained"
+      cost:
+        build_cost: 0
+    - value: "Engager moves voluntarily"
+      cost:
+        build_cost: 0
+    - value: "Engager is moved by another effect"
+      cost:
+        build_cost: 0
+    - value: "Engager fails a validation"
+      cost:
+        build_cost: 0
+    - value: "Engager uses another phase"
+      cost:
+        build_cost: 0
+    - value: "Engager loses line of sight to target"
+      cost:
+        build_cost: 0
+    - value: "Target moves out of range"
+      cost:
+        build_cost: 0
+    - value: "Target falls unconscious"
+      cost:
+        build_cost: 0
+    - value: "Target dies"
+      cost:
+        build_cost: 0
+    - value: "Target succeeds on a counter roll"
+      cost:
+        build_cost: 0
+    - value: "Phase duration expires"
+      cost:
+        build_cost: 0
+    - value: "Engager runs out of energy"
+      cost:
+        build_cost: 0
+
+  # Balanced per-event build costs for the reactive Trigger Event dropdown.
+  # A trigger is described as a Subject (You / An Ally / An Opponent /
+  # Someone Else) plus one of these subject-agnostic events. Common or
+  # powerful reactive events cost more; situational or weak events cost less.
+  # Baseline is 2 build points. Some events cascade into a follow-up dropdown
+  # (damage type, enactment type, trait, condition) via visibility_when.
+  trigger_events:
+    # Movement
+    - value: "moves away from you"
+      cost:
+        build_cost: 0
+    - value: "moves towards you"
+      cost:
+        build_cost: 0
+    - value: "moves past you"
+      cost:
+        build_cost: 0
+    - value: "enters interaction range"
+      cost:
+        build_cost: 0
+    - value: "leaves interaction range"
+      cost:
+        build_cost: 0
+    - value: "ends their turn within range"
+      cost:
+        build_cost: 0
+    - value: "is moved by an effect"
+      cost:
+        build_cost: 0
+    # Damage & healing - typed variants keep triggers specific instead of
+    # firing on any damage/heal at all.
+    - value: "gets hit by damage of a type"
+      cost:
+        build_cost: 0
+    - value: "deals damage of a type"
+      cost:
+        build_cost: 0
+    - value: "gets healed by an ability of a type"
+      cost:
+        build_cost: 0
+    - value: "gets hit by a weapon of a type"
+      cost:
+        build_cost: 0
+    # Abilities & enactments - typed variants for enactment / ability type.
+    - value: "starts casting an ability of a type"
+      cost:
+        build_cost: 0
+        energy_cost: 0
+    - value: "gets targeted by an ability of a type"
+      cost:
+        build_cost: 0
+        energy_cost: 0
+    - value: "gets hit with an enactment of a type"
+      cost:
+        build_cost: 0
+    - value: "resolves an enactment of a type"
+      cost:
+        build_cost: 0
+    # Checks, validations & condition - typed variants.
+    - value: "makes a trait check of a type"
+      cost:
+        build_cost: 0
+    - value: "fails a validation of a type"
+      cost:
+        build_cost: 0
+    - value: "succeeds on a validation of a type"
+      cost:
+        build_cost: 0
+    - value: "becomes affected by a condition of a type"
+      cost:
+        build_cost: 0
+    - value: "recovers from a condition of a type"
+      cost:
+        build_cost: 0
+    # Status changes.
+    - value: "falls unconscious"
+      cost:
+        build_cost: 0
+    - value: "dies"
+      cost:
+        build_cost: 0
+    # Non-typed "any" events. These fire on the broad category regardless of
+    # type, so they have no follow-up dropdown and cost slightly more than the
+    # typed variants (a broader trigger is more useful).
+    - value: "moves"
+      cost:
+        build_cost: 0
+    - value: "takes any damage"
+      cost:
+        build_cost: 0
+    - value: "deals any damage"
+      cost:
+        build_cost: 0
+    - value: "gets healed"
+      cost:
+        build_cost: 0
+    - value: "casts any ability"
+      cost:
+        build_cost: 0
+        energy_cost: 0
+    - value: "gets targeted by any ability"
+      cost:
+        build_cost: 0
+        energy_cost: 0
+    - value: "is hit by any enactment"
+      cost:
+        build_cost: 0
+    - value: "makes any trait check"
+      cost:
+        build_cost: 0
+    - value: "fails any validation"
+      cost:
+        build_cost: 0
+    - value: "succeeds on any validation"
+      cost:
+        build_cost: 0
+    - value: "becomes affected by any condition"
+      cost:
+        build_cost: 0
+    - value: "recovers from any condition"
+      cost:
+        build_cost: 0
+
+  # How the per-round upkeep of a Concentration ability is paid.
+  concentration_upkeep:
+    - value: "1 Action or 1 Energy"
+      cost: { build_cost: 0, energy_cost: 0 }
+    - value: "1 Action"
+      cost: { build_cost: 0, energy_cost: 0 }
+    - value: "1 Energy"
+      cost: { build_cost: 0, energy_cost: 0 }
+
+  # Who the reactive trigger watches. Paired with a trigger_events entry to
+  # form a full trigger, e.g. "An Opponent" + "gets hit by damage of a type".
+  trigger_subjects:
+    - You
+    - An Ally
+    - An Opponent
+    - Someone Else
+    
+  directions:
+    - Towards
+    - Away
+
+  roll_medicine:
+    - value: "medicine"
+      label: "Medicine"
+      cost: { build_cost: 0, energy_cost: 0 }
+
+
+# Config-defined grouped dropdown sources. Each names an ordered set of member
+# groups, replacing the previously hardcoded traits_all/roll_all grouping.
+option_groups:
+  # All trait categories, grouped by category. Trait cost comes from a field's
+  # group_offsets keyed on the category id (general/offense/defense).
+  roll_heal:
+    groups:
+      - source: roll_generic
+        label: "Generic"
+      - source: roll_medicine
+        label: "Medicine"
+
+  traits_generic_offense:
+    groups:
+      - source: roll_generic
+        label: "Generic"
+      - source: traits.offense
+        label: "Defense"
+
+  traits_general_defense:
+    groups:
+      - source: traits.general
+        label: "General"
+      - source: traits.defense
+        label: "Defense"
+
+  traits_all:
+    groups:
+      - source: traits.general
+        label: "General"
+      - source: traits.offense
+        label: "Offense"
+      - source: traits.defense
+        label: "Defense"
+  # A "Generic" group of costed dice followed by the trait categories. Dice
+  # carry no namespace (so bare defaults like d6 keep matching); traits are
+  # namespaced by category so group_offsets apply.
+  roll_all:
+    groups:
+      - source: roll_generic
+        label: "Generic"
+      - source: traits.general
+        label: "General"
+      - source: traits.offense
+        label: "Offense"
+      - source: traits.defense
+        label: "Defense"
+
+validations:
+  information: "What rolls are needed?"
+  render_information: false
+  fields:
+    - key: comment
+      label: "Comment"
+      type: free_text
+    # Single combined engage dropdown: a "Generic" group of costed dice
+    # followed by the trait categories (General/Offense/Defense), grouped just
+    # like the traits_all source. Trait cost comes from group_offsets.
+    - key: engage
+      label: "Engage"
+      type: dropdown
+      default: d6
+      options_source: roll_all
+      group_offsets:
+        default_group: offense
+        offsets:
+          offense:
+            build_cost: 0
+          general:
+            build_cost: 0
+          defense:
+            build_cost: 0
+    - key: counter_trait
+      label: "Counter Trait"
+      type: multiselect
+      default_count: 2
+      options_source: traits_all
+      row_defaults:
+        - value: "defense.Reflex"
+        - value: "defense.Constitution"
+      row_fields:
+        - key: value
+          label: "Counter Trait"
+          type: dropdown
+          options_source: traits_all
+          # A counter roll is expected to use a Defensive trait. Choosing a
+          # trait from any other category costs extra build points.
+          group_offsets:
+            default_group: defense
+            offsets:
+              defense:
+                build_cost: 0
+              offense:
+                build_cost: 0
+              general:
+                build_cost: 0
+      per_item:
+        increase:
+          build_cost: 0
+          energy_cost: 0
+        decrease:
+          build_cost: 0
+          energy_cost: 0
+leveling:
+  max_level: 10
+  trait_points:
+    standard_trait_count: 22
+    starting_formula: "(trait_count + 2) / 3"
+    levels:
+      - level: 1
+        points_gained: 0
+        total: 8
+      - level: 2
+        points_gained: 1
+        total: 9
+      - level: 3
+        points_gained: 1
+        total: 10
+      - level: 4
+        points_gained: 1
+        total: 11
+      - level: 5
+        points_gained: 2
+        total: 13
+      - level: 6
+        points_gained: 1
+        total: 14
+      - level: 7
+        points_gained: 1
+        total: 15
+      - level: 8
+        points_gained: 1
+        total: 16
+      - level: 9
+        points_gained: 1
+        total: 17
+      - level: 10
+        points_gained: 2
+        total: 19
+  ability_points:
+    levels:
+      - level: 1
+        points_gained: 0
+        total: 10
+      - level: 2
+        points_gained: 2
+        total: 12
+      - level: 3
+        points_gained: 3
+        total: 15
+      - level: 4
+        points_gained: 2
+        total: 17
+      - level: 5
+        points_gained: 4
+        total: 21
+      - level: 6
+        points_gained: 2
+        total: 23
+      - level: 7
+        points_gained: 3
+        total: 26
+      - level: 8
+        points_gained: 2
+        total: 28
+      - level: 9
+        points_gained: 3
+        total: 31
+      - level: 10
+        points_gained: 5
+        total: 36# Character attribute sections. These are free-form character sheet fields
+# stored generically on the character. They do not affect ability cost.
+attributes:
+  identity:
+    label: "Identity"
+    fields:
+      - key: name
+        label: "Name"
+        type: free_text
+      - key: player
+        label: "Player"
+        type: free_text
+      - key: ancestry
+        label: "Ancestry"
+        type: free_text
+      - key: archetype
+        label: "Archetype"
+        type: free_text
+  description:
+    label: "Description"
+    fields:
+      - key: appearance
+        label: "Appearance"
+        type: free_text
+      - key: backstory
+        label: "Backstory"
+        type: free_text
+      - key: notes
+        label: "Notes"
+        type: free_text 
+# Order in which markdown files under ./docs are appended to the generated output.
+# Paths are relative to the project root.
+# The list must reference only files that exist on disk.
+file_order:
+  - ./docs/TODO.md
+  - ./docs/blok2ttrpg.md
+  - ./docs/core/character-attributes.md
+  - ./docs/core/character-traits.md
+  - ./docs/core/dice-rolling.md
+  - ./docs/core/combat.md
+  - ./docs/core/conditions.md
+
+  - ./docs/core/abilities.md
+  - ./docs/core/items.md
+  - ./docs/core/leveling.md
+  - ./docs/modules/ability-builder/cheatsheet.md
+  - ./docs/modules/ability-builder/introduction.md
+  - ./docs/modules/ability-builder/configuration.md
+  - ./docs/modules/ability-builder/ability-creation-guide.md
+  - ./docs/modules/ability-builder/ability-types/execution.md
+  - ./docs/modules/ability-builder/ability-types/preparation.md
+  - ./docs/modules/ability-builder/ability-types/reaction.md
+  - ./docs/modules/ability-builder/ability-types/concentration.md
+  - ./docs/modules/ability-builder/ability-types/passive.md
+  - ./docs/modules/ability-builder/enactments/amplification.md
+  - ./docs/modules/ability-builder/enactments/condition.md
+  - ./docs/modules/ability-builder/enactments/damage.md
+  - ./docs/modules/ability-builder/enactments/effect.md
+  - ./docs/modules/ability-builder/enactments/healing.md
+  - ./docs/modules/ability-builder/enactments/minion.md
+  - ./docs/modules/ability-builder/enactments/movement.md
+  - ./docs/modules/ability-builder/enactments/negation.md
+
+  - ./docs/modules/ability-builder/enactments/nerf.md
+  - ./docs/modules/ability-builder/enactments/phase.md
+  - ./docs/modules/ability-builder/enactments/reduction.md
+  - ./docs/modules/ability-builder/enactments/shift.md
+  - ./docs/modules/ability-builder/enactments/stack.md
+  - ./docs/modules/ability-builder/interactions/area.md
+  - ./docs/modules/ability-builder/interactions/area-of-effect.md
+  - ./docs/modules/ability-builder/interactions/direct.md
+  - ./docs/modules/ability-builder/interactions/ranged.md
+  - ./docs/modules/ability-builder/interactions/self.md
+  - ./docs/modules/ability-builder/validations.md
+  - ./docs/modules/ability-builder/leveling.md
+ability_types:
+  information: "Decide the timing of when the ability triggers"
+  render_information: false
+  execution:
+    name: "Execution"
+    information: "Execution is the most basic form for an Ability. It is simply the: \"I want to do this now\" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry."
+    render_information: false
+    base_energy: 3
+    base_action: 2
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: energy_steps
+        label: "Energy +/-"
+        type: free_number
+        information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
+        default: 0
+        min: -2
+        max: 2
+        step: 1
+        per_step:
+          increase:
+            build_cost: 2
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 1
+      - key: action_steps
+        label: "Action +/-"
+        type: free_number
+        information: "Adjust the amount of Actions it will cost to use this ability"
+        default: 0
+        min: -1
+        max: 1
+        step: 1
+        per_step:
+          increase:
+            build_cost: 2
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+
+  reaction:
+    name: "Reaction"
+    description: "Triggered in response to an event or enemy action."
+    information: "Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed. For example, you could have a reaction that triggers whenever someone runs towards you, Enacting a healing effect on yourself."
+    render_information: false
+    base_energy: 3
+    base_action: 0
+    base_range: 1
+    base_uses: 1
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: energy_steps
+        label: "Energy +/-"
+        type: free_number
+        default: 0
+        min: -2
+        max: 2
+        step: 1
+        per_step:
+          increase:
+            build_cost: 02
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 01
+      - key: triggers
+        label: "Triggers"
+        type: multiselect
+        default_count: 1
+        per_item:
+          increase:
+            build_cost: 0
+        row_fields:
+          - key: subject
+            label: "Subject"
+            type: dropdown
+            options_source: trigger_subjects
+          - key: event
+            label: "Event"
+            type: dropdown
+            options_source: trigger_events
+          - key: damage_type_hit
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "gets hit by damage of a type"
+          - key: damage_type_dealt
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "deals damage of a type"
+          - key: weapon_type
+            label: "Weapon Type"
+            type: dropdown
+            options_source: weapon_types
+            visibility_when: event
+            show_when: "gets hit by a weapon of a type"
+          - key: heal_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets healed by an ability of a type"
+          - key: cast_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "starts casting an ability of a type"
+          - key: targeted_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets targeted by an ability of a type"
+          - key: enactment_type_hit
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "gets hit with an enactment of a type"
+          - key: enactment_type_resolved
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "resolves an enactment of a type"
+          - key: trait
+            label: "Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "makes a trait check of a type"
+          - key: fail_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "fails a validation of a type"
+          - key: succeed_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "succeeds on a validation of a type"
+          - key: state_applied
+            label: "Condition"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "becomes affected by a condition of a type"
+          - key: state_recovered
+            label: "Condition"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "recovers from a condition of a type"
+      - key: range
+        label: "Range"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+      - key: uses
+        label: "Uses"
+        type: free_number
+        default: 1
+        min: 1
+        max: 3
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+
+  minion:
+    name: "Minion (Deprecated)"
+    description: "Deprecated. Kept for backward compatibility only."
+    base_energy: 0
+    base_health: 10
+    base_lifetime: 3
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+
+  preparation:
+    name: "Preparation"
+    description: "Works like a Reaction but must be prepared with an action."
+    information: "Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation will cost an action to prepare, but in turn cost far less Energy to use."
+    render_information: false
+
+    base_energy: 3
+    base_action: 2
+    base_range: 1
+    base_uses: 1
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: energy_steps
+        label: "Energy +/-"
+        type: free_number
+        default: 0
+        min: -2
+        max: 2
+        step: 1
+        per_step:
+          increase:
+            build_cost: 02
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 01
+      - key: action_steps
+        label: "Action +/-"
+        type: free_number
+        default: 0
+        min: -1
+        max: 1
+        step: 1
+        per_step:
+          increase:
+            build_cost: 02
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+      - key: triggers
+        label: "Triggers"
+        type: multiselect
+        default_count: 1
+        per_item:
+          increase:
+            build_cost: 0
+        row_fields:
+          - key: subject
+            label: "Subject"
+            type: dropdown
+            options_source: trigger_subjects
+          - key: event
+            label: "Event"
+            type: dropdown
+            options_source: trigger_events
+          - key: damage_type_hit
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "gets hit by damage of a type"
+          - key: damage_type_dealt
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "deals damage of a type"
+          - key: weapon_type
+            label: "Weapon Type"
+            type: dropdown
+            options_source: weapon_types
+            visibility_when: event
+            show_when: "gets hit by a weapon of a type"
+          - key: heal_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets healed by an ability of a type"
+          - key: cast_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "starts casting an ability of a type"
+          - key: targeted_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets targeted by an ability of a type"
+          - key: enactment_type_hit
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "gets hit with an enactment of a type"
+          - key: enactment_type_resolved
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "resolves an enactment of a type"
+          - key: trait
+            label: "Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "makes a trait check of a type"
+          - key: fail_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "fails a validation of a type"
+          - key: succeed_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "succeeds on a validation of a type"
+          - key: state_applied
+            label: "Condition"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "becomes affected by a condition of a type"
+          - key: state_recovered
+            label: "Condition"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "recovers from a condition of a type"
+      - key: range
+        label: "Range"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+      - key: uses
+        label: "Uses"
+        type: free_number
+        default: 1
+        min: 1
+        max: 3
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+
+  concentration:
+    name: "Concentration"
+    description: "An effect that persists over multiple rounds as long as the Engager maintains focus. It costs Actions and Energy to initiate, then re-triggers its Enactments every round as long as the upkeep is paid."
+    information: "Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep."
+    render_information: false
+    base_energy: 3
+
+    base_action: 2
+    base_upkeep_action: 1
+    base_upkeep_energy: 1
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: energy_steps
+        label: "Energy +/-"
+        type: free_number
+        default: 0
+        min: -2
+        max: 2
+        step: 1
+        per_step:
+          increase:
+            build_cost: 02
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 01
+      - key: action_steps
+        label: "Action +/-"
+        type: free_number
+        default: 0
+        min: -1
+        max: 1
+        step: 1
+        per_step:
+          increase:
+            build_cost: 02
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+      - key: upkeep_cost
+        label: "Upkeep Cost"
+        type: dropdown
+        options_source: concentration_upkeep
+      - key: effortless
+        label: "Effortless (upkeep is free)"
+        type: checkbox
+        cost:
+          build_cost: 0
+          energy_cost: 0
+
+  passive:
+    name: "Passive"
+    description: "An always-on effect that costs no Energy or Actions to use and can trigger whenever its condition is met. In exchange for being free to use it carries a higher base build cost."
+    information: "Passives are Abilities that are always on. They work just like a Reaction, they trigger when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself. Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build."
+    render_information: false
+    base_energy: 0
+
+    base_action: 0
+    base_range: 1
+    base_uses: 1
+    base_cost:
+      build_cost: 0
+    fields:
+      - key: comment
+        label: "Comment"
+        type: free_text
+      - key: energy_steps
+        label: "Energy +/-"
+        type: free_number
+        default: 0
+        min: -2
+        max: 2
+        step: 1
+        per_step:
+          increase:
+            build_cost: 02
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 01
+      - key: triggers
+        label: "Triggers"
+        type: multiselect
+        default_count: 1
+        per_item:
+          increase:
+            build_cost: 0
+        row_fields:
+          - key: subject
+            label: "Subject"
+            type: dropdown
+            options_source: trigger_subjects
+          - key: event
+            label: "Event"
+            type: dropdown
+            options_source: trigger_events
+          - key: damage_type_hit
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "gets hit by damage of a type"
+          - key: damage_type_dealt
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "deals damage of a type"
+          - key: weapon_type
+            label: "Weapon Type"
+            type: dropdown
+            options_source: weapon_types
+            visibility_when: event
+            show_when: "gets hit by a weapon of a type"
+          - key: heal_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets healed by an ability of a type"
+          - key: cast_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "starts casting an ability of a type"
+          - key: targeted_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets targeted by an ability of a type"
+          - key: enactment_type_hit
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "gets hit with an enactment of a type"
+          - key: enactment_type_resolved
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "resolves an enactment of a type"
+          - key: trait
+            label: "Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "makes a trait check of a type"
+          - key: fail_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "fails a validation of a type"
+          - key: succeed_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "succeeds on a validation of a type"
+          - key: state_applied
+            label: "Condition"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "becomes affected by a condition of a type"
+          - key: state_recovered
+            label: "Condition"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "recovers from a condition of a type"
+      - key: range
+        label: "Range"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+      - key: uses
+        label: "Uses"
+        type: free_number
+        default: 1
+        min: 1
+        max: 3
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0

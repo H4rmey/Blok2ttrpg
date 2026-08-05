@@ -1,17 +1,3 @@
-- [ ] healing traits.general.medicine doesn't work
-- [ ] cost for adding solution
-- [ ] rename solution to multiselect 
-- [ ] multiselect add small or/and to lef of items
-- [ ] multiselect allow for non dropdowns
-- [ ] add special case for nerf where you do not need validation or interaction because it is always applied to yourself
-- [ ] allow for enactments to specify what validations and what interactions are allowed/blocked. when you allow something it will only show what is on the allowed list. when you block something it will only show everything except what is on the block list
-```yaml
-allowed_validations:
-blocked_validations:
-allowed_interactions:
-blocked_interactions:
-```
-
 # blok2ttrpg
 ## Blok2ttrpg
 
@@ -1306,7 +1292,7 @@ A sword slash and a laser beam can easily be the exact same Ability mechanically
 
 ---
 
-# Step 1 - Pick an Ability Type
+### Step 1 - Pick an Ability Type
 
 Most people should start with **Execution**.
 
@@ -1337,7 +1323,7 @@ Only use the other Ability Types when you specifically want special timing or be
 
 ---
 
-# Step 2 - Pick the Main Enactment
+### Step 2 - Pick the Main Enactment
 
 This is the actual effect.
 
@@ -1361,13 +1347,13 @@ Think of Enactments as LEGO blocks.
 
 Most abilities are simply multiple Enactments chained together.
 
-## Example - Acid Splash
+**Example - Acid Splash**
 
-### D&D
+**D&D**
 
 Throw acid at somebody.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -1379,13 +1365,13 @@ Done.
 
 ---
 
-## Example - Stunning Strike
+**Example - Stunning Strike**
 
-### D&D
+**D&D**
 
 Punch someone and potentially stun them.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -1401,13 +1387,13 @@ Simple.
 
 ---
 
-# Step 3 - Combine Enactments
+### Step 3 - Combine Enactments
 
 This is where the fun starts.
 
 Most iconic abilities are just multiple Enactments chained together.
 
-## Ice Lance
+**Ice Lance**
 
 Deals damage and slows.
 
@@ -1419,7 +1405,7 @@ Execution
 
 ---
 
-## Explosive Arrow
+**Explosive Arrow**
 
 Deals damage and pushes people away.
 
@@ -1431,7 +1417,7 @@ Execution
 
 ---
 
-## Vampiric Touch
+**Vampiric Touch**
 
 Deals damage and heals the caster.
 
@@ -1443,7 +1429,7 @@ Execution
 
 ---
 
-## Hook Shot
+**Hook Shot**
 
 Pulls an enemy towards you.
 
@@ -1455,7 +1441,7 @@ Execution
 
 ---
 
-## Divine Blessing
+**Divine Blessing**
 
 Buff an ally's next roll.
 
@@ -1466,7 +1452,7 @@ Execution
 
 ---
 
-## Poison Blade
+**Poison Blade**
 
 Deals damage and applies poison.
 
@@ -1479,13 +1465,13 @@ Execution
 
 ---
 
-# Understanding Enactment Chains
+### Understanding Enactment Chains
 
 By default, Enactments are executed in order.
 
 If an Enactment fails its Validation, the chain stops.
 
-## Example
+**Example**
 
 ```text
 Execution
@@ -1508,7 +1494,7 @@ The chain ends.
 
 ---
 
-# Understanding "Will Always Resolve"
+### Understanding "Will Always Resolve"
 
 A common misunderstanding is:
 
@@ -1526,7 +1512,7 @@ The only thing this perk changes is:
 
 > The Enactment is processed even if previous Enactments failed.
 
-## Example
+**Example**
 
 ```text
 Execution
@@ -1556,7 +1542,7 @@ The perk only ignores failures from earlier Enactments.
 
 ---
 
-## Example - Stunning Strike
+**Example - Stunning Strike**
 
 ```text
 Execution
@@ -1571,7 +1557,7 @@ The stun attempt still occurs.
 
 ---
 
-## Example - Lingering Acid
+**Example - Lingering Acid**
 
 ```text
 Execution
@@ -1586,9 +1572,9 @@ Even if the direct acid splash doesn't land, the acid pool may still be created.
 
 ---
 
-# Design Philosophy
+### Design Philosophy
 
-## Without Always Resolve
+**Without Always Resolve**
 
 ```text
 Damage
@@ -1602,7 +1588,7 @@ Failure stops the chain.
 
 ---
 
-## With Always Resolve
+**With Always Resolve**
 
 ```text
 Damage -> Failed
@@ -1616,15 +1602,15 @@ This allows utility effects to continue even when earlier effects fail.
 
 ---
 
-# Examples From Other Systems
+### Examples From Other Systems
 
-## Magic Missile
+**Magic Missile**
 
-### D&D
+**D&D**
 
 Automatically damages a target.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -1634,13 +1620,13 @@ Execution
 
 ---
 
-## Fireball
+**Fireball**
 
-### D&D
+**D&D**
 
 Explosion at range.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -1650,13 +1636,13 @@ Execution
 
 ---
 
-## Thunderwave
+**Thunderwave**
 
-### D&D
+**D&D**
 
 Deals damage and pushes.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -1666,13 +1652,13 @@ Execution
 
 ---
 
-## Guiding Bolt
+**Guiding Bolt**
 
-### D&D
+**D&D**
 
 Damage and easier to hit afterwards.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -1682,13 +1668,13 @@ Execution
 
 ---
 
-## Hold Person
+**Hold Person**
 
-### D&D
+**D&D**
 
 Prevents movement.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -1697,13 +1683,13 @@ Execution
 
 ---
 
-## Haste
+**Haste**
 
-### D&D
+**D&D**
 
 Moves faster and acts faster.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Phase
@@ -1715,13 +1701,13 @@ Reverse
 
 ---
 
-## Hunter's Mark
+**Hunter's Mark**
 
-### D&D
+**D&D**
 
 Extra damage against one target.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Concentration
@@ -1730,13 +1716,13 @@ Concentration
 
 ---
 
-## Shield
+**Shield**
 
-### D&D
+**D&D**
 
 Protects when attacked.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Reaction
@@ -1745,7 +1731,7 @@ Reaction
 
 ---
 
-# Step 4 - Choose Timing
+### Step 4 - Choose Timing
 
 The effect itself does **not** determine the Ability Type.
 
@@ -1753,7 +1739,7 @@ The timing does.
 
 ---
 
-## Opportunity Attack
+**Opportunity Attack**
 
 ```text
 Reaction
@@ -1768,7 +1754,7 @@ Target moves away
 
 ---
 
-## Trap
+**Trap**
 
 ```text
 Preparation
@@ -1783,7 +1769,7 @@ Target enters area
 
 ---
 
-## Flame Beam
+**Flame Beam**
 
 ```text
 Concentration
@@ -1794,7 +1780,7 @@ Maintains continuous damage.
 
 ---
 
-## Rage
+**Rage**
 
 ```text
 Phase
@@ -1810,9 +1796,9 @@ Pay for it later.
 
 ---
 
-# Example For Every Enactment
+### Example For Every Enactment
 
-## Damage
+**Damage**
 
 ```text
 Execution
@@ -1823,7 +1809,7 @@ Execution
 
 ---
 
-## Healing
+**Healing**
 
 ```text
 Execution
@@ -1834,7 +1820,7 @@ Execution
 
 ---
 
-## Movement
+**Movement**
 
 ```text
 Execution
@@ -1845,7 +1831,7 @@ Execution
 
 ---
 
-## State
+**State**
 
 ```text
 Execution
@@ -1856,7 +1842,7 @@ Execution
 
 ---
 
-## Persistent Effect
+**Persistent Effect**
 
 ```text
 Execution
@@ -1868,7 +1854,7 @@ Execution
 
 ---
 
-## Proficiency Shift
+**Proficiency Shift**
 
 ```text
 Execution
@@ -1879,7 +1865,7 @@ Execution
 
 ---
 
-## Negation
+**Negation**
 
 ```text
 Reaction
@@ -1890,11 +1876,11 @@ Reaction
 
 ---
 
-# Example For Every Ability Type
+### Example For Every Ability Type
 
-## Execution
+**Execution**
 
-### Fireball
+**Fireball**
 
 ```text
 Execution
@@ -1903,9 +1889,9 @@ Execution
 
 ---
 
-## Reaction
+**Reaction**
 
-### Riposte
+**Riposte**
 
 ```text
 Reaction
@@ -1920,9 +1906,9 @@ Target damages engager
 
 ---
 
-## Preparation
+**Preparation**
 
-### Land Mine
+**Land Mine**
 
 ```text
 Preparation
@@ -1932,9 +1918,9 @@ Preparation
 
 ---
 
-## Concentration
+**Concentration**
 
-### Mind Prison
+**Mind Prison**
 
 ```text
 Concentration
@@ -1945,9 +1931,9 @@ Reapplies every round.
 
 ---
 
-## Phase
+**Phase**
 
-### Battle Trance
+**Battle Trance**
 
 ```text
 Phase
@@ -1959,9 +1945,9 @@ Reverse
 
 ---
 
-## Minion
+**Minion**
 
-### Wolf Companion
+**Wolf Companion**
 
 ```text
 Minion
@@ -1975,11 +1961,11 @@ Howl:
 
 ---
 
-# Full Example Using Almost Everything
+### Full Example Using Almost Everything
 
 Let's make something stupid.
 
-## Thunder Chain Prison
+**Thunder Chain Prison**
 
 You throw magical chains.
 
@@ -1990,7 +1976,7 @@ If they hit:
 - Restrain them
 - Continuously shock them
 
-### Builder Version
+**Builder Version**
 
 ```text
 Concentration
@@ -2017,6 +2003,8 @@ All in a single ability.
 
 ---
 
+# Ability Types
+
 ## Execution
 
 Execution is the most basic form for an Ability. It is simply the "I want to do this now" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
@@ -2026,133 +2014,6 @@ Execution is the most basic form for an Ability. It is simply the "I want to do 
 1. **Comment** *(optional)* - A note you can write on the ability. No cost.
 2. **Energy +/-** - Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some. Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
 3. **Action +/-** - Adjust the amount of Actions it will cost to use this ability. Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
-
-## Preparation
-
-Just like a Reaction, a Preparation works outside the regular turn order. It follows the exact same rules as a Reaction, but instead of passively sitting in the background, a Preparation costs an action to prepare, and in turn costs far less Energy to use.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
-3. **Action +/-** - Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
-4. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
-
-   For each trigger, choose one of:
-   - You, An Ally, An Opponent, Someone Else
-
-   For each trigger, choose one of:
-   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - 
-
-   For each trigger, choose one of:
-   - 
-5. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
-6. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
-
-## Reaction
-
-Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed. For example, you could have a reaction that triggers whenever someone runs towards you, Enacting a healing effect on yourself.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
-3. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
-
-   For each trigger, choose one of:
-   - You, An Ally, An Opponent, Someone Else
-
-   For each trigger, choose one of:
-   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - 
-
-   For each trigger, choose one of:
-   - 
-4. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
-5. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
 
 ## Concentration
 
@@ -2230,6 +2091,135 @@ Passives are Abilities that are always on. They work just like a Reaction, trigg
 4. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
 5. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
 
+## Reaction
+
+Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed. For example, you could have a reaction that triggers whenever someone runs towards you, Enacting a healing effect on yourself.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
+3. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
+
+   For each trigger, choose one of:
+   - You, An Ally, An Opponent, Someone Else
+
+   For each trigger, choose one of:
+   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
+
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
+
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
+
+   For each trigger, choose one of:
+   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
+
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
+
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
+
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
+
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
+
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
+
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+
+   For each trigger, choose one of:
+   - 
+
+   For each trigger, choose one of:
+   - 
+4. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
+5. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
+
+## Preparation
+
+Just like a Reaction, a Preparation works outside the regular turn order. It follows the exact same rules as a Reaction, but instead of passively sitting in the background, a Preparation costs an action to prepare, and in turn costs far less Energy to use.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
+3. **Action +/-** - Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
+4. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
+
+   For each trigger, choose one of:
+   - You, An Ally, An Opponent, Someone Else
+
+   For each trigger, choose one of:
+   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
+
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
+
+   For each trigger, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
+
+   For each trigger, choose one of:
+   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
+
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
+
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
+
+   For each trigger, choose one of:
+   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
+
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
+
+   For each trigger, choose one of:
+   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
+
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+
+   For each trigger, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+
+   For each trigger, choose one of:
+   - 
+
+   For each trigger, choose one of:
+   - 
+5. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
+6. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
+
+# Enactments
+
 ## Enact Amplification
 
 Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has an Amplification Die which determines the amplification of the effect.
@@ -2240,7 +2230,75 @@ Enact Amplification allows you to increase the effect of an enactment you or som
 2. **Amplification Mode** - Choose how the amplification is determined: a fixed die-size shift up/down the die ladder, or a die roll. Choose one of:
    - Die Shift, Die Roll
 3. **Flat Bonus** - Any whole number from **0 to 8** (starts at 0). Cost: Free per +1.
+## Enact Healing
 
+Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Source** - Choose one of:
+   - *Generic:* 1d4, 1d6, 1d8, 1d10, 1d12, 1d20
+   - *Medicine:* Medicine
+3. **Flat Bonus** - Any whole number from **0 to 20** (starts at 0). Cost: Free per +1.
+## Enact Stack
+
+Enact Stack (WIP)## Enact Effect
+
+The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for  rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Name** *(optional)* - A note you can write on the ability. No cost.
+3. **Applies** - Choose one of:
+   - Damage, Heal, Move
+4. **Solutions** - You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
+
+   For each solution, choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Defense:* Reflex, Constitution, Mind, Magic
+## Enact Minion
+
+Creates a minion to fight for you. By default the minion does not have any traits, has 1hp and no movement or energy. This can be upgraded.## Enact Damage
+
+Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Source** - The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die. Choose one of:
+   - *Generic:* 1d4, 1d6, 1d8, 1d10, 1d12, 1d20
+   - *Defense:* Precision, Power, Mind, Magic
+3. **Flat Bonus** - Any whole number from **0 to 20** (starts at 0). Cost: Free per +1.
+4. **Damage Types** - You start with **one** damage type and may add or remove damage types. Cost: Free per damage type.
+
+   For each damage type, choose one of:
+   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
+## Enact Nerf
+
+Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy.
+
+Enact Nerf can only target yourself.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Trait** - Choose one of:
+   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
+   - *Offense:* Precision, Power, Mind, Magic
+   - *Defense:* Reflex, Constitution, Mind, Magic
+3. **Shift -/+** - Any whole number from **-6 to -1** (starts at -1). Cost: Free per step.
+## Enact Reduction
+
+Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Reduction Mode** - Choose how the reduction is determined: a fixed die-size shift up/down the die ladder, or a die roll. Choose one of:
+   - Die Shift, Die Roll
+3. **Flat Bonus** - Any whole number from **0 to 8** (starts at 0). Cost: Free per +1.
 ## Enact Condition
 
 Enact Condition applies a condition to a target (e.g., prone, stunned, charmed). A Condition always has a value. See the Conditions chapter for the full list of conditions and their effects.
@@ -2257,54 +2315,6 @@ Enact Condition applies a condition to a target (e.g., prone, stunned, charmed).
    For each solution, choose one of:
    - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
    - *Defense:* Reflex, Constitution, Mind, Magic
-
-## Enact Damage
-
-Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Source** - The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die. Choose one of:
-   - Precision, Power, Mind, Magic
-3. **Flat Bonus** - Any whole number from **0 to 20** (starts at 0). Cost: Free per +1.
-4. **Damage Types** - You start with **one** damage type and may add or remove damage types. Cost: Free per damage type.
-
-   For each damage type, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-## Enact Effect
-
-The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for  rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Name** *(optional)* - A note you can write on the ability. No cost.
-3. **Applies** - Choose one of:
-   - Damage, Heal, Move
-4. **Solutions** - You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
-
-   For each solution, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-## Enact Healing
-
-Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Source** - Choose one of:
-   - *Generic:* 1d4, 1d6, 1d8, 1d10, 1d12, 1d20
-   - *Medicine:* Medicine
-3. **Flat Bonus** - Any whole number from **0 to 20** (starts at 0). Cost: Free per +1.
-
-## Enact Minion
-
-Creates a minion to fight for you. By default the minion does not have any traits, has 1hp and no movement or energy. This can be upgraded.
-
 ## Enact Movement
 
 Enact Movement allows you to move a Target up to a preset amount of meters.
@@ -2317,21 +2327,9 @@ Enact Movement allows you to move a Target up to a preset amount of meters.
 
    For each direction, choose one of:
    - Towards, Away
+## Enact Shift
 
-## Enact Negation
-
-Enact Negation allows characters to ignore or nullify the effects of an enactment you or someone else are the target for.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Ability hits Engager instead** - Enable Ability hits Engager instead. Cost: Free.
-
-## Enact Nerf
-
-Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy.
-
-Enact Nerf can only target yourself.
+Enact Shift allows you to temporarily enhance or weaken Traits. It always has a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens.
 
 **How to build it**
 
@@ -2340,8 +2338,16 @@ Enact Nerf can only target yourself.
    - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
    - *Offense:* Precision, Power, Mind, Magic
    - *Defense:* Reflex, Constitution, Mind, Magic
-3. **Shift -/+** - Any whole number from **-6 to -1** (starts at -1). Cost: Free per step.
+3. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: Free per step.
+4. **Uses** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
+## Enact Negation
 
+Enact Negation allows characters to ignore or nullify the effects of an enactment you or someone else are the target for.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Ability hits Engager instead** - Enable Ability hits Engager instead. Cost: Free.
 ## Enact Phase
 
 Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds.
@@ -2358,34 +2364,7 @@ Enact Phase allows you to shift some traits now and then reverse the effects lat
    - *Offense:* Precision, Power, Mind, Magic
    - *Defense:* Reflex, Constitution, Mind, Magic
 
-## Enact Reduction
-
-Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Reduction Mode** - Choose how the reduction is determined: a fixed die-size shift up/down the die ladder, or a die roll. Choose one of:
-   - Die Shift, Die Roll
-3. **Flat Bonus** - Any whole number from **0 to 8** (starts at 0). Cost: Free per +1.
-
-## Enact Shift
-
-Enact Shift allows you to temporarily enhance or weaken Traits. It always has a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Trait** - Choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-3. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: Free per step.
-4. **Uses** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
-
-## Enact Stack
-
-Enact Stack (WIP)
+# Interactions
 
 ## Area
 
@@ -2403,6 +2382,26 @@ You can also assign the point of **Origin** to an object, but this must be discu
 3. **Range** - Choose one of:
    - 5m (Close), 25m (Medium), 50m (Long)
 
+## Ranged
+
+**Ranged** **Interactions** include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to **Direct** Interactions but come with a lower success rate due to a penalty on the **Engagement Roll**. Additionally, the target must not be obstructed or invisible to the **Engager** by default.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Range** - Choose one of:
+   - 5m (Close), 25m (Medium), 50m (Long)
+3. **Targets** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
+
+## Direct
+
+Direct interactions are done by targeting those who are near you. They have to be within 1 meter of you in order for your enactment to execute.
+
+**How to build it**
+
+1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+2. **Targets** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
+
 ## Area of Effect
 
 An **Area of Effect (AoE)** Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. While an **Area Interaction** might be like a single-use bomb, an **AoE** Interaction is akin to a bomb that detonates every round. Alternatively, it could represent a healing circle, where characters gain health each round they remain within the **AoE**. The possibilities are endless, so get creative!
@@ -2416,26 +2415,6 @@ The effect of the **AoE** does not trigger immediately. Instead, it activates ei
 3. **Range** - Choose one of:
    - 5m (Close), 25m (Medium), 50m (Long)
 4. **Duration** - Any whole number from **2 to 6** (starts at 2). Cost: Free per round.
-
-## Direct
-
-Direct interactions are done by targeting those who are near you. They have to be within 1 meter of you in order for your enactment to execute.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Targets** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
-
-## Ranged
-
-**Ranged** **Interactions** include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to **Direct** Interactions but come with a lower success rate due to a penalty on the **Engagement Roll**. Additionally, the target must not be obstructed or invisible to the **Engager** by default.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Range** - Choose one of:
-   - 5m (Close), 25m (Medium), 50m (Long)
-3. **Targets** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
 
 ## Self
 

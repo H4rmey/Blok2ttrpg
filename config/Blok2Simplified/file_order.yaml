@@ -9,7 +9,6 @@ file_order:
   - ./docs/core/dice-rolling.md
   - ./docs/core/combat.md
   - ./docs/core/conditions.md
-
   - ./docs/core/abilities.md
   - ./docs/core/items.md
   - ./docs/core/leveling.md
@@ -17,29 +16,8 @@ file_order:
   - ./docs/modules/ability-builder/introduction.md
   - ./docs/modules/ability-builder/configuration.md
   - ./docs/modules/ability-builder/ability-creation-guide.md
-  - ./docs/modules/ability-builder/ability-types/execution.md
-  - ./docs/modules/ability-builder/ability-types/preparation.md
-  - ./docs/modules/ability-builder/ability-types/reaction.md
-  - ./docs/modules/ability-builder/ability-types/concentration.md
-  - ./docs/modules/ability-builder/ability-types/passive.md
-  - ./docs/modules/ability-builder/enactments/amplification.md
-  - ./docs/modules/ability-builder/enactments/condition.md
-  - ./docs/modules/ability-builder/enactments/damage.md
-  - ./docs/modules/ability-builder/enactments/effect.md
-  - ./docs/modules/ability-builder/enactments/healing.md
-  - ./docs/modules/ability-builder/enactments/minion.md
-  - ./docs/modules/ability-builder/enactments/movement.md
-  - ./docs/modules/ability-builder/enactments/negation.md
-
-  - ./docs/modules/ability-builder/enactments/nerf.md
-  - ./docs/modules/ability-builder/enactments/phase.md
-  - ./docs/modules/ability-builder/enactments/reduction.md
-  - ./docs/modules/ability-builder/enactments/shift.md
-  - ./docs/modules/ability-builder/enactments/stack.md
-  - ./docs/modules/ability-builder/interactions/area.md
-  - ./docs/modules/ability-builder/interactions/area-of-effect.md
-  - ./docs/modules/ability-builder/interactions/direct.md
-  - ./docs/modules/ability-builder/interactions/ranged.md
-  - ./docs/modules/ability-builder/interactions/self.md
+  - ./docs/modules/ability-builder/ability-types.md
+  - ./docs/modules/ability-builder/enactments.md
+  - ./docs/modules/ability-builder/interactions.md
   - ./docs/modules/ability-builder/validations.md
   - ./docs/modules/ability-builder/leveling.md

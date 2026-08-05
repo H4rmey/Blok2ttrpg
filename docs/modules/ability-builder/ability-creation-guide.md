@@ -23,7 +23,7 @@ A sword slash and a laser beam can easily be the exact same Ability mechanically
 
 ---
 
-# Step 1 - Pick an Ability Type
+### Step 1 - Pick an Ability Type
 
 Most people should start with **Execution**.
 
@@ -54,7 +54,7 @@ Only use the other Ability Types when you specifically want special timing or be
 
 ---
 
-# Step 2 - Pick the Main Enactment
+### Step 2 - Pick the Main Enactment
 
 This is the actual effect.
 
@@ -78,13 +78,13 @@ Think of Enactments as LEGO blocks.
 
 Most abilities are simply multiple Enactments chained together.
 
-## Example - Acid Splash
+**Example - Acid Splash**
 
-### D&D
+**D&D**
 
 Throw acid at somebody.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -96,13 +96,13 @@ Done.
 
 ---
 
-## Example - Stunning Strike
+**Example - Stunning Strike**
 
-### D&D
+**D&D**
 
 Punch someone and potentially stun them.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -118,13 +118,13 @@ Simple.
 
 ---
 
-# Step 3 - Combine Enactments
+### Step 3 - Combine Enactments
 
 This is where the fun starts.
 
 Most iconic abilities are just multiple Enactments chained together.
 
-## Ice Lance
+**Ice Lance**
 
 Deals damage and slows.
 
@@ -136,7 +136,7 @@ Execution
 
 ---
 
-## Explosive Arrow
+**Explosive Arrow**
 
 Deals damage and pushes people away.
 
@@ -148,7 +148,7 @@ Execution
 
 ---
 
-## Vampiric Touch
+**Vampiric Touch**
 
 Deals damage and heals the caster.
 
@@ -160,7 +160,7 @@ Execution
 
 ---
 
-## Hook Shot
+**Hook Shot**
 
 Pulls an enemy towards you.
 
@@ -172,7 +172,7 @@ Execution
 
 ---
 
-## Divine Blessing
+**Divine Blessing**
 
 Buff an ally's next roll.
 
@@ -183,7 +183,7 @@ Execution
 
 ---
 
-## Poison Blade
+**Poison Blade**
 
 Deals damage and applies poison.
 
@@ -196,13 +196,13 @@ Execution
 
 ---
 
-# Understanding Enactment Chains
+### Understanding Enactment Chains
 
 By default, Enactments are executed in order.
 
 If an Enactment fails its Validation, the chain stops.
 
-## Example
+**Example**
 
 ```text
 Execution
@@ -225,7 +225,7 @@ The chain ends.
 
 ---
 
-# Understanding "Will Always Resolve"
+### Understanding "Will Always Resolve"
 
 A common misunderstanding is:
 
@@ -243,7 +243,7 @@ The only thing this perk changes is:
 
 > The Enactment is processed even if previous Enactments failed.
 
-## Example
+**Example**
 
 ```text
 Execution
@@ -273,7 +273,7 @@ The perk only ignores failures from earlier Enactments.
 
 ---
 
-## Example - Stunning Strike
+**Example - Stunning Strike**
 
 ```text
 Execution
@@ -288,7 +288,7 @@ The stun attempt still occurs.
 
 ---
 
-## Example - Lingering Acid
+**Example - Lingering Acid**
 
 ```text
 Execution
@@ -303,9 +303,9 @@ Even if the direct acid splash doesn't land, the acid pool may still be created.
 
 ---
 
-# Design Philosophy
+### Design Philosophy
 
-## Without Always Resolve
+**Without Always Resolve**
 
 ```text
 Damage
@@ -319,7 +319,7 @@ Failure stops the chain.
 
 ---
 
-## With Always Resolve
+**With Always Resolve**
 
 ```text
 Damage -> Failed
@@ -333,15 +333,15 @@ This allows utility effects to continue even when earlier effects fail.
 
 ---
 
-# Examples From Other Systems
+### Examples From Other Systems
 
-## Magic Missile
+**Magic Missile**
 
-### D&D
+**D&D**
 
 Automatically damages a target.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -351,13 +351,13 @@ Execution
 
 ---
 
-## Fireball
+**Fireball**
 
-### D&D
+**D&D**
 
 Explosion at range.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -367,13 +367,13 @@ Execution
 
 ---
 
-## Thunderwave
+**Thunderwave**
 
-### D&D
+**D&D**
 
 Deals damage and pushes.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -383,13 +383,13 @@ Execution
 
 ---
 
-## Guiding Bolt
+**Guiding Bolt**
 
-### D&D
+**D&D**
 
 Damage and easier to hit afterwards.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -399,13 +399,13 @@ Execution
 
 ---
 
-## Hold Person
+**Hold Person**
 
-### D&D
+**D&D**
 
 Prevents movement.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Execution
@@ -414,13 +414,13 @@ Execution
 
 ---
 
-## Haste
+**Haste**
 
-### D&D
+**D&D**
 
 Moves faster and acts faster.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Phase
@@ -432,13 +432,13 @@ Reverse
 
 ---
 
-## Hunter's Mark
+**Hunter's Mark**
 
-### D&D
+**D&D**
 
 Extra damage against one target.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Concentration
@@ -447,13 +447,13 @@ Concentration
 
 ---
 
-## Shield
+**Shield**
 
-### D&D
+**D&D**
 
 Protects when attacked.
 
-### Builder Version
+**Builder Version**
 
 ```text
 Reaction
@@ -462,7 +462,7 @@ Reaction
 
 ---
 
-# Step 4 - Choose Timing
+### Step 4 - Choose Timing
 
 The effect itself does **not** determine the Ability Type.
 
@@ -470,7 +470,7 @@ The timing does.
 
 ---
 
-## Opportunity Attack
+**Opportunity Attack**
 
 ```text
 Reaction
@@ -485,7 +485,7 @@ Target moves away
 
 ---
 
-## Trap
+**Trap**
 
 ```text
 Preparation
@@ -500,7 +500,7 @@ Target enters area
 
 ---
 
-## Flame Beam
+**Flame Beam**
 
 ```text
 Concentration
@@ -511,7 +511,7 @@ Maintains continuous damage.
 
 ---
 
-## Rage
+**Rage**
 
 ```text
 Phase
@@ -527,9 +527,9 @@ Pay for it later.
 
 ---
 
-# Example For Every Enactment
+### Example For Every Enactment
 
-## Damage
+**Damage**
 
 ```text
 Execution
@@ -540,7 +540,7 @@ Execution
 
 ---
 
-## Healing
+**Healing**
 
 ```text
 Execution
@@ -551,7 +551,7 @@ Execution
 
 ---
 
-## Movement
+**Movement**
 
 ```text
 Execution
@@ -562,7 +562,7 @@ Execution
 
 ---
 
-## State
+**State**
 
 ```text
 Execution
@@ -573,7 +573,7 @@ Execution
 
 ---
 
-## Persistent Effect
+**Persistent Effect**
 
 ```text
 Execution
@@ -585,7 +585,7 @@ Execution
 
 ---
 
-## Proficiency Shift
+**Proficiency Shift**
 
 ```text
 Execution
@@ -596,7 +596,7 @@ Execution
 
 ---
 
-## Negation
+**Negation**
 
 ```text
 Reaction
@@ -607,11 +607,11 @@ Reaction
 
 ---
 
-# Example For Every Ability Type
+### Example For Every Ability Type
 
-## Execution
+**Execution**
 
-### Fireball
+**Fireball**
 
 ```text
 Execution
@@ -620,9 +620,9 @@ Execution
 
 ---
 
-## Reaction
+**Reaction**
 
-### Riposte
+**Riposte**
 
 ```text
 Reaction
@@ -637,9 +637,9 @@ Target damages engager
 
 ---
 
-## Preparation
+**Preparation**
 
-### Land Mine
+**Land Mine**
 
 ```text
 Preparation
@@ -649,9 +649,9 @@ Preparation
 
 ---
 
-## Concentration
+**Concentration**
 
-### Mind Prison
+**Mind Prison**
 
 ```text
 Concentration
@@ -662,9 +662,9 @@ Reapplies every round.
 
 ---
 
-## Phase
+**Phase**
 
-### Battle Trance
+**Battle Trance**
 
 ```text
 Phase
@@ -676,9 +676,9 @@ Reverse
 
 ---
 
-## Minion
+**Minion**
 
-### Wolf Companion
+**Wolf Companion**
 
 ```text
 Minion
@@ -692,11 +692,11 @@ Howl:
 
 ---
 
-# Full Example Using Almost Everything
+### Full Example Using Almost Everything
 
 Let's make something stupid.
 
-## Thunder Chain Prison
+**Thunder Chain Prison**
 
 You throw magical chains.
 
@@ -707,7 +707,7 @@ If they hit:
 - Restrain them
 - Continuously shock them
 
-### Builder Version
+**Builder Version**
 
 ```text
 Concentration
