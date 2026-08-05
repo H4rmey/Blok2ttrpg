@@ -385,12 +385,6 @@ validations:
   information: "What rolls are needed?"
   render_information: false
   fields:
-    - key: comment
-      label: "Comment"
-      type: free_text
-    # Single combined engage dropdown: a "Generic" group of costed dice
-    # followed by the trait categories (General/Offense/Defense), grouped just
-    # like the traits_all source. Trait cost comes from group_offsets.
     - key: engage
       label: "Engage"
       type: dropdown

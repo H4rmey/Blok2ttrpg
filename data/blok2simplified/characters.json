@@ -47,17 +47,14 @@
             "fields": {
               "comment": "",
               "damage_type": [],
-              "flat": 0,
               "source": ""
             },
-            "interaction": "ranged",
+            "interaction": "direct",
             "interaction_data": {
-              "comment": "",
-              "range": "5",
+              "range": "1",
               "targets": 1
             },
             "validation_data": {
-              "comment": "",
               "counter_trait": [
                 {
                   "value": "defense.Reflex"

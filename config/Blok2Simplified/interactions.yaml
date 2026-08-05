@@ -3,65 +3,31 @@ interactions:
   render_information: false
   self:
     type: "Self"
-    description: "Targets the Ability user."
     information: "Self Interactions apply to your own character. They do require a validation still. But the Counter roll is a Generic Die instead. This means that you are still the Engager and the DM makes the Counter Roll."
     render_information: false
     base_cost:
-
       build_cost: 0
       energy_cost: 0
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
 
   direct:
     type: "Direct"
-    description: "Affects a single target within 1m."
-    information: "Direct interactions are done by targeting those who are near you. They have to be within 1 meter of you in order for your enactment to execute."
-    render_information: false
-    default_range: 1
-
-    default_targets: 1
-    base_cost:
-      build_cost: 0
-      energy_cost: 0
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: targets
-        label: "Targets"
-        type: free_number
-        default: 1
-        min: 1
-        max: 5
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-
-  ranged:
-    type: "Ranged"
-    description: "Affects a single target at range."
     information: "Ranged Interactions include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to Direct Interactions but come with a lower success rate due to a penalty on the Engagement Roll. Additionally, the target must not be obstructed or invisible to the Engager by default."
     render_information: false
-    default_range: 5
-
+    default_range: 1
     default_targets: 1
     base_cost:
       build_cost: 0
       energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
       - key: range
         label: "Range"
         type: dropdown
-        default: "5"
+        default: "1"
         options:
+          - value: "1"
+            label: "1m (direct)"
+            cost:
+              build_cost: 0
           - value: "5"
             label: "5m (Close)"
             cost:
@@ -79,7 +45,7 @@ interactions:
         type: free_number
         default: 1
         min: 1
-        max: 5
+        max: 8
         step: 1
         per_step:
           increase:
@@ -88,19 +54,14 @@ interactions:
 
   area:
     type: "Area"
-    description: "Affects a radius at a point within range."
     information: "Area Interactions encompass actions like bombs, splash potions, and traps. These interactions always have a defined Radius and Range. Radius determines the area where the Enactment will take effect; Range specifies how far from the user the point of origin is set."
     render_information: false
     default_radius: 1
-
     default_range: 5
     base_cost:
       build_cost: 0
       energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
       - key: radius
         label: "Radius"
         type: free_number
@@ -115,8 +76,12 @@ interactions:
       - key: range
         label: "Range"
         type: dropdown
-        default: "5"
+        default: "1"
         options:
+          - value: "1"
+            label: "1m (Close)"
+            cost:
+              build_cost: 0
           - value: "5"
             label: "5m (Close)"
             cost:
@@ -129,61 +94,18 @@ interactions:
             label: "50m (Long)"
             cost:
               build_cost: 0
-
-  zone:
-    type: "Zone"
-    description: "A persistent area that triggers each round."
-    information: "An Area of Effect (AoE) Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. The effect does not trigger immediately; it activates at the start of a character's turn within the AoE or at the end of the Engager's turn."
-    render_information: false
-    default_radius: 1
-
-    default_range: 5
-    default_duration: 2
-    base_cost:
-      build_cost: 0
-      energy_cost: 0
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: radius
-        label: "Radius"
+      - key: area-duration
+        label: "Duration (rounds)"
         type: free_number
-        default: 1
-        min: 1
+        default: 0
+        min: 0
         max: 6
         step: 1
         per_step:
           increase:
             build_cost: 0
             energy_cost: 0
-      - key: range
-        label: "Range"
-        type: dropdown
-        default: "5"
-        options:
-          - value: "5"
-            label: "5m (Close)"
-            cost:
-              build_cost: 0
-          - value: "25"
-            label: "25m (Medium)"
-            cost:
-              build_cost: 0
-          - value: "50"
-            label: "50m (Long)"
-            cost:
-              build_cost: 0
-      - key: duration
-        label: "Duration"
-        type: free_number
-        default: 2
-        min: 2
-        max: 6
-        step: 1
-        per_step:
-          increase:
+          decrease:
             build_cost: 0
             energy_cost: 0
-
 

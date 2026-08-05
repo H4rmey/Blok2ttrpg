@@ -72,6 +72,20 @@ enactments:
           decrease:
             build_cost: 0
             energy_cost: 0
+      - key: solution_dc
+        label: "Solution DC"
+        type: free_number
+        default: 0
+        min: 2
+        max: 12
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
 
   damage:
     type: "Enact Damage"
@@ -79,7 +93,6 @@ enactments:
     information: "Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses."
     render_information: false
     base_cost:
-
       build_cost: 0
       energy_cost: 0
     fields:
@@ -89,19 +102,8 @@ enactments:
       - key: source
         label: "Source"
         type: dropdown
-        options_source: traits_generic_offense
+        options_source: roll_generic
         information: "The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die."
-      - key: flat
-        label: "Flat Bonus"
-        type: free_number
-        default: 0
-        min: 0
-        max: 20
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
       - key: damage_type
         label: "Damage Types"
         type: multiselect
@@ -120,13 +122,12 @@ enactments:
             build_cost: 0
             energy_cost: 0
 
-  persistent_effect:
+  effect:
     type: "Enact Effect"
     description: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for {{fieldDefault (enactment \"effect\") \"duration\"}} rounds and triggers at either the start of the target's turn. On the targets turn they can re-roll the solution again to get rid fo the effect or take an action to remove it."
     information: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for a few rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it."
     render_information: false
     base_cost:
-
       build_cost: 0
       energy_cost: 0
     fields:
@@ -149,6 +150,20 @@ enactments:
             label: "Move"
         inline_builder:
           kind: enactment
+      - key: effect-duration
+        label: "Duration (rounds)"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
       - key: solution
         label: "Solutions"
         type: multiselect
@@ -164,6 +179,20 @@ enactments:
                 general:
                   build_cost: 0
         per_item:
+          increase:
+            build_cost: 0
+            energy_cost: 0
+          decrease:
+            build_cost: 0
+            energy_cost: 0
+      - key: solution_dc
+        label: "Solution DC"
+        type: free_number
+        default: 0
+        min: 2
+        max: 12
+        step: 1
+        per_step:
           increase:
             build_cost: 0
             energy_cost: 0
@@ -194,17 +223,6 @@ enactments:
           offsets:
             defense:
               build_cost: 0
-      - key: flat
-        label: "Flat Bonus"
-        type: free_number
-        default: 0
-        min: 0
-        max: 20
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
 
   motion:
     type: "Enact Motion"
