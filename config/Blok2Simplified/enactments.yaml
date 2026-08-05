@@ -1,69 +1,6 @@
 enactments:
   information: "What is this going to do?"
   render_information: false
-  amplification:
-    name: "Enact Amplification"
-    description: "Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has a Amplification Die which determines the amplification of the effect."
-    information: "Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has an Amplification Die which determines the amplification of the effect."
-    render_information: false
-    base_energy: 0
-
-    base_action: 0
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: mode
-        label: "Amplification Mode"
-        type: dropdown
-        default: die_roll
-        information: "Choose how the amplification is determined: a fixed die-size shift up/down the die ladder, or a die roll."
-        options:
-          - value: die_shift
-            label: "Die Shift"
-          - value: die_roll
-            label: "Die Roll"
-      - key: shift_amount
-        label: "Die Shift -/+"
-        type: free_number
-        default: 0
-        min: -6
-        max: 6
-        step: 1
-        visibility_when: mode
-        show_when: die_shift
-        information: "How many die-sizes the target effect is shifted up (+) or down (-)."
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
-      - key: amplification
-        label: "Amplification"
-        type: dropdown
-        default: d4
-        options_source: roll_generic
-        visibility_when: mode
-        show_when: die_roll
-        information: "The die rolled to determine how much the target effect is amplified. Larger dice amplify more but cost more to build."
-      - key: flat
-
-        label: "Flat Bonus"
-        type: free_number
-        default: 0
-        min: 0
-        max: 8
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
-
   condition:
     type: "Enact Condition"
     description: "Enact State will apply a conditon to a target (e.g., prone, stunned, charmed). A Condition will always have a value"
@@ -208,7 +145,7 @@ enactments:
             label: "Damage"
           - value: healing
             label: "Heal"
-          - value: movement
+          - value: motion
             label: "Move"
         inline_builder:
           kind: enactment
@@ -269,10 +206,10 @@ enactments:
             build_cost: 0
             energy_cost: 0
 
-  movement:
-    type: "Enact Movement"
-    description: "Enact Movement allows you to move a Target up to a preset amount of meters."
-    information: "Enact Movement allows you to move a Target up to a preset amount of meters."
+  motion:
+    type: "Enact Motion"
+    description: "Enact Motion allows you to move a Target up to a preset amount of meters."
+    information: "Enact Motion allows you to move a Target up to a preset amount of meters."
     render_information: false
     base_cost:
 
@@ -422,68 +359,6 @@ enactments:
                 general:
                   build_cost: 0
         per_item:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
-
-  reduction:
-    type: "Enact Reduction"
-    description: "Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect."
-    information: "Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect."
-    render_information: false
-    base_energy: 0
-
-    base_action: 0
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: mode
-        label: "Reduction Mode"
-        type: dropdown
-        default: die_roll
-        information: "Choose how the reduction is determined: a fixed die-size shift up/down the die ladder, or a die roll."
-        options:
-          - value: die_shift
-            label: "Die Shift"
-          - value: die_roll
-            label: "Die Roll"
-      - key: shift_amount
-        label: "Die Shift -/+"
-        type: free_number
-        default: 0
-        min: -6
-        max: 6
-        step: 1
-        visibility_when: mode
-        show_when: die_shift
-        information: "How many die-sizes the target effect is shifted up (+) or down (-)."
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
-      - key: reduction
-        label: "Reduction"
-        type: dropdown
-        default: d4
-        options_source: roll_generic
-        visibility_when: mode
-        show_when: die_roll
-      - key: flat
-
-        label: "Flat Bonus"
-        type: free_number
-        default: 0
-        min: 0
-        max: 8
-        step: 1
-        per_step:
           increase:
             build_cost: 0
             energy_cost: 0

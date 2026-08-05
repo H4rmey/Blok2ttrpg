@@ -186,17 +186,6 @@ ability_types:
             build_cost: 0
             energy_cost: 0
 
-  minion:
-    name: "Minion (Deprecated)"
-    description: "Deprecated. Kept for backward compatibility only."
-    base_energy: 0
-    base_health: 10
-    base_lifetime: 3
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-
   preparation:
     name: "Preparation"
     description: "Works like a Reaction but must be prepared with an action."

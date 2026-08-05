@@ -123,6 +123,18 @@ func funcMap(cfg *config.Config) template.FuncMap {
 			return b.String()
 		},
 
+		// allAbilityTypes returns the ability types in author order.
+		"allAbilityTypes": func() []*config.Component {
+			return cfg.AbilityTypes.List()
+		},
+		// allEnactments returns the enactments in author order.
+		"allEnactments": func() []*config.Component {
+			return cfg.Enactments.List()
+		},
+		// allInteractions returns the interactions in author order.
+		"allInteractions": func() []*config.Component {
+			return cfg.Interactions.List()
+		},
 		// enactmentSurchargeTable renders the additional-enactment surcharge.
 		"enactmentSurchargeTable": func() string {
 			var b strings.Builder
