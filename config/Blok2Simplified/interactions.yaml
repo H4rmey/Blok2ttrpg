@@ -16,7 +16,7 @@ interactions:
     default_range: 1
     default_targets: 1
     base_cost:
-      build_cost: 0
+      build_cost: 1
       energy_cost: 0
     fields:
       - key: range
@@ -26,20 +26,16 @@ interactions:
         options:
           - value: "1"
             label: "1m (direct)"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 0 }
           - value: "5"
             label: "5m (Close)"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 1 }
           - value: "25"
             label: "25m (Medium)"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 2 }
           - value: "50"
             label: "50m (Long)"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 3 }
       - key: targets
         label: "Targets"
         type: free_number
@@ -49,21 +45,38 @@ interactions:
         step: 1
         per_step:
           increase:
-            build_cost: 0
+            build_cost: 2
             energy_cost: 0
 
-  area:
-    type: "Area"
+  zone:
+    type: "Zone"
     information: "Area Interactions encompass actions like bombs, splash potions, and traps. These interactions always have a defined Radius and Range. Radius determines the area where the Enactment will take effect; Range specifies how far from the user the point of origin is set."
     render_information: false
     default_radius: 1
     default_range: 5
     base_cost:
-      build_cost: 0
+      build_cost: 2
       energy_cost: 0
     fields:
-      - key: radius
-        label: "Radius"
+      - key: zone-range
+        label: "Range"
+        type: dropdown
+        default: "1"
+        options:
+          - value: "1"
+            label: "1m (Close)"
+            cost: { build_cost: 0 }
+          - value: "5"
+            label: "5m (Close)"
+            cost: { build_cost: 1 }
+          - value: "25"
+            label: "25m (Medium)"
+            cost: { build_cost: 2 }
+          - value: "50"
+            label: "50m (Long)"
+            cost: { build_cost: 3 }
+      - key: zone-radius
+        label: "Radius (meter)"
         type: free_number
         default: 1
         min: 1
@@ -71,30 +84,9 @@ interactions:
         step: 1
         per_step:
           increase:
-            build_cost: 0
+            build_cost: 2
             energy_cost: 0
-      - key: range
-        label: "Range"
-        type: dropdown
-        default: "1"
-        options:
-          - value: "1"
-            label: "1m (Close)"
-            cost:
-              build_cost: 0
-          - value: "5"
-            label: "5m (Close)"
-            cost:
-              build_cost: 0
-          - value: "25"
-            label: "25m (Medium)"
-            cost:
-              build_cost: 0
-          - value: "50"
-            label: "50m (Long)"
-            cost:
-              build_cost: 0
-      - key: area-duration
+      - key: zone-duration
         label: "Duration (rounds)"
         type: free_number
         default: 0
@@ -102,10 +94,5 @@ interactions:
         max: 6
         step: 1
         per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
-
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }

@@ -7,13 +7,9 @@ enactments:
     information: "Enact State will apply a condition to a target (e.g., prone, stunned, charmed). A Condition will always have a value."
     render_information: false
     base_cost:
-
-      build_cost: 0
+      build_cost: 1
       energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
       - key: condition
         label: "Condition"
         type: dropdown
@@ -28,29 +24,22 @@ enactments:
             label: "1 turn"
           - value: "2"
             label: "2 turns"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 1 }
           - value: "3"
             label: "3 turns"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 2 }
           - value: "4"
             label: "4 turns"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 3 }
           - value: "5"
             label: "5 turns"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 4 }
           - value: "6"
             label: "6 turns"
-            cost:
-              build_cost: 0
+            cost: { build_cost: 5 }
           - value: "unlimited"
             label: "Unlimited"
-            cost:
-              build_cost: 0
-              energy_cost: 0
+            cost: { build_cost: 8, energy_cost: 0 }
       - key: solution
         label: "Solutions"
         type: multiselect
@@ -63,15 +52,10 @@ enactments:
             group_offsets:
               default_group: defense
               offsets:
-                general:
-                  build_cost: 0
+                general: { build_cost: 0 }
         per_item:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 0 }
+          decrease: { build_cost: 0 }
       - key: solution_dc
         label: "Solution DC"
         type: free_number
@@ -80,12 +64,8 @@ enactments:
         max: 12
         step: 1
         per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
 
   damage:
     type: "Enact Damage"
@@ -93,17 +73,14 @@ enactments:
     information: "Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses."
     render_information: false
     base_cost:
-      build_cost: 0
+      build_cost: 1
       energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
       - key: source
         label: "Source"
         type: dropdown
-        options_source: roll_generic
-        information: "The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die."
+        options_source: roll_damage
+        information: "The offensive trait whose die is rolled for damage."
       - key: damage_type
         label: "Damage Types"
         type: multiselect
@@ -114,13 +91,6 @@ enactments:
             label: "Damage Type"
             type: dropdown
             options_source: damage_types
-        per_item:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
 
   effect:
     type: "Enact Effect"
@@ -128,16 +98,9 @@ enactments:
     information: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for a few rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it."
     render_information: false
     base_cost:
-      build_cost: 0
+      build_cost: 2
       energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: effect_name
-        label: "Name"
-        type: free_text
-        default: "Effect"
       - key: effect_type
         label: "Applies"
         type: dropdown
@@ -145,9 +108,9 @@ enactments:
           - value: damage
             label: "Damage"
           - value: healing
-            label: "Heal"
+            label: "Healing"
           - value: motion
-            label: "Move"
+            label: "Motion"
         inline_builder:
           kind: enactment
       - key: effect-duration
@@ -158,12 +121,8 @@ enactments:
         max: 5
         step: 1
         per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
       - key: solution
         label: "Solutions"
         type: multiselect
@@ -176,15 +135,10 @@ enactments:
             group_offsets:
               default_group: defense
               offsets:
-                general:
-                  build_cost: 0
+                general: { build_cost: 0 }
         per_item:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 0 }
+          decrease: { build_cost: 0 }
       - key: solution_dc
         label: "Solution DC"
         type: free_number
@@ -193,12 +147,8 @@ enactments:
         max: 12
         step: 1
         per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
 
   healing:
     type: "Enact Healing"
@@ -206,13 +156,9 @@ enactments:
     information: "Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses."
     render_information: false
     base_cost:
-
-      build_cost: 0
+      build_cost: 1
       energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
       - key: source
         label: "Source"
         type: dropdown
@@ -221,22 +167,17 @@ enactments:
         group_offsets:
           default_group: roll_generic
           offsets:
-            defense:
-              build_cost: 0
+            defense: { build_cost: 0 }
 
   motion:
     type: "Enact Motion"
     description: "Enact Motion allows you to move a Target up to a preset amount of meters."
-    information: "Enact Motion allows you to move a Target up to a preset amount of meters."
+    information: "Move a Target."
     render_information: false
     base_cost:
-
-      build_cost: 0
+      build_cost: 1
       energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
       - key: distance
         label: "Distance"
         type: free_number
@@ -245,9 +186,8 @@ enactments:
         max: 20
         step: 1
         per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
       - key: direction
         label: "Directions"
         type: multiselect
@@ -258,9 +198,7 @@ enactments:
             type: dropdown
             options_source: directions
         per_item:
-          increase:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 0 }
 
   negation:
     type: "Enact Negation"
@@ -268,40 +206,25 @@ enactments:
     information: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
     render_information: false
     base_cost:
-
-      build_cost: 0
+      build_cost: 4
       energy_cost: 0
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: full_counter
-        label: "Ability hits Engager instead"
-        type: checkbox
-        cost:
-          build_cost: 0
-          energy_cost: 0
 
   nerf:
     type: "Enact Nerf"
     description: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
     information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
     render_information: false
-    base_cost:
-
+    base_cost: 
       build_cost: 0
       energy_cost: 0
     allowed_interactions:
       - self
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: shifted_trait
+      - key: nerf-shifted-trait
         label: "Trait"
         type: dropdown
         options_source: traits_all
-      - key: shift_amount
+      - key: nerf-shift-amount
         label: "Shift -/+"
         type: free_number
         default: -1
@@ -311,22 +234,11 @@ enactments:
         per_step:
           increase:
             build_cost: 0
-            energy_cost: 0
+            energy_cost: 1
           decrease:
-            build_cost: 01
-            energy_cost: 0
-
-  phase:
-    name: "Enact Phase"
-    description: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two round those traits are shifted down for 2 rounds."
-    information: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds."
-    render_information: false
-    fields:
-
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: phase-duration
+            build_cost: 0
+            energy_cost: -1
+      - key: nerf-duration
         label: "Duration (rounds)"
         type: free_number
         default: 1
@@ -336,11 +248,31 @@ enactments:
         per_step:
           increase:
             build_cost: 0
-            energy_cost: 0
+            energy_cost: -1
           decrease:
             build_cost: 0
-            energy_cost: 0
-      - key: shift_amount
+            energy_cost: 1
+
+  phase:
+    name: "Enact Phase"
+    description: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two round those traits are shifted down for 2 rounds."
+    information: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds."
+    render_information: false
+    base_cost: 
+      build_cost: 2
+      energy_cost: 0
+    fields:
+      - key: phase-duration
+        label: "Duration (rounds)"
+        type: free_number
+        default: 1
+        min: 1
+        max: 5
+        step: 1
+        per_step:
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
+      - key: phase-shift-amount
         label: "Shift -/+"
         type: free_number
         default: 0
@@ -348,16 +280,12 @@ enactments:
         max: 6
         step: 1
         per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 01
-            energy_cost: 0
-      - key: affected_traits
+          increase: { build_cost: 1 }
+          decrease: { build_cost: 1 }
+      - key: shift-affected-traits
         label: "Affected Trait(s)"
         type: multiselect
-        default_count: 2
+        default_count: 1
         options_source: traits_all
         row_defaults:
           - value: "offense.precision"
@@ -370,39 +298,27 @@ enactments:
             group_offsets:
               default_group: defense
               offsets:
-                defense:
-                  build_cost: 0
-                offense:
-                  build_cost: 0
-                general:
-                  build_cost: 0
+                defense: { build_cost: 0 }
+                offense: { build_cost: 0 }
+                general: { build_cost: 0 }
         per_item:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
 
-
-  shift:
-    type: "Enact Shift"
+  modification:
+    type: "Enact Modification"
     description: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value rangeing from -6 to 6, which decide how much and in what direction the shift happens."
     information: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens."
     render_information: false
     base_cost:
-
-      build_cost: 0
+      build_cost: 2
       energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: shifted_trait
+      - key: modification-traits
         label: "Trait"
         type: dropdown
         options_source: traits_all
-      - key: shift_amount
+      - key: modification-shift-amount
         label: "Shift -/+"
         type: free_number
         default: 0
@@ -410,20 +326,30 @@ enactments:
         max: 6
         step: 1
         per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
-      - key: shift_uses
-        label: "Uses"
+          increase: { build_cost: 1 }
+          decrease: { build_cost: 1 }
+      - key: modificaiton-shift-duration
+        label: "Duration"
         type: free_number
         default: 1
         min: 1
         max: 5
         step: 1
         per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
+
+  adjustment:
+    type: "Enact Adjustment"
+    description: "Enact Adjustment allows you to adjust the effect of another enactment that someone or you is affected by. The supported enactments are Damage, Healing and Motion, the adjustment applies to the Source"
+    information: "Enact Adjustment allows you to adjust the effect of another enactment that someone or you is affected by. The supported enactments are Damage, Healing and Motion, the adjustment applies to the Source"
+    render_information: false
+    base_cost:
+      build_cost: 2
+      energy_cost: 0
+    fields:
+      - key: source
+        label: "Source"
+        type: dropdown
+        options_source: roll_generic
+        information: "The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die."

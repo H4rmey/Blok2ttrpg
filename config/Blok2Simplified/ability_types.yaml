@@ -5,13 +5,10 @@ ability_types:
     name: "Execution"
     information: "Execution is the most basic form for an Ability. It is simply the: \"I want to do this now\" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry."
     render_information: false
-    base_energy: 3
-    base_action: 2
+    build_cost: 1
+    energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: energy_steps
+      - key: execution-energy-offset
         label: "Energy +/-"
         type: free_number
         information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
@@ -27,12 +24,36 @@ ability_types:
             build_cost: 0
             energy_cost: 1
       - key: action_steps
-        label: "Action +/-"
+        label: "Action(s)"
         type: free_number
         information: "Adjust the amount of Actions it will cost to use this ability"
+        default: 1
+        min: 1
+        max: 2
+        step: 1
+        per_step:
+          increase:
+            build_cost: -1
+            energy_cost: 0
+          decrease:
+            build_cost: 1
+            energy_cost: 0
+
+  reaction:
+    name: "Reaction"
+    description: "Triggered in response to an event or enemy action."
+    information: "Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed."
+    render_information: false
+    build_cost: 3
+    energy_cost: 0
+    fields:
+      - key: reaction-energy-offset
+        label: "Energy +/-"
+        type: free_number
+        information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
         default: 0
-        min: -1
-        max: 1
+        min: -2
+        max: 2
         step: 1
         per_step:
           increase:
@@ -40,42 +61,14 @@ ability_types:
             energy_cost: 0
           decrease:
             build_cost: 0
-            energy_cost: 0
-
-  reaction:
-    name: "Reaction"
-    description: "Triggered in response to an event or enemy action."
-    information: "Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed. For example, you could have a reaction that triggers whenever someone runs towards you, Enacting a healing effect on yourself."
-    render_information: false
-    base_energy: 3
-    base_action: 0
-    base_range: 1
-    base_uses: 1
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: energy_steps
-        label: "Energy +/-"
-        type: free_number
-        default: 0
-        min: -2
-        max: 2
-        step: 1
-        per_step:
-          increase:
-            build_cost: 02
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 01
-      - key: triggers
+            energy_cost: 1
+      - key: reaction-triggers
         label: "Triggers"
         type: multiselect
         default_count: 1
         per_item:
           increase:
-            build_cost: 0
+            build_cost: 1
         row_fields:
           - key: subject
             label: "Subject"
@@ -163,8 +156,8 @@ ability_types:
             options_source: states_all
             visibility_when: event
             show_when: "recovers from a condition of a type"
-      - key: range
-        label: "Range"
+      - key: reaction-trigger-range
+        label: "Trigger Range"
         type: free_number
         default: 1
         min: 1
@@ -172,18 +165,7 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 0
-            energy_cost: 0
-      - key: uses
-        label: "Uses"
-        type: free_number
-        default: 1
-        min: 1
-        max: 3
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
+            build_cost: 1
             energy_cost: 0
 
   preparation:
@@ -191,50 +173,31 @@ ability_types:
     description: "Works like a Reaction but must be prepared with an action."
     information: "Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation will cost an action to prepare, but in turn cost far less Energy to use."
     render_information: false
-
-    base_energy: 3
-    base_action: 2
-    base_range: 1
-    base_uses: 1
+    build_cost: 2
+    energy_cost: 0
     fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: energy_steps
+      - key: preperation-energy-offset
         label: "Energy +/-"
         type: free_number
+        information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
         default: 0
         min: -2
         max: 2
         step: 1
         per_step:
           increase:
-            build_cost: 02
+            build_cost: 2
             energy_cost: 0
           decrease:
             build_cost: 0
-            energy_cost: 01
-      - key: action_steps
-        label: "Action +/-"
-        type: free_number
-        default: 0
-        min: -1
-        max: 1
-        step: 1
-        per_step:
-          increase:
-            build_cost: 02
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 0
-      - key: triggers
+            energy_cost: 1
+      - key: preperation-triggers
         label: "Triggers"
         type: multiselect
         default_count: 1
         per_item:
           increase:
-            build_cost: 0
+            build_cost: 1
         row_fields:
           - key: subject
             label: "Subject"
@@ -322,8 +285,8 @@ ability_types:
             options_source: states_all
             visibility_when: event
             show_when: "recovers from a condition of a type"
-      - key: range
-        label: "Range"
+      - key: preperation-trigger-range
+        label: "Trigger Range"
         type: free_number
         default: 1
         min: 1
@@ -331,18 +294,135 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 0
+            build_cost: 1
             energy_cost: 0
-      - key: uses
-        label: "Uses"
+
+  passive:
+    name: "Passive"
+    description: "An always-on effect that costs no Energy or Actions to use and can trigger whenever its condition is met. In exchange for being free to use it carries a higher base build cost."
+    information: "Passives are Abilities that are always on. They work just like a Reaction, they trigger when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself. Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build."
+    render_information: false
+    build_cost: 5
+    energy_cost: 0
+    fields:
+      - key: preperation-energy-offset
+        label: "Energy +/-"
         type: free_number
-        default: 1
-        min: 1
-        max: 3
+        default: 0
+        min: -2
+        max: 2
         step: 1
         per_step:
           increase:
+            build_cost: 2
+            energy_cost: 0
+          decrease:
             build_cost: 0
+            energy_cost: 1
+      - key: preperation-triggers
+        label: "Triggers"
+        type: multiselect
+        default_count: 1
+        per_item:
+          increase:
+            build_cost: 1
+        row_fields:
+          - key: subject
+            label: "Subject"
+            type: dropdown
+            options_source: trigger_subjects
+          - key: event
+            label: "Event"
+            type: dropdown
+            options_source: trigger_events
+          - key: damage_type_hit
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "gets hit by damage of a type"
+          - key: damage_type_dealt
+            label: "Damage Type"
+            type: dropdown
+            options_source: damage_types
+            visibility_when: event
+            show_when: "deals damage of a type"
+          - key: weapon_type
+            label: "Weapon Type"
+            type: dropdown
+            options_source: weapon_types
+            visibility_when: event
+            show_when: "gets hit by a weapon of a type"
+          - key: heal_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets healed by an ability of a type"
+          - key: cast_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "starts casting an ability of a type"
+          - key: targeted_ability_type
+            label: "Ability Type"
+            type: dropdown
+            options_source: ability_types
+            visibility_when: event
+            show_when: "gets targeted by an ability of a type"
+          - key: enactment_type_hit
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "gets hit with an enactment of a type"
+          - key: enactment_type_resolved
+            label: "Enactment Type"
+            type: dropdown
+            options_source: enactment_types
+            visibility_when: event
+            show_when: "resolves an enactment of a type"
+          - key: trait
+            label: "Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "makes a trait check of a type"
+          - key: fail_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "fails a validation of a type"
+          - key: succeed_validation_trait
+            label: "Validation Trait"
+            type: dropdown
+            options_source: traits_all
+            visibility_when: event
+            show_when: "succeeds on a validation of a type"
+          - key: state_applied
+            label: "Condition"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "becomes affected by a condition of a type"
+          - key: state_recovered
+            label: "Condition"
+            type: dropdown
+            options_source: states_all
+            visibility_when: event
+            show_when: "recovers from a condition of a type"
+      - key: preperation-trigger-range
+        label: "Trigger Range"
+        type: free_number
+        default: 1
+        min: 1
+        max: 6
+        step: 1
+        per_step:
+          increase:
+            build_cost: 1
             energy_cost: 0
 
   concentration:
@@ -350,9 +430,8 @@ ability_types:
     description: "An effect that persists over multiple rounds as long as the Engager maintains focus. It costs Actions and Energy to initiate, then re-triggers its Enactments every round as long as the upkeep is paid."
     information: "Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep."
     render_information: false
-    base_energy: 3
-
-    base_action: 2
+    build_cost: 2
+    energy_cost: 0
     base_upkeep_action: 1
     base_upkeep_energy: 1
     fields:
@@ -368,11 +447,11 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 02
+            build_cost: 2
             energy_cost: 0
           decrease:
             build_cost: 0
-            energy_cost: 01
+            energy_cost: 1
       - key: action_steps
         label: "Action +/-"
         type: free_number
@@ -382,10 +461,10 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 02
+            build_cost: -1
             energy_cost: 0
           decrease:
-            build_cost: 0
+            build_cost: 2
             energy_cost: 0
       - key: upkeep_cost
         label: "Upkeep Cost"
@@ -395,152 +474,5 @@ ability_types:
         label: "Effortless (upkeep is free)"
         type: checkbox
         cost:
-          build_cost: 0
+          build_cost: 4
           energy_cost: 0
-
-  passive:
-    name: "Passive"
-    description: "An always-on effect that costs no Energy or Actions to use and can trigger whenever its condition is met. In exchange for being free to use it carries a higher base build cost."
-    information: "Passives are Abilities that are always on. They work just like a Reaction, they trigger when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself. Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build."
-    render_information: false
-    base_energy: 0
-
-    base_action: 0
-    base_range: 1
-    base_uses: 1
-    base_cost:
-      build_cost: 0
-    fields:
-      - key: comment
-        label: "Comment"
-        type: free_text
-      - key: energy_steps
-        label: "Energy +/-"
-        type: free_number
-        default: 0
-        min: -2
-        max: 2
-        step: 1
-        per_step:
-          increase:
-            build_cost: 02
-            energy_cost: 0
-          decrease:
-            build_cost: 0
-            energy_cost: 01
-      - key: triggers
-        label: "Triggers"
-        type: multiselect
-        default_count: 1
-        per_item:
-          increase:
-            build_cost: 0
-        row_fields:
-          - key: subject
-            label: "Subject"
-            type: dropdown
-            options_source: trigger_subjects
-          - key: event
-            label: "Event"
-            type: dropdown
-            options_source: trigger_events
-          - key: damage_type_hit
-            label: "Damage Type"
-            type: dropdown
-            options_source: damage_types
-            visibility_when: event
-            show_when: "gets hit by damage of a type"
-          - key: damage_type_dealt
-            label: "Damage Type"
-            type: dropdown
-            options_source: damage_types
-            visibility_when: event
-            show_when: "deals damage of a type"
-          - key: weapon_type
-            label: "Weapon Type"
-            type: dropdown
-            options_source: weapon_types
-            visibility_when: event
-            show_when: "gets hit by a weapon of a type"
-          - key: heal_ability_type
-            label: "Ability Type"
-            type: dropdown
-            options_source: ability_types
-            visibility_when: event
-            show_when: "gets healed by an ability of a type"
-          - key: cast_ability_type
-            label: "Ability Type"
-            type: dropdown
-            options_source: ability_types
-            visibility_when: event
-            show_when: "starts casting an ability of a type"
-          - key: targeted_ability_type
-            label: "Ability Type"
-            type: dropdown
-            options_source: ability_types
-            visibility_when: event
-            show_when: "gets targeted by an ability of a type"
-          - key: enactment_type_hit
-            label: "Enactment Type"
-            type: dropdown
-            options_source: enactment_types
-            visibility_when: event
-            show_when: "gets hit with an enactment of a type"
-          - key: enactment_type_resolved
-            label: "Enactment Type"
-            type: dropdown
-            options_source: enactment_types
-            visibility_when: event
-            show_when: "resolves an enactment of a type"
-          - key: trait
-            label: "Trait"
-            type: dropdown
-            options_source: traits_all
-            visibility_when: event
-            show_when: "makes a trait check of a type"
-          - key: fail_validation_trait
-            label: "Validation Trait"
-            type: dropdown
-            options_source: traits_all
-            visibility_when: event
-            show_when: "fails a validation of a type"
-          - key: succeed_validation_trait
-            label: "Validation Trait"
-            type: dropdown
-            options_source: traits_all
-            visibility_when: event
-            show_when: "succeeds on a validation of a type"
-          - key: state_applied
-            label: "Condition"
-            type: dropdown
-            options_source: states_all
-            visibility_when: event
-            show_when: "becomes affected by a condition of a type"
-          - key: state_recovered
-            label: "Condition"
-            type: dropdown
-            options_source: states_all
-            visibility_when: event
-            show_when: "recovers from a condition of a type"
-      - key: range
-        label: "Range"
-        type: free_number
-        default: 1
-        min: 1
-        max: 6
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
-      - key: uses
-        label: "Uses"
-        type: free_number
-        default: 1
-        min: 1
-        max: 3
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 0
