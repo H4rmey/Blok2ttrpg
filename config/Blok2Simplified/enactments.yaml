@@ -3,8 +3,7 @@ enactments:
   render_information: false
   condition:
     type: "Enact Condition"
-    description: "Enact State will apply a conditon to a target (e.g., prone, stunned, charmed). A Condition will always have a value"
-    information: "Enact State will apply a condition to a target (e.g., prone, stunned, charmed). A Condition will always have a value."
+    information: "Enact Condition will apply a condition to a target (e.g., prone, stunned, charmed). A Condition will always have a value."
     render_information: false
     base_cost:
       build_cost: 1
@@ -41,6 +40,7 @@ enactments:
             label: "Unlimited"
             cost: { build_cost: 8, energy_cost: 0 }
       - key: solution
+        information: "Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this ability then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action."
         label: "Solutions"
         type: multiselect
         default_count: 2
@@ -69,7 +69,6 @@ enactments:
 
   damage:
     type: "Enact Damage"
-    description: "Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonusses."
     information: "Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses."
     render_information: false
     base_cost:
@@ -81,6 +80,10 @@ enactments:
         type: dropdown
         options_source: roll_damage
         information: "The offensive trait whose die is rolled for damage."
+        group_offsets:
+          default_group: traits.offensive
+          offsets:
+            general: { build_cost: 1 }
       - key: damage_type
         label: "Damage Types"
         type: multiselect
@@ -94,7 +97,6 @@ enactments:
 
   effect:
     type: "Enact Effect"
-    description: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for {{fieldDefault (enactment \"effect\") \"duration\"}} rounds and triggers at either the start of the target's turn. On the targets turn they can re-roll the solution again to get rid fo the effect or take an action to remove it."
     information: "The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for a few rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it."
     render_information: false
     base_cost:
@@ -124,6 +126,7 @@ enactments:
           increase: { build_cost: 1 }
           decrease: { build_cost: -1 }
       - key: solution
+        information: "Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this ability then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action."
         label: "Solutions"
         type: multiselect
         default_count: 2
@@ -152,7 +155,6 @@ enactments:
 
   healing:
     type: "Enact Healing"
-    description: "Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain onter bonusses."
     information: "Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses."
     render_information: false
     base_cost:
@@ -171,8 +173,7 @@ enactments:
 
   motion:
     type: "Enact Motion"
-    description: "Enact Motion allows you to move a Target up to a preset amount of meters."
-    information: "Move a Target."
+    information: "Enact Motion allows you to move a Target up to a preset amount of meters."
     render_information: false
     base_cost:
       build_cost: 1
@@ -202,7 +203,6 @@ enactments:
 
   negation:
     type: "Enact Negation"
-    description: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
     information: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
     render_information: false
     base_cost:
@@ -211,7 +211,6 @@ enactments:
 
   nerf:
     type: "Enact Nerf"
-    description: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
     information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
     render_information: false
     base_cost: 
@@ -255,7 +254,6 @@ enactments:
 
   phase:
     name: "Enact Phase"
-    description: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two round those traits are shifted down for 2 rounds."
     information: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds."
     render_information: false
     base_cost: 
@@ -307,7 +305,6 @@ enactments:
 
   modification:
     type: "Enact Modification"
-    description: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value rangeing from -6 to 6, which decide how much and in what direction the shift happens."
     information: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens."
     render_information: false
     base_cost:
@@ -341,8 +338,7 @@ enactments:
 
   adjustment:
     type: "Enact Adjustment"
-    description: "Enact Adjustment allows you to adjust the effect of another enactment that someone or you is affected by. The supported enactments are Damage, Healing and Motion, the adjustment applies to the Source"
-    information: "Enact Adjustment allows you to adjust the effect of another enactment that someone or you is affected by. The supported enactments are Damage, Healing and Motion, the adjustment applies to the Source"
+    information: "Enact Adjustment allows you to adjust the effect of another enactment that someone or you is affected by. The supported enactments are Damage, Healing and Motion, the adjustment applies to the Source component and is added to it"
     render_information: false
     base_cost:
       build_cost: 2

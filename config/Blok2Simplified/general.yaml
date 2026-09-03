@@ -256,9 +256,11 @@ option_sources:
     - value: "1 Action or 1 Energy"
       cost: { build_cost: 0, energy_cost: 0 }
     - value: "1 Action"
-      cost: { build_cost: 0, energy_cost: 0 }
+      cost: { build_cost: 1, energy_cost: 0 }
     - value: "1 Energy"
-      cost: { build_cost: 0, energy_cost: 0 }
+      cost: { build_cost: 2, energy_cost: 0 }
+    - value: "Effortless (no upkeep cost)"
+      cost: { build_cost: 4, energy_cost: 0 }
 
   # Who the reactive trigger watches. Paired with a trigger_events entry to
   # form a full trigger, e.g. "An Opponent" + "gets hit by damage of a type".

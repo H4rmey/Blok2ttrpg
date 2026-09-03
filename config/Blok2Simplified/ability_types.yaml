@@ -9,59 +9,58 @@ ability_types:
     energy_cost: 0
     fields:
       - key: execution-energy-offset
-        label: "Energy +/-"
-        type: free_number
+        label: "Energy Offset +/-"
         information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
+        type: free_number
         default: 0
         min: -2
         max: 2
         step: 1
         per_step:
           increase:
-            build_cost: 2
-            energy_cost: 0
-          decrease:
-            build_cost: 0
+            build_cost: -2
             energy_cost: 1
-      - key: action_steps
-        label: "Action(s)"
+          decrease:
+            build_cost: 2
+            energy_cost: -1
+      - key: execution-action-offset
+        label: "Action offset"
+        information: "Normally an ability costs 2 actions to use. This will adjust the amount of Actions it will cost to use this ability"
         type: free_number
-        information: "Adjust the amount of Actions it will cost to use this ability"
-        default: 1
-        min: 1
-        max: 2
+        default: 0
+        min: -1
+        max: 1
         step: 1
         per_step:
           increase:
             build_cost: -1
             energy_cost: 0
           decrease:
-            build_cost: 1
+            build_cost: 2
             energy_cost: 0
 
   reaction:
     name: "Reaction"
-    description: "Triggered in response to an event or enemy action."
     information: "Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed."
     render_information: false
     build_cost: 3
     energy_cost: 0
     fields:
       - key: reaction-energy-offset
-        label: "Energy +/-"
-        type: free_number
+        label: "Energy Offset +/-"
         information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
+        type: free_number
         default: 0
         min: -2
         max: 2
         step: 1
         per_step:
           increase:
-            build_cost: 2
-            energy_cost: 0
-          decrease:
-            build_cost: 0
+            build_cost: -2
             energy_cost: 1
+          decrease:
+            build_cost: 2
+            energy_cost: -1
       - key: reaction-triggers
         label: "Triggers"
         type: multiselect
@@ -170,27 +169,41 @@ ability_types:
 
   preparation:
     name: "Preparation"
-    description: "Works like a Reaction but must be prepared with an action."
     information: "Just like a Reaction, a Preparation works outside the regular turn order. They follow the exact same rules as a Reaction but instead of being passively on the background, a Preparation will cost an action to prepare, but in turn cost far less Energy to use."
     render_information: false
     build_cost: 2
     energy_cost: 0
     fields:
       - key: preperation-energy-offset
-        label: "Energy +/-"
-        type: free_number
+        label: "Energy Offset +/-"
         information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
+        type: free_number
         default: 0
         min: -2
         max: 2
         step: 1
         per_step:
           increase:
+            build_cost: -2
+            energy_cost: 1
+          decrease:
             build_cost: 2
+            energy_cost: -1
+      - key: preperation-action-offset
+        label: "Action offset"
+        information: "Normally an ability costs 2 actions to use. This will adjust the amount of Actions it will cost to use this ability"
+        type: free_number
+        default: 0
+        min: -1
+        max: 1
+        step: 1
+        per_step:
+          increase:
+            build_cost: -1
             energy_cost: 0
           decrease:
-            build_cost: 0
-            energy_cost: 1
+            build_cost: 2
+            energy_cost: 0
       - key: preperation-triggers
         label: "Triggers"
         type: multiselect
@@ -299,14 +312,14 @@ ability_types:
 
   passive:
     name: "Passive"
-    description: "An always-on effect that costs no Energy or Actions to use and can trigger whenever its condition is met. In exchange for being free to use it carries a higher base build cost."
     information: "Passives are Abilities that are always on. They work just like a Reaction, they trigger when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself. Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build."
     render_information: false
     build_cost: 5
     energy_cost: 0
     fields:
       - key: preperation-energy-offset
-        label: "Energy +/-"
+        label: "Energy Offset +/-"
+        information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
         type: free_number
         default: 0
         min: -2
@@ -314,11 +327,11 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 2
-            energy_cost: 0
-          decrease:
-            build_cost: 0
+            build_cost: -2
             energy_cost: 1
+          decrease:
+            build_cost: 2
+            energy_cost: -1
       - key: preperation-triggers
         label: "Triggers"
         type: multiselect
@@ -427,7 +440,6 @@ ability_types:
 
   concentration:
     name: "Concentration"
-    description: "An effect that persists over multiple rounds as long as the Engager maintains focus. It costs Actions and Energy to initiate, then re-triggers its Enactments every round as long as the upkeep is paid."
     information: "Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep."
     render_information: false
     build_cost: 2
@@ -438,8 +450,9 @@ ability_types:
       - key: comment
         label: "Comment"
         type: free_text
-      - key: energy_steps
-        label: "Energy +/-"
+      - key: concentration-energy-offset
+        label: "Energy Offset +/-"
+        information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
         type: free_number
         default: 0
         min: -2
@@ -447,13 +460,14 @@ ability_types:
         step: 1
         per_step:
           increase:
-            build_cost: 2
-            energy_cost: 0
-          decrease:
-            build_cost: 0
+            build_cost: -2
             energy_cost: 1
-      - key: action_steps
-        label: "Action +/-"
+          decrease:
+            build_cost: 2
+            energy_cost: -1
+      - key: concentration-action-offset
+        label: "Action offset"
+        information: "Normally an ability costs 2 actions to use. This will adjust the amount of Actions it will cost to use this ability"
         type: free_number
         default: 0
         min: -1
@@ -470,9 +484,3 @@ ability_types:
         label: "Upkeep Cost"
         type: dropdown
         options_source: concentration_upkeep
-      - key: effortless
-        label: "Effortless (upkeep is free)"
-        type: checkbox
-        cost:
-          build_cost: 4
-          energy_cost: 0

@@ -1,7 +1,5 @@
 traits:
   general:
-    - Strength
-    - Dexterity
     - Stealth
     - Perception
     - Nature
@@ -13,14 +11,14 @@ traits:
     - Magic
     - Medicine
   offense:
+    - Strength
     - Precision
-    - Power
-    - Mind
+    - Wisdom
     - Magic
   defense:
-    - Reflex
     - Constitution
-    - Mind
+    - Reflex
+    - Wisdom
     - Magic
   vital:
     - HP

@@ -35,43 +35,24 @@
         "id": "ability-1785832679027312800",
         "name": "Entangle (L1)",
         "description": "Grasping vines erupt from the ground, snaring a foe and hampering its movement.",
-        "type": "reaction",
+        "type": "execution",
         "fields": {
-          "reaction-energy-offset": 0,
-          "reaction-trigger-range": 1,
-          "reaction-triggers": [
-            {
-              "cast_ability_type": "",
-              "damage_type_dealt": "",
-              "damage_type_hit": "",
-              "enactment_type_hit": "",
-              "enactment_type_resolved": "",
-              "event": "gets healed by an ability of a type",
-              "fail_validation_trait": "",
-              "heal_ability_type": "",
-              "state_applied": "",
-              "state_recovered": "",
-              "subject": "You",
-              "succeed_validation_trait": "",
-              "targeted_ability_type": "",
-              "trait": "",
-              "weapon_type": "Unarmed"
-            }
-          ]
+          "execution-action-offset": 0,
+          "execution-energy-offset": 0
         },
         "enactments": [
           {
-            "type": "effect",
+            "type": "modification",
             "fields": {
-              "effect-duration": 1,
-              "effect_type": "",
-              "solution": [],
-              "solution_dc": 2
+              "modificaiton-shift-duration": 1,
+              "modification-shift-amount": 0,
+              "modification-traits": ""
             },
-            "interaction": "direct",
+            "interaction": "zone",
             "interaction_data": {
-              "range": "1",
-              "targets": 1
+              "zone-duration": 0,
+              "zone-radius": 1,
+              "zone-range": ""
             },
             "validation_data": {
               "counter_trait": [
