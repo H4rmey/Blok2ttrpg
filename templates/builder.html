@@ -2,7 +2,7 @@
 {{ $c := .Character }}
 {{ $ab := .Ability }}
 <div class="builder-head">
-  <h1>{{ if $ab.ID }}Edit Ability{{ else }}New Ability{{ end }}</h1>
+  <h1>{{ if $ab.ID }}Edit Perk{{ else }}New Perk{{ end }}</h1>
   <div class="cost-cards" id="cost-badge">
     {{ template "cost_cards" . }}
   </div>
@@ -19,11 +19,11 @@
 
 
   <fieldset>
-    <legend>Ability Details</legend>
+    <legend>Perk Details</legend>
     <div class="field">
       <label>Name <span class="req">*</span></label>
       <input type="text" name="name" id="ability-name" value="{{ $ab.Name }}" required
-             placeholder="Name your ability to begin">
+             placeholder="Name your perk to begin">
       <small class="muted" id="name-hint">Enter a name to unlock the rest of the builder.</small>
     </div>
     <div class="field">
@@ -34,7 +34,7 @@
 
   <div id="builder-gate" {{ if not $ab.Name }}class="gated"{{ end }}>
   <fieldset>
-    <legend>Ability Type
+    <legend>Perk Type
       {{ if and .Cfg.AbilityTypes.Information (not .Cfg.AbilityTypes.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Cfg.AbilityTypes.Information }}">i</span>{{ end }}
     </legend>
     {{ if and .Cfg.AbilityTypes.Information .Cfg.AbilityTypes.RenderInformation }}<small class="component-info">{{ .Cfg.AbilityTypes.Information }}</small>{{ end }}
@@ -95,7 +95,8 @@
   </div>
 
   <div class="toolbar">
-    <button class="btn primary" type="submit" id="save-ability">Save Ability</button>
+    <button class="btn primary" type="submit" id="save-ability">Save Perk</button>
+
     <a class="btn" href="/characters/{{ $c.ID }}/abilities">Cancel</a>
   </div>
 </form>

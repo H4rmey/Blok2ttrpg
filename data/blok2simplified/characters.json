@@ -30,89 +30,7 @@
       "vital.HP": "novice",
       "vital.Movement": "clumsy"
     },
-    "abilities": [
-      {
-        "id": "ability-1785832679027312800",
-        "name": "Entangle (L1)",
-        "description": "Grasping vines erupt from the ground, snaring a foe and hampering its movement.",
-        "type": "execution",
-        "fields": {
-          "execution-action-offset": 0,
-          "execution-energy-offset": 0
-        },
-        "enactments": [
-          {
-            "type": "modification",
-            "fields": {
-              "modificaiton-shift-duration": 1,
-              "modification-shift-amount": 0,
-              "modification-traits": ""
-            },
-            "interaction": "zone",
-            "interaction_data": {
-              "zone-duration": 0,
-              "zone-radius": 1,
-              "zone-range": ""
-            },
-            "validation_data": {
-              "counter_trait": [
-                {
-                  "value": "defense.Reflex"
-                },
-                {
-                  "value": "defense.Constitution"
-                }
-              ],
-              "engage": "d6"
-            }
-          }
-        ]
-      },
-      {
-        "id": "ability-1785832683527970800",
-        "name": "Entangle (L10)",
-        "description": "A writhing thicket bursts across a wide area, rooting all caught within it and crushing them with thorned vines.",
-        "type": "concentration",
-        "fields": {
-          "action_steps": 0,
-          "comment": "A field of grasping, thorned vines.",
-          "energy_steps": 0
-        },
-        "enactments": [
-          {
-            "type": "condition",
-            "fields": {
-              "comment": "Rooted in place by the thicket.",
-              "condition": "anchored",
-              "duration": "unlimited",
-              "solution": [
-                {
-                  "value": "defense.Reflex"
-                },
-                {
-                  "value": "general.Strength"
-                }
-              ]
-            },
-            "interaction": "zone"
-          },
-          {
-            "type": "persistent_effect",
-            "fields": {
-              "comment": "Thorns tear at the trapped.",
-              "effect_name": "Thorns",
-              "effect_type": "damage",
-              "solution": [
-                {
-                  "value": "defense.Constitution"
-                }
-              ]
-            },
-            "interaction": "zone"
-          }
-        ]
-      }
-    ],
+    "abilities": [],
     "packages": [
       {
         "id": "entertainer",
@@ -150,6 +68,71 @@
         },
         "toggleable": true,
         "enabled": false
+      }
+    ]
+  },
+  "char-1790257857250642400": {
+    "id": "char-1790257857250642400",
+    "level": 1,
+    "attributes": {
+      "name": "pieter"
+    },
+    "traits": {
+      "defense.Constitution": "untrained",
+      "defense.Magic": "untrained",
+      "defense.Reflex": "untrained",
+      "defense.Wisdom": "untrained",
+      "general.Crafting": "untrained",
+      "general.Knowledge": "untrained",
+      "general.Magic": "untrained",
+      "general.Medicine": "untrained",
+      "general.Nature": "untrained",
+      "general.People Skill": "untrained",
+      "general.Perception": "untrained",
+      "general.Performance": "untrained",
+      "general.Stealth": "untrained",
+      "general.Thievery": "untrained",
+      "offense.Magic": "untrained",
+      "offense.Precision": "untrained",
+      "offense.Strength": "untrained",
+      "offense.Wisdom": "untrained",
+      "vital.Energy": "untrained",
+      "vital.HP": "untrained",
+      "vital.Movement": "untrained"
+    },
+    "abilities": [
+      {
+        "id": "ability-1790258021348-429326336",
+        "name": "shoot",
+        "type": "execution",
+        "fields": {
+          "execution-action-offset": 1,
+          "execution-energy-offset": 2
+        },
+        "enactments": [
+          {
+            "type": "damage",
+            "fields": {
+              "source": "offense.Precision"
+            },
+            "interaction": "direct",
+            "interaction_data": {
+              "range": "25",
+              "targets": 1
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Magic"
+                }
+              ],
+              "engage": "offense.Precision"
+            }
+          }
+        ]
       }
     ]
   }

@@ -20,6 +20,47 @@
   </div>
 
   <div class="collapsible-content">
+    <div class="region region-enactment">
+      <h4 class="region-title">Enactment{{ if and $cfg.Enactments.Information (not $cfg.Enactments.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Enactments.Information }}">i</span>{{ end }}</h4>
+      <div class="field">
+        <label>Enactment Type
+          {{ range enactmentsFor $cfg $atype }}{{ if eq .ID $type }}{{ if and .Information (not .RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Information }}">i</span>{{ end }}{{ end }}{{ end }}
+        </label>
+
+        {{ if and $cfg.Enactments.Information $cfg.Enactments.RenderInformation }}<small class="component-info">{{ $cfg.Enactments.Information }}</small>{{ end }}
+
+
+
+        <div class="select-row">
+          <select name="{{ $prefix }}type" class="opt-select"
+
+                  hx-get="/builder/enactment"
+                  hx-target="closest .enactment"
+                  hx-swap="outerHTML"
+                  hx-vals='{"index": "{{ $i }}", "atype": "{{ $atype }}"}'
+                  hx-trigger="change"
+                  hx-include="closest .enactment">
+            {{ range enactmentsFor $cfg $atype }}
+            <option value="{{ .ID }}"{{ if .Information }} title="{{ .Information }}" data-info="{{ .Information }}" data-render-info="{{ if .RenderInformation }}true{{ else }}false{{ end }}"{{ end }} {{ if eq .ID $type }}selected{{ end }}>{{ .DisplayName }}</option>
+            {{ end }}
+          </select>
+          <span class="info-icon option-info" tabindex="0" data-tooltip="" hidden>i</span>
+        </div>
+        <small class="field-info option-info-text" hidden></small>
+      </div>
+
+      <div id="{{ $prefix }}enactment-fields">
+        {{ range enactmentsFor $cfg $atype }}
+        {{ if eq .ID $type }}
+          {{ range .Fields }}
+          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sf_" $prefix) "Values" $fields }}
+          {{ end }}
+
+        {{ end }}
+        {{ end }}
+      </div>
+    </div>
+
     {{ if showInteraction $cfg $idx }}
     <div class="region region-interaction">
       <h4 class="region-title">Interaction{{ if and $cfg.Interactions.Information (not $cfg.Interactions.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Interactions.Information }}">i</span>{{ end }}</h4>
@@ -76,47 +117,6 @@
 
     </div>
     {{ end }}
-
-    <div class="region region-enactment">
-      <h4 class="region-title">Enactment{{ if and $cfg.Enactments.Information (not $cfg.Enactments.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Enactments.Information }}">i</span>{{ end }}</h4>
-      <div class="field">
-        <label>Enactment Type
-          {{ range enactmentsFor $cfg $atype }}{{ if eq .ID $type }}{{ if and .Information (not .RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Information }}">i</span>{{ end }}{{ end }}{{ end }}
-        </label>
-
-        {{ if and $cfg.Enactments.Information $cfg.Enactments.RenderInformation }}<small class="component-info">{{ $cfg.Enactments.Information }}</small>{{ end }}
-
-
-
-        <div class="select-row">
-          <select name="{{ $prefix }}type" class="opt-select"
-
-                  hx-get="/builder/enactment"
-                  hx-target="closest .enactment"
-                  hx-swap="outerHTML"
-                  hx-vals='{"index": "{{ $i }}", "atype": "{{ $atype }}"}'
-                  hx-trigger="change"
-                  hx-include="closest .enactment">
-            {{ range enactmentsFor $cfg $atype }}
-            <option value="{{ .ID }}"{{ if .Information }} title="{{ .Information }}" data-info="{{ .Information }}" data-render-info="{{ if .RenderInformation }}true{{ else }}false{{ end }}"{{ end }} {{ if eq .ID $type }}selected{{ end }}>{{ .DisplayName }}</option>
-            {{ end }}
-          </select>
-          <span class="info-icon option-info" tabindex="0" data-tooltip="" hidden>i</span>
-        </div>
-        <small class="field-info option-info-text" hidden></small>
-      </div>
-
-      <div id="{{ $prefix }}enactment-fields">
-        {{ range enactmentsFor $cfg $atype }}
-        {{ if eq .ID $type }}
-          {{ range .Fields }}
-          {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sf_" $prefix) "Values" $fields }}
-          {{ end }}
-
-        {{ end }}
-        {{ end }}
-      </div>
-    </div>
   </div>
 
 </div>

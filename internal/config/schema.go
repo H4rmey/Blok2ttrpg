@@ -28,7 +28,16 @@ type Config struct {
 	ProfileID string `yaml:"profile_id" json:"profile_id"`
 	Title     string `yaml:"title,omitempty" json:"title,omitempty"`
 
-	Combat              Combat              `yaml:"combat,omitempty" json:"combat,omitempty"`
+	// AllowNegativeBuildCost/AllowNegativeEnergyCost control whether an
+	// ability's final computed cost may drop below zero. Refund-style options
+	// (the energy offset, Enact Nerf, negative-cost knockouts) can otherwise
+	// push a total negative. These are pointers so an unset value defaults to
+	// false, clamping the corresponding total at zero.
+	AllowNegativeBuildCost  *bool `yaml:"allow_negative_build_cost,omitempty" json:"allow_negative_build_cost,omitempty"`
+	AllowNegativeEnergyCost *bool `yaml:"allow_negative_energy_cost,omitempty" json:"allow_negative_energy_cost,omitempty"`
+
+	Combat Combat `yaml:"combat,omitempty" json:"combat,omitempty"`
+
 	AdditionalEnactment AdditionalEnactment `yaml:"additional_enactment,omitempty" json:"additional_enactment,omitempty"`
 	Dice                Dice                `yaml:"dice,omitempty" json:"dice,omitempty"`
 	Validations         Validations         `yaml:"validations,omitempty" json:"validations,omitempty"`
@@ -102,7 +111,20 @@ type Config struct {
 	FileOrder []string `yaml:"file_order,omitempty" json:"file_order,omitempty"`
 }
 
+// AllowsNegativeBuildCost reports whether an ability's final build cost may be
+// negative. Defaults to false when unset.
+func (c *Config) AllowsNegativeBuildCost() bool {
+	return c.AllowNegativeBuildCost != nil && *c.AllowNegativeBuildCost
+}
+
+// AllowsNegativeEnergyCost reports whether an ability's final energy cost may
+// be negative. Defaults to false when unset.
+func (c *Config) AllowsNegativeEnergyCost() bool {
+	return c.AllowNegativeEnergyCost != nil && *c.AllowNegativeEnergyCost
+}
+
 // Combat holds combat-wide settings.
+
 type Combat struct {
 	Actions struct {
 		Amount int `yaml:"amount" json:"amount"`

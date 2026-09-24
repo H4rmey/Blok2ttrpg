@@ -1,68 +1,83 @@
+# Point budgets per character level.
+#
+# Ability (perk) points are tuned so a baseline perk costs about 3 points:
+#   execution base_cost 1 + direct interaction base 1 + validation engage d6 1
+#   (the first enactment's base_cost is waived by the cost engine).
+# Level 1 therefore grants 9 points (about 3 perks) and every level after
+# grants 3 more (about 1 extra perk per level), ending at 36 at level 10.
+#
+# Skill (trait) points follow the documented starting formula
+# (trait_count + 2) / 3 over the 26 skills (15 general + 4 offense +
+# 4 defense + 3 vital), giving 9 at level 1 and rising by 1 per level with a
+# bonus point at levels 5 and 10.
+#
+# Note: standard_trait_count and starting_formula are documentation only; the
+# budget actually served to the app comes from the `levels` totals below.
 leveling:
   max_level: 10
   trait_points:
-    standard_trait_count: 22
+    standard_trait_count: 26
     starting_formula: "(trait_count + 2) / 3"
     levels:
       - level: 1
         points_gained: 0
-        total: 8
+        total: 9
       - level: 2
         points_gained: 1
-        total: 9
+        total: 10
       - level: 3
         points_gained: 1
-        total: 10
+        total: 11
       - level: 4
         points_gained: 1
-        total: 11
+        total: 12
       - level: 5
         points_gained: 2
-        total: 13
+        total: 14
       - level: 6
         points_gained: 1
-        total: 14
+        total: 15
       - level: 7
         points_gained: 1
-        total: 15
+        total: 16
       - level: 8
         points_gained: 1
-        total: 16
+        total: 17
       - level: 9
         points_gained: 1
-        total: 17
+        total: 18
       - level: 10
         points_gained: 2
-        total: 19
+        total: 20
   ability_points:
     levels:
       - level: 1
         points_gained: 0
-        total: 10
+        total: 9
       - level: 2
-        points_gained: 2
+        points_gained: 3
         total: 12
       - level: 3
         points_gained: 3
         total: 15
       - level: 4
-        points_gained: 2
-        total: 17
+        points_gained: 3
+        total: 18
       - level: 5
-        points_gained: 4
+        points_gained: 3
         total: 21
       - level: 6
-        points_gained: 2
-        total: 23
+        points_gained: 3
+        total: 24
       - level: 7
         points_gained: 3
-        total: 26
+        total: 27
       - level: 8
-        points_gained: 2
-        total: 28
+        points_gained: 3
+        total: 30
       - level: 9
         points_gained: 3
-        total: 31
+        total: 33
       - level: 10
-        points_gained: 5
+        points_gained: 3
         total: 36

@@ -184,12 +184,12 @@ func (a *App) importBuiltinAbility(w http.ResponseWriter, r *http.Request, c *mo
 func (a *App) renderAbilityList(w http.ResponseWriter, c *model.Character) {
 
 	a.render(w, "abilities.html", pageData{
-		Title:     c.Name() + " - Abilities",
+		Title:     c.Name() + " - Perks",
 		Character: c,
 		Breadcrumbs: []crumb{
 			{Label: "Home", URL: "/"},
 			{Label: c.Name(), URL: "/characters/" + c.ID},
-			{Label: "Abilities", URL: "/characters/" + c.ID + "/abilities"},
+			{Label: "Perks", URL: "/characters/" + c.ID + "/abilities"},
 		},
 	})
 }
@@ -197,7 +197,7 @@ func (a *App) renderAbilityList(w http.ResponseWriter, c *model.Character) {
 func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model.Ability, isNew bool) {
 	cost := engine.AbilityCost(a.Cfg.Config, *ab)
 	budget := a.Cfg.AbilityPointBudget(c.Level)
-	title := "New Ability"
+	title := "New Perk"
 	if !isNew {
 		title = ab.Name
 	}
@@ -215,7 +215,7 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 		Breadcrumbs: []crumb{
 			{Label: "Home", URL: "/"},
 			{Label: c.Name(), URL: "/characters/" + c.ID},
-			{Label: "Abilities", URL: "/characters/" + c.ID + "/abilities"},
+			{Label: "Perks", URL: "/characters/" + c.ID + "/abilities"},
 			{Label: title, URL: "#"},
 		},
 	})

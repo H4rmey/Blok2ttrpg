@@ -360,6 +360,17 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 		}
 	}
 
+	// Apply the configured cost floors. Only the final total is clamped, so
+	// refund-style options (energy offsets, Enact Nerf, negative-cost
+	// knockouts) still offset other costs internally; they just cannot make an
+	// ability cost less than nothing unless the ruleset opts in.
+	if !cfg.AllowsNegativeBuildCost() && total.Build < 0 {
+		total.Build = 0
+	}
+	if !cfg.AllowsNegativeEnergyCost() && total.Energy < 0 {
+		total.Energy = 0
+	}
+
 	return total
 }
 

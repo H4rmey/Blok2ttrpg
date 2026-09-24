@@ -84,16 +84,7 @@ enactments:
           default_group: traits.offensive
           offsets:
             general: { build_cost: 1 }
-      - key: damage_type
-        label: "Damage Types"
-        type: multiselect
-        default_count: 1
-        options_source: damage_types
-        row_fields:
-          - key: value
-            label: "Damage Type"
-            type: dropdown
-            options_source: damage_types
+
 
   effect:
     type: "Enact Effect"

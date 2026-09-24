@@ -3,16 +3,13 @@
     "id": "char-1784634713450921500",
     "level": 10,
     "attributes": {
-      "ancestry": "",
       "appearance": "",
-      "archetype": "fa",
       "backstory": "",
       "bnananan": "",
       "current_energy": "21",
       "current_hp": "8",
       "name": "fasdfasdf",
-      "notes": "",
-      "player": ""
+      "notes": ""
     },
     "traits": {
       "defense.Constitution": "trained",

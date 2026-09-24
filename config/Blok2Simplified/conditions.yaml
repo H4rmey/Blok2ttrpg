@@ -6,8 +6,8 @@ additional_condition:
 # unified conditions list in one labelled optgroup. Options use bare condition
 # ids (no namespace), which the cost engine resolves via ConditionByID:
 # shiftable conditions charge per-shift, fixed conditions charge build/energy.
-# "conditions_all" backs the Enact Condition selector; "states_all" backs the
-# reaction triggers' condition follow-up dropdowns.
+# "conditions_all" backs the Enact Condition selector.
+
 option_groups:
   conditions_all:
     groups:

@@ -4,7 +4,7 @@
   <h1>{{ if $c.ID }}{{ $c.Name }}{{ else }}New Character{{ end }}</h1>
   {{ if $c.ID }}
   <div class="actions">
-    <a class="btn" href="/characters/{{ $c.ID }}/abilities">Abilities ({{ len $c.Abilities }})</a>
+    <a class="btn" href="/characters/{{ $c.ID }}/abilities">Perks ({{ len $c.Abilities }})</a>
     <a class="btn" href="/characters/{{ $c.ID }}/export">Export YAML</a>
     <a class="btn" href="/characters/{{ $c.ID }}/pdf" target="_blank">PDF</a>
     <button class="btn danger" hx-delete="/characters/{{ $c.ID }}" hx-confirm="Delete this character?">Delete</button>
@@ -33,6 +33,7 @@
       data-stats-url="/characters/{{ $c.ID }}/stats">
 
 
+  <h2 class="section-heading">Attributes</h2>
   {{ range attributes .Cfg }}
 
   <fieldset class="section section-attributes">
@@ -47,6 +48,7 @@
   </fieldset>
   {{ end }}
 
+  <h2 class="section-heading">Skills</h2>
   {{ range traitGroups .Cfg }}
 
   {{ $g := . }}

@@ -1,9 +1,9 @@
 {{ template "head" . }}
 {{ $c := .Character }}
 <div class="page-head">
-  <h1>{{ $c.Name }} &mdash; Abilities</h1>
+  <h1>{{ $c.Name }} &mdash; Perks</h1>
   <div class="toolbar">
-    <button class="btn primary" type="button" onclick="document.getElementById('new-ability-modal').showModal()">+ New Ability</button>
+    <button class="btn primary" type="button" onclick="document.getElementById('new-ability-modal').showModal()">+ New Perk</button>
 
     <button class="btn" type="button"
             hx-get="/abilities/library?character={{ $c.ID }}"
@@ -24,9 +24,9 @@
 
 <dialog id="new-ability-modal">
   <form method="get" action="/characters/{{ $c.ID }}/abilities/new">
-    <h2>New Ability</h2>
+    <h2>New Perk</h2>
     <label for="new-ability-name">Name</label>
-    <input id="new-ability-name" type="text" name="name" placeholder="Ability name" required autofocus>
+    <input id="new-ability-name" type="text" name="name" placeholder="Perk name" required autofocus>
     <div class="toolbar">
       <button class="btn primary" type="submit">Create</button>
       <button class="btn" type="button" onclick="document.getElementById('new-ability-modal').close()">Cancel</button>
@@ -46,12 +46,12 @@
     <div class="actions">
       <a class="btn" href="/characters/{{ $c.ID }}/abilities/{{ .ID }}">Edit</a>
       <a class="btn" href="/characters/{{ $c.ID }}/abilities/{{ .ID }}/export">Export</a>
-      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/abilities/{{ .ID }}" hx-confirm="Delete ability?">Delete</button>
+      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/abilities/{{ .ID }}" hx-confirm="Delete perk?">Delete</button>
     </div>
   </li>
   {{ end }}
 </ul>
 {{ else }}
-<p class="muted">No abilities yet.</p>
+<p class="muted">No perks yet.</p>
 {{ end }}
 {{ template "foot" . }}

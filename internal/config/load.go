@@ -113,6 +113,15 @@ func merge(base, in *Config) {
 	if in.Combat.Actions.Amount != 0 {
 		base.Combat = in.Combat
 	}
+	// Cost-floor opt-ins are pointers, so only an explicitly set value
+	// overrides the base (an absent key leaves the existing setting alone).
+	if in.AllowNegativeBuildCost != nil {
+		base.AllowNegativeBuildCost = in.AllowNegativeBuildCost
+	}
+	if in.AllowNegativeEnergyCost != nil {
+		base.AllowNegativeEnergyCost = in.AllowNegativeEnergyCost
+	}
+
 	if (in.AdditionalEnactment != AdditionalEnactment{}) {
 		base.AdditionalEnactment = in.AdditionalEnactment
 	}

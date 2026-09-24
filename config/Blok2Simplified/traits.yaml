@@ -1,3 +1,5 @@
+# Dice-backed skill groups. These render under the "Skills" heading on the
+# character page and each selection costs skill (trait) points.
 traits:
   general:
     - Stealth
@@ -10,6 +12,12 @@ traits:
     - Knowledge
     - Magic
     - Medicine
+    - Provoke
+    - Intimidate
+    - Athletics
+    - Deceive
+    - Resources
+
   offense:
     - Strength
     - Precision

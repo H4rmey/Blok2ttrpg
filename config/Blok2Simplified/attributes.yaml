@@ -1,5 +1,7 @@
 # Character attribute sections. These are free-form character sheet fields
 # stored generically on the character. They do not affect ability cost.
+# Both groups below are presented under the "Attributes" heading on the
+# character page; the dice-backed trait groups render under "Skills".
 attributes:
   identity:
     label: "Identity"
@@ -7,24 +9,27 @@ attributes:
       - key: name
         label: "Name"
         type: free_text
-      - key: player
-        label: "Player"
+      - key: age
+        label: "Age"
         type: free_text
-      - key: ancestry
-        label: "Ancestry"
+      - key: description
+        label: "Description"
         type: free_text
-      - key: archetype
-        label: "Archetype"
-        type: free_text
-  description:
-    label: "Description"
+  traits:
+    label: "Traits"
     fields:
-      - key: appearance
-        label: "Appearance"
+      - key: motivation
+        label: "Motivation"
         type: free_text
-      - key: backstory
-        label: "Backstory"
+      - key: problem
+        label: "Problem"
         type: free_text
-      - key: notes
-        label: "Notes"
-        type: free_text 
+      - key: trait_1
+        label: "Trait 1"
+        type: free_text
+      - key: trait_2
+        label: "Trait 2"
+        type: free_text
+      - key: trait_3
+        label: "Trait 3"
+        type: free_text

@@ -10,7 +10,6 @@
       "class": "Fighter",
       "name": "Borin Stonefist",
       "notes": "Primary weapon: Longsword. Sidearm: Warhammer.",
-      "player": "",
       "race": "Dwarf"
     },
     "traits": {
@@ -52,14 +51,40 @@
         "name": "Longsword",
         "description": "A versatile martial blade, balanced for cut and thrust.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Longsword" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Longsword"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d8", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d8",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Strength" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Strength"
+            }
           }
         ],
         "package_id": "fighter"
@@ -69,14 +94,40 @@
         "name": "Warhammer",
         "description": "A heavy hammer that crushes armor and bone alike.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Warhammer" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Warhammer"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d8", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d8",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Strength" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Strength"
+            }
           }
         ],
         "package_id": "fighter"
@@ -86,14 +137,36 @@
         "name": "Second Wind",
         "description": "You have a limited well of stamina you can draw on to protect yourself. As a reaction, regain some hit points.",
         "type": "reaction",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Engager takes damage", "uses": 1 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Engager takes damage",
+          "uses": 1
+        },
         "enactments": [
           {
             "type": "healing",
-            "fields": { "always": true, "flat": 0, "medicine": "", "other": "", "source": "d10", "source_trait": "" },
+            "fields": {
+              "always": true,
+              "flat": 0,
+              "medicine": "",
+              "other": "",
+              "source": "d10",
+              "source_trait": ""
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Constitution" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Constitution"
+            }
           }
         ],
         "package_id": "fighter"
@@ -103,23 +176,71 @@
         "name": "Dwarven Resilience",
         "description": "Your dwarven heritage grants advantage against poison and hardship. Passive boost to Constitution saves.",
         "type": "passive",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Target makes a trait check", "trigger_trait": "defense.Constitution", "uses": 3 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Target makes a trait check",
+          "trigger_trait": "defense.Constitution",
+          "uses": 3
+        },
         "enactments": [
           {
             "type": "proficiency_shift",
-            "fields": { "always": true, "shift_amount": 1, "shift_dir": "UP", "shift_uses": 1, "shifted_trait": "defense.Constitution" },
+            "fields": {
+              "always": true,
+              "shift_amount": 1,
+              "shift_dir": "UP",
+              "shift_uses": 1,
+              "shifted_trait": "defense.Constitution"
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Constitution" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Constitution"
+            }
           }
         ],
         "package_id": "dwarf"
       }
     ],
     "packages": [
-      { "id": "dwarf", "name": "Dwarf", "shifts": { "general.Constitution": 2, "defense.Constitution": 2, "general.Strength": 1 } },
-      { "id": "fighter", "name": "Fighter", "shifts": { "offense.Strength": 3, "general.Strength": 2, "general.Athletics": 2, "defense.Constitution": 2, "defense.Strength": 1 } },
-      { "id": "soldier", "name": "Soldier", "shifts": { "general.Athletics": 2, "general.Strength": 1, "defense.Constitution": 1 } }
+      {
+        "id": "dwarf",
+        "name": "Dwarf",
+        "shifts": {
+          "general.Constitution": 2,
+          "defense.Constitution": 2,
+          "general.Strength": 1
+        }
+      },
+      {
+        "id": "fighter",
+        "name": "Fighter",
+        "shifts": {
+          "offense.Strength": 3,
+          "general.Strength": 2,
+          "general.Athletics": 2,
+          "defense.Constitution": 2,
+          "defense.Strength": 1
+        }
+      },
+      {
+        "id": "soldier",
+        "name": "Soldier",
+        "shifts": {
+          "general.Athletics": 2,
+          "general.Strength": 1,
+          "defense.Constitution": 1
+        }
+      }
     ]
   },
   "char-dnd-l5-lyra": {
@@ -133,7 +254,6 @@
       "class": "Bard",
       "name": "Lyra Nightsong",
       "notes": "Weapon: Rapier. Support caster.",
-      "player": "",
       "race": "Half-Elf"
     },
     "traits": {
@@ -175,14 +295,40 @@
         "name": "Rapier",
         "description": "A slender thrusting blade prized for precise, finesse strikes.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Rapier" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Rapier"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d8", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d8",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Dexterity" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Dexterity"
+            }
           }
         ],
         "package_id": "bard"
@@ -192,21 +338,76 @@
         "name": "Vicious Mockery",
         "description": "You unleash a string of insults laced with subtle enchantments, wounding the mind and rattling the target.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": false, "item_name": "" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": ""
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d6", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d6",
+              "source_trait": ""
+            },
             "interaction": "ranged",
-            "interaction_data": { "range": 12, "targets": 1, "visible": false, "obstructed": false, "remove_penalty": false, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Wisdom" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Charisma" }
+            "interaction_data": {
+              "range": 12,
+              "targets": 1,
+              "visible": false,
+              "obstructed": false,
+              "remove_penalty": false,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Wisdom"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Charisma"
+            }
           },
           {
             "type": "state",
-            "fields": { "state": "distracted", "shift_amount": 0, "duration": "1", "solution": [ { "value": "defense.Wisdom" } ] },
+            "fields": {
+              "state": "distracted",
+              "shift_amount": 0,
+              "duration": "1",
+              "solution": [
+                {
+                  "value": "defense.Wisdom"
+                }
+              ]
+            },
             "interaction": "ranged",
-            "interaction_data": { "range": 12, "targets": 1, "visible": false, "obstructed": false, "remove_penalty": false, "use_previous": true },
-            "validation_data": { "counter_trait": [ { "value": "defense.Wisdom" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Charisma" }
+            "interaction_data": {
+              "range": 12,
+              "targets": 1,
+              "visible": false,
+              "obstructed": false,
+              "remove_penalty": false,
+              "use_previous": true
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Wisdom"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Charisma"
+            }
           }
         ],
         "package_id": "bard"
@@ -216,14 +417,39 @@
         "name": "Healing Word",
         "description": "A word of power that restores a creature within range to a spark of vitality.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": false, "item_name": "" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": ""
+        },
         "enactments": [
           {
             "type": "healing",
-            "fields": { "always": true, "flat": 0, "medicine": "", "other": "", "source": "d4", "source_trait": "" },
+            "fields": {
+              "always": true,
+              "flat": 0,
+              "medicine": "",
+              "other": "",
+              "source": "d4",
+              "source_trait": ""
+            },
             "interaction": "ranged",
-            "interaction_data": { "range": 12, "targets": 1, "visible": false, "obstructed": false, "remove_penalty": false, "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Charisma" }
+            "interaction_data": {
+              "range": 12,
+              "targets": 1,
+              "visible": false,
+              "obstructed": false,
+              "remove_penalty": false,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Charisma"
+            }
           }
         ],
         "package_id": "bard"
@@ -233,23 +459,71 @@
         "name": "Fey Ancestry",
         "description": "Your fey blood makes you hard to charm or put to sleep. Passive boost to Wisdom saves against mind effects.",
         "type": "passive",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Target makes a trait check", "trigger_trait": "defense.Wisdom", "uses": 3 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Target makes a trait check",
+          "trigger_trait": "defense.Wisdom",
+          "uses": 3
+        },
         "enactments": [
           {
             "type": "proficiency_shift",
-            "fields": { "always": true, "shift_amount": 1, "shift_dir": "UP", "shift_uses": 1, "shifted_trait": "defense.Wisdom" },
+            "fields": {
+              "always": true,
+              "shift_amount": 1,
+              "shift_dir": "UP",
+              "shift_uses": 1,
+              "shifted_trait": "defense.Wisdom"
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Wisdom" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Wisdom"
+            }
           }
         ],
         "package_id": "half-elf"
       }
     ],
     "packages": [
-      { "id": "half-elf", "name": "Half-Elf", "shifts": { "general.Charisma": 2, "general.Persuasion": 1, "general.Dexterity": 1 } },
-      { "id": "bard", "name": "Bard", "shifts": { "offense.Charisma": 3, "general.Charisma": 2, "general.Persuasion": 2, "defense.Charisma": 1, "general.Dexterity": 1 } },
-      { "id": "entertainer", "name": "Entertainer", "shifts": { "general.Acrobatics": 2, "general.Persuasion": 1, "general.Charisma": 1 } }
+      {
+        "id": "half-elf",
+        "name": "Half-Elf",
+        "shifts": {
+          "general.Charisma": 2,
+          "general.Persuasion": 1,
+          "general.Dexterity": 1
+        }
+      },
+      {
+        "id": "bard",
+        "name": "Bard",
+        "shifts": {
+          "offense.Charisma": 3,
+          "general.Charisma": 2,
+          "general.Persuasion": 2,
+          "defense.Charisma": 1,
+          "general.Dexterity": 1
+        }
+      },
+      {
+        "id": "entertainer",
+        "name": "Entertainer",
+        "shifts": {
+          "general.Acrobatics": 2,
+          "general.Persuasion": 1,
+          "general.Charisma": 1
+        }
+      }
     ]
   },
   "char-dnd-l10-zaltar": {
@@ -263,7 +537,6 @@
       "class": "Sorcerer",
       "name": "Zaltar Emberpalm",
       "notes": "Blaster caster. Quarterstaff as backup.",
-      "player": "",
       "race": "Tiefling"
     },
     "traits": {
@@ -305,14 +578,42 @@
         "name": "Fireball",
         "description": "A bright streak flashes to a point and blossoms into an explosion of flame.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": false, "item_name": "" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": ""
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d12", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d12",
+              "source_trait": ""
+            },
             "interaction": "area",
-            "interaction_data": { "radius": 3, "range": 10, "origin_mode": "other", "origin_text": "A point you can see within range", "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Charisma" }
+            "interaction_data": {
+              "radius": 3,
+              "range": 10,
+              "origin_mode": "other",
+              "origin_text": "A point you can see within range",
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Charisma"
+            }
           }
         ],
         "package_id": "sorcerer"
@@ -322,14 +623,43 @@
         "name": "Fire Bolt",
         "description": "A mote of fire hurled at a creature or object within range.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": false, "item_name": "" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": ""
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d10", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d10",
+              "source_trait": ""
+            },
             "interaction": "ranged",
-            "interaction_data": { "range": 12, "targets": 1, "visible": false, "obstructed": false, "remove_penalty": false, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Charisma" }
+            "interaction_data": {
+              "range": 12,
+              "targets": 1,
+              "visible": false,
+              "obstructed": false,
+              "remove_penalty": false,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Charisma"
+            }
           }
         ],
         "package_id": "sorcerer"
@@ -339,14 +669,40 @@
         "name": "Quarterstaff",
         "description": "A sturdy wooden staff, simple but reliable in trained hands.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Quarterstaff" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Quarterstaff"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d6", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d6",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Strength" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Strength"
+            }
           }
         ],
         "package_id": "sorcerer"
@@ -356,23 +712,73 @@
         "name": "Hellish Resistance",
         "description": "Your infernal heritage lets you shrug off flames. Passive damage reduction against fire.",
         "type": "passive",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Target damages engager", "uses": 3 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Target damages engager",
+          "uses": 3
+        },
         "enactments": [
           {
             "type": "negation",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d6", "source_trait": "", "counter_negation": false, "full_counter": false },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d6",
+              "source_trait": "",
+              "counter_negation": false,
+              "full_counter": false
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Constitution" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Constitution"
+            }
           }
         ],
         "package_id": "tiefling"
       }
     ],
     "packages": [
-      { "id": "tiefling", "name": "Tiefling", "shifts": { "general.Charisma": 2, "general.Intelligence": 1, "offense.Charisma": 1 } },
-      { "id": "sorcerer", "name": "Sorcerer", "shifts": { "offense.Charisma": 3, "general.Charisma": 2, "general.Arcana": 1, "defense.Constitution": 1, "defense.Charisma": 1 } },
-      { "id": "sage", "name": "Sage", "shifts": { "general.Arcana": 2, "general.Intelligence": 1, "general.Insight": 1 } }
+      {
+        "id": "tiefling",
+        "name": "Tiefling",
+        "shifts": {
+          "general.Charisma": 2,
+          "general.Intelligence": 1,
+          "offense.Charisma": 1
+        }
+      },
+      {
+        "id": "sorcerer",
+        "name": "Sorcerer",
+        "shifts": {
+          "offense.Charisma": 3,
+          "general.Charisma": 2,
+          "general.Arcana": 1,
+          "defense.Constitution": 1,
+          "defense.Charisma": 1
+        }
+      },
+      {
+        "id": "sage",
+        "name": "Sage",
+        "shifts": {
+          "general.Arcana": 2,
+          "general.Intelligence": 1,
+          "general.Insight": 1
+        }
+      }
     ]
   },
   "char-dnd-l15-kael": {
@@ -386,7 +792,6 @@
       "class": "Rogue",
       "name": "Kael Swiftshadow",
       "notes": "Daggers and shortsword for melee, longbow at range.",
-      "player": "",
       "race": "Elf"
     },
     "traits": {
@@ -428,14 +833,40 @@
         "name": "Dagger",
         "description": "A light, finessed blade. Quick to strike with either hand.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Dagger" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Dagger"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d4", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d4",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Dexterity" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Dexterity"
+            }
           }
         ],
         "package_id": "rogue"
@@ -445,14 +876,40 @@
         "name": "Shortsword",
         "description": "A light finesse blade favored by duelists and skirmishers.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Shortsword" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Shortsword"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d6", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d6",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Dexterity" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Dexterity"
+            }
           }
         ],
         "package_id": "rogue"
@@ -462,14 +919,43 @@
         "name": "Longbow",
         "description": "A tall bow with great range, striking distant foes with precision.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Longbow" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Longbow"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d8", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d8",
+              "source_trait": ""
+            },
             "interaction": "ranged",
-            "interaction_data": { "range": 20, "targets": 1, "visible": false, "obstructed": false, "remove_penalty": false, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Dexterity" }
+            "interaction_data": {
+              "range": 20,
+              "targets": 1,
+              "visible": false,
+              "obstructed": false,
+              "remove_penalty": false,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Dexterity"
+            }
           }
         ],
         "package_id": "rogue"
@@ -479,14 +965,40 @@
         "name": "Sneak Attack",
         "description": "Once per turn you can deal extra damage to a creature you catch off guard or gang up on.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": false, "item_name": "" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": ""
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d6", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d6",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": true },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Dexterity" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": true
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Dexterity"
+            }
           }
         ],
         "package_id": "rogue"
@@ -496,14 +1008,38 @@
         "name": "Uncanny Dodge",
         "description": "When an attacker you can see hits you, you can use your reaction to halve the damage.",
         "type": "reaction",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Target damages engager", "uses": 1 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Target damages engager",
+          "uses": 1
+        },
         "enactments": [
           {
             "type": "negation",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d8", "source_trait": "", "counter_negation": false, "full_counter": false },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d8",
+              "source_trait": "",
+              "counter_negation": false,
+              "full_counter": false
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Dexterity" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Dexterity"
+            }
           }
         ],
         "package_id": "rogue"
@@ -513,14 +1049,36 @@
         "name": "Danger Sense",
         "description": "You have an uncanny sense for danger, gaining an edge on Dexterity saves against effects you can see.",
         "type": "passive",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Target makes a trait check", "trigger_trait": "defense.Dexterity", "uses": 3 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Target makes a trait check",
+          "trigger_trait": "defense.Dexterity",
+          "uses": 3
+        },
         "enactments": [
           {
             "type": "proficiency_shift",
-            "fields": { "always": true, "shift_amount": 1, "shift_dir": "UP", "shift_uses": 1, "shifted_trait": "defense.Dexterity" },
+            "fields": {
+              "always": true,
+              "shift_amount": 1,
+              "shift_dir": "UP",
+              "shift_uses": 1,
+              "shifted_trait": "defense.Dexterity"
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Dexterity" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Dexterity"
+            }
           }
         ],
         "package_id": "rogue"
@@ -530,23 +1088,71 @@
         "name": "Fey Ancestry",
         "description": "Your fey blood makes you hard to charm or put to sleep. Passive boost to Wisdom saves against mind effects.",
         "type": "passive",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Target makes a trait check", "trigger_trait": "defense.Wisdom", "uses": 3 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Target makes a trait check",
+          "trigger_trait": "defense.Wisdom",
+          "uses": 3
+        },
         "enactments": [
           {
             "type": "proficiency_shift",
-            "fields": { "always": true, "shift_amount": 1, "shift_dir": "UP", "shift_uses": 1, "shifted_trait": "defense.Wisdom" },
+            "fields": {
+              "always": true,
+              "shift_amount": 1,
+              "shift_dir": "UP",
+              "shift_uses": 1,
+              "shifted_trait": "defense.Wisdom"
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Wisdom" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Wisdom"
+            }
           }
         ],
         "package_id": "elf"
       }
     ],
     "packages": [
-      { "id": "elf", "name": "Elf", "shifts": { "general.Dexterity": 2, "offense.Dexterity": 1, "general.Perception": 1 } },
-      { "id": "rogue", "name": "Rogue", "shifts": { "offense.Dexterity": 3, "general.Dexterity": 2, "general.Stealth": 2, "general.Acrobatics": 1, "general.Perception": 1 } },
-      { "id": "criminal", "name": "Criminal", "shifts": { "general.Stealth": 2, "general.Dexterity": 1, "general.Insight": 1 } }
+      {
+        "id": "elf",
+        "name": "Elf",
+        "shifts": {
+          "general.Dexterity": 2,
+          "offense.Dexterity": 1,
+          "general.Perception": 1
+        }
+      },
+      {
+        "id": "rogue",
+        "name": "Rogue",
+        "shifts": {
+          "offense.Dexterity": 3,
+          "general.Dexterity": 2,
+          "general.Stealth": 2,
+          "general.Acrobatics": 1,
+          "general.Perception": 1
+        }
+      },
+      {
+        "id": "criminal",
+        "name": "Criminal",
+        "shifts": {
+          "general.Stealth": 2,
+          "general.Dexterity": 1,
+          "general.Insight": 1
+        }
+      }
     ]
   },
   "char-dnd-l20-grimjaw": {
@@ -560,7 +1166,6 @@
       "class": "Barbarian",
       "name": "Grimjaw Ironhide",
       "notes": "Greataxe primary. Warhammer sidearm. Rages in battle.",
-      "player": "",
       "race": "Half-Orc"
     },
     "traits": {
@@ -602,14 +1207,40 @@
         "name": "Greataxe",
         "description": "A massive two-handed axe that cleaves through foes.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Greataxe" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Greataxe"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d12", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d12",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Strength" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Strength"
+            }
           }
         ],
         "package_id": "barbarian"
@@ -619,14 +1250,40 @@
         "name": "Warhammer",
         "description": "A heavy hammer that crushes armor and bone alike.",
         "type": "execution",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": true, "item_name": "Warhammer" },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": true,
+          "item_name": "Warhammer"
+        },
         "enactments": [
           {
             "type": "damage",
-            "fields": { "always": false, "flat": 0, "offense": "", "other": "", "source": "d8", "source_trait": "" },
+            "fields": {
+              "always": false,
+              "flat": 0,
+              "offense": "",
+              "other": "",
+              "source": "d8",
+              "source_trait": ""
+            },
             "interaction": "direct",
-            "interaction_data": { "range": 1, "targets": 1, "use_previous": false },
-            "validation_data": { "counter_trait": [ { "value": "defense.Dexterity" } ], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Strength" }
+            "interaction_data": {
+              "range": 1,
+              "targets": 1,
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [
+                {
+                  "value": "defense.Dexterity"
+                }
+              ],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Strength"
+            }
           }
         ],
         "package_id": "barbarian"
@@ -636,21 +1293,59 @@
         "name": "Rage",
         "description": "You give in to primal fury, bolstering your strength and toughness for the fight.",
         "type": "concentration",
-        "fields": { "action_steps": 0, "energy_steps": 0, "item_dep": false, "item_name": "", "trigger_timing": "Start of Engager Turn", "upkeep_cost": "1 Energy", "effortless": false, "iron_will": true, "dual_focus": false },
+        "fields": {
+          "action_steps": 0,
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "trigger_timing": "Start of Engager Turn",
+          "upkeep_cost": "1 Energy",
+          "effortless": false,
+          "iron_will": true,
+          "dual_focus": false
+        },
         "enactments": [
           {
             "type": "proficiency_shift",
-            "fields": { "always": true, "shift_amount": 2, "shift_dir": "UP", "shift_uses": 1, "shifted_trait": "offense.Strength" },
+            "fields": {
+              "always": true,
+              "shift_amount": 2,
+              "shift_dir": "UP",
+              "shift_uses": 1,
+              "shifted_trait": "offense.Strength"
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Strength" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Strength"
+            }
           },
           {
             "type": "proficiency_shift",
-            "fields": { "always": true, "shift_amount": 2, "shift_dir": "UP", "shift_uses": 1, "shifted_trait": "defense.Constitution" },
+            "fields": {
+              "always": true,
+              "shift_amount": 2,
+              "shift_dir": "UP",
+              "shift_uses": 1,
+              "shifted_trait": "defense.Constitution"
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "offense.Strength" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "offense.Strength"
+            }
           }
         ],
         "package_id": "barbarian"
@@ -660,14 +1355,36 @@
         "name": "Danger Sense",
         "description": "You have an uncanny sense for danger, gaining an edge on Dexterity saves against effects you can see.",
         "type": "passive",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Target makes a trait check", "trigger_trait": "defense.Dexterity", "uses": 3 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Target makes a trait check",
+          "trigger_trait": "defense.Dexterity",
+          "uses": 3
+        },
         "enactments": [
           {
             "type": "proficiency_shift",
-            "fields": { "always": true, "shift_amount": 1, "shift_dir": "UP", "shift_uses": 1, "shifted_trait": "defense.Dexterity" },
+            "fields": {
+              "always": true,
+              "shift_amount": 1,
+              "shift_dir": "UP",
+              "shift_uses": 1,
+              "shifted_trait": "defense.Dexterity"
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Dexterity" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Dexterity"
+            }
           }
         ],
         "package_id": "barbarian"
@@ -677,23 +1394,71 @@
         "name": "Relentless Endurance",
         "description": "When you would be dropped to 0 HP, you can hang on with 1 HP instead. Once per rest.",
         "type": "passive",
-        "fields": { "energy_steps": 0, "item_dep": false, "item_name": "", "range": 1, "trigger": "Engager takes damage", "uses": 1 },
+        "fields": {
+          "energy_steps": 0,
+          "item_dep": false,
+          "item_name": "",
+          "range": 1,
+          "trigger": "Engager takes damage",
+          "uses": 1
+        },
         "enactments": [
           {
             "type": "healing",
-            "fields": { "always": true, "flat": 1, "medicine": "", "other": "", "source": "d4", "source_trait": "" },
+            "fields": {
+              "always": true,
+              "flat": 1,
+              "medicine": "",
+              "other": "",
+              "source": "d4",
+              "source_trait": ""
+            },
             "interaction": "self",
-            "interaction_data": { "use_previous": false },
-            "validation_data": { "counter_trait": [], "engage_die": "d20", "engage_mode": "trait", "engage_other": "", "engage_trait": "defense.Constitution" }
+            "interaction_data": {
+              "use_previous": false
+            },
+            "validation_data": {
+              "counter_trait": [],
+              "engage_die": "d20",
+              "engage_mode": "trait",
+              "engage_other": "",
+              "engage_trait": "defense.Constitution"
+            }
           }
         ],
         "package_id": "half-orc"
       }
     ],
     "packages": [
-      { "id": "half-orc", "name": "Half-Orc", "shifts": { "general.Strength": 2, "offense.Strength": 1, "general.Constitution": 1 } },
-      { "id": "barbarian", "name": "Barbarian", "shifts": { "offense.Strength": 3, "general.Strength": 2, "general.Athletics": 2, "defense.Constitution": 2, "offense.Intelligence": -1 } },
-      { "id": "folk-hero", "name": "Folk Hero", "shifts": { "general.Athletics": 2, "general.Strength": 1, "general.Persuasion": 1 } }
+      {
+        "id": "half-orc",
+        "name": "Half-Orc",
+        "shifts": {
+          "general.Strength": 2,
+          "offense.Strength": 1,
+          "general.Constitution": 1
+        }
+      },
+      {
+        "id": "barbarian",
+        "name": "Barbarian",
+        "shifts": {
+          "offense.Strength": 3,
+          "general.Strength": 2,
+          "general.Athletics": 2,
+          "defense.Constitution": 2,
+          "offense.Intelligence": -1
+        }
+      },
+      {
+        "id": "folk-hero",
+        "name": "Folk Hero",
+        "shifts": {
+          "general.Athletics": 2,
+          "general.Strength": 1,
+          "general.Persuasion": 1
+        }
+      }
     ]
   }
 }
