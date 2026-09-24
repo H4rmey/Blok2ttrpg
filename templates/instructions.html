@@ -1,0 +1,19 @@
+{{ define "instructions" }}
+{{ if .Instructions }}
+<div class="instructions">
+  {{ range .Instructions }}
+  <div class="instruction-block">
+    <h4 class="instruction-title">{{ .Index }}. {{ .Title }}</h4>
+    <dl class="instruction-lines">
+      {{ if .Interaction }}<dt>Interaction</dt><dd>{{ .Interaction }}</dd>{{ end }}
+      {{ if .Validation }}<dt>Validation</dt><dd>{{ .Validation }}</dd>{{ end }}
+      {{ if .Success }}<dt>On success</dt><dd>{{ .Success }}</dd>{{ end }}
+      {{ if .Solution }}<dt>Solution</dt><dd>{{ .Solution }}</dd>{{ end }}
+    </dl>
+  </div>
+  {{ end }}
+</div>
+{{ else }}
+<p class="muted">Add an enactment to generate instructions.</p>
+{{ end }}
+{{ end }}

@@ -25,6 +25,11 @@ type abilityPage struct {
 	Cost        engine.Cost
 	Budget      int
 	OverBudget  bool
+
+	// Instructions is the generated play-facing rules text for the ability,
+	// one entry per enactment. It is rendered by the "instructions" partial
+	// and refreshed by /builder/instructions as the builder changes.
+	Instructions []engine.Instruction
 }
 
 // handleAbilities dispatches /characters/{id}/abilities[/...] routes.
@@ -211,6 +216,8 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 		Budget:    budget,
 		// Over budget is advisory only: it never blocks saving.
 		OverBudget: cost.Build > budget,
+
+		Instructions: engine.AbilityInstructions(a.Cfg.Config, *ab),
 
 		Breadcrumbs: []crumb{
 			{Label: "Home", URL: "/"},
@@ -692,7 +699,25 @@ func (a *App) handleBuilderCost(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleBuilderInstructions regenerates the play-facing instruction text from
+// the posted builder form. It mirrors handleBuilderCost: the form is parsed
+// into a throwaway ability, the generator runs over it, and only the
+// "instructions" partial is returned so htmx can swap that region.
+func (a *App) handleBuilderInstructions(w http.ResponseWriter, r *http.Request) {
+	_ = r.ParseForm()
+	ab := a.buildAbilityFromForm(r, r.FormValue("ability_id"))
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	data := abilityPage{
+		Cfg:          a.Cfg.Config,
+		Instructions: engine.AbilityInstructions(a.Cfg.Config, ab),
+	}
+	if err := a.Tmpl.ExecuteTemplate(w, "instructions", data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
 func findAbility(c *model.Character, id string) int {
+
 	for i, ab := range c.Abilities {
 		if ab.ID == id {
 			return i

@@ -1,4 +1,6 @@
 err.log
+.run/
+
 out.log
 server.log
 data/*/*json

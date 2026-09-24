@@ -4,10 +4,13 @@ services:
     image: blok2ttrpg:latest
     container_name: blok2ttrpg
     ports:
-      - "4040:8080"
+      # 47821 is the project's canonical port, used on both sides so the URL
+      # matches a local (non-container) run.
+      - "47821:47821"
     environment:
       # Port the server listens on inside the container.
-      PORT: "8080"
+      PORT: "47821"
+
       # Game system to load. This selects both the ruleset (config/<system>)
       # and the built-in library (library/<system>). Set to "dnd" to run the
       # D&D system, or "ability-builder" for the original ruleset, instead of

@@ -91,7 +91,16 @@ traits, or character attributes anywhere in the Go code.
 go run .
 ```
 
-Then open http://localhost:8080.
+Then open http://localhost:47821.
+
+Or use the helper scripts, which always use the project's default port 47821
+and run the server in the background:
+
+```bash
+./start.sh   # build and start (logs to .run/server.log)
+./stop.sh    # stop it again
+```
+
 
 Or with Docker Compose:
 
@@ -103,7 +112,8 @@ docker compose up
 
 - `-config` (or `CONFIG`): config directory or file. Default `config/ability-builder`.
 - `-templates`: template directory. Default `templates`.
-- `PORT`: listen port. Default `8080`.
+- `PORT`: listen port. Default `47821`.
+
 
 Characters are stored in `data/<profile_id>/characters.json`.
 

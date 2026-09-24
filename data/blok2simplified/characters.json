@@ -113,23 +113,19 @@
           {
             "type": "damage",
             "fields": {
-              "source": "offense.Precision"
+              "source": ""
             },
-            "interaction": "direct",
-            "interaction_data": {
-              "range": "25",
-              "targets": 1
-            },
+            "interaction": "self",
             "validation_data": {
               "counter_trait": [
                 {
                   "value": "defense.Reflex"
                 },
                 {
-                  "value": "defense.Magic"
+                  "value": "defense.Constitution"
                 }
               ],
-              "engage": "offense.Precision"
+              "engage": "d6"
             }
           }
         ]

@@ -14,6 +14,36 @@
 }
 [data-theme="dark"] { color-scheme: dark; }
 
+/* Generated perk instructions (play-facing rules text). */
+.instructions { display: grid; gap: 0.6rem; }
+.instruction-block {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--cyan);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--cyan) 6%, var(--surface));
+  padding: 0.6rem 0.8rem;
+}
+.instruction-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cyan);
+}
+.instruction-lines {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.15rem 0.75rem;
+  margin: 0;
+}
+.instruction-lines dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.instruction-lines dd { margin: 0; font-size: 0.9rem; }
+
+
 
 [data-theme="light"] {
   --bg: #f6f7f9;

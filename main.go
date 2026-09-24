@@ -30,7 +30,10 @@ func main() {
 	libraryDir := flag.String("library", "", "explicit path to the built-in content library (overrides the per-system default)")
 	flag.Parse()
 
-	port := "8080"
+	// defaultPort is the project's fixed development port. It can still be
+	// overridden with the PORT environment variable.
+	const defaultPort = "47821"
+	port := defaultPort
 	if p := os.Getenv("PORT"); p != "" {
 		port = p
 	}

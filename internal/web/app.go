@@ -52,6 +52,8 @@ func (a *App) Router() http.Handler {
 	mux.HandleFunc("/builder/condition-shift", a.handleConditionShift)
 
 	mux.HandleFunc("/builder/cost", a.handleBuilderCost)
+	mux.HandleFunc("/builder/instructions", a.handleBuilderInstructions)
+
 	mux.HandleFunc("/builder/autosave", a.handleBuilderAutosave)
 
 	mux.HandleFunc("/builder/ability-type-fields", a.handleAbilityTypeFields)

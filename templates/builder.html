@@ -30,7 +30,19 @@
       <label>Description</label>
       <input type="text" name="description" value="{{ $ab.Description }}">
     </div>
+    <div class="field">
+      <label>Instructions</label>
+      <small class="muted">Generated from the choices below; this is the rules text you read at the table.</small>
+      <div id="instructions-panel"
+           hx-post="/builder/instructions"
+           hx-trigger="change from:#ability-form, load"
+           hx-include="#ability-form"
+           hx-target="this" hx-swap="innerHTML">
+        {{ template "instructions" . }}
+      </div>
+    </div>
   </fieldset>
+
 
   <div id="builder-gate" {{ if not $ab.Name }}class="gated"{{ end }}>
   <fieldset>
