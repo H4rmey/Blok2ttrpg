@@ -265,6 +265,21 @@ type Condition struct {
 	MinShift  int  `yaml:"min_shift,omitempty" json:"min_shift,omitempty"`
 	MaxShift  int  `yaml:"max_shift,omitempty" json:"max_shift,omitempty"`
 	ShiftCost Cost `yaml:"shift_cost,omitempty" json:"shift_cost,omitempty"`
+
+	// Selectable controls whether the condition appears in the builder's
+	// condition dropdown. Some conditions are states the rules impose (Dying),
+	// gear states, or GM-only effects, and must not be purchasable as an
+	// enactment. It is a pointer so an unset value defaults to true, leaving
+	// existing profiles unchanged. Non-selectable conditions are still
+	// resolvable by id, so saved abilities and generated instructions keep
+	// working.
+	Selectable *bool `yaml:"selectable,omitempty" json:"selectable,omitempty"`
+}
+
+// IsSelectable reports whether the condition may be picked in the builder.
+// Defaults to true when unset.
+func (c Condition) IsSelectable() bool {
+	return c.Selectable == nil || *c.Selectable
 }
 
 // Shiftable reports whether the condition applies a trait shift (and therefore

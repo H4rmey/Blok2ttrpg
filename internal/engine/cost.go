@@ -371,7 +371,10 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 		total.Build = 0
 	}
 	// Using a perk always costs at least 1 energy, so the floor is 1 rather
-	// than 0. A ruleset that opts into negative energy cost (via
+	// than 0. The per-enactment energy cost comes from the ability type's
+	// base_cost plus additional_enactment, so this is a backstop that keeps
+	// refund-style options (Enact Nerf, energy offsets) from making a perk free.
+	// A ruleset that opts into negative energy cost (via
 	// allow_negative_energy_cost) keeps whatever the options computed.
 	if !cfg.AllowsNegativeEnergyCost() && total.Energy < 1 {
 		total.Energy = 1

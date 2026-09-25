@@ -15,48 +15,76 @@ option_groups:
         label: "Conditions"
 
 
+# Pricing tiers used throughout this file, so a new condition can be slotted in
+# by comparing it to its neighbours:
+#
+#   1  minor friction: a single small penalty, easily played around
+#   2  a real restriction: removes one option or shifts one die
+#   3  a strong restriction: removes a whole category of play
+#   4  removes a turn's worth of agency, or hands control to someone else
+#   5  near-total denial for a round
+#   6+ effectively removes a character from the fight
+#
+# Buffs are priced one step above the mirrored debuff: making an ally stronger
+# is worth more than making one enemy weaker, because the ally acts every round.
+#
+# A condition may also set "selectable: false". Such a condition is a state the
+# rules impose (Dying), a property of gear, or a GM-only effect: it is never
+# offered in the Enact Condition dropdown, but it keeps its id, name and
+# description so existing perks and the rules reference still resolve it.
+
 conditions:
-  # General states apply trait shifts with per-shift cost
+  # Shiftable conditions. IMPORTANT: a condition that declares a shift range is
+  # charged shift_cost PER UNIT OF SHIFT and its build_cost is never read. These
+  # four previously set only build_cost, which made them free at any magnitude.
   - id: blinded
     name: "Blinded"
     description: "Reduces certain trait rolls"
     min_shift: -6
     max_shift: 0
-    build_cost: 1
+    shift_cost: { build_cost: 1 }
   - id: encumbered
     name: "Encumbered"
     description: "Reduces movement and relevant traits"
     min_shift: -6
     max_shift: 0
-    build_cost: 1
+    shift_cost: { build_cost: 1 }
   - id: encouraged
     name: "Encouraged"
     description: "Positive trait shifts"
     min_shift: 1
     max_shift: 6
-    build_cost: 3
+    # A buff costs more per step than the mirrored debuff (see Frightened).
+    shift_cost: { build_cost: 2 }
   - id: frightened
     name: "Frightened"
     description: "Negative trait shifts"
     min_shift: -6
     max_shift: 0
-    build_cost: 2
+    shift_cost: { build_cost: 1 }
   - id: taunted
     name: "Taunted"
     description: "You can only target a preset Target."
-    build_cost: 1
+    # Removes every targeting option but one, which is the same weight as
+    # Confused (2) and Isolated (2). Was 1, the "minor friction" tier.
+    build_cost: 2
   - id: swayed
     name: "Swayed"
     description: "You cannot target a preset Target anymore."
-    build_cost: 1
+    # Removes one targeting option: the mirror of Taunted, priced with it.
+    build_cost: 2
   - id: untargetable
     name: "Untouchable"
     description: "You cannot be targeted."
-    build_cost: 4
+    # Near-total denial of incoming attacks for the duration, so tier 5. At 4 it
+    # was priced level with Charmed while being harder to play around.
+    build_cost: 5
   - id: ignored
     name: "Ignored"
     description: "You cannot be targeted, but you can still get hit."
-    build_cost: 1
+    # A weaker Untouchable (5): you avoid being singled out but area effects and
+    # stray hits still reach you, so it sits one step below it.
+    build_cost: 3
   - id: confused
     name: "Confused"
     description: "You indiscriminately target anyone."
@@ -73,17 +101,20 @@ conditions:
     name: "Isolated"
     description: "You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent."
     build_cost: 2
-    
+
 
   # Mind Control & Behavioral Constraints
   - id: charmed
     name: "Charmed"
     description: "You must do what the Charmer says."
-    build_cost: 4
+    # Hands full control of a character to someone else, which is the strongest
+    # thing short of denial. Was 4, the same as "phase through walls".
+    build_cost: 5
   - id: hypnotized
     name: "Hypnotized"
     description: "You mimic the exact movement and action of the person who hypnotized you on their last turn."
-    build_cost: 4
+    # Also surrenders control of the whole turn, so priced with Charmed.
+    build_cost: 5
   - id: stubborn
     name: "Stubborn"
     description: "You cannot repeat the same action or use the same ability two turns in a row."
@@ -101,11 +132,14 @@ conditions:
   - id: stunned
     name: "Stunned"
     description: "You are stunned; you lose one of your actions."
-    build_cost: 4
+    # One of three actions, so a third of a turn.
+    build_cost: 3
   - id: paralyzed
     name: "Paralyzed"
     description: "Lose your turn."
-    build_cost: 4
+    # Strictly worse than Stunned, so it must cost more: the whole turn rather
+    # than one action. Both sat at 4.
+    build_cost: 5
   - id: pacified
     name: "Pacified"
     description: "You can no longer attack any Target."
@@ -151,11 +185,13 @@ conditions:
   - id: slowed
     name: "Slowed"
     description: "Movement speed shifted one down."
-    build_cost: 1
+    # One die shift on a trait, which is the tier 2 "shifts one die" line. Was 1.
+    build_cost: 2
   - id: terrified
     name: "Terrified"
     description: "You move 1m away from the target (or take 1d4 damage)."
-    build_cost: 3
+    # A 1m push or 1d4 is friction, not a lost category of play. Was 3.
+    build_cost: 2
 
   # Dice & Stats Modifications
   - id: weakened
@@ -177,14 +213,21 @@ conditions:
   - id: hesitant
     name: "Hesitant"
     description: "Your Engagement Roll must be rolled twice."
-    build_cost: 1
+    # Rerolling every engagement is a standing penalty on each attack, which is
+    # heavier than the single small penalties on tier 1. Was 1.
+    build_cost: 2
   - id: broken_gear
     name: "Broken Gear"
     description: "Rolls for this gear are reduced by one die shift."
+    # A property of a piece of equipment, applied by wear, sundering or the GM,
+    # not an effect a perk buys, so it is not offered in the dropdown.
+    selectable: false
     build_cost: 2
   - id: amplified_gear
     name: "Amplified Gear"
     description: "Rolls for this gear are upgraded by one die shift."
+    # Gear state like Broken Gear: granted by the item, not purchased.
+    selectable: false
     build_cost: 3
 
   # Energy & Resource Manipulation
@@ -195,7 +238,9 @@ conditions:
   - id: energized
     name: "Energized"
     description: "Energy cost of abilities is reduced by 1."
-    build_cost: 4
+    # A buff, so one step above Fatigued. Now that a perk costs 1 energy per
+    # enactment, this is a standing discount on every perk the target uses.
+    build_cost: 3
 
   # Time & Round Economy
   - id: delayed
@@ -209,21 +254,23 @@ conditions:
   - id: echoed
     name: "Echoed"
     description: "Whatever action you took last round will be executed automatically next round."
-    build_cost: 4
+    # Repeats an action the target already chose, so it neither removes agency
+    # nor hands over control: a strong restriction, not a tier 4. Was 4.
+    build_cost: 3
 
   # Health, Death & Reality Alterations
   - id: dying
     name: "Dying"
     description: "Your HP went below 0; you are out of combat until revived by an ally."
+    # A consequence of running out of HP, which the rules apply on their own. It
+    # is listed here so the rules reference and existing perks can name it, but
+    # it must never be purchasable, hence cost 0 and selectable: false.
+    selectable: false
     build_cost: 0
   - id: doomed
     name: "Doomed"
     description: "You will move to Dying in x turns."
     build_cost: 3
-  - id: invincible
-    name: "Invincible"
-    description: "You cannot be damaged."
-    build_cost: 5
   - id: zombified
     name: "Zombified"
     description: "Healing damages instead; Damage heals instead."
@@ -235,8 +282,18 @@ conditions:
   - id: incorporeal
     name: "Incorporeal"
     description: "Phase through walls."
-    build_cost: 4
+    # Positioning utility with no combat denial attached, so tier 3 rather than
+    # the tier 4 it shared with Charmed.
+    build_cost: 3
   - id: marked
     name: "Marked"
     description: "Everything that happens to you is buffed or nerfed (pick one)."
     build_cost: 3
+  - id: invincible
+    name: "Invincible"
+    description: "You cannot be damaged."
+    # Total damage immunity: the strongest effect in the game and a narrative /
+    # GM tool rather than a perk, so it is not selectable. The cost is kept at
+    # the top of the scale for reference.
+    selectable: false
+    build_cost: 8

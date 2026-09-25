@@ -43,6 +43,16 @@
 }
 .instruction-lines dd { margin: 0; font-size: 0.9rem; }
 
+/* Small reminder line under an instruction block, e.g. the description of the
+   condition the enactment applies. */
+.instruction-note {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
 
 
 [data-theme="light"] {
@@ -72,6 +82,7 @@ a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 .topbar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,12 +93,22 @@ a:hover { text-decoration: underline; }
 .topbar .brand { font-weight: 700; font-size: 1.1rem; color: var(--text); }
 .topbar nav { display: flex; align-items: center; gap: 1rem; }
 
-/* Name of the open character, shown in the banner on every page scoped to it. */
-.topbar-sep { opacity: 0.4; }
-.topbar .char-name { font-weight: 600; color: var(--accent); }
-.topbar .char-nav { margin-right: auto; font-size: 0.85rem; }
-.topbar .char-nav a { opacity: 0.8; }
-.topbar .char-nav a:hover { opacity: 1; }
+/* Name of the open character, centred in the banner on every page scoped to it.
+   It is positioned absolutely so it sits in the true centre of the bar rather
+   than being pushed off-centre by the differing widths of the brand and nav. */
+.topbar .char-name {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--accent);
+  /* Keep the name clear of the brand and nav on narrow screens. */
+  max-width: 40%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 /* Compact square button used for the inline recalculate controls. */
 .btn.icon-btn {

@@ -10,6 +10,7 @@
       {{ if .Success }}<dt>On success</dt><dd>{{ .Success }}</dd>{{ end }}
       {{ if .Solution }}<dt>Solution</dt><dd>{{ .Solution }}</dd>{{ end }}
     </dl>
+    {{ if .Note }}<small class="instruction-note">{{ .Note }}</small>{{ end }}
   </div>
   {{ end }}
 </div>

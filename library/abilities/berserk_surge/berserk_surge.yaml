@@ -1,6 +1,9 @@
 name: Berserk Surge
 description: "You throw defence to the wind and swing with everything you have. The reckoning comes later. Cost target: 6 build / 0 energy."
-type: phase
+# "phase" is an enactment type, not an ability type, so this perk previously
+# resolved to no ability type at all and silently paid no base cost. The Phase
+# effect itself is the first enactment below.
+type: execution
 fields:
   comment: Big offensive phase paid for with a nerf.
   energy_steps: 0

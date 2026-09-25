@@ -454,6 +454,12 @@ func (c *Config) OptionsFor(source string) []Option {
 	case "conditions":
 		out := make([]Option, 0, len(c.Conditions))
 		for _, s := range c.Conditions {
+			// Conditions marked selectable: false are states the rules impose
+			// rather than effects an ability can buy, so they never appear in
+			// the dropdown. They stay resolvable via ConditionByID.
+			if !s.IsSelectable() {
+				continue
+			}
 			// Shiftable conditions charge per-shift (handled by the cost
 			// engine via ConditionByID), so they carry no flat option cost.
 			// Fixed-cost conditions attach their build/energy cost so the
@@ -462,7 +468,9 @@ func (c *Config) OptionsFor(source string) []Option {
 			if !s.Shiftable() && (s.BuildCost != 0 || s.EnergyCost != 0) {
 				cost = &Cost{BuildCost: s.BuildCost, EnergyCost: s.EnergyCost}
 			}
-			out = append(out, Option{Value: s.ID, Label: s.Name, Cost: cost})
+			// The description doubles as the option's hover tooltip, so a
+			// player can read what a condition does before picking it.
+			out = append(out, Option{Value: s.ID, Label: s.Name, Information: s.Description, Cost: cost})
 		}
 		return out
 	case "ability_types":

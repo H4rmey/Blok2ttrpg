@@ -116,20 +116,14 @@
     },
     "abilities": [
       {
-        "id": "ability-1790340287352585400",
+        "id": "ability-1790341108743302300",
         "name": "Time Slip",
         "description": "You step half a heartbeat ahead of the fight while your enemy stumbles half a heartbeat behind. Cost target: 8 build / 1 energy.",
         "type": "execution",
-        "fields": {
-          "action_steps": 0,
-          "comment": "Turn order manipulation, both directions.",
-          "energy_steps": 0
-        },
         "enactments": [
           {
             "type": "condition",
             "fields": {
-              "comment": "You act sooner.",
               "condition": "hastened",
               "duration": "1",
               "solution": [
@@ -140,11 +134,7 @@
               "solution_dc": 2
             },
             "interaction": "self",
-            "interaction_data": {
-              "comment": ""
-            },
             "validation_data": {
-              "comment": "",
               "counter_trait": [
                 {
                   "value": "defense.Wisdom"
@@ -156,8 +146,7 @@
           {
             "type": "condition",
             "fields": {
-              "comment": "The target acts later.",
-              "condition": "delayed",
+              "condition": "blessed",
               "duration": "1",
               "solution": [
                 {
@@ -171,7 +160,6 @@
             },
             "interaction": "direct",
             "interaction_data": {
-              "comment": "",
               "range": "5",
               "targets": 1
             },

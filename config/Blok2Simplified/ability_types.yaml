@@ -7,18 +7,25 @@ ability_types:
     render_information: false
     # Component cost must be nested under base_cost; a top-level build_cost key
     # is not read by the loader and silently made this ability type free.
+    #
+    # Using a perk costs 1 energy per enactment. The first enactment is paid for
+    # here; each additional one adds another point via
+    # additional_enactment.energy_cost, so a two-enactment perk costs 2 energy.
     base_cost:
       build_cost: 1
-      energy_cost: 0
+      energy_cost: 1
 
 
   concentration:
     name: "Concentration"
     information: "Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep."
     render_information: false
+    # As with execution, activation costs 1 energy per enactment. This is
+    # separate from base_upkeep_energy, which is the per-round cost of keeping
+    # the concentration going.
     base_cost:
       build_cost: 2
-      energy_cost: 0
+      energy_cost: 1
     base_upkeep_action: 1
     base_upkeep_energy: 1
     fields:

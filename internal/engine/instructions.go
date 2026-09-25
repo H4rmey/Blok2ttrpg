@@ -33,6 +33,10 @@ type Instruction struct {
 	Validation  string
 	Success     string
 	Solution    string
+	// Note is optional supporting detail rendered under the generated lines,
+	// such as the description of the condition an enactment applies. It is a
+	// reminder of what the chosen option does, not a separate rule.
+	Note string
 }
 
 // AbilityInstructions generates one Instruction per enactment of an ability.
@@ -59,6 +63,7 @@ func AbilityInstructions(cfg *config.Config, a model.Ability) []Instruction {
 		ins.Validation = validationLine(cfg, en, plural)
 		ins.Success = successLine(cfg, en, plural)
 		ins.Solution = solutionLine(cfg, en)
+		ins.Note = noteLine(cfg, en)
 		out = append(out, ins)
 	}
 	return out
@@ -210,6 +215,16 @@ func successLine(cfg *config.Config, en model.Enactment, plural bool) string {
 	return ""
 }
 
+// noteLine returns optional supporting detail for an enactment. Condition
+// enactments quote the selected condition's description so the player does not
+// have to look it up.
+func noteLine(cfg *config.Config, en model.Enactment) string {
+	if en.Type != "condition" {
+		return ""
+	}
+	return conditionDescription(cfg, asString(en.Fields["condition"]))
+}
+
 // solutionLine describes how a target ends a condition or effect early. It is
 // only produced for enactments that define solution fields.
 func solutionLine(cfg *config.Config, en model.Enactment) string {
@@ -279,6 +294,25 @@ func conditionName(cfg *config.Config, id string) string {
 		return c.Name
 	}
 	return id
+}
+
+// conditionDescription resolves a condition id to its description text, or ""
+// when the condition is unknown or has none.
+func conditionDescription(cfg *config.Config, id string) string {
+	id = strings.TrimPrefix(strings.TrimPrefix(id, "general."), "specific.")
+	if id == "" {
+		return ""
+	}
+	if c, ok := cfg.ConditionByID(id); ok {
+		return c.Description
+	}
+	if c, ok := cfg.GeneralConditionByID(id); ok {
+		return c.Description
+	}
+	if c, ok := cfg.SpecificConditionByID(id); ok {
+		return c.Description
+	}
+	return ""
 }
 
 // shiftWords turns a signed shift amount into readable direction text.
