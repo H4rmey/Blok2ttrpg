@@ -1,6 +1,6 @@
 {{ template "head" . }}
 <h1>Characters</h1>
-<div class="toolbar">
+<div class="toolbar toolbar-spaced">
   <button class="btn" type="button" onclick="document.getElementById('new-character-modal').showModal()">+ New Character</button>
   <button class="btn" type="button" onclick="document.getElementById('character-import-input').click()">Import YAML</button>
   <form id="character-import-form" action="/characters/import" method="post" enctype="multipart/form-data" hidden>

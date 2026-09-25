@@ -176,6 +176,11 @@ a:hover { text-decoration: underline; }
 .actions, .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .toolbar { margin-top: 1.5rem; }
 
+/* A toolbar that sits above a list rather than below one, e.g. the New
+   Character / Import YAML buttons on the character index. It needs bottom
+   spacing so the buttons do not sit flush against the list that follows. */
+.toolbar-spaced { margin-bottom: 1.5rem; }
+
 fieldset {
   border: 1px solid var(--border);
   border-radius: var(--radius);

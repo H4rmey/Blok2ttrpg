@@ -99,7 +99,7 @@ type Enactment struct {
 	// the Go field name by default ("interactiondata") and would silently ignore
 	// the "interaction_data" key used in the library and export files, which
 	// made interaction and validation costs vanish on import.
-	InteractionData map[string]any `json:"interaction_data,omitempty" yaml:"interaction_data,omitempty"`
+	InteractionData map[string]any `json:"interaction_data,omitempty"`
 	// ValidationData holds the engagement/counter (validation) field values.
 	ValidationData map[string]any `json:"validation_data,omitempty" yaml:"validation_data,omitempty"`
 }
