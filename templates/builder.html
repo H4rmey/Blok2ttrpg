@@ -1,18 +1,28 @@
 {{ template "head" . }}
 {{ $c := .Character }}
 {{ $ab := .Ability }}
-<div class="builder-head">
+<div class="page-head">
   <h1>{{ if $ab.ID }}Edit Perk{{ else }}New Perk{{ end }}</h1>
+  <div class="toolbar">
+    <a class="btn" href="/characters/{{ $c.ID }}/abilities">Back to Perks</a>
+  </div>
+</div>
+
+{{ template "character_bar" . }}
+
+<div class="builder-head">
   <div class="cost-cards" id="cost-badge">
     {{ template "cost_cards" . }}
   </div>
 </div>
 
+{{/* "load" is part of the trigger list so opening an existing perk recomputes
+     its cost from the rendered form instead of trusting whatever was stored. */}}
 <form method="post"
       action="/characters/{{ $c.ID }}/abilities/{{ if $ab.ID }}{{ $ab.ID }}{{ else }}new{{ end }}"
       id="ability-form"
       hx-post="/builder/cost"
-      hx-trigger="change, keyup changed delay:300ms"
+      hx-trigger="load, change, keyup changed delay:300ms"
       hx-target="#cost-badge" hx-swap="innerHTML">
   <input type="hidden" name="character_id" value="{{ $c.ID }}">
   <input type="hidden" name="ability_id" id="ability-id" value="{{ $ab.ID }}">

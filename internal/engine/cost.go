@@ -179,7 +179,10 @@ func controllingDefault(fields []config.Field, key string) string {
 }
 
 // addNumberCost applies per-step increase/decrease costs relative to the
-// field's default value, honoring the step size and rounding mode.
+// field's default value, honoring the step size and rounding mode. The baseline
+// is clamped into the field's range because a config may declare a default
+// outside its own min/max; normalization stores the clamped value, so the
+// baseline has to be clamped the same way for the delta to come out at zero.
 func addNumberCost(total Cost, f config.Field, raw any) Cost {
 	if f.PerStep == nil {
 		return total
@@ -188,7 +191,7 @@ func addNumberCost(total Cost, f config.Field, raw any) Cost {
 	if step == 0 {
 		step = 1
 	}
-	delta := asInt(raw) - asInt(f.Default)
+	delta := asInt(raw) - clampNumber(f, asInt(f.Default))
 	if delta == 0 {
 		return total
 	}
@@ -367,8 +370,11 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 	if !cfg.AllowsNegativeBuildCost() && total.Build < 0 {
 		total.Build = 0
 	}
-	if !cfg.AllowsNegativeEnergyCost() && total.Energy < 0 {
-		total.Energy = 0
+	// Using a perk always costs at least 1 energy, so the floor is 1 rather
+	// than 0. A ruleset that opts into negative energy cost (via
+	// allow_negative_energy_cost) keeps whatever the options computed.
+	if !cfg.AllowsNegativeEnergyCost() && total.Energy < 1 {
+		total.Energy = 1
 	}
 
 	return total

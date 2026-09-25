@@ -1,0 +1,20 @@
+name: Second Breath
+description: "You dig deep, ignore the pain, and find one more fight left in you. Cost target: 4 build / 0 energy."
+type: execution
+fields:
+  comment: Strong self-heal.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: healing
+    fields:
+      comment: Grit-fuelled recovery.
+      source: d10
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

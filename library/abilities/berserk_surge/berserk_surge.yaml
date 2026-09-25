@@ -1,0 +1,32 @@
+name: Berserk Surge
+description: "You throw defence to the wind and swing with everything you have. The reckoning comes later. Cost target: 6 build / 0 energy."
+type: phase
+fields:
+  comment: Big offensive phase paid for with a nerf.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: phase
+    fields:
+      comment: Strength surges now, collapses after.
+      phase-duration: 2
+      phase-shift-amount: 2
+      shift-affected-traits:
+        - value: offense.Strength
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
+  - type: nerf
+    fields:
+      comment: Abandon your guard to fuel the surge.
+      nerf-shifted-trait: defense.Reflex
+      nerf-shift-amount: -1
+      nerf-duration: 2
+    interaction: self
+    interaction_data:
+      comment: ""

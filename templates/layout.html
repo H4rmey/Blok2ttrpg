@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Title }}</title>
-  <link rel="stylesheet" href="/static/css/app.css?v=3">
+  <link rel="stylesheet" href="/static/css/app.css?v=6">
 
 
   <script src="/static/js/htmx.min.js"></script>
@@ -13,6 +13,18 @@
 <body>
   <header class="topbar">
     <a href="/" class="brand">{{ .Cfg.Title }}</a>
+    {{/* The open character stays named in the banner on every page that is
+         scoped to it (sheet, perks, perk builder), together with links to the
+         other views of that character, so the pages share one structure. */}}
+    {{ with .Character }}{{ if .ID }}
+    <span class="topbar-sep">/</span>
+    <a class="char-name" href="/characters/{{ .ID }}">{{ .Name }}</a>
+    <nav class="char-nav">
+      <a href="/characters/{{ .ID }}">Sheet</a>
+      <a href="/characters/{{ .ID }}/abilities">Perks</a>
+      <a href="/characters/{{ .ID }}/pdf" target="_blank">PDF</a>
+    </nav>
+    {{ end }}{{ end }}
     <nav>
       <a href="/docs">Docs</a>
       <button id="theme-toggle" type="button" title="Toggle theme">&#9788;</button>
@@ -28,7 +40,7 @@
 
 {{ define "foot" }}
   </main>
-  <script src="/static/js/app.js?v=7"></script>
+  <script src="/static/js/app.js?v=8"></script>
 
 </body>
 </html>

@@ -86,16 +86,20 @@ type Ability struct {
 	// It is used only for package removal: deleting a package removes every
 	// ability tagged with its id. Editing the ability never touches the
 	// package definition, so the tag stays purely for ownership tracking.
-	PackageID string `json:"package_id,omitempty"`
+	PackageID string `json:"package_id,omitempty" yaml:"package_id,omitempty"`
 }
 
 // Enactment is one effect attached to an ability. Type is an enactment
 // component id; Interaction is an optional interaction component id.
 type Enactment struct {
-	Type            string         `json:"type"`
-	Fields          map[string]any `json:"fields,omitempty"`
-	Interaction     string         `json:"interaction,omitempty"`
-	InteractionData map[string]any `json:"interaction_data,omitempty"`
+	Type        string         `json:"type"`
+	Fields      map[string]any `json:"fields,omitempty"`
+	Interaction string         `json:"interaction,omitempty"`
+	// Explicit yaml tags are required on the multi-word keys: yaml.v3 lowercases
+	// the Go field name by default ("interactiondata") and would silently ignore
+	// the "interaction_data" key used in the library and export files, which
+	// made interaction and validation costs vanish on import.
+	InteractionData map[string]any `json:"interaction_data,omitempty" yaml:"interaction_data,omitempty"`
 	// ValidationData holds the engagement/counter (validation) field values.
-	ValidationData map[string]any `json:"validation_data,omitempty"`
+	ValidationData map[string]any `json:"validation_data,omitempty" yaml:"validation_data,omitempty"`
 }

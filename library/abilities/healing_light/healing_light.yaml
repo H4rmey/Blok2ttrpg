@@ -1,0 +1,36 @@
+name: Healing Light
+description: "A warm glow that knits an ally's wounds shut and lifts their spirits. Cost target: 6 build / 1 energy."
+type: execution
+fields:
+  comment: Heal an ally and encourage them.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: healing
+    fields:
+      comment: Restorative light.
+      source: d8
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
+  - type: condition
+    fields:
+      comment: The ally is heartened.
+      condition: encouraged
+      shift_amount: 1
+      duration: "1"
+      solution:
+        - value: defense.Wisdom
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1

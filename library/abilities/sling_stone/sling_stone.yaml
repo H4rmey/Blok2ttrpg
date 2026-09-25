@@ -1,0 +1,25 @@
+name: Sling Stone
+description: "A whirling leather sling hurls a river stone with surprising force. Cost target: 3 build / 0 energy."
+type: execution
+fields:
+  comment: A cheap ranged opener.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Stone impact.
+      source: offense.Precision
+      flat: 0
+      damage_type:
+        - value: Bludgeoning
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

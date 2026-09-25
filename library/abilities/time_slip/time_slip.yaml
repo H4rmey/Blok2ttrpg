@@ -1,0 +1,38 @@
+name: Time Slip
+description: "You step half a heartbeat ahead of the fight while your enemy stumbles half a heartbeat behind. Cost target: 8 build / 1 energy."
+type: execution
+fields:
+  comment: Turn order manipulation, both directions.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: You act sooner.
+      condition: hastened
+      duration: "1"
+      solution:
+        - value: defense.Wisdom
+      solution_dc: 0
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
+  - type: condition
+    fields:
+      comment: The target acts later.
+      condition: delayed
+      duration: "1"
+      solution:
+        - value: defense.Wisdom
+        - value: defense.Reflex
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1

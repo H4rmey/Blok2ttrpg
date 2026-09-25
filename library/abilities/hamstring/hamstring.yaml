@@ -1,0 +1,39 @@
+name: Hamstring
+description: "A vicious low cut behind the knee that pins a fleeing enemy in place. Cost target: 5 build / 1 energy."
+type: execution
+fields:
+  comment: Damage plus a hard stop on movement.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Cut to the tendon.
+      source: offense.Precision
+      flat: 0
+      damage_type:
+        - value: Slashing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
+  - type: condition
+    fields:
+      comment: The leg will not carry them.
+      condition: anchored
+      duration: "1"
+      solution:
+        - value: defense.Constitution
+        - value: general.Medicine
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1

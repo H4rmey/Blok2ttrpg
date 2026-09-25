@@ -26,6 +26,14 @@ type abilityPage struct {
 	Budget      int
 	OverBudget  bool
 
+	// charStats carries the character bar figures so the builder shows the same
+	// level/points/vitals header as every other character-scoped page.
+	charStats
+
+	// ReadOnlyStats is always true on the builder: the character bar's inputs
+	// belong to the character sheet form, which does not exist here.
+	ReadOnlyStats bool
+
 	// Instructions is the generated play-facing rules text for the ability,
 	// one entry per enactment. It is rendered by the "instructions" partial
 	// and refreshed by /builder/instructions as the builder changes.
@@ -37,6 +45,22 @@ func (a *App) handleAbilities(w http.ResponseWriter, r *http.Request, c *model.C
 	// /abilities        -> list
 	if len(rest) == 0 {
 		a.renderAbilityList(w, c)
+		return
+	}
+
+	// /abilities/refresh -> re-normalize every perk against the current config,
+	// persist the result, and return just the perk list region so the
+	// "Refresh All" button can swap it in place. Persisting is the point: cost
+	// is a pure function of the stored data, so a display-only refresh could
+	// never change anything. This repairs perks stored before normalization or
+	// under an older config.
+	if rest[0] == "refresh" {
+		changed := engine.NormalizeCharacter(a.Cfg.Config, c)
+		if err := a.Store.Save(*c); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		a.renderPerkList(w, c, changed)
 		return
 	}
 
@@ -129,6 +153,7 @@ func (a *App) importAbility(w http.ResponseWriter, r *http.Request, c *model.Cha
 	// Always assign a fresh id so an imported ability never collides with an
 	// existing one on the character.
 	ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
+	ab = engine.NormalizeAbility(a.Cfg.Config, ab)
 	c.Abilities = append(c.Abilities, ab)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -137,13 +162,15 @@ func (a *App) importAbility(w http.ResponseWriter, r *http.Request, c *model.Cha
 	http.Redirect(w, r, "/characters/"+c.ID+"/abilities", http.StatusSeeOther)
 }
 
-// abilityLibraryPage is the data envelope for the built-in ability browser.
+// abilityLibraryPage is the data envelope for the built-in perk browser. Perks
+// carry their computed cost so the library can show the price of a perk before
+// it is imported.
 type abilityLibraryPage struct {
 	CharacterID string
-	Abilities   []model.Ability
+	Perks       []perkSummary
 }
 
-// handleAbilityLibrary renders the built-in ability browser. It expects a
+// handleAbilityLibrary renders the built-in perk browser. It expects a
 // "character" query parameter so the import buttons post to the right route.
 func (a *App) handleAbilityLibrary(w http.ResponseWriter, r *http.Request) {
 	charID := r.URL.Query().Get("character")
@@ -152,8 +179,19 @@ func (a *App) handleAbilityLibrary(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// Each perk is normalized before its cost is computed, exactly as it will be
+	// on import. That keeps the price shown in the library identical to the
+	// price the perk ends up with once it is on a character.
+	perks := make([]perkSummary, 0, len(abs))
+	for _, ab := range abs {
+		norm := engine.NormalizeAbility(a.Cfg.Config, ab)
+		perks = append(perks, perkSummary{
+			Ability: norm,
+			Cost:    engine.AbilityCost(a.Cfg.Config, norm),
+		})
+	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	data := abilityLibraryPage{CharacterID: charID, Abilities: abs}
+	data := abilityLibraryPage{CharacterID: charID, Perks: perks}
 	if err := a.Tmpl.ExecuteTemplate(w, "ability_library", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -178,6 +216,7 @@ func (a *App) importBuiltinAbility(w http.ResponseWriter, r *http.Request, c *mo
 		return
 	}
 	ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
+	ab = engine.NormalizeAbility(a.Cfg.Config, ab)
 	c.Abilities = append(c.Abilities, ab)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -186,17 +225,66 @@ func (a *App) importBuiltinAbility(w http.ResponseWriter, r *http.Request, c *mo
 	http.Redirect(w, r, "/characters/"+c.ID+"/abilities", http.StatusSeeOther)
 }
 
-func (a *App) renderAbilityList(w http.ResponseWriter, c *model.Character) {
+// perkSummaries recomputes cost and instruction text for every perk the
+// character owns. Costs are always derived here rather than stored, so the
+// figures follow the current config even for perks built long ago.
+func (a *App) perkSummaries(c *model.Character) []perkSummary {
+	perks := make([]perkSummary, 0, len(c.Abilities))
+	for _, ab := range c.Abilities {
+		perks = append(perks, perkSummary{
+			Ability:      ab,
+			Cost:         engine.AbilityCost(a.Cfg.Config, ab),
+			Instructions: engine.AbilityInstructions(a.Cfg.Config, ab),
+		})
+	}
+	return perks
+}
 
-	a.render(w, "abilities.html", pageData{
-		Title:     c.Name() + " - Perks",
-		Character: c,
+// abilityListPage builds the envelope shared by the full Perks page and the
+// perk-list partial returned by the refresh route.
+func (a *App) abilityListPage(c *model.Character) pageData {
+	return pageData{
+		Title:         c.Name() + " - Perks",
+		Character:     c,
+		Perks:         a.perkSummaries(c),
+		charStats:     a.characterStats(c),
+		ReadOnlyStats: true,
 		Breadcrumbs: []crumb{
 			{Label: "Home", URL: "/"},
 			{Label: c.Name(), URL: "/characters/" + c.ID},
 			{Label: "Perks", URL: "/characters/" + c.ID + "/abilities"},
 		},
-	})
+	}
+}
+
+func (a *App) renderAbilityList(w http.ResponseWriter, c *model.Character) {
+	a.render(w, "abilities.html", a.abilityListPage(c))
+}
+
+// refreshNotice phrases the outcome of a refresh for the user.
+func refreshNotice(changed int) string {
+	switch changed {
+	case 0:
+		return "Recalculated: all perk costs were already up to date."
+	case 1:
+		return "Recalculated: 1 perk was updated."
+	default:
+		return fmt.Sprintf("Recalculated: %d perks were updated.", changed)
+	}
+}
+
+// renderPerkList returns only the perk list region with freshly recomputed
+// costs; used by the "Refresh All" button. changed is the number of perks whose
+// cost moved during normalization, reported back so the user can see the
+// refresh did something (or confirm everything was already correct).
+func (a *App) renderPerkList(w http.ResponseWriter, c *model.Character, changed int) {
+	data := a.abilityListPage(c)
+	data.Cfg = a.Cfg.Config
+	data.RefreshNotice = refreshNotice(changed)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if err := a.Tmpl.ExecuteTemplate(w, "perk_list", data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model.Ability, isNew bool) {
@@ -216,6 +304,9 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 		Budget:    budget,
 		// Over budget is advisory only: it never blocks saving.
 		OverBudget: cost.Build > budget,
+
+		charStats:     a.characterStats(c),
+		ReadOnlyStats: true,
 
 		Instructions: engine.AbilityInstructions(a.Cfg.Config, *ab),
 
@@ -275,6 +366,10 @@ func (a *App) saveAbility(w http.ResponseWriter, r *http.Request, c *model.Chara
 		ab.Enactments = append(ab.Enactments, en)
 	}
 
+	// Normalize on the way in so the stored perk is canonical: every configured
+	// field present, repeatable fields expanded, numbers in range. The cost
+	// engine and the builder then read the same values and cannot disagree.
+	ab = engine.NormalizeAbility(a.Cfg.Config, ab)
 	if idx := findAbility(c, existingID); idx >= 0 {
 		c.Abilities[idx] = ab
 	} else {
@@ -599,7 +694,7 @@ func (a *App) handleBuilderAutosave(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	existingID := r.FormValue("ability_id")
-	ab := a.buildAbilityFromForm(r, existingID)
+	ab := engine.NormalizeAbility(a.Cfg.Config, a.buildAbilityFromForm(r, existingID))
 	if idx := findAbility(&c, existingID); idx >= 0 {
 		c.Abilities[idx] = ab
 	} else {

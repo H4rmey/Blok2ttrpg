@@ -1,0 +1,27 @@
+name: Entangling Vines
+description: "Thorned creepers burst from the soil, binding a foe's arms tight against their body. Cost target: 6 build / 0 energy."
+type: execution
+fields:
+  comment: Restrain a target for two turns.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Arms bound by living plants.
+      condition: restrained
+      duration: "2"
+      solution:
+        - value: general.Athletics
+        - value: defense.Constitution
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

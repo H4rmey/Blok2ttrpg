@@ -82,6 +82,51 @@ a:hover { text-decoration: underline; }
 .topbar .brand { font-weight: 700; font-size: 1.1rem; color: var(--text); }
 .topbar nav { display: flex; align-items: center; gap: 1rem; }
 
+/* Name of the open character, shown in the banner on every page scoped to it. */
+.topbar-sep { opacity: 0.4; }
+.topbar .char-name { font-weight: 600; color: var(--accent); }
+.topbar .char-nav { margin-right: auto; font-size: 0.85rem; }
+.topbar .char-nav a { opacity: 0.8; }
+.topbar .char-nav a:hover { opacity: 1; }
+
+/* Compact square button used for the inline recalculate controls. */
+.btn.icon-btn {
+  align-self: center;
+  padding: 0.35rem 0.55rem;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* Cost chips on the perk list: the point and energy price of a perk should be
+   readable at a glance instead of hiding in muted body text. */
+.perk-cost-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.35rem 0; }
+.perk-chip {
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.perk-chip.build { color: var(--accent); border-color: var(--accent); }
+.perk-chip.energy { color: var(--cyan); border-color: var(--cyan); }
+.perk-chip.action { color: var(--warn); border-color: var(--warn); }
+
+/* Read-only character bar (perk list and perk builder): the level reads as
+   plain text because its input belongs to the character sheet form. */
+.stats-bar-level-value { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+
+/* Outcome of a perk recalculation, so the refresh controls visibly confirm
+   what they did instead of appearing to do nothing. */
+.notice-info {
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--cyan);
+  border-left: 3px solid var(--cyan);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
+  font-size: 0.9rem;
+}
+
 .breadcrumbs {
   padding: 0.5rem 1.25rem;
   color: var(--muted);
@@ -363,12 +408,28 @@ textarea { min-height: 5rem; resize: vertical; }
 
 
 .card-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+
+/* The perk list. list-style is cleared so no bullet appears in front of a perk,
+   and the gap gives the cards room to read as separate items. */
+.card-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
 .card {
   padding: 0.9rem 1.1rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
+
+/* Separate a card's action buttons from the rules text above them. .toolbar
+   already carries a top margin; .actions did not, so the buttons sat flush
+   against the instructions. */
+.card > .actions { margin-top: 1rem; }
 
 .enactment {
   border: 1px solid var(--border);

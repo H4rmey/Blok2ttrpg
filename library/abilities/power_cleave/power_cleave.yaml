@@ -1,0 +1,39 @@
+name: Power Cleave
+description: "A wide two-handed arc that bites into two adjacent foes and staggers them off balance. Cost target: 6 build / 1 energy."
+type: execution
+fields:
+  comment: Sweeping strike against two enemies.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Heavy sweeping cut.
+      source: offense.Strength
+      flat: 0
+      damage_type:
+        - value: Slashing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 2
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
+  - type: condition
+    fields:
+      comment: Momentum knocks them down.
+      condition: prone
+      duration: "1"
+      solution:
+        - value: defense.Reflex
+        - value: general.Athletics
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1

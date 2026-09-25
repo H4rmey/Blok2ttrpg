@@ -1,0 +1,27 @@
+name: Disarming Strike
+description: "A twisting parry-and-flick that sends an enemy's weapon clattering across the floor. Cost target: 4 build / 0 energy."
+type: execution
+fields:
+  comment: Knock the weapon out of their hands.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Weapon is lost.
+      condition: disarmed
+      duration: "1"
+      solution:
+        - value: general.Athletics
+        - value: defense.Reflex
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

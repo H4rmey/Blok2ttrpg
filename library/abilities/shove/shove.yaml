@@ -1,0 +1,24 @@
+name: Shove
+description: "A blunt two-handed push that sends an enemy stumbling backwards out of reach. Cost target: 3 build / 0 energy."
+type: execution
+fields:
+  comment: Push an enemy away from you.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: motion
+    fields:
+      comment: Forced movement, two meters.
+      distance: 2
+      direction:
+        - value: Away
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

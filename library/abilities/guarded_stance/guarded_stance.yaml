@@ -1,0 +1,22 @@
+name: Guarded Stance
+description: "Weight back, shield high. You give up ground but become much harder to hit. Cost target: 5 build / 0 energy."
+type: execution
+fields:
+  comment: Temporary defensive buff on yourself.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: modification
+    fields:
+      comment: Tighten your guard.
+      modification-traits: defense.Reflex
+      modification-shift-amount: 1
+      modificaiton-shift-duration: 2
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

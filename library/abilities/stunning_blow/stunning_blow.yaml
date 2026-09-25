@@ -1,0 +1,39 @@
+name: Stunning Blow
+description: "A precise, brutal hit to the temple that robs an enemy of an action entirely. Cost target: 8 build / 1 energy."
+type: execution
+fields:
+  comment: Damage plus a stun. A capstone perk.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Concussive impact.
+      source: offense.Strength
+      flat: 0
+      damage_type:
+        - value: Bludgeoning
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
+  - type: condition
+    fields:
+      comment: Target loses an action.
+      condition: stunned
+      duration: "1"
+      solution:
+        - value: defense.Constitution
+        - value: defense.Wisdom
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1

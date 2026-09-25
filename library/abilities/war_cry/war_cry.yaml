@@ -1,0 +1,27 @@
+name: War Cry
+description: "A roar that drags an enemy's attention squarely onto you and nobody else. Cost target: 3 build / 0 energy."
+type: execution
+fields:
+  comment: Force a foe to focus on you.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Target can only target you.
+      condition: taunted
+      duration: "1"
+      solution:
+        - value: defense.Wisdom
+        - value: general.Knowledge
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom

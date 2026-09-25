@@ -1,0 +1,25 @@
+name: Shield Wall
+description: "You plant your shield beside an ally and hold the line as long as your focus holds. Cost target: 6 build / 0 energy."
+type: concentration
+fields:
+  comment: Sustained defensive buff on an ally.
+  energy_steps: 0
+  action_steps: 0
+  upkeep_cost: "1 Action or 1 Energy"
+enactments:
+  - type: modification
+    fields:
+      comment: Ally gains cover behind your shield.
+      modification-traits: defense.Constitution
+      modification-shift-amount: 1
+      modificaiton-shift-duration: 2
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

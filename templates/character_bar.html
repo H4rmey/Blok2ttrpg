@@ -1,0 +1,24 @@
+{{/* Sticky character bar: level plus the derived point and vital cards.
+     Rendered on every page that is scoped to an open character (sheet, perk
+     list, perk builder) so the same figures are always in view. When
+     ReadOnlyStats is set the level and current-vital boxes render as plain
+     text, because their inputs belong to the character sheet form which only
+     exists on the sheet itself. */}}
+{{ define "character_bar" }}
+{{ $c := .Character }}
+<div class="stats-bar{{ if .ReadOnlyStats }} stats-bar-readonly{{ end }}">
+  <div class="stats-bar-level">
+    <label>Level</label>
+    {{ if .ReadOnlyStats }}
+    <span class="stats-bar-level-value">{{ $c.Level }}</span>
+    {{ else }}
+    <input type="number" name="level" min="1" value="{{ $c.Level }}"
+           form="character-form" id="character-level">
+    {{ end }}
+  </div>
+
+  <div class="cost-cards" id="stat-cards">
+    {{ template "stat_cards" . }}
+  </div>
+</div>
+{{ end }}

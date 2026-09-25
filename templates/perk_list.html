@@ -1,0 +1,43 @@
+{{/* The perk list region. It is defined as its own partial so the "Refresh All"
+     button can request /characters/{id}/abilities/refresh and swap just this
+     block, with every perk's point and energy cost recomputed from the current
+     config. */}}
+{{ define "perk_list" }}
+{{ $c := .Character }}
+{{ if .RefreshNotice }}<div class="notice-info">{{ .RefreshNotice }}</div>{{ end }}
+{{ if .Perks }}
+{{ $remaining := sub .AbilityBudget .AbilityUsed }}
+<p class="muted">
+  Perk points:
+  <strong class="{{ if lt $remaining 0 }}over{{ else }}ok{{ end }}">{{ $remaining }}/{{ .AbilityBudget }}</strong>
+  remaining ({{ .AbilityUsed }} spent)
+</p>
+<ul class="card-grid">
+  {{ range .Perks }}
+  {{ $ab := .Ability }}
+  <li class="card">
+    <strong>{{ $ab.Name }}</strong>
+    {{/* Costs are shown as chips rather than muted inline text so the point
+         and energy price of a perk is readable at a glance. */}}
+    <div class="perk-cost-chips">
+      <span class="perk-chip build">{{ .Cost.Build }} pt</span>
+      {{ if .Cost.Energy }}<span class="perk-chip energy">{{ .Cost.Energy }} E</span>{{ end }}
+      {{ if .Cost.Action }}<span class="perk-chip action">{{ .Cost.Action }} action(s)</span>{{ end }}
+    </div>
+    <span class="muted">{{ $ab.Type }} &middot; {{ len $ab.Enactments }} enactment(s)</span>
+    {{ if $ab.Description }}<p class="muted">{{ $ab.Description }}</p>{{ end }}
+    {{/* The generated rules text is shown inline so the perk does not have to
+         be opened in the builder just to read what it does. */}}
+    {{ template "instructions" . }}
+    <div class="actions">
+      <a class="btn" href="/characters/{{ $c.ID }}/abilities/{{ $ab.ID }}">Edit</a>
+      <a class="btn" href="/characters/{{ $c.ID }}/abilities/{{ $ab.ID }}/export">Export</a>
+      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/abilities/{{ $ab.ID }}" hx-confirm="Delete perk?">Delete</button>
+    </div>
+  </li>
+  {{ end }}
+</ul>
+{{ else }}
+<p class="muted">No perks yet.</p>
+{{ end }}
+{{ end }}

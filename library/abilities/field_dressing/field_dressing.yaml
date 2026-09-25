@@ -1,0 +1,20 @@
+name: Field Dressing
+description: "Bandages, a tourniquet and a steady hand. Enough to keep yourself standing. Cost target: 2 build / 0 energy."
+type: execution
+fields:
+  comment: Patch up your own wounds.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: healing
+    fields:
+      comment: Self-applied first aid.
+      source: medicine
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

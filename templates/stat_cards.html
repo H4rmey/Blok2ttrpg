@@ -21,13 +21,17 @@
 {{ range .Vitals }}
 <div class="cost-card vital-card">
   <span class="cost-card-label">{{ .Trait }}</span>
-  {{ if .Editable }}
+  {{ if and .Editable (not $.ReadOnlyStats) }}
   <span class="cost-card-value vital-editable">
     <input type="number" class="vital-current" name="current_{{ .Key }}"
            value="{{ .Current }}" form="character-form" min="0">
     <span class="vital-sep">/</span>
     <span class="vital-max">{{ .Max }}</span>
   </span>
+  {{ else if .Editable }}
+  {{/* Read-only view of an editable vital: show current/max as plain text so
+       the numbers match the sheet without orphaning a form input. */}}
+  <span class="cost-card-value">{{ .Current }}<span class="vital-sep">/</span>{{ .Max }}</span>
   {{ else }}
   <span class="cost-card-value">{{ .Max }}</span>
   {{ end }}

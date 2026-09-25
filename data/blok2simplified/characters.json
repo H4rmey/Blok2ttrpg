@@ -73,16 +73,28 @@
   },
   "char-1790257857250642400": {
     "id": "char-1790257857250642400",
-    "level": 1,
+    "level": 10,
     "attributes": {
-      "name": "pieter"
+      "age": "",
+      "current_energy": "5",
+      "current_hp": "8",
+      "description": "",
+      "motivation": "",
+      "name": "pieter",
+      "problem": "",
+      "trait_1": "",
+      "trait_2": "",
+      "trait_3": ""
     },
     "traits": {
       "defense.Constitution": "untrained",
       "defense.Magic": "untrained",
       "defense.Reflex": "untrained",
       "defense.Wisdom": "untrained",
+      "general.Athletics": "untrained",
       "general.Crafting": "untrained",
+      "general.Deceive": "untrained",
+      "general.Intimidate": "untrained",
       "general.Knowledge": "untrained",
       "general.Magic": "untrained",
       "general.Medicine": "untrained",
@@ -90,6 +102,8 @@
       "general.People Skill": "untrained",
       "general.Perception": "untrained",
       "general.Performance": "untrained",
+      "general.Provoke": "untrained",
+      "general.Resources": "untrained",
       "general.Stealth": "untrained",
       "general.Thievery": "untrained",
       "offense.Magic": "untrained",
@@ -102,27 +116,102 @@
     },
     "abilities": [
       {
-        "id": "ability-1790258021348-429326336",
-        "name": "shoot",
+        "id": "ability-1790338158954338000",
+        "name": "Time Slip",
+        "description": "You step half a heartbeat ahead of the fight while your enemy stumbles half a heartbeat behind. Cost target: 8 build / 1 energy.",
         "type": "execution",
         "fields": {
-          "execution-action-offset": 1,
-          "execution-energy-offset": 2
+          "action_steps": 0,
+          "comment": "Turn order manipulation, both directions.",
+          "energy_steps": 0
+        },
+        "enactments": [
+          {
+            "type": "condition",
+            "fields": {
+              "comment": "You act sooner.",
+              "condition": "hastened",
+              "duration": "1",
+              "solution": [
+                {
+                  "value": "defense.Wisdom"
+                }
+              ],
+              "solution_dc": 2
+            },
+            "interaction": "self",
+            "interaction_data": {
+              "comment": ""
+            },
+            "validation_data": {
+              "comment": "",
+              "counter_trait": [
+                {
+                  "value": "defense.Wisdom"
+                }
+              ],
+              "engage": "d6"
+            }
+          },
+          {
+            "type": "condition",
+            "fields": {
+              "comment": "The target acts later.",
+              "condition": "delayed",
+              "duration": "1",
+              "solution": [
+                {
+                  "value": "defense.Wisdom"
+                },
+                {
+                  "value": "defense.Reflex"
+                }
+              ],
+              "solution_dc": 2
+            },
+            "interaction": "direct",
+            "interaction_data": {
+              "comment": "",
+              "range": "5",
+              "targets": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "ability-1790338211321464300",
+        "name": "Arcane Spark",
+        "description": "A crackling mote of raw magic, the first cantrip every apprentice learns. Cost target: 3 build / 0 energy.",
+        "type": "execution",
+        "fields": {
+          "action_steps": 0,
+          "comment": "A minor magical bolt.",
+          "energy_steps": 0
         },
         "enactments": [
           {
             "type": "damage",
             "fields": {
-              "source": ""
+              "comment": "Arcane discharge.",
+              "damage_type": [
+                {
+                  "value": "Force"
+                }
+              ],
+              "flat": 0,
+              "source": "offense.Magic"
             },
-            "interaction": "self",
+            "interaction": "direct",
+            "interaction_data": {
+              "comment": "",
+              "range": "5",
+              "targets": 1
+            },
             "validation_data": {
+              "comment": "",
               "counter_trait": [
                 {
                   "value": "defense.Reflex"
-                },
-                {
-                  "value": "defense.Constitution"
                 }
               ],
               "engage": "d6"

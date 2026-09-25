@@ -22,23 +22,67 @@ type pageData struct {
 	Character   *model.Character
 	Characters  []model.Character
 
-	// Budget summary for the character sheet.
-	TraitBudget   int
-	TraitUsed     int
-	AbilityBudget int
-	AbilityUsed   int
+	// charStats carries the budget and vital figures rendered in the character
+	// bar. Fields are promoted, so templates keep using .AbilityBudget etc.
+	charStats
 
-	// Vitals holds the computed vital stats (HP/Movement/Energy) for the sheet.
-	Vitals []engine.VitalStat
+	// Perks carries the character's abilities pre-enriched with their computed
+	// cost and generated instruction text, so the Perks list can show the rules
+	// inline without the user opening each perk in the builder.
+	Perks []perkSummary
 
 	// Warning is a non-blocking notice shown at the top of the page, e.g. when
 	// a package shift was clamped at the ends of the proficiency ladder.
 	Warning string
+
+	// RefreshNotice reports the outcome of a perk recalculation, so the refresh
+	// controls visibly confirm what they did.
+	RefreshNotice string
+
+	// ReadOnlyStats renders the character bar without editable inputs. The
+	// level box and the current-value boxes for vitals are bound to the
+	// character form, which only exists on the sheet itself, so every other
+	// character-scoped page shows the same numbers as plain text.
+	ReadOnlyStats bool
+}
+
+// charStats holds the derived budget and vital figures shown in the character
+// bar. It is embedded in every envelope that renders the bar so the perks list
+// and the perk builder can show the same numbers as the character sheet.
+type charStats struct {
+	TraitBudget   int
+	TraitUsed     int
+	AbilityBudget int
+	AbilityUsed   int
+	Vitals        []engine.VitalStat
+}
+
+// characterStats computes the character bar figures for a character.
+func (a *App) characterStats(c *model.Character) charStats {
+	abilityUsed := 0
+	for _, ab := range c.Abilities {
+		abilityUsed += engine.AbilityCost(a.Cfg.Config, ab).Build
+	}
+	return charStats{
+		TraitBudget:   a.Cfg.TraitPointBudget(c.Level),
+		TraitUsed:     engine.TraitPointsUsed(a.Cfg.Config, *c),
+		AbilityBudget: a.Cfg.AbilityPointBudget(c.Level),
+		AbilityUsed:   abilityUsed,
+		Vitals:        engine.CharacterVitals(a.Cfg.Config, *c),
+	}
 }
 
 type crumb struct {
 	Label string
 	URL   string
+}
+
+// perkSummary pairs an ability with the derived values the Perks list shows:
+// its advisory cost and its generated play-facing instructions.
+type perkSummary struct {
+	Ability      model.Ability
+	Cost         engine.Cost
+	Instructions []engine.Instruction
 }
 
 func (a *App) render(w http.ResponseWriter, name string, data pageData) {
@@ -258,11 +302,6 @@ func (a *App) characterPage(c *model.Character, isNew bool) pageData {
 	if isNew {
 		title = "New Character"
 	}
-	// Sum the build cost of every ability the character owns.
-	abilityUsed := 0
-	for _, ab := range c.Abilities {
-		abilityUsed += engine.AbilityCost(a.Cfg.Config, ab).Build
-	}
 	return pageData{
 		Title:     title,
 		Character: c,
@@ -270,10 +309,6 @@ func (a *App) characterPage(c *model.Character, isNew bool) pageData {
 			{Label: "Home", URL: "/"},
 			{Label: title, URL: "/characters/" + c.ID},
 		},
-		TraitBudget:   a.Cfg.TraitPointBudget(c.Level),
-		TraitUsed:     engine.TraitPointsUsed(a.Cfg.Config, *c),
-		AbilityBudget: a.Cfg.AbilityPointBudget(c.Level),
-		AbilityUsed:   abilityUsed,
-		Vitals:        engine.CharacterVitals(a.Cfg.Config, *c),
+		charStats: a.characterStats(c),
 	}
 }

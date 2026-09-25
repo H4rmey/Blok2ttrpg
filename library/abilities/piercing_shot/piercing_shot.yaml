@@ -1,0 +1,25 @@
+name: Piercing Shot
+description: "A carefully drawn arrow loosed at distance, aimed for the gap in the armour. Cost target: 4 build / 0 energy."
+type: execution
+fields:
+  comment: Medium-range precision attack.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Arrow punches through.
+      source: offense.Precision
+      flat: 0
+      damage_type:
+        - value: Piercing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "25"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

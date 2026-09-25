@@ -1,0 +1,23 @@
+name: Mass Mend
+description: "A pulse of restorative energy that washes over a wide area and mends every ally caught in it. Cost target: 8 build / 0 energy."
+type: execution
+fields:
+  comment: Area healing over a two meter radius.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: healing
+    fields:
+      comment: Restorative pulse.
+      source: d8
+    interaction: zone
+    interaction_data:
+      comment: ""
+      zone-range: "5"
+      zone-radius: 2
+      zone-duration: 0
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom

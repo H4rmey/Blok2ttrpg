@@ -5,79 +5,23 @@ ability_types:
     name: "Execution"
     information: "Execution is the most basic form for an Ability. It is simply the: \"I want to do this now\" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry."
     render_information: false
-    build_cost: 1
-    energy_cost: 0
-    fields:
-      - key: execution-energy-offset
-        label: "Energy Offset +/-"
-        information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
-        type: free_number
-        default: 0
-        min: -2
-        max: 2
-        step: 1
-        per_step:
-          increase:
-            build_cost: -2
-            energy_cost: 1
-          decrease:
-            build_cost: 2
-            energy_cost: -1
-      - key: execution-action-offset
-        label: "Action offset"
-        information: "Normally an ability costs 2 actions to use. This will adjust the amount of Actions it will cost to use this ability"
-        type: free_number
-        default: 0
-        min: -1
-        max: 1
-        step: 1
-        per_step:
-          increase:
-            build_cost: -1
-            energy_cost: 0
-          decrease:
-            build_cost: 2
-            energy_cost: 0
+    # Component cost must be nested under base_cost; a top-level build_cost key
+    # is not read by the loader and silently made this ability type free.
+    base_cost:
+      build_cost: 1
+      energy_cost: 0
+
 
   concentration:
     name: "Concentration"
     information: "Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep."
     render_information: false
-    build_cost: 2
-    energy_cost: 0
+    base_cost:
+      build_cost: 2
+      energy_cost: 0
     base_upkeep_action: 1
     base_upkeep_energy: 1
     fields:
-      - key: concentration-energy-offset
-        label: "Energy Offset +/-"
-        information: "Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some."
-        type: free_number
-        default: 0
-        min: -2
-        max: 2
-        step: 1
-        per_step:
-          increase:
-            build_cost: -2
-            energy_cost: 1
-          decrease:
-            build_cost: 2
-            energy_cost: -1
-      - key: concentration-action-offset
-        label: "Action offset"
-        information: "Normally an ability costs 2 actions to use. This will adjust the amount of Actions it will cost to use this ability"
-        type: free_number
-        default: 0
-        min: -1
-        max: 1
-        step: 1
-        per_step:
-          increase:
-            build_cost: -1
-            energy_cost: 0
-          decrease:
-            build_cost: 2
-            energy_cost: 0
       - key: upkeep_cost
         label: "Upkeep Cost"
         type: dropdown

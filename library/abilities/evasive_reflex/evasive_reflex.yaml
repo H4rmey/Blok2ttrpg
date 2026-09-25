@@ -1,0 +1,19 @@
+name: Evasive Reflex
+description: "A last-instant twist of the body that lets an incoming effect pass harmlessly through where you were. Cost target: 6 build / 0 energy."
+type: execution
+fields:
+  comment: Negate an incoming enactment aimed at you.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: negation
+    fields:
+      comment: The effect misses you entirely.
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

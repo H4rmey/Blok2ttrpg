@@ -1,0 +1,28 @@
+name: Caltrops
+description: "Scattered iron spikes that shred the feet of anyone crossing the ground for a few rounds. Cost target: 5 build / 0 energy."
+type: execution
+fields:
+  comment: Lingering damage zone on the floor.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: effect
+    fields:
+      comment: Spikes bite at anyone standing in the area.
+      effect_type: damage
+      effect-duration: 2
+      solution:
+        - value: defense.Reflex
+        - value: general.Athletics
+      solution_dc: 0
+    interaction: zone
+    interaction_data:
+      comment: ""
+      zone-range: "1"
+      zone-radius: 1
+      zone-duration: 0
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

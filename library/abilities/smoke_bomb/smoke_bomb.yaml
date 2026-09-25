@@ -1,0 +1,29 @@
+name: Smoke Bomb
+description: "A clay pellet that bursts into choking grey smoke, blinding everyone caught in the cloud. Cost target: 5 build / 0 energy."
+type: execution
+fields:
+  comment: Zone blind in a small cloud.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Vision lost inside the cloud.
+      condition: blinded
+      shift_amount: -1
+      duration: "1"
+      solution:
+        - value: general.Perception
+        - value: defense.Constitution
+      solution_dc: 0
+    interaction: zone
+    interaction_data:
+      comment: ""
+      zone-range: "5"
+      zone-radius: 1
+      zone-duration: 0
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

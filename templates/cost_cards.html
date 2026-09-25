@@ -17,9 +17,16 @@
 </div>
 {{ end }}
 
+{{/* Manual recalculation. The cost cards already refresh on every form change,
+     but this gives an explicit way to re-derive the perk points, e.g. after a
+     config change or when a stale value is suspected. */}}
+
 <div class="cost-card">
   <span class="cost-card-label">Total Energy Cost</span>
   <span class="cost-card-value energy" id="cost-energy">{{ .Cost.Energy }}</span>
 </div>
+<button class="btn icon-btn" type="button" title="Recalculate perk points"
+        hx-post="/builder/cost" hx-include="#ability-form"
+        hx-target="#cost-badge" hx-swap="innerHTML">&#8635;</button>
 {{ if .OverBudget }}<div class="cost-warning" id="cost-warn">Out of perk points (allowed)</div>{{ end }}
 {{ end }}

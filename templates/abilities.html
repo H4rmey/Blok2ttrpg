@@ -1,21 +1,28 @@
 {{ template "head" . }}
 {{ $c := .Character }}
 <div class="page-head">
-  <h1>{{ $c.Name }} &mdash; Perks</h1>
+  <h1>Perks</h1>
   <div class="toolbar">
     <button class="btn primary" type="button" onclick="document.getElementById('new-ability-modal').showModal()">+ New Perk</button>
 
     <button class="btn" type="button"
             hx-get="/abilities/library?character={{ $c.ID }}"
             hx-target="#ability-modal-body" hx-swap="innerHTML"
-            onclick="openAbilityModal()">Import</button>
+            onclick="openAbilityModal()">Import from Library</button>
     <button class="btn" type="button"
             onclick="document.getElementById('ability-import-input').click()">Import Custom</button>
+    {{/* Recomputes the point and energy cost of every perk from the current
+         config and swaps the list in place. */}}
+    <button class="btn" type="button" title="Recalculate the cost of every perk"
+            hx-get="/characters/{{ $c.ID }}/abilities/refresh"
+            hx-target="#perk-list" hx-swap="innerHTML">&#8635; Refresh All</button>
     <form id="ability-import-form" action="/characters/{{ $c.ID }}/abilities/import-custom" method="post" enctype="multipart/form-data" hidden>
       <input id="ability-import-input" type="file" name="file" accept=".yaml,.yml" onchange="this.form.submit()">
     </form>
   </div>
 </div>
+
+{{ template "character_bar" . }}
 
 <div id="ability-modal" class="modal" hidden>
   <div class="modal-backdrop" onclick="closeAbilityModal()"></div>
@@ -34,24 +41,7 @@
   </form>
 </dialog>
 
-
-
-
-{{ if $c.Abilities }}
-<ul class="card-grid">
-  {{ range $c.Abilities }}
-  <li class="card">
-    <strong>{{ .Name }}</strong>
-    <span class="muted">{{ .Type }} &middot; {{ len .Enactments }} enactment(s)</span>
-    <div class="actions">
-      <a class="btn" href="/characters/{{ $c.ID }}/abilities/{{ .ID }}">Edit</a>
-      <a class="btn" href="/characters/{{ $c.ID }}/abilities/{{ .ID }}/export">Export</a>
-      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/abilities/{{ .ID }}" hx-confirm="Delete perk?">Delete</button>
-    </div>
-  </li>
-  {{ end }}
-</ul>
-{{ else }}
-<p class="muted">No perks yet.</p>
-{{ end }}
+<div id="perk-list">
+  {{ template "perk_list" . }}
+</div>
 {{ template "foot" . }}

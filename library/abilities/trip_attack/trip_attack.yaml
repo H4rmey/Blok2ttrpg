@@ -1,0 +1,27 @@
+name: Trip Attack
+description: "A low sweep of the leg or haft that drops a foe flat on their back. Cost target: 3 build / 0 energy."
+type: execution
+fields:
+  comment: Knock the target to the ground.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Target is swept off their feet.
+      condition: prone
+      duration: "1"
+      solution:
+        - value: defense.Reflex
+        - value: general.Athletics
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

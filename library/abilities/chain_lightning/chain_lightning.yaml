@@ -1,0 +1,25 @@
+name: Chain Lightning
+description: "An arc of lightning that leaps from one enemy to the next, striking three targets in a breath. Cost target: 7 build / 0 energy."
+type: execution
+fields:
+  comment: Multi-target magical damage.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Lightning jumps between targets.
+      source: offense.Magic
+      flat: 0
+      damage_type:
+        - value: Lightning
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 3
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

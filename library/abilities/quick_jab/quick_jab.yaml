@@ -1,0 +1,25 @@
+name: Quick Jab
+description: "A short, snapping punch thrown inside the opponent's guard. Cheap, fast and reliable. Cost target: 3 build / 0 energy."
+type: execution
+fields:
+  comment: A fast close-range strike.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Bare-knuckle impact.
+      source: offense.Strength
+      flat: 0
+      damage_type:
+        - value: Bludgeoning
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

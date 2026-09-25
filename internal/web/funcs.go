@@ -81,6 +81,27 @@ func funcMap() template.FuncMap {
 			return index == 0 || cfg.AdditionalEnactment.RequiresValidation()
 		},
 
+		// hasValues reports whether a stored values map holds anything
+		// meaningful. An optional builder region (Interaction / Validation
+		// beyond the first enactment) is rendered when the ruleset requires it
+		// OR when the perk already carries data there, so opening and saving a
+		// perk neither discards that data nor invents defaults the perk never
+		// had. Both would change the perk's cost behind the user's back.
+		"hasValues": func(values map[string]any) bool {
+			for _, v := range values {
+				switch t := v.(type) {
+				case nil:
+				case string:
+					if t != "" {
+						return true
+					}
+				default:
+					return true
+				}
+			}
+			return false
+		},
+
 		// costHint formats a flat cost into a short inline hint such as
 		// "(-2 pt, +1 E)". Zero components are omitted; an all-zero cost yields
 		// an empty string so nothing is shown.

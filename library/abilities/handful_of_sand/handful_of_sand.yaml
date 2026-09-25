@@ -1,0 +1,28 @@
+name: Handful of Sand
+description: "A fistful of grit flung into the eyes. Dishonourable, effective, and very cheap. Cost target: 3 build / 0 energy."
+type: execution
+fields:
+  comment: Blind a foe with thrown grit.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Eyes full of sand.
+      condition: blinded
+      shift_amount: -1
+      duration: "1"
+      solution:
+        - value: defense.Constitution
+        - value: general.Perception
+      solution_dc: 0
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

@@ -3,7 +3,7 @@
 <div class="page-head">
   <h1>{{ if $c.ID }}{{ $c.Name }}{{ else }}New Character{{ end }}</h1>
   {{ if $c.ID }}
-  <div class="actions">
+  <div class="toolbar">
     <a class="btn" href="/characters/{{ $c.ID }}/abilities">Perks ({{ len $c.Abilities }})</a>
     <a class="btn" href="/characters/{{ $c.ID }}/export">Export YAML</a>
     <a class="btn" href="/characters/{{ $c.ID }}/pdf" target="_blank">PDF</a>
@@ -16,18 +16,7 @@
 <div class="notice-warn">{{ .Warning }}</div>
 {{ end }}
 
-<div class="stats-bar">
-
-  <div class="stats-bar-level">
-    <label>Level</label>
-    <input type="number" name="level" min="1" value="{{ $c.Level }}"
-           form="character-form" id="character-level">
-  </div>
-
-  <div class="cost-cards" id="stat-cards">
-    {{ template "stat_cards" . }}
-  </div>
-</div>
+{{ template "character_bar" . }}
 
 <form method="post" id="character-form" action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
       data-stats-url="/characters/{{ $c.ID }}/stats">

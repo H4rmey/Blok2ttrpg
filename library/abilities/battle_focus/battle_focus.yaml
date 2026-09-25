@@ -1,0 +1,22 @@
+name: Battle Focus
+description: "A breath, a grip check, and total clarity. Your strikes land truer for a short while. Cost target: 5 build / 0 energy."
+type: execution
+fields:
+  comment: Temporary offensive buff on yourself.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: modification
+    fields:
+      comment: Sharpen your aim.
+      modification-traits: offense.Precision
+      modification-shift-amount: 1
+      modificaiton-shift-duration: 2
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom

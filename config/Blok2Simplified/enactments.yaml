@@ -59,7 +59,7 @@ enactments:
       - key: solution_dc
         label: "Solution DC"
         type: free_number
-        default: 0
+        default: 2
         min: 2
         max: 12
         step: 1
@@ -136,7 +136,7 @@ enactments:
       - key: solution_dc
         label: "Solution DC"
         type: free_number
-        default: 0
+        default: 2
         min: 2
         max: 12
         step: 1

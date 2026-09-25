@@ -1,0 +1,26 @@
+name: Veil of Shadows
+description: "Darkness gathers around you and nothing can find you while you hold your focus. Cost target: 9 build / 0 energy."
+type: concentration
+fields:
+  comment: Sustained untargetable state on yourself.
+  energy_steps: 0
+  action_steps: 0
+  upkeep_cost: "1 Action or 1 Energy"
+enactments:
+  - type: condition
+    fields:
+      comment: You cannot be targeted.
+      condition: untargetable
+      duration: "1"
+      solution:
+        - value: general.Perception
+        - value: defense.Wisdom
+      solution_dc: 0
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
