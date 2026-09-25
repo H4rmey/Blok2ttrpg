@@ -42,7 +42,11 @@
   {{ else if eq $f.Type "checkbox" }}
   {{ else if eq $f.Type "dropdown" }}
 
+  {{/* firstOption is the fallback selection: every dropdown must resolve to a
+       real value, so there is no empty "none" choice. It mirrors the engine's
+       normalization, which fills an unset dropdown with its first option. */}}
   {{ $default := fvalStr $values $f.Key (str $f.Default) }}
+  {{ if eq $default "" }}{{ $default = firstOption $cfg $f }}{{ end }}
   {{ if $f.InlineBuilder }}
   <select name="{{ $name }}"
           hx-get="/builder/inline-fields"
@@ -50,7 +54,6 @@
           hx-swap="innerHTML"
           hx-vals='{"name": "{{ $name }}", "kind": "{{ $f.InlineBuilder.Kind }}"}'
           hx-trigger="change">
-    <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
     {{ range $grp := resolveOptionGroups $cfg $f }}
     {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
     {{ range $grp.Options }}
@@ -73,7 +76,6 @@
   {{ else }}
   <div class="select-row">
     <select name="{{ $name }}" class="opt-select">
-      <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
       {{ range $grp := resolveOptionGroups $cfg $f }}
       {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
       {{ range $grp.Options }}
@@ -93,6 +95,7 @@
        general state loads its per-state shift dropdown into the sibling
        container via HTMX. */}}
   {{ $default := fvalStr $values $f.Key (str $f.Default) }}
+  {{ if eq $default "" }}{{ $default = firstOption $cfg $f }}{{ end }}
   {{ $shiftKey := $f.ShiftKey }}
   {{ if eq $shiftKey "" }}{{ $shiftKey = "shift_amount" }}{{ end }}
   {{ $shiftName := printf "%s%s" $prefix $shiftKey }}
@@ -102,7 +105,6 @@
           hx-swap="innerHTML"
           hx-vals='{"name": "{{ $name }}", "shift_name": "{{ $shiftName }}"}'
           hx-trigger="change">
-    <option value="" {{ if eq $default "" }}selected{{ end }}>&lt;none&gt;</option>
     {{ range $grp := resolveOptionGroups $cfg $f }}
     {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
     {{ range $grp.Options }}
@@ -129,9 +131,9 @@
           <label class="row-label">{{ $rf.Label }}</label>
           {{ $rname := printf "%s_%d_%s" $name $ri $rf.Key }}
           {{ $rdef := fvalStr $row $rf.Key (str $rf.Default) }}
+          {{ if eq $rdef "" }}{{ $rdef = firstOption $cfg $rf }}{{ end }}
           {{ if eq $rf.Type "dropdown" }}
           <select name="{{ $rname }}" data-row-key="{{ $rf.Key }}">
-            <option value="" {{ if eq $rdef "" }}selected{{ end }}>&lt;none&gt;</option>
             {{ range $grp := resolveOptionGroups $cfg $rf }}
             {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
             {{ range $grp.Options }}
@@ -170,7 +172,6 @@
           <label class="row-label">{{ .Label }}</label>
           {{ if eq .Type "dropdown" }}
           <select data-row-key="{{ .Key }}">
-            <option value="">&lt;none&gt;</option>
             {{ range $grp := resolveOptionGroups $cfg . }}
             {{ if $grp.Label }}<optgroup label="{{ $grp.Label }}">{{ end }}
             {{ range $grp.Options }}

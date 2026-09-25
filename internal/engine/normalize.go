@@ -52,11 +52,12 @@ func normalizeEnactment(cfg *config.Config, en model.Enactment) model.Enactment 
 	if ic, ok := cfg.Interaction(en.Interaction); ok {
 		out.InteractionData = normalizeFields(cfg, ic.Fields, en.InteractionData)
 	}
-	// Validation data is only normalized when the enactment already carries
-	// some. An enactment with no validation at all is left alone rather than
-	// having a full set of defaults invented for it, which would add cost the
-	// perk never had.
-	if len(en.ValidationData) > 0 && len(cfg.Validations.Fields) > 0 {
+	// Validation is filled in for every enactment. An enactment that carried no
+	// validation at all used to be left alone, but that leaves the perk
+	// half-specified: the generated rules text has no roll to make, and the
+	// stored perk disagrees with the builder, which renders the region anyway.
+	// Every enactment therefore gets a complete, valid validation block.
+	if len(cfg.Validations.Fields) > 0 {
 		out.ValidationData = normalizeFields(cfg, cfg.Validations.Fields, en.ValidationData)
 	}
 	return out
@@ -82,8 +83,16 @@ func normalizeFields(cfg *config.Config, fields []config.Field, values map[strin
 		case "multiselect", "conditions":
 			out[f.Key] = normalizeRows(cfg, f, raw, present)
 		case "dropdown":
+			// A dropdown always resolves to a real option: the stored value if
+			// it has one, else the configured default, else the first available
+			// option. Leaving a dropdown empty would produce a half-filled
+			// enactment whose generated rules text reads as a gap, so "no
+			// selection" is not a valid state.
 			if !present {
 				out[f.Key] = asString(f.Default)
+			}
+			if asString(out[f.Key]) == "" {
+				out[f.Key] = firstOptionValue(cfg, f)
 			}
 			// An inline_builder dropdown carries a nested component builder;
 			// recurse so its nested values are normalized too.
@@ -104,6 +113,21 @@ func normalizeFields(cfg *config.Config, fields []config.Field, values map[strin
 		}
 	}
 	return out
+}
+
+// firstOptionValue returns the first selectable value for a dropdown, used as
+// the last-resort fallback when a field carries neither a stored value nor a
+// configured default.
+func firstOptionValue(cfg *config.Config, f config.Field) string {
+	if cfg == nil {
+		return ""
+	}
+	for _, opt := range cfg.ResolveOptions(f) {
+		if opt.Value != "" {
+			return opt.Value
+		}
+	}
+	return ""
 }
 
 // normalizeRows expands a repeatable field to its stored rows, or to the

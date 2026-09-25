@@ -7,11 +7,7 @@
 {{ if .RefreshNotice }}<div class="notice-info">{{ .RefreshNotice }}</div>{{ end }}
 {{ if .Perks }}
 {{ $remaining := sub .AbilityBudget .AbilityUsed }}
-<p class="muted">
-  Perk points:
-  <strong class="{{ if lt $remaining 0 }}over{{ else }}ok{{ end }}">{{ $remaining }}/{{ .AbilityBudget }}</strong>
-  remaining ({{ .AbilityUsed }} spent)
-</p>
+
 <ul class="card-grid">
   {{ range .Perks }}
   {{ $ab := .Ability }}

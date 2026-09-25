@@ -37,6 +37,23 @@ func funcMap() template.FuncMap {
 		"resolveOptionGroups": func(cfg *config.Config, f config.Field) []config.OptionGroup {
 			return cfg.ResolveOptionGroups(f)
 		},
+		// firstOption returns the first selectable value of a dropdown. Every
+		// dropdown must resolve to a real option (there is no empty "none"
+		// choice), so this is the fallback when a field carries neither a
+		// stored value nor a configured default. It mirrors the engine's
+		// normalization, which fills an unset dropdown the same way, keeping
+		// the rendered form and the stored ability in agreement.
+		"firstOption": func(cfg *config.Config, f config.Field) string {
+			if cfg == nil {
+				return ""
+			}
+			for _, opt := range cfg.ResolveOptions(f) {
+				if opt.Value != "" {
+					return opt.Value
+				}
+			}
+			return ""
+		},
 		// componentByKind resolves a component (enactment/interaction/ability
 		// type) by kind and id for the inline builder. Returns nil when not
 		// found so the template can guard with `if`.

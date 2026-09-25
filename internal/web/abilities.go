@@ -413,6 +413,21 @@ func readFieldValues(cfg *config.Config, fields []config.Field, prefix string, r
 		case "dropdown":
 
 			val := r.FormValue(name)
+			// A dropdown must always carry a real value. If the post is missing
+			// one (e.g. a region that was not rendered), fall back to the
+			// configured default and then to the first option, matching what
+			// normalization stores and what the builder renders.
+			if val == "" {
+				val = asStringValue(f.Default)
+			}
+			if val == "" && cfg != nil {
+				for _, opt := range cfg.ResolveOptions(f) {
+					if opt.Value != "" {
+						val = opt.Value
+						break
+					}
+				}
+			}
 			out[f.Key] = val
 			// An inline_builder dropdown carries a nested component builder.
 			// Parse the referenced component's fields under "<name>_ib_" and
@@ -428,6 +443,14 @@ func readFieldValues(cfg *config.Config, fields []config.Field, prefix string, r
 
 	}
 	return out
+}
+
+// asStringValue renders a config default as a string ("" for nil).
+func asStringValue(v any) string {
+	if v == nil {
+		return ""
+	}
+	return fmt.Sprintf("%v", v)
 }
 
 // readRowValues reads a multiselect/conditions repeatable field from the form. Rows

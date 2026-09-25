@@ -27,7 +27,12 @@ func TestBuilderCostMatchesStoredCost(t *testing.T) {
 	req := httptest.NewRequest("POST", "/builder/cost", strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	_ = req.ParseForm()
-	replayed := engine.AbilityCost(app.Cfg.Config, app.buildAbilityFromForm(req, "ability-1"))
+	// The save path normalizes what the form posts, so the replay does too:
+	// this asserts the real invariant, that opening a perk and saving it leaves
+	// the cost untouched. Normalizing cannot conjure data the form dropped, so
+	// genuine losses (e.g. an omitted interaction) still fail here.
+	saved := engine.NormalizeAbility(app.Cfg.Config, app.buildAbilityFromForm(req, "ability-1"))
+	replayed := engine.AbilityCost(app.Cfg.Config, saved)
 
 	if replayed.Build != stored.Build || replayed.Energy != stored.Energy {
 		t.Errorf("builder round trip changed the cost: stored build=%d energy=%d, builder build=%d energy=%d\nform: %v",

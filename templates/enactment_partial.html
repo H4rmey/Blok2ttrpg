@@ -61,13 +61,10 @@
       </div>
     </div>
 
-    {{/* An optional region is still rendered (just hidden) when the perk
-         already carries data for it, so saving cannot silently discard that
-         data. When the perk has none, the region is omitted entirely rather
-         than materialising defaults the perk never had. Either mistake would
-         change the perk's cost merely by opening and saving it. */}}
-    {{ $wantInteraction := or (showInteraction $cfg $idx) (ne $interaction "") }}
-    {{ if $wantInteraction }}
+    {{/* Every enactment is fully specified, so both regions always render and
+         always post. A region the ruleset does not require for this enactment
+         is merely hidden: omitting it would drop the stored values on save,
+         silently changing the perk and its cost. */}}
     <div class="region region-interaction"{{ if not (showInteraction $cfg $idx) }} hidden{{ end }}>
       <h4 class="region-title">Interaction{{ if and $cfg.Interactions.Information (not $cfg.Interactions.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Interactions.Information }}">i</span>{{ end }}</h4>
       <div class="field">
@@ -107,10 +104,8 @@
         {{ end }}
       </div>
     </div>
-    {{ end }}
 
     {{/* Same reasoning as the Interaction region. */}}
-    {{ if or (showValidation $cfg $idx) (hasValues $validationData) }}
     <div class="region region-validation"{{ if not (showValidation $cfg $idx) }} hidden{{ end }}>
       <h4 class="region-title">Validation{{ if and $cfg.Validations.Information (not $cfg.Validations.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Validations.Information }}">i</span>{{ end }}</h4>
 
@@ -123,7 +118,6 @@
       {{ end }}
 
     </div>
-    {{ end }}
   </div>
 
 </div>
