@@ -12,8 +12,10 @@
     {{ if .ReadOnlyStats }}
     <span class="stats-bar-level-value">{{ $c.Level }}</span>
     {{ else }}
-    <input type="number" name="level" min="1" value="{{ $c.Level }}"
-           form="character-form" id="character-level">
+    {{/* max comes from leveling.max_level; the server clamps to the same
+         value, so the input bound is a convenience and not the only guard. */}}
+    <input type="number" name="level" min="1" max="{{ .Cfg.MaxLevel }}"
+           value="{{ $c.Level }}" form="character-form" id="character-level">
     {{ end }}
   </div>
 

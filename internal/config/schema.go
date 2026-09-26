@@ -141,6 +141,12 @@ type Combat struct {
 	Actions struct {
 		Amount int `yaml:"amount" json:"amount"`
 	} `yaml:"actions" json:"actions"`
+
+	// EnergyRecoveryPerRest is how much Energy a character regains on a rest.
+	// It is a rules parameter surfaced in the generated documentation; the app
+	// does not spend or restore Energy automatically, so nothing in the engine
+	// reads it.
+	EnergyRecoveryPerRest int `yaml:"energy_recovery_per_rest,omitempty" json:"energy_recovery_per_rest,omitempty"`
 }
 
 // AdditionalEnactment is the surcharge for each enactment beyond the first.
@@ -254,11 +260,18 @@ type Leveling struct {
 	AbilityPoints LevelTable `yaml:"ability_points,omitempty" json:"ability_points,omitempty"`
 }
 
-// LevelTable holds a per-level budget table.
+// LevelTable holds the budget progression for one point pool. The budget is
+// normally derived from the formula Start + PerLevel * (level - 1), which keeps
+// the documented curve and the served numbers from drifting apart. Levels is an
+// optional explicit override used for non-linear curves: when it contains a row
+// for the requested level that row's Total wins.
 type LevelTable struct {
-	StandardTraitCount int          `yaml:"standard_trait_count,omitempty" json:"standard_trait_count,omitempty"`
-	StartingFormula    string       `yaml:"starting_formula,omitempty" json:"starting_formula,omitempty"`
-	Levels             []LevelEntry `yaml:"levels,omitempty" json:"levels,omitempty"`
+	// Start is the budget granted at level 1.
+	Start int `yaml:"start,omitempty" json:"start,omitempty"`
+	// PerLevel is the budget added by each level after the first.
+	PerLevel int `yaml:"per_level,omitempty" json:"per_level,omitempty"`
+	// Levels optionally overrides the formula on a per-level basis.
+	Levels []LevelEntry `yaml:"levels,omitempty" json:"levels,omitempty"`
 }
 
 // LevelEntry is one row in a level table.

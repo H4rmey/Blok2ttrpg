@@ -1,9 +1,18 @@
 {
-  "char-1790444272640810900": {
-    "id": "char-1790444272640810900",
+  "char-1790452165737608700": {
+    "id": "char-1790452165737608700",
     "level": 1,
     "attributes": {
-      "name": "pizza"
+      "age": "",
+      "current_energy": "8",
+      "current_hp": "10",
+      "description": "",
+      "motivation": "",
+      "name": "micheal",
+      "problem": "",
+      "trait_1": "",
+      "trait_2": "",
+      "trait_3": ""
     },
     "traits": {
       "defense.Constitution": "untrained",
@@ -19,20 +28,110 @@
       "general.Medicine": "untrained",
       "general.Nature": "untrained",
       "general.People Skill": "untrained",
-      "general.Perception": "untrained",
+      "general.Perception": "novice",
       "general.Performance": "untrained",
       "general.Provoke": "untrained",
       "general.Resources": "untrained",
       "general.Stealth": "untrained",
       "general.Thievery": "untrained",
       "offense.Magic": "untrained",
-      "offense.Precision": "untrained",
+      "offense.Precision": "proficient",
       "offense.Strength": "untrained",
       "offense.Wisdom": "untrained",
       "vital.Energy": "untrained",
       "vital.HP": "untrained",
       "vital.Movement": "untrained"
     },
-    "abilities": []
+    "abilities": [
+      {
+        "id": "ability-1790452234872404900",
+        "name": "Piercing Shot",
+        "description": "A carefully drawn arrow loosed at distance, aimed for the gap in the armour.",
+        "type": "execution",
+        "fields": {
+          "action_steps": 0,
+          "comment": "Medium-range precision attack.",
+          "energy_steps": 0
+        },
+        "enactments": [
+          {
+            "type": "damage",
+            "fields": {
+              "comment": "Arrow punches through.",
+              "damage_type": [
+                {
+                  "value": "Piercing"
+                }
+              ],
+              "flat": 0,
+              "source": "offense.Precision"
+            },
+            "interaction": "direct",
+            "validation_data": {
+              "comment": "",
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                }
+              ],
+              "engage": "d6"
+            }
+          }
+        ],
+        "package_id": "ranger"
+      },
+      {
+        "id": "ability-1790452234873054300",
+        "name": "Caltrops",
+        "description": "Scattered iron spikes that shred the feet of anyone crossing the ground for a few rounds.",
+        "type": "execution",
+        "fields": {
+          "action_steps": 0,
+          "comment": "Lingering damage zone on the floor.",
+          "energy_steps": 0
+        },
+        "enactments": [
+          {
+            "type": "effect",
+            "fields": {
+              "comment": "Spikes bite at anyone standing in the area.",
+              "effect-duration": 2,
+              "effect_type": "damage",
+              "solution": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "general.Athletics"
+                }
+              ],
+              "solution_dc": 0
+            },
+            "interaction": "zone",
+            "validation_data": {
+              "comment": "",
+              "counter_trait": [
+                {
+                  "value": "defense.Reflex"
+                }
+              ],
+              "engage": "d6"
+            }
+          }
+        ],
+        "package_id": "ranger"
+      }
+    ],
+    "packages": [
+      {
+        "id": "ranger",
+        "name": "Ranger",
+        "shifts": {
+          "general.Perception": 1,
+          "offense.Precision": 2
+        },
+        "enabled": true
+      }
+    ]
   }
 }

@@ -9,10 +9,14 @@ This page will list some predefined abilities that players and DM's can use to c
 
 ### Ability List
 
-## Specialized Abilities 
+{{ abilitiesTable }}
+
+## Specialized Abilities
 
 While the Ability Builder is perfect for creating fireballs, sword strikes, and healing spells using standard Enactments, some concepts are too abstract, vague, or narrative-driven to fit into the Ability Builder system.
 
 Abilities like Message, Mind Reading, or Illusion often lack hard numbers. Predefined Abilities solve this by providing a conceptual base effect with hardcoded rules and a dedicated list of Perks to upgrade them.
 
 ### Specialized Abilities List
+
+Specialized Abilities are still being written. When one is added to the library it appears in the list above alongside the Ability Builder abilities, because both are loaded from the same place.

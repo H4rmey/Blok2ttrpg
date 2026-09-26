@@ -12,7 +12,9 @@ import (
 // handleDocs renders the configuration-driven documentation as an HTML page
 // with a Print / Save-as-PDF button (no external PDF dependency).
 func (a *App) handleDocs(w http.ResponseWriter, r *http.Request) {
-	html, err := docs.RenderHTML(a.Cfg)
+	// The app's content library is passed in so the generated rulebook lists
+	// the real classes, races, backgrounds and items it ships with.
+	html, err := docs.RenderHTML(a.Cfg, a.Library)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -29,7 +31,7 @@ func (a *App) handleDocs(w http.ResponseWriter, r *http.Request) {
 
 // handleDocsMarkdown downloads the docs as a markdown file.
 func (a *App) handleDocsMarkdown(w http.ResponseWriter, r *http.Request) {
-	md, err := docs.RenderMarkdown(a.Cfg)
+	md, err := docs.RenderMarkdown(a.Cfg, a.Library)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -5,37 +5,39 @@
 
 As your character progresses through the world, they will gain levels. Leveling up represents your character's growth, allowing them to improve their Traits, increase their Vital stats, and become more capable in both combat and roleplay.
 
-The maximum level a character can reach is Level 10.
+The maximum level a character can reach is Level {{ .Leveling.MaxLevel }}.
 
 ## Trait Points
 
 Trait Points are used to upgrade your Proficiency Levels in various Traits (e.g., shifting a Trait from Untrained to Trained, or Expert to Master).
 
-### Starting Trait Points
+### Starting and Gaining Points
 
-At Level 1, your base Trait Points are calculated based on the total number of Traits used in your specific campaign setting. To calculate your starting Trait Points, use the following formula:
+Both point pools follow the same rule: you start with a fixed amount at Level 1 and gain a fixed amount for every level after that.
 
-$$TraitPoints=(TraitAmount+2)/3$$
+$$Points = Start + PerLevel \times (Level - 1)$$
 
-For example, if your setting uses the standard 22 Traits, you would receive 8 Trait Points at Level 1:
+For Trait Points that is **{{ .Leveling.TraitPoints.Start }}** at Level 1 and **+{{ .Leveling.TraitPoints.PerLevel }}** per level thereafter. For Ability Points it is **{{ .Leveling.AbilityPoints.Start }}** at Level 1 and **+{{ .Leveling.AbilityPoints.PerLevel }}** per level.
 
-$$(22+2)/3=8$$
+Starting Trait Points are set so a new character can raise their Vital Traits off the bottom rung and still put a handful of Traits into their speciality. The per-level gain is one visible die step plus change, and it matches the Ability Point gain so both halves of your character sheet grow at the same rate.
 
-### Gaining and Refunding Points
+### Refunding Points
 
-By the time you level up, you gain additional Trait Points as outlined in the leveling table below.
+You can dynamically gain Trait Points by lowering a Proficiency. For instance, if you are an Expert in a Trait but want to balance things out, you can lower it back toward the starting rung and recover the points you spent. Dropping a Trait *below* the starting rung to Inept even refunds an extra point. Spending points never locks you into your choices; you can always reallocate them.
 
-You can also dynamically gain Trait Points by lowering your Proficiency. For instance, if you are an Expert in Dexterity but want to balance out your Traits, you can lower the Proficiency to Trained or even Untrained to gain 1 or 2 points, respectively. This means spending points does not lock you into your choices; you can always reallocate them as needed.
+## Proficiency Tiers
+
+The dice ladder rises by a flat +1 average per rung. The die is capped at {{ highestDie }}; rungs above that add a flat bonus instead, which keeps high-end rolls from becoming wildly swingy. {{ defaultProficiencyName }} is the starting rung and is free. The rung below it refunds a point. HP and Energy climb by 3 per rung and Movement by 1.
+
+| Tier | Cost | Die | HP | Movement | Energy |
+| --- | --- | --- | --- | --- | --- |
+{{range .Proficiencies}}| {{.Name}} | {{.Cost}} | {{.Die}} | {{index .Vitals "hp"}} | {{index .Vitals "movement"}} | {{index .Vitals "energy"}} |
+{{end}}
 
 ## Leveling Table: Trait Points
 
-| Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
-| --- | --- | --- |
-{{range .Leveling.TraitPoints.Levels}}| **{{.Level}}** | +{{.PointsGained}} | {{.Total}} |
-{{end}}
-## Proficiency Tiers
+{{ levelingTable "trait" }}
 
-| Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-{{range .Proficiencies}}| {{.Name}} | {{.Cost}} | {{.Dice.General}} | {{.Dice.Offense}} | {{.Dice.Defense}} | {{index .Vitals "hp"}} | {{index .Vitals "movement"}} | {{index .Vitals "energy"}} |
-{{end}}
+## Cost and Budget Rules
+
+{{ rulesFlagsTable }}

@@ -11,6 +11,16 @@ trait_categories:
 combat:
   actions:
     amount: 3
+  # Energy regained per rest. A full three-action round costs about 3 Energy,
+  # so this is a deliberately slow trickle that keeps Energy scarce between
+  # fights. The app never spends or restores Energy by itself; this value is a
+  # rules parameter for the table, surfaced in the generated documentation.
+  energy_recovery_per_rest: 5
+
+# The proficiency rung every trait starts at, and the one that is free. This
+# must be set explicitly: the ladder now opens with the below-baseline "Inept"
+# rung, so falling back to the first entry would start every character there.
+default_proficiency: untrained
 
 # Cost floors. When false (the default) the final computed build/energy cost of
 # a perk is clamped at zero, so refund-style options (e.g. the energy offset,
@@ -58,7 +68,16 @@ option_sources:
   # then appends the trait categories as grouped optgroups. Used by Damage/Heal/
   # Mitigation "Source" and the Validation "Engage" dropdown. Dice scale in cost
   # with size; trait cost comes from the field's group_offsets.
+  #
+  # This mirrors the proficiency ladder in proficiencies.yaml: the die is capped
+  # at d12 and higher rungs add a flat bonus instead. Each entry raises the
+  # average result by 1, so build cost rises by 1 per entry. The old d20 option
+  # is gone: it jumped the average by 4 in a single step for 2 points and made
+  # the roll wildly swingy.
   roll_generic:
+    - value: "1"
+      label: "1 (flat, no roll)"
+      cost: { build_cost: -1, energy_cost: 0 }
     - value: "d4"
       label: "1d4"
       cost: { build_cost: 0, energy_cost: 0 }
@@ -74,9 +93,15 @@ option_sources:
     - value: "d12"
       label: "1d12"
       cost: { build_cost: 4, energy_cost: 0 }
-    - value: "d20"
-      label: "1d20"
+    - value: "d12+1"
+      label: "1d12+1"
+      cost: { build_cost: 5, energy_cost: 0 }
+    - value: "d12+2"
+      label: "1d12+2"
       cost: { build_cost: 6, energy_cost: 0 }
+    - value: "d12+3"
+      label: "1d12+3"
+      cost: { build_cost: 7, energy_cost: 0 }
 
   # Balanced per-knockout costs for Phase abilities. A knockout is a condition
   # that interrupts an active Phase, so it is a drawback: the more easily a

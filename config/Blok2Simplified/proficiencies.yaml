@@ -1,20 +1,70 @@
+# Proficiency ladder. Order matters: a rung's position defines its place in the
+# ladder, and default_proficiency (see general.yaml) names the free baseline.
+# Rungs below the baseline refund points; rungs above it cost their cumulative
+# per-rung cost.
+#
+#
+# Dice
+# ----
+# The ladder is linear: 1, d4, d6, d8, d10, d12, d12+1, d12+2, d12+3. Average
+# result rises a flat +1 per rung (1.0, 2.5, 3.5 ... 9.5). The old ladder ended
+# at d20, which jumped +8 sides in a single rung and made average damage leap
+# +4 while HP gained its usual +4, so the top rung actually killed faster than
+# level 1 did. Capping the die at d12 and continuing with flat +1 bonuses keeps
+# the progression readable and the damage swing bounded.
+#
+#
+# Cost
+# ----
+# Costs are progressive: 1, 1, 1, 1 for the d6..d12 rungs, then 2, 2, 3 for the
+# d12+N rungs. Reaching d12 (Master) costs 4 points, exactly what reaching the
+# old top-but-one rung cost, so ordinary play is priced as before. The three
+# capstone rungs total 11 points, which makes Legendary a deliberate investment
+# rather than the free rung it used to be (it was cost 0, so the strongest tier
+# in the game was free).
+#
+# Inept sits below the baseline and therefore refunds a point. It is a real dial
+# for deliberately weak traits and backs the Enact Nerf drawback.
+#
+#
+# Vitals
+# ------
+# HP and Energy both rise a flat +3 per rung, Movement a flat +1. Because damage
+# now rises +1 average per rung, +3 HP holds time-to-kill steady at roughly 3.2
+# to 3.4 hits across the whole ladder instead of drifting.
+#
+# Energy previously went 5, 8, 12, 16, 20, 25 (+3, +4, +4, +4, +5), which
+# followed no rule. A full three-action round costs about 3 energy, so the
+# column now reads as rounds of sustained play: 1.7 at Inept up to 9.7 at
+# Legendary. See combat.md for the per-rest recovery rule.
 proficiencies:
+  - id: inept
+    name: "Inept"
+    # Below the baseline, so this rung refunds a point rather than costing one.
+    cost: 1
+    # A flat result of 1: no die is rolled at all.
+    die: "1"
+    vitals:
+      hp: 7
+      movement: 2
+      energy: 5
   - id: untrained
     name: "Untrained"
+    # The configured baseline (default_proficiency), so it is free.
     cost: 1
     die: "d4"
     vitals:
-      hp: 8
+      hp: 10
       movement: 3
-      energy: 5
+      energy: 8
   - id: novice
     name: "Novice"
     cost: 1
     die: "d6"
     vitals:
-      hp: 12
+      hp: 13
       movement: 4
-      energy: 8
+      energy: 11
   - id: proficient
     name: "Proficient"
     cost: 1
@@ -22,28 +72,45 @@ proficiencies:
     vitals:
       hp: 16
       movement: 5
-      energy: 12
+      energy: 14
   - id: expert
     name: "Expert"
     cost: 1
     die: "d10"
     vitals:
-      hp: 20
+      hp: 19
       movement: 6
-      energy: 16
+      energy: 17
   - id: master
     name: "Master"
     cost: 1
     die: "d12"
     vitals:
-      hp: 24
+      hp: 22
       movement: 7
       energy: 20
-  - id: legendary
-    name: "Legendary"
-    cost: 0
-    die: "d20"
+  - id: grandmaster
+    name: "Grandmaster"
+    # The die is capped at d12; further rungs add a flat bonus instead.
+    cost: 2
+    die: "d12+1"
+    vitals:
+      hp: 25
+      movement: 8
+      energy: 23
+  - id: champion
+    name: "Champion"
+    cost: 2
+    die: "d12+2"
     vitals:
       hp: 28
-      movement: 8
-      energy: 25
+      movement: 9
+      energy: 26
+  - id: legendary
+    name: "Legendary"
+    cost: 3
+    die: "d12+3"
+    vitals:
+      hp: 31
+      movement: 10
+      energy: 29

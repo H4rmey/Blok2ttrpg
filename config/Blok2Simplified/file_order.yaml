@@ -1,8 +1,11 @@
 # Order in which markdown files under ./docs are appended to the generated output.
 # Paths are relative to the project root.
-# The list must reference only files that exist on disk.
+#
+# The list is checked in both directions when the config loads: every entry must
+# exist on disk, and every .md file under ./docs must appear here exactly once.
+# Internal files that are deliberately not part of the rulebook (TODO.md) are
+# listed in docsOrderExempt in internal/config/docsorder.go rather than here.
 file_order:
-  - ./docs/TODO.md
   - ./docs/blok2ttrpg.md
   - ./docs/core/character-attributes.md
   - ./docs/core/character-traits.md
@@ -10,14 +13,21 @@ file_order:
   - ./docs/core/combat.md
   - ./docs/core/conditions.md
   - ./docs/core/abilities.md
+  - ./docs/core/packages.md
   - ./docs/core/items.md
   - ./docs/core/leveling.md
+  - ./docs/modules/skill-trees.md
+  - ./docs/modules/magic-system/magic-system.md
+  - ./docs/modules/magic-system/imbuing.md
+  - ./docs/modules/magic-system/curses.md
+  - ./docs/modules/world/world.md
+  - ./docs/modules/world/culture.md
   - ./docs/modules/ability-builder/cheatsheet.md
   - ./docs/modules/ability-builder/introduction.md
-  - ./docs/modules/ability-builder/configuration.md
   - ./docs/modules/ability-builder/ability-creation-guide.md
   - ./docs/modules/ability-builder/ability-types.md
   - ./docs/modules/ability-builder/enactments.md
   - ./docs/modules/ability-builder/interactions.md
   - ./docs/modules/ability-builder/validations.md
   - ./docs/modules/ability-builder/leveling.md
+  - ./docs/modules/ability-builder/configuration.md

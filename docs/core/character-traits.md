@@ -9,15 +9,13 @@ Character Attributes form the core of your character, while Traits determine the
 
 ## **Trait Points**
 
-To calculate the amount of trait points you need use the following formula:
+Your Trait Point budget is set by your level:
 
-$$Trait Points = (TraitAmount+2)/3$$
+$$TraitPoints = {{ .Leveling.TraitPoints.Start }} + {{ .Leveling.TraitPoints.PerLevel }} \times (Level - 1)$$
 
-For example, if your setting uses 22 Traits, you would receive 8 Trait Points:
+So you begin with **{{ .Leveling.TraitPoints.Start }}** points at Level 1 and gain **{{ .Leveling.TraitPoints.PerLevel }}** more each level, up to level {{ .Leveling.MaxLevel }}. See [Leveling](leveling.md) for the reasoning behind those numbers.
 
-$$(22+2)/3=8$$
-
-By the time you level up, you gain additional Trait Points. You can also gain Trait Points by lowering your Proficiency. For instance, if you are an Expert in Dexterity but want to balance out your Traits, you can lower the Proficiency to Trained or even Untrained to gain 1 or 2 points, respectively. This means that spending points does not lock you into your choices; you can always reallocate them as needed.
+You can also gain Trait Points back by lowering a Proficiency. For instance, if you are an Expert in a Trait but want to balance out your spread, you can lower it back toward the starting rung and recover what you spent; dropping below the starting rung refunds an extra point. Spending points does not lock you into your choices; you can always reallocate them as needed.
 
 ---
 

@@ -178,7 +178,7 @@ func merge(base, in *Config) {
 	base.Proficiencies = append(base.Proficiencies, in.Proficiencies...)
 	base.FileOrder = append(base.FileOrder, in.FileOrder...)
 
-	if in.Leveling.MaxLevel != 0 || len(in.Leveling.TraitPoints.Levels) > 0 || len(in.Leveling.AbilityPoints.Levels) > 0 {
+	if levelingConfigured(in.Leveling) {
 		base.Leveling = in.Leveling
 	}
 
@@ -189,6 +189,21 @@ func merge(base, in *Config) {
 	base.GeneralConditions = append(base.GeneralConditions, in.GeneralConditions...)
 	base.SpecificConditions = append(base.SpecificConditions, in.SpecificConditions...)
 
+}
+
+// levelingConfigured reports whether a section file actually declared a
+// leveling block. A block counts as configured when it sets max_level or when
+// either pool supplies a formula (start/per_level) or an explicit level table.
+func levelingConfigured(l Leveling) bool {
+	if l.MaxLevel != 0 {
+		return true
+	}
+	for _, t := range []LevelTable{l.TraitPoints, l.AbilityPoints} {
+		if t.Start != 0 || t.PerLevel != 0 || len(t.Levels) > 0 {
+			return true
+		}
+	}
+	return false
 }
 
 func mergeComponentMap(base *ComponentMap, in ComponentMap) {

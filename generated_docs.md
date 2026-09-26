@@ -1,17 +1,3 @@
-- [ ] healing traits.general.medicine doesn't work
-- [ ] cost for adding solution
-- [ ] rename solution to multiselect 
-- [ ] multiselect add small or/and to lef of items
-- [ ] multiselect allow for non dropdowns
-- [ ] add special case for nerf where you do not need validation or interaction because it is always applied to yourself
-- [ ] allow for enactments to specify what validations and what interactions are allowed/blocked. when you allow something it will only show what is on the allowed list. when you block something it will only show everything except what is on the block list
-```yaml
-allowed_validations:
-blocked_validations:
-allowed_interactions:
-blocked_interactions:
-```
-
 # blok2ttrpg
 ## Blok2ttrpg
 
@@ -79,15 +65,16 @@ A character’s attributes describe their traits, background, and abilities. Not
 **Identity**
 
 *   Name
-*   Player
-*   Ancestry
-*   Archetype
+*   Age
+*   Description
 
-**Description**
+**Traits**
 
-*   Appearance
-*   Backstory
-*   Notes
+*   Motivation
+*   Problem
+*   Trait 1
+*   Trait 2
+*   Trait 3
 
 
 ---
@@ -216,15 +203,13 @@ Character Attributes form the core of your character, while Traits determine the
 
 ## **Trait Points**
 
-To calculate the amount of trait points you need use the following formula:
+Your Trait Point budget is set by your level:
 
-$$Trait Points = (TraitAmount+2)/3$$
+$$TraitPoints = 13 + 3 \times (Level - 1)$$
 
-For example, if your setting uses 22 Traits, you would receive 8 Trait Points:
+So you begin with **13** points at Level 1 and gain **3** more each level, up to level 10. See [Leveling](leveling.md) for the reasoning behind those numbers.
 
-$$(22+2)/3=8$$
-
-By the time you level up, you gain additional Trait Points. You can also gain Trait Points by lowering your Proficiency. For instance, if you are an Expert in Dexterity but want to balance out your Traits, you can lower the Proficiency to Trained or even Untrained to gain 1 or 2 points, respectively. This means that spending points does not lock you into your choices; you can always reallocate them as needed.
+You can also gain Trait Points back by lowering a Proficiency. For instance, if you are an Expert in a Trait but want to balance out your spread, you can lower it back toward the starting rung and recover what you spent; dropping below the starting rung refunds an extra point. Spending points does not lock you into your choices; you can always reallocate them as needed.
 
 ---
 
@@ -234,67 +219,75 @@ Each Trait is rated by a Proficiency tier. Dice-backed Traits roll the die shown
 
 ### General Traits
 
-| Trait | Untrained | Novice | Proficient | Expert | Master | Legendary |
-| --- | --- | --- | --- | --- | --- | --- |
-| *Cost* | 1 | 1 | 1 | 1 | 1 | 0 |
-| **Strength** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Dexterity** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Stealth** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Perception** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Nature** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Crafting** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **People Skill** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Performance** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Thievery** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Knowledge** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Magic** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Medicine** | d4 | d6 | d8 | d10 | d12 | d20 |
+| Trait | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| *Cost* | 1 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 3 |
+| **Stealth** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Perception** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Nature** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Crafting** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **People Skill** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Performance** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Thievery** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Knowledge** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Magic** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Medicine** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Provoke** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Intimidate** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Athletics** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Deceive** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Resources** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 
 ### Offense Traits
 
-| Trait | Untrained | Novice | Proficient | Expert | Master | Legendary |
-| --- | --- | --- | --- | --- | --- | --- |
-| *Cost* | 1 | 1 | 1 | 1 | 1 | 0 |
-| **Precision** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Power** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Mind** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Magic** | d4 | d6 | d8 | d10 | d12 | d20 |
+| Trait | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| *Cost* | 1 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 3 |
+| **Strength** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Precision** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Wisdom** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Magic** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 
 ### Defense Traits
 
-| Trait | Untrained | Novice | Proficient | Expert | Master | Legendary |
-| --- | --- | --- | --- | --- | --- | --- |
-| *Cost* | 1 | 1 | 1 | 1 | 1 | 0 |
-| **Reflex** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Constitution** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Mind** | d4 | d6 | d8 | d10 | d12 | d20 |
-| **Magic** | d4 | d6 | d8 | d10 | d12 | d20 |
+| Trait | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| *Cost* | 1 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 3 |
+| **Constitution** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Reflex** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Wisdom** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
+| **Magic** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 
 ### Vital Traits
 
 These traits use numeric values rather than dice.
 
-| Trait | Untrained | Novice | Proficient | Expert | Master | Legendary |
-| --- | --- | --- | --- | --- | --- | --- |
-| **HP** | 8 | 12 | 16 | 20 | 24 | 28 |
-| **Movement** | 3 | 4 | 5 | 6 | 7 | 8 |
-| **Energy** | 5 | 8 | 12 | 16 | 20 | 25 |
+| Trait | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| **HP** | 7 | 10 | 13 | 16 | 19 | 22 | 25 | 28 | 31 |
+| **Movement** | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| **Energy** | 5 | 8 | 11 | 14 | 17 | 20 | 23 | 26 | 29 |
 
 # dice-rolling
 ## Dice Rolling
 
 ## Introduction
 
-The dice system used in this system consists of six different dice: **d4, d6, d8, d10, d12, and d20**. These dice are categorized into **Dice Tiers** (1-6), each corresponding to a **Proficiency Level**:
+Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Trait. The ladder runs from 1 at the bottom rung to d12+3 at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
 
-| Proficiency | Dice |
+| Proficiency | Die |
 | --- | --- |
-| Clumsy | d4 |
-| Untrained | d6 |
-| Trained | d8 |
+| Inept | 1 |
+| Untrained | d4 |
+| Novice | d6 |
+| Proficient | d8 |
 | Expert | d10 |
 | Master | d12 |
-| Legendary | d20 |
+| Grandmaster | d12+1 |
+| Champion | d12+2 |
+| Legendary | d12+3 |
+
+Untrained is the rung every Trait starts at and is free; the rung below it is a deliberate weakness and refunds a point.
 
 ---
 
@@ -317,7 +310,7 @@ When attempting an action where the outcome is uncertain, the acting character m
 
 **1\. The Engagement Roll**
 
-The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Trait and rolls the corresponding die (ranging from d4 to d12). This is the **Engagement Roll**.
+The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Trait and rolls the corresponding die (ranging from 1 to d12+3). This is the **Engagement Roll**.
 
 **2\. The Counter Roll**
 
@@ -391,6 +384,14 @@ On your turn you get three actions. By default you have 3 of actions. How much a
 ### Movement
 
 Movement costs one action; it is fully allowed to just keep using actions just to move, however each subsequent movement action costs 1 energy extra (this stacks between turns).So moving 3 times in a row will cost 0 + 1 + 2 = 3 Energy.
+
+### Energy and Recovery
+
+Energy is the resource that using Abilities spends. Each Enactment in an Ability costs 1 Energy, so a full turn of three actions costs roughly 3 Energy, and a Concentration costs a further point of upkeep every round it stays up. Repeated movement in a single stretch also drains Energy as described above.
+
+Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Trait, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
+
+Energy does not come back on its own. On a rest you regain **5 Energy**. That is deliberately less than a single fight consumes, so Energy is a resource to be managed across a whole day rather than reset between encounters. The GM may grant more for an especially long or comfortable rest.
 
 ### Attacking/Healing/Doing
 
@@ -483,11 +484,11 @@ These conditions apply a set effect rather than a trait shift.
 | **Echoed** | Whatever action you took last round will be executed automatically next round. |
 | **Dying** | Your HP went below 0; you are out of combat until revived by an ally. |
 | **Doomed** | You will move to Dying in x turns. |
-| **Invincible** | You cannot be damaged. |
 | **Zombified** | Healing damages instead; Damage heals instead. |
 | **Linked** | You are linked to a Target; what happens to you happens to the linked Target. This links per Trait. |
 | **Incorporeal** | Phase through walls. |
 | **Marked** | Everything that happens to you is buffed or nerfed (pick one). |
+| **Invincible** | You cannot be damaged. |
 
 # abilities
 ## Abilities
@@ -500,7 +501,68 @@ This page will list some predefined abilities that players and DM's can use to c
 
 ### Ability List
 
-## Specialized Abilities 
+| Ability | Type |
+| --- | --- |
+| **Arcane Focus** | concentration |
+| **Arcane Spark** | execution |
+| **Bait and Switch** | execution |
+| **Battle Focus** | execution |
+| **Berserk Surge** | execution |
+| **Bodyguard** | execution |
+| **Caltrops** | execution |
+| **Chain Lightning** | execution |
+| **Creeping Frost** | execution |
+| **Dagger** | execution |
+| **Disarming Strike** | execution |
+| **Entangling Vines** | execution |
+| **Evasive Reflex** | execution |
+| **Field Dressing** | execution |
+| **Flame Burst** | execution |
+| **Frost Lance** | execution |
+| **Gale Step** | execution |
+| **Guarded Stance** | execution |
+| **Hamstring** | execution |
+| **Handful of Sand** | execution |
+| **Healing Light** | execution |
+| **Hex of Ruin** | execution |
+| **Holy Smite** | execution |
+| **Hooked Chain** | execution |
+| **Hunter's Mark** | concentration |
+| **Last Stand** | execution |
+| **Life Tap** | execution |
+| **Longsword** | execution |
+| **Mass Mend** | execution |
+| **Mind Spike** | execution |
+| **Mocking Jeer** | execution |
+| **Overcharge** | execution |
+| **Piercing Shot** | execution |
+| **Poisoned Blade** | execution |
+| **Power Cleave** | execution |
+| **Power Strike** | execution |
+| **Pressure Point** | execution |
+| **Quick Dodge** | reaction |
+| **Quick Jab** | execution |
+| **Rallying Banner** | concentration |
+| **Riposte** | execution |
+| **Sap Strength** | execution |
+| **Second Breath** | execution |
+| **Shield Bash** | execution |
+| **Shield Wall** | concentration |
+| **Shove** | execution |
+| **Sling Stone** | execution |
+| **Smoke Bomb** | execution |
+| **Soul Link** | concentration |
+| **Spellbreaker** | execution |
+| **Staff** | execution |
+| **Stunning Blow** | execution |
+| **Tar Bomb** | execution |
+| **Thunderclap** | execution |
+| **Time Slip** | execution |
+| **Trip Attack** | execution |
+| **Veil of Shadows** | concentration |
+| **War Cry** | execution |
+
+## Specialized Abilities
 
 While the Ability Builder is perfect for creating fireballs, sword strikes, and healing spells using standard Enactments, some concepts are too abstract, vague, or narrative-driven to fit into the Ability Builder system.
 
@@ -508,19 +570,97 @@ Abilities like Message, Mind Reading, or Illusion often lack hard numbers. Prede
 
 ### Specialized Abilities List
 
+Specialized Abilities are still being written. When one is added to the library it appears in the list above alongside the Ability Builder abilities, because both are loaded from the same place.
+
+# packages
+## Packages
+
+## Introduction
+
+A **Package** is a ready-made bundle of character content: a set of Proficiency shifts plus, sometimes, a few Abilities. Importing one applies its shifts to your Traits and copies its Abilities onto your sheet, so you can pick a Class, Race and Background without hand-building everything from scratch.
+
+Packages are a convenience, not a restriction. Everything a Package grants can be bought by hand with Trait Points and Ability Points, and nothing stops you from adjusting a Trait after importing one.
+
+## Identity and Equipment
+
+Packages come in two kinds:
+
+**Identity packages** (Class, Race, Background) describe who your character is. Once chosen they are always applied and cannot be switched off, because they are not something a character puts down.
+
+**Equipment packages** (Items) can be toggled on and off freely. Their Trait shifts apply only while the package is active, which is how a piece of gear that grants a bonus stops granting it once it is dropped, stolen, or broken.
+
+## Budgets and Clamping
+
+A Package's shifts are paid for out of the same Trait Point budget as a manual Proficiency change, so importing one is not free: it spends points, and a Package you cannot afford is refused.
+
+A shift can also run out of ladder. If a Package would push a Trait above the top rung or below the bottom rung, the Trait stops at the end of the ladder and you are warned which Traits were clamped. The import still goes through; you simply do not get the part of the shift that had nowhere to go.
+
+## Available Packages
+
+### Classes
+
+This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
+
+| Name | Description | Trait Shifts | Abilities Granted |
+| --- | --- | --- | --- |
+| **Cleric** | A devoted healer and smiter. Keeps the party upright and the unholy down. | Medicine +1, Wisdom +2 | Healing Light |
+| **Fighter** | A disciplined front-line combatant. Trades blows, holds ground and keeps standing. | Constitution +1, Strength +2 | Power Cleave |
+| **Ranger** | A tracker and marksman. Picks a target, marks it and does not miss twice. | Perception +1, Precision +2 | Piercing Shot, Caltrops |
+| **Rogue** | A precise opportunist. Strikes where it hurts, then is somewhere else. | Stealth +1, Precision +2 | Smoke Bomb, Evasive Reflex |
+| **Wizard** | A studied caster. Reshapes the battlefield with prepared arcane force. | Magic +1, Magic +2 | Frost Lance |
+
+### Races
+
+This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
+
+| Name | Description | Trait Shifts | Abilities Granted |
+| --- | --- | --- | --- |
+| **Dwarf** | Stone-stubborn and hard to move. Dwarves endure what others cannot. | Constitution +1, Crafting +1, HP +1 | Guarded Stance |
+| **Elf** | Long-lived, keen-eyed and attuned to magic. Elves move lightly and see far. | Reflex +1, Magic +1, Perception +1 | Arcane Spark |
+| **Halfling** | Small, quick and impossible to pin down. Halflings slip out of trouble as easily as they find it. | Reflex +1, Stealth +1, Thievery +1 | Evasive Reflex |
+| **Human** | Adaptable and driven. Humans spread everywhere and pick up a little of everything. | People Skill +1, Resources +1, Precision +1 | Quick Dodge |
+| **Orc** | Raw strength and a frightening presence. Orcs end fights by starting them hard. | Intimidate +1, Strength +1, HP +1 | Berserk Surge |
+
+### Backgrounds
+
+This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
+
+| Name | Description | Trait Shifts | Abilities Granted |
+| --- | --- | --- | --- |
+| **Artisan** | A trained trade and a paying clientele. You make things and you know their worth. | Crafting +1, Resources +1 | Field Dressing |
+| **Criminal** | A past best left undescribed. You know locks, fences and when to leave. | Deceive +1, Thievery +1 | Handful of Sand |
+| **Scholar** | Years in libraries and laboratories. You have read about most things at least once. | Knowledge +1, Medicine +1 | Battle Focus |
+| **Soldier** | Drilled in formation fighting. You know how to take an order and shout one. | Athletics +1, Intimidate +1 | War Cry |
+| **Wanderer** | No fixed home, many roads walked. You read weather, terrain and strangers well. | Nature +1, Perception +1 | Second Breath |
+
 # items
 ## Items
 
 Items are physical objects that characters can use to aid them in combat, exploration, or roleplay. They range from simple tools and weapons to Imbued artifacts that hold complex Abilities.
 
-In the Ability Builder, you can often select the **Has item dependency** perk, which reduces the Ability's Add Cost by 1. This means the Ability is physically tied to the item—if the item is dropped, stolen, or broken, the character can no longer use the Ability.
-Item Categories
+In the Ability Builder, you can often select the **Has item dependency** perk, which reduces the Ability's Build Cost. This means the Ability is physically tied to the item: if the item is dropped, stolen, or broken, the character can no longer use the Ability.
 
 ## Item Categories
 
 **Equipment (Weapons & Armor):** Items that grant a passive Die Shift to specific Traits while equipped. For example, a well-crafted sword might grant a +1 Die Shift to Offensive Power rolls, while heavy armor might grant a +1 Die Shift to Defensive Constitution rolls but a -1 Die Shift to Stealth.
 
 **Consumables:** Single-use items like potions, bombs, or rations. These often trigger an Area Interaction or Direct Interaction with a predefined Enactment (like Enact Healing).
+
+## Available Items
+
+Items are Packages, so they can be picked up and put down: their Trait shifts apply only while the item is carried and active. See [Packages](packages.md) for how importing and toggling works.
+
+### Items
+
+These may be picked up and put down freely: the trait shifts apply only while the package is active.
+
+| Name | Description | Trait Shifts | Abilities Granted |
+| --- | --- | --- | --- |
+| **Dagger** | A short concealable blade. Fast in the hand and easy to coat with something nasty. | - | Dagger |
+| **Healer's Kit** | Bandages, salves and a needle. Enough to stop bleeding and steady a shaking hand. | - | Field Dressing, Battle Focus |
+| **Longsword** | A balanced martial blade. Grants a basic swing and a heavy committed strike. | - | Longsword, Power Strike |
+| **Quarterstaff** | A length of hardwood, equally useful for tripping legs and channelling magic. | - | Staff, Trip Attack |
+| **Shield** | A sturdy board of banded wood. Blocks, shoves and occasionally breaks noses. | - | Shield Bash, Quick Dodge |
 
 # leveling
 ## Leveling
@@ -535,47 +675,914 @@ The maximum level a character can reach is Level 10.
 
 Trait Points are used to upgrade your Proficiency Levels in various Traits (e.g., shifting a Trait from Untrained to Trained, or Expert to Master).
 
-### Starting Trait Points
+### Starting and Gaining Points
 
-At Level 1, your base Trait Points are calculated based on the total number of Traits used in your specific campaign setting. To calculate your starting Trait Points, use the following formula:
+Both point pools follow the same rule: you start with a fixed amount at Level 1 and gain a fixed amount for every level after that.
 
-$$TraitPoints=(TraitAmount+2)/3$$
+$$Points = Start + PerLevel \times (Level - 1)$$
 
-For example, if your setting uses the standard 22 Traits, you would receive 8 Trait Points at Level 1:
+For Trait Points that is **13** at Level 1 and **+3** per level thereafter. For Ability Points it is **9** at Level 1 and **+3** per level.
 
-$$(22+2)/3=8$$
+Starting Trait Points are set so a new character can raise their Vital Traits off the bottom rung and still put a handful of Traits into their speciality. The per-level gain is one visible die step plus change, and it matches the Ability Point gain so both halves of your character sheet grow at the same rate.
 
-### Gaining and Refunding Points
+### Refunding Points
 
-By the time you level up, you gain additional Trait Points as outlined in the leveling table below.
-
-You can also dynamically gain Trait Points by lowering your Proficiency. For instance, if you are an Expert in Dexterity but want to balance out your Traits, you can lower the Proficiency to Trained or even Untrained to gain 1 or 2 points, respectively. This means spending points does not lock you into your choices; you can always reallocate them as needed.
-
-## Leveling Table: Trait Points
-
-| Level | Points Gained | Total Trait Points (Standard 22-Trait Setting) |
-| --- | --- | --- |
-| **1** | +0 | 8 |
-| **2** | +1 | 9 |
-| **3** | +1 | 10 |
-| **4** | +1 | 11 |
-| **5** | +2 | 13 |
-| **6** | +1 | 14 |
-| **7** | +1 | 15 |
-| **8** | +1 | 16 |
-| **9** | +1 | 17 |
-| **10** | +2 | 19 |
+You can dynamically gain Trait Points by lowering a Proficiency. For instance, if you are an Expert in a Trait but want to balance things out, you can lower it back toward the starting rung and recover the points you spent. Dropping a Trait *below* the starting rung to Inept even refunds an extra point. Spending points never locks you into your choices; you can always reallocate them.
 
 ## Proficiency Tiers
 
-| Tier | Cost | General Dice | Offense Dice | Defense Dice | HP | Movement | Energy |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Untrained | 1 | <no value> | <no value> | <no value> | 8 | 3 | 5 |
-| Novice | 1 | <no value> | <no value> | <no value> | 12 | 4 | 8 |
-| Proficient | 1 | <no value> | <no value> | <no value> | 16 | 5 | 12 |
-| Expert | 1 | <no value> | <no value> | <no value> | 20 | 6 | 16 |
-| Master | 1 | <no value> | <no value> | <no value> | 24 | 7 | 20 |
-| Legendary | 0 | <no value> | <no value> | <no value> | 28 | 8 | 25 |
+The dice ladder rises by a flat +1 average per rung. The die is capped at d12+3; rungs above that add a flat bonus instead, which keeps high-end rolls from becoming wildly swingy. Untrained is the starting rung and is free. The rung below it refunds a point. HP and Energy climb by 3 per rung and Movement by 1.
+
+| Tier | Cost | Die | HP | Movement | Energy |
+| --- | --- | --- | --- | --- | --- |
+| Inept | 1 | 1 | 7 | 2 | 5 |
+| Untrained | 1 | d4 | 10 | 3 | 8 |
+| Novice | 1 | d6 | 13 | 4 | 11 |
+| Proficient | 1 | d8 | 16 | 5 | 14 |
+| Expert | 1 | d10 | 19 | 6 | 17 |
+| Master | 1 | d12 | 22 | 7 | 20 |
+| Grandmaster | 2 | d12+1 | 25 | 8 | 23 |
+| Champion | 2 | d12+2 | 28 | 9 | 26 |
+| Legendary | 3 | d12+3 | 31 | 10 | 29 |
+
+
+## Leveling Table: Trait Points
+
+| Level | Points Gained | Total Trait Points |
+| --- | --- | --- |
+| **1** | 13 (starting) | 13 |
+| **2** | +3 | 16 |
+| **3** | +3 | 19 |
+| **4** | +3 | 22 |
+| **5** | +3 | 25 |
+| **6** | +3 | 28 |
+| **7** | +3 | 31 |
+| **8** | +3 | 34 |
+| **9** | +3 | 37 |
+| **10** | +3 | 40 |
+
+## Cost and Budget Rules
+
+| Rule | In effect |
+| --- | --- |
+| Build point refunds | Drawbacks refund build points, but never past zero: an ability's total build cost stops at nothing. |
+| Energy cost refunds | Drawbacks refund energy points, but never past zero: an ability's total energy cost stops at nothing. |
+| Skill point budget | A character may not spend more skill points than its level grants; edits and package imports that would overspend are refused. |
+| Maximum level | A character's level is capped at 10. |
+
+# skill-trees
+## Skills Trees
+
+Skill Trees are thematic collections of Abilities, Traits, and Perks. Instead of building Abilities completely from scratch every time, a player can adopt a Skill Tree (e.g., The Pyromancer, The Master Thief, The Telepath).
+
+Skill trees guide character progression by locking powerful, complex Abilities behind foundational ones. This ensures a character naturally grows into a specialized role.
+Rules
+
+*   **Nodes:** A Skill Tree is made up of interconnected Nodes. A Node can be a new Ability, a Perk for an existing Ability, a new Trait, or a flat stat boost (like +Max Energy).
+
+*   **Progression:** You must unlock the prerequisite Node before you can spend Ability Points or Trait Points to unlock the next Node connected to it.
+
+*   **Creating Trees:** GMs and players are encouraged to build custom Skill Trees during character creation by bundling custom-built Abilities and mapping out how they evolve.
+
+# magic-system
+## Magic System
+
+Designing a believable magic system is difficult, especially when the goal is to ground it in a reality that feels internally consistent and understandable.
+
+The goal of the Lettuce magic system is to make interaction with the world feel **systematic rather than mystical**.
+
+While this document refers to a “magic system” for convenience, the world of Lettuce does **not** necessarily recognize these mechanics as magic. Instead, they are understood as natural phenomena that can be observed, measured, and manipulated.
+
+The system is designed so that:
+
+*   Curious players can understand _how_ things work and design effects themselves.
+*   Other players can use abilities without needing to understand the underlying mechanics.
+*   All interactions remain predictable and explainable.
+
+This document explains the foundational concepts of the system and how spells or effects can be constructed within the rules of Lettuce.
+
+:::warning Although this document describes a “magic system”, this does **not** mean the world of Lettuce perceives these effects as magic. :::
+
+---
+
+## What to Discuss
+
+- [ ] Limits
+- [ ] Materials
+- [ ] Body
+- [ ] Passives
+- [ ] Basic spells explained
+- [ ] Interactions
+- [ ] Rituals
+- [ ] Items
+- [ ] Pulse disturbances
+- [ ] Harmonization
+
+---
+
+
+
+Travel by mantles never really goes into a straight line as mantles are just everywhere. 
+
+direction control ideas: 
+ - move mantles out of the way so they cannot act as a condiute
+ - beam forming
+ - modulation 
+
+
+default state, atoms always reform into a default state after concentration is released. If the effect linguars longer it is proportonal to how long it takes to reform to  a default state. There is however a threshold for permanent transmution.
+
+physcial bodies have organs that manage the mantles inside their body. These work in balance, missing one may handicap you, but also won't disable you from interaction with mantles, losing all of them will however. These organs act like muscles so they grow with training. These organs are connected by veins that flow the mantles in the body.
+
+mastering movement inside materials is quite hard. Moving an object in one direction is simple, pull/push. But you can also split the mantles inside the material into groups and control them. This can either be done by parrallel sending of slices or in very quick succession, the latter of which is more inefficient. the more orgens the bette the parrallel sending of slices is. But it still requires training.
+
+## The body
+
+## The Soul 
+
+---
+
+## Mantles
+
+Atoms exist everywhere in the world of Lettuce. Each atom is surrounded by Mantles. Mantles are not bound my an atom and may move between atom of the same type. You can imagine that a piece of wood contains atoms and therefor Mantles. The Mantles inside the wood are free to float around like a gas, they do not have a sense of gravity, but they are bound by that piece of wood and cannot normally leave it. Interacting with those mantles can make the wood do specific things. Pulling all the mantles to one side will make it move to that side for example. Focussing them on one point and shaking them may cause a specific point to burst into flames. 
+
+An Atom that does not contain a Mantle at a given moment is called a dead atom.
+
+---
+
+## Frequencyknot and Mantleveins
+
+To interact with a mantle bodies have evolved. There is an organ called the Frequencyknot. That is connected using Mantelveins. Some bodies have multiple frequencyknot's while others only have one. Without a frequencyknot, interaction is almost impossible.
+
+The frequencyknot's are connected using mantleveins. They make the flow of mantle possible within a body. So even though the body consists out of multiple materials, with mantleveins that is no longer an issue. The most special thing about a mantlevein is that it is one of the rare materials that allows for it's mantles to move about 1cm outside of the it, so a mantle is less contraint.
+
+With the frequencyknot it is possible to generate a slice that can then interact with other mantles.
+
+---
+
+## Slices and profiles
+
+A Profile is a collection of slices. Where each slice represents a component or property of the relevant material. So there is a slice that decides interactions for movement, temperature, atom interaction, size etc... Same materials share the same profile. To give an example, all iron share the same profile, as iron is just a material and not unique. So all iron slices have the same slice that represent temperature. By resonating you can read or modify that slice, heating it up or cooling it down. 
+
+A Slice is a wave with an amplitude, frequency, fluctuation and modulation.
+
+**Amplitude:** decides the range the wave will travel. The higher the Amplitude the further the range.
+**Frequency:** the key of what slice in the profile to target, a frequency of 10Hz might apply movement to atoms. As that slice will resonate when applied
+**Fluctuation:** decides the data or command send to the mantle. 
+**Modulation:** decides the direction in which the slice will travel, this is another sinus applied to the already existing wave.
+
+---
+
+## interaction with mantles and spellcasting
+
+Now that we know what mantles, slices and profiles are, we can focus on interactions between mantles. As stated before, mantles are everywhere, that includes the air. To explain how these interactions work it will be best to use an example of pulling a rock towards yourself.
+
+To interact with a material, you can use the frequencyknot to generate one or multiple slices in a direction. The Mantles in the air will all resonate to that and that is what makes it possilble to pull a rock towards yourself for example. 
+
+To do this you have to generate a Slice that with the instruction that tells the Mantles in the rock to move towards yourself.
+1. To target the correct rock you induce the correct modulation to the slice, this can be done by pointing at it for example.
+2. To make sure the you can reach the targetted rock you Amplify the slice.
+2. To make sure the you target the movement slice of the rock you generate a slice of 10Hz as that falls into the movement range of the profile of the mantles in the rock.
+3. To then make sure you induce the command to move towards yourself you have to apply in the correct fluctuations in the generated slice/wave.
+
+The hard part is getting to know how the material behaves. You can imagine that one of the most studied materials is the air (nitrogen and oxygen). You can imagine that you have to discover the correct fluctuations and slice frequencies to burst air into flames to create a fireball.
+
+Some spend a lot of time studying different materials to become a master, others invest more into general knowledge to be more flexible. 
+
+---
+
+## Signature
+
+Every Aggregate emits a **Signature**. This is a unique and immutable combination of Slices, comparable to a fingerprint.
+
+Signatures are emitted passively and continuously. Because of this, they are sometimes referred to as **send profiles**.
+
+---
+
+---
+
+## Souls and Spirits
+
+## Imbuing
+
+## Cursed
+
+_(To be expanded)_
+
+# imbuing
+## Imbuing
+
+## Imbuing
+
+**Imbuing** is the act of permanently altering an object by imprinting it with a **Resonance Signature**.
+
+Unlike temporary interactions or active effects, imbuing causes an object to **retain resonance characteristics indefinitely**. Once imbued, an object no longer behaves purely according to its material Response Profile — it becomes a hybrid, influenced by both its material composition and the Resonance Signature embedded within it.
+
+Imbuing is not a spell, ritual, or momentary act. It is a **process of resonance adaptation**.
+
+---
+
+### Nature of Imbuing
+
+When an object is imbued, its surrounding **Mantles** partially realign to respond to a foreign Resonance Signature. Over time, the object begins to behave as if that signature were a natural part of its structure.
+
+This can result in:
+
+*   Enhanced properties
+*   Altered behavior
+*   Structural reinforcement
+*   Unintended degradation or instability
+
+Importantly:
+
+> An imbued object is not “powered” by an Aggregate.  
+> It has been **permanently reclassified by the world**.
+
+---
+
+### Examples of Imbuing
+
+*   **A sword imbued with a fire‑aligned Resonance Signature**  
+    The blade resonates with heat‑related Resonance Slices, causing it to ignite, scorch, or burn on impact.
+*   **A stone imbued to increase density**  
+    The stone’s Mantles respond as if the material were more massive than it physically is, increasing weight and resistance without changing volume.
+*   **A bow or arrow imbued for durability**  
+    The object’s Mantles reinforce structural integrity, reducing wear, splintering, or deformation under repeated stress.
+
+Not all imbuing results are beneficial. Poor alignment between the Resonance Signature and the material’s Response Profile can weaken an object or cause unpredictable behavior.
+
+---
+
+### The Process of Imbuing
+
+Imbuing is **slow and demanding**.
+
+To successfully imbue an object, a Aggregate must:
+
+*   Sustain a stable Resonance Signature over an extended period
+*   Maintain precise alignment with the object’s Response Profile
+*   Gradually force the object’s Mantles to adapt
+
+This process often takes:
+
+*   Hours, days, or weeks of continuous work
+*   Specialized environments
+*   Significant mental and physical strain
+
+Imbuing cannot be rushed. Attempts to accelerate the process frequently result in flawed or unstable imprints.
+
+---
+
+### Accidental Imbuing
+
+Objects can also become imbued **without intent**.
+
+When an object is used repeatedly by the same individual over a long period, it may begin to absorb aspects of that individual’s Resonance Signature. This is especially common when:
+
+*   The object is in constant physical contact
+*   The user experiences strong emotional states while using it
+*   The user’s Resonance Signature is particularly intense or unstable
+
+Such imbuing occurs extremely slowly, often over years.
+
+Examples include:
+
+*   A weapon becoming unnaturally reliable in the hands of its long‑time owner
+*   Armor subtly adapting to its wearer’s movement patterns
+*   Tools behaving differently depending on who uses them
+
+Accidentally imbued objects are often mistaken for legendary artifacts, despite having no intentional design behind them.
+
+---
+
+### Limits and Risks
+
+Imbuing has inherent limitations.
+
+*   An object can only sustain **so much resonance distortion** before becoming unstable
+*   Multiple incompatible Resonance Signatures may cause interference
+*   Some materials resist imbuing entirely
+
+In rare cases, an imbued object may begin to **feed back** into the Aggregate that created it, subtly influencing the individual’s Resonance Signature in return.
+
+---
+
+### Cultural and Scientific Views
+
+From a scientific perspective, imbuing is understood as **long‑term resonance conditioning**.
+
+Culturally, however:
+
+*   Imbued objects are often mythologized
+*   Ownership may be associated with destiny or fate
+*   Accidental imbuing is frequently misinterpreted as divine intervention
+
+As with curses, the disconnect between understanding and perception plays a significant role in how imbued objects are treated in the world of SAS.
+
+---
+
+### Relationship to Curses
+
+Imbuing and curses are closely related phenomena.
+
+A curse alters how the world responds to a Aggregate.  
+Imbuing alters how the world responds to an object.
+
+Both arise from:
+
+*   Resonance misalignment
+*   Long‑term exposure
+*   Instability or over‑resonance
+
+In some cases, an improperly imbued object may act as a **vector for curse‑like effects**, particularly when used extensively by the same individual.
+
+---
+
+# curses
+## Curses
+
+In the world of SAS, a **curse is not a supernatural judgment or imposed effect**.  
+A curse is a **natural abnormality** — comparable to a birth defect, genetic disorder, chronic illness, or degenerative disease.
+
+Curses arise when a Aggregate’s **Resonance Signature** deviates from what is considered stable or typical. This deviation can be congenital, acquired, progressive, or situational, and may cause the Aggregate to interact with the world in **unexpected or harmful ways**.
+
+From an in‑world perspective, curses are not magic — they are **faulty resonance behavior**.
+
+---
+
+## Origin of Curses
+
+A curse occurs when one or more of the following conditions apply:
+
+*   A Resonance Signature is **unstable**, fluctuating between Resonance Slices
+*   A Resonance Signature **overlaps too strongly** with a material’s Response Profile
+*   A Resonance Signature contains **fractured or noisy slices**
+*   A Resonance Signature resonates with **unintended domains**
+
+These abnormalities cause Mantles in the surrounding environment to react in ways that were not consciously intended by the Aggregate.
+
+Importantly:
+
+> A cursed individual is not actively causing the effect —  
+> the effect happens _because the world responds to them differently_.
+
+---
+
+## Types of Curses
+
+Curses can be broadly categorized by how they manifest.
+
+### Unstable Signature Curses
+
+Some Aggregates emit a Resonance Signature that is **inconsistent or noisy**.  
+Their Resonance Slices fluctuate unpredictably, causing subtle but persistent interference with nearby systems.
+
+**Example: Curse of Misfortune**
+
+An individual believed to be “unlucky” may have an unstable Resonance Signature that interferes with probability‑sensitive interactions.
+
+*   Tools malfunction more often
+*   Structures fail at inopportune moments
+*   Minor accidents cluster around the individual
+
+There is no intent, malice, or conscious control — only resonance instability.
+
+---
+
+### Over‑Resonant Curses
+
+In some cases, a Aggregate’s Resonance Signature resonates **too strongly** with a specific Response Profile.
+
+**Example: Petrification**
+
+If a Aggregate’s Resonance Signature aligns excessively with the Response Profile of stone, the Mantles surrounding the individual’s body may begin to respond as if the body itself were stone.
+
+This can manifest as:
+
+*   Gradual stiffening of tissue
+*   Loss of mobility
+*   Progressive mineralization of skin or bone
+
+From the outside, this appears as a curse.  
+From a resonance perspective, it is a **misclassification of the body by the environment**.
+
+---
+
+### Degenerative Curses
+
+Some curses worsen over time as the Aggregate’s Resonance Signature slowly drifts further from stability.
+
+These curses may:
+
+*   Begin with mild symptoms
+*   Escalate under stress
+*   Be accelerated by repeated resonance exposure
+
+Degenerative curses are often confused with traditional diseases, but differ in that they originate from **Aggregate‑level resonance**, not physical pathogens.
+
+---
+
+### Reactive Curses
+
+Reactive curses only manifest under specific conditions.
+
+For example:
+
+*   A Aggregate whose Resonance Signature reacts violently to heat
+*   A Aggregate that destabilizes near certain materials
+*   A Aggregate that disrupts other Aggregates in close proximity
+
+Such curses may remain dormant for long periods and only activate when specific Resonance Slices are stimulated.
+
+---
+
+## Curses Are Not Moral
+
+In SAS, curses carry **no moral weight**.
+
+They are:
+
+*   Not punishments
+*   Not signs of corruption
+*   Not inherently evil
+
+A cursed individual is simply someone whose Resonance Signature does not align cleanly with the surrounding world.
+
+As a result:
+
+*   Curses cannot be “broken” through willpower
+*   Faith has no inherent effect
+*   Understanding and intervention are required
+
+---
+
+## Treatment and Mitigation
+
+Curses cannot always be removed, but they can often be **managed**.
+
+Common approaches include:
+
+*   Stabilizing a Aggregate’s Resonance Signature
+*   Dampening specific Resonance Slices
+*   Introducing controlled interference to counteract harmful alignment
+*   Isolating the Aggregate from triggering Response Profiles
+
+In extreme cases, partial suppression of a Aggregate’s Resonance Signature may be required — often at great personal cost.
+
+---
+
+## Cultural Interpretation
+
+While scholars and engineers understand curses as resonance phenomena, most societies do not.
+
+As a result:
+
+*   Cursed individuals may be feared or ostracized
+*   Superstitions arise around certain manifestations
+*   Curses are often mythologized or ritualized
+
+This disconnect between understanding and perception is one of the primary sources of social tension surrounding curses in SAS.
+
+---
+
+## Summary
+
+A curse is not an external force acting upon a person.
+
+A curse is:
+
+> **The world responding honestly to a flawed Resonance Signature.**
+
+# world
+## World
+
+## Universes
+
+Reality consists of **multiple universes**.
+
+Each universe appears to be a globe of infinite size. This appearance is **not caused by physical boundaries**, but by large‑scale **light bending** driven by resonance interactions between matter, Mantles, and the surrounding medium.
+
+There is no enclosing shell, no inner surface, and no central point.
+
+The universe only _appears_ to be a globe.
+
+---
+
+## Apparent Geometry vs True Geometry
+
+Light does not travel in perfectly straight lines over extreme distances. Instead, it bends gradually due to continuous resonance interactions.
+
+This causes:
+
+*   Distant objects to appear overhead
+*   The sky to appear dome‑like
+*   Space to feel enclosed
+
+In reality, all civilizations exist on the **outside** of an infinitely large sphere.
+
+Each universe is best described as a **sphere of infinite radius**:
+
+*   Locally flat everywhere
+*   Globally unbounded
+*   Without edges, ceilings, or walls
+
+The spherical appearance is an optical effect, not a physical structure.
+
+---
+
+## Islands (Worlds)
+
+Within each universe exist massive structures known as **Islands**.
+
+An Island:
+
+*   Is comparable in size to a planet
+*   Is considered a complete world by its inhabitants
+*   Exists on the surface of the universe
+
+Because the universe is infinitely large, the surface of an Island appears perfectly flat. There is no visible curvature or horizon drop.
+
+---
+
+## Vertical Space: Infinite Ascent
+
+Traveling **upward**, away from the surface of an Island, has no finite limit.
+
+There is:
+
+*   No ceiling
+*   No boundary
+*   No enclosing shell
+
+An individual may continue upward indefinitely.
+
+However, **eventually**, far beyond any finite distance, another universe (another infinite sphere) exists above.
+
+The distance required to reach another universe is **infinite**.
+
+This means:
+
+*   At or below the speed of light, another universe can never be reached
+*   Only movement beyond light‑speed could theoretically bridge this distance
+*   For all practical purposes, upward travel leads forever into empty space
+
+---
+
+## Lateral Space: Reaching Other Worlds
+
+Movement **sideways**, relative to an Island’s surface, follows the surface of the universe.
+
+By traveling laterally for a sufficient amount of time, one may eventually reach another Island.
+
+Distances between Islands vary:
+
+*   Some are separated by immense distances, comparable to interplanetary travel
+*   Others may be relatively close, similar to the distance between a planet and its moon
+
+Because of this:
+
+*   Some Islands appear as bright stars
+*   Others appear large and distinct in the sky
+*   Rarely, multiple Islands may be visible as clearly separate bodies
+
+---
+
+## Inter‑Island Medium
+
+The space between Islands is **not empty**.
+
+Depending on the universe, this medium may consist of:
+
+*   Water
+*   Sand
+*   Dust
+*   Other particulate or fluid matter
+
+This medium exists **along the surface** of the universe.
+
+Vertical travel moves away from all Islands.  
+Lateral travel moves between Islands.
+
+---
+
+## The Sky and the Stars
+
+The sky is a **misleading representation of space**.
+
+Stars are not distant points of light in a void. They are:
+
+*   Other Islands
+*   Other worlds
+*   Other planets
+
+Light bending causes laterally distant Islands to appear overhead instead of on the horizon.
+
+Navigation by sight alone is unreliable.
+
+---
+
+## Suns and Light‑Islands
+
+A “sun” is an Island whose **Response Profile causes it to emit light**.
+
+Light emission is not permanent.
+
+Due to the properties of the materials composing these light‑Islands:
+
+*   Resonance alignment degrades
+*   Mantles lose coherence
+*   Light emission weakens and ceases
+
+The sun does not set.
+
+**The sun turns off.**
+
+After sufficient resonance realignment, the light‑Island may emit again, creating a new day.
+
+---
+
+## Motion, Interaction, and Pseudo‑Gravity
+
+Traditional gravity does not govern the movement of Islands.
+
+Instead, **Response Profiles act as the primary organizing force**.
+
+Each Island’s materials interact resonantly with:
+
+*   The surrounding medium
+*   Nearby Islands
+*   Large‑scale resonance gradients
+
+These interactions function as a form of **pseudo‑gravity**:
+
+*   Islands are guided into stable configurations
+*   Close Islands tend to avoid destructive trajectories
+*   Long‑term balance is maintained through resonance alignment
+
+---
+
+## Island Collisions and Merging
+
+Although rare, **Island collisions are possible**.
+
+When two Islands approach one another:
+
+*   Their Response Profiles begin to interact
+*   Materials slowly transmute at the boundary
+*   The Islands tend to **merge rather than collide catastrophically**
+
+In most cases, this merging is gradual and non‑violent, forming:
+
+*   Larger composite Islands
+*   Complex layered worlds
+*   Shared ecosystems over long timescales
+
+However, catastrophic outcomes are possible.
+
+If a **light‑emitting Island (sun)** merges with a living world:
+
+*   Resonance overload may occur
+*   Ecosystems may collapse
+*   The event may resemble an apocalyptic catastrophe
+
+---
+
+## Motion Through Transmutation
+
+All matter continuously interacts via resonance.
+
+Stone interacts with air.  
+Air interacts with stone.
+
+Over immense spans of time, these interactions cause **gradual transmutation**.
+
+To preserve balance:
+
+*   Some matter converts into other forms
+*   Equivalent matter elsewhere converts back
+
+This slow, distributed process creates the **illusion of motion**:
+
+*   Islands appear to drift
+*   Suns appear to move
+*   Stars shift position
+
+Nothing truly travels through space.
+
+**Space itself is re‑categorizing matter.**
+
+---
+
+## Accelerated Change and Imbuing
+
+Some materials have closely aligned Response Profiles and transmute more easily.
+
+This process can be **artificially accelerated** through **Imbuing**.
+
+By imprinting a Resonance Signature onto an object or region:
+
+*   Certain transmutation pathways are favored
+*   Local equilibrium shifts
+*   Changes that would normally take millennia can occur rapidly
+
+Imbuing does not violate the laws of reality.
+
+It forces resonance interactions to occur **faster than intended**.
+
+---
+
+## Consequences
+
+This structure of reality implies several truths:
+
+*   Worlds are not eternal
+*   Islands may slowly merge or drift apart
+*   Space travel is possible, but slow and dangerous
+*   Ancient composite Islands may exist
+*   Legends of ascension may describe attempts to reach other universes
+*   Catastrophic events are resonance failures, not random disasters
+
+---
+
+## Summary
+
+The universe is not a globe.
+
+It only **appears** to be one.
+
+You live on the outside of an infinite sphere shaped by resonance and curved light. You can ascend forever, never reaching a boundary. Other worlds lie not above you, but far to the side.
+
+Worlds do not orbit.
+
+Worlds **interact**, **align**, and sometimes **become one**.
+
+# culture
+## Culture
+
+## The Accepted Worldview
+
+For most civilizations, the world is believed to be **flat and enclosed**.
+
+The sky is perceived as a dome.  
+Stars are thought to be distant lights embedded in that dome.  
+The sun is believed to move across the world and disappear beyond its edge or behind a barrier.
+
+This belief is reinforced by daily experience:
+
+*   The ground appears flat
+*   There is no visible curvature
+*   The sky curves overhead
+*   No edge of the world can be reached
+
+As a result, the idea that the universe is anything other than a flat, enclosed world is considered **dangerous nonsense**.
+
+---
+
+## The Heresy of Curvature
+
+At various points in history, individuals and small groups proposed an alternative idea:
+
+> That the world is not flat,  
+> that it does not exist _inside_ a globe,  
+> but rather on the **outside of an infinite sphere**.
+
+They claimed:
+
+*   The sky only _appears_ curved because of light bending
+*   Stars are other worlds, not lights
+*   There is no ceiling above the world
+*   Traveling upward never ends
+*   Other worlds can only be reached sideways
+
+These claims were met with hostility.
+
+To most cultures, they sounded absurd — or worse, destabilizing.
+
+---
+
+## Social Response and Suppression
+
+Those who argued that the world curves, or that the universe is a sphere rather than a globe, were often labeled as:
+
+*   Liars
+*   Madmen
+*   Blasphemers
+*   Enemies of social order
+
+In many societies:
+
+*   Their teachings were banned
+*   Their writings were destroyed
+*   Their gatherings were broken up
+*   Their voices were silenced
+
+The idea that the world “curves away beneath your feet” was seen as an attack on common sense, tradition, and authority.
+
+In extreme cases, speaking openly about curvature or infinite ascent was punishable by exile, imprisonment, or death.
+
+---
+
+## The Reason for Fear
+
+This suppression was not only ideological — it was **practical**.
+
+If the world had no ceiling:
+
+*   Then gods did not live above it
+*   Then authority was not anchored to the sky
+*   Then the universe was not designed _for_ the people living in it
+
+If other worlds existed:
+
+*   Then isolation was a lie
+*   Then myths became geography
+*   Then power structures based on uniqueness collapsed
+
+The truth was destabilizing.
+
+---
+
+## Cultural Myths and Distortions
+
+Over time, suppressed ideas resurfaced in distorted forms:
+
+*   Legends of “endless ascent”
+*   Myths of people who climbed forever and vanished
+*   Stories of forbidden heights
+*   Religious tales of souls ascending beyond creation
+
+These stories were tolerated as metaphor, but not as fact.
+
+The truth survived only in fragments.
+
+---
+
+## The Eventual Discovery
+
+Eventually, knowledge advanced.
+
+Through careful observation, experimentation, and resonance science, it became undeniable that:
+
+*   Light bends over distance
+*   The sky is an illusion
+*   No ceiling exists
+*   Upward travel never returns
+*   Lateral travel can reach other Islands
+
+What had once been heresy became **measurable reality**.
+
+The universe was proven to be a sphere of infinite size — not a globe containing the world, but a surface upon which the world rests.
+
+---
+
+## Cultural Fallout
+
+The revelation caused immense cultural shock.
+
+Some societies:
+
+*   Rewrote history
+*   Claimed the knowledge had always been known
+*   Reframed ancient myths as intentional allegory
+
+Others collapsed under the weight of the truth.
+
+Institutions built on the enclosed‑world model lost legitimacy. Religions fractured. Philosophies rewrote themselves.
+
+Even after proof, many refused to accept it.
+
+---
+
+## Modern Attitudes
+
+In the present age:
+
+*   Some cultures accept the true structure of reality
+*   Others acknowledge it academically but ignore it culturally
+*   A few still deny it entirely
+
+Belief in a flat, enclosed world persists not because it is correct, but because it is **comforting**.
+
+Knowing the truth means accepting that:
+
+*   The universe has no top
+*   The world is not central
+*   You are not contained
+*   You are not protected
+
+---
+
+## Summary
+
+For most of history, people believed the world was flat and enclosed.
+
+Those who claimed otherwise were silenced.
+
+Only much later was the truth discovered:
+
+The world does not sit _inside_ a globe.
+
+It lies on the **outside of an infinite sphere**, beneath a sky that lies, in a universe far larger — and far less comforting — than anyone was prepared to accept.
 
 # cheat-sheet
 ## Cheat Sheet
@@ -669,617 +1676,12 @@ Let's say you want to hit someone with a an **Damage Enactment**. You first chec
 
 ## Additional Enactments
 
-| Build Cost | Energy Cost | Description |
-| --- | --- | --- |
-| 0 | 0 | Adding an additional Enactment beyond the first |
-
-# Ability Builder Configuration
-
-## Overview
-
-The Ability Builder loads its default rules from the split YAML directory `config/ability-builder/`. Set `ABILITY_BUILDER_CONFIG` to point at another config directory or a legacy single YAML file.
-
-The split directory is loaded into `AbilityBuilderConfig` from these section files:
-
-- `general.yaml`
-- `file_order.yaml`
-- `ability_types.yaml`
-- `enactments.yaml`
-- `interactions.yaml`
-- `proficiencies.yaml`
-- `traits.yaml`
-- `leveling.yaml`
-- `states.yaml`
-
-Split config loading is strict: unknown YAML keys are rejected. Keep examples and edits aligned with the schema names exactly.
-
-Legacy single-file configs, such as `config/dnd.yaml` and `config/pathfinder2e.yaml`, are still supported. When a config section has no generic `fields` schema, the system falls back to older hardcoded cost paths for that section.
-
-## File-by-file reference
-
-### `general.yaml`
-
-Controls root metadata and global defaults:
-
-- `version`
-- `profile_id`
-- `combat.actions.amount`
-- `additional_enactment`
-- `dice.damage`
-- `dice.generic`
-- `validations`
-- generic validation `fields`
-
-Example:
-
-```yaml
-version: 1
-profile_id: ability-builder
-combat:
-  actions:
-    amount: 3
-additional_enactment:
-  add_cost: 1
-  energy_cost: 1
-  description: "Adding an additional Enactment beyond the first"
-```
-
-### `file_order.yaml`
-
-Controls the order in which Markdown files under `./docs/` are appended to generated output.
-
-```yaml
-file_order:
-  - ./docs/modules/ability-builder/introduction.md
-  - ./docs/modules/ability-builder/guide.md
-```
-
-The list must be exhaustive: every `.md` file under `./docs/` must appear exactly once.
-
-### `ability_types.yaml`
-
-Defines ability type display names, descriptions, base energy/action values, legacy cost settings, compatible enactments, and generic `fields` for Execution, Reaction, Phase, Minion, Preparation, Concentration, and Passive.
-
-Example:
-
-```yaml
-ability_types:
-  execution:
-    name: "Execution"
-    description: "Performed instantly during a character's turn."
-    base_energy: 3
-    base_action: 2
-    compatible_enactments:
-      - Enact Damage
-      - Enact Healing
-    fields:
-      - key: item_dep
-        label: "Has Item Dependency"
-        type: checkbox
-        cost:
-          add_cost: -1
-          energy_cost: 0
-```
-
-### `enactments.yaml`
-
-Defines enactment type names, descriptions, base costs, legacy cost settings, and generic `fields` for Enact Damage, Healing, Movement, Proficiency Shift, Persistent Effect, State, and Negation.
-
-Example:
-
-```yaml
-enactments:
-  damage:
-    type: "Enact Damage"
-    description: "Inflicts damage to a target."
-    base_cost:
-      add_cost: 2
-      energy_cost: 1
-```
-
-### `interactions.yaml`
-
-Defines interaction type names, descriptions, base costs, legacy cost settings, and generic `fields` for Self, Direct, Ranged, Area, and Area of Effect.
-
-Example:
-
-```yaml
-interactions:
-  direct:
-    type: "Direct"
-    description: "Affects a single target within 1m."
-    default_range: 1
-    default_targets: 1
-    base_cost:
-      add_cost: 0
-      energy_cost: 0
-```
-
-### `traits.yaml`
-
-Provides trait lists used by option sources.
-
-```yaml
-traits:
-  general:
-    - Strength
-    - Dexterity
-  offense:
-    - Precision
-  defense:
-    - Reflex
-  vital:
-    - HP
-```
-
-### `proficiencies.yaml`
-
-Defines proficiency tiers, point cost, dice per category, and vital values.
-
-```yaml
-proficiencies:
-  - id: trained
-    name: "Trained"
-    cost: 1
-    dice:
-      general: "d8"
-      offense: "d8"
-      defense: "d8"
-    vitals:
-      hp: 16
-      movement: 5
-      energy: 12
-```
-
-### `leveling.yaml`
-
-Defines trait point and ability point progression.
-
-```yaml
-leveling:
-  max_level: 10
-  trait_points:
-    standard_trait_count: 22
-    starting_formula: "(trait_count + 2) / 3"
-    levels:
-      - level: 1
-        points_gained: 0
-        total: 8
-```
-
-### `states.yaml`
-
-Defines the Enact State data set:
-
-- `additional_state`: surcharge for each selected state after the first.
-- `general_states`: flexible shift states with min/max bounds and per-shift cost.
-- `specific_states`: fixed-cost named states.
-
-```yaml
-additional_state:
-  add_cost: 1
-  energy_cost: 0
-
-general_states:
-  - id: encouraged
-    name: "Encouraged"
-    description: "Positive trait shifts"
-    min_shift: 1
-    max_shift: 6
-    shift_cost:
-      add_cost: 2
-      energy_cost: 1
-```
-
-## Generic field schema
-
-Generic fields appear under `fields` or `row_fields`. Supported `FieldConfig` keys are:
-
-| Key | Purpose |
-| --- | --- |
-| `key` | Stable submitted field key. This is persisted in generic field maps. |
-| `label` | UI label. |
-| `type` | Field type: `checkbox`, `dropdown`, `free_text`, `free_number`, `solutions`, or `states`. |
-| `cost` | Field-level `add_cost` / `energy_cost`. |
-| `options` | Inline dropdown options. |
-| `options_source` | Dynamic option source name resolved by the browser. |
-| `default` | Default submitted/display value. |
-| `min` | Minimum numeric value. |
-| `max` | Maximum numeric value. |
-| `step` | Numeric increment size. Defaults to `1` for cost calculation when omitted. |
-| `rounding` | Optional step rounding: `ceil` or `floor`. |
-| `per_step` | `increase` / `decrease` costs for `free_number` deltas. |
-| `default_count` | Default row count for repeatable fields. |
-| `per_item` | `increase` / `decrease` costs for repeatable row count deltas. |
-| `export` | Export mapping with `key`, optional `suffix`, and `omit_when_default`. |
-| `row_fields` | Sub-fields used by `solutions` and `states` rows. |
-| `stores_to` | Maps generic values to typed model fields for export compatibility. |
-| `visibility_when` | Controlling sibling field key. |
-| `show_when` | Required controlling value for visibility. |
-
-`FieldOption` supports `value`, `label`, optional `cost`, and optional child `fields`. `CostDefinition` supports `add_cost`, `energy_cost`, optional `description`, and optional `step`.
-
-## Supported field types
-
-### `checkbox`
-
-Charges `cost` only when checked.
-
-```yaml
-- key: always
-  label: "Will always resolve"
-  type: checkbox
-  cost:
-    add_cost: 5
-    energy_cost: 3
-```
-
-### `dropdown`
-
-A dropdown can use inline `options` or an `options_source`. Do not mix both on the same field.
-
-A field-level `cost` is charged when any non-empty option is selected:
-
-```yaml
-- key: offense
-  label: "Offensive Trait (extra die)"
-  type: dropdown
-  options_source: traits_offense
-  cost:
-    add_cost: 4
-    energy_cost: 2
-```
-
-Inline options can carry per-option cost:
-
-```yaml
-- key: shift_dir
-  label: "Direction"
-  type: dropdown
-  options:
-    - value: UP
-      label: "UP"
-      cost:
-        add_cost: 0
-        energy_cost: 0
-    - value: DOWN
-      label: "DOWN"
-      cost:
-        add_cost: 0
-        energy_cost: 0
-```
-
-### `free_text`
-
-Stores text and has no direct cost.
-
-```yaml
-- key: other
-  label: "Other Roll Text"
-  type: free_text
-  visibility_when: source
-  show_when: other
-```
-
-### `free_number`
-
-Uses `default`, `min`, `max`, `step`, optional `rounding`, and optional `per_step`.
-
-```yaml
-- key: range
-  label: "Range"
-  type: free_number
-  default: 0
-  min: 0
-  max: 10
-  step: 2
-  rounding: ceil
-  per_step:
-    increase:
-      add_cost: 1
-      energy_cost: 0
-```
-
-For values above `default`, `per_step.increase` is multiplied by the number of steps. For values below `default`, `per_step.decrease` is multiplied by the absolute number of steps. `rounding: ceil` rounds positive partial steps up; `rounding: floor` rounds down through integer division.
-
-### `solutions`
-
-Repeatable row field. The form submits parallel arrays named `<field>__<subfield>`, and the server validates/evaluates each row using `row_fields`.
-
-Blank rows are ignored before `per_item` calculation. A `default` value can seed initial rows; when it is an array of objects with keys matching `row_fields`, each object populates one row:
-
-```yaml
-- key: counter_trait
-  label: "Counter Trait"
-  type: solutions
-  default_count: 2
-  default:
-    - type: defense
-      value: Reflex
-    - type: defense
-      value: Constitution
-  options_source: traits_all
-  row_fields:
-    - key: type
-      label: "Counter Type"
-      type: dropdown
-      default: defense
-      options:
-        - value: defense
-          label: "Defensive Trait"
-          cost:
-            add_cost: 0
-            energy_cost: 0
-        - value: general
-          label: "General Trait"
-          cost:
-            add_cost: 4
-            energy_cost: 0
-        - value: offense
-          label: "Offensive Trait"
-          cost:
-            add_cost: 4
-            energy_cost: 0
-        - value: previous
-          label: "Use result of previous"
-          cost:
-            add_cost: 3
-            energy_cost: 1
-    - key: value
-      label: "Counter Trait"
-      type: dropdown
-      options_source: traits_all
-  per_item:
-    increase:
-      add_cost: 0
-      energy_cost: 0
-    decrease:
-      add_cost: 3
-      energy_cost: 1
-```
-
-Add/remove buttons on a `solutions` field always add or remove exactly one row at a time. `default_count` controls how many rows are shown initially.
-
-### `states`
-
-Repeatable Enact State rows backed by `states.yaml`. Blank rows are ignored; partially filled rows are invalid.
-
-```yaml
-- key: states
-  label: "States"
-  type: states
-  default_count: 1
-  row_fields:
-    - key: state_kind
-      label: "State Type"
-      type: dropdown
-      default: ""
-      options:
-        - value: specific
-          label: "Specific State"
-          cost:
-            add_cost: 0
-            energy_cost: 0
-        - value: general
-          label: "General State (shift)"
-          cost:
-            add_cost: 0
-            energy_cost: 0
-    - key: specific_state
-      label: "Specific State"
-      type: dropdown
-      options_source: states_specific
-      visibility_when: state_kind
-      show_when: specific
-    - key: general_state
-      label: "General State"
-      type: dropdown
-      options_source: states_general
-      visibility_when: state_kind
-      show_when: general
-    - key: shift_amount
-      label: "Shift Amount"
-      type: free_number
-      default: 1
-      step: 1
-      visibility_when: state_kind
-      show_when: general
-```
-
-## Cost evaluation rules
-
-Cost calculation is server-authoritative:
-
-- The browser mirrors the calculation for live feedback only.
-- The server recomputes costs on save.
-- Schema-backed cards do not trust hidden build/cast values from the form.
-- Legacy no-schema paths still use submitted build/cast fallback behavior.
-
-Rules:
-
-- Enactments and interactions start from `base_cost`.
-- The first enactment added to an ability is free: its component `base_cost` is waived, so adding the first enactment costs no build or energy. Field-driven costs on that first enactment (checkboxes, dropdowns, numbers, states, etc.) still apply normally.
-- Each enactment beyond the first pays its full `base_cost` plus the `additional_enactment` surcharge from `general.yaml`.
-- Ability types start from `base_energy` and `base_action` where applicable.
-
-- `checkbox` cost applies only when checked.
-- `dropdown` field-level `cost` applies when the selected value is non-empty.
-- Inline dropdown option `cost` also applies for the selected option.
-- `free_number` applies `per_step.increase` or `per_step.decrease` from the configured `default`.
-- `rounding: ceil` rounds positive partial steps up; `rounding: floor` rounds down.
-- Enact State adds specific/general state row costs from `states.yaml` plus `additional_state` once per selected state after the first.
-
-Example: this Ranged field charges `+1` build for every full 2m above 10m and floors partial steps.
-
-```yaml
-- key: range
-  label: "Range"
-  type: free_number
-  default: 10
-  min: 10
-  max: 20
-  step: 2
-  rounding: floor
-  per_step:
-    increase:
-      add_cost: 1
-      energy_cost: 0
-    decrease:
-      add_cost: 0
-      energy_cost: 0
-```
-
-## Visibility rules
-
-`visibility_when` references another field's `key`. The field is active only when that controlling value equals `show_when`. Hidden/inactive fields do not contribute cost.
-
-For checkboxes, the submitted checked value is the string `"true"`, not `"on"`.
-
-```yaml
-- key: item_dep
-  label: "Has Item Dependency"
-  type: checkbox
-  cost:
-    add_cost: -1
-    energy_cost: 0
-- key: item_name
-  label: "Item Name"
-  type: free_text
-  visibility_when: item_dep
-  show_when: "true"
-```
-
-Dropdown-controlled visibility:
-
-```yaml
-- key: source_trait
-  label: "Trait"
-  type: dropdown
-  options_source: traits_offense
-  visibility_when: source
-  show_when: trait
-```
-
-## Default-driven visibility
-
-When a controlling field has no submitted value, `visibility_when` falls back to that field's configured `default`. This ensures dependent fields become visible as soon as the default is active, without requiring an explicit user selection first.
-
-```yaml
-- key: engage_mode
-  label: "Engage Roll Type"
-  type: dropdown
-  default: trait
-  options:
-    - value: trait
-      label: "Trait Roll"
-- key: engage_trait
-  label: "Trait"
-  type: dropdown
-  options_source: traits_all
-  visibility_when: engage_mode
-  show_when: trait
-```
-
-With the default above, `engage_trait` is visible immediately when the card renders.
-
-## Trait dropdown grouping and filtering
-
-Dropdowns backed by `traits_general`, `traits_offense`, `traits_defense`, or `traits_all` are rendered as grouped `<optgroup>` lists by category.
-
-For `solutions` rows that include a `type` field (for example `counter_trait`), the `value` dropdown is filtered to traits of the selected type. When the type is empty or `previous`, all traits are shown grouped.
-
-## Option sources
-
-Option sources are resolved in `static/js/builder.js`. Adding a new source name requires a JavaScript mapping.
-
-| Source | Resolves to |
-| --- | --- |
-| `traits_general` | `D.generalTraits` from `traits.general` |
-| `traits_offense` | `D.offenseTraits` from `traits.offense` |
-| `traits_defense` | `D.defenseTraits` from `traits.defense` |
-| `traits_all` | General + offense + defense traits |
-| `dice_damage` | `D.damageDiceOptions` from `dice.damage` |
-| `dice_generic` | `D.genericDieOptions` from `dice.generic` |
-| `states_general` | `C.states.general_states` |
-| `states_specific` | `C.states.specific_states` |
-| `directions_all` | `D.directionOptions` |
-| `directions` | `D.directionOptions` |
-| `shift_directions` | `D.shiftDirectionOptions` |
-| `trigger_timings` | `D.triggerTimings` |
-| `aoe_trigger_timings` | `D.aoeTriggerTimings` |
-| `knockout_options` | `D.knockoutOptions` |
-| `reaction_triggers` | `D.reactionTriggers` |
-| `ability_types` | `D.abilityTypes` |
-| `enactment_types` | `D.allEnactmentTypes` |
-| `interaction_types` | `D.interactionTypes` |
-
-## States configuration
-
-Specific states have fixed `add_cost` and `energy_cost`:
-
-```yaml
-specific_states:
-  - id: taunted
-    name: "Taunted"
-    description: "You can only target a preset Target."
-    add_cost: 2
-    energy_cost: 0
-```
-
-General states use `min_shift`, `max_shift`, and `shift_cost` per absolute shift:
-
-```yaml
-general_states:
-  - id: frightened
-    name: "Frightened"
-    description: "Negative trait shifts"
-    min_shift: -6
-    max_shift: 0
-    shift_cost:
-      add_cost: 1
-      energy_cost: 0
-```
-
-Validation rules:
-
-- `specific` rows require `specific_state`.
-- `general` rows require `general_state` and `shift_amount` within that state's range.
-- Unknown state IDs are rejected.
-- Blank rows are ignored before surcharge calculation.
-- `additional_state` is applied once per selected state after the first.
-
-## How to add or change config
-
-Safe workflows:
-
-1. Change labels, costs, or existing option values directly in YAML.
-2. Add an option to an existing field by appending to its `options` list.
-3. Add a field to an existing type by appending a valid `FieldConfig` under `fields`.
-4. Add a specific or general state in `states.yaml` and use an existing `states_*` option source.
-5. Add a new ability, enactment, or interaction type by adding its config entry and updating compatibility lists such as `compatible_enactments` as needed.
-
-After edits, validate with:
-
-```bash
-go test ./...
-go vet ./...
-go build ./...
-node --check static/js/builder.js
-go run .
-```
-
-For documentation changes, also run:
-
-```bash
-go run ./cmd/docs
-```
-
-## Known boundaries
-
-- Generic YAML import/export is not fully schema-driven unless implemented separately.
-- Existing saved abilities may not migrate cleanly when config keys change.
-- Field keys are persisted in generic `Fields` maps, so renaming a field key changes saved-data compatibility.
-- Config-defined type lists are used by the builder, but model/export compatibility may still depend on existing typed fields for some paths.
+| Rule | Build Cost | Energy Cost | Description |
+| --- | --- | --- | --- |
+| **Each enactment beyond the first** | 0 | 1 | Adding an additional Enactment beyond the first |
+| **This enactment has a different target than the enactment before it** | 1 | 0 | Give an enactment beyond the first its own Interaction and Validation |
+
+The first enactment of an ability always declares who it affects and what roll resolves it. Enactments after the first inherit both the target and the resolving roll of the enactment before them. Taking the separate-target option on a later enactment gives that enactment its own interaction and validation, so their costs apply on top of the surcharge above.
 
 # Ability Creation Guide
 
@@ -2019,15 +2421,12 @@ All in a single ability.
 
 # Ability Types
 
+
 ## Execution
 
-Execution is the most basic form for an Ability. It is simply the "I want to do this now" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
+Execution is the most basic form for an Ability. It is simply the: "I want to do this now" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
 
-**How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Energy +/-** - Adjust the Energy cost of this ability. Lowering energy costs extra build points; raising it refunds some. Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
-3. **Action +/-** - Adjust the amount of Actions it will cost to use this ability. Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
 
 ## Concentration
 
@@ -2035,443 +2434,196 @@ Concentration is an Ability Type that allows an effect to persist over multiple 
 
 **How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
-3. **Action +/-** - Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
-4. **Upkeep Cost** - Choose one of:
-   - 1 Action or 1 Energy, 1 Action, 1 Energy
-5. **Effortless (upkeep is free)** - Enable Effortless (upkeep is free). Cost: Free.
-
-## Passive
-
-Passives are Abilities that are always on. They work just like a Reaction, triggering when something happens, but unlike a Reaction a Passive does not cost any Energy or Actions to use and is not bound to your action economy at all. Whenever the trigger happens, the linked Enactment is executed. For example, you could have a passive that triggers whenever someone damages you, Enacting a small healing effect on yourself. Because a Passive is free to use and can trigger whenever, it is the most expensive Ability Type to build. This higher base build cost is the price you pay for never having to spend Energy or Actions on it.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
-3. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
-
-   For each trigger, choose one of:
-   - You, An Ally, An Opponent, Someone Else
-
-   For each trigger, choose one of:
-   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - 
-
-   For each trigger, choose one of:
-   - 
-4. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
-5. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
-
-## Reaction
-
-Reactions are Abilities that trigger outside your normal action economy. Reactions trigger when someone else does something. When the trigger happens, the linked Enactment is executed. For example, you could have a reaction that triggers whenever someone runs towards you, Enacting a healing effect on yourself.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
-3. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
-
-   For each trigger, choose one of:
-   - You, An Ally, An Opponent, Someone Else
-
-   For each trigger, choose one of:
-   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - 
-
-   For each trigger, choose one of:
-   - 
-4. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
-5. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
-
-## Preparation
-
-Just like a Reaction, a Preparation works outside the regular turn order. It follows the exact same rules as a Reaction, but instead of passively sitting in the background, a Preparation costs an action to prepare, and in turn costs far less Energy to use.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Energy +/-** - Any whole number from **-2 to 2** (starts at 0). Cost: 2 build per step.
-3. **Action +/-** - Any whole number from **-1 to 1** (starts at 0). Cost: 2 build per step.
-4. **Triggers** - You start with **one** trigger and may add or remove triggers. Cost: Free per trigger.
-
-   For each trigger, choose one of:
-   - You, An Ally, An Opponent, Someone Else
-
-   For each trigger, choose one of:
-   - moves away from you, moves towards you, moves past you, enters interaction range, leaves interaction range, ends their turn within range, is moved by an effect, gets hit by damage of a type, deals damage of a type, gets healed by an ability of a type, gets hit by a weapon of a type, starts casting an ability of a type, gets targeted by an ability of a type, gets hit with an enactment of a type, resolves an enactment of a type, makes a trait check of a type, fails a validation of a type, succeeds on a validation of a type, becomes affected by a condition of a type, recovers from a condition of a type, falls unconscious, dies, moves, takes any damage, deals any damage, gets healed, casts any ability, gets targeted by any ability, is hit by any enactment, makes any trait check, fails any validation, succeeds on any validation, becomes affected by any condition, recovers from any condition
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
-
-   For each trigger, choose one of:
-   - Unarmed, Sword, Axe, Mace, Spear, Dagger, Bow, Crossbow, Thrown, Firearm, Staff, Wand, Shield
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Execution, Reaction, Minion (Deprecated), Preparation, Concentration, Passive
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - Enact Amplification, Enact Condition, Enact Damage, Enact Effect, Enact Healing, Enact Movement, Enact Negation, Enact Nerf, Enact Phase, Enact Reduction, Enact Shift
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-
-   For each trigger, choose one of:
-   - 
-
-   For each trigger, choose one of:
-   - 
-5. **Range** - Any whole number from **1 to 6** (starts at 1). Cost: Free per meter.
-6. **Uses** - Any whole number from **1 to 3** (starts at 1). Cost: Free per step.
+1. **Upkeep Cost** - Choose one of:
+   - 1 Action or 1 Energy, 1 Action (1 build), 1 Energy (2 build), Effortless (no upkeep cost) (4 build)
 
 # Enactments
 
-## Enact Amplification
 
-Enact Amplification allows you to increase the effect of an enactment you or someone else are the target for. It always has an Amplification Die which determines the amplification of the effect.
+## Enact Condition
+
+Enact Condition will apply a condition to a target (e.g., prone, stunned, charmed). A Condition will always have a value.
 
 **How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Amplification Mode** - Choose how the amplification is determined: a fixed die-size shift up/down the die ladder, or a die roll. Choose one of:
-   - Die Shift, Die Roll
-3. **Flat Bonus** - Any whole number from **0 to 8** (starts at 0). Cost: Free per +1.
+1. **Condition** - Choose one of:
+   - *Conditions:* Blinded, Encumbered, Encouraged, Frightened, Taunted (2 build), Swayed (2 build), Untouchable (5 build), Ignored (3 build), Confused (2 build), Vengeful (2 build), Distracted (1 build), Isolated (2 build), Charmed (5 build), Hypnotized (5 build), Stubborn (2 build), Paranoid (2 build), Insane (3 build), Stunned (3 build), Paralyzed (5 build), Pacified (3 build), Enraged (3 build), Disarmed (2 build), Silenced (2 build), Deafened (2 build), Stifled (2 build), Staggered (2 build), Prone (2 build), Anchored (2 build), Restrained (2 build), Slowed (2 build), Terrified (2 build), Weakened (2 build), Fragile (2 build), Cursed (2 build), Blessed (3 build), Hesitant (2 build), Fatigued (2 build), Energized (3 build), Delayed (2 build), Hastened (2 build), Echoed (3 build), Doomed (3 build), Zombified (3 build), Linked (3 build), Incorporeal (3 build), Marked (3 build)
+2. **Duration (turns)** - Choose one of:
+   - 1 turn, 2 turns (1 build), 3 turns (2 build), 4 turns (3 build), 5 turns (4 build), 6 turns (5 build), Unlimited (8 build)
+3. **Solutions** - Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this ability then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action. You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
+
+   For each solution, choose one of:
+   - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
+   - *Defense:* Constitution, Reflex, Wisdom, Magic
+4. **Solution DC** - Any whole number from **2 to 12** (starts at 2). Cost: 1 build per step.
+
+## Enact Damage
+
+Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses.
+
+**How to build it**
+
+1. **Source** - The offensive trait whose die is rolled for damage. Choose one of:
+   - *Offense:* Strength, Precision, Wisdom, Magic
+   - *Generic:* 1 (flat, no roll) (-1 build (refund)), 1d4, 1d6 (1 build), 1d8 (2 build), 1d10 (3 build), 1d12 (4 build), 1d12+1 (5 build), 1d12+2 (6 build), 1d12+3 (7 build)
+   - *General:* Stealth (1 build), Perception (1 build), Nature (1 build), Crafting (1 build), People Skill (1 build), Performance (1 build), Thievery (1 build), Knowledge (1 build), Magic (1 build), Medicine (1 build), Provoke (1 build), Intimidate (1 build), Athletics (1 build), Deceive (1 build), Resources (1 build)
+
+## Enact Effect
+
+The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for a few rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it.
+
+**How to build it**
+
+1. **Applies** - Choose one of:
+   - Damage, Healing, Motion
+2. **Duration (rounds)** - Any whole number from **1 to 5** (starts at 1). Cost: 1 build per round.
+3. **Solutions** - Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this ability then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action. You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
+
+   For each solution, choose one of:
+   - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
+   - *Defense:* Constitution, Reflex, Wisdom, Magic
+4. **Solution DC** - Any whole number from **2 to 12** (starts at 2). Cost: 1 build per step.
+
 ## Enact Healing
 
 Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses.
 
 **How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Source** - Choose one of:
-   - *Generic:* 1d4, 1d6, 1d8, 1d10, 1d12, 1d20
+1. **Source** - Choose one of:
+   - *Generic:* 1 (flat, no roll) (-1 build (refund)), 1d4, 1d6 (1 build), 1d8 (2 build), 1d10 (3 build), 1d12 (4 build), 1d12+1 (5 build), 1d12+2 (6 build), 1d12+3 (7 build)
    - *Medicine:* Medicine
-3. **Flat Bonus** - Any whole number from **0 to 20** (starts at 0). Cost: Free per +1.
-## Enact Stack
 
-Enact Stack (WIP)## Enact Effect
+## Enact Motion
 
-The Enact Effect applies a lingering effect to a target, such as fire, frost, or poison damage. By default, the effect lasts for  rounds and triggers at the start of the target's turn. On the target's turn they can re-roll the solution to get rid of the effect or take an action to remove it.
+Enact Motion allows you to move a Target up to a preset amount of meters.
 
 **How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Name** *(optional)* - A note you can write on the ability. No cost.
-3. **Applies** - Choose one of:
-   - Damage, Heal, Move
-4. **Solutions** - You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
+1. **Distance** - Any whole number from **1 to 20** (starts at 1). Cost: 1 build per meter.
+2. **Directions** - You start with **one** direction and may add or remove directions. Cost: Free per direction.
 
-   For each solution, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Defense:* Reflex, Constitution, Mind, Magic
-## Enact Minion
+   For each direction, choose one of:
+   - Towards, Away
 
-Creates a minion to fight for you. By default the minion does not have any traits, has 1hp and no movement or energy. This can be upgraded.## Enact Damage
+## Enact Negation
 
-Enact Damage allows characters to inflict harm on their enemies. It always has a Source Die and can have added bonuses.
+Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for.
 
-**How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Source** - The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die. Choose one of:
-   - *Generic:* 1d4, 1d6, 1d8, 1d10, 1d12, 1d20
-   - *Defense:* Precision, Power, Mind, Magic
-3. **Flat Bonus** - Any whole number from **0 to 20** (starts at 0). Cost: Free per +1.
-4. **Damage Types** - You start with **one** damage type and may add or remove damage types. Cost: Free per damage type.
 
-   For each damage type, choose one of:
-   - Physical, Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Thunder, Acid, Poison, Psychic, Necrotic, Radiant, Force, Arcane, Nature, Holy, Shadow, Chaos
 ## Enact Nerf
 
 Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy.
 
-Enact Nerf can only target yourself.
-
 **How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Trait** - Choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-3. **Shift -/+** - Any whole number from **-6 to -1** (starts at -1). Cost: Free per step.
-## Enact Reduction
+1. **Trait** - Choose one of:
+   - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
+   - *Offense:* Strength, Precision, Wisdom, Magic
+   - *Defense:* Constitution, Reflex, Wisdom, Magic
+2. **Shift -/+** - Any whole number from **-6 to -1** (starts at -1). Cost: 1 energy per step.
+3. **Duration (rounds)** - Any whole number from **1 to 5** (starts at 1). Cost: -1 energy per round.
 
-Enact Reduction allows you to reduce the effect of an enactment you or someone else are the target for. It always has a Reduction Die which determines the reduction of the effect.
+**Usable with**
 
-**How to build it**
+*   Interactions: Self
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Reduction Mode** - Choose how the reduction is determined: a fixed die-size shift up/down the die ladder, or a die roll. Choose one of:
-   - Die Shift, Die Roll
-3. **Flat Bonus** - Any whole number from **0 to 8** (starts at 0). Cost: Free per +1.
-## Enact Condition
-
-Enact Condition applies a condition to a target (e.g., prone, stunned, charmed). A Condition always has a value. See the Conditions chapter for the full list of conditions and their effects.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Condition** - Choose one of:
-   - *Conditions:* Blinded, Encumbered, Encouraged, Frightened, Taunted, Swayed, Untouchable, Ignored, Confused, Vengeful, Distracted, Isolated, Charmed, Hypnotized, Stubborn, Paranoid, Insane, Stunned, Paralyzed, Pacified, Enraged, Disarmed, Silenced, Deafened, Stifled, Staggered, Prone, Anchored, Restrained, Slowed, Terrified, Weakened, Fragile, Cursed, Blessed, Hesitant, Broken Gear, Amplified Gear, Fatigued, Energized, Delayed, Hastened, Echoed, Dying, Doomed, Invincible, Zombified, Linked, Incorporeal, Marked
-3. **Duration (turns)** - Choose one of:
-   - 1 turn, 2 turns, 3 turns, 4 turns, 5 turns, 6 turns, Unlimited
-4. **Solutions** - You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
-
-   For each solution, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Defense:* Reflex, Constitution, Mind, Magic
-## Enact Movement
-
-Enact Movement allows you to move a Target up to a preset amount of meters.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Distance** - Any whole number from **1 to 20** (starts at 1). Cost: Free per meter.
-3. **Directions** - You start with **one** direction and may add or remove directions. Cost: Free per direction.
-
-   For each direction, choose one of:
-   - Towards, Away
-## Enact Shift
-
-Enact Shift allows you to temporarily enhance or weaken Traits. It always has a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Trait** - Choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-3. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: Free per step.
-4. **Uses** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
-## Enact Negation
-
-Enact Negation allows characters to ignore or nullify the effects of an enactment you or someone else are the target for.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Ability hits Engager instead** - Enable Ability hits Engager instead. Cost: Free.
 ## Enact Phase
 
 Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds.
 
 **How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Duration (rounds)** - Any whole number from **1 to 5** (starts at 1). Cost: Free per round.
-3. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: Free per step.
-4. **Affected Trait(s)** - You start with **two** affected traits (Precision and Power) and may add or remove affected traits. Cost: Free per affected trait.
+1. **Duration (rounds)** - Any whole number from **1 to 5** (starts at 1). Cost: 1 build per round.
+2. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: 1 build per step.
+3. **Affected Trait(s)** - You start with **one** affected trait (Precision and Power) and may add or remove affected traits. Cost: 1 build per affected trait.
 
    For each affected trait, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
+   - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
+   - *Offense:* Strength, Precision, Wisdom, Magic
+   - *Defense:* Constitution, Reflex, Wisdom, Magic
+
+## Enact Modification
+
+Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens.
+
+**How to build it**
+
+1. **Trait** - Choose one of:
+   - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
+   - *Offense:* Strength, Precision, Wisdom, Magic
+   - *Defense:* Constitution, Reflex, Wisdom, Magic
+2. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: 1 build per step.
+3. **Duration** - Any whole number from **1 to 5** (starts at 1). Cost: 1 build per round.
+
+## Enact Adjustment
+
+Enact Adjustment allows you to adjust the effect of another enactment that someone or you is affected by. The supported enactments are Damage, Healing and Motion, the adjustment applies to the Source component and is added to it
+
+**How to build it**
+
+1. **Source** - The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die. Choose one of:
+   - 1 (flat, no roll) (-1 build (refund)), 1d4, 1d6 (1 build), 1d8 (2 build), 1d10 (3 build), 1d12 (4 build), 1d12+1 (5 build), 1d12+2 (6 build), 1d12+3 (7 build)
 
 # Interactions
 
-## Area
-
-**Area Interactions** encompass actions like bombs, splash potions, and traps. These interactions always have a defined **Radius** and **Range**:
-
-*   **Radius**: This determines the area where the Enactment will take effect.
-*   **Range**: This specifies how far from the user the point of origin is set. By default, the point of origin is 0m from the user.
-
-You can also assign the point of **Origin** to an object, but this must be discussed with the GM beforehand. So you could put the point of **Origin** to an arrow or a device you’ve made. Then use a **Ranged Interaction** to throw it.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Radius** - Any whole number from **1 to 6** (starts at 1). Cost: Free per step.
-3. **Range** - Choose one of:
-   - 5m (Close), 25m (Medium), 50m (Long)
-
-## Ranged
-
-**Ranged** **Interactions** include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to **Direct** Interactions but come with a lower success rate due to a penalty on the **Engagement Roll**. Additionally, the target must not be obstructed or invisible to the **Engager** by default.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Range** - Choose one of:
-   - 5m (Close), 25m (Medium), 50m (Long)
-3. **Targets** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
-
-## Direct
-
-Direct interactions are done by targeting those who are near you. They have to be within 1 meter of you in order for your enactment to execute.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Targets** - Any whole number from **1 to 5** (starts at 1). Cost: Free per step.
-
-## Area of Effect
-
-An **Area of Effect (AoE)** Interaction functions similarly to an Area Interaction, but its effects persist for several rounds. While an **Area Interaction** might be like a single-use bomb, an **AoE** Interaction is akin to a bomb that detonates every round. Alternatively, it could represent a healing circle, where characters gain health each round they remain within the **AoE**. The possibilities are endless, so get creative!
-
-The effect of the **AoE** does not trigger immediately. Instead, it activates either at the start of a character's turn within the **AoE** or at the end of the **Engager**'s turn.
-
-**How to build it**
-
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Radius** - Any whole number from **1 to 6** (starts at 1). Cost: Free per step.
-3. **Range** - Choose one of:
-   - 5m (Close), 25m (Medium), 50m (Long)
-4. **Duration** - Any whole number from **2 to 6** (starts at 2). Cost: Free per round.
 
 ## Self
 
-Self Interactions apply to your own character. They do require a validation still. But the Counter roll is a Generic Die instead. This means that you are still the Enagager and the DM makes the Counter Roll.
+Self Interactions apply to your own character. They do require a validation still. But the Counter roll is a Generic Die instead. This means that you are still the Engager and the DM makes the Counter Roll.
+
+
+
+## Direct
+
+Ranged Interactions include actions like using bows, guns, and boomerangs. These interactions offer an increased range compared to Direct Interactions but come with a lower success rate due to a penalty on the Engagement Roll. Additionally, the target must not be obstructed or invisible to the Engager by default.
 
 **How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
+1. **Range** - Choose one of:
+   - 1m (direct), 5m (Close) (1 build), 25m (Medium) (2 build), 50m (Long) (3 build)
+2. **Targets** - Any whole number from **1 to 8** (starts at 1). Cost: 2 build per step.
+
+## Zone
+
+Area Interactions encompass actions like bombs, splash potions, and traps. These interactions always have a defined Radius and Range. Radius determines the area where the Enactment will take effect; Range specifies how far from the user the point of origin is set.
+
+**How to build it**
+
+1. **Range** - Choose one of:
+   - 1m (Close), 5m (Close) (1 build), 25m (Medium) (2 build), 50m (Long) (3 build)
+2. **Radius (meter)** - Any whole number from **1 to 6** (starts at 1). Cost: 2 build per meter.
+3. **Duration (rounds)** - Any whole number from **0 to 6** (starts at 0). Cost: 1 build per round.
 
 ## Validations
 
-Here, you'll find the guidelines and options for customizing your **Engagement** and **Counter Rolls**.
-
-*   **Engagement Roll**: This is an Offensive Trait used to initiate actions against a target.
-*   **Counter Roll**: This involves two Defensive Traits, allowing the target to choose how they respond to the attack.
-
 **How to build it**
 
-1. **Comment** *(optional)* - A note you can write on the ability. No cost.
-2. **Engage** - Choose one of:
-   - *Generic:* 1d4, 1d6, 1d8, 1d10, 1d12, 1d20
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
-3. **Counter Trait** - You start with **two** counter traits (Reflex and Constitution) and may add or remove counter traits. Cost: Free per counter trait.
+1. **Engage** - Choose one of:
+   - *Generic:* 1 (flat, no roll) (-1 build (refund)), 1d4, 1d6 (1 build), 1d8 (2 build), 1d10 (3 build), 1d12 (4 build), 1d12+1 (5 build), 1d12+2 (6 build), 1d12+3 (7 build)
+   - *General:* Stealth (1 build), Perception (1 build), Nature (1 build), Crafting (1 build), People Skill (1 build), Performance (1 build), Thievery (1 build), Knowledge (1 build), Magic (1 build), Medicine (1 build), Provoke (1 build), Intimidate (1 build), Athletics (1 build), Deceive (1 build), Resources (1 build)
+   - *Offense:* Strength, Precision, Wisdom, Magic
+   - *Defense:* Constitution (2 build), Reflex (2 build), Wisdom (2 build), Magic (2 build)
+2. **Counter Trait** - You start with **two** counter traits (Reflex and Constitution) and may add or remove counter traits. Cost: 1 build per counter trait.
 
    For each counter trait, choose one of:
-   - *General:* Strength, Dexterity, Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine
-   - *Offense:* Precision, Power, Mind, Magic
-   - *Defense:* Reflex, Constitution, Mind, Magic
+   - *General:* Stealth (1 build), Perception (1 build), Nature (1 build), Crafting (1 build), People Skill (1 build), Performance (1 build), Thievery (1 build), Knowledge (1 build), Magic (1 build), Medicine (1 build), Provoke (1 build), Intimidate (1 build), Athletics (1 build), Deceive (1 build), Resources (1 build)
+   - *Offense:* Strength (2 build), Precision (2 build), Wisdom (2 build), Magic (2 build)
+   - *Defense:* Constitution, Reflex, Wisdom, Magic
 
 # leveling
 ## Ability Builder Leveling
 
 ## Introduction
 
-As you level up, your character gains a deeper understanding of their powers, techniques, and spells. This growth is represented by **Ability Points**. Ability Points are spent to pay the **Add Cost** of Perks, Enactments, Interactions, and Validations when constructing or upgrading your Abilities.
+As you level up, your character gains a deeper understanding of their powers, techniques, and spells. This growth is represented by **Ability Points**. Ability Points are spent to pay the **Build Cost** of Perks, Enactments, Interactions, and Validations when constructing or upgrading your Abilities.
 
 ---
 
 ## Ability Points
 
-At Level 1, a character starts with a base pool of Ability Points. As they level up, they gain a steady stream of new points, with larger spikes at milestone levels (Level 5 and Level 10).
+At Level 1 a character starts with **9** Ability Points and gains **3** more with every level after that, up to level 10. The gain is flat: there are no bonus points at milestone levels, and the same **+3** per level applies to Trait Points, so both halves of your character sheet grow at the same rate.
 
 These points are permanently invested into your abilities during character creation or level-ups.
 
@@ -2481,25 +2633,314 @@ You do not need to create a brand new Ability every time you level up. You can s
 
 ### Refunding Ability Points
 
-Some Perks in the Ability Builder apply drawbacks or restrictions to an Ability (such as giving it an Item Dependency or increasing its Action Cost). These Perks have a **negative Add Cost**. Taking these drawbacks refunds Ability Points, allowing you to spend them elsewhere on the same Ability to make it more powerful
+Some Perks in the Ability Builder apply drawbacks or restrictions to an Ability (such as giving it an Item Dependency or increasing its Action Cost). These Perks have a **negative Build Cost**. Taking these drawbacks refunds Ability Points, allowing you to spend them elsewhere on the same Ability to make it more powerful.
 
-## Example Progression
+There is a floor on this, however. See the table of cost rules below.
 
-If you build a simple "Fireball" at **Level 1**, you might spend 4 of your 10 starting points on it, leaving 6 points for a defensive Reaction ability.
+### Cost and Budget Rules
 
-By **Level 5**, you will have earned 11 additional Ability Points. You could spend 6 of those new points to add an Area of Effect Interaction to your Fireball and increase its damage dice, transforming it from a basic projectile into a massive explosion.
+| Rule | In effect |
+| --- | --- |
+| Build point refunds | Drawbacks refund build points, but never past zero: an ability's total build cost stops at nothing. |
+| Energy cost refunds | Drawbacks refund energy points, but never past zero: an ability's total energy cost stops at nothing. |
+| Skill point budget | A character may not spend more skill points than its level grants; edits and package imports that would overspend are refused. |
+| Maximum level | A character's level is capped at 10. |
 
 ## Leveling Table: Ability Points
 
 | Level | Points Gained | Total Ability Points |
 | --- | --- | --- |
-| **1** | +0 | 10 |
-| **2** | +2 | 12 |
+| **1** | 9 (starting) | 9 |
+| **2** | +3 | 12 |
 | **3** | +3 | 15 |
-| **4** | +2 | 17 |
-| **5** | +4 | 21 |
-| **6** | +2 | 23 |
-| **7** | +3 | 26 |
-| **8** | +2 | 28 |
-| **9** | +3 | 31 |
-| **10** | +5 | 36 |
+| **4** | +3 | 18 |
+| **5** | +3 | 21 |
+| **6** | +3 | 24 |
+| **7** | +3 | 27 |
+| **8** | +3 | 30 |
+| **9** | +3 | 33 |
+| **10** | +3 | 36 |
+
+# Ability Builder Configuration
+
+## Overview
+
+This chapter is the maintainer's reference for the ruleset YAML. Every key table below is generated by reflecting over the Go types in `internal/config`, and every option source table is read from the ruleset that is currently loaded, so this chapter cannot describe keys that do not exist or omit keys that do.
+
+The ruleset is a directory of YAML section files. Loading is strict: unknown keys are rejected, so a typo fails at startup rather than being silently ignored.
+
+### Section files
+
+The currently loaded ruleset is assembled from these files:
+
+- `ability_types.yaml`
+- `attributes.yaml`
+- `conditions.yaml`
+- `enactments.yaml`
+- `file_order.yaml`
+- `general.yaml`
+- `interactions.yaml`
+- `leveling.yaml`
+- `proficiencies.yaml`
+- `traits.yaml`
+
+`file_order.yaml` deserves a note of its own: it lists the markdown chapters, in order, that make up the generated rulebook. The list is checked in both directions when the config loads. Every entry must exist on disk, and every `.md` file under `./docs/` must be listed exactly once, so a chapter cannot be written and then quietly left out of the book. Maintainer notes that are deliberately not chapters are named in `docsOrderExempt` in `internal/config/docsorder.go`.
+
+## Costs
+
+Every cost in the ruleset is the same pair of numbers.
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `build_cost` | whole number | Build points charged when the ability is created or upgraded. Negative values refund points. |
+| `energy_cost` | whole number | Energy charged every time the ability is used. Negative values refund energy. |
+
+Build points are spent once, when the ability is created or upgraded. Energy is paid every time the ability is used. Both may be negative, which turns an option into a refund: drawbacks are priced this way.
+
+Whether a refund can take a total below zero is itself configurable. See the cost and budget rules in the [Leveling](leveling.md) chapter for what the loaded ruleset does.
+
+### Per-step and per-item costs
+
+Numeric and repeatable fields charge per step or per row rather than a flat amount.
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `increase` | `Cost` block (optional) | Cost charged per step the value moves above its default. |
+| `decrease` | `Cost` block (optional) | Cost charged per step the value moves below its default. A negative cost here refunds points for weakening the ability. |
+
+## Fields
+
+A field is one choice in the builder. Fields appear under a component's `fields`, under a repeatable field's `row_fields`, or under `validations.fields`.
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `key` | text | Stable submitted field name. It is persisted in saved abilities, so renaming it breaks existing data. |
+| `label` | text | Text shown next to the field in the builder and used as its name in the documentation. |
+| `type` | text | Which kind of input this is. See the supported field types below. |
+| `description` | text | Reader-facing explanation of the field, used as the lead sentence in the generated build guide. |
+| `information` | text | Help text shown as a hover tooltip next to the field label. |
+| `render_information` | true/false | When true, show the information as plain text below the field instead of behind a hover indicator. |
+| `default` | any scalar | The starting value of the field. For numbers it is also the zero point that per_step costs are measured from. |
+| `cost` | `Cost` block (optional) | Flat cost applied whenever the field is active: a checked checkbox or a dropdown with a non-empty value. |
+| `min` | whole number | Lowest value a free_number accepts. |
+| `max` | whole number | Highest value a free_number accepts. |
+| `step` | whole number | Size of one increment of a free_number. Defaults to 1 when omitted. |
+| `rounding` | text | How partial steps are handled: ceil rounds a partial step up, floor rounds it down. |
+| `per_step` | `PerStep` block (optional) | Cost charged per step a free_number moves away from its default. |
+| `options` | list of `Option` block | Inline list of dropdown choices. Do not combine with options_source on the same field. |
+| `options_source` | text | Name of a shared option source or grouped source to populate the dropdown from. |
+| `shift_key` | text | On a condition field, the sibling field holding the shift amount. The condition's shift_cost is multiplied by the absolute value read from it. Defaults to shift_amount. |
+| `row_fields` | list of `Field` block | The fields that make up one row of a multiselect or conditions field. |
+| `default_count` | whole number | How many rows a repeatable field starts with. per_item costs are measured relative to this count. |
+| `per_item` | `PerStep` block (optional) | Cost charged per row added beyond default_count, or refunded per row removed below it. |
+| `row_defaults` | list of mapping of text to text | Values pre-filled into the first rows of a repeatable field, one map of row field key to value per row. |
+| `conjunction` | text | The joining word shown to the left of each repeatable row after the first, either and or or. Display only; defaults to or. |
+| `visibility_when` | text | Name of the sibling field that controls whether this field is shown. |
+| `show_when` | text | The value the controlling field must have for this field to be shown. A hidden field contributes no cost. |
+| `inline_builder` | `InlineBuilder` block (optional) | Turns a dropdown into a nested builder for the component the selected value names. |
+| `group_offsets` | `GroupOffsets` block (optional) | Per-trait-group cost offsets for a dropdown backed by a multi-group trait source. |
+
+### Supported field types
+
+| Type | Behaviour |
+| --- | --- |
+| `checkbox` | A toggle. Its `cost` applies only while it is checked. |
+| `dropdown` | Pick one value, from inline `options` or a named `options_source`. The field `cost` applies when a non-empty value is selected, plus the selected option's own cost and any `group_offsets` for its trait group. |
+| `free_text` | Free-form text. Never carries a cost. |
+| `free_number` | A bounded whole number using `min`, `max`, `step` and `rounding`. `per_step.increase` or `per_step.decrease` is charged per step away from `default`. |
+| `multiselect` | A repeatable set of rows built from `row_fields`, starting at `default_count` and pre-filled from `row_defaults`. `per_item` is charged per row added or removed relative to `default_count`. |
+| `conditions` | A repeatable set of condition rows. Behaves like `multiselect` but each row resolves against the `conditions` list, charging a shiftable condition's `shift_cost` per unit of shift or a fixed condition's `build_cost`/`energy_cost`. |
+
+### Dropdown options
+
+An inline dropdown option looks like this:
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `value` | text | The value stored when this option is selected. Must be stable: it is persisted on saved abilities. |
+| `label` | text | Text shown in the dropdown. Falls back to the value when omitted. |
+| `information` | text | Help text shown as a hover tooltip on the option. |
+| `render_information` | true/false | When true, show this option's information as plain text below the dropdown once selected instead of behind a hover indicator. |
+| `cost` | `Cost` block (optional) | Cost added when this option is the selected one. |
+| `fields` | list of `Field` block | Extra fields revealed when this option is selected. |
+
+### Trait group offsets
+
+A dropdown backed by a multi-group trait source can lean toward one trait group, making a pick from another group cost more.
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `default_group` | text | The trait group the field leans toward. A value with no group prefix is treated as belonging to this group. |
+| `offsets` | mapping of text to `Cost` block (optional) | Extra cost added per trait group, keyed by group id. Picking a trait outside the preferred group normally costs more. |
+
+### Inline builders
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `kind` | text | Which component map the selected dropdown value resolves against: enactment, interaction or ability_type. The referenced component's own fields render beneath the dropdown and add their cost. |
+
+## Components
+
+Ability types, enactments and interactions are all the same underlying shape. Nothing is special-cased by id in Go, so a new type can be added purely in YAML.
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `name` | text | Display name, used by ability types. |
+| `type` | text | Display name, used by enactments and interactions. |
+| `description` | text | Reader-facing explanation of what the component does. |
+| `information` | text | Help text shown as a hover tooltip next to the component. |
+| `render_information` | true/false | When true, show the information as plain text under the component header instead of behind a hover indicator. |
+| `base_cost` | `Cost` block | Flat cost of including this component. The first enactment of an ability has its base cost waived. |
+| `base_energy` | whole number | Starting energy cost of an ability of this type. |
+| `base_action` | whole number | Starting action cost of an ability of this type. |
+| `base_range` | whole number | Starting range in metres. |
+| `base_uses` | whole number | Starting number of uses. |
+| `base_duration` | whole number | Starting duration in rounds. |
+| `base_reverse_duration` | whole number | Starting number of rounds a phase takes to reverse itself. |
+| `base_health` | whole number | Starting health, used by summoned minions. |
+| `base_lifetime` | whole number | Starting lifetime in rounds, used by summoned minions. |
+| `base_upkeep_action` | whole number | Actions required each round to sustain the ability. |
+| `base_upkeep_energy` | whole number | Energy required each round to sustain the ability. |
+| `default_range` | whole number | Default range of an interaction, in metres. |
+| `default_targets` | whole number | Default number of targets an interaction affects. |
+| `default_radius` | whole number | Default radius of an area interaction, in metres. |
+| `default_duration` | whole number | Default duration of an area interaction, in rounds. |
+| `allowed_interactions` | list of text | When set, only these interactions are offered for this enactment, in the order listed. |
+| `blocked_interactions` | list of text | When set (and no allowed list is given), every interaction except these is offered. |
+| `allowed_validations` | list of text | When set, only these validation fields are shown for this enactment. |
+| `blocked_validations` | list of text | When set (and no allowed list is given), every validation field except these is shown. |
+| `allowed_enactments` | list of text | When set, only these enactments are offered for this ability type, in the order listed. |
+| `blocked_enactments` | list of text | When set (and no allowed list is given), every enactment except these is offered. |
+| `fields` | list of `Field` block | The choices this component offers, driving both the builder form and the cost engine. |
+
+### Validations
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `information` | text | Help text for the validation section as a whole. |
+| `render_information` | true/false | When true, show the section information as plain text under the header instead of behind a hover indicator. |
+| `fields` | list of `Field` block | The validation choices offered, such as which trait resolves the engagement roll and what counters it. |
+
+## Option sources
+
+A field populates its dropdown either from inline `options` or by naming a source with `options_source`. Sources are resolved from the config, so adding one requires no Go or JavaScript changes.
+
+These are the plain sources the loaded ruleset defines:
+
+| Source | Entries | Costed |
+| --- | --- | --- |
+| `concentration_upkeep` | 4 | Yes |
+| `directions` | 2 | No |
+| `knockout_options` | 16 | Yes |
+| `roll_generic` | 9 | Yes |
+| `roll_medicine` | 1 | No |
+
+These are the grouped sources, which concatenate several member sources and render them as labelled groups:
+
+| Grouped Source | Member Groups |
+| --- | --- |
+| `conditions_all` | Conditions (`conditions`) |
+| `roll_all` | Generic (`roll_generic`), General (`traits.general`), Offense (`traits.offense`), Defense (`traits.defense`) |
+| `roll_damage` | Offense (`traits.offense`), Generic (`roll_generic`), General (`traits.general`) |
+| `roll_heal` | Generic (`roll_generic`), Medicine (`roll_medicine`) |
+| `traits_all` | General (`traits.general`), Offense (`traits.offense`), Defense (`traits.defense`) |
+| `traits_general_defense` | General (`traits.general`), Defense (`traits.defense`) |
+| `traits_generic_offense` | Generic (`roll_generic`), Defense (`traits.offense`) |
+
+Two further source forms are resolved dynamically rather than being declared: a dotted `traits.<category>` reference expands to that trait category, and `ability_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
+
+## Proficiencies and leveling
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `id` | text | Stable identifier for the tier, referenced by traits and by default_proficiency. |
+| `name` | text | Display name of the tier. |
+| `cost` | whole number | Trait points charged to climb onto this rung from the one below it. |
+| `note` | text | Optional remark about the tier. |
+| `die` | text | Die rolled by a dice-backed trait at this tier. Used for every trait group unless dice overrides it. |
+| `dice` | mapping of text to text | Per-trait-group die overrides, keyed by group id. Only needed when a group differs from die. |
+| `vitals` | mapping of text to any scalar | Numeric values this tier grants for the vital traits, keyed by lowercase trait name (hp, movement, energy). |
+
+Point budgets are computed from a formula rather than a hand-written table, which is what keeps the documented curve and the served numbers identical.
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `max_level` | whole number | Highest level a character may reach. Levels are clamped to this value on every edit and on import. |
+| `trait_points` | `LevelTable` block | Budget progression for the trait (skill) point pool. |
+| `ability_points` | `LevelTable` block | Budget progression for the ability (perk) point pool. |
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `start` | whole number | Budget granted at level 1. |
+| `per_level` | whole number | Budget added by each level after the first. The budget for a level is start + per_level x (level - 1). |
+| `levels` | list of `LevelEntry` block | Optional explicit per-level overrides for a non-linear curve. A row for the requested level wins over the formula. |
+
+## Conditions
+
+Conditions are a single unified list. An entry is *shiftable* when it declares a non-zero shift range, in which case it charges `shift_cost` per unit of applied shift; otherwise it is a fixed-cost condition charging `build_cost` and `energy_cost`.
+
+| Key | Value | Purpose |
+| --- | --- | --- |
+| `id` | text | Stable identifier, referenced by saved abilities and generated instructions. |
+| `name` | text | Display name of the condition. |
+| `description` | text | What the condition does, shown in the rulebook and as a hover tooltip. |
+| `build_cost` | whole number | Build points charged for a fixed condition. |
+| `energy_cost` | whole number | Energy charged for a fixed condition. |
+| `min_shift` | whole number | Lowest shift a shiftable condition may apply. A non-zero min or max shift is what makes a condition shiftable. |
+| `max_shift` | whole number | Highest shift a shiftable condition may apply. |
+| `shift_cost` | `Cost` block | Cost charged per unit of shift applied by a shiftable condition. |
+| `selectable` | true/false (optional) | Whether the condition can be purchased in the builder. Defaults to true; set false for states the rules impose rather than ones a player buys. |
+
+## Cost evaluation
+
+Cost calculation is server-authoritative. The browser mirrors it for live feedback only, and the server recomputes every cost on save rather than trusting values from the form.
+
+The rules are:
+
+*   Enactments and interactions start from their `base_cost`.
+*   The **first** enactment of an ability has its `base_cost` waived, so adding it costs nothing by itself. Its field-driven costs still apply normally.
+*   Each enactment beyond the first pays its full `base_cost` plus the additional-enactment surcharge. See [Enactments](enactments.md) for the surcharge and the separate-target option.
+*   Ability types start from `base_energy` and `base_action`.
+*   A `checkbox` charges its cost only while checked.
+*   A `dropdown` charges its field `cost` when a non-empty value is selected, plus the selected option's own cost, plus any group offset for the selected trait's group.
+*   A `free_number` charges `per_step.increase` or `per_step.decrease` per step away from its `default`, with `rounding` deciding how a partial step is treated.
+*   A repeatable field charges `per_item` per row added beyond `default_count`, or refunds per row removed below it.
+*   A condition row charges a shiftable condition's `shift_cost` per unit of shift, or a fixed condition's flat cost.
+*   A hidden field contributes nothing. A field is hidden when its `visibility_when` sibling does not currently equal its `show_when`.
+
+### Default-driven visibility
+
+When a controlling field has no submitted value, `visibility_when` falls back to that field's configured `default`. A dependent field therefore becomes visible as soon as the default makes it relevant, without requiring an explicit selection first.
+
+## Changing the config
+
+Safe workflows:
+
+1.  Change labels, costs, or existing option values directly in YAML.
+2.  Add an option to an existing field by appending to its `options` list.
+3.  Add a field to an existing component by appending a valid field definition under `fields`.
+4.  Add a condition to `conditions.yaml` and reference it from a `conditions` field.
+5.  Add a new ability type, enactment or interaction by adding its config entry and updating the relevant `allowed_*` or `blocked_*` lists.
+
+After editing, validate with:
+
+```bash
+go build ./...
+go vet ./...
+go test ./...
+node --check static/js/builder.js
+```
+
+To regenerate the checked-in markdown export of the rulebook:
+
+```bash
+go run ./cmd/gendocs
+```
+
+`gendocs` lints its own output and fails when a table lost its rows, a section rendered empty, or template syntax survived unexecuted. The same lint runs as part of `go test ./...`, together with a check that every config key documented above actually has a description. That is what makes it impossible to move the code ahead of this chapter without something failing.
+
+## Known boundaries
+
+*   Field keys are persisted in saved abilities, so renaming a key breaks compatibility with existing data.
+*   Saved abilities may not migrate cleanly when config keys change shape.
+*   The allowed/blocked lists filter what the builder offers; they are not enforced when an ability is saved, so an imported ability may hold a combination the builder would not have offered.

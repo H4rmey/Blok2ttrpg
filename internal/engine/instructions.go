@@ -270,10 +270,31 @@ func rollText(v string) string {
 	if i := strings.IndexByte(v, '.'); i >= 0 {
 		return "your " + v[i+1:] + " die"
 	}
+	// A die value, optionally with a flat bonus: "d8" reads as "1d8" and
+	// "d12+3" as "1d12+3".
 	if len(v) > 1 && v[0] == 'd' {
 		return "1" + v
 	}
+	// A plain number is a flat result with no roll at all (the bottom rung of
+	// the ladder), so it prints as the number itself rather than as a die.
+	if isNumeric(v) {
+		return v
+	}
 	return "your " + v + " die"
+}
+
+// isNumeric reports whether s consists only of digits, i.e. it is a flat
+// numeric result rather than a die or a trait name.
+func isNumeric(s string) bool {
+	if s == "" {
+		return false
+	}
+	for i := 0; i < len(s); i++ {
+		if s[i] < '0' || s[i] > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 // traitName strips the option-source namespace from a trait value.

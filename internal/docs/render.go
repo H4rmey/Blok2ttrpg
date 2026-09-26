@@ -21,7 +21,8 @@ import (
 // funcMap returns the template helpers used by the markdown docs. All helpers
 // are config-driven: they look values up from the loaded ruleset so the docs
 // stay in sync with the YAML automatically.
-func funcMap(cfg *config.Config) template.FuncMap {
+func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
+	cfg := loaded.Config
 	return template.FuncMap{
 		// Component lookups. Each returns a *Component (nil when missing) so
 		// templates can chain field access without the two-value method form.
@@ -135,23 +136,64 @@ func funcMap(cfg *config.Config) template.FuncMap {
 		"allInteractions": func() []*config.Component {
 			return cfg.Interactions.List()
 		},
-		// enactmentSurchargeTable renders the additional-enactment surcharge.
+		// enactmentSurchargeTable renders the additional-enactment rules: the
+		// per-enactment surcharge, the separate-target opt-in, and whether
+		// later enactments must declare their own interaction and validation.
 		"enactmentSurchargeTable": func() string {
-			var b strings.Builder
-			b.WriteString("| Build Cost | Energy Cost | Description |\n")
-			b.WriteString("| --- | --- | --- |\n")
-			b.WriteString(fmt.Sprintf("| %d | %d | %s |\n",
-				cfg.AdditionalEnactment.BuildCost,
-				cfg.AdditionalEnactment.EnergyCost,
-				orDash(cfg.AdditionalEnactment.Description)))
-			return b.String()
+			return enactmentSurchargeTable(cfg)
 		},
+
+		// levelingTable renders the point budget for every level of a pool
+		// ("trait" or "ability"). The rows are computed with the same budget
+		// accessors the application uses, so the documented curve cannot drift
+		// from the numbers a character actually receives.
+		"levelingTable": func(pool string) string {
+			return levelingTable(cfg, pool)
+		},
+		// proficiencyDiceTable renders the proficiency ladder as tier and die.
+		"proficiencyDiceTable": func() string {
+			return proficiencyDiceTable(cfg)
+		},
+		// lowestDie / highestDie expose the ends of the dice ladder so prose
+		// can describe its range without hardcoding dice.
+		"lowestDie":  func() string { return lowestDie(cfg) },
+		"highestDie": func() string { return highestDie(cfg) },
+		// defaultProficiencyName names the free baseline rung.
+		"defaultProficiencyName": func() string { return defaultProficiencyName(cfg) },
+		// rulesFlagsTable documents the cost floors, the skill-point budget
+		// enforcement and the level cap.
+		"rulesFlagsTable": func() string { return rulesFlagsTable(cfg) },
+
+		// packagesTable renders the built-in content library. With no
+		// arguments every category is rendered; otherwise only the named
+		// categories are, so the items chapter can show just items.
+		"packagesTable": func(categories ...string) string {
+			return packagesTable(lib, categories...)
+		},
+		// abilitiesTable renders the pre-built abilities in the content library.
+		"abilitiesTable": func() string { return abilitiesTable(lib) },
+
+		// schemaTable renders the yaml keys of a config type straight off the
+		// Go struct, so the configuration reference cannot describe keys that
+		// do not exist or miss keys that do.
+		"schemaTable": schemaTable,
+		// fieldTypesList renders the field types the code actually implements.
+		"fieldTypesList": fieldTypesList,
+		// optionSourcesTable / optionGroupsTable list the option sources the
+		// loaded ruleset really defines.
+		"optionSourcesTable": func() string { return optionSourcesTable(cfg) },
+		"optionGroupsTable":  func() string { return optionGroupsTable(cfg) },
+		// configFilesList lists the ruleset's section files as found on disk.
+		"configFilesList": func() string { return configFilesList(loaded) },
 	}
 }
 
 // FuncMapForTest exposes the template helpers for out-of-package verification
-// tools. It is a thin wrapper over the unexported funcMap.
-func FuncMapForTest(cfg *config.Config) template.FuncMap { return funcMap(cfg) }
+// tools. It is a thin wrapper over the unexported funcMap. The content library
+// is optional: helpers that need it degrade to a placeholder when it is nil.
+func FuncMapForTest(loaded *config.Loaded, lib PackageLister) template.FuncMap {
+	return funcMap(loaded, lib)
+}
 
 // findField returns a field by key from a slice.
 func findField(fields []config.Field, key string) (config.Field, bool) {
@@ -166,8 +208,14 @@ func findField(fields []config.Field, key string) (config.Field, bool) {
 // sharedListSources names option sources that are large and reused across
 // several components. Rather than repeat them inline in every Perks table,
 // each is printed once in a shared reference table and skipped here.
+//
+// The knockout and concentration-upkeep lists are included because both are
+// long, fully costed, and referenced from more than one component; inlining
+// them made the affected perk tables far longer than the rules they describe.
 var sharedListSources = map[string]bool{
-	"trigger_events": true,
+	"trigger_events":       true,
+	"knockout_options":     true,
+	"concentration_upkeep": true,
 }
 
 // fieldsTable builds a reader-friendly markdown table describing the perks a
@@ -430,7 +478,11 @@ func orDash(s string) string {
 // RenderMarkdown builds the full markdown documentation by rendering each file
 // listed in cfg.Docs.Order (relative to dir) against the config as template
 // data, then concatenating the results.
-func RenderMarkdown(loaded *config.Loaded) (string, error) {
+//
+// lib supplies the built-in content library so the docs can list the classes,
+// races, backgrounds and items that ship with the app. It may be nil, in which
+// case the package tables render a placeholder (which the lint then reports).
+func RenderMarkdown(loaded *config.Loaded, lib PackageLister) (string, error) {
 	if loaded == nil || loaded.Config == nil {
 		return "", fmt.Errorf("config is nil")
 	}
@@ -439,7 +491,7 @@ func RenderMarkdown(loaded *config.Loaded) (string, error) {
 		return "", fmt.Errorf("no file_order configured")
 	}
 
-	fns := funcMap(loaded.Config)
+	fns := funcMap(loaded, lib)
 
 	var sections []string
 	for _, rel := range order {
@@ -473,8 +525,8 @@ func RenderMarkdown(loaded *config.Loaded) (string, error) {
 }
 
 // RenderHTML converts the markdown documentation to an HTML fragment.
-func RenderHTML(loaded *config.Loaded) (string, error) {
-	md, err := RenderMarkdown(loaded)
+func RenderHTML(loaded *config.Loaded, lib PackageLister) (string, error) {
+	md, err := RenderMarkdown(loaded, lib)
 	if err != nil {
 		return "", err
 	}

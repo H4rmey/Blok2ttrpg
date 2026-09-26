@@ -193,10 +193,76 @@ func buildGuide(cfg *config.Config, comp *config.Component) string {
 	if comp == nil {
 		return ""
 	}
-	if guide := buildGuideFields(cfg, comp.Fields); guide != "" {
-		return guide
+	body := buildGuideFields(cfg, comp.Fields)
+	if body == "" {
+		body = strings.TrimSpace(comp.Description)
 	}
-	return strings.TrimSpace(comp.Description)
+	// The allowed/blocked lists decide which enactments, interactions and
+	// validations may legally be combined with this component. That is a rule a
+	// reader needs in order to build an ability by hand, so it is appended to
+	// the walkthrough rather than left implicit in the builder's dropdowns.
+	if combos := allowedCombinations(cfg, comp); combos != "" {
+		if body == "" {
+			return combos
+		}
+		return body + "\n\n" + combos
+	}
+	return body
+}
+
+// allowedCombinations describes which other components may be used with this
+// one, based on the component's allowed/blocked lists resolved through the same
+// config lookups the builder uses. It returns "" when the component places no
+// restrictions, so unrestricted components read no differently than before.
+func allowedCombinations(cfg *config.Config, comp *config.Component) string {
+	if cfg == nil || comp == nil {
+		return ""
+	}
+	var lines []string
+	// Ability types filter which enactments they accept.
+	if len(comp.AllowedEnactments) > 0 || len(comp.BlockedEnactments) > 0 {
+		if names := componentNames(cfg.EnactmentsFor(comp.ID)); names != "" {
+			lines = append(lines, "*   Enactments: "+names)
+		}
+	}
+	// Enactments filter which interactions and validations they accept.
+	if len(comp.AllowedInteractions) > 0 || len(comp.BlockedInteractions) > 0 {
+		if names := componentNames(cfg.InteractionsFor(comp.ID)); names != "" {
+			lines = append(lines, "*   Interactions: "+names)
+		}
+	}
+	if len(comp.AllowedValidations) > 0 || len(comp.BlockedValidations) > 0 {
+		if names := fieldLabels(cfg.ValidationFieldsFor(comp.ID)); names != "" {
+			lines = append(lines, "*   Validation rolls: "+names)
+		}
+	}
+	if len(lines) == 0 {
+		return ""
+	}
+	return "**Usable with**\n\n" + strings.Join(lines, "\n")
+}
+
+// componentNames renders the display names of a component list.
+func componentNames(comps []*config.Component) string {
+	names := make([]string, 0, len(comps))
+	for _, c := range comps {
+		if c == nil {
+			continue
+		}
+		names = append(names, c.DisplayName())
+	}
+	return strings.Join(names, ", ")
+}
+
+// fieldLabels renders the labels of a field list.
+func fieldLabels(fields []config.Field) string {
+	names := make([]string, 0, len(fields))
+	for _, f := range fields {
+		if l := strings.TrimSpace(f.Label); l != "" {
+			names = append(names, l)
+		}
+	}
+	return strings.Join(names, ", ")
 }
 
 // buildGuideFields renders a numbered "How to build it" walkthrough over an

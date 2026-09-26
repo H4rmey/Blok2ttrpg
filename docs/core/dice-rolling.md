@@ -3,16 +3,11 @@
 
 ## Introduction
 
-The dice system used in this system consists of six different dice: **d4, d6, d8, d10, d12, and d20**. These dice are categorized into **Dice Tiers** (1-6), each corresponding to a **Proficiency Level**:
+Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Trait. The ladder runs from {{ lowestDie }} at the bottom rung to {{ highestDie }} at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
 
-| Proficiency | Dice |
-| --- | --- |
-| Clumsy | d4 |
-| Untrained | d6 |
-| Trained | d8 |
-| Expert | d10 |
-| Master | d12 |
-| Legendary | d20 |
+{{ proficiencyDiceTable }}
+
+{{ defaultProficiencyName }} is the rung every Trait starts at and is free; the rung below it is a deliberate weakness and refunds a point.
 
 ---
 
@@ -35,7 +30,7 @@ When attempting an action where the outcome is uncertain, the acting character m
 
 **1\. The Engagement Roll**
 
-The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Trait and rolls the corresponding die (ranging from d4 to d12). This is the **Engagement Roll**.
+The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Trait and rolls the corresponding die (ranging from {{ lowestDie }} to {{ highestDie }}). This is the **Engagement Roll**.
 
 **2\. The Counter Roll**
 

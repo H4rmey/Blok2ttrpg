@@ -1,83 +1,61 @@
 # Point budgets per character level.
 #
-# Ability (perk) points are tuned so a baseline perk costs about 3 points:
+# Both pools are now derived from a formula rather than a hand-written table:
+#
+#   budget(level) = start + per_level * (level - 1)
+#
+# The engine computes this directly, so the numbers documented here are the
+# numbers the app serves. An optional `levels:` list may still be supplied to
+# override individual levels when a non-linear curve is wanted; a row for the
+# requested level wins over the formula.
+#
+# max_level is enforced: a character's level is clamped to this value on every
+# manual edit and on import, so it is not possible to go past level 10.
+#
+#
+# Ability (perk) points
+# --------------------
+# Tuned so a baseline perk costs about 3 points:
 #   execution base_cost 1 + direct interaction base 1 + validation engage d6 1
 #   (the first enactment's base_cost is waived by the cost engine).
-# Level 1 therefore grants 9 points (about 3 perks) and every level after
-# grants 3 more (about 1 extra perk per level), ending at 36 at level 10.
+# start 9 is about 3 starting perks; per_level 3 is about 1 extra perk per
+# level, ending at 36 (about 12 perks) at level 10.
 #
-# Skill (trait) points follow the documented starting formula
-# (trait_count + 2) / 3 over the 26 skills (15 general + 4 offense +
-# 4 defense + 3 vital), giving 9 at level 1 and rising by 1 per level with a
-# bonus point at levels 5 and 10.
 #
-# Note: standard_trait_count and starting_formula are documentation only; the
-# budget actually served to the app comes from the `levels` totals below.
+# Skill (trait) points
+# -------------------
+# The old "(trait_count + 2) / 3" starting formula no longer matched the cost
+# model and has been dropped. Two things broke it:
+#
+#   1. Every rung of the proficiency ladder in proficiencies.yaml costs 1
+#      point (untrained is the free default, legendary is 0), so raising a
+#      single trait from untrained to master costs 4 and the whole 26-trait
+#      roster costs 104 points to max out. The old curve granted 9 at level 1
+#      and only 20 at level 10, under 20% of the ladder, which left a level 10
+#      character's dice almost indistinguishable from a level 1 character's.
+#   2. The vital group (HP / Movement / Energy) is paid from this same pool, so
+#      3 to 6 of those points are effectively mandatory and never reach the 23
+#      dice-backed skills.
+#
+# The rebalanced curve grants 13 at level 1 and +3 per level, reaching 40 at
+# level 10 (about 38% of the 104-point ladder):
+#
+#   L1 13   L2 16   L3 19   L4 22   L5 25
+#   L6 28   L7 31   L8 34   L9 37   L10 40
+#
+# 13 at level 1 buys the three vitals at Novice plus roughly five signature
+# skills at Novice, or a pair of skills at Proficient with vitals covered.
+# +3 per level is one visible die bump (or one vital step) plus change every
+# level, which matches the +3 perk points so the dice half of the sheet grows
+# at the same rate as the perk half. 40 at level 10 lets a specialist reach
+# Master in two or three skills and stay broadly competent elsewhere, without
+# trivialising a 26-skill roster. The arbitrary bonus points that used to be
+# handed out at levels 5 and 10 are gone: the flat +3 replaces them.
 leveling:
   max_level: 10
   trait_points:
-    standard_trait_count: 26
-    starting_formula: "(trait_count + 2) / 3"
-    levels:
-      - level: 1
-        points_gained: 0
-        total: 9
-      - level: 2
-        points_gained: 1
-        total: 10
-      - level: 3
-        points_gained: 1
-        total: 11
-      - level: 4
-        points_gained: 1
-        total: 12
-      - level: 5
-        points_gained: 2
-        total: 14
-      - level: 6
-        points_gained: 1
-        total: 15
-      - level: 7
-        points_gained: 1
-        total: 16
-      - level: 8
-        points_gained: 1
-        total: 17
-      - level: 9
-        points_gained: 1
-        total: 18
-      - level: 10
-        points_gained: 2
-        total: 20
+    start: 13
+    per_level: 3
   ability_points:
-    levels:
-      - level: 1
-        points_gained: 0
-        total: 9
-      - level: 2
-        points_gained: 3
-        total: 12
-      - level: 3
-        points_gained: 3
-        total: 15
-      - level: 4
-        points_gained: 3
-        total: 18
-      - level: 5
-        points_gained: 3
-        total: 21
-      - level: 6
-        points_gained: 3
-        total: 24
-      - level: 7
-        points_gained: 3
-        total: 27
-      - level: 8
-        points_gained: 3
-        total: 30
-      - level: 9
-        points_gained: 3
-        total: 33
-      - level: 10
-        points_gained: 3
-        total: 36
+    start: 9
+    per_level: 3

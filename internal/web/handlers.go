@@ -194,8 +194,8 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 		// edits to level and trait dropdowns before saving.
 		a.applyCharacterForm(&c, r)
 		if lvl := r.URL.Query().Get("level"); lvl != "" {
-			if n, err := strconv.Atoi(lvl); err == nil && n >= 1 {
-				c.Level = n
+			if n, err := strconv.Atoi(lvl); err == nil {
+				c.Level = a.Cfg.ClampLevel(n)
 			}
 		}
 		data := a.characterPage(&c, false)
@@ -240,6 +240,9 @@ func (a *App) handleImportCharacter(w http.ResponseWriter, r *http.Request) {
 	if c.ID == "" {
 		c.ID = fmt.Sprintf("char-%d", time.Now().UnixNano())
 	}
+	// An imported file may name any level, so normalise it against the
+	// ruleset's cap before the character is stored.
+	c.Level = a.Cfg.ClampLevel(c.Level)
 	if err := a.Store.Save(c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -272,9 +275,11 @@ func (a *App) blankCharacter(id string) model.Character {
 // form was applied as posted.
 func (a *App) applyCharacterForm(c *model.Character, r *http.Request) string {
 	_ = r.ParseForm()
+	// The level is clamped to the configured range, so a hand-edited or
+	// scripted request cannot push a character past leveling.max_level.
 	if lvl := r.FormValue("level"); lvl != "" {
-		if n, err := strconv.Atoi(lvl); err == nil && n >= 1 {
-			c.Level = n
+		if n, err := strconv.Atoi(lvl); err == nil {
+			c.Level = a.Cfg.ClampLevel(n)
 		}
 	}
 	for _, g := range a.Cfg.Attributes.List() {
