@@ -131,6 +131,49 @@ a:hover { text-decoration: underline; }
 .perk-chip.build { color: var(--accent); border-color: var(--accent); }
 .perk-chip.energy { color: var(--cyan); border-color: var(--cyan); }
 .perk-chip.action { color: var(--warn); border-color: var(--warn); }
+.perk-chip.skill { color: var(--cyan); border-color: var(--cyan); }
+
+/* A cost the remaining budget cannot cover. The "over" modifier wins over the
+   per-kind colours above, so it must stay after them. */
+.perk-chip.over {
+  color: var(--danger);
+  border-color: var(--danger);
+  font-weight: 600;
+}
+
+/* A library card the character cannot afford: dimmed, outlined in the danger
+   colour, with its Import button visibly inert. */
+.pkg-card.unaffordable {
+  border-color: var(--danger);
+  opacity: 0.75;
+}
+
+.pkg-card.unaffordable .btn[disabled],
+.pkg-card .btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pkg-blocked {
+  margin: 0.25rem 0 0;
+  color: var(--danger);
+  font-size: 0.85rem;
+}
+
+/* Heads-up that a package's shift would be clamped at an end of the
+   proficiency ladder. Amber rather than red: the import is still allowed. */
+.pkg-clamp-warn {
+  margin: 0.25rem 0 0;
+  color: var(--warn);
+  font-size: 0.85rem;
+}
+
+/* Remaining-points line at the top of the library modals. */
+.pkg-budget {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
 
 /* Read-only character bar (perk list and perk builder): the level reads as
    plain text because its input belongs to the character sheet form. */

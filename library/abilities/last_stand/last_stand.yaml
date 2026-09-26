@@ -1,0 +1,33 @@
+name: Last Stand
+description: "You set your feet, refuse to fall, and become very hard to move for as long as it lasts."
+type: execution
+fields:
+  comment: Strong self phase that later reverses.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: phase
+    fields:
+      comment: Constitution surges, then gives out.
+      phase-duration: 2
+      phase-shift-amount: 2
+      shift-affected-traits:
+        - value: defense.Constitution
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
+  - type: condition
+    # The resolve is on you, the same target the phase above shifted, so this
+    # enactment inherits it.
+    fields:
+      comment: Nothing shifts you while it holds.
+      condition: anchored
+      duration: "2"
+      solution:
+        - value: defense.Constitution
+      solution_dc: 2

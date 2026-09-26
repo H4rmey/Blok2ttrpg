@@ -1,5 +1,5 @@
 name: Holy Smite
-description: "Radiant judgement falls on your enemy while the same light settles as a blessing on you. Cost target: 7 build / 1 energy."
+description: "Radiant judgement falls on your enemy while the same light settles as a blessing on you."
 type: execution
 fields:
   comment: Radiant damage and a self blessing.
@@ -24,6 +24,9 @@ enactments:
       counter_trait:
         - value: defense.Wisdom
   - type: condition
+    # The blessing lands on you, not on the enemy the first enactment struck,
+    # so this enactment buys its own target.
+    new_target: true
     fields:
       comment: You are wreathed in holy light.
       condition: blessed
@@ -34,3 +37,8 @@ enactments:
     interaction: self
     interaction_data:
       comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom

@@ -36,6 +36,12 @@ type Config struct {
 	AllowNegativeBuildCost  *bool `yaml:"allow_negative_build_cost,omitempty" json:"allow_negative_build_cost,omitempty"`
 	AllowNegativeEnergyCost *bool `yaml:"allow_negative_energy_cost,omitempty" json:"allow_negative_energy_cost,omitempty"`
 
+	// AllowNegativeSkillPoints controls whether a character may spend more
+	// skill (trait) points than its level budget grants. It defaults to false,
+	// which makes the app reject any change (manual trait edit or package
+	// import) that would push the used total past the budget.
+	AllowNegativeSkillPoints *bool `yaml:"allow_negative_skill_points,omitempty" json:"allow_negative_skill_points,omitempty"`
+
 	Combat Combat `yaml:"combat,omitempty" json:"combat,omitempty"`
 
 	AdditionalEnactment AdditionalEnactment `yaml:"additional_enactment,omitempty" json:"additional_enactment,omitempty"`
@@ -123,6 +129,12 @@ func (c *Config) AllowsNegativeEnergyCost() bool {
 	return c.AllowNegativeEnergyCost != nil && *c.AllowNegativeEnergyCost
 }
 
+// AllowsNegativeSkillPoints reports whether a character is permitted to
+// overspend its skill (trait) point budget. Defaults to false when unset.
+func (c *Config) AllowsNegativeSkillPoints() bool {
+	return c.AllowNegativeSkillPoints != nil && *c.AllowNegativeSkillPoints
+}
+
 // Combat holds combat-wide settings.
 
 type Combat struct {
@@ -145,6 +157,35 @@ type AdditionalEnactment struct {
 	// first.
 	RequireInteraction *bool `yaml:"require_interaction,omitempty" json:"require_interaction,omitempty"`
 	RequireValidation  *bool `yaml:"require_validation,omitempty" json:"require_validation,omitempty"`
+
+	// NewTarget is the surcharge for letting an enactment beyond the first pick
+	// its own target instead of inheriting the previous enactment's target. An
+	// enactment that opts in gets its own Interaction and Validation region and
+	// pays for them; one that does not inherit both for free.
+	NewTarget NewTargetOption `yaml:"new_target,omitempty" json:"new_target,omitempty"`
+}
+
+// NewTargetOption configures the "different target than the previous enactment"
+// opt-in: what it costs and how it is labelled in the builder.
+type NewTargetOption struct {
+	BuildCost   int    `yaml:"build_cost,omitempty" json:"build_cost,omitempty"`
+	EnergyCost  int    `yaml:"energy_cost,omitempty" json:"energy_cost,omitempty"`
+	Label       string `yaml:"label,omitempty" json:"label,omitempty"`
+	Description string `yaml:"description,omitempty" json:"description,omitempty"`
+}
+
+// AsCost converts the surcharge into a plain Cost.
+func (n NewTargetOption) AsCost() Cost {
+	return Cost{BuildCost: n.BuildCost, EnergyCost: n.EnergyCost}
+}
+
+// DisplayLabel returns the checkbox label, falling back to a sensible default
+// when the ruleset does not name it.
+func (n NewTargetOption) DisplayLabel() string {
+	if n.Label != "" {
+		return n.Label
+	}
+	return "Targets something different than the previous enactment"
 }
 
 // AsCost converts the surcharge into a plain Cost.

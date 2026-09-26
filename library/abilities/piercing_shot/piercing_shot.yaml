@@ -1,5 +1,5 @@
 name: Piercing Shot
-description: "A carefully drawn arrow loosed at distance, aimed for the gap in the armour. Cost target: 4 build / 0 energy."
+description: "A carefully drawn arrow loosed at distance, aimed for the gap in the armour."
 type: execution
 fields:
   comment: Medium-range precision attack.

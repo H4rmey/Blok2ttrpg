@@ -1,0 +1,6 @@
+id: shield
+name: Shield
+description: "A sturdy board of banded wood. Blocks, shoves and occasionally breaks noses."
+imports:
+  - shield_bash
+  - quick_dodge

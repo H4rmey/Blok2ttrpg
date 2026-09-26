@@ -1,0 +1,40 @@
+name: Life Tap
+description: "You open a thin red thread between you and your enemy, and what leaves them arrives in you."
+type: execution
+fields:
+  comment: Drain an enemy to heal yourself.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Vitality torn loose.
+      source: offense.Magic
+      flat: 0
+      damage_type:
+        - value: Necrotic
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
+  - type: healing
+    # The healing lands on you, not on the enemy that was drained, so this
+    # enactment buys its own target.
+    new_target: true
+    fields:
+      comment: What you took, you keep.
+      source: d4
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

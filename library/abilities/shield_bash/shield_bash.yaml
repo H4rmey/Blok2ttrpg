@@ -1,0 +1,33 @@
+name: Shield Bash
+description: "You lead with the boss of the shield, drive them backwards, and follow the step yourself."
+type: execution
+fields:
+  comment: Damage plus a shove on the same target.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: The shield rim connects.
+      source: offense.Strength
+      flat: 0
+      damage_type:
+        - value: Bludgeoning
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
+  - type: motion
+    # Same enemy as the hit above, so this enactment inherits its target and
+    # needs no roll of its own.
+    fields:
+      comment: Driven back a pace.
+      distance: 2
+      direction:
+        - value: Away

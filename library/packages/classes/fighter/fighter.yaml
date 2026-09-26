@@ -1,0 +1,10 @@
+id: fighter
+name: Fighter
+description: "A disciplined front-line combatant. Trades blows, holds ground and keeps standing."
+# Sized for a level 1 character: the shifts and the single signature perk leave
+# room for a race and a background on top of them.
+shifts:
+  offense.Strength: 2
+  defense.Constitution: 1
+imports:
+  - power_cleave

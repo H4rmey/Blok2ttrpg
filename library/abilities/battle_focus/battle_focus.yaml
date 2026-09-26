@@ -1,5 +1,5 @@
 name: Battle Focus
-description: "A breath, a grip check, and total clarity. Your strikes land truer for a short while. Cost target: 5 build / 0 energy."
+description: "A breath, a grip check, and total clarity. Your strikes land truer for a short while."
 type: execution
 fields:
   comment: Temporary offensive buff on yourself.

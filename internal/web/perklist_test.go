@@ -57,24 +57,23 @@ func TestPerkListShowsCostAndInstructions(t *testing.T) {
 	if !strings.Contains(body, "Time Slip") {
 		t.Fatalf("perk name missing from list:\n%s", body)
 	}
-	// Time Slip costs 9 build points once normalized: the execution base, two
+	// Time Slip costs 8 build points once normalized: the execution base, two
 	// condition enactments (the first waives its base cost), the additional-
-	// enactment surcharge, a direct interaction at 5m, and a full validation
-	// block on each enactment. A different figure here means field binding
+	// enactment surcharge, the new-target surcharge on the second enactment
+	// (it hastens you and then delays an enemy, so it buys its own target), a
+	// direct interaction at 5m, and a validation block on each of the two
+	// enactments that own a target. A different figure here means field binding
 	// regressed (e.g. missing yaml tags on interaction_data / validation_data),
 	// an ability-type base_cost stopped being read, or normalization changed
 	// what gets stored.
-	//
-	// Note: the library file's description claims a target of 8 build, which
-	// does not match what the rules actually compute. The engine is the
-	// authority here; the description is a stale authoring note.
-	if !strings.Contains(body, "9 pt") {
-		t.Errorf("expected Time Slip to render a 9 pt cost; got:\n%s", body)
+	if !strings.Contains(body, "8 pt") {
+		t.Errorf("expected Time Slip to render an 8 pt cost; got:\n%s", body)
 	}
-	// 9 points at level 1, 9 spent, so none remain.
-	if !strings.Contains(body, "0/9") {
-		t.Errorf("expected remaining perk points 0/9 in the summary; got:\n%s", body)
+	// 9 points at level 1, 8 spent, so one remains.
+	if !strings.Contains(body, "1/9") {
+		t.Errorf("expected remaining perk points 1/9 in the summary; got:\n%s", body)
 	}
+
 	if !strings.Contains(body, "instruction-block") {
 		t.Errorf("instructions not rendered inline in the perk list:\n%s", body)
 	}
@@ -101,7 +100,7 @@ func TestPerkListRefreshPartial(t *testing.T) {
 	if strings.Contains(body, "<html") {
 		t.Errorf("refresh should return a partial, not a full page:\n%s", body)
 	}
-	if !strings.Contains(body, "9 pt") {
+	if !strings.Contains(body, "8 pt") {
 		t.Errorf("refreshed perk list did not recompute the cost:\n%s", body)
 	}
 	// The refresh reports its outcome, so the control is visibly not a no-op.
@@ -167,8 +166,10 @@ func TestPerkLibraryShowsCost(t *testing.T) {
 	if !strings.Contains(body, "perk-cost-chips") {
 		t.Errorf("library does not show perk costs:\n%s", body)
 	}
-	// Time Slip costs 9 pt on a character, so the library must quote 9 pt too.
-	if !strings.Contains(body, "9 pt") {
+	// Time Slip costs 8 perk points on a character, so the library must quote
+	// the same figure.
+	if !strings.Contains(body, "8 perk pt") {
+
 		t.Errorf("library cost does not match the imported cost:\n%s", body)
 	}
 	if strings.Contains(body, "Ability Library") {

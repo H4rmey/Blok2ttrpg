@@ -1,5 +1,5 @@
 name: Shove
-description: "A blunt two-handed push that sends an enemy stumbling backwards out of reach. Cost target: 3 build / 0 energy."
+description: "A blunt two-handed push that sends an enemy stumbling backwards out of reach."
 type: execution
 fields:
   comment: Push an enemy away from you.

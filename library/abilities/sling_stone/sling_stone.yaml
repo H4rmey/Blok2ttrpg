@@ -1,5 +1,5 @@
 name: Sling Stone
-description: "A whirling leather sling hurls a river stone with surprising force. Cost target: 3 build / 0 energy."
+description: "A whirling leather sling hurls a river stone with surprising force."
 type: execution
 fields:
   comment: A cheap ranged opener.

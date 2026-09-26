@@ -19,6 +19,12 @@ combat:
 allow_negative_build_cost: false
 allow_negative_energy_cost: false
 
+# Skill (trait) point budget enforcement. When false (the default) a character
+# may not spend more skill points than its level grants: manual trait edits and
+# package imports that would overspend the budget are rejected. Set to true to
+# let a character go into negative skill points.
+allow_negative_skill_points: false
+
 
 additional_enactment:
   build_cost: 0
@@ -29,6 +35,16 @@ additional_enactment:
   # them. Set to false to hide that region for enactments beyond the first.
   require_interaction: false
   require_validation: false
+  # Opt-in surcharge for an enactment beyond the first that picks its own
+  # target instead of inheriting the target of the enactment before it.
+  # Checking it reveals that enactment's own Interaction and Validation
+  # regions, so their cost applies on top of this surcharge.
+  new_target:
+    build_cost: 1
+    energy_cost: 0
+    label: "This enactment has a different target than the enactment before it"
+    description: "Give an enactment beyond the first its own Interaction and Validation"
+
 
 
 # Named option sources. Each entry may be authored as a bare string

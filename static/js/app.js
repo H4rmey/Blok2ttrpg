@@ -228,7 +228,32 @@ function dispatchChange(el) {
 
 
 
+  // Show or hide an enactment's Interaction and Validation regions. An
+  // enactment owns its target when it is the first one, or when the author
+  // ticked "different target than the enactment before it"; otherwise it
+  // reuses the previous enactment's target and the two regions are hidden.
+  // They stay in the DOM (and keep posting) so hiding them never discards
+  // stored values, matching how the server renders the block.
+  function applyTargetRegions(block, index) {
+    var toggle = block.querySelector(".new-target-toggle");
+    var owns = index === 0 || (toggle && toggle.checked);
+    ["region-interaction", "region-validation"].forEach(function (cls) {
+      var region = block.querySelector("." + cls);
+      if (region) region.hidden = !owns;
+    });
+  }
+
+  container.addEventListener("change", function (e) {
+    if (e.target && e.target.classList.contains("new-target-toggle")) {
+      var block = e.target.closest(".enactment");
+      if (block) {
+        applyTargetRegions(block, parseInt(block.getAttribute("data-index") || "0", 10));
+      }
+    }
+  });
+
   // Renumber every enactment block so their indices are contiguous starting
+
   // at 0. This rewrites the "en<i>_" prefix on every named input/select and
   // the hx-vals index, then syncs enactment_count to the real block count.
   // Without this, removing a block leaves a gap (e.g. en0 removed, en1 kept)
@@ -244,6 +269,13 @@ function dispatchChange(el) {
       // so hide its Remove button.
       var removeBtn = block.querySelector(".remove-enactment");
       if (removeBtn) removeBtn.style.display = i === 0 ? "none" : "";
+      // The first enactment always owns its target, so it never shows the
+      // "different target" checkbox; later blocks do. Renumbering can turn a
+      // second enactment into the first one, so this has to be reapplied here.
+      var ntField = block.querySelector(".new-target-field");
+      if (ntField) ntField.hidden = i === 0;
+      applyTargetRegions(block, i);
+
 
       block.querySelectorAll("[name]").forEach(function (input) {
         input.name = input.name.replace(/^en\d+_/, "en" + i + "_");

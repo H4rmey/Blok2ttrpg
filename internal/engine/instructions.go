@@ -46,6 +46,10 @@ func AbilityInstructions(cfg *config.Config, a model.Ability) []Instruction {
 	}
 	var out []Instruction
 	n := 0
+	// inheritedPlural carries the singular/plural wording of the last enactment
+	// that owned a target, so an enactment reusing that target words its lines
+	// the same way.
+	inheritedPlural := false
 	for _, en := range a.Enactments {
 		if en.Type == "" {
 			continue
@@ -59,8 +63,23 @@ func AbilityInstructions(cfg *config.Config, a model.Ability) []Instruction {
 			ins.Title = en.Type
 		}
 		plural := false
-		ins.Interaction, plural = interactionLine(cfg, en)
-		ins.Validation = validationLine(cfg, en, plural)
+		// An enactment owns its target when it is the first one, or when the
+		// author ticked "different target than the enactment before it". One
+		// that does not simply reuses the previous enactment's target, so it
+		// has neither its own Interaction nor its own roll.
+		if n == 1 || en.NewTarget {
+			ins.Interaction, plural = interactionLine(cfg, en)
+			ins.Validation = validationLine(cfg, en, plural)
+			inheritedPlural = plural
+		} else {
+			plural = inheritedPlural
+			ins.Interaction = "Same target as the previous enactment."
+			if plural {
+				ins.Interaction = "The same targets as the previous enactment."
+			}
+			ins.Validation = "No separate roll; uses the previous enactment's result."
+		}
+
 		ins.Success = successLine(cfg, en, plural)
 		ins.Solution = solutionLine(cfg, en)
 		ins.Note = noteLine(cfg, en)

@@ -1,5 +1,5 @@
 name: Stunning Blow
-description: "A precise, brutal hit to the temple that robs an enemy of an action entirely. Cost target: 8 build / 1 energy."
+description: "A precise, brutal hit to the temple that robs an enemy of an action entirely."
 type: execution
 fields:
   comment: Damage plus a stun. A capstone perk.
@@ -32,8 +32,3 @@ enactments:
         - value: defense.Constitution
         - value: defense.Wisdom
       solution_dc: 0
-    interaction: direct
-    interaction_data:
-      comment: ""
-      range: "1"
-      targets: 1

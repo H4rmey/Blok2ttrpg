@@ -1,0 +1,44 @@
+name: Bait and Switch
+description: "You make yourself the obvious threat, then step somewhere much less convenient for them."
+type: execution
+fields:
+  comment: Taunt an enemy, then reposition yourself.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: They cannot look away from you.
+      condition: taunted
+      duration: "1"
+      solution:
+        - value: defense.Wisdom
+        - value: general.Perception
+      solution_dc: 3
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
+  - type: motion
+    # You are the one who moves, not the enemy you taunted, so this enactment
+    # buys its own target.
+    new_target: true
+    fields:
+      comment: And then you are not where they expected.
+      distance: 3
+      direction:
+        - value: Away
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom

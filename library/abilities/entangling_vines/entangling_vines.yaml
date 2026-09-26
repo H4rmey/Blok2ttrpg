@@ -1,5 +1,5 @@
 name: Entangling Vines
-description: "Thorned creepers burst from the soil, binding a foe's arms tight against their body. Cost target: 6 build / 0 energy."
+description: "Thorned creepers burst from the soil, binding a foe's arms tight against their body."
 type: execution
 fields:
   comment: Restrain a target for two turns.

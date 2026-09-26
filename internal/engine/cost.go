@@ -346,9 +346,18 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 			total.Build += c.Build
 			total.Energy += c.Energy
 		}
+		// An enactment owns its target when it is the first one, or when the
+		// author ticked "different target than the enactment before it". Only
+		// an enactment that owns its target has an Interaction and a
+		// Validation, so only then do those regions cost anything: the others
+		// simply reuse the previous enactment's target for free.
+		ownsTarget := present == 0 || en.NewTarget
+		if present > 0 && en.NewTarget {
+			total.plus(cfg.AdditionalEnactment.NewTarget.AsCost())
+		}
 		present++
 
-		if en.Interaction != "" {
+		if ownsTarget && en.Interaction != "" {
 			if ic, ok := cfg.Interaction(en.Interaction); ok {
 				c := ComponentCost(cfg, ic, en.InteractionData)
 				total.Build += c.Build
@@ -356,7 +365,7 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 			}
 		}
 		// Validation (engagement/counter) fields also contribute cost.
-		if len(cfg.Validations.Fields) > 0 {
+		if ownsTarget && len(cfg.Validations.Fields) > 0 {
 			c := FieldsCost(cfg, cfg.Validations.Fields, en.ValidationData)
 			total.Build += c.Build
 			total.Energy += c.Energy
@@ -424,6 +433,45 @@ func cumulativeTraitCost(cfg *config.Config, profID string) int {
 		sum += cfg.Proficiencies[i].Cost
 	}
 	return sum
+}
+
+// PackageCost is the price of importing a package, expressed in the two budgets
+// a character actually spends: perk (ability) points and skill (trait) points.
+type PackageCost struct {
+	// Perk is the sum of the build cost of every ability the package installs.
+	Perk int `json:"perk"`
+	// Skill is the number of trait points the package's proficiency shifts
+	// consume on top of what the character already spends.
+	Skill int `json:"skill"`
+}
+
+// PackageCostFor computes what a package would cost the given character. Perk
+// points are the summed build cost of the package's abilities. Skill points are
+// the difference in cumulative trait cost between the character's current tier
+// and the tier the shift would move it to, so a shift that is already paid for
+// (or that moves a trait downward) does not charge again.
+//
+// The character is not modified. A trait the character has no entry for is
+// treated as sitting at the configured default tier.
+func PackageCostFor(cfg *config.Config, c model.Character, shifts map[string]int, abilities []model.Ability) PackageCost {
+	var out PackageCost
+	for _, ab := range abilities {
+		out.Perk += AbilityCost(cfg, ab).Build
+	}
+	def := cfg.DefaultProficiencyID()
+	for traitKey, delta := range shifts {
+		if delta == 0 {
+			continue
+		}
+		current, ok := c.Traits[traitKey]
+		if !ok || current == "" {
+			current = def
+		}
+		before := cumulativeTraitCost(cfg, current)
+		after := cumulativeTraitCost(cfg, cfg.ShiftProficiency(current, delta))
+		out.Skill += after - before
+	}
+	return out
 }
 
 func abs(n int) int {

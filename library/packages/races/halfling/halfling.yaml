@@ -1,0 +1,9 @@
+id: halfling
+name: Halfling
+description: "Small, quick and impossible to pin down. Halflings slip out of trouble as easily as they find it."
+shifts:
+  general.Stealth: 1
+  general.Thievery: 1
+  defense.Reflex: 1
+imports:
+  - evasive_reflex

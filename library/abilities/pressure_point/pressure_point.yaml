@@ -1,0 +1,27 @@
+name: Pressure Point
+description: "One thumb in exactly the right place and the arm stops answering its owner."
+type: execution
+fields:
+  comment: Cheap melee disable with no damage.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: The limb goes numb.
+      condition: weakened
+      duration: "2"
+      solution:
+        - value: defense.Constitution
+        - value: general.Medicine
+      solution_dc: 3
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

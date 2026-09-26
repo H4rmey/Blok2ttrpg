@@ -1,5 +1,5 @@
 name: Guarded Stance
-description: "Weight back, shield high. You give up ground but become much harder to hit. Cost target: 5 build / 0 energy."
+description: "Weight back, shield high. You give up ground but become much harder to hit."
 type: execution
 fields:
   comment: Temporary defensive buff on yourself.

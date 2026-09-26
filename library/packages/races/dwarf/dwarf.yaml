@@ -1,0 +1,9 @@
+id: dwarf
+name: Dwarf
+description: "Stone-stubborn and hard to move. Dwarves endure what others cannot."
+shifts:
+  general.Crafting: 1
+  defense.Constitution: 1
+  vital.HP: 1
+imports:
+  - guarded_stance

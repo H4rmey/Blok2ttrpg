@@ -154,6 +154,10 @@ func (a *App) importAbility(w http.ResponseWriter, r *http.Request, c *model.Cha
 	// existing one on the character.
 	ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
 	ab = engine.NormalizeAbility(a.Cfg.Config, ab)
+	if ok, reason := a.affordAbility(c, ab); !ok {
+		http.Error(w, reason, http.StatusBadRequest)
+		return
+	}
 	c.Abilities = append(c.Abilities, ab)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -162,16 +166,30 @@ func (a *App) importAbility(w http.ResponseWriter, r *http.Request, c *model.Cha
 	http.Redirect(w, r, "/characters/"+c.ID+"/abilities", http.StatusSeeOther)
 }
 
+// perkLibraryRow is one perk in the browser plus whether the character can still
+// pay for it. With no character in context it is always affordable.
+type perkLibraryRow struct {
+	perkSummary
+	Affordable bool
+}
+
 // abilityLibraryPage is the data envelope for the built-in perk browser. Perks
 // carry their computed cost so the library can show the price of a perk before
-// it is imported.
+// it is imported, along with the character's remaining budgets so an
+// unaffordable perk can be flagged and blocked.
 type abilityLibraryPage struct {
 	CharacterID string
-	Perks       []perkSummary
+	Perks       []perkLibraryRow
+
+	// HasCharacter reports whether budget figures are available. When false the
+	// browser hides the remaining-points header and never blocks an import.
+	HasCharacter bool
+	charStats
 }
 
 // handleAbilityLibrary renders the built-in perk browser. It expects a
-// "character" query parameter so the import buttons post to the right route.
+// "character" query parameter so the import buttons post to the right route and
+// so each perk can be checked against that character's remaining perk points.
 func (a *App) handleAbilityLibrary(w http.ResponseWriter, r *http.Request) {
 	charID := r.URL.Query().Get("character")
 	abs, err := a.Library.ListAbilities()
@@ -179,22 +197,49 @@ func (a *App) handleAbilityLibrary(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	data := abilityLibraryPage{CharacterID: charID}
+	if charID != "" {
+		if c, ok := a.Store.Get(charID); ok {
+			data.HasCharacter = true
+			data.charStats = a.characterStats(&c)
+		}
+	}
+	perkLeft := data.AbilityBudget - data.AbilityUsed
+
 	// Each perk is normalized before its cost is computed, exactly as it will be
 	// on import. That keeps the price shown in the library identical to the
 	// price the perk ends up with once it is on a character.
-	perks := make([]perkSummary, 0, len(abs))
 	for _, ab := range abs {
 		norm := engine.NormalizeAbility(a.Cfg.Config, ab)
-		perks = append(perks, perkSummary{
-			Ability: norm,
-			Cost:    engine.AbilityCost(a.Cfg.Config, norm),
-		})
+		cost := engine.AbilityCost(a.Cfg.Config, norm)
+		row := perkLibraryRow{
+			perkSummary: perkSummary{Ability: norm, Cost: cost},
+			Affordable:  true,
+		}
+		if data.HasCharacter {
+			row.Affordable = cost.Build <= perkLeft
+		}
+		data.Perks = append(data.Perks, row)
 	}
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	data := abilityLibraryPage{CharacterID: charID, Perks: perks}
 	if err := a.Tmpl.ExecuteTemplate(w, "ability_library", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+// affordAbility reports whether the character has enough perk points left to
+// take on the given (already normalized) ability, with a human-readable reason
+// when it does not. Callers turn a false result into a 400 so an unaffordable
+// import is blocked server-side and not merely flagged in the UI.
+func (a *App) affordAbility(c *model.Character, ab model.Ability) (bool, string) {
+	cost := engine.AbilityCost(a.Cfg.Config, ab)
+	stats := a.characterStats(c)
+	if left := stats.AbilityBudget - stats.AbilityUsed; cost.Build > left {
+		return false, fmt.Sprintf("%q costs %d perk points but only %d remain.", ab.Name, cost.Build, left)
+	}
+	return true, ""
 }
 
 // importBuiltinAbility copies a built-in ability (by library id) onto the
@@ -217,6 +262,10 @@ func (a *App) importBuiltinAbility(w http.ResponseWriter, r *http.Request, c *mo
 	}
 	ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
 	ab = engine.NormalizeAbility(a.Cfg.Config, ab)
+	if ok, reason := a.affordAbility(c, ab); !ok {
+		http.Error(w, reason, http.StatusBadRequest)
+		return
+	}
 	c.Abilities = append(c.Abilities, ab)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -329,42 +378,9 @@ func (a *App) saveAbility(w http.ResponseWriter, r *http.Request, c *model.Chara
 	if existingID == "" {
 		existingID = r.FormValue("ability_id")
 	}
-	_ = r.ParseForm()
-	ab := model.Ability{
-		ID:          existingID,
-		Name:        r.FormValue("name"),
-		Description: r.FormValue("description"),
-		Type:        r.FormValue("type"),
-		Fields:      map[string]any{},
-	}
-	if ab.ID == "" {
-		ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
-	}
-	if at, ok := a.Cfg.AbilityType(ab.Type); ok {
-		ab.Fields = readFieldValues(a.Cfg.Config, at.Fields, "atype_", r)
-	}
-
-	// Enactments are posted as enactment count + per-index type/fields.
-	count, _ := strconv.Atoi(r.FormValue("enactment_count"))
-	for i := 0; i < count; i++ {
-		prefix := fmt.Sprintf("en%d_", i)
-		etype := r.FormValue(prefix + "type")
-		if etype == "" {
-			continue
-		}
-		en := model.Enactment{Type: etype}
-		if ec, ok := a.Cfg.Enactment(etype); ok {
-			en.Fields = readFieldValues(a.Cfg.Config, ec.Fields, prefix+"f_", r)
-		}
-		en.Interaction = r.FormValue(prefix + "interaction")
-		if ic, ok := a.Cfg.Interaction(en.Interaction); ok {
-			en.InteractionData = readFieldValues(a.Cfg.Config, ic.Fields, prefix+"i_", r)
-		}
-		if len(a.Cfg.Validations.Fields) > 0 {
-			en.ValidationData = readFieldValues(a.Cfg.Config, a.Cfg.Validations.Fields, prefix+"v_", r)
-		}
-		ab.Enactments = append(ab.Enactments, en)
-	}
+	// One shared parse path for save, autosave and the cost preview so the
+	// three can never disagree about what the form said.
+	ab := a.buildAbilityFromForm(r, existingID)
 
 	// Normalize on the way in so the stored perk is canonical: every configured
 	// field present, repeatable fields expanded, numbers in range. The cost
@@ -514,6 +530,10 @@ func (a *App) handleBuilderEnactment(w http.ResponseWriter, r *http.Request) {
 		"Fields":          map[string]any{},
 		"InteractionData": map[string]any{},
 		"ValidationData":  map[string]any{},
+		// A freshly added enactment inherits the previous enactment's target,
+		// so the "different target" box starts unchecked unless the form
+		// already had it ticked for this index.
+		"NewTarget": r.FormValue(fmt.Sprintf("en%s_new_target", idx)) == "on",
 	}
 
 	var buf bytes.Buffer
@@ -748,7 +768,17 @@ func (a *App) buildAbilityFromForm(r *http.Request, existingID string) model.Abi
 	if at, ok := a.Cfg.AbilityType(ab.Type); ok {
 		ab.Fields = readFieldValues(a.Cfg.Config, at.Fields, "atype_", r)
 	}
+	ab.Enactments = a.readEnactments(r)
+	return ab
+}
+
+// readEnactments parses the posted enactment blocks of the builder form. They
+// arrive as an "enactment_count" plus per-index "en<i>_" prefixed values. It is
+// the single parse path shared by save, autosave and the cost/instruction
+// previews so those can never disagree about what the form said.
+func (a *App) readEnactments(r *http.Request) []model.Enactment {
 	count, _ := strconv.Atoi(r.FormValue("enactment_count"))
+	var out []model.Enactment
 	for i := 0; i < count; i++ {
 		prefix := fmt.Sprintf("en%d_", i)
 		etype := r.FormValue(prefix + "type")
@@ -759,6 +789,11 @@ func (a *App) buildAbilityFromForm(r *http.Request, existingID string) model.Abi
 		if ec, ok := a.Cfg.Enactment(etype); ok {
 			en.Fields = readFieldValues(a.Cfg.Config, ec.Fields, prefix+"f_", r)
 		}
+		// The first enactment always owns its target, so its checkbox is not
+		// rendered and the flag stays false there; later enactments opt in.
+		if v := r.FormValue(prefix + "new_target"); v == "on" || v == "true" {
+			en.NewTarget = true
+		}
 		en.Interaction = r.FormValue(prefix + "interaction")
 		if ic, ok := a.Cfg.Interaction(en.Interaction); ok {
 			en.InteractionData = readFieldValues(a.Cfg.Config, ic.Fields, prefix+"i_", r)
@@ -766,9 +801,9 @@ func (a *App) buildAbilityFromForm(r *http.Request, existingID string) model.Abi
 		if len(a.Cfg.Validations.Fields) > 0 {
 			en.ValidationData = readFieldValues(a.Cfg.Config, a.Cfg.Validations.Fields, prefix+"v_", r)
 		}
-		ab.Enactments = append(ab.Enactments, en)
+		out = append(out, en)
 	}
-	return ab
+	return out
 }
 
 // handleBuilderCost recomputes advisory cost from posted form values.
@@ -779,27 +814,9 @@ func (a *App) handleBuilderCost(w http.ResponseWriter, r *http.Request) {
 	if at, ok := a.Cfg.AbilityType(ab.Type); ok {
 		ab.Fields = readFieldValues(a.Cfg.Config, at.Fields, "atype_", r)
 	}
-	count, _ := strconv.Atoi(r.FormValue("enactment_count"))
-	for i := 0; i < count; i++ {
-		prefix := fmt.Sprintf("en%d_", i)
-		etype := r.FormValue(prefix + "type")
-		if etype == "" {
-			continue
-		}
-		en := model.Enactment{Type: etype}
-		if ec, ok := a.Cfg.Enactment(etype); ok {
-			en.Fields = readFieldValues(a.Cfg.Config, ec.Fields, prefix+"f_", r)
-		}
-		en.Interaction = r.FormValue(prefix + "interaction")
-		if ic, ok := a.Cfg.Interaction(en.Interaction); ok {
-			en.InteractionData = readFieldValues(a.Cfg.Config, ic.Fields, prefix+"i_", r)
-		}
-		if len(a.Cfg.Validations.Fields) > 0 {
-			en.ValidationData = readFieldValues(a.Cfg.Config, a.Cfg.Validations.Fields, prefix+"v_", r)
-		}
-		ab.Enactments = append(ab.Enactments, en)
-	}
+	ab.Enactments = a.readEnactments(r)
 	cost := engine.AbilityCost(a.Cfg.Config, ab)
+
 	// Budget for the over-budget hint; the character id is passed as a form
 	// value so this conditionless partial can look it up.
 	budget := 0

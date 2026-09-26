@@ -1,0 +1,11 @@
+id: ranger
+name: Ranger
+description: "A tracker and marksman. Picks a target, marks it and does not miss twice."
+# Sized for a level 1 character: the shifts and these two cheap perks leave room
+# for a race and a background on top of them.
+shifts:
+  general.Perception: 1
+  offense.Precision: 2
+imports:
+  - piercing_shot
+  - caltrops

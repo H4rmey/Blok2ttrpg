@@ -1,0 +1,46 @@
+name: Soul Link
+description: "You tie your fate to an ally's. What reaches them reaches you, and neither of you stands alone."
+type: concentration
+fields:
+  comment: Sustained link between you and an ally.
+  energy_steps: 0
+  action_steps: 0
+  upkeep_cost: "1 Energy"
+enactments:
+  - type: condition
+    fields:
+      comment: The ally is bound to you.
+      condition: linked
+      duration: "3"
+      solution:
+        - value: defense.Wisdom
+      solution_dc: 2
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
+  - type: condition
+    # Your half of the link is on you, not on the ally, so this enactment buys
+    # its own target.
+    new_target: true
+    fields:
+      comment: And you to them.
+      condition: linked
+      duration: "3"
+      solution:
+        - value: defense.Wisdom
+      solution_dc: 2
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom

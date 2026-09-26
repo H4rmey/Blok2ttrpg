@@ -102,4 +102,12 @@ type Enactment struct {
 	InteractionData map[string]any `json:"interaction_data,omitempty"`
 	// ValidationData holds the engagement/counter (validation) field values.
 	ValidationData map[string]any `json:"validation_data,omitempty" yaml:"validation_data,omitempty"`
+
+	// NewTarget marks an enactment beyond the first that picks its own target
+	// instead of inheriting the target of the enactment before it. The first
+	// enactment always has its own target, so the flag is ignored there. When
+	// set, the enactment shows and pays for its own Interaction and Validation
+	// plus the configured additional_enactment.new_target surcharge; when
+	// unset, it reuses the previous enactment's target and pays for neither.
+	NewTarget bool `json:"new_target,omitempty" yaml:"new_target,omitempty"`
 }

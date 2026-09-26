@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -158,12 +159,16 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 			a.render(w, "character.html", data)
 
 		case http.MethodPost:
-			a.applyCharacterForm(&c, r)
+			warn := a.applyCharacterForm(&c, r)
 			if err := a.Store.Save(c); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			http.Redirect(w, r, "/characters/"+id, http.StatusSeeOther)
+			target := "/characters/" + id
+			if warn != "" {
+				target += "?warn=" + url.QueryEscape(warn)
+			}
+			http.Redirect(w, r, target, http.StatusSeeOther)
 		case http.MethodDelete:
 			_ = a.Store.Delete(id)
 			w.Header().Set("HX-Redirect", "/")
@@ -262,7 +267,10 @@ func (a *App) blankCharacter(id string) model.Character {
 }
 
 // applyCharacterForm reads posted form fields into the generic character maps.
-func (a *App) applyCharacterForm(c *model.Character, r *http.Request) {
+// It returns a warning message when the posted trait selections had to be
+// rejected for overspending the skill-point budget; an empty string means the
+// form was applied as posted.
+func (a *App) applyCharacterForm(c *model.Character, r *http.Request) string {
 	_ = r.ParseForm()
 	if lvl := r.FormValue("level"); lvl != "" {
 		if n, err := strconv.Atoi(lvl); err == nil && n >= 1 {
@@ -277,6 +285,13 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) {
 			}
 		}
 	}
+	// Snapshot the trait tiers so an overspending selection can be rolled back
+	// wholesale. Skill points are only allowed to go negative when the ruleset
+	// sets allow_negative_skill_points.
+	before := make(map[string]string, len(c.Traits))
+	for k, v := range c.Traits {
+		before[k] = v
+	}
 	for _, g := range a.Cfg.Traits.List() {
 
 		for _, t := range g.Traits {
@@ -284,6 +299,14 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) {
 			if v := r.FormValue(name); v != "" {
 				c.Traits[model.TraitKey(g.ID, t)] = v
 			}
+		}
+	}
+	warning := ""
+	if !a.Cfg.AllowsNegativeSkillPoints() {
+		budget := a.Cfg.TraitPointBudget(c.Level)
+		if used := engine.TraitPointsUsed(a.Cfg.Config, *c); used > budget {
+			c.Traits = before
+			warning = fmt.Sprintf("That selection would use %d skill points but only %d are available at level %d. Your skill changes were not applied.", used, budget, c.Level)
 		}
 	}
 	// Current values for editable vitals (HP/Energy). Stored as attributes
@@ -295,6 +318,7 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) {
 			c.Attributes[name] = r.FormValue(name)
 		}
 	}
+	return warning
 }
 
 func (a *App) characterPage(c *model.Character, isNew bool) pageData {

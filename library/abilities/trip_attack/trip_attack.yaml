@@ -1,5 +1,5 @@
 name: Trip Attack
-description: "A low sweep of the leg or haft that drops a foe flat on their back. Cost target: 3 build / 0 energy."
+description: "A low sweep of the leg or haft that drops a foe flat on their back."
 type: execution
 fields:
   comment: Knock the target to the ground.

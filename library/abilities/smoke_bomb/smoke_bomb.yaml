@@ -1,5 +1,5 @@
 name: Smoke Bomb
-description: "A clay pellet that bursts into choking grey smoke, blinding everyone caught in the cloud. Cost target: 5 build / 0 energy."
+description: "A clay pellet that bursts into choking grey smoke, blinding everyone caught in the cloud."
 type: execution
 fields:
   comment: Zone blind in a small cloud.

@@ -1,5 +1,5 @@
 name: Healing Light
-description: "A warm glow that knits an ally's wounds shut and lifts their spirits. Cost target: 6 build / 1 energy."
+description: "A warm glow that knits an ally's wounds shut and lifts their spirits."
 type: execution
 fields:
   comment: Heal an ally and encourage them.
@@ -29,8 +29,3 @@ enactments:
       solution:
         - value: defense.Wisdom
       solution_dc: 0
-    interaction: direct
-    interaction_data:
-      comment: ""
-      range: "5"
-      targets: 1

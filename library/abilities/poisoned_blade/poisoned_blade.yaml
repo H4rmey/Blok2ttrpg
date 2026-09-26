@@ -1,0 +1,38 @@
+name: Poisoned Blade
+description: "A shallow cut is enough. The coating on the steel does the rest over the next few rounds."
+type: execution
+fields:
+  comment: Light hit that leaves a lingering poison.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: A thin, deliberate cut.
+      source: offense.Precision
+      flat: 0
+      damage_type:
+        - value: Piercing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
+  - type: effect
+    # The poison works on the enemy the blade cut, so this enactment inherits
+    # the target above.
+    fields:
+      comment: The coating spreads.
+      effect_type: damage
+      effect_type_ib:
+        source: d4
+      effect-duration: 2
+      solution:
+        - value: general.Medicine
+        - value: defense.Constitution
+      solution_dc: 4

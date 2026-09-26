@@ -1,0 +1,28 @@
+name: Overcharge
+description: "You push far more power through the spell than it was meant to carry, and pay for it afterwards."
+type: execution
+fields:
+  comment: Add to another enactment's Source, funded by a nerf.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: adjustment
+    fields:
+      comment: Extra power poured into the enactment.
+      source: d8
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
+  - type: nerf
+    # The backlash is on you, and the adjustment above already resolved against
+    # its own target, so this stays on the same target and needs no new one.
+    fields:
+      comment: The backlash dulls your senses.
+      nerf-shifted-trait: defense.Wisdom
+      nerf-shift-amount: -1
+      nerf-duration: 2

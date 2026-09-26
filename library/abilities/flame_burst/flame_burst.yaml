@@ -1,5 +1,5 @@
 name: Flame Burst
-description: "A detonating bloom of fire that engulfs a wide area and leaves the ground burning. Cost target: 7 build / 0 energy."
+description: "A detonating bloom of fire that engulfs a wide area and leaves the ground burning."
 type: execution
 fields:
   comment: Large fire zone with a lingering burn.

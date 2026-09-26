@@ -1,0 +1,10 @@
+id: wizard
+name: Wizard
+description: "A studied caster. Reshapes the battlefield with prepared arcane force."
+# Sized for a level 1 character: the shifts and the single signature spell leave
+# room for a race and a background on top of them.
+shifts:
+  general.Magic: 1
+  offense.Magic: 2
+imports:
+  - frost_lance

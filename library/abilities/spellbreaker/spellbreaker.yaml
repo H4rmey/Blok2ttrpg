@@ -1,0 +1,41 @@
+name: Spellbreaker
+description: "You catch a spell mid-word, unravel it, and leave the caster unable to find the word again."
+type: execution
+fields:
+  comment: Negate an enactment and silence its source.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: negation
+    fields:
+      comment: The incoming enactment comes apart.
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
+  - type: condition
+    # The silence is pinned on the caster, while the negation protected you, so
+    # this enactment buys its own target.
+    new_target: true
+    fields:
+      comment: The caster loses the thread.
+      condition: silenced
+      duration: "1"
+      solution:
+        - value: defense.Wisdom
+        - value: general.Knowledge
+      solution_dc: 4
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom

@@ -1,0 +1,41 @@
+name: Sap Strength
+description: "You siphon the power out of an enemy's arms and pour it straight into your own."
+type: execution
+fields:
+  comment: Steal a trait shift from an enemy.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: modification
+    fields:
+      comment: Their arms go slack.
+      modification-traits: offense.Strength
+      modification-shift-amount: -1
+      modificaiton-shift-duration: 2
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
+  - type: modification
+    # The stolen strength is added to you, not to the enemy you drained, so
+    # this enactment buys its own target.
+    new_target: true
+    fields:
+      comment: And yours fill out.
+      modification-traits: offense.Strength
+      modification-shift-amount: 1
+      modificaiton-shift-duration: 2
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

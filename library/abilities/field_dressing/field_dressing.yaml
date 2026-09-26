@@ -1,5 +1,5 @@
 name: Field Dressing
-description: "Bandages, a tourniquet and a steady hand. Enough to keep yourself standing. Cost target: 2 build / 0 energy."
+description: "Bandages, a tourniquet and a steady hand. Enough to keep yourself standing."
 type: execution
 fields:
   comment: Patch up your own wounds.

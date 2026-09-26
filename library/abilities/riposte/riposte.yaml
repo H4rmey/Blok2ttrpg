@@ -1,0 +1,39 @@
+name: Riposte
+description: "You turn the blow aside on your guard and answer it along the same line before they recover."
+type: execution
+fields:
+  comment: Nullify an attack, then punish it.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: negation
+    fields:
+      comment: The attack slides off your guard.
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
+  - type: damage
+    # The counter-thrust goes back at the attacker, not at you, so this
+    # enactment buys its own target.
+    new_target: true
+    fields:
+      comment: Straight back down the line.
+      source: offense.Precision
+      flat: 0
+      damage_type:
+        - value: Piercing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

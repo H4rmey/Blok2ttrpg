@@ -1,0 +1,8 @@
+id: soldier
+name: Soldier
+description: "Drilled in formation fighting. You know how to take an order and shout one."
+shifts:
+  general.Athletics: 1
+  general.Intimidate: 1
+imports:
+  - war_cry

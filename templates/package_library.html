@@ -5,6 +5,16 @@
     <button class="btn" type="button" onclick="closePackageModal()">Close</button>
   </div>
 
+  {{ if .HasCharacter }}
+  {{/* Remaining budgets, so the cost shown on each card can be read against
+       what the character actually has left to spend. */}}
+  <p class="pkg-budget">
+    Perk points: <strong>{{ .AbilityUsed }}/{{ .AbilityBudget }}</strong> used
+    &middot;
+    Skill points: <strong>{{ .TraitUsed }}/{{ .TraitBudget }}</strong> used
+  </p>
+  {{ end }}
+
   {{ if .Packages }}
   <div class="pkg-cats">
     {{ $charID := .CharacterID }}
@@ -20,14 +30,34 @@
       <div class="pkg-cat-body">
     {{ $lastCat = .Category }}
     {{ end }}
-        <div class="pkg-card">
+        <div class="pkg-card{{ if not .Affordable }} unaffordable{{ end }}">
           <div class="pkg-card-head">
             <strong>{{ .Name }}</strong>
             <form action="/characters/{{ $charID }}/packages/import" method="post">
               <input type="hidden" name="package_id" value="{{ .ID }}">
-              <button class="btn primary" type="submit">Import</button>
+              {{/* An unaffordable package cannot be imported: the button is
+                   disabled here and the server rejects the post as well. */}}
+              <button class="btn primary" type="submit" {{ if not .Affordable }}disabled{{ end }}>Import</button>
             </form>
           </div>
+          {{/* What importing this package will spend, in both budgets. The chip
+               turns red when that budget cannot cover it. */}}
+          <div class="perk-cost-chips">
+            <span class="perk-chip build{{ if not .PerkAffordable }} over{{ end }}">{{ .Cost.Perk }} perk pt</span>
+            <span class="perk-chip skill{{ if not .SkillAffordable }} over{{ end }}">{{ .Cost.Skill }} skill pt</span>
+          </div>
+          {{ if not .Affordable }}
+          <p class="pkg-blocked">Not enough points to import this package.</p>
+          {{ end }}
+          {{ if .Clamped }}
+          {{/* These skills already sit at an end of the proficiency ladder, so
+               the package's shift cannot be applied in full. Importing is still
+               allowed; this is a heads-up, not a block. */}}
+          <p class="pkg-clamp-warn">
+            Already at the proficiency limit, so the shift will not apply in full:
+            {{ range $i, $t := .Clamped }}{{ if $i }}, {{ end }}{{ $t }}{{ end }}
+          </p>
+          {{ end }}
           {{ if .Description }}<p class="muted">{{ .Description }}</p>{{ end }}
           {{ if .Shifts }}
           <div class="pkg-shifts">

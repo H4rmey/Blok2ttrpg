@@ -5,21 +5,49 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"sort"
 	"strings"
 	"time"
 
+	"github.com/harmey/blok2ttrpg-v5/internal/engine"
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 	"github.com/harmey/blok2ttrpg-v5/internal/premade"
 )
 
+// packageRow is one package in the browser together with what importing it
+// would cost the current character and whether that fits in the remaining
+// budget. Affordability is only meaningful when a character is in context; with
+// no character every row is reported as affordable.
+type packageRow struct {
+	premade.Package
+	Cost engine.PackageCost
+
+	// PerkAffordable/SkillAffordable are tracked separately so the template can
+	// redden only the budget that actually overflows.
+	PerkAffordable  bool
+	SkillAffordable bool
+	Affordable      bool
+
+	// Clamped lists the trait keys whose shift would run off the top or bottom
+	// of the proficiency ladder for this character, so the browser can warn
+	// about them before the import happens. It is empty when every shift fits.
+	Clamped []string
+}
+
 // packageLibraryPage is the data envelope for the built-in package browser.
 type packageLibraryPage struct {
 	CharacterID string
-	Packages    []premade.Package
+	Packages    []packageRow
+
+	// HasCharacter reports whether budget figures are available. When false the
+	// browser hides the remaining-points header and never blocks an import.
+	HasCharacter bool
+	charStats
 }
 
 // handlePackageLibrary renders the built-in package browser. It expects a
-// "character" query parameter so the import buttons post to the right route.
+// "character" query parameter so the import buttons post to the right route and
+// so each package can be priced against that character's remaining points.
 func (a *App) handlePackageLibrary(w http.ResponseWriter, r *http.Request) {
 	charID := r.URL.Query().Get("character")
 	pkgs, err := a.Library.ListPackages()
@@ -27,11 +55,77 @@ func (a *App) handlePackageLibrary(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	data := packageLibraryPage{CharacterID: charID}
+	var c model.Character
+	if charID != "" {
+		if found, ok := a.Store.Get(charID); ok {
+			c = found
+			data.HasCharacter = true
+			data.charStats = a.characterStats(&c)
+		}
+	}
+	perkLeft := data.AbilityBudget - data.AbilityUsed
+	skillLeft := data.TraitBudget - data.TraitUsed
+
+	for _, pkg := range pkgs {
+		cost := engine.PackageCostFor(a.Cfg.Config, c, pkg.Shifts, pkg.Abilities)
+		row := packageRow{Package: pkg, Cost: cost, PerkAffordable: true, SkillAffordable: true}
+		if data.HasCharacter {
+			row.PerkAffordable = cost.Perk <= perkLeft
+			// Overspending skill points is only allowed when the ruleset opts in
+			// via allow_negative_skill_points.
+			row.SkillAffordable = a.Cfg.AllowsNegativeSkillPoints() || cost.Skill <= skillLeft
+		}
+		row.Affordable = row.PerkAffordable && row.SkillAffordable
+		if data.HasCharacter {
+			row.Clamped = a.clampedShifts(&c, pkg.Shifts)
+		}
+		data.Packages = append(data.Packages, row)
+	}
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	data := packageLibraryPage{CharacterID: charID, Packages: pkgs}
 	if err := a.Tmpl.ExecuteTemplate(w, "package_library", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+// clampedShifts returns the trait keys whose shift cannot be applied in full
+// because the character already sits at an end of the proficiency ladder. It is
+// a preview only: it does not modify the character. Keys are returned sorted so
+// the warning text is stable between renders.
+func (a *App) clampedShifts(c *model.Character, shifts map[string]int) []string {
+	var out []string
+	for traitKey, delta := range shifts {
+		if delta == 0 {
+			continue
+		}
+		current, ok := c.Traits[traitKey]
+		if !ok || current == "" {
+			current = a.Cfg.DefaultProficiencyID()
+		}
+		if a.Cfg.ShiftClamped(current, delta) {
+			out = append(out, traitKey)
+		}
+	}
+	sort.Strings(out)
+	return out
+}
+
+// affordPackage reports whether the character can pay for a package, returning a
+// human-readable reason when it cannot. Callers turn a false result into a 400
+// so an unaffordable import is blocked server-side and not merely hidden in the
+// UI.
+func (a *App) affordPackage(c *model.Character, pkg *premade.Package) (bool, string) {
+	cost := engine.PackageCostFor(a.Cfg.Config, *c, pkg.Shifts, pkg.Abilities)
+	stats := a.characterStats(c)
+	if perkLeft := stats.AbilityBudget - stats.AbilityUsed; cost.Perk > perkLeft {
+		return false, fmt.Sprintf("%q costs %d perk points but only %d remain.", pkg.Name, cost.Perk, perkLeft)
+	}
+	if skillLeft := stats.TraitBudget - stats.TraitUsed; !a.Cfg.AllowsNegativeSkillPoints() && cost.Skill > skillLeft {
+		return false, fmt.Sprintf("%q costs %d skill points but only %d remain.", pkg.Name, cost.Skill, skillLeft)
+	}
+	return true, ""
 }
 
 // handlePackages dispatches /characters/{id}/packages[/...] routes.
@@ -197,6 +291,12 @@ func (a *App) togglePackage(w http.ResponseWriter, r *http.Request, c *model.Cha
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+		// Re-enabling spends points again, so it is subject to the same budget
+		// check as a fresh import.
+		if ok, reason := a.affordPackage(c, pkg); !ok {
+			http.Error(w, reason, http.StatusBadRequest)
+			return
+		}
 		rec.Shifts = a.applyPackageEffects(c, pkg)
 		rec.Enabled = true
 	}
@@ -235,6 +335,10 @@ func (a *App) importBuiltinPackage(w http.ResponseWriter, r *http.Request, c *mo
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	if ok, reason := a.affordPackage(c, pkg); !ok {
+		http.Error(w, reason, http.StatusBadRequest)
+		return
+	}
 	clamped := a.applyPackage(c, pkg)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -265,6 +369,10 @@ func (a *App) importCustomPackage(w http.ResponseWriter, r *http.Request, c *mod
 	pkg, err := premade.ParsePackage(data, baseDir)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if ok, reason := a.affordPackage(c, pkg); !ok {
+		http.Error(w, reason, http.StatusBadRequest)
 		return
 	}
 	clamped := a.applyPackage(c, pkg)

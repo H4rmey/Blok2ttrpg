@@ -1,0 +1,35 @@
+name: Hooked Chain
+description: "A weighted hook snaps out, bites into cloth or armour, and hauls its owner to your feet."
+type: execution
+fields:
+  comment: Pull a distant enemy into melee and pin them.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: motion
+    fields:
+      comment: Reeled in hard.
+      distance: 4
+      direction:
+        - value: Towards
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
+  - type: condition
+    # The same enemy that was dragged in is the one now tangled in the chain,
+    # so this enactment inherits the target above.
+    fields:
+      comment: Tangled in the chain where they land.
+      condition: restrained
+      duration: "1"
+      solution:
+        - value: general.Athletics
+        - value: defense.Reflex
+      solution_dc: 4

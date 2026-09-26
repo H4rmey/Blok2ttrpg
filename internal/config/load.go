@@ -113,6 +113,18 @@ func merge(base, in *Config) {
 	if in.Combat.Actions.Amount != 0 {
 		base.Combat = in.Combat
 	}
+	// The allow_negative_* flags are tri-state pointers: only a section file
+	// that actually sets one overwrites the base value, so an unset flag keeps
+	// whatever an earlier file declared (and ultimately defaults to false).
+	if in.AllowNegativeBuildCost != nil {
+		base.AllowNegativeBuildCost = in.AllowNegativeBuildCost
+	}
+	if in.AllowNegativeEnergyCost != nil {
+		base.AllowNegativeEnergyCost = in.AllowNegativeEnergyCost
+	}
+	if in.AllowNegativeSkillPoints != nil {
+		base.AllowNegativeSkillPoints = in.AllowNegativeSkillPoints
+	}
 	if (in.AdditionalEnactment != AdditionalEnactment{}) {
 		base.AdditionalEnactment = in.AdditionalEnactment
 	}

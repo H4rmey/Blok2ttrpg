@@ -1,0 +1,41 @@
+name: Gale Step
+description: "A hard gust throws an enemy off their line and carries you into the space they left."
+type: execution
+fields:
+  comment: Reposition an enemy and then yourself.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: motion
+    fields:
+      comment: Blown off their footing.
+      distance: 3
+      direction:
+        - value: Away
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
+  - type: motion
+    # You are the one riding the gust forward, not the enemy it pushed, so this
+    # enactment buys its own target.
+    new_target: true
+    fields:
+      comment: You ride the same gust forward.
+      distance: 3
+      direction:
+        - value: Towards
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

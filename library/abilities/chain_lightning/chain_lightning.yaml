@@ -1,5 +1,5 @@
 name: Chain Lightning
-description: "An arc of lightning that leaps from one enemy to the next, striking three targets in a breath. Cost target: 7 build / 0 energy."
+description: "An arc of lightning that leaps from one enemy to the next, striking three targets in a breath."
 type: execution
 fields:
   comment: Multi-target magical damage.

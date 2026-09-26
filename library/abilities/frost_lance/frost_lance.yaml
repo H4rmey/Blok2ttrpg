@@ -1,5 +1,5 @@
 name: Frost Lance
-description: "A spear of hoarfrost that cracks on impact and leaves the target's limbs stiff with cold. Cost target: 5 build / 1 energy."
+description: "A spear of hoarfrost that cracks on impact and leaves the target's limbs stiff with cold."
 type: execution
 fields:
   comment: Cold damage plus a slow.
@@ -32,8 +32,3 @@ enactments:
         - value: defense.Constitution
         - value: general.Athletics
       solution_dc: 0
-    interaction: direct
-    interaction_data:
-      comment: ""
-      range: "5"
-      targets: 1

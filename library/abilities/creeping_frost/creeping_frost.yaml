@@ -1,0 +1,30 @@
+name: Creeping Frost
+description: "Hoarfrost spreads across the ground and keeps biting at anything still standing on it."
+type: execution
+fields:
+  comment: Persistent damaging zone.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: effect
+    fields:
+      comment: The cold keeps working each round.
+      effect_type: damage
+      effect_type_ib:
+        source: d4
+      effect-duration: 3
+      solution:
+        - value: defense.Constitution
+        - value: general.Athletics
+      solution_dc: 4
+    interaction: zone
+    interaction_data:
+      comment: ""
+      zone-range: "5"
+      zone-radius: 2
+      zone-duration: 3
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution

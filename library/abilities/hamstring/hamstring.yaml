@@ -1,5 +1,5 @@
 name: Hamstring
-description: "A vicious low cut behind the knee that pins a fleeing enemy in place. Cost target: 5 build / 1 energy."
+description: "A vicious low cut behind the knee that pins a fleeing enemy in place."
 type: execution
 fields:
   comment: Damage plus a hard stop on movement.
@@ -32,8 +32,3 @@ enactments:
         - value: defense.Constitution
         - value: general.Medicine
       solution_dc: 0
-    interaction: direct
-    interaction_data:
-      comment: ""
-      range: "1"
-      targets: 1

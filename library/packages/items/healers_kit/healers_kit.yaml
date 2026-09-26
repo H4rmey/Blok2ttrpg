@@ -1,0 +1,6 @@
+id: healers_kit
+name: Healer's Kit
+description: "Bandages, salves and a needle. Enough to stop bleeding and steady a shaking hand."
+imports:
+  - field_dressing
+  - battle_focus

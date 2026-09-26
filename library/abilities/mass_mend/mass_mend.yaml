@@ -1,5 +1,5 @@
 name: Mass Mend
-description: "A pulse of restorative energy that washes over a wide area and mends every ally caught in it. Cost target: 8 build / 0 energy."
+description: "A pulse of restorative energy that washes over a wide area and mends every ally caught in it."
 type: execution
 fields:
   comment: Area healing over a two meter radius.

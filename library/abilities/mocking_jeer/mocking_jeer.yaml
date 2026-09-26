@@ -1,5 +1,5 @@
 name: Mocking Jeer
-description: "A cutting insult that rattles a foe's concentration and makes them second-guess every swing. Cost target: 4 build / 1 energy."
+description: "A cutting insult that rattles a foe's concentration and makes them second-guess every swing."
 type: execution
 fields:
   comment: Two light mental debuffs.
@@ -33,8 +33,3 @@ enactments:
       solution:
         - value: defense.Wisdom
       solution_dc: 0
-    interaction: direct
-    interaction_data:
-      comment: ""
-      range: "5"
-      targets: 1

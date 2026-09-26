@@ -1,0 +1,29 @@
+name: Rallying Banner
+description: "You plant the standard and hold it up. Everyone who can see it stands a little straighter."
+type: concentration
+fields:
+  comment: Sustained area encouragement for allies.
+  energy_steps: 0
+  action_steps: 0
+  upkeep_cost: "1 Action or 1 Energy"
+enactments:
+  - type: condition
+    fields:
+      comment: Allies in sight of the banner take heart.
+      condition: encouraged
+      shift_amount: 1
+      duration: "2"
+      solution:
+        - value: defense.Wisdom
+      solution_dc: 2
+    interaction: zone
+    interaction_data:
+      comment: ""
+      zone-range: "1"
+      zone-radius: 3
+      zone-duration: 2
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom

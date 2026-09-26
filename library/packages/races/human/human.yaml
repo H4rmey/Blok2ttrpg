@@ -1,0 +1,9 @@
+id: human
+name: Human
+description: "Adaptable and driven. Humans spread everywhere and pick up a little of everything."
+shifts:
+  general.People Skill: 1
+  general.Resources: 1
+  offense.Precision: 1
+imports:
+  - quick_dodge

@@ -9,6 +9,12 @@
 {{ $validationData := .ValidationData }}
 {{ $prefix := printf "en%s_" $i }}
 {{ $idx := atoi $i }}
+{{ $newTarget := .NewTarget }}
+{{/* The first enactment always owns its target. A later one only shows (and
+     pays for) its own Interaction and Validation when the author ticks the
+     "different target" box. */}}
+{{ $ownsTarget := or (eq $idx 0) $newTarget }}
+
 
 <div class="enactment" data-index="{{ $i }}">
   <div class="enactment-head">
@@ -61,11 +67,29 @@
       </div>
     </div>
 
+    {{/* Enactments after the first inherit the previous enactment's target by
+         default. Ticking this box gives this enactment its own Interaction and
+         Validation, which is what lets a perk hit an opponent first and then
+         yourself. It carries the configured surcharge plus the cost of the two
+         regions it reveals. */}}
+    {{ if gt $idx 0 }}
+    <div class="field new-target-field">
+      <label>
+        <input type="checkbox" name="{{ $prefix }}new_target" class="new-target-toggle"
+               {{ if $newTarget }}checked{{ end }}>
+        {{ $cfg.AdditionalEnactment.NewTarget.DisplayLabel }}
+        {{ with newTargetHint $cfg }}<span class="cost-hint">{{ . }}</span>{{ end }}
+      </label>
+      {{ with $cfg.AdditionalEnactment.NewTarget.Description }}<small class="field-info">{{ . }}</small>{{ end }}
+    </div>
+    {{ end }}
+
     {{/* Every enactment is fully specified, so both regions always render and
-         always post. A region the ruleset does not require for this enactment
-         is merely hidden: omitting it would drop the stored values on save,
-         silently changing the perk and its cost. */}}
-    <div class="region region-interaction"{{ if not (showInteraction $cfg $idx) }} hidden{{ end }}>
+         always post. A region this enactment does not own is merely hidden:
+         omitting it would drop the stored values on save, silently changing
+         the perk and its cost. */}}
+    <div class="region region-interaction"{{ if not (and $ownsTarget (showInteraction $cfg $idx)) }} hidden{{ end }}>
+
       <h4 class="region-title">Interaction{{ if and $cfg.Interactions.Information (not $cfg.Interactions.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Interactions.Information }}">i</span>{{ end }}</h4>
       <div class="field">
         <label>Interaction Type
@@ -106,7 +130,8 @@
     </div>
 
     {{/* Same reasoning as the Interaction region. */}}
-    <div class="region region-validation"{{ if not (showValidation $cfg $idx) }} hidden{{ end }}>
+    <div class="region region-validation"{{ if not (and $ownsTarget (showValidation $cfg $idx)) }} hidden{{ end }}>
+
       <h4 class="region-title">Validation{{ if and $cfg.Validations.Information (not $cfg.Validations.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ $cfg.Validations.Information }}">i</span>{{ end }}</h4>
 
 

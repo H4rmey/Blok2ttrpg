@@ -1,0 +1,9 @@
+id: orc
+name: Orc
+description: "Raw strength and a frightening presence. Orcs end fights by starting them hard."
+shifts:
+  general.Intimidate: 1
+  offense.Strength: 1
+  vital.HP: 1
+imports:
+  - berserk_surge

@@ -5,26 +5,42 @@
     <button class="btn" type="button" onclick="closeAbilityModal()">Close</button>
   </div>
 
+  {{ if .HasCharacter }}
+  {{/* Remaining budgets, so the price on each card can be read against what
+       the character actually has left to spend. */}}
+  <p class="pkg-budget">
+    Perk points: <strong>{{ .AbilityUsed }}/{{ .AbilityBudget }}</strong> used
+    &middot;
+    Skill points: <strong>{{ .TraitUsed }}/{{ .TraitBudget }}</strong> used
+  </p>
+  {{ end }}
+
   {{ if .Perks }}
   <ul class="pkg-list">
     {{ $charID := .CharacterID }}
     {{ range .Perks }}
     {{ $ab := .Ability }}
-    <li class="pkg-card">
+    <li class="pkg-card{{ if not .Affordable }} unaffordable{{ end }}">
       <div class="pkg-card-head">
         <strong>{{ $ab.Name }}</strong>
         <form action="/characters/{{ $charID }}/abilities/import" method="post">
           <input type="hidden" name="ability_id" value="{{ $ab.ID }}">
-          <button class="btn primary" type="submit">Import</button>
+          {{/* An unaffordable perk cannot be imported: the button is disabled
+               here and the server rejects the post as well. */}}
+          <button class="btn primary" type="submit" {{ if not .Affordable }}disabled{{ end }}>Import</button>
         </form>
       </div>
       {{/* The price is shown with the same chips as the perk list, so a perk
-           costs what the library says once it is imported. */}}
+           costs what the library says once it is imported. The perk-point chip
+           turns red when the remaining budget cannot cover it. */}}
       <div class="perk-cost-chips">
-        <span class="perk-chip build">{{ .Cost.Build }} pt</span>
+        <span class="perk-chip build{{ if not .Affordable }} over{{ end }}">{{ .Cost.Build }} perk pt</span>
         {{ if .Cost.Energy }}<span class="perk-chip energy">{{ .Cost.Energy }} E</span>{{ end }}
         {{ if .Cost.Action }}<span class="perk-chip action">{{ .Cost.Action }} action(s)</span>{{ end }}
       </div>
+      {{ if not .Affordable }}
+      <p class="pkg-blocked">Not enough perk points to import this perk.</p>
+      {{ end }}
       <p class="muted">{{ $ab.Type }} &middot; {{ len $ab.Enactments }} enactment(s)</p>
       {{ if $ab.Description }}<p class="muted">{{ $ab.Description }}</p>{{ end }}
     </li>

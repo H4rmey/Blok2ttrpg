@@ -1,0 +1,37 @@
+name: Thunderclap
+description: "You bring your palms together and the air itself hits everyone standing near you."
+type: execution
+fields:
+  comment: Self-centred burst that deafens the area.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: The pressure wave lands on everyone close.
+      source: offense.Magic
+      flat: 0
+      damage_type:
+        - value: Thunder
+    interaction: zone
+    interaction_data:
+      comment: ""
+      zone-range: "1"
+      zone-radius: 2
+      zone-duration: 0
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Constitution
+  - type: condition
+    # Everyone caught in the burst above is the one left ringing, so this
+    # enactment inherits that zone.
+    fields:
+      comment: Ears ringing.
+      condition: deafened
+      duration: "1"
+      solution:
+        - value: defense.Constitution
+        - value: general.Perception
+      solution_dc: 3

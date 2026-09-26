@@ -1,0 +1,45 @@
+name: Hunter's Mark
+description: "You pick one target out of the crowd and from then on you simply do not lose them."
+type: concentration
+fields:
+  comment: Sustained mark that also sharpens your aim.
+  energy_steps: 0
+  action_steps: 0
+  upkeep_cost: "1 Energy"
+enactments:
+  - type: condition
+    fields:
+      comment: They are marked as long as you hold focus.
+      condition: marked
+      duration: "3"
+      solution:
+        - value: defense.Reflex
+        - value: general.Stealth
+      solution_dc: 5
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
+  - type: modification
+    # The sharpened aim is yours, not the marked enemy's, so this enactment
+    # buys its own target.
+    new_target: true
+    fields:
+      comment: Your aim settles on them.
+      modification-traits: offense.Precision
+      modification-shift-amount: 1
+      modificaiton-shift-duration: 3
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex

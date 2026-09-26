@@ -1,5 +1,5 @@
 name: Handful of Sand
-description: "A fistful of grit flung into the eyes. Dishonourable, effective, and very cheap. Cost target: 3 build / 0 energy."
+description: "A fistful of grit flung into the eyes. Dishonourable, effective, and very cheap."
 type: execution
 fields:
   comment: Blind a foe with thrown grit.

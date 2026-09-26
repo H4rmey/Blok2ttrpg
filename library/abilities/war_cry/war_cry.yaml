@@ -1,5 +1,5 @@
 name: War Cry
-description: "A roar that drags an enemy's attention squarely onto you and nobody else. Cost target: 3 build / 0 energy."
+description: "A roar that drags an enemy's attention squarely onto you and nobody else."
 type: execution
 fields:
   comment: Force a foe to focus on you.

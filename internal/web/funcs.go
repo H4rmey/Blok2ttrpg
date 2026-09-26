@@ -123,6 +123,13 @@ func funcMap() template.FuncMap {
 		// "(-2 pt, +1 E)". Zero components are omitted; an all-zero cost yields
 		// an empty string so nothing is shown.
 		"costHint": func(c *config.Cost) string { return costHintStr(c) },
+		// newTargetHint formats the configured cost of giving an enactment its
+		// own target, for the builder checkbox label.
+		"newTargetHint": func(cfg *config.Config) string {
+			c := cfg.AdditionalEnactment.NewTarget.AsCost()
+			return costHintStr(&c)
+		},
+
 		// perStepHint formats a free_number per-step cost into a hint describing
 		// the increase (and decrease, if different) per step.
 		"perStepHint": func(p *config.PerStep) string { return perStepHintStr(p) },

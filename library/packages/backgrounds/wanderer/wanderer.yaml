@@ -1,0 +1,8 @@
+id: wanderer
+name: Wanderer
+description: "No fixed home, many roads walked. You read weather, terrain and strangers well."
+shifts:
+  general.Nature: 1
+  general.Perception: 1
+imports:
+  - second_breath

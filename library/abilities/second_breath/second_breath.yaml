@@ -1,5 +1,5 @@
 name: Second Breath
-description: "You dig deep, ignore the pain, and find one more fight left in you. Cost target: 4 build / 0 energy."
+description: "You dig deep, ignore the pain, and find one more fight left in you."
 type: execution
 fields:
   comment: Strong self-heal.

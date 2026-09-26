@@ -1,0 +1,8 @@
+id: artisan
+name: Artisan
+description: "A trained trade and a paying clientele. You make things and you know their worth."
+shifts:
+  general.Crafting: 1
+  general.Resources: 1
+imports:
+  - field_dressing

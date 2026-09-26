@@ -1,5 +1,5 @@
 name: Shield Wall
-description: "You plant your shield beside an ally and hold the line as long as your focus holds. Cost target: 6 build / 0 energy."
+description: "You plant your shield beside an ally and hold the line as long as your focus holds."
 type: concentration
 fields:
   comment: Sustained defensive buff on an ally.

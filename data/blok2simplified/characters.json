@@ -1,90 +1,9 @@
 {
-  "char-1785224135588941100": {
-    "id": "char-1785224135588941100",
+  "char-1790444272640810900": {
+    "id": "char-1790444272640810900",
     "level": 1,
     "attributes": {
-      "name": "new char"
-    },
-    "traits": {
-      "defense.Constitution": "clumsy",
-      "defense.Magic": "clumsy",
-      "defense.Mind": "clumsy",
-      "defense.Reflex": "clumsy",
-      "general.Crafting": "clumsy",
-      "general.Dexterity": "novice",
-      "general.Knowledge": "untrained",
-      "general.Magic": "untrained",
-      "general.Medicine": "novice",
-      "general.Nature": "clumsy",
-      "general.People Skill": "novice",
-      "general.Perception": "clumsy",
-      "general.Performance": "proficient",
-      "general.Stealth": "clumsy",
-      "general.Strength": "clumsy",
-      "general.Thievery": "clumsy",
-      "offense.Magic": "clumsy",
-      "offense.Mind": "clumsy",
-      "offense.Power": "clumsy",
-      "offense.Precision": "novice",
-      "vital.Energy": "clumsy",
-      "vital.HP": "novice",
-      "vital.Movement": "clumsy"
-    },
-    "abilities": [],
-    "packages": [
-      {
-        "id": "entertainer",
-        "name": "Entertainer",
-        "shifts": {
-          "general.People Skill": 1,
-          "general.Performance": 2
-        },
-        "enabled": false
-      },
-      {
-        "id": "dagger",
-        "name": "Dagger",
-        "shifts": {
-          "general.Dexterity": 1,
-          "offense.Precision": 1
-        },
-        "enabled": false
-      },
-      {
-        "id": "healing_potion",
-        "name": "Healing Potion",
-        "shifts": {
-          "general.Medicine": 1,
-          "vital.HP": 1
-        },
-        "enabled": false
-      },
-      {
-        "id": "spellbook",
-        "name": "Spellbook",
-        "shifts": {
-          "general.Knowledge": 1,
-          "general.Magic": 1
-        },
-        "toggleable": true,
-        "enabled": false
-      }
-    ]
-  },
-  "char-1790257857250642400": {
-    "id": "char-1790257857250642400",
-    "level": 10,
-    "attributes": {
-      "age": "",
-      "current_energy": "5",
-      "current_hp": "8",
-      "description": "",
-      "motivation": "",
-      "name": "pieter",
-      "problem": "",
-      "trait_1": "",
-      "trait_2": "",
-      "trait_3": ""
+      "name": "pizza"
     },
     "traits": {
       "defense.Constitution": "untrained",
@@ -114,69 +33,6 @@
       "vital.HP": "untrained",
       "vital.Movement": "untrained"
     },
-    "abilities": [
-      {
-        "id": "ability-1790341108743302300",
-        "name": "Time Slip",
-        "description": "You step half a heartbeat ahead of the fight while your enemy stumbles half a heartbeat behind. Cost target: 8 build / 1 energy.",
-        "type": "execution",
-        "enactments": [
-          {
-            "type": "condition",
-            "fields": {
-              "condition": "hastened",
-              "duration": "1",
-              "solution": [
-                {
-                  "value": "defense.Wisdom"
-                }
-              ],
-              "solution_dc": 2
-            },
-            "interaction": "self",
-            "validation_data": {
-              "counter_trait": [
-                {
-                  "value": "defense.Wisdom"
-                }
-              ],
-              "engage": "d6"
-            }
-          },
-          {
-            "type": "condition",
-            "fields": {
-              "condition": "blessed",
-              "duration": "1",
-              "solution": [
-                {
-                  "value": "defense.Wisdom"
-                },
-                {
-                  "value": "defense.Reflex"
-                }
-              ],
-              "solution_dc": 2
-            },
-            "interaction": "direct",
-            "interaction_data": {
-              "range": "5",
-              "targets": 1
-            },
-            "validation_data": {
-              "counter_trait": [
-                {
-                  "value": "defense.Reflex"
-                },
-                {
-                  "value": "defense.Constitution"
-                }
-              ],
-              "engage": "d6"
-            }
-          }
-        ]
-      }
-    ]
+    "abilities": []
   }
 }

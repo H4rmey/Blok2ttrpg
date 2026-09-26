@@ -1,5 +1,5 @@
 name: Time Slip
-description: "You step half a heartbeat ahead of the fight while your enemy stumbles half a heartbeat behind. Cost target: 8 build / 1 energy."
+description: "You step half a heartbeat ahead of the fight while your enemy stumbles half a heartbeat behind."
 type: execution
 fields:
   comment: Turn order manipulation, both directions.
@@ -23,6 +23,9 @@ enactments:
       counter_trait:
         - value: defense.Wisdom
   - type: condition
+    # The delay is inflicted on an enemy while the haste above was on you, so
+    # this enactment buys its own target.
+    new_target: true
     fields:
       comment: The target acts later.
       condition: delayed
@@ -36,3 +39,10 @@ enactments:
       comment: ""
       range: "5"
       targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
+
+

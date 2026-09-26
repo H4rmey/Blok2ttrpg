@@ -1,0 +1,11 @@
+id: rogue
+name: Rogue
+description: "A precise opportunist. Strikes where it hurts, then is somewhere else."
+# Sized for a level 1 character: the shifts and these two cheap perks leave room
+# for a race and a background on top of them.
+shifts:
+  general.Stealth: 1
+  offense.Precision: 2
+imports:
+  - smoke_bomb
+  - evasive_reflex

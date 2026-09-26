@@ -1,5 +1,5 @@
 name: Quick Jab
-description: "A short, snapping punch thrown inside the opponent's guard. Cheap, fast and reliable. Cost target: 3 build / 0 energy."
+description: "A short, snapping punch thrown inside the opponent's guard. Cheap, fast and reliable."
 type: execution
 fields:
   comment: A fast close-range strike.

@@ -1,0 +1,8 @@
+id: scholar
+name: Scholar
+description: "Years in libraries and laboratories. You have read about most things at least once."
+shifts:
+  general.Knowledge: 1
+  general.Medicine: 1
+imports:
+  - battle_focus

@@ -1,0 +1,6 @@
+id: quarterstaff
+name: Quarterstaff
+description: "A length of hardwood, equally useful for tripping legs and channelling magic."
+imports:
+  - staff
+  - trip_attack

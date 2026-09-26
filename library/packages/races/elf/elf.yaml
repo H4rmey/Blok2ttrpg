@@ -1,0 +1,12 @@
+id: elf
+name: Elf
+description: "Long-lived, keen-eyed and attuned to magic. Elves move lightly and see far."
+shifts:
+  general.Perception: 1
+  general.Magic: 1
+  defense.Reflex: 1
+# Gale Step is the flavourful choice here but costs 8 perk points, which eats a
+# level 1 character's whole budget on its own. Arcane Spark keeps the innate
+# magic theme at a price a starting character can actually pay.
+imports:
+  - arcane_spark

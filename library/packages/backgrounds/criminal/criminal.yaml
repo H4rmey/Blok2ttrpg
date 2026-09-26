@@ -1,0 +1,8 @@
+id: criminal
+name: Criminal
+description: "A past best left undescribed. You know locks, fences and when to leave."
+shifts:
+  general.Thievery: 1
+  general.Deceive: 1
+imports:
+  - handful_of_sand

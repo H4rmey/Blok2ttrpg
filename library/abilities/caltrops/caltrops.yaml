@@ -1,5 +1,5 @@
 name: Caltrops
-description: "Scattered iron spikes that shred the feet of anyone crossing the ground for a few rounds. Cost target: 5 build / 0 energy."
+description: "Scattered iron spikes that shred the feet of anyone crossing the ground for a few rounds."
 type: execution
 fields:
   comment: Lingering damage zone on the floor.

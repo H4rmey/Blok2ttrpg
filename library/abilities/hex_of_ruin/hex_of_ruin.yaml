@@ -1,0 +1,35 @@
+name: Hex of Ruin
+description: "A muttered word settles on an enemy, and from that moment everything they try goes slightly wrong."
+type: execution
+fields:
+  comment: Curse plus a defensive shift on the same target.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: condition
+    fields:
+      comment: Luck turns against them.
+      condition: cursed
+      duration: "2"
+      solution:
+        - value: defense.Wisdom
+        - value: general.Knowledge
+      solution_dc: 5
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "5"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Wisdom
+  - type: modification
+    # The same cursed enemy is the one whose guard slips, so this enactment
+    # inherits the target above.
+    fields:
+      comment: Their guard slips with it.
+      modification-traits: defense.Reflex
+      modification-shift-amount: -1
+      modificaiton-shift-duration: 2

@@ -1,0 +1,10 @@
+id: cleric
+name: Cleric
+description: "A devoted healer and smiter. Keeps the party upright and the unholy down."
+# Sized for a level 1 character: the shifts and the single signature perk leave
+# room for a race and a background on top of them.
+shifts:
+  general.Medicine: 1
+  offense.Wisdom: 2
+imports:
+  - healing_light

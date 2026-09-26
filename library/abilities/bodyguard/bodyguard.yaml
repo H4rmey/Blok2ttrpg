@@ -1,0 +1,38 @@
+name: Bodyguard
+description: "You step into the path of the blow meant for your ally and wear it on your own shoulder."
+type: execution
+fields:
+  comment: Cancel an effect on an ally, take the strain yourself.
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: negation
+    fields:
+      comment: The enactment aimed at your ally is nullified.
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
+  - type: nerf
+    # The cost of intercepting lands on you, not on the ally you protected, so
+    # this enactment buys its own target.
+    new_target: true
+    fields:
+      comment: You are off balance for having stepped in.
+      nerf-shifted-trait: defense.Reflex
+      nerf-shift-amount: -1
+      nerf-duration: 1
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_trait:
+        - value: defense.Reflex
