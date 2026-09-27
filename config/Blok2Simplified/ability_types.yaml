@@ -1,12 +1,12 @@
-ability_types:
-  information: "Decide the timing of when the ability triggers"
+perk_types:
+  information: "Decide the timing of when the perk triggers"
   render_information: false
   execution:
     name: "Execution"
-    information: "Execution is the most basic form for an Ability. It is simply the: \"I want to do this now\" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry."
+    information: "Execution is the most basic form for an Perk. It is simply the: \"I want to do this now\" Perk Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry."
     render_information: false
     # Component cost must be nested under base_cost; a top-level build_cost key
-    # is not read by the loader and silently made this ability type free.
+    # is not read by the loader and silently made this perk type free.
     #
     # Using a perk costs 1 energy per enactment. The first enactment is paid for
     # here; each additional one adds another point via
@@ -18,7 +18,7 @@ ability_types:
 
   concentration:
     name: "Concentration"
-    information: "Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep."
+    information: "Concentration is an Perk Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep."
     render_information: false
     # As with execution, activation costs 1 energy per enactment. This is
     # separate from base_upkeep_energy, which is the per-round cost of keeping

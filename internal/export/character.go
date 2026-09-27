@@ -1,4 +1,4 @@
-// Package export handles converting characters and abilities to and from the
+// Package export handles converting characters and perks to and from the
 // portable YAML representation, plus building print-friendly HTML for PDF.
 package export
 
@@ -13,23 +13,23 @@ import (
 // intentionally mirrors the generic model so any config's traits survive a
 // round trip without code changes.
 type CharacterYAML struct {
-	ID         string                   `yaml:"id,omitempty"`
-	Level      int                      `yaml:"level"`
-	Traits map[string]any           `yaml:"traits,omitempty"`
-	Skills     map[string]string        `yaml:"skills,omitempty"`
-	Abilities  []model.Ability          `yaml:"abilities,omitempty"`
-	Packages   []model.InstalledPackage `yaml:"packages,omitempty"`
+	ID       string                   `yaml:"id,omitempty"`
+	Level    int                      `yaml:"level"`
+	Traits   map[string]any           `yaml:"traits,omitempty"`
+	Skills   map[string]string        `yaml:"skills,omitempty"`
+	Perks    []model.Perk             `yaml:"perks,omitempty"`
+	Packages []model.InstalledPackage `yaml:"packages,omitempty"`
 }
 
 // MarshalCharacter serializes a character to YAML bytes.
 func MarshalCharacter(c model.Character) ([]byte, error) {
 	out := CharacterYAML{
-		ID:         c.ID,
-		Level:      c.Level,
-		Traits: c.Traits,
-		Skills:     c.Skills,
-		Abilities:  c.Abilities,
-		Packages:   c.Packages,
+		ID:       c.ID,
+		Level:    c.Level,
+		Traits:   c.Traits,
+		Skills:   c.Skills,
+		Perks:    c.Perks,
+		Packages: c.Packages,
 	}
 	return yaml.Marshal(out)
 }
@@ -42,12 +42,12 @@ func UnmarshalCharacter(data []byte) (model.Character, error) {
 		return model.Character{}, fmt.Errorf("parsing character yaml: %w", err)
 	}
 	c := model.Character{
-		ID:         in.ID,
-		Level:      in.Level,
-		Traits: in.Traits,
-		Skills:     in.Skills,
-		Abilities:  in.Abilities,
-		Packages:   in.Packages,
+		ID:       in.ID,
+		Level:    in.Level,
+		Traits:   in.Traits,
+		Skills:   in.Skills,
+		Perks:    in.Perks,
+		Packages: in.Packages,
 	}
 	if c.Level < 1 {
 		c.Level = 1
@@ -61,17 +61,17 @@ func UnmarshalCharacter(data []byte) (model.Character, error) {
 	return c, nil
 }
 
-// MarshalAbility serializes a single ability to YAML.
-func MarshalAbility(a model.Ability) ([]byte, error) {
+// MarshalPerk serializes a single perk to YAML.
+func MarshalPerk(a model.Perk) ([]byte, error) {
 	return yaml.Marshal(a)
 }
 
-// UnmarshalAbility parses YAML bytes into a single ability. The id may be
+// UnmarshalPerk parses YAML bytes into a single perk. The id may be
 // overridden by the caller after import.
-func UnmarshalAbility(data []byte) (model.Ability, error) {
-	var a model.Ability
+func UnmarshalPerk(data []byte) (model.Perk, error) {
+	var a model.Perk
 	if err := yaml.Unmarshal(data, &a); err != nil {
-		return model.Ability{}, fmt.Errorf("parsing ability yaml: %w", err)
+		return model.Perk{}, fmt.Errorf("parsing perk yaml: %w", err)
 	}
 	return a, nil
 }

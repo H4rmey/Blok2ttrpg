@@ -1,6 +1,6 @@
-# Ability Types
+# Perk Types
 
-{{range allAbilityTypes}}
+{{range allPerkTypes}}
 ## {{.DisplayName}}
 
 {{.Information}}

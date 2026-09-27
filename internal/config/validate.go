@@ -15,8 +15,8 @@ func (c *Config) Validate() error {
 	if !profileIDPattern.MatchString(c.ProfileID) {
 		return fmt.Errorf("profile_id %q must be lowercase letters, numbers, _ or -", c.ProfileID)
 	}
-	if len(c.AbilityTypes.Order) == 0 {
-		return fmt.Errorf("at least one ability type is required")
+	if len(c.PerkTypes.Order) == 0 {
+		return fmt.Errorf("at least one perk type is required")
 	}
 
 	check := func(kind string, m ComponentMap) error {
@@ -30,7 +30,7 @@ func (c *Config) Validate() error {
 		}
 		return nil
 	}
-	if err := check("ability_type", c.AbilityTypes); err != nil {
+	if err := check("perk_type", c.PerkTypes); err != nil {
 		return err
 	}
 	if err := check("enactment", c.Enactments); err != nil {

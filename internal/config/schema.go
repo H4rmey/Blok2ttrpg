@@ -29,7 +29,7 @@ type Config struct {
 	Title     string `yaml:"title,omitempty" json:"title,omitempty"`
 
 	// AllowNegativeBuildCost/AllowNegativeEnergyCost control whether an
-	// ability's final computed cost may drop below zero. Refund-style options
+	// perk's final computed cost may drop below zero. Refund-style options
 	// (the energy offset, Enact Nerf, negative-cost knockouts) can otherwise
 	// push a total negative. These are pointers so an unset value defaults to
 	// false, clamping the corresponding total at zero.
@@ -99,11 +99,11 @@ type Config struct {
 
 	// Negotiation is the structured social encounter: the motivation ladder,
 	// the patience clock and the NPC trait-alignment rules. It is unrelated to
-	// Interactions, which are the ability-builder's targeting components.
+	// Interactions, which are the perk-builder's targeting components.
 	Negotiation Negotiation `yaml:"negotiation,omitempty" json:"negotiation,omitempty"`
 
-	// Ability building blocks, keyed by id but with author ordering preserved.
-	AbilityTypes ComponentMap `yaml:"ability_types,omitempty" json:"ability_types,omitempty"`
+	// Perk building blocks, keyed by id but with author ordering preserved.
+	PerkTypes    ComponentMap `yaml:"perk_types,omitempty" json:"perk_types,omitempty"`
 	Enactments   ComponentMap `yaml:"enactments,omitempty" json:"enactments,omitempty"`
 	Interactions ComponentMap `yaml:"interactions,omitempty" json:"interactions,omitempty"`
 
@@ -127,13 +127,13 @@ type Config struct {
 	FileOrder []string `yaml:"file_order,omitempty" json:"file_order,omitempty"`
 }
 
-// AllowsNegativeBuildCost reports whether an ability's final build cost may be
+// AllowsNegativeBuildCost reports whether an perk's final build cost may be
 // negative. Defaults to false when unset.
 func (c *Config) AllowsNegativeBuildCost() bool {
 	return c.AllowNegativeBuildCost != nil && *c.AllowNegativeBuildCost
 }
 
-// AllowsNegativeEnergyCost reports whether an ability's final energy cost may
+// AllowsNegativeEnergyCost reports whether an perk's final energy cost may
 // be negative. Defaults to false when unset.
 func (c *Config) AllowsNegativeEnergyCost() bool {
 	return c.AllowNegativeEnergyCost != nil && *c.AllowNegativeEnergyCost
@@ -265,9 +265,9 @@ func (p Proficiency) DieFor(group string) string {
 
 // Leveling describes the point budgets available to a character by level.
 type Leveling struct {
-	MaxLevel      int        `yaml:"max_level,omitempty" json:"max_level,omitempty"`
-	SkillPoints   LevelTable `yaml:"skill_points,omitempty" json:"skill_points,omitempty"`
-	AbilityPoints LevelTable `yaml:"ability_points,omitempty" json:"ability_points,omitempty"`
+	MaxLevel    int        `yaml:"max_level,omitempty" json:"max_level,omitempty"`
+	SkillPoints LevelTable `yaml:"skill_points,omitempty" json:"skill_points,omitempty"`
+	PerkPoints  LevelTable `yaml:"perk_points,omitempty" json:"perk_points,omitempty"`
 
 	// InvokePoints is the per-session invoke point pool. It uses its own table
 	// type because it grows in steps every few levels rather than every level;
@@ -340,7 +340,7 @@ type Condition struct {
 	// gear states, or GM-only effects, and must not be purchasable as an
 	// enactment. It is a pointer so an unset value defaults to true, leaving
 	// existing profiles unchanged. Non-selectable conditions are still
-	// resolvable by id, so saved abilities and generated instructions keep
+	// resolvable by id, so saved perks and generated instructions keep
 	// working.
 	Selectable *bool `yaml:"selectable,omitempty" json:"selectable,omitempty"`
 }
@@ -357,7 +357,7 @@ func (c Condition) Shiftable() bool {
 	return c.MinShift != 0 || c.MaxShift != 0
 }
 
-// Component is a generic ability building block: an ability type, enactment or
+// Component is a generic perk building block: an perk type, enactment or
 // interaction. Fields drive the builder UI and the cost engine; BaseCost is the
 // flat component cost. The Base*/Default* values are advisory rule parameters
 // (starting energy, action, range, etc.) surfaced by the documentation and
@@ -379,7 +379,7 @@ type Component struct {
 	BaseEnergy int `yaml:"base_energy,omitempty" json:"base_energy,omitempty"`
 	BaseAction int `yaml:"base_action,omitempty" json:"base_action,omitempty"`
 
-	// Ability-type base parameters. Not every component sets all of these;
+	// Perk-type base parameters. Not every component sets all of these;
 	// unset values decode as zero.
 	BaseRange           int `yaml:"base_range,omitempty" json:"base_range,omitempty"`
 	BaseUses            int `yaml:"base_uses,omitempty" json:"base_uses,omitempty"`
@@ -403,8 +403,8 @@ type Component struct {
 	// shown. AllowedInteractions/BlockedInteractions and AllowedValidations/
 	// BlockedValidations apply to enactment components (filtering the
 	// interaction dropdown and validation fields shown for that enactment).
-	// AllowedEnactments/BlockedEnactments apply to ability-type components
-	// (filtering the enactment dropdown shown for that ability type).
+	// AllowedEnactments/BlockedEnactments apply to perk-type components
+	// (filtering the enactment dropdown shown for that perk type).
 	AllowedInteractions []string `yaml:"allowed_interactions,omitempty" json:"allowed_interactions,omitempty"`
 	BlockedInteractions []string `yaml:"blocked_interactions,omitempty" json:"blocked_interactions,omitempty"`
 	AllowedValidations  []string `yaml:"allowed_validations,omitempty" json:"allowed_validations,omitempty"`
@@ -415,7 +415,7 @@ type Component struct {
 	Fields []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
 }
 
-// DisplayName returns the human-facing label for a component. Ability types use
+// DisplayName returns the human-facing label for a component. Perk types use
 // "name"; enactments and interactions use "type" as their display name.
 func (c Component) DisplayName() string {
 	if c.Name != "" {
@@ -514,7 +514,7 @@ type GroupOffsets struct {
 // dropdown in any component can opt in.
 type InlineBuilder struct {
 	// Kind selects which component map the selected value resolves against:
-	// "enactment", "interaction" or "ability_type".
+	// "enactment", "interaction" or "perk_type".
 	Kind string `yaml:"kind" json:"kind"`
 }
 
@@ -547,7 +547,7 @@ type ComponentMap struct {
 	Items map[string]*Component
 	// Information is optional map-level help text. It is set from a reserved
 	// top-level "information" key inside the mapping (e.g. directly under
-	// ability_types:), and is not treated as a component.
+	// perk_types:), and is not treated as a component.
 	Information string
 	// RenderInformation, when true, renders the map-level Information as plain
 	// text between the section header and the first field instead of behind a

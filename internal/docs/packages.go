@@ -22,27 +22,27 @@ import (
 // tests can supply a fixed set of packages.
 type PackageLister interface {
 	ListPackages() ([]premade.Package, error)
-	ListAbilities() ([]model.Ability, error)
+	ListPerks() ([]model.Perk, error)
 }
 
-// abilitiesTable renders the pre-built abilities that ship in the content
+// perksTable renders the pre-built perks that ship in the content
 // library. The rulebook had headings for these lists but nothing underneath
-// them, so the ready-made abilities the application offers were invisible to a
+// them, so the ready-made perks the application offers were invisible to a
 // reader even though they were sitting in the library directory.
-func abilitiesTable(lib PackageLister) string {
+func perksTable(lib PackageLister) string {
 	if lib == nil {
-		return "_No abilities configured._"
+		return "_No perks configured._"
 	}
-	abs, err := lib.ListAbilities()
+	abs, err := lib.ListPerks()
 	if err != nil {
-		return fmt.Sprintf("_Could not read the ability library: %v_", err)
+		return fmt.Sprintf("_Could not read the perk library: %v_", err)
 	}
 	if len(abs) == 0 {
-		return "_No abilities configured._"
+		return "_No perks configured._"
 	}
 	sort.Slice(abs, func(i, j int) bool { return abs[i].Name < abs[j].Name })
 	var b strings.Builder
-	b.WriteString("| Ability | Type |\n")
+	b.WriteString("| Perk | Type |\n")
 	b.WriteString("| --- | --- |\n")
 	for _, a := range abs {
 		fmt.Fprintf(&b, "| **%s** | %s |\n", orDash(a.Name), orDash(a.Type))
@@ -62,7 +62,7 @@ var categoryLabels = map[string]string{
 
 // packagesTable renders every package in the given categories as one section per
 // category. Each package lists its description, the proficiency shifts it
-// applies, the abilities it grants, and whether it can be toggled off.
+// applies, the perks it grants, and whether it can be toggled off.
 //
 // When categories is empty every category found in the library is rendered, in
 // the order given by categoryOrder.
@@ -142,14 +142,14 @@ func writePackageCategory(b *strings.Builder, category string, list []premade.Pa
 	} else {
 		b.WriteString("This is part of a character's core identity: once chosen it is always applied and cannot be switched off.\n\n")
 	}
-	b.WriteString("| Name | Description | Skill Shifts | Abilities Granted |\n")
+	b.WriteString("| Name | Description | Skill Shifts | Perks Granted |\n")
 	b.WriteString("| --- | --- | --- | --- |\n")
 	for _, p := range list {
 		fmt.Fprintf(b, "| **%s** | %s | %s | %s |\n",
 			orDash(p.Name),
 			orDash(oneLine(p.Description)),
 			orDash(shiftsPhrase(p.Shifts)),
-			orDash(abilityNames(p)))
+			orDash(perkNames(p)))
 	}
 	b.WriteString("\n")
 }
@@ -189,13 +189,13 @@ func skillDisplayName(key string) string {
 	return key
 }
 
-// abilityNames renders the names of the abilities a package grants.
-func abilityNames(p premade.Package) string {
-	if len(p.Abilities) == 0 {
+// perkNames renders the names of the perks a package grants.
+func perkNames(p premade.Package) string {
+	if len(p.Perks) == 0 {
 		return ""
 	}
-	names := make([]string, 0, len(p.Abilities))
-	for _, a := range p.Abilities {
+	names := make([]string, 0, len(p.Perks))
+	for _, a := range p.Perks {
 		if n := strings.TrimSpace(a.Name); n != "" {
 			names = append(names, n)
 		}

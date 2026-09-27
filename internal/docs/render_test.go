@@ -4,7 +4,7 @@
 //
 // The problem it exists to catch: text/template renders a range over an empty
 // or absent slice as nothing at all, so when the leveling config moved from a
-// hand-written levels list to a computed formula, the ability point table kept
+// hand-written levels list to a computed formula, the perk point table kept
 // its header and lost every row, and nothing noticed. These tests turn that
 // class of silent loss into a test failure.
 package docs
@@ -83,12 +83,12 @@ func TestDocsOrderIsComplete(t *testing.T) {
 }
 
 // TestLevelingTableHasEveryLevel is a direct regression test for the bug that
-// started this work: the ability point table rendering with no rows. It asserts
+// started this work: the perk point table rendering with no rows. It asserts
 // a row exists for every level up to the configured cap, for both point pools.
 func TestLevelingTableHasEveryLevel(t *testing.T) {
 	loaded := loadRuleset(t)
 	cfg := loaded.Config
-	for _, pool := range []string{"skill", "ability"} {
+	for _, pool := range []string{"skill", "perk"} {
 		table := levelingTable(cfg, pool)
 		rows := countTableRows(table)
 		if want := cfg.MaxLevel(); rows != want {
@@ -104,15 +104,15 @@ func TestLevelingTableHasEveryLevel(t *testing.T) {
 func TestLevelingTableMatchesBudgets(t *testing.T) {
 	loaded := loadRuleset(t)
 	cfg := loaded.Config
-	table := levelingTable(cfg, "ability")
+	table := levelingTable(cfg, "perk")
 	for level := 1; level <= cfg.MaxLevel(); level++ {
-		want := cfg.AbilityPointBudget(level)
+		want := cfg.PerkPointBudget(level)
 		if !strings.Contains(table, "| **"+itoa(level)+"** |") {
-			t.Errorf("ability leveling table has no row for level %d", level)
+			t.Errorf("perk leveling table has no row for level %d", level)
 			continue
 		}
 		if !rowHasTotal(table, level, want) {
-			t.Errorf("ability leveling table row for level %d does not show the served budget %d:\n%s",
+			t.Errorf("perk leveling table row for level %d does not show the served budget %d:\n%s",
 				level, want, table)
 		}
 	}

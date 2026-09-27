@@ -10,7 +10,7 @@ import (
 
 // TestEnergyCostMatchesEnactmentCount pins the energy rule: using a perk costs
 // 1 energy per enactment, so a two-enactment perk costs 2 energy. The first
-// enactment is paid by the ability type's base_cost, each additional one by
+// enactment is paid by the perk type's base_cost, each additional one by
 // additional_enactment.energy_cost. This walks the whole built-in library, so a
 // config change that breaks the rule for any perk fails here.
 func TestEnergyCostMatchesEnactmentCount(t *testing.T) {
@@ -18,15 +18,15 @@ func TestEnergyCostMatchesEnactmentCount(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load config: %v", err)
 	}
-	abs, err := premade.New("../../library").ListAbilities()
+	abs, err := premade.New("../../library").ListPerks()
 	if err != nil {
-		t.Fatalf("list abilities: %v", err)
+		t.Fatalf("list perks: %v", err)
 	}
 	if len(abs) == 0 {
 		t.Fatal("no library perks found")
 	}
 	for _, raw := range abs {
-		ab := engine.NormalizeAbility(cfg.Config, raw)
+		ab := engine.NormalizePerk(cfg.Config, raw)
 
 		// Only enactments that actually carry a type are charged for.
 		want := 0
@@ -47,7 +47,7 @@ func TestEnergyCostMatchesEnactmentCount(t *testing.T) {
 			want = 1 // the floor: every perk costs at least 1 energy
 		}
 
-		got := engine.AbilityCost(cfg.Config, ab).Energy
+		got := engine.PerkCost(cfg.Config, ab).Energy
 		switch {
 		case refunds:
 			if got < 1 || got > want {

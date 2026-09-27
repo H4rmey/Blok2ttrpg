@@ -1,7 +1,7 @@
 // Package premade loads the built-in content library that ships with the app:
-// importable packages and the abilities they reference. A package is a
-// collection of proficiency shifts plus a list of ability imports; importing a
-// package applies its shifts and copies its abilities onto a character.
+// importable packages and the perks they reference. A package is a
+// collection of proficiency shifts plus a list of perk imports; importing a
+// package applies its shifts and copies its perks onto a character.
 package premade
 
 import (
@@ -17,8 +17,8 @@ import (
 
 // PackageYAML is the on-disk shape of a package definition. Shifts map a skill
 // key ("group.Skill") to a relative proficiency delta (e.g. +2, -1). Imports
-// lists abilities to include; each entry is either a short name (resolved to
-// ../../abilities/<name>/<name>.yaml relative to the package file) or an
+// lists perks to include; each entry is either a short name (resolved to
+// ../../perks/<name>/<name>.yaml relative to the package file) or an
 // explicit path relative to the package file.
 type PackageYAML struct {
 	ID          string         `yaml:"id"`
@@ -29,7 +29,7 @@ type PackageYAML struct {
 }
 
 // Package is a loaded package: its metadata, the proficiency shifts it applies,
-// and the fully-parsed abilities it provides. Category is the library
+// and the fully-parsed perks it provides. Category is the library
 // subfolder it lives in (e.g. "classes", "races", "backgrounds").
 type Package struct {
 	ID          string
@@ -37,7 +37,7 @@ type Package struct {
 	Category    string
 	Description string
 	Shifts      map[string]int
-	Abilities   []model.Ability
+	Perks       []model.Perk
 }
 
 // Library is the built-in content library rooted at a directory. It exposes the
@@ -72,10 +72,10 @@ func (l *Library) packagesDir() string {
 	return filepath.Join(l.Root, "packages")
 }
 
-// CustomBaseDir returns the abilities directory that short-name imports in an
+// CustomBaseDir returns the perks directory that short-name imports in an
 // uploaded (custom) package resolve against.
 func (l *Library) CustomBaseDir() string {
-	return l.abilitiesDir()
+	return l.perksDir()
 }
 
 // ListPackages scans the packages directory (recursively through category
@@ -154,33 +154,33 @@ func (l *Library) GetPackage(id string) (*Package, error) {
 }
 
 // loadPackage reads a package file and resolves its imports against the
-// library's abilities directory.
+// library's perks directory.
 func (l *Library) loadPackage(path string) (*Package, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("reading package %q: %w", path, err)
 	}
-	return ParsePackage(data, l.abilitiesDir())
+	return ParsePackage(data, l.perksDir())
 }
 
-// abilitiesDir is the directory holding the built-in ability definitions.
-func (l *Library) abilitiesDir() string {
-	return filepath.Join(l.Root, "abilities")
+// perksDir is the directory holding the built-in perk definitions.
+func (l *Library) perksDir() string {
+	return filepath.Join(l.Root, "perks")
 }
 
-// ListAbilities scans the abilities directory and returns every loadable
-// built-in ability, sorted by name. Individual files that fail to parse are
+// ListPerks scans the perks directory and returns every loadable
+// built-in perk, sorted by name. Individual files that fail to parse are
 // skipped so one bad file does not break the whole browser.
-func (l *Library) ListAbilities() ([]model.Ability, error) {
-	dir := l.abilitiesDir()
+func (l *Library) ListPerks() ([]model.Perk, error) {
+	dir := l.perksDir()
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return nil, nil
 		}
-		return nil, fmt.Errorf("reading abilities dir: %w", err)
+		return nil, fmt.Errorf("reading perks dir: %w", err)
 	}
-	var out []model.Ability
+	var out []model.Perk
 	for _, e := range entries {
 		if !e.IsDir() {
 			continue
@@ -191,7 +191,7 @@ func (l *Library) ListAbilities() ([]model.Ability, error) {
 		if err != nil {
 			continue
 		}
-		ab, err := export.UnmarshalAbility(data)
+		ab, err := export.UnmarshalPerk(data)
 		if err != nil {
 			continue
 		}
@@ -203,20 +203,20 @@ func (l *Library) ListAbilities() ([]model.Ability, error) {
 	return out, nil
 }
 
-// GetAbility loads a single built-in ability by its library id (the directory
+// GetPerk loads a single built-in perk by its library id (the directory
 // name).
-func (l *Library) GetAbility(id string) (model.Ability, error) {
-	path := filepath.Join(l.abilitiesDir(), id, id+".yaml")
+func (l *Library) GetPerk(id string) (model.Perk, error) {
+	path := filepath.Join(l.perksDir(), id, id+".yaml")
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return model.Ability{}, fmt.Errorf("reading ability %q: %w", id, err)
+		return model.Perk{}, fmt.Errorf("reading perk %q: %w", id, err)
 	}
-	return export.UnmarshalAbility(data)
+	return export.UnmarshalPerk(data)
 }
 
 // ParsePackage parses package YAML bytes and resolves imports relative to
-// baseDir (the abilities directory). It is exported so custom (uploaded)
-// package files can be parsed with a caller-supplied abilities directory.
+// baseDir (the perks directory). It is exported so custom (uploaded)
+// package files can be parsed with a caller-supplied perks directory.
 
 func ParsePackage(data []byte, baseDir string) (*Package, error) {
 	var in PackageYAML
@@ -236,19 +236,19 @@ func ParsePackage(data []byte, baseDir string) (*Package, error) {
 		abPath := resolveImport(imp, baseDir)
 		abData, err := os.ReadFile(abPath)
 		if err != nil {
-			return nil, fmt.Errorf("reading imported ability %q: %w", imp, err)
+			return nil, fmt.Errorf("reading imported perk %q: %w", imp, err)
 		}
-		ab, err := export.UnmarshalAbility(abData)
+		ab, err := export.UnmarshalPerk(abData)
 		if err != nil {
-			return nil, fmt.Errorf("parsing imported ability %q: %w", imp, err)
+			return nil, fmt.Errorf("parsing imported perk %q: %w", imp, err)
 		}
-		pkg.Abilities = append(pkg.Abilities, ab)
+		pkg.Perks = append(pkg.Perks, ab)
 	}
 	return pkg, nil
 }
 
 // resolveImport turns an import entry into a path relative to baseDir (the
-// abilities directory). A short name like "fireball" resolves to
+// perks directory). A short name like "fireball" resolves to
 // "<baseDir>/fireball/fireball.yaml"; anything containing a path separator or a
 // ".yaml" suffix is treated as an explicit relative path.
 func resolveImport(imp, baseDir string) string {

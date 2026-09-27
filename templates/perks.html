@@ -1,0 +1,47 @@
+{{ template "head" . }}
+{{ $c := .Character }}
+<div class="page-head">
+  <h1>Perks</h1>
+  <div class="toolbar">
+    <button class="btn primary" type="button" onclick="document.getElementById('new-perk-modal').showModal()">+ New Perk</button>
+
+    <button class="btn" type="button"
+            hx-get="/perks/library?character={{ $c.ID }}"
+            hx-target="#perk-modal-body" hx-swap="innerHTML"
+            onclick="openPerkModal()">Import from Library</button>
+    <button class="btn" type="button"
+            onclick="document.getElementById('perk-import-input').click()">Import Custom</button>
+    {{/* Recomputes the point and energy cost of every perk from the current
+         config and swaps the list in place. */}}
+    <button class="btn" type="button" title="Recalculate the cost of every perk"
+            hx-get="/characters/{{ $c.ID }}/perks/refresh"
+            hx-target="#perk-list" hx-swap="innerHTML">&#8635; Refresh All</button>
+    <form id="perk-import-form" action="/characters/{{ $c.ID }}/perks/import-custom" method="post" enctype="multipart/form-data" hidden>
+      <input id="perk-import-input" type="file" name="file" accept=".yaml,.yml" onchange="this.form.submit()">
+    </form>
+  </div>
+</div>
+
+{{ template "character_bar" . }}
+
+<div id="perk-modal" class="modal" hidden>
+  <div class="modal-backdrop" onclick="closePerkModal()"></div>
+  <div class="modal-content" id="perk-modal-body"></div>
+</div>
+
+<dialog id="new-perk-modal">
+  <form method="get" action="/characters/{{ $c.ID }}/perks/new">
+    <h2>New Perk</h2>
+    <label for="new-perk-name">Name</label>
+    <input id="new-perk-name" type="text" name="name" placeholder="Perk name" required autofocus>
+    <div class="toolbar">
+      <button class="btn primary" type="submit">Create</button>
+      <button class="btn" type="button" onclick="document.getElementById('new-perk-modal').close()">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="perk-list">
+  {{ template "perk_list" . }}
+</div>
+{{ template "foot" . }}

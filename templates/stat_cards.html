@@ -1,11 +1,11 @@
 {{ define "stat_cards" }}
-{{ $abilityRemaining := sub .AbilityBudget .AbilityUsed }}
+{{ $perkRemaining := sub .PerkBudget .PerkUsed }}
 {{ $skillRemaining := sub .SkillBudget .SkillUsed }}
 <div class="cost-card">
   <span class="cost-card-label">Perk Points</span>
 
-  <span class="cost-card-value {{ if lt $abilityRemaining 0 }}over{{ else }}ok{{ end }}">
-    {{ $abilityRemaining }}/{{ .AbilityBudget }}
+  <span class="cost-card-value {{ if lt $perkRemaining 0 }}over{{ else }}ok{{ end }}">
+    {{ $perkRemaining }}/{{ .PerkBudget }}
   </span>
 </div>
 <div class="cost-card">
@@ -16,7 +16,7 @@
 </div>
 <div class="cost-card">
   <span class="cost-card-label">Perks</span>
-  <span class="cost-card-value">{{ len .Character.Abilities }}</span>
+  <span class="cost-card-value">{{ len .Character.Perks }}</span>
 </div>
 {{ range .Vitals }}
 <div class="cost-card vital-card">

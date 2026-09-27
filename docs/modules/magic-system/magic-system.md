@@ -10,7 +10,7 @@ While this document refers to a “magic system” for convenience, the world of
 The system is designed so that:
 
 *   Curious players can understand _how_ things work and design effects themselves.
-*   Other players can use abilities without needing to understand the underlying mechanics.
+*   Other players can use perks without needing to understand the underlying mechanics.
 *   All interactions remain predictable and explainable.
 
 This document explains the foundational concepts of the system and how spells or effects can be constructed within the rules of Lettuce.

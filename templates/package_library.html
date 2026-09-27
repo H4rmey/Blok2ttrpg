@@ -9,7 +9,7 @@
   {{/* Remaining budgets, so the cost shown on each card can be read against
        what the character actually has left to spend. */}}
   <p class="pkg-budget">
-    Perk points: <strong>{{ .AbilityUsed }}/{{ .AbilityBudget }}</strong> used
+    Perk points: <strong>{{ .PerkUsed }}/{{ .PerkBudget }}</strong> used
     &middot;
     Skill points: <strong>{{ .SkillUsed }}/{{ .SkillBudget }}</strong> used
   </p>
@@ -67,11 +67,11 @@
             {{ end }}
           </div>
           {{ end }}
-          {{ if .Abilities }}
-          <div class="pkg-abilities">
-            <span class="pkg-label">Abilities:</span>
-            {{ range .Abilities }}
-            <span class="pkg-ability">{{ .Name }}</span>
+          {{ if .Perks }}
+          <div class="pkg-perks">
+            <span class="pkg-label">Perks:</span>
+            {{ range .Perks }}
+            <span class="pkg-perk">{{ .Name }}</span>
             {{ end }}
           </div>
           {{ end }}

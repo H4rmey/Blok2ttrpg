@@ -26,7 +26,7 @@
   {{ range .Characters }}
   <li class="card">
     <a href="/characters/{{ .ID }}"><strong>{{ .Name }}</strong></a>
-    <span class="muted">Level {{ .Level }} &middot; {{ len .Abilities }} abilities</span>
+    <span class="muted">Level {{ .Level }} &middot; {{ len .Perks }} perks</span>
   </li>
   {{ end }}
 </ul>

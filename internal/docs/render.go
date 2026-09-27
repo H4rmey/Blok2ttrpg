@@ -1,5 +1,5 @@
 // Package docs renders the ruleset documentation. Unlike v4, it does not name
-// any specific ability type or enactment: it simply passes the whole config to
+// any specific perk type or enactment: it simply passes the whole config to
 // each markdown template and lets the template iterate. Docs therefore stay in
 // sync with the config automatically.
 package docs
@@ -26,8 +26,8 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 	return template.FuncMap{
 		// Component lookups. Each returns a *Component (nil when missing) so
 		// templates can chain field access without the two-value method form.
-		"abilityType": func(id string) *config.Component {
-			if c, ok := cfg.AbilityTypes.Get(id); ok {
+		"perkType": func(id string) *config.Component {
+			if c, ok := cfg.PerkTypes.Get(id); ok {
 				return c
 			}
 			return nil
@@ -57,7 +57,7 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 		},
 		// buildGuide renders a self-contained, numbered "How to build it"
 		// walkthrough for a component: every field with its range/default and
-		// every concrete choice listed, so a reader can build the ability by
+		// every concrete choice listed, so a reader can build the perk by
 		// hand without the application.
 		"buildGuide": func(comp *config.Component) string {
 			return buildGuide(cfg, comp)
@@ -92,24 +92,32 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 			return traitSections(cfg)
 		},
 
-		// perksTable renders a markdown table of every cost-bearing choice on a
-		// component: checkboxes, dropdown options, and per-step number fields.
-		"perksTable": func(comp *config.Component) string {
+		// componentPerksTable renders a markdown table of every cost-bearing
+		// choice on a component: checkboxes, dropdown options, and per-step
+		// number fields.
+		//
+		// The name is deliberately not "perksTable". The Abilities -> Perks
+		// rename collided this helper with the content-library listing below,
+		// which is the one the perks chapter calls; keeping the component
+		// variant explicitly named avoids a silent shadow if one is ever
+		// reintroduced.
+		"componentPerksTable": func(comp *config.Component) string {
 			if comp == nil {
 				return "_No options configured._"
 			}
 			return fieldsTable(cfg, comp.Fields)
 		},
-		// perksFields renders the same table for an explicit field slice, used
-		// for sections like validations that live outside a component.
-		"perksFields": func(fields []config.Field) string {
+		// componentPerksFields renders the same table for an explicit field
+		// slice, used for sections like validations that live outside a
+		// component.
+		"componentPerksFields": func(fields []config.Field) string {
 			return fieldsTable(cfg, fields)
 		},
 
 		// costedOptionsTable renders a standalone reference table for a costed
 		// option source (e.g. "trigger_events"), one row per option with its
 		// cost in words. It is meant to be printed once and referenced from the
-		// ability types that use the source, so the large list is not repeated.
+		// perk types that use the source, so the large list is not repeated.
 		"costedOptionsTable": func(source string) string {
 			opts := cfg.OptionsFor(source)
 			if len(opts) == 0 {
@@ -124,9 +132,9 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 			return b.String()
 		},
 
-		// allAbilityTypes returns the ability types in author order.
-		"allAbilityTypes": func() []*config.Component {
-			return cfg.AbilityTypes.List()
+		// allPerkTypes returns the perk types in author order.
+		"allPerkTypes": func() []*config.Component {
+			return cfg.PerkTypes.List()
 		},
 		// allEnactments returns the enactments in author order.
 		"allEnactments": func() []*config.Component {
@@ -144,7 +152,7 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 		},
 
 		// levelingTable renders the point budget for every level of a pool
-		// ("skill" or "ability"). The rows are computed with the same budget
+		// ("skill" or "perk"). The rows are computed with the same budget
 		// accessors the application uses, so the documented curve cannot drift
 		// from the numbers a character actually receives.
 		"levelingTable": func(pool string) string {
@@ -188,8 +196,8 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 		"packagesTable": func(categories ...string) string {
 			return packagesTable(lib, categories...)
 		},
-		// abilitiesTable renders the pre-built abilities in the content library.
-		"abilitiesTable": func() string { return abilitiesTable(lib) },
+		// perksTable renders the pre-built perks in the content library.
+		"perksTable": func() string { return perksTable(lib) },
 
 		// schemaTable renders the yaml keys of a config type straight off the
 		// Go struct, so the configuration reference cannot describe keys that
@@ -248,7 +256,7 @@ func fieldsTable(cfg *config.Config, fields []config.Field) string {
 	}
 	var b strings.Builder
 	intro := "The following perks can be added when building or upgrading this component. " +
-		"Build points are spent when the ability is created or upgraded; energy is paid each time it is used.\n\n"
+		"Build points are spent when the perk is created or upgraded; energy is paid each time it is used.\n\n"
 	b.WriteString(intro)
 	b.WriteString("| Perk | Cost |\n")
 	b.WriteString("| --- | --- |\n")

@@ -10,7 +10,7 @@ import (
 )
 
 // TestNoEmptyFieldsAfterNormalize asserts that a normalized perk never carries
-// an empty value: every configured field of the ability type, of each enactment,
+// an empty value: every configured field of the perk type, of each enactment,
 // and of each enactment's interaction resolves to something real. A half-filled
 // enactment generates rules text with visible gaps, so "unset" is not a legal
 // stored state - there is deliberately no empty option in any dropdown.
@@ -19,15 +19,15 @@ func TestNoEmptyFieldsAfterNormalize(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load config: %v", err)
 	}
-	abs, err := premade.New("../../library").ListAbilities()
+	abs, err := premade.New("../../library").ListPerks()
 	if err != nil {
-		t.Fatalf("list abilities: %v", err)
+		t.Fatalf("list perks: %v", err)
 	}
 	for _, raw := range abs {
-		ab := engine.NormalizeAbility(cfg.Config, raw)
+		ab := engine.NormalizePerk(cfg.Config, raw)
 
-		if at, ok := cfg.AbilityType(ab.Type); ok {
-			assertNoEmptyFields(t, ab.Name+" (ability type)", at.Fields, ab.Fields)
+		if at, ok := cfg.PerkType(ab.Type); ok {
+			assertNoEmptyFields(t, ab.Name+" (perk type)", at.Fields, ab.Fields)
 		}
 		for i, en := range ab.Enactments {
 			where := fmt.Sprintf("%s enactment %d", ab.Name, i)

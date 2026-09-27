@@ -15,13 +15,13 @@ import (
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
 
-// abilityPage is the data envelope for the builder and ability views.
-type abilityPage struct {
+// perkPage is the data envelope for the builder and perk views.
+type perkPage struct {
 	Cfg         *config.Config
 	Title       string
 	Breadcrumbs []crumb
 	Character   *model.Character
-	Ability     *model.Ability
+	Perk        *model.Perk
 	Cost        engine.Cost
 	Budget      int
 	OverBudget  bool
@@ -34,21 +34,21 @@ type abilityPage struct {
 	// belong to the character sheet form, which does not exist here.
 	ReadOnlyStats bool
 
-	// Instructions is the generated play-facing rules text for the ability,
+	// Instructions is the generated play-facing rules text for the perk,
 	// one entry per enactment. It is rendered by the "instructions" partial
 	// and refreshed by /builder/instructions as the builder changes.
 	Instructions []engine.Instruction
 }
 
-// handleAbilities dispatches /characters/{id}/abilities[/...] routes.
-func (a *App) handleAbilities(w http.ResponseWriter, r *http.Request, c *model.Character, rest []string) {
-	// /abilities        -> list
+// handlePerks dispatches /characters/{id}/perks[/...] routes.
+func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Character, rest []string) {
+	// /perks        -> list
 	if len(rest) == 0 {
-		a.renderAbilityList(w, c)
+		a.renderPerkList(w, c)
 		return
 	}
 
-	// /abilities/refresh -> re-normalize every perk against the current config,
+	// /perks/refresh -> re-normalize every perk against the current config,
 	// persist the result, and return just the perk list region so the
 	// "Refresh All" button can swap it in place. Persisting is the point: cost
 	// is a pure function of the stored data, so a display-only refresh could
@@ -60,40 +60,40 @@ func (a *App) handleAbilities(w http.ResponseWriter, r *http.Request, c *model.C
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		a.renderPerkList(w, c, changed)
+		a.renderPerkListPartial(w, c, changed)
 		return
 	}
 
-	// /abilities/import        -> import a built-in ability by library id
+	// /perks/import        -> import a built-in perk by library id
 	if rest[0] == "import" {
-		a.importBuiltinAbility(w, r, c)
+		a.importBuiltinPerk(w, r, c)
 		return
 	}
 
-	// /abilities/import-custom -> import an ability from an uploaded YAML file
+	// /perks/import-custom -> import an perk from an uploaded YAML file
 	if rest[0] == "import-custom" {
-		a.importAbility(w, r, c)
+		a.importPerk(w, r, c)
 		return
 	}
 
-	// /abilities/new    -> builder for a new ability
+	// /perks/new    -> builder for a new perk
 	if rest[0] == "new" {
 
 		if r.Method == http.MethodPost {
-			a.saveAbility(w, r, c, "")
+			a.savePerk(w, r, c, "")
 			return
 		}
 		// The name is collected up front via a modal (mirroring the new
 		// character flow) and passed as a query parameter so the builder opens
 		// with the name already set and the rest of the form unlocked.
-		blank := model.Ability{Type: firstAbilityTypeID(a.Cfg.Config), Name: strings.TrimSpace(r.URL.Query().Get("name"))}
+		blank := model.Perk{Type: firstPerkTypeID(a.Cfg.Config), Name: strings.TrimSpace(r.URL.Query().Get("name"))}
 		a.renderBuilder(w, c, &blank, true)
 		return
 
 	}
 
 	aid := rest[0]
-	idx := findAbility(c, aid)
+	idx := findPerk(c, aid)
 	if idx < 0 {
 		http.NotFound(w, r)
 		return
@@ -102,34 +102,34 @@ func (a *App) handleAbilities(w http.ResponseWriter, r *http.Request, c *model.C
 	if len(rest) == 1 {
 		switch r.Method {
 		case http.MethodGet:
-			a.renderBuilder(w, c, &c.Abilities[idx], false)
+			a.renderBuilder(w, c, &c.Perks[idx], false)
 		case http.MethodPost:
-			a.saveAbility(w, r, c, aid)
+			a.savePerk(w, r, c, aid)
 		case http.MethodDelete:
-			c.Abilities = append(c.Abilities[:idx], c.Abilities[idx+1:]...)
+			c.Perks = append(c.Perks[:idx], c.Perks[idx+1:]...)
 			_ = a.Store.Save(*c)
-			w.Header().Set("HX-Redirect", "/characters/"+c.ID+"/abilities")
+			w.Header().Set("HX-Redirect", "/characters/"+c.ID+"/perks")
 		}
 		return
 	}
 
 	if rest[1] == "export" {
-		b, err := export.MarshalAbility(c.Abilities[idx])
+		b, err := export.MarshalPerk(c.Perks[idx])
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "application/x-yaml")
-		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", c.Abilities[idx].Name+".yaml"))
+		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", c.Perks[idx].Name+".yaml"))
 		w.Write(b)
 		return
 	}
 	http.NotFound(w, r)
 }
 
-// importAbility reads an uploaded YAML file, parses it into an ability, gives
+// importPerk reads an uploaded YAML file, parses it into an perk, gives
 // it a fresh id, appends it to the character and redirects back to the list.
-func (a *App) importAbility(w http.ResponseWriter, r *http.Request, c *model.Character) {
+func (a *App) importPerk(w http.ResponseWriter, r *http.Request, c *model.Character) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -145,25 +145,25 @@ func (a *App) importAbility(w http.ResponseWriter, r *http.Request, c *model.Cha
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	ab, err := export.UnmarshalAbility(data)
+	ab, err := export.UnmarshalPerk(data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	// Always assign a fresh id so an imported ability never collides with an
+	// Always assign a fresh id so an imported perk never collides with an
 	// existing one on the character.
-	ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
-	ab = engine.NormalizeAbility(a.Cfg.Config, ab)
-	if ok, reason := a.affordAbility(c, ab); !ok {
+	ab.ID = fmt.Sprintf("perk-%d", time.Now().UnixNano())
+	ab = engine.NormalizePerk(a.Cfg.Config, ab)
+	if ok, reason := a.affordPerk(c, ab); !ok {
 		http.Error(w, reason, http.StatusBadRequest)
 		return
 	}
-	c.Abilities = append(c.Abilities, ab)
+	c.Perks = append(c.Perks, ab)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID+"/abilities", http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
 }
 
 // perkLibraryRow is one perk in the browser plus whether the character can still
@@ -173,11 +173,11 @@ type perkLibraryRow struct {
 	Affordable bool
 }
 
-// abilityLibraryPage is the data envelope for the built-in perk browser. Perks
+// perkLibraryPage is the data envelope for the built-in perk browser. Perks
 // carry their computed cost so the library can show the price of a perk before
 // it is imported, along with the character's remaining budgets so an
 // unaffordable perk can be flagged and blocked.
-type abilityLibraryPage struct {
+type perkLibraryPage struct {
 	CharacterID string
 	Perks       []perkLibraryRow
 
@@ -187,34 +187,34 @@ type abilityLibraryPage struct {
 	charStats
 }
 
-// handleAbilityLibrary renders the built-in perk browser. It expects a
+// handlePerkLibrary renders the built-in perk browser. It expects a
 // "character" query parameter so the import buttons post to the right route and
 // so each perk can be checked against that character's remaining perk points.
-func (a *App) handleAbilityLibrary(w http.ResponseWriter, r *http.Request) {
+func (a *App) handlePerkLibrary(w http.ResponseWriter, r *http.Request) {
 	charID := r.URL.Query().Get("character")
-	abs, err := a.Library.ListAbilities()
+	abs, err := a.Library.ListPerks()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	data := abilityLibraryPage{CharacterID: charID}
+	data := perkLibraryPage{CharacterID: charID}
 	if charID != "" {
 		if c, ok := a.Store.Get(charID); ok {
 			data.HasCharacter = true
 			data.charStats = a.characterStats(&c)
 		}
 	}
-	perkLeft := data.AbilityBudget - data.AbilityUsed
+	perkLeft := data.PerkBudget - data.PerkUsed
 
 	// Each perk is normalized before its cost is computed, exactly as it will be
 	// on import. That keeps the price shown in the library identical to the
 	// price the perk ends up with once it is on a character.
 	for _, ab := range abs {
-		norm := engine.NormalizeAbility(a.Cfg.Config, ab)
-		cost := engine.AbilityCost(a.Cfg.Config, norm)
+		norm := engine.NormalizePerk(a.Cfg.Config, ab)
+		cost := engine.PerkCost(a.Cfg.Config, norm)
 		row := perkLibraryRow{
-			perkSummary: perkSummary{Ability: norm, Cost: cost},
+			perkSummary: perkSummary{Perk: norm, Cost: cost},
 			Affordable:  true,
 		}
 		if data.HasCharacter {
@@ -224,74 +224,74 @@ func (a *App) handleAbilityLibrary(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	if err := a.Tmpl.ExecuteTemplate(w, "ability_library", data); err != nil {
+	if err := a.Tmpl.ExecuteTemplate(w, "perk_library", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-// affordAbility reports whether the character has enough perk points left to
-// take on the given (already normalized) ability, with a human-readable reason
+// affordPerk reports whether the character has enough perk points left to
+// take on the given (already normalized) perk, with a human-readable reason
 // when it does not. Callers turn a false result into a 400 so an unaffordable
 // import is blocked server-side and not merely flagged in the UI.
-func (a *App) affordAbility(c *model.Character, ab model.Ability) (bool, string) {
-	cost := engine.AbilityCost(a.Cfg.Config, ab)
+func (a *App) affordPerk(c *model.Character, ab model.Perk) (bool, string) {
+	cost := engine.PerkCost(a.Cfg.Config, ab)
 	stats := a.characterStats(c)
-	if left := stats.AbilityBudget - stats.AbilityUsed; cost.Build > left {
+	if left := stats.PerkBudget - stats.PerkUsed; cost.Build > left {
 		return false, fmt.Sprintf("%q costs %d perk points but only %d remain.", ab.Name, cost.Build, left)
 	}
 	return true, ""
 }
 
-// importBuiltinAbility copies a built-in ability (by library id) onto the
-// character with a fresh id and redirects back to the ability list.
-func (a *App) importBuiltinAbility(w http.ResponseWriter, r *http.Request, c *model.Character) {
+// importBuiltinPerk copies a built-in perk (by library id) onto the
+// character with a fresh id and redirects back to the perk list.
+func (a *App) importBuiltinPerk(w http.ResponseWriter, r *http.Request, c *model.Character) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 	_ = r.ParseForm()
-	id := r.FormValue("ability_id")
+	id := r.FormValue("perk_id")
 	if id == "" {
-		http.Error(w, "missing ability id", http.StatusBadRequest)
+		http.Error(w, "missing perk id", http.StatusBadRequest)
 		return
 	}
-	ab, err := a.Library.GetAbility(id)
+	ab, err := a.Library.GetPerk(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
-	ab = engine.NormalizeAbility(a.Cfg.Config, ab)
-	if ok, reason := a.affordAbility(c, ab); !ok {
+	ab.ID = fmt.Sprintf("perk-%d", time.Now().UnixNano())
+	ab = engine.NormalizePerk(a.Cfg.Config, ab)
+	if ok, reason := a.affordPerk(c, ab); !ok {
 		http.Error(w, reason, http.StatusBadRequest)
 		return
 	}
-	c.Abilities = append(c.Abilities, ab)
+	c.Perks = append(c.Perks, ab)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID+"/abilities", http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
 }
 
 // perkSummaries recomputes cost and instruction text for every perk the
 // character owns. Costs are always derived here rather than stored, so the
 // figures follow the current config even for perks built long ago.
 func (a *App) perkSummaries(c *model.Character) []perkSummary {
-	perks := make([]perkSummary, 0, len(c.Abilities))
-	for _, ab := range c.Abilities {
+	perks := make([]perkSummary, 0, len(c.Perks))
+	for _, ab := range c.Perks {
 		perks = append(perks, perkSummary{
-			Ability:      ab,
-			Cost:         engine.AbilityCost(a.Cfg.Config, ab),
-			Instructions: engine.AbilityInstructions(a.Cfg.Config, ab),
+			Perk:         ab,
+			Cost:         engine.PerkCost(a.Cfg.Config, ab),
+			Instructions: engine.PerkInstructions(a.Cfg.Config, ab),
 		})
 	}
 	return perks
 }
 
-// abilityListPage builds the envelope shared by the full Perks page and the
+// perkListPage builds the envelope shared by the full Perks page and the
 // perk-list partial returned by the refresh route.
-func (a *App) abilityListPage(c *model.Character) pageData {
+func (a *App) perkListPage(c *model.Character) pageData {
 	return pageData{
 		Title:         c.Name() + " - Perks",
 		Character:     c,
@@ -301,13 +301,13 @@ func (a *App) abilityListPage(c *model.Character) pageData {
 		Breadcrumbs: []crumb{
 			{Label: "Home", URL: "/"},
 			{Label: c.Name(), URL: "/characters/" + c.ID},
-			{Label: "Perks", URL: "/characters/" + c.ID + "/abilities"},
+			{Label: "Perks", URL: "/characters/" + c.ID + "/perks"},
 		},
 	}
 }
 
-func (a *App) renderAbilityList(w http.ResponseWriter, c *model.Character) {
-	a.render(w, "abilities.html", a.abilityListPage(c))
+func (a *App) renderPerkList(w http.ResponseWriter, c *model.Character) {
+	a.render(w, "perks.html", a.perkListPage(c))
 }
 
 // refreshNotice phrases the outcome of a refresh for the user.
@@ -322,12 +322,17 @@ func refreshNotice(changed int) string {
 	}
 }
 
-// renderPerkList returns only the perk list region with freshly recomputed
-// costs; used by the "Refresh All" button. changed is the number of perks whose
-// cost moved during normalization, reported back so the user can see the
-// refresh did something (or confirm everything was already correct).
-func (a *App) renderPerkList(w http.ResponseWriter, c *model.Character, changed int) {
-	data := a.abilityListPage(c)
+// renderPerkListPartial returns only the perk list region with freshly
+// recomputed costs; used by the "Refresh All" button. changed is the number of
+// perks whose cost moved during normalization, reported back so the user can see
+// the refresh did something (or confirm everything was already correct).
+//
+// This is the HTMX fragment counterpart of renderPerkList above, which renders
+// the whole page. The two were distinct before the Abilities -> Perks rename
+// collapsed their names together.
+func (a *App) renderPerkListPartial(w http.ResponseWriter, c *model.Character, changed int) {
+
+	data := a.perkListPage(c)
 	data.Cfg = a.Cfg.Config
 	data.RefreshNotice = refreshNotice(changed)
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -336,19 +341,19 @@ func (a *App) renderPerkList(w http.ResponseWriter, c *model.Character, changed 
 	}
 }
 
-func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model.Ability, isNew bool) {
-	cost := engine.AbilityCost(a.Cfg.Config, *ab)
-	budget := a.Cfg.AbilityPointBudget(c.Level)
+func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model.Perk, isNew bool) {
+	cost := engine.PerkCost(a.Cfg.Config, *ab)
+	budget := a.Cfg.PerkPointBudget(c.Level)
 	title := "New Perk"
 	if !isNew {
 		title = ab.Name
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err := a.Tmpl.ExecuteTemplate(w, "builder.html", abilityPage{
+	err := a.Tmpl.ExecuteTemplate(w, "builder.html", perkPage{
 		Cfg:       a.Cfg.Config,
 		Title:     title,
 		Character: c,
-		Ability:   ab,
+		Perk:      ab,
 		Cost:      cost,
 		Budget:    budget,
 		// Over budget is advisory only: it never blocks saving.
@@ -357,12 +362,12 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 		charStats:     a.characterStats(c),
 		ReadOnlyStats: true,
 
-		Instructions: engine.AbilityInstructions(a.Cfg.Config, *ab),
+		Instructions: engine.PerkInstructions(a.Cfg.Config, *ab),
 
 		Breadcrumbs: []crumb{
 			{Label: "Home", URL: "/"},
 			{Label: c.Name(), URL: "/characters/" + c.ID},
-			{Label: "Perks", URL: "/characters/" + c.ID + "/abilities"},
+			{Label: "Perks", URL: "/characters/" + c.ID + "/perks"},
 			{Label: title, URL: "#"},
 		},
 	})
@@ -371,31 +376,31 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 	}
 }
 
-// saveAbility parses the builder form into an ability and stores it. Cost is
-// never validated here; over-budget abilities are allowed by design.
-func (a *App) saveAbility(w http.ResponseWriter, r *http.Request, c *model.Character, existingID string) {
+// savePerk parses the builder form into an perk and stores it. Cost is
+// never validated here; over-budget perks are allowed by design.
+func (a *App) savePerk(w http.ResponseWriter, r *http.Request, c *model.Character, existingID string) {
 	_ = r.ParseForm()
 	if existingID == "" {
-		existingID = r.FormValue("ability_id")
+		existingID = r.FormValue("perk_id")
 	}
 	// One shared parse path for save, autosave and the cost preview so the
 	// three can never disagree about what the form said.
-	ab := a.buildAbilityFromForm(r, existingID)
+	ab := a.buildPerkFromForm(r, existingID)
 
 	// Normalize on the way in so the stored perk is canonical: every configured
 	// field present, repeatable fields expanded, numbers in range. The cost
 	// engine and the builder then read the same values and cannot disagree.
-	ab = engine.NormalizeAbility(a.Cfg.Config, ab)
-	if idx := findAbility(c, existingID); idx >= 0 {
-		c.Abilities[idx] = ab
+	ab = engine.NormalizePerk(a.Cfg.Config, ab)
+	if idx := findPerk(c, existingID); idx >= 0 {
+		c.Perks[idx] = ab
 	} else {
-		c.Abilities = append(c.Abilities, ab)
+		c.Perks = append(c.Perks, ab)
 	}
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID+"/abilities", http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
 }
 
 // readFieldValues extracts values for a set of fields from a form using a key
@@ -514,7 +519,7 @@ func (a *App) handleBuilderEnactment(w http.ResponseWriter, r *http.Request) {
 	if interaction == "" {
 		interaction = firstInteractionID(a.Cfg.Config)
 	}
-	// The ability type drives which enactments are offered (allowed/blocked
+	// The perk type drives which enactments are offered (allowed/blocked
 	// filtering) and, for enactments beyond the first, whether the Interaction
 	// and Validation regions are shown.
 	atype := r.URL.Query().Get("atype")
@@ -524,7 +529,7 @@ func (a *App) handleBuilderEnactment(w http.ResponseWriter, r *http.Request) {
 	data := map[string]any{
 		"Cfg":             a.Cfg.Config,
 		"Index":           idx,
-		"AbilityType":     atype,
+		"PerkType":        atype,
 		"Type":            etype,
 		"Interaction":     interaction,
 		"Fields":          map[string]any{},
@@ -598,7 +603,7 @@ func (a *App) handleInteractionFields(w http.ResponseWriter, r *http.Request) {
 
 // handleInlineFields renders the nested fields of the component referenced by
 // an inline_builder dropdown. It parallels handleEnactmentFields but resolves
-// the component generically by kind (enactment/interaction/ability_type) and
+// the component generically by kind (enactment/interaction/perk_type) and
 // renders its fields under the "<name>_ib_" prefix so they stay namespaced.
 func (a *App) handleInlineFields(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
@@ -693,16 +698,16 @@ func name2attr(s string) string {
 	return strings.ReplaceAll(s, `"`, "")
 }
 
-// handleAbilityTypeFields renders the config-driven fields for the selected
-// ability type, used to swap the type-specific field block in the builder.
+// handlePerkTypeFields renders the config-driven fields for the selected
+// perk type, used to swap the type-specific field block in the builder.
 
-func (a *App) handleAbilityTypeFields(w http.ResponseWriter, r *http.Request) {
+func (a *App) handlePerkTypeFields(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
 	atype := r.FormValue("type")
 	if atype == "" {
-		atype = firstAbilityTypeID(a.Cfg.Config)
+		atype = firstPerkTypeID(a.Cfg.Config)
 	}
-	comp, ok := a.Cfg.AbilityType(atype)
+	comp, ok := a.Cfg.PerkType(atype)
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if !ok {
 		return
@@ -716,11 +721,11 @@ func (a *App) handleAbilityTypeFields(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleBuilderAutosave saves the ability from the posted builder form without
+// handleBuilderAutosave saves the perk from the posted builder form without
 // redirecting, so the builder can persist edits in the background as the user
-// selects options. It returns the (possibly newly created) ability id in the
-// HX-Trigger-independent JSON body and an HX-Ability-ID header so the client
-// can keep posting to a stable URL. Autosave is skipped until the ability has
+// selects options. It returns the (possibly newly created) perk id in the
+// HX-Trigger-independent JSON body and an HX-Perk-ID header so the client
+// can keep posting to a stable URL. Autosave is skipped until the perk has
 // a name, mirroring the manual save gate.
 func (a *App) handleBuilderAutosave(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
@@ -736,26 +741,26 @@ func (a *App) handleBuilderAutosave(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
-	existingID := r.FormValue("ability_id")
-	ab := engine.NormalizeAbility(a.Cfg.Config, a.buildAbilityFromForm(r, existingID))
-	if idx := findAbility(&c, existingID); idx >= 0 {
-		c.Abilities[idx] = ab
+	existingID := r.FormValue("perk_id")
+	ab := engine.NormalizePerk(a.Cfg.Config, a.buildPerkFromForm(r, existingID))
+	if idx := findPerk(&c, existingID); idx >= 0 {
+		c.Perks[idx] = ab
 	} else {
-		c.Abilities = append(c.Abilities, ab)
+		c.Perks = append(c.Perks, ab)
 	}
 	if err := a.Store.Save(c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("X-Ability-ID", ab.ID)
+	w.Header().Set("X-Perk-ID", ab.ID)
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, `{"id":%q}`, ab.ID)
 }
 
-// buildAbilityFromForm parses the builder form into an Ability. Shared by the
+// buildPerkFromForm parses the builder form into an Perk. Shared by the
 // manual save and the background autosave paths.
-func (a *App) buildAbilityFromForm(r *http.Request, existingID string) model.Ability {
-	ab := model.Ability{
+func (a *App) buildPerkFromForm(r *http.Request, existingID string) model.Perk {
+	ab := model.Perk{
 		ID:          existingID,
 		Name:        r.FormValue("name"),
 		Description: r.FormValue("description"),
@@ -763,9 +768,9 @@ func (a *App) buildAbilityFromForm(r *http.Request, existingID string) model.Abi
 		Fields:      map[string]any{},
 	}
 	if ab.ID == "" {
-		ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
+		ab.ID = fmt.Sprintf("perk-%d", time.Now().UnixNano())
 	}
-	if at, ok := a.Cfg.AbilityType(ab.Type); ok {
+	if at, ok := a.Cfg.PerkType(ab.Type); ok {
 		ab.Fields = readFieldValues(a.Cfg.Config, at.Fields, "atype_", r)
 	}
 	ab.Enactments = a.readEnactments(r)
@@ -810,21 +815,21 @@ func (a *App) readEnactments(r *http.Request) []model.Enactment {
 
 func (a *App) handleBuilderCost(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
-	ab := model.Ability{Type: r.FormValue("type"), Fields: map[string]any{}}
-	if at, ok := a.Cfg.AbilityType(ab.Type); ok {
+	ab := model.Perk{Type: r.FormValue("type"), Fields: map[string]any{}}
+	if at, ok := a.Cfg.PerkType(ab.Type); ok {
 		ab.Fields = readFieldValues(a.Cfg.Config, at.Fields, "atype_", r)
 	}
 	ab.Enactments = a.readEnactments(r)
-	cost := engine.AbilityCost(a.Cfg.Config, ab)
+	cost := engine.PerkCost(a.Cfg.Config, ab)
 
 	// Budget for the over-budget hint; the character id is passed as a form
 	// value so this conditionless partial can look it up.
 	budget := 0
 	if c, ok := a.Store.Get(r.FormValue("character_id")); ok {
-		budget = a.Cfg.AbilityPointBudget(c.Level)
+		budget = a.Cfg.PerkPointBudget(c.Level)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	data := abilityPage{
+	data := perkPage{
 		Cost:       cost,
 		Budget:     budget,
 		OverBudget: budget > 0 && cost.Build > budget,
@@ -836,24 +841,24 @@ func (a *App) handleBuilderCost(w http.ResponseWriter, r *http.Request) {
 
 // handleBuilderInstructions regenerates the play-facing instruction text from
 // the posted builder form. It mirrors handleBuilderCost: the form is parsed
-// into a throwaway ability, the generator runs over it, and only the
+// into a throwaway perk, the generator runs over it, and only the
 // "instructions" partial is returned so htmx can swap that region.
 func (a *App) handleBuilderInstructions(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
-	ab := a.buildAbilityFromForm(r, r.FormValue("ability_id"))
+	ab := a.buildPerkFromForm(r, r.FormValue("perk_id"))
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	data := abilityPage{
+	data := perkPage{
 		Cfg:          a.Cfg.Config,
-		Instructions: engine.AbilityInstructions(a.Cfg.Config, ab),
+		Instructions: engine.PerkInstructions(a.Cfg.Config, ab),
 	}
 	if err := a.Tmpl.ExecuteTemplate(w, "instructions", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-func findAbility(c *model.Character, id string) int {
+func findPerk(c *model.Character, id string) int {
 
-	for i, ab := range c.Abilities {
+	for i, ab := range c.Perks {
 		if ab.ID == id {
 			return i
 		}
@@ -861,9 +866,9 @@ func findAbility(c *model.Character, id string) int {
 	return -1
 }
 
-func firstAbilityTypeID(cfg *config.Config) string {
-	if len(cfg.AbilityTypes.Order) > 0 {
-		return cfg.AbilityTypes.Order[0]
+func firstPerkTypeID(cfg *config.Config) string {
+	if len(cfg.PerkTypes.Order) > 0 {
+		return cfg.PerkTypes.Order[0]
 	}
 	return ""
 }

@@ -1,8 +1,8 @@
 package config
 
-// AbilityType returns the ability-type component with the given id.
-func (c *Config) AbilityType(id string) (Component, bool) {
-	if comp, ok := c.AbilityTypes.Get(id); ok {
+// PerkType returns the perk-type component with the given id.
+func (c *Config) PerkType(id string) (Component, bool) {
+	if comp, ok := c.PerkTypes.Get(id); ok {
 		return *comp, true
 	}
 	return Component{}, false
@@ -127,12 +127,12 @@ func (c *Config) ValidationFieldsFor(enactmentID string) []Field {
 }
 
 // EnactmentsFor returns the enactment components visible for the given
-// ability-type id, filtered by that ability type's allowed_enactments/
-// blocked_enactments lists. Filtering is UI-only. An unknown ability-type id
+// perk-type id, filtered by that perk type's allowed_enactments/
+// blocked_enactments lists. Filtering is UI-only. An unknown perk-type id
 // yields the full enactment list.
-func (c *Config) EnactmentsFor(abilityTypeID string) []*Component {
+func (c *Config) EnactmentsFor(perkTypeID string) []*Component {
 	all := c.Enactments.List()
-	comp, ok := c.AbilityTypes.Get(abilityTypeID)
+	comp, ok := c.PerkTypes.Get(perkTypeID)
 	if !ok {
 		return all
 	}
@@ -153,15 +153,15 @@ func (c *Config) EnactmentsFor(abilityTypeID string) []*Component {
 // ComponentByKind resolves a component id against the map named by kind. It
 
 // backs the generic inline_builder feature so a dropdown can reference any
-// enactment, interaction or ability type.
+// enactment, interaction or perk type.
 func (c *Config) ComponentByKind(kind, id string) (Component, bool) {
 	switch kind {
 	case "enactment":
 		return c.Enactment(id)
 	case "interaction":
 		return c.Interaction(id)
-	case "ability_type":
-		return c.AbilityType(id)
+	case "perk_type":
+		return c.PerkType(id)
 	default:
 		return Component{}, false
 	}
@@ -455,7 +455,7 @@ func (c *Config) OptionsFor(source string) []Option {
 		out := make([]Option, 0, len(c.Conditions))
 		for _, s := range c.Conditions {
 			// Conditions marked selectable: false are states the rules impose
-			// rather than effects an ability can buy, so they never appear in
+			// rather than effects an perk can buy, so they never appear in
 			// the dropdown. They stay resolvable via ConditionByID.
 			if !s.IsSelectable() {
 				continue
@@ -473,8 +473,8 @@ func (c *Config) OptionsFor(source string) []Option {
 			out = append(out, Option{Value: s.ID, Label: s.Name, Information: s.Description, Cost: cost})
 		}
 		return out
-	case "ability_types":
-		return componentOptions(c.AbilityTypes)
+	case "perk_types":
+		return componentOptions(c.PerkTypes)
 
 	case "enactment_types":
 		return componentOptions(c.Enactments)
@@ -570,7 +570,7 @@ func (c *Config) MaxLevel() int {
 		return c.Leveling.MaxLevel
 	}
 	max := 0
-	for _, t := range []LevelTable{c.Leveling.SkillPoints, c.Leveling.AbilityPoints} {
+	for _, t := range []LevelTable{c.Leveling.SkillPoints, c.Leveling.PerkPoints} {
 		for _, e := range t.Levels {
 			if e.Level > max {
 				max = e.Level
@@ -603,9 +603,9 @@ func (c *Config) SkillPointBudget(level int) int {
 	return budgetForLevel(c.Leveling.SkillPoints, c.ClampLevel(level))
 }
 
-// AbilityPointBudget returns the ability-point budget for a given level.
-func (c *Config) AbilityPointBudget(level int) int {
-	return budgetForLevel(c.Leveling.AbilityPoints, c.ClampLevel(level))
+// PerkPointBudget returns the perk-point budget for a given level.
+func (c *Config) PerkPointBudget(level int) int {
+	return budgetForLevel(c.Leveling.PerkPoints, c.ClampLevel(level))
 }
 
 // budgetForLevel resolves a level table. An explicit row for the requested

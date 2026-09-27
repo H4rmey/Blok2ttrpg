@@ -42,7 +42,7 @@ func funcMap() template.FuncMap {
 		// choice), so this is the fallback when a field carries neither a
 		// stored value nor a configured default. It mirrors the engine's
 		// normalization, which fills an unset dropdown the same way, keeping
-		// the rendered form and the stored ability in agreement.
+		// the rendered form and the stored perk in agreement.
 		"firstOption": func(cfg *config.Config, f config.Field) string {
 			if cfg == nil {
 				return ""
@@ -54,7 +54,7 @@ func funcMap() template.FuncMap {
 			}
 			return ""
 		},
-		// componentByKind resolves a component (enactment/interaction/ability
+		// componentByKind resolves a component (enactment/interaction/perk
 		// type) by kind and id for the inline builder. Returns nil when not
 		// found so the template can guard with `if`.
 		"componentByKind": func(cfg *config.Config, kind, id string) *config.Component {
@@ -64,17 +64,17 @@ func funcMap() template.FuncMap {
 			return nil
 		},
 
-		// abilityTypes/enactments/interactions expose the ordered component
+		// perkTypes/enactments/interactions expose the ordered component
 		// lists so templates can range over them.
-		"abilityTypes": func(cfg *config.Config) []*config.Component { return cfg.AbilityTypes.List() },
+		"perkTypes":    func(cfg *config.Config) []*config.Component { return cfg.PerkTypes.List() },
 		"enactments":   func(cfg *config.Config) []*config.Component { return cfg.Enactments.List() },
 		"interactions": func(cfg *config.Config) []*config.Component { return cfg.Interactions.List() },
-		"traits":   func(cfg *config.Config) []*config.TraitGroup { return cfg.Traits.List() },
+		"traits":       func(cfg *config.Config) []*config.TraitGroup { return cfg.Traits.List() },
 		"skillGroups":  func(cfg *config.Config) []config.SkillGroup { return cfg.Skills.List() },
 		// enactmentsFor/interactionsFor/validationFieldsFor apply the UI-only
-		// allowed/blocked filtering for a given ability-type or enactment id.
-		"enactmentsFor": func(cfg *config.Config, abilityTypeID string) []*config.Component {
-			return cfg.EnactmentsFor(abilityTypeID)
+		// allowed/blocked filtering for a given perk-type or enactment id.
+		"enactmentsFor": func(cfg *config.Config, perkTypeID string) []*config.Component {
+			return cfg.EnactmentsFor(perkTypeID)
 		},
 		"interactionsFor": func(cfg *config.Config, enactmentID string) []*config.Component {
 			return cfg.InteractionsFor(enactmentID)
@@ -304,7 +304,7 @@ func asValuesMap(v any) map[string]any {
 }
 
 // resolveRows produces the row value maps to render for a repeatable field.
-// Stored rows (from a saved/imported ability) take precedence; otherwise the
+// Stored rows (from a saved/imported perk) take precedence; otherwise the
 // configured row defaults are used, one map per default row.
 func resolveRows(f config.Field, values map[string]any) []map[string]any {
 	if raw := mapGet(values, f.Key); raw != nil {

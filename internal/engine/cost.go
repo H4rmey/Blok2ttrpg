@@ -11,8 +11,8 @@ import (
 type Cost struct {
 	Build  int `json:"build"`
 	Energy int `json:"energy"`
-	// Action is the number of actions it takes to use the ability. It is only
-	// meaningful for ability types that actually cost actions (base_action > 0);
+	// Action is the number of actions it takes to use the perk. It is only
+	// meaningful for perk types that actually cost actions (base_action > 0);
 	// reactions and similar zero-action types leave this at 0. When set it is
 	// clamped to a minimum of 1 action.
 	Action int `json:"action"`
@@ -30,7 +30,7 @@ func (c *Cost) plusN(x config.Cost, n int) {
 
 // FieldsCost computes the cost contribution of a set of field values against
 // their field definitions. It handles every field type generically so no
-// ability type or enactment is special-cased in Go.
+// perk type or enactment is special-cased in Go.
 func FieldsCost(cfg *config.Config, fields []config.Field, values map[string]any) Cost {
 	var total Cost
 	for _, f := range fields {
@@ -299,15 +299,15 @@ func ComponentCost(cfg *config.Config, comp config.Component, values map[string]
 	return c
 }
 
-// AbilityCost computes the full advisory cost of an ability, including the
+// PerkCost computes the full advisory cost of an perk, including the
 // additional-enactment surcharge for each enactment beyond the first.
-func AbilityCost(cfg *config.Config, a model.Ability) Cost {
+func PerkCost(cfg *config.Config, a model.Perk) Cost {
 	var total Cost
-	if at, ok := cfg.AbilityType(a.Type); ok {
+	if at, ok := cfg.PerkType(a.Type); ok {
 		c := ComponentCost(cfg, at, a.Fields)
 		total.Build += c.Build
 		total.Energy += c.Energy
-		// Action count is only meaningful for ability types that actually cost
+		// Action count is only meaningful for perk types that actually cost
 		// actions to use (base_action > 0). Reactions and similar zero-action
 		// types leave Action at 0 so the builder can hide the badge. The
 		// "action_steps" perk field (if present) adjusts the count relative to
@@ -375,12 +375,12 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 	// Apply the configured cost floors. Only the final total is clamped, so
 	// refund-style options (energy offsets, Enact Nerf, negative-cost
 	// knockouts) still offset other costs internally; they just cannot make an
-	// ability cost less than nothing unless the ruleset opts in.
+	// perk cost less than nothing unless the ruleset opts in.
 	if !cfg.AllowsNegativeBuildCost() && total.Build < 0 {
 		total.Build = 0
 	}
 	// Using a perk always costs at least 1 energy, so the floor is 1 rather
-	// than 0. The per-enactment energy cost comes from the ability type's
+	// than 0. The per-enactment energy cost comes from the perk type's
 	// base_cost plus additional_enactment, so this is a backstop that keeps
 	// refund-style options (Enact Nerf, energy offsets) from making a perk free.
 	// A ruleset that opts into negative energy cost (via
@@ -436,9 +436,9 @@ func cumulativeSkillCost(cfg *config.Config, profID string) int {
 }
 
 // PackageCost is the price of importing a package, expressed in the two budgets
-// a character actually spends: perk (ability) points and skill (skill) points.
+// a character actually spends: perk (perk) points and skill (skill) points.
 type PackageCost struct {
-	// Perk is the sum of the build cost of every ability the package installs.
+	// Perk is the sum of the build cost of every perk the package installs.
 	Perk int `json:"perk"`
 	// Skill is the number of skill points the package's proficiency shifts
 	// consume on top of what the character already spends.
@@ -446,17 +446,17 @@ type PackageCost struct {
 }
 
 // PackageCostFor computes what a package would cost the given character. Perk
-// points are the summed build cost of the package's abilities. Skill points are
+// points are the summed build cost of the package's perks. Skill points are
 // the difference in cumulative skill cost between the character's current tier
 // and the tier the shift would move it to, so a shift that is already paid for
 // (or that moves a skill downward) does not charge again.
 //
 // The character is not modified. A skill the character has no entry for is
 // treated as sitting at the configured default tier.
-func PackageCostFor(cfg *config.Config, c model.Character, shifts map[string]int, abilities []model.Ability) PackageCost {
+func PackageCostFor(cfg *config.Config, c model.Character, shifts map[string]int, perks []model.Perk) PackageCost {
 	var out PackageCost
-	for _, ab := range abilities {
-		out.Perk += AbilityCost(cfg, ab).Build
+	for _, ab := range perks {
+		out.Perk += PerkCost(cfg, ab).Build
 	}
 	def := cfg.DefaultProficiencyID()
 	for skillKey, delta := range shifts {

@@ -1,10 +1,10 @@
 {{ template "head" . }}
 {{ $c := .Character }}
-{{ $ab := .Ability }}
+{{ $ab := .Perk }}
 <div class="page-head">
   <h1>{{ if $ab.ID }}Edit Perk{{ else }}New Perk{{ end }}</h1>
   <div class="toolbar">
-    <a class="btn" href="/characters/{{ $c.ID }}/abilities">Back to Perks</a>
+    <a class="btn" href="/characters/{{ $c.ID }}/perks">Back to Perks</a>
   </div>
 </div>
 
@@ -19,20 +19,20 @@
 {{/* "load" is part of the trigger list so opening an existing perk recomputes
      its cost from the rendered form instead of trusting whatever was stored. */}}
 <form method="post"
-      action="/characters/{{ $c.ID }}/abilities/{{ if $ab.ID }}{{ $ab.ID }}{{ else }}new{{ end }}"
-      id="ability-form"
+      action="/characters/{{ $c.ID }}/perks/{{ if $ab.ID }}{{ $ab.ID }}{{ else }}new{{ end }}"
+      id="perk-form"
       hx-post="/builder/cost"
       hx-trigger="load, change, keyup changed delay:300ms"
       hx-target="#cost-badge" hx-swap="innerHTML">
   <input type="hidden" name="character_id" value="{{ $c.ID }}">
-  <input type="hidden" name="ability_id" id="ability-id" value="{{ $ab.ID }}">
+  <input type="hidden" name="perk_id" id="perk-id" value="{{ $ab.ID }}">
 
 
   <fieldset>
     <legend>Perk Details</legend>
     <div class="field">
       <label>Name <span class="req">*</span></label>
-      <input type="text" name="name" id="ability-name" value="{{ $ab.Name }}" required
+      <input type="text" name="name" id="perk-name" value="{{ $ab.Name }}" required
              placeholder="Name your perk to begin">
       <small class="muted" id="name-hint">Enter a name to unlock the rest of the builder.</small>
     </div>
@@ -45,8 +45,8 @@
       <small class="muted">Generated from the choices below; this is the rules text you read at the table.</small>
       <div id="instructions-panel"
            hx-post="/builder/instructions"
-           hx-trigger="change from:#ability-form, load"
-           hx-include="#ability-form"
+           hx-trigger="change from:#perk-form, load"
+           hx-include="#perk-form"
            hx-target="this" hx-swap="innerHTML">
         {{ template "instructions" . }}
       </div>
@@ -57,9 +57,9 @@
   <div id="builder-gate" {{ if not $ab.Name }}class="gated"{{ end }}>
   <fieldset>
     <legend>Perk Type
-      {{ if and .Cfg.AbilityTypes.Information (not .Cfg.AbilityTypes.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Cfg.AbilityTypes.Information }}">i</span>{{ end }}
+      {{ if and .Cfg.PerkTypes.Information (not .Cfg.PerkTypes.RenderInformation) }}<span class="info-icon" tabindex="0" data-tooltip="{{ .Cfg.PerkTypes.Information }}">i</span>{{ end }}
     </legend>
-    {{ if and .Cfg.AbilityTypes.Information .Cfg.AbilityTypes.RenderInformation }}<small class="component-info">{{ .Cfg.AbilityTypes.Information }}</small>{{ end }}
+    {{ if and .Cfg.PerkTypes.Information .Cfg.PerkTypes.RenderInformation }}<small class="component-info">{{ .Cfg.PerkTypes.Information }}</small>{{ end }}
 
 
     <div class="field">
@@ -68,11 +68,11 @@
       <div class="select-row">
 
         <select name="type" class="opt-select"
-                hx-get="/builder/ability-type-fields"
-                hx-target="#ability-type-fields"
+                hx-get="/builder/perk-type-fields"
+                hx-target="#perk-type-fields"
                 hx-swap="innerHTML"
                 hx-trigger="change">
-          {{ range abilityTypes .Cfg }}
+          {{ range perkTypes .Cfg }}
           <option value="{{ .ID }}"{{ if .Information }} title="{{ .Information }}" data-info="{{ .Information }}" data-render-info="{{ if .RenderInformation }}true{{ else }}false{{ end }}"{{ end }} {{ if eq .ID $ab.Type }}selected{{ end }}>{{ .DisplayName }}</option>
           {{ end }}
         </select>
@@ -81,8 +81,8 @@
       <small class="field-info option-info-text" hidden></small>
     </div>
 
-    <div id="ability-type-fields">
-      {{ range abilityTypes .Cfg }}
+    <div id="perk-type-fields">
+      {{ range perkTypes .Cfg }}
       {{ if eq .ID $ab.Type }}
         {{ range .Fields }}
         {{ template "field" dict "Cfg" $.Cfg "Field" . "Prefix" "atype_" "Values" $ab.Fields }}
@@ -100,7 +100,7 @@
       {{ template "enactment_partial.html" dict
           "Cfg" $.Cfg
           "Index" (str $ei)
-          "AbilityType" $ab.Type
+          "PerkType" $ab.Type
           "Type" $en.Type
           "Interaction" $en.Interaction
 
@@ -119,9 +119,9 @@
   </div>
 
   <div class="toolbar">
-    <button class="btn primary" type="submit" id="save-ability">Save Perk</button>
+    <button class="btn primary" type="submit" id="save-perk">Save Perk</button>
 
-    <a class="btn" href="/characters/{{ $c.ID }}/abilities">Cancel</a>
+    <a class="btn" href="/characters/{{ $c.ID }}/perks">Cancel</a>
   </div>
 </form>
 

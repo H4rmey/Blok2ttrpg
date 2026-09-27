@@ -40,7 +40,7 @@ enactments:
             label: "Unlimited"
             cost: { build_cost: 8, energy_cost: 0 }
       - key: solution
-        information: "Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this ability then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action."
+        information: "Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this perk then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action."
         label: "Solutions"
         type: multiselect
         default_count: 2
@@ -117,7 +117,7 @@ enactments:
           increase: { build_cost: 1 }
           decrease: { build_cost: -1 }
       - key: solution
-        information: "Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this ability then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action."
+        information: "Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this perk then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action."
         label: "Solutions"
         type: multiselect
         default_count: 2
@@ -146,7 +146,7 @@ enactments:
 
   healing:
     type: "Enact Healing"
-    information: "Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses."
+    information: "Enact Healing perks allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses."
     render_information: false
     base_cost:
       build_cost: 1
@@ -202,7 +202,7 @@ enactments:
 
   nerf:
     type: "Enact Nerf"
-    information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy."
+    information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain perk points or energy."
     render_information: false
     base_cost: 
       build_cost: 0

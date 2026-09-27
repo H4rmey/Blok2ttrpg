@@ -13,14 +13,14 @@ import (
 // TestBuilderCostMatchesStoredCost guards the round trip: the cost shown when a
 // perk is opened in the builder must equal the cost computed for the same perk
 // in the list. A difference means the builder form does not faithfully carry
-// the stored ability, so simply opening and saving a perk would change its
+// the stored perk, so simply opening and saving a perk would change its
 // price.
 func TestBuilderCostMatchesStoredCost(t *testing.T) {
 	app, c := testAppWithPerk(t)
-	stored := engine.AbilityCost(app.Cfg.Config, c.Abilities[0])
+	stored := engine.PerkCost(app.Cfg.Config, c.Perks[0])
 
 	rec := httptest.NewRecorder()
-	app.renderBuilder(rec, c, &c.Abilities[0], false)
+	app.renderBuilder(rec, c, &c.Perks[0], false)
 	form := formValuesFromHTML(rec.Body.String())
 	form.Set("character_id", c.ID)
 
@@ -31,8 +31,8 @@ func TestBuilderCostMatchesStoredCost(t *testing.T) {
 	// this asserts the real invariant, that opening a perk and saving it leaves
 	// the cost untouched. Normalizing cannot conjure data the form dropped, so
 	// genuine losses (e.g. an omitted interaction) still fail here.
-	saved := engine.NormalizeAbility(app.Cfg.Config, app.buildAbilityFromForm(req, "ability-1"))
-	replayed := engine.AbilityCost(app.Cfg.Config, saved)
+	saved := engine.NormalizePerk(app.Cfg.Config, app.buildPerkFromForm(req, "perk-1"))
+	replayed := engine.PerkCost(app.Cfg.Config, saved)
 
 	if replayed.Build != stored.Build || replayed.Energy != stored.Energy {
 		t.Errorf("builder round trip changed the cost: stored build=%d energy=%d, builder build=%d energy=%d\nform: %v",

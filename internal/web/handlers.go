@@ -24,10 +24,10 @@ type pageData struct {
 	Characters  []model.Character
 
 	// charStats carries the budget and vital figures rendered in the character
-	// bar. Fields are promoted, so templates keep using .AbilityBudget etc.
+	// bar. Fields are promoted, so templates keep using .PerkBudget etc.
 	charStats
 
-	// Perks carries the character's abilities pre-enriched with their computed
+	// Perks carries the character's perks pre-enriched with their computed
 	// cost and generated instruction text, so the Perks list can show the rules
 	// inline without the user opening each perk in the builder.
 	Perks []perkSummary
@@ -51,11 +51,11 @@ type pageData struct {
 // bar. It is embedded in every envelope that renders the bar so the perks list
 // and the perk builder can show the same numbers as the character sheet.
 type charStats struct {
-	SkillBudget   int
-	SkillUsed     int
-	AbilityBudget int
-	AbilityUsed   int
-	Vitals        []engine.VitalStat
+	SkillBudget int
+	SkillUsed   int
+	PerkBudget  int
+	PerkUsed    int
+	Vitals      []engine.VitalStat
 
 	// InvokeBudget is the maximum invoke points the character's level grants;
 	// InvokeCurrent is how many are unspent right now. Unlike the two point
@@ -68,16 +68,16 @@ type charStats struct {
 
 // characterStats computes the character bar figures for a character.
 func (a *App) characterStats(c *model.Character) charStats {
-	abilityUsed := 0
-	for _, ab := range c.Abilities {
-		abilityUsed += engine.AbilityCost(a.Cfg.Config, ab).Build
+	perkUsed := 0
+	for _, ab := range c.Perks {
+		perkUsed += engine.PerkCost(a.Cfg.Config, ab).Build
 	}
 	invokeBudget := a.Cfg.InvokePointBudget(c.Level)
 	return charStats{
 		SkillBudget:   a.Cfg.SkillPointBudget(c.Level),
 		SkillUsed:     engine.SkillPointsUsed(a.Cfg.Config, *c),
-		AbilityBudget: a.Cfg.AbilityPointBudget(c.Level),
-		AbilityUsed:   abilityUsed,
+		PerkBudget:    a.Cfg.PerkPointBudget(c.Level),
+		PerkUsed:      perkUsed,
 		Vitals:        engine.CharacterVitals(a.Cfg.Config, *c),
 		InvokeBudget:  invokeBudget,
 		InvokeCurrent: a.invokeCurrent(c, invokeBudget),
@@ -141,10 +141,10 @@ type crumb struct {
 	URL   string
 }
 
-// perkSummary pairs an ability with the derived values the Perks list shows:
+// perkSummary pairs an perk with the derived values the Perks list shows:
 // its advisory cost and its generated play-facing instructions.
 type perkSummary struct {
-	Ability      model.Ability
+	Perk         model.Perk
 	Cost         engine.Cost
 	Instructions []engine.Instruction
 }
@@ -269,8 +269,8 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 		}
 	case "pdf":
 		a.renderCharacterPDF(w, c)
-	case "abilities":
-		a.handleAbilities(w, r, &c, parts[2:])
+	case "perks":
+		a.handlePerks(w, r, &c, parts[2:])
 	case "packages":
 		a.handlePackages(w, r, &c, parts[2:])
 	default:
@@ -316,11 +316,11 @@ func (a *App) handleImportCharacter(w http.ResponseWriter, r *http.Request) {
 // blankCharacter builds a character with defaults for every configured skill.
 func (a *App) blankCharacter(id string) model.Character {
 	c := model.Character{
-		ID:        id,
-		Level:     1,
-		Traits:    map[string]any{},
-		Skills:    map[string]string{},
-		Abilities: []model.Ability{},
+		ID:     id,
+		Level:  1,
+		Traits: map[string]any{},
+		Skills: map[string]string{},
+		Perks:  []model.Perk{},
 	}
 	def := a.Cfg.DefaultProficiencyID()
 	for _, g := range a.Cfg.Skills.List() {

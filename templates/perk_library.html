@@ -1,15 +1,15 @@
-{{ define "ability_library" }}
+{{ define "perk_library" }}
 <div class="pkg-library">
   <div class="pkg-library-head">
     <h2>Perk Library</h2>
-    <button class="btn" type="button" onclick="closeAbilityModal()">Close</button>
+    <button class="btn" type="button" onclick="closePerkModal()">Close</button>
   </div>
 
   {{ if .HasCharacter }}
   {{/* Remaining budgets, so the price on each card can be read against what
        the character actually has left to spend. */}}
   <p class="pkg-budget">
-    Perk points: <strong>{{ .AbilityUsed }}/{{ .AbilityBudget }}</strong> used
+    Perk points: <strong>{{ .PerkUsed }}/{{ .PerkBudget }}</strong> used
     &middot;
     Skill points: <strong>{{ .SkillUsed }}/{{ .SkillBudget }}</strong> used
   </p>
@@ -19,12 +19,12 @@
   <ul class="pkg-list">
     {{ $charID := .CharacterID }}
     {{ range .Perks }}
-    {{ $ab := .Ability }}
+    {{ $ab := .Perk }}
     <li class="pkg-card{{ if not .Affordable }} unaffordable{{ end }}">
       <div class="pkg-card-head">
         <strong>{{ $ab.Name }}</strong>
-        <form action="/characters/{{ $charID }}/abilities/import" method="post">
-          <input type="hidden" name="ability_id" value="{{ $ab.ID }}">
+        <form action="/characters/{{ $charID }}/perks/import" method="post">
+          <input type="hidden" name="perk_id" value="{{ $ab.ID }}">
           {{/* An unaffordable perk cannot be imported: the button is disabled
                here and the server rejects the post as well. */}}
           <button class="btn primary" type="submit" {{ if not .Affordable }}disabled{{ end }}>Import</button>

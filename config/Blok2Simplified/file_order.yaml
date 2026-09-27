@@ -15,7 +15,7 @@ file_order:
   - ./docs/core/negotiation.md
   - ./docs/core/conditions.md
 
-  - ./docs/core/abilities.md
+  - ./docs/core/perks.md
   - ./docs/core/packages.md
   - ./docs/core/items.md
   - ./docs/core/leveling.md
@@ -25,12 +25,12 @@ file_order:
   - ./docs/modules/magic-system/curses.md
   - ./docs/modules/world/world.md
   - ./docs/modules/world/culture.md
-  - ./docs/modules/ability-builder/cheatsheet.md
-  - ./docs/modules/ability-builder/introduction.md
-  - ./docs/modules/ability-builder/ability-creation-guide.md
-  - ./docs/modules/ability-builder/ability-types.md
-  - ./docs/modules/ability-builder/enactments.md
-  - ./docs/modules/ability-builder/interactions.md
-  - ./docs/modules/ability-builder/validations.md
-  - ./docs/modules/ability-builder/leveling.md
-  - ./docs/modules/ability-builder/configuration.md
+  - ./docs/modules/perk-builder/cheatsheet.md
+  - ./docs/modules/perk-builder/introduction.md
+  - ./docs/modules/perk-builder/perk-creation-guide.md
+  - ./docs/modules/perk-builder/perk-types.md
+  - ./docs/modules/perk-builder/enactments.md
+  - ./docs/modules/perk-builder/interactions.md
+  - ./docs/modules/perk-builder/validations.md
+  - ./docs/modules/perk-builder/leveling.md
+  - ./docs/modules/perk-builder/configuration.md

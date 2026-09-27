@@ -1,5 +1,5 @@
 name: Staff
-description: An arcane conduit that amplifies magical attacks. A weapon is a type of ability - channel a bolt of force through the staff.
+description: An arcane conduit that amplifies magical attacks. A weapon is a type of perk - channel a bolt of force through the staff.
 type: execution
 fields:
   comment: A focused blast of arcane energy channeled through the staff.

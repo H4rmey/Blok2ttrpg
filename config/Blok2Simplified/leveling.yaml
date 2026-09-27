@@ -13,7 +13,7 @@
 # manual edit and on import, so it is not possible to go past level 10.
 #
 #
-# Ability (perk) points
+# Perk (perk) points
 # --------------------
 # Tuned so a baseline perk costs about 3 points:
 #   execution base_cost 1 + direct interaction base 1 + validation engage d6 1
@@ -75,7 +75,7 @@ leveling:
   skill_points:
     start: 13
     per_level: 3
-  ability_points:
+  perk_points:
     start: 9
     per_level: 3
   invoke_points:

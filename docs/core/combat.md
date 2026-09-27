@@ -9,7 +9,7 @@ Rolling for initiative is done by rolling your perception + movement. PC's go be
 
 ### Turns and Actions
 
-On your turn you get three actions. By default you have {{ .Combat.Actions.Amount }} of actions. How much actions an ability costs can may differ. 
+On your turn you get three actions. By default you have {{ .Combat.Actions.Amount }} of actions. How much actions an perk costs can may differ. 
 
 ### Reactions
 
@@ -17,7 +17,7 @@ Your actions are spent on your turn, but a **Reaction** lets you act out of turn
 
 {{ reactionRules }}
 
-The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own abilities, so a character who reacts every round has less left to spend when their turn comes around.
+The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own perks, so a character who reacts every round has less left to spend when their turn comes around.
 
 ### Movement
 
@@ -26,7 +26,7 @@ Movement costs one action; it is fully allowed to just keep using actions just t
 
 ### Energy and Recovery
 
-Energy is the resource that using Abilities spends. Each Enactment in an Ability costs 1 Energy, so a full turn of three actions costs roughly 3 Energy, and a Concentration costs a further point of upkeep every round it stays up. Repeated movement in a single stretch also drains Energy as described above.
+Energy is the resource that using Perks spends. Each Enactment in an Perk costs 1 Energy, so a full turn of three actions costs roughly 3 Energy, and a Concentration costs a further point of upkeep every round it stays up. Repeated movement in a single stretch also drains Energy as described above.
 
 Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Skill, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
 
@@ -34,7 +34,7 @@ Energy does not come back on its own. On a rest you regain **{{ .Combat.EnergyRe
 
 ### Attacking/Healing/Doing
 
-Oppenents are not willing to get hit by your attacks/abilities. That is why when attacking an opponent you make an **Attack Roll** to a **Target**. In the chapter about [Dice Rolling](dice-rolling.md) We already dicussed Engegement Rolls and Counter Rolls. An **Attack Roll** is a type of **Engegment Roll**.
+Oppenents are not willing to get hit by your attacks/perks. That is why when attacking an opponent you make an **Attack Roll** to a **Target**. In the chapter about [Dice Rolling](dice-rolling.md) We already dicussed Engegement Rolls and Counter Rolls. An **Attack Roll** is a type of **Engegment Roll**.
 
 When Attacking/Healing/Prepping/Anythinging you always first roll the Engagement Roll to see if you hit, then you resolve the action/enactment/thing.
 

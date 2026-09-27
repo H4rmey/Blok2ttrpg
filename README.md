@@ -1,7 +1,7 @@
 # Blok2ttrpg
 
 A flexible, theme-agnostic tabletop RPG system, together with a config-driven
-companion web app for building characters and abilities.
+companion web app for building characters and perks.
 
 Blok2ttrpg is a long-running personal project to build a TTRPG that is flexible
 enough to be applied to almost any setting. The system deliberately ships with
@@ -20,11 +20,11 @@ The project has two halves:
 1. **The system (the rules).** Hand-written documentation living in `docs/`.
    These describe the core mechanics and optional modules.
 2. **The app (the tooling).** A Go web application that turns a directory of
-   YAML config into an interactive character and ability builder, plus generated
+   YAML config into an interactive character and perk builder, plus generated
    documentation.
 
 The rules are written by hand. The surrounding application is optional but very
-useful when creating abilities.
+useful when creating perks.
 
 ## The system
 
@@ -37,7 +37,7 @@ other systems, much of this will feel familiar.
 
 | Document | Topic |
 | --- | --- |
-| `abilities.md` | How abilities work |
+| `perks.md` | How perks work |
 | `character-traits.md` | Character traits |
 | `character-skills.md` | Character skills |
 | `combat.md` | Combat rules |
@@ -52,37 +52,37 @@ Modules are optional extensions to the core system. Current and planned modules
 live in `docs/modules/`:
 
 - **Character Creation** (core)
-- **Ability Builder**
+- **Perk Builder**
 - **Leveling**
 - **Skill Trees**
 - **Magic System**
 - **World**
 
-Planned modules include character presets (races/classes), predefined ability
-templates, an items list, and predefined abilities with skill trees.
+Planned modules include character presets (races/classes), predefined perk
+templates, an items list, and predefined perks with skill trees.
 
 ## The app
 
-A config-driven character and ability builder written in Go with
+A config-driven character and perk builder written in Go with
 `html/template` + [HTMX](https://htmx.org). No Node, no npm, no build step.
 
 **The config leads.** Everything the app renders and costs is derived from a
-directory of YAML files. There are no hardcoded ability types, enactments,
+directory of YAML files. There are no hardcoded perk types, enactments,
 skills, or character traits anywhere in the Go code.
 
 ### Features
 
 - Config files drive every rendered page.
-- Live, advisory cost calculation while building abilities.
+- Live, advisory cost calculation while building perks.
 - Export documentation (Markdown + browser-print PDF).
 - Export character sheets (YAML + browser-print PDF).
-- Export abilities as YAML.
+- Export perks as YAML.
 - YAML import/export of characters.
 - JSON persistence of all characters.
 - Dark/light mode and breadcrumb navigation.
 - PDFs produced by the browser's own `window.print()` - no headless browser
   dependency.
-- Cost is advisory, never blocking: you can always save an ability even if it is
+- Cost is advisory, never blocking: you can always save an perk even if it is
   over budget; the UI just flags it.
 
 ### Running
@@ -110,7 +110,7 @@ docker compose up
 
 ### Flags / environment
 
-- `-config` (or `CONFIG`): config directory or file. Default `config/ability-builder`.
+- `-config` (or `CONFIG`): config directory or file. Default `config/perk-builder`.
 - `-templates`: template directory. Default `templates`.
 - `PORT`: listen port. Default `47821`.
 
@@ -120,14 +120,14 @@ Characters are stored in `data/<profile_id>/characters.json`.
 ## Configuration
 
 A ruleset is a directory of YAML files, merged in filename order. See
-`config/ability-builder/` for the reference ruleset:
+`config/perk-builder/` for the reference ruleset:
 
 | File | Purpose |
 | --- | --- |
 | `general.yaml` | version, profile id, title |
 | `traits.yaml` | character trait groups/fields |
 | `skills.yaml` | skill groups and reusable option lists |
-| `ability_types.yaml` | ability types |
+| `perk_types.yaml` | perk types |
 | `enactments.yaml` | enactment building blocks |
 | `interactions.yaml` | interaction building blocks |
 | `proficiencies.yaml` | proficiencies |
@@ -135,7 +135,7 @@ A ruleset is a directory of YAML files, merged in filename order. See
 | `states.yaml` | states |
 | `file_order.yaml` | merge/load order for the ruleset |
 
-To make your own ruleset, copy `config/ability-builder` to a new directory, edit
+To make your own ruleset, copy `config/perk-builder` to a new directory, edit
 the YAML, and run with `-config path/to/your-ruleset`.
 
 ### Field types
@@ -157,7 +157,7 @@ same `Config` the app runs on, they never drift out of sync.
 main.go                 entrypoint / flags
 cmd/gendocs             standalone docs generator
 internal/config         schema, loading/merging, validation, lookups
-internal/model          generic Character / Ability model
+internal/model          generic Character / Perk model
 internal/store          JSON-backed character store
 internal/engine         advisory cost calculation
 internal/docs           config -> markdown/HTML docs
@@ -165,7 +165,7 @@ internal/export         YAML import/export
 internal/web            HTTP handlers, routing, template funcs
 templates               html/template views
 static                  css, app.js, vendored htmx
-config/ability-builder  reference ruleset
+config/perk-builder  reference ruleset
 docs/                   hand-written system documentation
 ```
 

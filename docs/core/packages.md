@@ -3,9 +3,9 @@
 
 ## Introduction
 
-A **Package** is a ready-made bundle of character content: a set of Proficiency shifts plus, sometimes, a few Abilities. Importing one applies its shifts to your Skills and copies its Abilities onto your sheet, so you can pick a Class, Race and Background without hand-building everything from scratch.
+A **Package** is a ready-made bundle of character content: a set of Proficiency shifts plus, sometimes, a few Perks. Importing one applies its shifts to your Skills and copies its Perks onto your sheet, so you can pick a Class, Race and Background without hand-building everything from scratch.
 
-Packages are a convenience, not a restriction. Everything a Package grants can be bought by hand with Skill Points and Ability Points, and nothing stops you from adjusting a Skill after importing one.
+Packages are a convenience, not a restriction. Everything a Package grants can be bought by hand with Skill Points and Perk Points, and nothing stops you from adjusting a Skill after importing one.
 
 ## Identity and Equipment
 

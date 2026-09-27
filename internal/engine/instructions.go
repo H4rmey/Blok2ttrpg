@@ -23,7 +23,7 @@ import (
 
 // Instruction is the generated rules text for a single enactment.
 type Instruction struct {
-	// Index is the 1-based position of the enactment within the ability.
+	// Index is the 1-based position of the enactment within the perk.
 	Index int
 	// Title is the enactment's display name (e.g. "Enact Damage").
 	Title string
@@ -39,8 +39,8 @@ type Instruction struct {
 	Note string
 }
 
-// AbilityInstructions generates one Instruction per enactment of an ability.
-func AbilityInstructions(cfg *config.Config, a model.Ability) []Instruction {
+// PerkInstructions generates one Instruction per enactment of an perk.
+func PerkInstructions(cfg *config.Config, a model.Perk) []Instruction {
 	if cfg == nil {
 		return nil
 	}

@@ -5,30 +5,30 @@ import (
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
 
-// Normalization gives the app a single canonical representation of an ability.
+// Normalization gives the app a single canonical representation of an perk.
 //
 // Cost used to be derived from two representations that resolved defaults
-// independently: the stored ability (where an absent field meant "nothing
+// independently: the stored perk (where an absent field meant "nothing
 // selected") and the builder form (where the template rendered the field's
 // configured default). The same perk therefore had two different prices
 // depending on which one you looked at, and merely opening a perk in the
 // builder could change its cost.
 //
-// NormalizeAbility closes that gap by resolving every default once, on the way
-// in. After normalization a stored ability is complete and in range, so the
+// NormalizePerk closes that gap by resolving every default once, on the way
+// in. After normalization a stored perk is complete and in range, so the
 // cost engine and the templates can both read values literally and agree by
 // construction.
 
-// NormalizeAbility returns a copy of the ability with every configured field
+// NormalizePerk returns a copy of the perk with every configured field
 // present, repeatable fields expanded to their default rows, and numeric fields
 // clamped into their configured range. It is idempotent: normalizing an already
-// normalized ability changes nothing.
-func NormalizeAbility(cfg *config.Config, a model.Ability) model.Ability {
+// normalized perk changes nothing.
+func NormalizePerk(cfg *config.Config, a model.Perk) model.Perk {
 	if cfg == nil {
 		return a
 	}
 	out := a
-	if at, ok := cfg.AbilityType(a.Type); ok {
+	if at, ok := cfg.PerkType(a.Type); ok {
 		out.Fields = normalizeFields(cfg, at.Fields, a.Fields)
 	}
 
@@ -147,7 +147,7 @@ func normalizeRows(cfg *config.Config, f config.Field, raw any, present bool) []
 
 // defaultRows builds the initial rows a repeatable field starts with, from
 // row_defaults and default_count. This mirrors what the builder renders for a
-// field the ability does not yet carry.
+// field the perk does not yet carry.
 func defaultRows(f config.Field) []map[string]any {
 	n := f.DefaultCount
 	if n < len(f.RowDefaults) {
@@ -191,17 +191,17 @@ func clampNumber(f config.Field, n int) int {
 
 // NormalizeCharacter normalizes every perk a character owns, reporting how many
 // perks actually changed. The count drives the user-facing feedback of the
-// refresh controls, which exist to repair abilities stored before normalization
+// refresh controls, which exist to repair perks stored before normalization
 // (or by an older version of the config).
 func NormalizeCharacter(cfg *config.Config, c *model.Character) int {
 	changed := 0
-	for i, ab := range c.Abilities {
-		before := AbilityCost(cfg, ab)
-		norm := NormalizeAbility(cfg, ab)
-		if AbilityCost(cfg, norm) != before {
+	for i, ab := range c.Perks {
+		before := PerkCost(cfg, ab)
+		norm := NormalizePerk(cfg, ab)
+		if PerkCost(cfg, norm) != before {
 			changed++
 		}
-		c.Abilities[i] = norm
+		c.Perks[i] = norm
 	}
 	return changed
 }

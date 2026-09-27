@@ -1,4 +1,4 @@
-// Command blok2ttrpg-v5 is a config-driven TTRPG character and ability builder.
+// Command blok2ttrpg-v5 is a config-driven TTRPG character and perk builder.
 // The entire ruleset lives in a YAML config directory; the Go code only knows
 // how to render generic fields, compute advisory costs, and persist characters.
 package main

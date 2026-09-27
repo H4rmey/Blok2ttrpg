@@ -117,7 +117,7 @@ conditions:
     build_cost: 5
   - id: stubborn
     name: "Stubborn"
-    description: "You cannot repeat the same action or use the same ability two turns in a row."
+    description: "You cannot repeat the same action or use the same perk two turns in a row."
     build_cost: 2
   - id: paranoid
     name: "Paranoid"
@@ -128,7 +128,7 @@ conditions:
     description: "At the start of your turn, roll a die (d4) to determine random behavior."
     build_cost: 3
 
-  # Action & Ability Inhibitors
+  # Action & Perk Inhibitors
   - id: stunned
     name: "Stunned"
     description: "You are stunned; you lose one of your actions."
@@ -233,11 +233,11 @@ conditions:
   # Energy & Resource Manipulation
   - id: fatigued
     name: "Fatigued"
-    description: "Energy cost of abilities is increased by 1."
+    description: "Energy cost of perks is increased by 1."
     build_cost: 2
   - id: energized
     name: "Energized"
-    description: "Energy cost of abilities is reduced by 1."
+    description: "Energy cost of perks is reduced by 1."
     # A buff, so one step above Fatigued. Now that a perk costs 1 energy per
     # enactment, this is a standing discount on every perk the target uses.
     build_cost: 3

@@ -21,7 +21,7 @@ type App struct {
 }
 
 // NewApp parses templates and returns a ready App. libraryRoot points at the
-// built-in content library (packages and abilities) that ships with the app.
+// built-in content library (packages and perks) that ships with the app.
 func NewApp(cfg *config.Loaded, st *store.Store, templateDir, libraryRoot string) (*App, error) {
 	tmpl, err := template.New("").Funcs(funcMap()).ParseGlob(filepath.Join(templateDir, "*.html"))
 	if err != nil {
@@ -56,11 +56,11 @@ func (a *App) Router() http.Handler {
 
 	mux.HandleFunc("/builder/autosave", a.handleBuilderAutosave)
 
-	mux.HandleFunc("/builder/ability-type-fields", a.handleAbilityTypeFields)
+	mux.HandleFunc("/builder/perk-type-fields", a.handlePerkTypeFields)
 
-	// Package and ability library browsers (built-in content).
+	// Package and perk library browsers (built-in content).
 	mux.HandleFunc("/packages/library", a.handlePackageLibrary)
-	mux.HandleFunc("/abilities/library", a.handleAbilityLibrary)
+	mux.HandleFunc("/perks/library", a.handlePerkLibrary)
 
 	// Docs.
 	mux.HandleFunc("/docs", a.handleDocs)

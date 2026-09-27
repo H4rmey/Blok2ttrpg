@@ -12,13 +12,13 @@ import (
 // first enactment's target or buys its own, depending on newTarget. Both
 // variants carry identical interaction and validation data, so the only
 // difference between their costs is what the flag makes the engine charge for.
-func twoEnactmentPerk(newTarget bool) model.Ability {
+func twoEnactmentPerk(newTarget bool) model.Perk {
 	direct := map[string]any{"range": "5", "targets": 1}
 	validation := map[string]any{
 		"engage":        "d6",
 		"counter_skill": []map[string]any{{"value": "defense.Reflex"}},
 	}
-	return model.Ability{
+	return model.Perk{
 		Name: "Test Perk",
 		Type: "execution",
 		Enactments: []model.Enactment{
@@ -52,8 +52,8 @@ func TestNewTargetCostsMoreThanInheriting(t *testing.T) {
 		t.Fatalf("load config: %v", err)
 	}
 
-	inherit := engine.AbilityCost(cfg.Config, engine.NormalizeAbility(cfg.Config, twoEnactmentPerk(false)))
-	own := engine.AbilityCost(cfg.Config, engine.NormalizeAbility(cfg.Config, twoEnactmentPerk(true)))
+	inherit := engine.PerkCost(cfg.Config, engine.NormalizePerk(cfg.Config, twoEnactmentPerk(false)))
+	own := engine.PerkCost(cfg.Config, engine.NormalizePerk(cfg.Config, twoEnactmentPerk(true)))
 
 	if own.Build <= inherit.Build {
 		t.Errorf("a second enactment with its own target should cost more build: inherit=%d own=%d",
@@ -75,7 +75,7 @@ func TestInheritedTargetInstructions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load config: %v", err)
 	}
-	ins := engine.AbilityInstructions(cfg.Config, engine.NormalizeAbility(cfg.Config, twoEnactmentPerk(false)))
+	ins := engine.PerkInstructions(cfg.Config, engine.NormalizePerk(cfg.Config, twoEnactmentPerk(false)))
 	if len(ins) != 2 {
 		t.Fatalf("expected 2 instructions, got %d", len(ins))
 	}

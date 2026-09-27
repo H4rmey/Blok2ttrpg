@@ -29,17 +29,17 @@ func testAppWithPerk(t *testing.T) (*App, *model.Character) {
 	if err != nil {
 		t.Fatalf("new app: %v", err)
 	}
-	ab, err := premade.New("../../library").GetAbility("time_slip")
+	ab, err := premade.New("../../library").GetPerk("time_slip")
 	if err != nil {
-		t.Fatalf("get ability: %v", err)
+		t.Fatalf("get perk: %v", err)
 	}
-	ab.ID = "ability-1"
+	ab.ID = "perk-1"
 	// Library perks are normalized on import, so the fixture mirrors what is
 	// actually stored on a character.
-	ab = engine.NormalizeAbility(cfg.Config, ab)
+	ab = engine.NormalizePerk(cfg.Config, ab)
 	c := app.blankCharacter("char-1")
 	c.Traits["name"] = "Tester"
-	c.Abilities = append(c.Abilities, ab)
+	c.Perks = append(c.Perks, ab)
 	return app, &c
 }
 
@@ -51,7 +51,7 @@ func TestPerkListShowsCostAndInstructions(t *testing.T) {
 	app, c := testAppWithPerk(t)
 
 	rec := httptest.NewRecorder()
-	app.renderAbilityList(rec, c)
+	app.renderPerkList(rec, c)
 	body := rec.Body.String()
 
 	if !strings.Contains(body, "Time Slip") {
@@ -64,7 +64,7 @@ func TestPerkListShowsCostAndInstructions(t *testing.T) {
 	// direct interaction at 5m, and a validation block on each of the two
 	// enactments that own a target. A different figure here means field binding
 	// regressed (e.g. missing yaml tags on interaction_data / validation_data),
-	// an ability-type base_cost stopped being read, or normalization changed
+	// an perk-type base_cost stopped being read, or normalization changed
 	// what gets stored.
 	if !strings.Contains(body, "8 pt") {
 		t.Errorf("expected Time Slip to render an 8 pt cost; got:\n%s", body)
@@ -94,10 +94,11 @@ func TestPerkListRefreshPartial(t *testing.T) {
 	app, c := testAppWithPerk(t)
 
 	rec := httptest.NewRecorder()
-	app.renderPerkList(rec, c, 0)
+	app.renderPerkListPartial(rec, c, 0)
 	body := rec.Body.String()
 
 	if strings.Contains(body, "<html") {
+
 		t.Errorf("refresh should return a partial, not a full page:\n%s", body)
 	}
 	if !strings.Contains(body, "8 pt") {
@@ -116,7 +117,7 @@ func TestBuilderShowsCharacterBar(t *testing.T) {
 	app, c := testAppWithPerk(t)
 
 	rec := httptest.NewRecorder()
-	app.renderBuilder(rec, c, &c.Abilities[0], false)
+	app.renderBuilder(rec, c, &c.Perks[0], false)
 	body := rec.Body.String()
 
 	if !strings.Contains(body, "stats-bar") {
@@ -134,16 +135,16 @@ func TestBuilderShowsCharacterBar(t *testing.T) {
 }
 
 // TestNormalizeIsIdempotent is the core guarantee of the normalization design:
-// normalizing an already normalized ability must not change its cost. If this
+// normalizing an already normalized perk must not change its cost. If this
 // fails, opening and saving a perk could keep shifting its price.
 func TestNormalizeIsIdempotent(t *testing.T) {
 	app, c := testAppWithPerk(t)
 	cfg := app.Cfg.Config
 
-	once := engine.NormalizeAbility(cfg, c.Abilities[0])
-	twice := engine.NormalizeAbility(cfg, once)
+	once := engine.NormalizePerk(cfg, c.Perks[0])
+	twice := engine.NormalizePerk(cfg, once)
 
-	if got, want := engine.AbilityCost(cfg, twice), engine.AbilityCost(cfg, once); got != want {
+	if got, want := engine.PerkCost(cfg, twice), engine.PerkCost(cfg, once); got != want {
 		t.Errorf("normalization is not idempotent: %+v then %+v", want, got)
 	}
 }
@@ -156,8 +157,8 @@ func TestPerkLibraryShowsCost(t *testing.T) {
 	app, _ := testAppWithPerk(t)
 
 	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("GET", "/abilities/library?character=char-1", nil)
-	app.handleAbilityLibrary(rec, req)
+	req := httptest.NewRequest("GET", "/perks/library?character=char-1", nil)
+	app.handlePerkLibrary(rec, req)
 	body := rec.Body.String()
 
 	if !strings.Contains(body, "Perk Library") {
@@ -169,9 +170,11 @@ func TestPerkLibraryShowsCost(t *testing.T) {
 	// Time Slip costs 8 perk points on a character, so the library must quote
 	// the same figure.
 	if !strings.Contains(body, "8 perk pt") {
-
 		t.Errorf("library cost does not match the imported cost:\n%s", body)
 	}
+	// The pre-rename wording must be gone. This guard used to read "Perk
+	// Library", which the Abilities -> Perks rename turned into the same string
+	// the assertion above requires, so the test contradicted itself.
 	if strings.Contains(body, "Ability Library") {
 		t.Errorf("library still uses the old Ability Library wording:\n%s", body)
 	}
@@ -186,14 +189,14 @@ func TestLibraryPerksNormalizeStably(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load config: %v", err)
 	}
-	abs, err := premade.New("../../library").ListAbilities()
+	abs, err := premade.New("../../library").ListPerks()
 	if err != nil {
-		t.Fatalf("list abilities: %v", err)
+		t.Fatalf("list perks: %v", err)
 	}
 	for _, ab := range abs {
-		norm := engine.NormalizeAbility(cfg.Config, ab)
-		again := engine.NormalizeAbility(cfg.Config, norm)
-		if got, want := engine.AbilityCost(cfg.Config, again), engine.AbilityCost(cfg.Config, norm); got != want {
+		norm := engine.NormalizePerk(cfg.Config, ab)
+		again := engine.NormalizePerk(cfg.Config, norm)
+		if got, want := engine.PerkCost(cfg.Config, again), engine.PerkCost(cfg.Config, norm); got != want {
 			t.Errorf("%s: normalization not stable: %+v then %+v", ab.Name, want, got)
 		}
 	}

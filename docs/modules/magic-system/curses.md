@@ -39,13 +39,13 @@ Their Resonance Slices fluctuate unpredictably, causing subtle but persistent in
 
 **Example: Curse of Misfortune**
 
-An individual believed to be “unlucky” may have an unstable Resonance Signature that interferes with probability‑sensitive interactions.
+An individual believed to be “unlucky” may have an unstable Resonance Signature that interferes with probperk‑sensitive interactions.
 
 *   Tools malfunction more often
 *   Structures fail at inopportune moments
 *   Minor accidents cluster around the individual
 
-There is no intent, malice, or conscious control — only resonance instability.
+There is no intent, malice, or conscious control — only resonance instperk.
 
 ---
 
@@ -70,7 +70,7 @@ From a resonance perspective, it is a **misclassification of the body by the env
 
 ### Degenerative Curses
 
-Some curses worsen over time as the Aggregate’s Resonance Signature slowly drifts further from stability.
+Some curses worsen over time as the Aggregate’s Resonance Signature slowly drifts further from stperk.
 
 These curses may:
 

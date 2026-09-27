@@ -1,7 +1,7 @@
 // This file implements the config-driven "build guide" renderer. Instead of the
 // former Rules/Perks split, a chapter simply asks for buildGuide of a component
 // and gets a self-contained, numbered walkthrough that a reader can follow to
-// build the ability entirely by hand: every field, its range/default, and every
+// build the perk entirely by hand: every field, its range/default, and every
 // concrete choice (skills, dice, damage types, etc.) is listed with its cost.
 //
 // The output deliberately avoids any application or configuration terminology.
@@ -199,7 +199,7 @@ func buildGuide(cfg *config.Config, comp *config.Component) string {
 	}
 	// The allowed/blocked lists decide which enactments, interactions and
 	// validations may legally be combined with this component. That is a rule a
-	// reader needs in order to build an ability by hand, so it is appended to
+	// reader needs in order to build an perk by hand, so it is appended to
 	// the walkthrough rather than left implicit in the builder's dropdowns.
 	if combos := allowedCombinations(cfg, comp); combos != "" {
 		if body == "" {
@@ -219,7 +219,7 @@ func allowedCombinations(cfg *config.Config, comp *config.Component) string {
 		return ""
 	}
 	var lines []string
-	// Ability types filter which enactments they accept.
+	// Perk types filter which enactments they accept.
 	if len(comp.AllowedEnactments) > 0 || len(comp.BlockedEnactments) > 0 {
 		if names := componentNames(cfg.EnactmentsFor(comp.ID)); names != "" {
 			lines = append(lines, "*   Enactments: "+names)
@@ -317,7 +317,7 @@ func textDetail(f config.Field) string {
 	if strings.TrimSpace(f.Description) != "" {
 		return ensureSentence(f.Description)
 	}
-	return "A note you can write on the ability."
+	return "A note you can write on the perk."
 }
 
 // checkboxDetail describes a checkbox toggle.

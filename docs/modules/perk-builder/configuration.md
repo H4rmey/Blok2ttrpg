@@ -1,4 +1,4 @@
-# Ability Builder Configuration
+# Perk Builder Configuration
 
 ## Overview
 
@@ -20,7 +20,7 @@ Every cost in the ruleset is the same pair of numbers.
 
 {{ schemaTable "Cost" }}
 
-Build points are spent once, when the ability is created or upgraded. Energy is paid every time the ability is used. Both may be negative, which turns an option into a refund: drawbacks are priced this way.
+Build points are spent once, when the perk is created or upgraded. Energy is paid every time the perk is used. Both may be negative, which turns an option into a refund: drawbacks are priced this way.
 
 Whether a refund can take a total below zero is itself configurable. See the cost and budget rules in the [Leveling](leveling.md) chapter for what the loaded ruleset does.
 
@@ -58,7 +58,7 @@ A dropdown backed by a multi-group skill source can lean toward one skill group,
 
 ## Components
 
-Ability types, enactments and interactions are all the same underlying shape. Nothing is special-cased by id in Go, so a new type can be added purely in YAML.
+Perk types, enactments and interactions are all the same underlying shape. Nothing is special-cased by id in Go, so a new type can be added purely in YAML.
 
 {{ schemaTable "Component" }}
 
@@ -78,7 +78,7 @@ These are the grouped sources, which concatenate several member sources and rend
 
 {{ optionGroupsTable }}
 
-Two further source forms are resolved dynamically rather than being declared: a dotted `skills.<category>` reference expands to that skill category, and `ability_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
+Two further source forms are resolved dynamically rather than being declared: a dotted `skills.<category>` reference expands to that skill category, and `perk_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
 
 ## Proficiencies and leveling
 
@@ -103,9 +103,9 @@ Cost calculation is server-authoritative. The browser mirrors it for live feedba
 The rules are:
 
 *   Enactments and interactions start from their `base_cost`.
-*   The **first** enactment of an ability has its `base_cost` waived, so adding it costs nothing by itself. Its field-driven costs still apply normally.
+*   The **first** enactment of an perk has its `base_cost` waived, so adding it costs nothing by itself. Its field-driven costs still apply normally.
 *   Each enactment beyond the first pays its full `base_cost` plus the additional-enactment surcharge. See [Enactments](enactments.md) for the surcharge and the separate-target option.
-*   Ability types start from `base_energy` and `base_action`.
+*   Perk types start from `base_energy` and `base_action`.
 *   A `checkbox` charges its cost only while checked.
 *   A `dropdown` charges its field `cost` when a non-empty value is selected, plus the selected option's own cost, plus any group offset for the selected skill's group.
 *   A `free_number` charges `per_step.increase` or `per_step.decrease` per step away from its `default`, with `rounding` deciding how a partial step is treated.
@@ -125,7 +125,7 @@ Safe workflows:
 2.  Add an option to an existing field by appending to its `options` list.
 3.  Add a field to an existing component by appending a valid field definition under `fields`.
 4.  Add a condition to `conditions.yaml` and reference it from a `conditions` field.
-5.  Add a new ability type, enactment or interaction by adding its config entry and updating the relevant `allowed_*` or `blocked_*` lists.
+5.  Add a new perk type, enactment or interaction by adding its config entry and updating the relevant `allowed_*` or `blocked_*` lists.
 
 After editing, validate with:
 
@@ -146,6 +146,6 @@ go run ./cmd/gendocs
 
 ## Known boundaries
 
-*   Field keys are persisted in saved abilities, so renaming a key breaks compatibility with existing data.
-*   Saved abilities may not migrate cleanly when config keys change shape.
-*   The allowed/blocked lists filter what the builder offers; they are not enforced when an ability is saved, so an imported ability may hold a combination the builder would not have offered.
+*   Field keys are persisted in saved perks, so renaming a key breaks compatibility with existing data.
+*   Saved perks may not migrate cleanly when config keys change shape.
+*   The allowed/blocked lists filter what the builder offers; they are not enforced when an perk is saved, so an imported perk may hold a combination the builder would not have offered.

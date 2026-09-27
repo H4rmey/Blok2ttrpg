@@ -44,19 +44,19 @@ func TestLintCatchesPlaceholder(t *testing.T) {
 // TestLintCatchesDanglingHeading covers a heading whose section was never
 // filled, which is what a heading followed by a shallower heading means.
 func TestLintCatchesDanglingHeading(t *testing.T) {
-	md := "# Chapter\n\nIntro.\n\n## Section\n\nBody.\n\n### Ability List\n\n# Next Chapter\n\nBody.\n"
+	md := "# Chapter\n\nIntro.\n\n## Section\n\nBody.\n\n### Perk List\n\n# Next Chapter\n\nBody.\n"
 	findings := Lint(md)
 	if len(findings) == 0 {
 		t.Fatal("expected a finding for a dangling heading, got none")
 	}
 	found := false
 	for _, f := range findings {
-		if f.Message == "heading has no content: ### Ability List" {
+		if f.Message == "heading has no content: ### Perk List" {
 			found = true
 		}
 	}
 	if !found {
-		t.Errorf("expected the dangling '### Ability List' heading to be reported, got:\n%s",
+		t.Errorf("expected the dangling '### Perk List' heading to be reported, got:\n%s",
 			FindingsText(findings))
 	}
 }

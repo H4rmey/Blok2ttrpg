@@ -42,11 +42,11 @@
     </section>
     {{ end }}
 
-    {{ if $c.Abilities }}
+    {{ if $c.Perks }}
     <section>
-      <h2>Abilities</h2>
-      {{ range $c.Abilities }}
-      <div class="ability-card">
+      <h2>Perks</h2>
+      {{ range $c.Perks }}
+      <div class="perk-card">
         <h3>{{ .Name }} <span class="muted">({{ .Type }})</span></h3>
         {{ if .Description }}<p>{{ .Description }}</p>{{ end }}
         {{ if .Enactments }}

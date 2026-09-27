@@ -16,7 +16,7 @@ import (
 
 // packageRow is one package in the browser together with what importing it
 // would cost the current character and whether that fits in the remaining
-// budget. Affordability is only meaningful when a character is in context; with
+// budget. Affordperk is only meaningful when a character is in context; with
 // no character every row is reported as affordable.
 type packageRow struct {
 	premade.Package
@@ -65,11 +65,11 @@ func (a *App) handlePackageLibrary(w http.ResponseWriter, r *http.Request) {
 			data.charStats = a.characterStats(&c)
 		}
 	}
-	perkLeft := data.AbilityBudget - data.AbilityUsed
+	perkLeft := data.PerkBudget - data.PerkUsed
 	skillLeft := data.SkillBudget - data.SkillUsed
 
 	for _, pkg := range pkgs {
-		cost := engine.PackageCostFor(a.Cfg.Config, c, pkg.Shifts, pkg.Abilities)
+		cost := engine.PackageCostFor(a.Cfg.Config, c, pkg.Shifts, pkg.Perks)
 		row := packageRow{Package: pkg, Cost: cost, PerkAffordable: true, SkillAffordable: true}
 		if data.HasCharacter {
 			row.PerkAffordable = cost.Perk <= perkLeft
@@ -117,9 +117,9 @@ func (a *App) clampedShifts(c *model.Character, shifts map[string]int) []string 
 // so an unaffordable import is blocked server-side and not merely hidden in the
 // UI.
 func (a *App) affordPackage(c *model.Character, pkg *premade.Package) (bool, string) {
-	cost := engine.PackageCostFor(a.Cfg.Config, *c, pkg.Shifts, pkg.Abilities)
+	cost := engine.PackageCostFor(a.Cfg.Config, *c, pkg.Shifts, pkg.Perks)
 	stats := a.characterStats(c)
-	if perkLeft := stats.AbilityBudget - stats.AbilityUsed; cost.Perk > perkLeft {
+	if perkLeft := stats.PerkBudget - stats.PerkUsed; cost.Perk > perkLeft {
 		return false, fmt.Sprintf("%q costs %d perk points but only %d remain.", pkg.Name, cost.Perk, perkLeft)
 	}
 	if skillLeft := stats.SkillBudget - stats.SkillUsed; !a.Cfg.AllowsNegativeSkillPoints() && cost.Skill > skillLeft {
@@ -158,7 +158,7 @@ func (a *App) handlePackages(w http.ResponseWriter, r *http.Request, c *model.Ch
 }
 
 // applyPackage applies a loaded package to a character: it shifts the relevant
-// skills, copies the package's abilities in (each with a fresh id and a
+// skills, copies the package's perks in (each with a fresh id and a
 // PackageID tag), and records an InstalledPackage so removal is exact.
 //
 // It returns the list of skill keys whose shift was clamped at an end of the
@@ -187,11 +187,11 @@ func (a *App) applyPackage(c *model.Character, pkg *premade.Package) []string {
 		c.Skills[skillKey] = a.Cfg.ShiftProficiency(current, delta)
 		applied[skillKey] = delta
 	}
-	for _, ab := range pkg.Abilities {
-		ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
+	for _, ab := range pkg.Perks {
+		ab.ID = fmt.Sprintf("perk-%d", time.Now().UnixNano())
 		ab.PackageID = pkg.ID
-		c.Abilities = append(c.Abilities, ab)
-		// Ensure unique ids even when copying several abilities in the same
+		c.Perks = append(c.Perks, ab)
+		// Ensure unique ids even when copying several perks in the same
 		// nanosecond.
 		time.Sleep(time.Nanosecond)
 	}
@@ -205,7 +205,7 @@ func (a *App) applyPackage(c *model.Character, pkg *premade.Package) []string {
 	return clamped
 }
 
-// applyPackageEffects re-applies a package's proficiency shifts and abilities
+// applyPackageEffects re-applies a package's proficiency shifts and perks
 // without appending a new InstalledPackage record. It is used when re-enabling
 // a package that was previously disabled; the caller owns the existing record
 // and updates its recorded shifts from the returned map.
@@ -225,17 +225,17 @@ func (a *App) applyPackageEffects(c *model.Character, pkg *premade.Package) map[
 		c.Skills[skillKey] = a.Cfg.ShiftProficiency(current, delta)
 		applied[skillKey] = delta
 	}
-	for _, ab := range pkg.Abilities {
-		ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
+	for _, ab := range pkg.Perks {
+		ab.ID = fmt.Sprintf("perk-%d", time.Now().UnixNano())
 		ab.PackageID = pkg.ID
-		c.Abilities = append(c.Abilities, ab)
+		c.Perks = append(c.Perks, ab)
 		time.Sleep(time.Nanosecond)
 	}
 	return applied
 }
 
 // reversePackageEffects reverses the recorded proficiency shifts and removes
-// all abilities tagged with the package id, leaving the InstalledPackage record
+// all perks tagged with the package id, leaving the InstalledPackage record
 // in place. It is used when disabling a toggleable package.
 func (a *App) reversePackageEffects(c *model.Character, rec *model.InstalledPackage) {
 	for skillKey, delta := range rec.Shifts {
@@ -245,18 +245,18 @@ func (a *App) reversePackageEffects(c *model.Character, rec *model.InstalledPack
 		}
 		c.Skills[skillKey] = a.Cfg.ShiftProficiency(current, -delta)
 	}
-	kept := c.Abilities[:0]
-	for _, ab := range c.Abilities {
+	kept := c.Perks[:0]
+	for _, ab := range c.Perks {
 		if ab.PackageID == rec.ID {
 			continue
 		}
 		kept = append(kept, ab)
 	}
-	c.Abilities = kept
+	c.Perks = kept
 }
 
 // togglePackage enables or disables a toggleable package. Disabling reverses
-// the package's effects (shifts + abilities) but keeps the record so it can be
+// the package's effects (shifts + perks) but keeps the record so it can be
 // re-enabled; enabling re-applies the effects from the library definition.
 // Class, race, and background packages are not toggleable and are rejected.
 func (a *App) togglePackage(w http.ResponseWriter, r *http.Request, c *model.Character, pkgID string) {
@@ -363,7 +363,7 @@ func (a *App) importCustomPackage(w http.ResponseWriter, r *http.Request, c *mod
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	// A custom package's imports resolve against the built-in abilities
+	// A custom package's imports resolve against the built-in perks
 	// directory, so short names keep working for uploaded packages.
 	baseDir := a.Library.CustomBaseDir()
 	pkg, err := premade.ParsePackage(data, baseDir)
@@ -383,7 +383,7 @@ func (a *App) importCustomPackage(w http.ResponseWriter, r *http.Request, c *mod
 	packageRedirect(w, r, c.ID, clamped)
 }
 
-// removePackage undoes an installed package: it removes every ability tagged
+// removePackage undoes an installed package: it removes every perk tagged
 // with the package id and reverses the exact proficiency shifts the package
 // applied. Only content originating from this package is touched.
 func (a *App) removePackage(w http.ResponseWriter, r *http.Request, c *model.Character, pkgID string) {
@@ -413,16 +413,16 @@ func (a *App) removePackage(w http.ResponseWriter, r *http.Request, c *model.Cha
 		c.Skills[skillKey] = a.Cfg.ShiftProficiency(current, -delta)
 	}
 
-	// Remove abilities tagged with this package id. User-created abilities and
-	// abilities from other packages are left untouched.
-	kept := c.Abilities[:0]
-	for _, ab := range c.Abilities {
+	// Remove perks tagged with this package id. User-created perks and
+	// perks from other packages are left untouched.
+	kept := c.Perks[:0]
+	for _, ab := range c.Perks {
 		if ab.PackageID == pkgID {
 			continue
 		}
 		kept = append(kept, ab)
 	}
-	c.Abilities = kept
+	c.Perks = kept
 
 	// Drop the installed-package record.
 	c.Packages = append(c.Packages[:idx], c.Packages[idx+1:]...)

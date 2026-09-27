@@ -12,13 +12,13 @@ package docs
 // keys of the inner map are the yaml names as written in the config files.
 var schemaPurposes = map[string]map[string]string{
 	"Cost": {
-		"build_cost":  "Build points charged when the ability is created or upgraded. Negative values refund points.",
-		"energy_cost": "Energy charged every time the ability is used. Negative values refund energy.",
+		"build_cost":  "Build points charged when the perk is created or upgraded. Negative values refund points.",
+		"energy_cost": "Energy charged every time the perk is used. Negative values refund energy.",
 	},
 
 	"PerStep": {
 		"increase": "Cost charged per step the value moves above its default.",
-		"decrease": "Cost charged per step the value moves below its default. A negative cost here refunds points for weakening the ability.",
+		"decrease": "Cost charged per step the value moves below its default. A negative cost here refunds points for weakening the perk.",
 	},
 
 	"GroupOffsets": {
@@ -27,11 +27,11 @@ var schemaPurposes = map[string]map[string]string{
 	},
 
 	"InlineBuilder": {
-		"kind": "Which component map the selected dropdown value resolves against: enactment, interaction or ability_type. The referenced component's own fields render beneath the dropdown and add their cost.",
+		"kind": "Which component map the selected dropdown value resolves against: enactment, interaction or perk_type. The referenced component's own fields render beneath the dropdown and add their cost.",
 	},
 
 	"Option": {
-		"value":              "The value stored when this option is selected. Must be stable: it is persisted on saved abilities.",
+		"value":              "The value stored when this option is selected. Must be stable: it is persisted on saved perks.",
 		"label":              "Text shown in the dropdown. Falls back to the value when omitted.",
 		"information":        "Help text shown as a hover tooltip on the option.",
 		"render_information": "When true, show this option's information as plain text below the dropdown once selected instead of behind a hover indicator.",
@@ -40,7 +40,7 @@ var schemaPurposes = map[string]map[string]string{
 	},
 
 	"Field": {
-		"key":                "Stable submitted field name. It is persisted in saved abilities, so renaming it breaks existing data.",
+		"key":                "Stable submitted field name. It is persisted in saved perks, so renaming it breaks existing data.",
 		"label":              "Text shown next to the field in the builder and used as its name in the documentation.",
 		"type":               "Which kind of input this is. See the supported field types below.",
 		"description":        "Reader-facing explanation of the field, used as the lead sentence in the generated build guide.",
@@ -68,22 +68,22 @@ var schemaPurposes = map[string]map[string]string{
 	},
 
 	"Component": {
-		"name":                  "Display name, used by ability types.",
+		"name":                  "Display name, used by perk types.",
 		"type":                  "Display name, used by enactments and interactions.",
 		"description":           "Reader-facing explanation of what the component does.",
 		"information":           "Help text shown as a hover tooltip next to the component.",
 		"render_information":    "When true, show the information as plain text under the component header instead of behind a hover indicator.",
-		"base_cost":             "Flat cost of including this component. The first enactment of an ability has its base cost waived.",
-		"base_energy":           "Starting energy cost of an ability of this type.",
-		"base_action":           "Starting action cost of an ability of this type.",
+		"base_cost":             "Flat cost of including this component. The first enactment of an perk has its base cost waived.",
+		"base_energy":           "Starting energy cost of an perk of this type.",
+		"base_action":           "Starting action cost of an perk of this type.",
 		"base_range":            "Starting range in metres.",
 		"base_uses":             "Starting number of uses.",
 		"base_duration":         "Starting duration in rounds.",
 		"base_reverse_duration": "Starting number of rounds a phase takes to reverse itself.",
 		"base_health":           "Starting health, used by summoned minions.",
 		"base_lifetime":         "Starting lifetime in rounds, used by summoned minions.",
-		"base_upkeep_action":    "Actions required each round to sustain the ability.",
-		"base_upkeep_energy":    "Energy required each round to sustain the ability.",
+		"base_upkeep_action":    "Actions required each round to sustain the perk.",
+		"base_upkeep_energy":    "Energy required each round to sustain the perk.",
 		"default_range":         "Default range of an interaction, in metres.",
 		"default_targets":       "Default number of targets an interaction affects.",
 		"default_radius":        "Default radius of an area interaction, in metres.",
@@ -92,7 +92,7 @@ var schemaPurposes = map[string]map[string]string{
 		"blocked_interactions":  "When set (and no allowed list is given), every interaction except these is offered.",
 		"allowed_validations":   "When set, only these validation fields are shown for this enactment.",
 		"blocked_validations":   "When set (and no allowed list is given), every validation field except these is shown.",
-		"allowed_enactments":    "When set, only these enactments are offered for this ability type, in the order listed.",
+		"allowed_enactments":    "When set, only these enactments are offered for this perk type, in the order listed.",
 		"blocked_enactments":    "When set (and no allowed list is given), every enactment except these is offered.",
 		"fields":                "The choices this component offers, driving both the builder form and the cost engine.",
 	},
@@ -108,10 +108,10 @@ var schemaPurposes = map[string]map[string]string{
 	},
 
 	"Leveling": {
-		"max_level":      "Highest level a character may reach. Levels are clamped to this value on every edit and on import.",
-		"skill_points":   "Budget progression for the skill point pool.",
-		"ability_points": "Budget progression for the ability (perk) point pool.",
-		"invoke_points":  "Pool progression for the per-session invoke point currency.",
+		"max_level":     "Highest level a character may reach. Levels are clamped to this value on every edit and on import.",
+		"skill_points":  "Budget progression for the skill point pool.",
+		"perk_points":   "Budget progression for the perk (perk) point pool.",
+		"invoke_points": "Pool progression for the per-session invoke point currency.",
 	},
 
 	"InvokeTable": {
@@ -211,7 +211,7 @@ var schemaPurposes = map[string]map[string]string{
 	},
 
 	"Condition": {
-		"id":          "Stable identifier, referenced by saved abilities and generated instructions.",
+		"id":          "Stable identifier, referenced by saved perks and generated instructions.",
 		"name":        "Display name of the condition.",
 		"description": "What the condition does, shown in the rulebook and as a hover tooltip.",
 		"build_cost":  "Build points charged for a fixed condition.",

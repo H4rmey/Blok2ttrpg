@@ -17,9 +17,9 @@ Both point pools follow the same rule: you start with a fixed amount at Level 1 
 
 $$Points = Start + PerLevel \times (Level - 1)$$
 
-For Skill Points that is **{{ .Leveling.SkillPoints.Start }}** at Level 1 and **+{{ .Leveling.SkillPoints.PerLevel }}** per level thereafter. For Ability Points it is **{{ .Leveling.AbilityPoints.Start }}** at Level 1 and **+{{ .Leveling.AbilityPoints.PerLevel }}** per level.
+For Skill Points that is **{{ .Leveling.SkillPoints.Start }}** at Level 1 and **+{{ .Leveling.SkillPoints.PerLevel }}** per level thereafter. For Perk Points it is **{{ .Leveling.PerkPoints.Start }}** at Level 1 and **+{{ .Leveling.PerkPoints.PerLevel }}** per level.
 
-Starting Skill Points are set so a new character can raise their Vital Skills off the bottom rung and still put a handful of Skills into their speciality. The per-level gain is one visible die step plus change, and it matches the Ability Point gain so both halves of your character sheet grow at the same rate.
+Starting Skill Points are set so a new character can raise their Vital Skills off the bottom rung and still put a handful of Skills into their speciality. The per-level gain is one visible die step plus change, and it matches the Perk Point gain so both halves of your character sheet grow at the same rate.
 
 ### Refunding Points
 

@@ -15,7 +15,7 @@ type Character struct {
 	// Skills maps "<group_id>.<skill_name>" to a proficiency id.
 	Skills map[string]string `json:"skills"`
 
-	Abilities []Ability `json:"abilities"`
+	Perks []Perk `json:"perks"`
 
 	// Packages lists the currently installed content packages. Each records
 	// exactly what it applied (proficiency shifts) so removal is precise and
@@ -25,7 +25,7 @@ type Character struct {
 
 // InstalledPackage is the record of a package imported onto a character. It is
 // the source of truth for undoing a package: Shifts holds the proficiency
-// deltas that were applied, and abilities added by the package carry a matching
+// deltas that were applied, and perks added by the package carry a matching
 // PackageID so they can be removed together.
 type InstalledPackage struct {
 	ID     string         `json:"id"`
@@ -39,7 +39,7 @@ type InstalledPackage struct {
 
 	// Enabled reports whether a toggleable package's effects are currently
 	// applied. Non-toggleable packages are always enabled. When a toggleable
-	// package is disabled its proficiency shifts are reversed and its abilities
+	// package is disabled its proficiency shifts are reversed and its perks
 	// are removed, but the record is kept so it can be re-enabled later.
 	Enabled bool `json:"enabled"`
 }
@@ -67,29 +67,29 @@ func (c *Character) Attr(key string) any {
 // SkillKey builds the composite key used to store a skill proficiency.
 func SkillKey(groupID, skill string) string { return groupID + "." + skill }
 
-// Ability is a built ability. Its structured data lives generically in Fields
-// and its attached enactments; there are no hardcoded ability-type fields.
-type Ability struct {
+// Perk is a built perk. Its structured data lives generically in Fields
+// and its attached enactments; there are no hardcoded perk-type fields.
+type Perk struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
 
-	// Type is an ability-type component id from the config.
+	// Type is an perk-type component id from the config.
 	Type string `json:"type"`
 
-	// Fields holds the ability-type-level field values.
+	// Fields holds the perk-type-level field values.
 	Fields map[string]any `json:"fields,omitempty"`
 
 	Enactments []Enactment `json:"enactments,omitempty"`
 
-	// PackageID, when set, records the package this ability was imported from.
+	// PackageID, when set, records the package this perk was imported from.
 	// It is used only for package removal: deleting a package removes every
-	// ability tagged with its id. Editing the ability never touches the
+	// perk tagged with its id. Editing the perk never touches the
 	// package definition, so the tag stays purely for ownership tracking.
 	PackageID string `json:"package_id,omitempty" yaml:"package_id,omitempty"`
 }
 
-// Enactment is one effect attached to an ability. Type is an enactment
+// Enactment is one effect attached to an perk. Type is an enactment
 // component id; Interaction is an optional interaction component id.
 type Enactment struct {
 	Type        string         `json:"type"`

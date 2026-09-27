@@ -3,7 +3,7 @@
 //
 // The leveling tables are the important case. The point budgets stopped being a
 // hand-written `levels:` list and became the formula start + per_level*(level-1),
-// computed by config.SkillPointBudget / AbilityPointBudget. The docs still
+// computed by config.SkillPointBudget / PerkPointBudget. The docs still
 // ranged over the now-absent list, so the table rendered as a bare header with
 // no rows. Generating the rows by asking the config for each level's budget
 // keeps the documented numbers identical to the numbers the application serves,
@@ -20,7 +20,7 @@ import (
 
 // levelingTable renders the point budget for every level as Level / Points
 // Gained / Total. The pool argument selects which budget to render: "skill" for
-// skill points or "ability" for perk points.
+// skill points or "perk" for perk points.
 //
 // Budgets are read through the config's budget accessors, which are the same
 // ones the application uses when it hands a character its points, so the table
@@ -67,8 +67,8 @@ func budgetAccessor(cfg *config.Config, pool string) (func(int) int, string, boo
 	case "skill", "skills", "trait", "traits":
 
 		return cfg.SkillPointBudget, "Skill Points", true
-	case "ability", "abilities", "perk", "perks":
-		return cfg.AbilityPointBudget, "Ability Points", true
+	case "perk", "perks":
+		return cfg.PerkPointBudget, "Perk Points", true
 	}
 	return nil, "", false
 }
@@ -143,9 +143,9 @@ func rulesFlagsTable(cfg *config.Config) string {
 // floorPhrase explains whether a total may go below zero.
 func floorPhrase(allowNegative bool, unit string) string {
 	if allowNegative {
-		return fmt.Sprintf("Drawbacks may refund more %s than the rest of the ability costs, so a total can go below zero.", unit)
+		return fmt.Sprintf("Drawbacks may refund more %s than the rest of the perk costs, so a total can go below zero.", unit)
 	}
-	return fmt.Sprintf("Drawbacks refund %s points, but never past zero: an ability's total %s cost stops at nothing.", unit, unit)
+	return fmt.Sprintf("Drawbacks refund %s points, but never past zero: an perk's total %s cost stops at nothing.", unit, unit)
 }
 
 // skillBudgetPhrase explains whether the skill point budget is enforced.
@@ -157,7 +157,7 @@ func skillBudgetPhrase(allowNegative bool) string {
 }
 
 // enactmentSurchargeTable documents everything about attaching more than one
-// enactment to an ability: the flat surcharge, whether the extra enactments must
+// enactment to an perk: the flat surcharge, whether the extra enactments must
 // declare their own interaction and validation, and the opt-in surcharge for
 // giving an extra enactment its own target. The new-target rule and the two
 // requirement flags were previously undocumented.
@@ -181,7 +181,7 @@ func enactmentSurchargeTable(cfg *config.Config) string {
 			orDash(nt.DisplayLabel()), nt.BuildCost, nt.EnergyCost, orDash(nt.Description))
 	}
 	b.WriteString("\n")
-	b.WriteString("The first enactment of an ability always declares who it affects and what roll resolves it. ")
+	b.WriteString("The first enactment of an perk always declares who it affects and what roll resolves it. ")
 	b.WriteString(requirementPhrase(ae.RequiresInteraction(), ae.RequiresValidation()))
 	if hasNewTarget {
 		b.WriteString(" Taking the separate-target option on a later enactment gives that enactment its own interaction and validation, ")

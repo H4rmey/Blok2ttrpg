@@ -1,9 +1,9 @@
 # items
 ## Items
 
-Items are physical objects that characters can use to aid them in combat, exploration, or roleplay. They range from simple tools and weapons to Imbued artifacts that hold complex Abilities.
+Items are physical objects that characters can use to aid them in combat, exploration, or roleplay. They range from simple tools and weapons to Imbued artifacts that hold complex Perks.
 
-In the Ability Builder, you can often select the **Has item dependency** perk, which reduces the Ability's Build Cost. This means the Ability is physically tied to the item: if the item is dropped, stolen, or broken, the character can no longer use the Ability.
+In the Perk Builder, you can often select the **Has item dependency** perk, which reduces the Perk's Build Cost. This means the Perk is physically tied to the item: if the item is dropped, stolen, or broken, the character can no longer use the Perk.
 
 ## Item Categories
 

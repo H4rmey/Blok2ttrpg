@@ -20,7 +20,7 @@ This can result in:
 *   Enhanced properties
 *   Altered behavior
 *   Structural reinforcement
-*   Unintended degradation or instability
+*   Unintended degradation or instperk
 
 Importantly:
 
@@ -35,7 +35,7 @@ Importantly:
     The blade resonates with heat‑related Resonance Slices, causing it to ignite, scorch, or burn on impact.
 *   **A stone imbued to increase density**  
     The stone’s Mantles respond as if the material were more massive than it physically is, increasing weight and resistance without changing volume.
-*   **A bow or arrow imbued for durability**  
+*   **A bow or arrow imbued for durperk**  
     The object’s Mantles reinforce structural integrity, reducing wear, splintering, or deformation under repeated stress.
 
 Not all imbuing results are beneficial. Poor alignment between the Resonance Signature and the material’s Response Profile can weaken an object or cause unpredictable behavior.
@@ -121,7 +121,7 @@ Both arise from:
 
 *   Resonance misalignment
 *   Long‑term exposure
-*   Instability or over‑resonance
+*   Instperk or over‑resonance
 
 In some cases, an improperly imbued object may act as a **vector for curse‑like effects**, particularly when used extensively by the same individual.
 

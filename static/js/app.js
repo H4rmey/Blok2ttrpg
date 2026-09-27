@@ -11,14 +11,14 @@ function closePackageModal() {
   if (modal) modal.hidden = true;
 }
 
-// Ability import modal. The Import button loads the built-in ability browser
+// Perk import modal. The Import button loads the built-in perk browser
 // into the modal body via HTMX; these helpers just toggle visibility.
-function openAbilityModal() {
-  var modal = document.getElementById("ability-modal");
+function openPerkModal() {
+  var modal = document.getElementById("perk-modal");
   if (modal) modal.hidden = false;
 }
-function closeAbilityModal() {
-  var modal = document.getElementById("ability-modal");
+function closePerkModal() {
+  var modal = document.getElementById("perk-modal");
   if (modal) modal.hidden = true;
 }
 
@@ -188,7 +188,7 @@ function dispatchChange(el) {
 }
 
 // ---------------------------------------------------------------------------
-// Ability builder: add/remove enactments. Each enactment is fetched from the
+// Perk builder: add/remove enactments. Each enactment is fetched from the
 // server as an HTML partial so its fields stay config-driven.
 // ---------------------------------------------------------------------------
 (function () {
@@ -202,7 +202,7 @@ function dispatchChange(el) {
     return parseInt(countInput.value || "0", 10);
   }
 
-  // Recompute the whole ability cost from the current form state. The backend
+  // Recompute the whole perk cost from the current form state. The backend
   // recalculates everything from scratch on each request, so we never do any
   // incremental add/remove math on the client. We post the full form directly
   // via htmx.ajax (rather than relying on the form's change-trigger) so the
@@ -210,8 +210,8 @@ function dispatchChange(el) {
   // page load - and so add/remove stay perfectly symmetric. Deferred to the
   // next frame so the DOM mutation (append/remove + renumberEnactments) is
   // fully applied before the form is serialized.
-  function recalcAbilityCost() {
-    var form = document.getElementById("ability-form");
+  function recalcPerkCost() {
+    var form = document.getElementById("perk-form");
     if (!form) return;
     requestAnimationFrame(function () {
       if (window.htmx && window.htmx.ajax) {
@@ -297,10 +297,10 @@ function dispatchChange(el) {
   addBtn.addEventListener("click", function () {
     var index = nextIndex();
     var url = window.BUILDER.enactmentEndpoint + "?index=" + encodeURIComponent(index);
-    // Pass the current ability type so the new enactment's dropdowns apply the
-    // ability-type allowed/blocked enactment filtering (and Feature 4 region
+    // Pass the current perk type so the new enactment's dropdowns apply the
+    // perk-type allowed/blocked enactment filtering (and Feature 4 region
     // toggles) consistently with the server-rendered blocks.
-    var typeSel = document.querySelector('#ability-form select[name="type"]');
+    var typeSel = document.querySelector('#perk-form select[name="type"]');
     if (typeSel && typeSel.value) {
       url += "&atype=" + encodeURIComponent(typeSel.value);
     }
@@ -315,7 +315,7 @@ function dispatchChange(el) {
         renumberEnactments();
         if (window.htmx) window.htmx.process(node);
         applyVisibility(node);
-        recalcAbilityCost();
+        recalcPerkCost();
       });
   });
 
@@ -328,16 +328,16 @@ function dispatchChange(el) {
       if (block) {
         block.remove();
         renumberEnactments();
-        recalcAbilityCost();
+        recalcPerkCost();
       }
 
     }
   });
 
 
-  // When editing/importing an existing ability the enactments are rendered on
+  // When editing/importing an existing perk the enactments are rendered on
   // the server, so normalize their indices and Remove-button visibility once
-  // on load. Otherwise (a brand-new ability) the first enactment is free and
+  // on load. Otherwise (a brand-new perk) the first enactment is free and
   // always present: load one automatically.
   if (container.querySelectorAll(".enactment").length > 0) {
     renumberEnactments();
@@ -349,15 +349,15 @@ function dispatchChange(el) {
 
 
 // ---------------------------------------------------------------------------
-// Ability builder autosave. Whenever the builder form changes we POST the full
-// form to /builder/autosave (debounced). The server persists the ability and
-// returns its id; we write that back into the hidden ability_id input so a
-// brand-new ability keeps updating the same record on subsequent saves.
-// Autosave is skipped until the ability has a name (the server enforces this
+// Perk builder autosave. Whenever the builder form changes we POST the full
+// form to /builder/autosave (debounced). The server persists the perk and
+// returns its id; we write that back into the hidden perk_id input so a
+// brand-new perk keeps updating the same record on subsequent saves.
+// Autosave is skipped until the perk has a name (the server enforces this
 // too, returning 204 No Content).
 //
 // Two things prevent the "save creates a duplicate" bug:
-//   1. We assign a stable ability id on the client at load time, so every
+//   1. We assign a stable perk id on the client at load time, so every
 //      request (autosave AND the manual Save submit) carries the same id from
 //      the very first keystroke. Even if Save fires before an autosave response
 //      returns, the server updates the one record instead of appending a new
@@ -370,27 +370,27 @@ function dispatchChange(el) {
   var inFlight = false;
   var pending = false;
 
-  // Give a brand-new ability a stable id up front. Editing an existing ability
+  // Give a brand-new perk a stable id up front. Editing an existing perk
   // already has its server id in the hidden field, so we only fill it if empty.
-  (function ensureAbilityID() {
-    var idInput = document.getElementById("ability-id");
+  (function ensurePerkID() {
+    var idInput = document.getElementById("perk-id");
     if (idInput && !idInput.value) {
-      idInput.value = "ability-" + Date.now() + "-" + Math.floor(Math.random() * 1e9);
+      idInput.value = "perk-" + Date.now() + "-" + Math.floor(Math.random() * 1e9);
     }
   })();
 
   function scheduleAutosave() {
-    var nameInput = document.getElementById("ability-name");
+    var nameInput = document.getElementById("perk-name");
     if (nameInput && nameInput.value.trim().length === 0) return;
-    if (!document.getElementById("ability-form")) return;
+    if (!document.getElementById("perk-form")) return;
     clearTimeout(timer);
     timer = setTimeout(runAutosave, 600);
   }
 
   function runAutosave() {
-    var form = document.getElementById("ability-form");
+    var form = document.getElementById("perk-form");
     if (!form) return;
-    var nameInput = document.getElementById("ability-name");
+    var nameInput = document.getElementById("perk-name");
     if (nameInput && nameInput.value.trim().length === 0) return;
     if (inFlight) {
       // A save is already running; run once more when it returns so the latest
@@ -408,9 +408,9 @@ function dispatchChange(el) {
     })
       .then(function (r) {
         if (r.status === 204) return null;
-        var hid = r.headers.get("X-Ability-ID");
+        var hid = r.headers.get("X-Perk-ID");
         if (hid) {
-          var idInput = document.getElementById("ability-id");
+          var idInput = document.getElementById("perk-id");
           if (idInput) idInput.value = hid;
         }
         return null;
@@ -426,18 +426,18 @@ function dispatchChange(el) {
   }
 
   document.addEventListener("change", function (e) {
-    if (e.target && e.target.closest && e.target.closest("#ability-form")) {
+    if (e.target && e.target.closest && e.target.closest("#perk-form")) {
       scheduleAutosave();
     }
   });
   document.addEventListener("input", function (e) {
-    if (e.target && e.target.closest && e.target.closest("#ability-form")) {
+    if (e.target && e.target.closest && e.target.closest("#perk-form")) {
       scheduleAutosave();
     }
   });
 })();
 
-// Re-apply visibility after HTMX swaps (ability-type fields, enactment reloads).
+// Re-apply visibility after HTMX swaps (perk-type fields, enactment reloads).
 document.addEventListener("htmx:afterSwap", function (e) {
   applyVisibility();
   syncAllOptionInfo(e && e.target ? e.target : document);
@@ -450,11 +450,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // ---------------------------------------------------------------------------
-// Character sheet: recalculate the whole stats bar (trait points, ability
+// Character sheet: recalculate the whole stats bar (trait points, perk
 // points) on the server whenever any field changes. We always post the full
 // form (including the level input, which lives outside the form via the
 // form="" attribute) so the backend recomputes everything from scratch, just
-// like the ability builder does.
+// like the perk builder does.
 // ---------------------------------------------------------------------------
 function recalcCharacterStats() {
   var form = document.getElementById("character-form");
@@ -502,16 +502,16 @@ document.addEventListener("input", function (e) {
 });
 
 // ---------------------------------------------------------------------------
-// Name gate: the rest of the builder stays disabled until the ability has a
-// name. This mirrors the original flow where naming the ability comes first.
+// Name gate: the rest of the builder stays disabled until the perk has a
+// name. This mirrors the original flow where naming the perk comes first.
 // ---------------------------------------------------------------------------
 (function () {
-  var nameInput = document.getElementById("ability-name");
+  var nameInput = document.getElementById("perk-name");
   var gate = document.getElementById("builder-gate");
   if (!nameInput || !gate) return;
 
   var hint = document.getElementById("name-hint");
-  var saveBtn = document.getElementById("save-ability");
+  var saveBtn = document.getElementById("save-perk");
 
   function syncGate() {
     var named = nameInput.value.trim().length > 0;

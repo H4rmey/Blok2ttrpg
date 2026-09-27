@@ -1,5 +1,5 @@
 name: Longsword
-description: A versatile blade favoring strength and power in melee. A weapon is a type of ability - swing it to strike a single foe.
+description: A versatile blade favoring strength and power in melee. A weapon is a type of perk - swing it to strike a single foe.
 type: execution
 fields:
   comment: A sweeping melee cut with a heavy blade.

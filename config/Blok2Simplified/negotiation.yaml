@@ -1,0 +1,87 @@
+# Negotiation: the structured social encounter.
+#
+# A negotiation is what happens when the party wants something from an NPC who
+# is not simply going to hand it over. It runs on two numbers the GM sets per
+# NPC: motivation (how inclined they are to help) and patience (how long they
+# will keep listening).
+#
+# Naming note: this is deliberately not called an "interaction". Interactions
+# are the perk-builder's targeting components (Self / Direct / Zone) in
+# interactions.yaml, and reusing the word would make both harder to read.
+negotiation:
+  # Motivation is a ladder. Each rung is an outcome, not a verdict: the rung the
+  # NPC lands on when patience runs out tells the GM how the scene resolves.
+  #
+  # The rungs are not a lookup table. A 2 is a refusal, but an NPC who has been
+  # badgered to a 2 by someone they already disliked may well reach for a weapon;
+  # a 3 with a proud NPC who has been publicly embarrassed can also end in
+  # violence. The ladder says how well the argument went; the GM says what the
+  # NPC does about it.
+  motivation:
+    min: 1
+    max: 5
+    # The starting rung is set per NPC by the GM, not by this config: a city
+    # guard who owes you a favour and one you just insulted do not open at the
+    # same place.
+    rungs:
+      - id: hostile
+        value: 1
+        name: "Hostile"
+        outcome: >-
+          You do not get what you want, and it costs you. The NPC acts against
+          you: they raise an alarm, tell someone, demand payment, or fight.
+      - id: unwilling
+        value: 2
+        name: "Unwilling"
+        outcome: >-
+          You do not get what you want. The NPC refuses and the door closes,
+          though they do not go out of their way to hurt you.
+      - id: indifferent
+        value: 3
+        name: "Indifferent"
+        outcome: >-
+          Nothing happens. No deal, no harm; the NPC is unmoved and the party
+          leaves with what they walked in with.
+      - id: willing
+        value: 4
+        name: "Willing"
+        outcome: >-
+          You get what you asked for, on the terms you asked for it.
+      - id: invested
+        value: 5
+        name: "Invested"
+        outcome: >-
+          You get what you asked for and more. The NPC volunteers help,
+          information, or a favour you did not think to ask for.
+
+  # Patience is the clock. It starts wherever the GM sets it for that NPC and
+  # counts down; at zero the negotiation ends on whatever motivation rung has
+  # been reached.
+  patience:
+    min: 0
+    max: 5
+    # Every argument costs patience, whether it lands or not. This is what makes
+    # a negotiation finite and stops the party grinding an NPC up the ladder
+    # one reroll at a time.
+    loss_per_argument: 1
+
+  # Resolving one argument. The GM picks a relevant skill; the player rolls it.
+  argument:
+    on_success: 1
+    on_failure: -1
+    # An argument, and the trait behind it, may only be used once per
+    # negotiation. Without this a table finds the one line that works and
+    # repeats it until the NPC caves.
+    allow_repeats: false
+
+  # An NPC has traits of their own, and those traits constrain the ladder. This
+  # is the heart of the system: the party's job is to work out what the NPC
+  # cares about, because an argument that cuts against it cannot ever persuade
+  # them, no matter how well it is rolled.
+  trait_alignment:
+    # An argument that runs against one of the NPC's traits can never raise
+    # motivation. A success holds the line instead of gaining ground.
+    against: cannot_increase
+    # An argument that runs with one of the NPC's traits can never lower
+    # motivation. A failure holds the line instead of losing ground.
+    with: cannot_decrease

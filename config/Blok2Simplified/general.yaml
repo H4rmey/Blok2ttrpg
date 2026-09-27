@@ -103,7 +103,7 @@ option_sources:
       label: "1d12+3"
       cost: { build_cost: 7, energy_cost: 0 }
 
-  # Balanced per-knockout costs for Phase abilities. A knockout is a condition
+  # Balanced per-knockout costs for Phase perks. A knockout is a condition
   # that interrupts an active Phase, so it is a drawback: the more easily a
   # knockout can be triggered, the larger the build discount it grants. "None"
   # (no way to interrupt) is a benefit and therefore costs build points.
@@ -141,7 +141,7 @@ option_sources:
     - value: "Engager runs out of energy"
       cost: { build_cost: 0 }
 
-  # How the per-round upkeep of a Concentration ability is paid.
+  # How the per-round upkeep of a Concentration perk is paid.
   concentration_upkeep:
     - value: "1 Action or 1 Energy"
       cost: { build_cost: 0, energy_cost: 0 }

@@ -35,21 +35,21 @@ func main() {
 		}
 	}
 
-	perkBudget := cfg.AbilityPointBudget(1)
+	perkBudget := cfg.PerkPointBudget(1)
 	skillBudget := cfg.SkillPointBudget(1)
 	fmt.Printf("Level 1 budgets: %d perk pt, %d skill pt\n\n", perkBudget, skillBudget)
 
 	for _, pkg := range pkgs {
-		cost := engine.PackageCostFor(cfg.Config, c, pkg.Shifts, pkg.Abilities)
+		cost := engine.PackageCostFor(cfg.Config, c, pkg.Shifts, pkg.Perks)
 		flag := "ok"
 		if cost.Perk > perkBudget || cost.Skill > skillBudget {
 			flag = "OVER"
 		}
 		fmt.Printf("%-12s %-14s perk=%2d skill=%2d  %s\n", pkg.Category, pkg.ID, cost.Perk, cost.Skill, flag)
-		// Per-ability breakdown so an over-budget package shows which perk to drop.
+		// Per-perk breakdown so an over-budget package shows which perk to drop.
 		var names []string
-		for _, ab := range pkg.Abilities {
-			names = append(names, fmt.Sprintf("%s=%d", ab.Name, engine.AbilityCost(cfg.Config, engine.NormalizeAbility(cfg.Config, ab)).Build))
+		for _, ab := range pkg.Perks {
+			names = append(names, fmt.Sprintf("%s=%d", ab.Name, engine.PerkCost(cfg.Config, engine.NormalizePerk(cfg.Config, ab)).Build))
 		}
 		sort.Strings(names)
 		for _, n := range names {

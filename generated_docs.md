@@ -9,7 +9,7 @@ I borrow a lot of input from other systems as being alone trying to think of eve
 
 OH RIGHT! before i forget, THIS IS STILL HIGHLY and i mean HIGHLY WORK IN PROGRESS >:) So there will be issues, bugs and other stuff
 
-All the docs were written by me by hand, letter for letter, space for space. The application surrounding this system is optional but very usefull when creating abilities (for the ability building system). That full application is vibe coded, i honestly do not have the time to do this all myself. I'd rather spend time with friends and family so when i do get the time to work on this, i focus on the docs and not the application, as nowadays when using AI correctly for code it can produce some awesome stuff.
+All the docs were written by me by hand, letter for letter, space for space. The application surrounding this system is optional but very usefull when creating perks (for the perk building system). That full application is vibe coded, i honestly do not have the time to do this all myself. I'd rather spend time with friends and family so when i do get the time to work on this, i focus on the docs and not the application, as nowadays when using AI correctly for code it can produce some awesome stuff.
 
 So yes, i used AI for the coding part. Yes, i am a programmer by trade. So also yes, i highly steer the AI and manage it!
 
@@ -23,22 +23,22 @@ i'm probably still missing a bunch of mechanics
 The subpages are modules that can be used int he Blok2ttrpg. The following Modules exist:
 
 *   Character Creation (core)
-*   Ability Builder
+*   Perk Builder
 *   Lore (WIP)
 
 ## Planned Modules:
 
 ### Character Presets (races/classes)
 
-Basically preset skills that are usable by users to have a quick start. maybe even adding specific level up charts for thoses classes/races. Also maybe make it so there are abilities you get by selecting a specific race/class. But i never want to make abilities be tied to anything, anyone should be able to cast a fireball, that should not be a Wizard exclusive ability. 
+Basically preset skills that are usable by users to have a quick start. maybe even adding specific level up charts for thoses classes/races. Also maybe make it so there are perks you get by selecting a specific race/class. But i never want to make perks be tied to anything, anyone should be able to cast a fireball, that should not be a Wizard exclusive perk. 
 
-### Predefined Abilities
+### Predefined Perks
 
-A list of abilities that can be used by any character. These will costs ability points and are created using the ability creator, so they can also be upgraded. But i think i will also add abilities at different levels/tiers. So fireball level 1 just deals damage, level 2 will also apply burn effect and level 3 will explode after hitting for example.
+A list of perks that can be used by any character. These will costs perk points and are created using the perk creator, so they can also be upgraded. But i think i will also add perks at different levels/tiers. So fireball level 1 just deals damage, level 2 will also apply burn effect and level 3 will explode after hitting for example.
 
 ### Items list
 
-Same as predifined abilities, but they can not be upgraded. They might even have different rules from the specific ability creator. These will have a huge reduction on the energy cost and also do not need ability points to obtain.
+Same as predifined perks, but they can not be upgraded. They might even have different rules from the specific perk creator. These will have a huge reduction on the energy cost and also do not need perk points to obtain.
 
 ### MOAR ENACTMENTS
 
@@ -366,7 +366,7 @@ You can choose to help someone on a **Skill Check**. This uses the same rules as
 # invoking
 ## Invoking
 
-Invoke points are the currency of the fiction. Skill points buy dice and perk points buy abilities, but invoke points buy *moments*: the instant where your background turns out to matter, or where you step out of turn order because you saw it coming.
+Invoke points are the currency of the fiction. Skill points buy dice and perk points buy perks, but invoke points buy *moments*: the instant where your background turns out to matter, or where you step out of turn order because you saw it coming.
 
 Every player has their own pool. Points are not shared, not pooled with the party, and not held by the GM on your behalf.
 
@@ -470,7 +470,7 @@ Rolling for initiative is done by rolling your perception + movement. PC's go be
 
 ### Turns and Actions
 
-On your turn you get three actions. By default you have 3 of actions. How much actions an ability costs can may differ. 
+On your turn you get three actions. By default you have 3 of actions. How much actions an perk costs can may differ. 
 
 ### Reactions
 
@@ -483,7 +483,7 @@ Your actions are spent on your turn, but a **Reaction** lets you act out of turn
 | Timing | Between actions. A reaction resolves before or after a whole action, never in the middle of one, so it cannot undo a roll that has already been made. |
 | What it is | An out-of-order action. A reaction is not built in advance and is not listed on your sheet: describe what you do, pay the cost, and the GM resolves it like any other action. |
 
-The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own abilities, so a character who reacts every round has less left to spend when their turn comes around.
+The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own perks, so a character who reacts every round has less left to spend when their turn comes around.
 
 ### Movement
 
@@ -492,7 +492,7 @@ Movement costs one action; it is fully allowed to just keep using actions just t
 
 ### Energy and Recovery
 
-Energy is the resource that using Abilities spends. Each Enactment in an Ability costs 1 Energy, so a full turn of three actions costs roughly 3 Energy, and a Concentration costs a further point of upkeep every round it stays up. Repeated movement in a single stretch also drains Energy as described above.
+Energy is the resource that using Perks spends. Each Enactment in an Perk costs 1 Energy, so a full turn of three actions costs roughly 3 Energy, and a Concentration costs a further point of upkeep every round it stays up. Repeated movement in a single stretch also drains Energy as described above.
 
 Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Skill, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
 
@@ -500,7 +500,7 @@ Energy does not come back on its own. On a rest you regain **5 Energy**. That is
 
 ### Attacking/Healing/Doing
 
-Oppenents are not willing to get hit by your attacks/abilities. That is why when attacking an opponent you make an **Attack Roll** to a **Target**. In the chapter about [Dice Rolling](dice-rolling.md) We already dicussed Engegement Rolls and Counter Rolls. An **Attack Roll** is a type of **Engegment Roll**.
+Oppenents are not willing to get hit by your attacks/perks. That is why when attacking an opponent you make an **Attack Roll** to a **Target**. In the chapter about [Dice Rolling](dice-rolling.md) We already dicussed Engegement Rolls and Counter Rolls. An **Attack Roll** is a type of **Engegment Roll**.
 
 When Attacking/Healing/Prepping/Anythinging you always first roll the Engagement Roll to see if you hit, then you resolve the action/enactment/thing.
 
@@ -665,7 +665,7 @@ These conditions apply a set effect rather than a skill shift.
 | **Isolated** | You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent. |
 | **Charmed** | You must do what the Charmer says. |
 | **Hypnotized** | You mimic the exact movement and action of the person who hypnotized you on their last turn. |
-| **Stubborn** | You cannot repeat the same action or use the same ability two turns in a row. |
+| **Stubborn** | You cannot repeat the same action or use the same perk two turns in a row. |
 | **Paranoid** | You refuse help from anyone. |
 | **Insane** | At the start of your turn, roll a die (d4) to determine random behavior. |
 | **Stunned** | You are stunned; you lose one of your actions. |
@@ -689,8 +689,8 @@ These conditions apply a set effect rather than a skill shift.
 | **Hesitant** | Your Engagement Roll must be rolled twice. |
 | **Broken Gear** | Rolls for this gear are reduced by one die shift. |
 | **Amplified Gear** | Rolls for this gear are upgraded by one die shift. |
-| **Fatigued** | Energy cost of abilities is increased by 1. |
-| **Energized** | Energy cost of abilities is reduced by 1. |
+| **Fatigued** | Energy cost of perks is increased by 1. |
+| **Energized** | Energy cost of perks is reduced by 1. |
 | **Delayed** | You move down one in the turn order. |
 | **Hastened** | You move up one in the turn order. |
 | **Echoed** | Whatever action you took last round will be executed automatically next round. |
@@ -702,18 +702,18 @@ These conditions apply a set effect rather than a skill shift.
 | **Marked** | Everything that happens to you is buffed or nerfed (pick one). |
 | **Invincible** | You cannot be damaged. |
 
-# abilities
-## Abilities
+# perks
+## Perks
 
-Abilities are the main source of interactions in combat. They can also be used as tools during other types of gameplay. This page will list some **predefined abilities** and some **Specialized Abilities**.
+Perks are the main source of interactions in combat. They can also be used as tools during other types of gameplay. This page will list some **predefined perks** and some **Specialized Perks**.
 
-## Predefined Abilities
+## Predefined Perks
 
-This page will list some predefined abilities that players and DM's can use to create their character. While there is an Ability Builder system that can be used. Sometimes people do not want to use it or they want a quick lookup for an ability. The abilitis listed here are all created in the Ability Builder.
+This page will list some predefined perks that players and DM's can use to create their character. While there is an Perk Builder system that can be used. Sometimes people do not want to use it or they want a quick lookup for an perk. The abilitis listed here are all created in the Perk Builder.
 
-### Ability List
+### Perk List
 
-| Ability | Type |
+| Perk | Type |
 | --- | --- |
 | **Arcane Focus** | concentration |
 | **Arcane Spark** | execution |
@@ -774,24 +774,24 @@ This page will list some predefined abilities that players and DM's can use to c
 | **Veil of Shadows** | concentration |
 | **War Cry** | execution |
 
-## Specialized Abilities
+## Specialized Perks
 
-While the Ability Builder is perfect for creating fireballs, sword strikes, and healing spells using standard Enactments, some concepts are too abstract, vague, or narrative-driven to fit into the Ability Builder system.
+While the Perk Builder is perfect for creating fireballs, sword strikes, and healing spells using standard Enactments, some concepts are too abstract, vague, or narrative-driven to fit into the Perk Builder system.
 
-Abilities like Message, Mind Reading, or Illusion often lack hard numbers. Predefined Abilities solve this by providing a conceptual base effect with hardcoded rules and a dedicated list of Perks to upgrade them.
+Perks like Message, Mind Reading, or Illusion often lack hard numbers. Predefined Perks solve this by providing a conceptual base effect with hardcoded rules and a dedicated list of Perks to upgrade them.
 
-### Specialized Abilities List
+### Specialized Perks List
 
-Specialized Abilities are still being written. When one is added to the library it appears in the list above alongside the Ability Builder abilities, because both are loaded from the same place.
+Specialized Perks are still being written. When one is added to the library it appears in the list above alongside the Perk Builder perks, because both are loaded from the same place.
 
 # packages
 ## Packages
 
 ## Introduction
 
-A **Package** is a ready-made bundle of character content: a set of Proficiency shifts plus, sometimes, a few Abilities. Importing one applies its shifts to your Skills and copies its Abilities onto your sheet, so you can pick a Class, Race and Background without hand-building everything from scratch.
+A **Package** is a ready-made bundle of character content: a set of Proficiency shifts plus, sometimes, a few Perks. Importing one applies its shifts to your Skills and copies its Perks onto your sheet, so you can pick a Class, Race and Background without hand-building everything from scratch.
 
-Packages are a convenience, not a restriction. Everything a Package grants can be bought by hand with Skill Points and Ability Points, and nothing stops you from adjusting a Skill after importing one.
+Packages are a convenience, not a restriction. Everything a Package grants can be bought by hand with Skill Points and Perk Points, and nothing stops you from adjusting a Skill after importing one.
 
 ## Identity and Equipment
 
@@ -813,7 +813,7 @@ A shift can also run out of ladder. If a Package would push a Skill above the to
 
 This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
 
-| Name | Description | Skill Shifts | Abilities Granted |
+| Name | Description | Skill Shifts | Perks Granted |
 | --- | --- | --- | --- |
 | **Cleric** | A devoted healer and smiter. Keeps the party upright and the unholy down. | Medicine +1, Wisdom +2 | Healing Light |
 | **Fighter** | A disciplined front-line combatant. Trades blows, holds ground and keeps standing. | Constitution +1, Strength +2 | Power Cleave |
@@ -825,7 +825,7 @@ This is part of a character's core identity: once chosen it is always applied an
 
 This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
 
-| Name | Description | Skill Shifts | Abilities Granted |
+| Name | Description | Skill Shifts | Perks Granted |
 | --- | --- | --- | --- |
 | **Dwarf** | Stone-stubborn and hard to move. Dwarves endure what others cannot. | Constitution +1, Crafting +1, HP +1 | Guarded Stance |
 | **Elf** | Long-lived, keen-eyed and attuned to magic. Elves move lightly and see far. | Reflex +1, Magic +1, Perception +1 | Arcane Spark |
@@ -837,7 +837,7 @@ This is part of a character's core identity: once chosen it is always applied an
 
 This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
 
-| Name | Description | Skill Shifts | Abilities Granted |
+| Name | Description | Skill Shifts | Perks Granted |
 | --- | --- | --- | --- |
 | **Artisan** | A trained trade and a paying clientele. You make things and you know their worth. | Crafting +1, Resources +1 | Field Dressing |
 | **Criminal** | A past best left undescribed. You know locks, fences and when to leave. | Deceive +1, Thievery +1 | Handful of Sand |
@@ -848,9 +848,9 @@ This is part of a character's core identity: once chosen it is always applied an
 # items
 ## Items
 
-Items are physical objects that characters can use to aid them in combat, exploration, or roleplay. They range from simple tools and weapons to Imbued artifacts that hold complex Abilities.
+Items are physical objects that characters can use to aid them in combat, exploration, or roleplay. They range from simple tools and weapons to Imbued artifacts that hold complex Perks.
 
-In the Ability Builder, you can often select the **Has item dependency** perk, which reduces the Ability's Build Cost. This means the Ability is physically tied to the item: if the item is dropped, stolen, or broken, the character can no longer use the Ability.
+In the Perk Builder, you can often select the **Has item dependency** perk, which reduces the Perk's Build Cost. This means the Perk is physically tied to the item: if the item is dropped, stolen, or broken, the character can no longer use the Perk.
 
 ## Item Categories
 
@@ -866,7 +866,7 @@ Items are Packages, so they can be picked up and put down: their Skill shifts ap
 
 These may be picked up and put down freely: the skill shifts apply only while the package is active.
 
-| Name | Description | Skill Shifts | Abilities Granted |
+| Name | Description | Skill Shifts | Perks Granted |
 | --- | --- | --- | --- |
 | **Dagger** | A short concealable blade. Fast in the hand and easy to coat with something nasty. | - | Dagger |
 | **Healer's Kit** | Bandages, salves and a needle. Enough to stop bleeding and steady a shaking hand. | - | Field Dressing, Battle Focus |
@@ -893,9 +893,9 @@ Both point pools follow the same rule: you start with a fixed amount at Level 1 
 
 $$Points = Start + PerLevel \times (Level - 1)$$
 
-For Skill Points that is **13** at Level 1 and **+3** per level thereafter. For Ability Points it is **9** at Level 1 and **+3** per level.
+For Skill Points that is **13** at Level 1 and **+3** per level thereafter. For Perk Points it is **9** at Level 1 and **+3** per level.
 
-Starting Skill Points are set so a new character can raise their Vital Skills off the bottom rung and still put a handful of Skills into their speciality. The per-level gain is one visible die step plus change, and it matches the Ability Point gain so both halves of your character sheet grow at the same rate.
+Starting Skill Points are set so a new character can raise their Vital Skills off the bottom rung and still put a handful of Skills into their speciality. The per-level gain is one visible die step plus change, and it matches the Perk Point gain so both halves of your character sheet grow at the same rate.
 
 ### Refunding Points
 
@@ -937,24 +937,24 @@ The dice ladder rises by a flat +1 average per rung. The die is capped at d12+3;
 
 | Rule | In effect |
 | --- | --- |
-| Build point refunds | Drawbacks refund build points, but never past zero: an ability's total build cost stops at nothing. |
-| Energy cost refunds | Drawbacks refund energy points, but never past zero: an ability's total energy cost stops at nothing. |
+| Build point refunds | Drawbacks refund build points, but never past zero: an perk's total build cost stops at nothing. |
+| Energy cost refunds | Drawbacks refund energy points, but never past zero: an perk's total energy cost stops at nothing. |
 | Skill point budget | A character may not spend more skill points than its level grants; edits and package imports that would overspend are refused. |
 | Maximum level | A character's level is capped at 10. |
 
 # skill-trees
 ## Skills Trees
 
-Skill Trees are thematic collections of Abilities, Skills, and Perks. Instead of building Abilities completely from scratch every time, a player can adopt a Skill Tree (e.g., The Pyromancer, The Master Thief, The Telepath).
+Skill Trees are thematic collections of Perks, Skills, and Perks. Instead of building Perks completely from scratch every time, a player can adopt a Skill Tree (e.g., The Pyromancer, The Master Thief, The Telepath).
 
-Skill trees guide character progression by locking powerful, complex Abilities behind foundational ones. This ensures a character naturally grows into a specialized role.
+Skill trees guide character progression by locking powerful, complex Perks behind foundational ones. This ensures a character naturally grows into a specialized role.
 Rules
 
-*   **Nodes:** A Skill Tree is made up of interconnected Nodes. A Node can be a new Ability, a Perk for an existing Ability, a new Skill, or a flat stat boost (like +Max Energy).
+*   **Nodes:** A Skill Tree is made up of interconnected Nodes. A Node can be a new Perk, a Perk for an existing Perk, a new Skill, or a flat stat boost (like +Max Energy).
 
-*   **Progression:** You must unlock the prerequisite Node before you can spend Ability Points or Skill Points to unlock the next Node connected to it.
+*   **Progression:** You must unlock the prerequisite Node before you can spend Perk Points or Skill Points to unlock the next Node connected to it.
 
-*   **Creating Trees:** GMs and players are encouraged to build custom Skill Trees during character creation by bundling custom-built Abilities and mapping out how they evolve.
+*   **Creating Trees:** GMs and players are encouraged to build custom Skill Trees during character creation by bundling custom-built Perks and mapping out how they evolve.
 
 # magic-system
 ## Magic System
@@ -968,7 +968,7 @@ While this document refers to a “magic system” for convenience, the world of
 The system is designed so that:
 
 *   Curious players can understand _how_ things work and design effects themselves.
-*   Other players can use abilities without needing to understand the underlying mechanics.
+*   Other players can use perks without needing to understand the underlying mechanics.
 *   All interactions remain predictable and explainable.
 
 This document explains the foundational concepts of the system and how spells or effects can be constructed within the rules of Lettuce.
@@ -1103,7 +1103,7 @@ This can result in:
 *   Enhanced properties
 *   Altered behavior
 *   Structural reinforcement
-*   Unintended degradation or instability
+*   Unintended degradation or instperk
 
 Importantly:
 
@@ -1118,7 +1118,7 @@ Importantly:
     The blade resonates with heat‑related Resonance Slices, causing it to ignite, scorch, or burn on impact.
 *   **A stone imbued to increase density**  
     The stone’s Mantles respond as if the material were more massive than it physically is, increasing weight and resistance without changing volume.
-*   **A bow or arrow imbued for durability**  
+*   **A bow or arrow imbued for durperk**  
     The object’s Mantles reinforce structural integrity, reducing wear, splintering, or deformation under repeated stress.
 
 Not all imbuing results are beneficial. Poor alignment between the Resonance Signature and the material’s Response Profile can weaken an object or cause unpredictable behavior.
@@ -1204,7 +1204,7 @@ Both arise from:
 
 *   Resonance misalignment
 *   Long‑term exposure
-*   Instability or over‑resonance
+*   Instperk or over‑resonance
 
 In some cases, an improperly imbued object may act as a **vector for curse‑like effects**, particularly when used extensively by the same individual.
 
@@ -1251,13 +1251,13 @@ Their Resonance Slices fluctuate unpredictably, causing subtle but persistent in
 
 **Example: Curse of Misfortune**
 
-An individual believed to be “unlucky” may have an unstable Resonance Signature that interferes with probability‑sensitive interactions.
+An individual believed to be “unlucky” may have an unstable Resonance Signature that interferes with probperk‑sensitive interactions.
 
 *   Tools malfunction more often
 *   Structures fail at inopportune moments
 *   Minor accidents cluster around the individual
 
-There is no intent, malice, or conscious control — only resonance instability.
+There is no intent, malice, or conscious control — only resonance instperk.
 
 ---
 
@@ -1282,7 +1282,7 @@ From a resonance perspective, it is a **misclassification of the body by the env
 
 ### Degenerative Curses
 
-Some curses worsen over time as the Aggregate’s Resonance Signature slowly drifts further from stability.
+Some curses worsen over time as the Aggregate’s Resonance Signature slowly drifts further from stperk.
 
 These curses may:
 
@@ -1799,9 +1799,9 @@ It lies on the **outside of an infinite sphere**, beneath a sky that lies, in a 
 # cheat-sheet
 ## Cheat Sheet
 
-## Ability Types
+## Perk Types
 
-The when part of the ability
+The when part of the perk
 
 passive 		--> when the trigger condition is met, at any time 
 reaction 		--> when the trigger condition is met, only once per turn, during combat 
@@ -1811,7 +1811,7 @@ concentration 	--> after activation & at the start of your turn
 
 ## Enactments
 
-The what part of the ability
+The what part of the perk
 
 damage 		    --> lose hp
 heal 		    --> gain hp 
@@ -1826,13 +1826,13 @@ effect 	        --> lose/gain hp over time or move over time
 shift           --> shift proficiencies now
 phase 		    --> shift proficiencies now, reverse the proficiency later
 
-stack           --> stack points now, use them later for other abilities
+stack           --> stack points now, use them later for other perks
 
 minion 	        --> create a minion to fight for you
 
 ## Interactions
 
-The who part of the ability
+The who part of the perk
 
 Self    --> Target yourself (no validation needed)
 Direct  --> right next to you
@@ -1845,14 +1845,14 @@ AoE     --> Around a specific area hangs around for a while
 Will it hit or miss? I guess they never miss huh?
 
 # introduction
-## Ability Builder
+## Perk Builder
 
 > [!NOTE]
 > This document assumes you've read the core chapters, character-trait, character-skills, leveling and multi-dice-system.
 
 ## Introduction
 
-The **Ability Builder** is the core system used to create actions, maneuvers, spells, techniques, and special effects. An Ability represents an **action** taken by a character. But rather than relying on predefined spell lists or class-locked abilities, this system allows abilities to be created from **Enactments**.  What that action does, who it affects, how it is resolved, and under which conditions it succeeds are all explicitly defined by the **Enactment** chosen during creation. Each **Enactment** has one **Interaction** and one **validation**.
+The **Perk Builder** is the core system used to create actions, maneuvers, spells, techniques, and special effects. An Perk represents an **action** taken by a character. But rather than relying on predefined spell lists or class-locked perks, this system allows perks to be created from **Enactments**.  What that action does, who it affects, how it is resolved, and under which conditions it succeeds are all explicitly defined by the **Enactment** chosen during creation. Each **Enactment** has one **Interaction** and one **validation**.
 
 Definitions: 
 
@@ -1865,19 +1865,19 @@ In turn each of these Components (Enactment, Validation, Interaction) has Rules 
 *   **Rules** — define how the Component works by default.
 *   **Perks** — modify the Rules to upgrade the Component.
 
-Every **Ability** must contain **at least one Enactment**. Additional Enactments may be added to create more complex effects, which are resolved **in sequence**. Each Enactment is evaluated independently unless explicitly overridden by a Perk.
+Every **Perk** must contain **at least one Enactment**. Additional Enactments may be added to create more complex effects, which are resolved **in sequence**. Each Enactment is evaluated independently unless explicitly overridden by a Perk.
 
-The Ability Builder is intentionally **system-agnostic** with regard to flavor. A fireball, a sword technique, a healing prayer, or a mechanical trap are all created using the same underlying rules. The narrative description of an Ability is left to the player and GM, while the mechanical behavior remains the same. So a shot from an arrow might be the same as a light beam in terms of Ability Components.
+The Perk Builder is intentionally **system-agnostic** with regard to flavor. A fireball, a sword technique, a healing prayer, or a mechanical trap are all created using the same underlying rules. The narrative description of an Perk is left to the player and GM, while the mechanical behavior remains the same. So a shot from an arrow might be the same as a light beam in terms of Perk Components.
 
 ## Costs (WIP)
 
-Applying perks has a cost. The first cost is the **Ability Cost** to add the Perk. Each level you gain **Ability Points** that can be spent to create abilities.
+Applying perks has a cost. The first cost is the **Perk Cost** to add the Perk. Each level you gain **Perk Points** that can be spent to create perks.
 
-Then there is the **Energy Cost**. This cost is used to use your ability. Sometimes you do not have enough energy to use your ability. In this system it is allowed to still use your ability, but there is a catch: either you take damage equal to the amount of energy you are missing, or you only partially use your ability. The latter is done by not executing all enactments of the ability. The fireball you cast will still burn someone, but will not explode on impact anymore because you don't have the energy for that.
+Then there is the **Energy Cost**. This cost is used to use your perk. Sometimes you do not have enough energy to use your perk. In this system it is allowed to still use your perk, but there is a catch: either you take damage equal to the amount of energy you are missing, or you only partially use your perk. The latter is done by not executing all enactments of the perk. The fireball you cast will still burn someone, but will not explode on impact anymore because you don't have the energy for that.
 
-## Executing Abilities
+## Executing Perks
 
-So an **Ability** is made up from Enactments. Each of these Enactments describe what they do. The order in which you execute the Enactment is a bit odd compared to other systems. The order goes as follows:
+So an **Perk** is made up from Enactments. Each of these Enactments describe what they do. The order in which you execute the Enactment is a bit odd compared to other systems. The order goes as follows:
 
 1.  Resolve the **Interaction** → Which targets are going to be affected by this **Enactment.**
 2.  Resolve the **Validation** → Are the targets going to be affected by this **Enactment.**
@@ -1893,15 +1893,15 @@ Let's say you want to hit someone with a an **Damage Enactment**. You first chec
 | **Each enactment beyond the first** | 0 | 1 | Adding an additional Enactment beyond the first |
 | **This enactment has a different target than the enactment before it** | 1 | 0 | Give an enactment beyond the first its own Interaction and Validation |
 
-The first enactment of an ability always declares who it affects and what roll resolves it. Enactments after the first inherit both the target and the resolving roll of the enactment before them. Taking the separate-target option on a later enactment gives that enactment its own interaction and validation, so their costs apply on top of the surcharge above.
+The first enactment of an perk always declares who it affects and what roll resolves it. Enactments after the first inherit both the target and the resolving roll of the enactment before them. Taking the separate-target option on a later enactment gives that enactment its own interaction and validation, so their costs apply on top of the surcharge above.
 
-# Ability Creation Guide
+# Perk Creation Guide
 
-## Ability Creation Guide
+## Perk Creation Guide
 
-So you've read the docs and now you're staring at the Ability Builder thinking:
+So you've read the docs and now you're staring at the Perk Builder thinking:
 
-> "Cool, but how do I actually make a good ability?"
+> "Cool, but how do I actually make a good perk?"
 
 Yeah, that's fair.
 
@@ -1912,15 +1912,15 @@ What matters is:
 - What happens? (**Enactments**)
 - Who does it happen to? (**Interactions**)
 - How do we determine success? (**Validations**)
-- When does it happen? (**Ability Type**)
+- When does it happen? (**Perk Type**)
 
 Everything else is flavor.
 
-A sword slash and a laser beam can easily be the exact same Ability mechanically.
+A sword slash and a laser beam can easily be the exact same Perk mechanically.
 
 ---
 
-### Step 1 - Pick an Ability Type
+### Step 1 - Pick an Perk Type
 
 Most people should start with **Execution**.
 
@@ -1937,9 +1937,9 @@ Examples:
 - Dash Attack
 - Throw Rock
 
-Only use the other Ability Types when you specifically want special timing or behavior.
+Only use the other Perk Types when you specifically want special timing or behavior.
 
-| Ability Type | What It Really Means |
+| Perk Type | What It Really Means |
 |-------------|----------------------|
 | Execution | Do thing now |
 | Reaction | Do thing when something happens |
@@ -1957,7 +1957,7 @@ This is the actual effect.
 
 Ask yourself:
 
-> What should my ability do?
+> What should my perk do?
 
 Usually the answer is one of these:
 
@@ -1973,7 +1973,7 @@ Usually the answer is one of these:
 
 Think of Enactments as LEGO blocks.
 
-Most abilities are simply multiple Enactments chained together.
+Most perks are simply multiple Enactments chained together.
 
 **Example - Acid Splash**
 
@@ -2019,7 +2019,7 @@ Simple.
 
 This is where the fun starts.
 
-Most iconic abilities are just multiple Enactments chained together.
+Most iconic perks are just multiple Enactments chained together.
 
 **Ice Lance**
 
@@ -2361,7 +2361,7 @@ Reaction
 
 ### Step 4 - Choose Timing
 
-The effect itself does **not** determine the Ability Type.
+The effect itself does **not** determine the Perk Type.
 
 The timing does.
 
@@ -2504,7 +2504,7 @@ Reaction
 
 ---
 
-### Example For Every Ability Type
+### Example For Every Perk Type
 
 **Execution**
 
@@ -2627,22 +2627,22 @@ This combines:
 - ✅ Persistent Effect
 - ✅ Concentration
 
-All in a single ability.
+All in a single perk.
 
 ---
 
-# Ability Types
+# Perk Types
 
 
 ## Execution
 
-Execution is the most basic form for an Ability. It is simply the: "I want to do this now" Ability Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
+Execution is the most basic form for an Perk. It is simply the: "I want to do this now" Perk Type. Executions can be anything from casting a fireball to summoning a shield to block an attack or preparing a parry.
 
 
 
 ## Concentration
 
-Concentration is an Ability Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep.
+Concentration is an Perk Type that allows an effect to persist over multiple rounds, as long as the Engager actively maintains focus. It takes one action to start the Concentration and then at the start of each of your turns you have to spend energy for the upkeep.
 
 **How to build it**
 
@@ -2662,7 +2662,7 @@ Enact Condition will apply a condition to a target (e.g., prone, stunned, charme
    - *Conditions:* Blinded, Encumbered, Encouraged, Frightened, Taunted (2 build), Swayed (2 build), Untouchable (5 build), Ignored (3 build), Confused (2 build), Vengeful (2 build), Distracted (1 build), Isolated (2 build), Charmed (5 build), Hypnotized (5 build), Stubborn (2 build), Paranoid (2 build), Insane (3 build), Stunned (3 build), Paralyzed (5 build), Pacified (3 build), Enraged (3 build), Disarmed (2 build), Silenced (2 build), Deafened (2 build), Stifled (2 build), Staggered (2 build), Prone (2 build), Anchored (2 build), Restrained (2 build), Slowed (2 build), Terrified (2 build), Weakened (2 build), Fragile (2 build), Cursed (2 build), Blessed (3 build), Hesitant (2 build), Fatigued (2 build), Energized (3 build), Delayed (2 build), Hastened (2 build), Echoed (3 build), Doomed (3 build), Zombified (3 build), Linked (3 build), Incorporeal (3 build), Marked (3 build)
 2. **Duration (turns)** - Choose one of:
    - 1 turn, 2 turns (1 build), 3 turns (2 build), 4 turns (3 build), 5 turns (4 build), 6 turns (5 build), Unlimited (8 build)
-3. **Solutions** - Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this ability then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action. You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
+3. **Solutions** - Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this perk then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action. You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
 
    For each solution, choose one of:
    - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
@@ -2689,7 +2689,7 @@ The Enact Effect applies a lingering effect to a target, such as fire, frost, or
 1. **Applies** - Choose one of:
    - Damage, Healing, Motion
 2. **Duration (rounds)** - Any whole number from **1 to 5** (starts at 1). Cost: 1 build per round.
-3. **Solutions** - Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this ability then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action. You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
+3. **Solutions** - Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this perk then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action. You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
 
    For each solution, choose one of:
    - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
@@ -2698,7 +2698,7 @@ The Enact Effect applies a lingering effect to a target, such as fire, frost, or
 
 ## Enact Healing
 
-Enact Healing abilities allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses.
+Enact Healing perks allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses.
 
 **How to build it**
 
@@ -2726,7 +2726,7 @@ Enact Negation allows characters to ignore/nullify the effects of an enactment y
 
 ## Enact Nerf
 
-Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain ability points or energy.
+Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain perk points or energy.
 
 **How to build it**
 
@@ -2825,27 +2825,27 @@ Area Interactions encompass actions like bombs, splash potions, and traps. These
    - *Defense:* Constitution, Reflex, Wisdom, Magic
 
 # leveling
-## Ability Builder Leveling
+## Perk Builder Leveling
 
 ## Introduction
 
-As you level up, your character gains a deeper understanding of their powers, techniques, and spells. This growth is represented by **Ability Points**. Ability Points are spent to pay the **Build Cost** of Perks, Enactments, Interactions, and Validations when constructing or upgrading your Abilities.
+As you level up, your character gains a deeper understanding of their powers, techniques, and spells. This growth is represented by **Perk Points**. Perk Points are spent to pay the **Build Cost** of Perks, Enactments, Interactions, and Validations when constructing or upgrading your Perks.
 
 ---
 
-## Ability Points
+## Perk Points
 
-At Level 1 a character starts with **9** Ability Points and gains **3** more with every level after that, up to level 10. The gain is flat: there are no bonus points at milestone levels, and the same **+3** per level applies to Skill Points, so both halves of your character sheet grow at the same rate.
+At Level 1 a character starts with **9** Perk Points and gains **3** more with every level after that, up to level 10. The gain is flat: there are no bonus points at milestone levels, and the same **+3** per level applies to Skill Points, so both halves of your character sheet grow at the same rate.
 
-These points are permanently invested into your abilities during character creation or level-ups.
+These points are permanently invested into your perks during character creation or level-ups.
 
-### Upgrading Abilities
+### Upgrading Perks
 
-You do not need to create a brand new Ability every time you level up. You can spend your newly gained Ability Points to upgrade an existing Ability by adding new Perks, extending its Range, or attaching additional Enactments.
+You do not need to create a brand new Perk every time you level up. You can spend your newly gained Perk Points to upgrade an existing Perk by adding new Perks, extending its Range, or attaching additional Enactments.
 
-### Refunding Ability Points
+### Refunding Perk Points
 
-Some Perks in the Ability Builder apply drawbacks or restrictions to an Ability (such as giving it an Item Dependency or increasing its Action Cost). These Perks have a **negative Build Cost**. Taking these drawbacks refunds Ability Points, allowing you to spend them elsewhere on the same Ability to make it more powerful.
+Some Perks in the Perk Builder apply drawbacks or restrictions to an Perk (such as giving it an Item Dependency or increasing its Action Cost). These Perks have a **negative Build Cost**. Taking these drawbacks refunds Perk Points, allowing you to spend them elsewhere on the same Perk to make it more powerful.
 
 There is a floor on this, however. See the table of cost rules below.
 
@@ -2853,14 +2853,14 @@ There is a floor on this, however. See the table of cost rules below.
 
 | Rule | In effect |
 | --- | --- |
-| Build point refunds | Drawbacks refund build points, but never past zero: an ability's total build cost stops at nothing. |
-| Energy cost refunds | Drawbacks refund energy points, but never past zero: an ability's total energy cost stops at nothing. |
+| Build point refunds | Drawbacks refund build points, but never past zero: an perk's total build cost stops at nothing. |
+| Energy cost refunds | Drawbacks refund energy points, but never past zero: an perk's total energy cost stops at nothing. |
 | Skill point budget | A character may not spend more skill points than its level grants; edits and package imports that would overspend are refused. |
 | Maximum level | A character's level is capped at 10. |
 
-## Leveling Table: Ability Points
+## Leveling Table: Perk Points
 
-| Level | Points Gained | Total Ability Points |
+| Level | Points Gained | Total Perk Points |
 | --- | --- | --- |
 | **1** | 9 (starting) | 9 |
 | **2** | +3 | 12 |
@@ -2873,7 +2873,7 @@ There is a floor on this, however. See the table of cost rules below.
 | **9** | +3 | 33 |
 | **10** | +3 | 36 |
 
-# Ability Builder Configuration
+# Perk Builder Configuration
 
 ## Overview
 
@@ -2906,10 +2906,10 @@ Every cost in the ruleset is the same pair of numbers.
 
 | Key | Value | Purpose |
 | --- | --- | --- |
-| `build_cost` | whole number | Build points charged when the ability is created or upgraded. Negative values refund points. |
-| `energy_cost` | whole number | Energy charged every time the ability is used. Negative values refund energy. |
+| `build_cost` | whole number | Build points charged when the perk is created or upgraded. Negative values refund points. |
+| `energy_cost` | whole number | Energy charged every time the perk is used. Negative values refund energy. |
 
-Build points are spent once, when the ability is created or upgraded. Energy is paid every time the ability is used. Both may be negative, which turns an option into a refund: drawbacks are priced this way.
+Build points are spent once, when the perk is created or upgraded. Energy is paid every time the perk is used. Both may be negative, which turns an option into a refund: drawbacks are priced this way.
 
 Whether a refund can take a total below zero is itself configurable. See the cost and budget rules in the [Leveling](leveling.md) chapter for what the loaded ruleset does.
 
@@ -2920,7 +2920,7 @@ Numeric and repeatable fields charge per step or per row rather than a flat amou
 | Key | Value | Purpose |
 | --- | --- | --- |
 | `increase` | `Cost` block (optional) | Cost charged per step the value moves above its default. |
-| `decrease` | `Cost` block (optional) | Cost charged per step the value moves below its default. A negative cost here refunds points for weakening the ability. |
+| `decrease` | `Cost` block (optional) | Cost charged per step the value moves below its default. A negative cost here refunds points for weakening the perk. |
 
 ## Fields
 
@@ -2928,7 +2928,7 @@ A field is one choice in the builder. Fields appear under a component's `fields`
 
 | Key | Value | Purpose |
 | --- | --- | --- |
-| `key` | text | Stable submitted field name. It is persisted in saved abilities, so renaming it breaks existing data. |
+| `key` | text | Stable submitted field name. It is persisted in saved perks, so renaming it breaks existing data. |
 | `label` | text | Text shown next to the field in the builder and used as its name in the documentation. |
 | `type` | text | Which kind of input this is. See the supported field types below. |
 | `description` | text | Reader-facing explanation of the field, used as the lead sentence in the generated build guide. |
@@ -2971,7 +2971,7 @@ An inline dropdown option looks like this:
 
 | Key | Value | Purpose |
 | --- | --- | --- |
-| `value` | text | The value stored when this option is selected. Must be stable: it is persisted on saved abilities. |
+| `value` | text | The value stored when this option is selected. Must be stable: it is persisted on saved perks. |
 | `label` | text | Text shown in the dropdown. Falls back to the value when omitted. |
 | `information` | text | Help text shown as a hover tooltip on the option. |
 | `render_information` | true/false | When true, show this option's information as plain text below the dropdown once selected instead of behind a hover indicator. |
@@ -2991,30 +2991,30 @@ A dropdown backed by a multi-group skill source can lean toward one skill group,
 
 | Key | Value | Purpose |
 | --- | --- | --- |
-| `kind` | text | Which component map the selected dropdown value resolves against: enactment, interaction or ability_type. The referenced component's own fields render beneath the dropdown and add their cost. |
+| `kind` | text | Which component map the selected dropdown value resolves against: enactment, interaction or perk_type. The referenced component's own fields render beneath the dropdown and add their cost. |
 
 ## Components
 
-Ability types, enactments and interactions are all the same underlying shape. Nothing is special-cased by id in Go, so a new type can be added purely in YAML.
+Perk types, enactments and interactions are all the same underlying shape. Nothing is special-cased by id in Go, so a new type can be added purely in YAML.
 
 | Key | Value | Purpose |
 | --- | --- | --- |
-| `name` | text | Display name, used by ability types. |
+| `name` | text | Display name, used by perk types. |
 | `type` | text | Display name, used by enactments and interactions. |
 | `description` | text | Reader-facing explanation of what the component does. |
 | `information` | text | Help text shown as a hover tooltip next to the component. |
 | `render_information` | true/false | When true, show the information as plain text under the component header instead of behind a hover indicator. |
-| `base_cost` | `Cost` block | Flat cost of including this component. The first enactment of an ability has its base cost waived. |
-| `base_energy` | whole number | Starting energy cost of an ability of this type. |
-| `base_action` | whole number | Starting action cost of an ability of this type. |
+| `base_cost` | `Cost` block | Flat cost of including this component. The first enactment of an perk has its base cost waived. |
+| `base_energy` | whole number | Starting energy cost of an perk of this type. |
+| `base_action` | whole number | Starting action cost of an perk of this type. |
 | `base_range` | whole number | Starting range in metres. |
 | `base_uses` | whole number | Starting number of uses. |
 | `base_duration` | whole number | Starting duration in rounds. |
 | `base_reverse_duration` | whole number | Starting number of rounds a phase takes to reverse itself. |
 | `base_health` | whole number | Starting health, used by summoned minions. |
 | `base_lifetime` | whole number | Starting lifetime in rounds, used by summoned minions. |
-| `base_upkeep_action` | whole number | Actions required each round to sustain the ability. |
-| `base_upkeep_energy` | whole number | Energy required each round to sustain the ability. |
+| `base_upkeep_action` | whole number | Actions required each round to sustain the perk. |
+| `base_upkeep_energy` | whole number | Energy required each round to sustain the perk. |
 | `default_range` | whole number | Default range of an interaction, in metres. |
 | `default_targets` | whole number | Default number of targets an interaction affects. |
 | `default_radius` | whole number | Default radius of an area interaction, in metres. |
@@ -3023,7 +3023,7 @@ Ability types, enactments and interactions are all the same underlying shape. No
 | `blocked_interactions` | list of text | When set (and no allowed list is given), every interaction except these is offered. |
 | `allowed_validations` | list of text | When set, only these validation fields are shown for this enactment. |
 | `blocked_validations` | list of text | When set (and no allowed list is given), every validation field except these is shown. |
-| `allowed_enactments` | list of text | When set, only these enactments are offered for this ability type, in the order listed. |
+| `allowed_enactments` | list of text | When set, only these enactments are offered for this perk type, in the order listed. |
 | `blocked_enactments` | list of text | When set (and no allowed list is given), every enactment except these is offered. |
 | `fields` | list of `Field` block | The choices this component offers, driving both the builder form and the cost engine. |
 
@@ -3061,7 +3061,7 @@ These are the grouped sources, which concatenate several member sources and rend
 | `skills_general_defense` | General (`skills.general`), Defense (`skills.defense`) |
 | `skills_generic_offense` | Generic (`roll_generic`), Defense (`skills.offense`) |
 
-Two further source forms are resolved dynamically rather than being declared: a dotted `skills.<category>` reference expands to that skill category, and `ability_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
+Two further source forms are resolved dynamically rather than being declared: a dotted `skills.<category>` reference expands to that skill category, and `perk_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
 
 ## Proficiencies and leveling
 
@@ -3081,7 +3081,7 @@ Point budgets are computed from a formula rather than a hand-written table, whic
 | --- | --- | --- |
 | `max_level` | whole number | Highest level a character may reach. Levels are clamped to this value on every edit and on import. |
 | `skill_points` | `LevelTable` block | Budget progression for the skill point pool. |
-| `ability_points` | `LevelTable` block | Budget progression for the ability (perk) point pool. |
+| `perk_points` | `LevelTable` block | Budget progression for the perk (perk) point pool. |
 | `invoke_points` | `InvokeTable` block | Pool progression for the per-session invoke point currency. |
 
 | Key | Value | Purpose |
@@ -3096,7 +3096,7 @@ Conditions are a single unified list. An entry is *shiftable* when it declares a
 
 | Key | Value | Purpose |
 | --- | --- | --- |
-| `id` | text | Stable identifier, referenced by saved abilities and generated instructions. |
+| `id` | text | Stable identifier, referenced by saved perks and generated instructions. |
 | `name` | text | Display name of the condition. |
 | `description` | text | What the condition does, shown in the rulebook and as a hover tooltip. |
 | `build_cost` | whole number | Build points charged for a fixed condition. |
@@ -3113,9 +3113,9 @@ Cost calculation is server-authoritative. The browser mirrors it for live feedba
 The rules are:
 
 *   Enactments and interactions start from their `base_cost`.
-*   The **first** enactment of an ability has its `base_cost` waived, so adding it costs nothing by itself. Its field-driven costs still apply normally.
+*   The **first** enactment of an perk has its `base_cost` waived, so adding it costs nothing by itself. Its field-driven costs still apply normally.
 *   Each enactment beyond the first pays its full `base_cost` plus the additional-enactment surcharge. See [Enactments](enactments.md) for the surcharge and the separate-target option.
-*   Ability types start from `base_energy` and `base_action`.
+*   Perk types start from `base_energy` and `base_action`.
 *   A `checkbox` charges its cost only while checked.
 *   A `dropdown` charges its field `cost` when a non-empty value is selected, plus the selected option's own cost, plus any group offset for the selected skill's group.
 *   A `free_number` charges `per_step.increase` or `per_step.decrease` per step away from its `default`, with `rounding` deciding how a partial step is treated.
@@ -3135,7 +3135,7 @@ Safe workflows:
 2.  Add an option to an existing field by appending to its `options` list.
 3.  Add a field to an existing component by appending a valid field definition under `fields`.
 4.  Add a condition to `conditions.yaml` and reference it from a `conditions` field.
-5.  Add a new ability type, enactment or interaction by adding its config entry and updating the relevant `allowed_*` or `blocked_*` lists.
+5.  Add a new perk type, enactment or interaction by adding its config entry and updating the relevant `allowed_*` or `blocked_*` lists.
 
 After editing, validate with:
 
@@ -3156,6 +3156,6 @@ go run ./cmd/gendocs
 
 ## Known boundaries
 
-*   Field keys are persisted in saved abilities, so renaming a key breaks compatibility with existing data.
-*   Saved abilities may not migrate cleanly when config keys change shape.
-*   The allowed/blocked lists filter what the builder offers; they are not enforced when an ability is saved, so an imported ability may hold a combination the builder would not have offered.
+*   Field keys are persisted in saved perks, so renaming a key breaks compatibility with existing data.
+*   Saved perks may not migrate cleanly when config keys change shape.
+*   The allowed/blocked lists filter what the builder offers; they are not enforced when an perk is saved, so an imported perk may hold a combination the builder would not have offered.

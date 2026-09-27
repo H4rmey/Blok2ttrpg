@@ -27,7 +27,7 @@
   <input type="text" name="{{ $name }}" value="{{ fvalStr $values $f.Key (str $f.Default) }}">
   {{ else if eq $f.Type "free_number" }}
   {{ $numsel := fvalStr $values $f.Key (str $f.Default) }}
-  {{/* numberRange covers min..max, but a stored ability (or a config default)
+  {{/* numberRange covers min..max, but a stored perk (or a config default)
        may sit outside that range. Such a value is offered as an extra option so
        the dropdown never silently substitutes a different number, which would
        change the perk's cost just by opening it. */}}

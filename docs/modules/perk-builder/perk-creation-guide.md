@@ -1,10 +1,10 @@
-# Ability Creation Guide
+# Perk Creation Guide
 
-## Ability Creation Guide
+## Perk Creation Guide
 
-So you've read the docs and now you're staring at the Ability Builder thinking:
+So you've read the docs and now you're staring at the Perk Builder thinking:
 
-> "Cool, but how do I actually make a good ability?"
+> "Cool, but how do I actually make a good perk?"
 
 Yeah, that's fair.
 
@@ -15,15 +15,15 @@ What matters is:
 - What happens? (**Enactments**)
 - Who does it happen to? (**Interactions**)
 - How do we determine success? (**Validations**)
-- When does it happen? (**Ability Type**)
+- When does it happen? (**Perk Type**)
 
 Everything else is flavor.
 
-A sword slash and a laser beam can easily be the exact same Ability mechanically.
+A sword slash and a laser beam can easily be the exact same Perk mechanically.
 
 ---
 
-### Step 1 - Pick an Ability Type
+### Step 1 - Pick an Perk Type
 
 Most people should start with **Execution**.
 
@@ -40,9 +40,9 @@ Examples:
 - Dash Attack
 - Throw Rock
 
-Only use the other Ability Types when you specifically want special timing or behavior.
+Only use the other Perk Types when you specifically want special timing or behavior.
 
-| Ability Type | What It Really Means |
+| Perk Type | What It Really Means |
 |-------------|----------------------|
 | Execution | Do thing now |
 | Reaction | Do thing when something happens |
@@ -60,7 +60,7 @@ This is the actual effect.
 
 Ask yourself:
 
-> What should my ability do?
+> What should my perk do?
 
 Usually the answer is one of these:
 
@@ -76,7 +76,7 @@ Usually the answer is one of these:
 
 Think of Enactments as LEGO blocks.
 
-Most abilities are simply multiple Enactments chained together.
+Most perks are simply multiple Enactments chained together.
 
 **Example - Acid Splash**
 
@@ -122,7 +122,7 @@ Simple.
 
 This is where the fun starts.
 
-Most iconic abilities are just multiple Enactments chained together.
+Most iconic perks are just multiple Enactments chained together.
 
 **Ice Lance**
 
@@ -464,7 +464,7 @@ Reaction
 
 ### Step 4 - Choose Timing
 
-The effect itself does **not** determine the Ability Type.
+The effect itself does **not** determine the Perk Type.
 
 The timing does.
 
@@ -607,7 +607,7 @@ Reaction
 
 ---
 
-### Example For Every Ability Type
+### Example For Every Perk Type
 
 **Execution**
 
@@ -730,7 +730,7 @@ This combines:
 - ✅ Persistent Effect
 - ✅ Concentration
 
-All in a single ability.
+All in a single perk.
 
 ---
 

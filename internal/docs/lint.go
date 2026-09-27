@@ -4,7 +4,7 @@
 // config. When the config shape drifts away from what a template expects, Go's
 // text/template fails silently: a range over a missing or empty slice renders
 // nothing at all, so a table keeps its header and separator but loses every
-// body row. Nothing in the pipeline used to notice, which is how the ability
+// body row. Nothing in the pipeline used to notice, which is how the perk
 // point leveling table shipped empty.
 //
 // Lint therefore inspects the rendered markdown and reports the shapes that

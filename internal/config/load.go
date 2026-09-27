@@ -171,7 +171,7 @@ func merge(base, in *Config) {
 
 	mergeTraitMap(&base.Traits, in.Traits)
 	mergeSkillMap(&base.Skills, in.Skills)
-	mergeComponentMap(&base.AbilityTypes, in.AbilityTypes)
+	mergeComponentMap(&base.PerkTypes, in.PerkTypes)
 	mergeComponentMap(&base.Enactments, in.Enactments)
 	mergeComponentMap(&base.Interactions, in.Interactions)
 
@@ -208,7 +208,7 @@ func levelingConfigured(l Leveling) bool {
 	if l.MaxLevel != 0 {
 		return true
 	}
-	for _, t := range []LevelTable{l.SkillPoints, l.AbilityPoints} {
+	for _, t := range []LevelTable{l.SkillPoints, l.PerkPoints} {
 		if t.Start != 0 || t.PerLevel != 0 || len(t.Levels) > 0 {
 			return true
 		}
