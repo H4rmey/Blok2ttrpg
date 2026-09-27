@@ -31,6 +31,43 @@ func funcMap() template.FuncMap {
 			}
 			return c.Skills[model.SkillKey(group, skill)]
 		},
+		// skillProfLabel renders a character's stored proficiency for a skill
+		// as a readable label including its die or vital value, e.g.
+		// "Trained (d8)". Printed sheets need the die, not the raw tier id.
+		// Falls back to the raw stored id when the tier cannot be resolved.
+		"skillProfLabel": func(cfg *config.Config, c model.Character, group, skill string) string {
+			if c.Skills == nil {
+				return ""
+			}
+			id := c.Skills[model.SkillKey(group, skill)]
+			if id == "" || cfg == nil {
+				return id
+			}
+			p, ok := cfg.Proficiency(id)
+			if !ok {
+				return id
+			}
+			return profSkillLabelStr(cfg, p, group, skill)
+		},
+		// proficiencies exposes the ordered proficiency ladder so printable
+		// templates can render one tick box per tier.
+		"proficiencies": func(cfg *config.Config) []config.Proficiency {
+			if cfg == nil {
+				return nil
+			}
+			return cfg.Proficiencies
+		},
+		// componentName resolves a component id to its display name, falling
+		// back to the id so nothing renders blank on a printed sheet.
+		"componentName": func(cfg *config.Config, kind, id string) string {
+			if cfg == nil || id == "" {
+				return id
+			}
+			if comp, ok := cfg.ComponentByKind(kind, id); ok && comp.Name != "" {
+				return comp.Name
+			}
+			return id
+		},
 		"resolveOptions": func(cfg *config.Config, f config.Field) []config.Option {
 			return cfg.ResolveOptions(f)
 		},
@@ -123,6 +160,9 @@ func funcMap() template.FuncMap {
 		// "(-2 pt, +1 E)". Zero components are omitted; an all-zero cost yields
 		// an empty string so nothing is shown.
 		"costHint": func(c *config.Cost) string { return costHintStr(c) },
+		// costHintVal is costHint for a Cost held by value (e.g. a component's
+		// BaseCost), which a template cannot take the address of.
+		"costHintVal": func(c config.Cost) string { return costHintStr(&c) },
 		// newTargetHint formats the configured cost of giving an enactment its
 		// own target, for the builder checkbox label.
 		"newTargetHint": func(cfg *config.Config) string {
@@ -168,21 +208,7 @@ func funcMap() template.FuncMap {
 		// The configured vital group id (cfg.VitalGroup) selects which skill
 		// group is treated as vitals.
 		"profSkillLabel": func(cfg *config.Config, p config.Proficiency, groupID, skill string) string {
-			vitalGroup := "vital"
-			if cfg != nil && cfg.VitalGroup != "" {
-				vitalGroup = cfg.VitalGroup
-			}
-			if groupID == vitalGroup {
-				key := strings.ToLower(skill)
-				if v, ok := p.Vitals[key]; ok {
-					return fmt.Sprintf("%s (%v)", p.Name, v)
-				}
-				return p.Name
-			}
-			if d := p.DieFor(groupID); d != "" {
-				return fmt.Sprintf("%s (%s)", p.Name, d)
-			}
-			return p.Name
+			return profSkillLabelStr(cfg, p, groupID, skill)
 		},
 
 		// dict builds a map from alternating key/value pairs, for passing
@@ -276,6 +302,28 @@ func funcMap() template.FuncMap {
 			return resolveRows(f, values)
 		},
 	}
+}
+
+// profSkillLabelStr renders a proficiency tier for a specific skill. Vital
+// skills show their numeric vital value (keyed by the lowercased skill name);
+// every other group shows the die the tier grants. Shared by the
+// profSkillLabel and skillProfLabel template helpers.
+func profSkillLabelStr(cfg *config.Config, p config.Proficiency, groupID, skill string) string {
+	vitalGroup := "vital"
+	if cfg != nil && cfg.VitalGroup != "" {
+		vitalGroup = cfg.VitalGroup
+	}
+	if groupID == vitalGroup {
+		key := strings.ToLower(skill)
+		if v, ok := p.Vitals[key]; ok {
+			return fmt.Sprintf("%s (%v)", p.Name, v)
+		}
+		return p.Name
+	}
+	if d := p.DieFor(groupID); d != "" {
+		return fmt.Sprintf("%s (%s)", p.Name, d)
+	}
+	return p.Name
 }
 
 // mapGet safely reads a key from a values map, returning nil when absent.

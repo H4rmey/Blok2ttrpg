@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/docs"
+	"github.com/harmey/blok2ttrpg-v5/internal/engine"
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
 
@@ -44,12 +45,30 @@ func (a *App) handleDocsMarkdown(w http.ResponseWriter, r *http.Request) {
 // renderCharacterPDF renders a print-friendly character sheet page which the
 // browser can save as PDF via window.print(). This keeps the app dependency
 // free (no Node/puppeteer).
+//
+// The envelope carries everything the on-screen sheet shows, not just the raw
+// character: the derived budgets and vitals, and every perk paired with its
+// computed cost and generated instruction text. A printed sheet is read away
+// from the app, so it has to stand on its own.
 func (a *App) renderCharacterPDF(w http.ResponseWriter, c model.Character) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	perks := make([]perkSummary, 0, len(c.Perks))
+	for _, ab := range c.Perks {
+		perks = append(perks, perkSummary{
+			Perk:         ab,
+			Cost:         engine.PerkCost(a.Cfg.Config, ab),
+			Instructions: engine.PerkInstructions(a.Cfg.Config, ab),
+		})
+	}
 	data := pageData{
 		Cfg:       a.Cfg.Config,
 		Title:     c.Name(),
 		Character: &c,
+		charStats: a.characterStats(&c),
+		Perks:     perks,
+		// The printed sheet has no form for inputs to bind to, so every figure
+		// renders as plain text.
+		ReadOnlyStats: true,
 	}
 	if err := a.Tmpl.ExecuteTemplate(w, "character_pdf.html", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

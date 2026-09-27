@@ -1,0 +1,245 @@
+/* Print stylesheet for the character sheet PDF and the two blank,
+   fill-in-by-hand templates. It is loaded only by those pages and is
+   deliberately self-contained: it sets explicit black-on-white colors rather
+   than inheriting the app's theme variables, because a themed dark background
+   either wastes ink or is dropped by the browser's print path, leaving
+   unreadable light text on white paper. */
+
+.print-page {
+  background: #fff;
+  color: #000;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.print-toolbar {
+  padding: 1rem 1.25rem;
+}
+
+.print-sheet {
+  max-width: 190mm;
+  margin: 0 auto;
+  padding: 8mm;
+}
+
+.print-head {
+  border-bottom: 2px solid #000;
+  margin-bottom: 4mm;
+  padding-bottom: 2mm;
+}
+
+.print-head h1 {
+  font-size: 20pt;
+  margin: 0;
+}
+
+.print-sub {
+  margin: 1mm 0 0;
+  font-size: 9.5pt;
+}
+
+.print-muted {
+  color: #555;
+  font-size: 9pt;
+}
+
+/* Sections are boxed so the printed page reads as distinct blocks, and are
+   kept off page breaks where possible. */
+.print-section {
+  border: 1px solid #000;
+  border-radius: 2mm;
+  padding: 3mm 3.5mm;
+  margin-bottom: 4mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.print-section > h2 {
+  font-size: 12pt;
+  margin: 0 0 2.5mm;
+  border-bottom: 1px solid #999;
+  padding-bottom: 1mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Derived totals: a row of small boxed figures. */
+.print-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5mm;
+}
+
+.print-stat {
+  border: 1px solid #000;
+  border-radius: 1.5mm;
+  padding: 1.5mm 3mm;
+  min-width: 24mm;
+  text-align: center;
+}
+
+.print-stat-label {
+  display: block;
+  font-size: 7.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.print-stat-value {
+  display: block;
+  font-size: 13pt;
+  font-weight: 700;
+}
+
+/* Two-column key/value list, so trait and instruction blocks stay compact. */
+.print-kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.8mm 4mm;
+  margin: 0;
+}
+
+.print-kv dt {
+  font-weight: 700;
+}
+
+.print-kv dd {
+  margin: 0;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.print-table th,
+.print-table td {
+  border-bottom: 1px solid #bbb;
+  padding: 1.2mm 2mm;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 400;
+}
+
+.print-table th[scope="row"] {
+  font-weight: 700;
+  width: 38%;
+}
+
+.print-table thead th {
+  border-bottom: 1px solid #000;
+  font-size: 8pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.print-list {
+  margin: 0;
+  padding-left: 5mm;
+}
+
+.print-perk {
+  border: 1px solid #666;
+  border-radius: 1.5mm;
+  padding: 2.5mm 3mm;
+  margin-bottom: 3mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.print-perk h3 {
+  font-size: 11pt;
+  margin: 0;
+}
+
+.print-perk-meta {
+  margin: 0.8mm 0 1.5mm;
+  font-size: 9pt;
+  color: #333;
+}
+
+.print-instruction {
+  border-left: 2px solid #999;
+  padding-left: 2.5mm;
+  margin-top: 1.5mm;
+}
+
+.print-instruction h4 {
+  font-size: 9.5pt;
+  margin: 0 0 0.8mm;
+}
+
+/* Blank templates: ruled write-in lines and proficiency tick boxes. */
+.print-line {
+  display: block;
+  border-bottom: 1px solid #000;
+  height: 5mm;
+}
+
+.print-line-row {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: end;
+  gap: 1mm 3mm;
+  margin-bottom: 2mm;
+}
+
+.print-line-row > span:first-child {
+  font-weight: 700;
+}
+
+.print-box {
+  display: inline-block;
+  width: 3.2mm;
+  height: 3.2mm;
+  border: 1px solid #000;
+  margin-right: 1mm;
+  vertical-align: -0.4mm;
+}
+
+/* One tick box per proficiency tier, labelled with the die that tier grants. */
+.print-ticks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1mm 3mm;
+}
+
+.print-tick {
+  font-size: 8.5pt;
+  white-space: nowrap;
+}
+
+.print-note {
+  font-size: 8.5pt;
+  color: #444;
+  margin: 0 0 2mm;
+}
+
+@media print {
+  /* Chrome from the app shell never belongs on paper. */
+  .no-print,
+  .topbar,
+  .breadcrumbs {
+    display: none !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  .print-sheet {
+    max-width: none;
+    padding: 0;
+  }
+
+  /* Keep the borders and tick boxes: browsers strip backgrounds and borders
+     from printed output unless asked not to. */
+  .print-page {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

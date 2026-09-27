@@ -22,6 +22,11 @@
     
     {{ end }}{{ end }}
     <nav>
+      {{/* The two printable templates are config-driven and take no character,
+           so they belong in the banner rather than on a single page: a blank
+           sheet or perk worksheet may be wanted from anywhere in the app. */}}
+      <a href="/print/character" target="_blank" rel="noopener">Character PDF</a>
+      <a href="/print/perk" target="_blank" rel="noopener">Perk Template PDF</a>
       <a href="/docs">Docs</a>
       <button id="theme-toggle" type="button" title="Toggle theme">&#9788;</button>
     </nav>

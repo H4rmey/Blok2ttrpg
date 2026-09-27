@@ -1,0 +1,129 @@
+{{/* Blank, printable perk-builder worksheet. It mirrors the on-screen builder
+     structure straight from the config: the perk types, the enactments and
+     interactions available, and the validation fields. Choices are tick boxes
+     with their cost hint next to them, and field values are write-in lines, so
+     a perk can be drafted in pencil at the table and typed into the builder
+     afterwards without losing any of the pricing information. */}}
+{{ define "perk_template.html" }}
+{{ $cfg := .Cfg }}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Title }}</title>
+  <link rel="stylesheet" href="/static/css/app.css?v=9">
+  <link rel="stylesheet" href="/static/css/print.css?v=1">
+</head>
+<body class="print-page">
+  <div class="print-toolbar no-print">
+    <button type="button" class="btn primary" onclick="window.print()">Print / Save PDF</button>
+    <a class="btn" href="/">Back</a>
+  </div>
+
+  <main class="print-sheet">
+    <header class="print-head">
+      <h1>Perk Builder Template</h1>
+      <p class="print-sub">{{ $cfg.Title }} &middot; fill in by hand</p>
+    </header>
+
+    <section class="print-section">
+      <h2>Perk Details</h2>
+      <div class="print-line-row">
+        <span>Name</span><span class="print-line"></span>
+        <span>Description</span><span class="print-line"></span>
+      </div>
+      <span class="print-line"></span>
+    </section>
+
+    {{/* Every perk type with its base cost, so the total can be worked out on
+         paper the same way the builder does it on screen. */}}
+    <section class="print-section">
+      <h2>Perk Type</h2>
+      <p class="print-note">Tick one.</p>
+      <table class="print-table">
+        <tbody>
+          {{ range perkTypes $cfg }}
+          <tr>
+            <th scope="row"><span class="print-box"></span>{{ .Name }}</th>
+            <td>{{ costHintVal .BaseCost }}{{ if .Description }} {{ .Description }}{{ end }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="print-section">
+      <h2>Enactments Available</h2>
+      <p class="print-note">Reference list: tick the enactment used in each block below.</p>
+      <table class="print-table">
+        <tbody>
+          {{ range enactments $cfg }}
+          <tr>
+            <th scope="row">{{ .Name }}</th>
+            <td>{{ if .Description }}{{ .Description }}{{ end }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="print-section">
+      <h2>Interactions Available</h2>
+      <table class="print-table">
+        <tbody>
+          {{ range interactions $cfg }}
+          <tr>
+            <th scope="row">{{ .Name }}</th>
+            <td>{{ if .Description }}{{ .Description }}{{ end }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </section>
+
+    {{/* One block per enactment the perk will have. Each repeats the same
+         choices, because every enactment is priced independently. The count
+         comes from ?rows=. */}}
+    {{ range .Rows }}
+    {{ $index := . }}
+    <section class="print-perk">
+      <h3>Enactment {{ $index }}{{ if gt $index 1 }} <span class="print-muted">(additional enactment surcharge applies)</span>{{ end }}</h3>
+
+      <div class="print-line-row">
+        <span>Enactment</span><span class="print-line"></span>
+        <span>Interaction</span><span class="print-line"></span>
+      </div>
+
+      {{ if gt $index 1 }}
+      <p class="print-note"><span class="print-box"></span>New target {{ newTargetHint $cfg }} - leave unticked to reuse the previous enactment's target.</p>
+      {{ end }}
+
+      <h4>Fields</h4>
+      <span class="print-line"></span>
+      <span class="print-line"></span>
+      <span class="print-line"></span>
+
+      {{ if validationFields $cfg }}
+      <h4>Validation</h4>
+      <div class="print-line-row">
+        {{ range validationFields $cfg }}
+        <span>{{ .Label }}</span><span class="print-line"></span>
+        {{ end }}
+      </div>
+      {{ end }}
+    </section>
+    {{ end }}
+
+    <section class="print-section">
+      <h2>Cost Tally</h2>
+      <div class="print-line-row">
+        <span>Build points</span><span class="print-line"></span>
+        <span>Energy</span><span class="print-line"></span>
+        <span>Actions</span><span class="print-line"></span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+{{ end }}

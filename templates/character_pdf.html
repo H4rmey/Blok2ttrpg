@@ -1,26 +1,60 @@
+{{/* Print view of a saved character. It repeats everything the on-screen sheet
+     shows, because a printed sheet is read away from the app: derived point
+     totals and vitals, every trait, every skill with the die its proficiency
+     grants, installed packages, and each perk with its cost and generated
+     rules text. */}}
 {{ define "character_pdf.html" }}
 {{ $c := .Character }}
+{{ $cfg := .Cfg }}
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Title }}</title>
-  <link rel="stylesheet" href="/static/css/app.css">
+  <link rel="stylesheet" href="/static/css/app.css?v=9">
+  <link rel="stylesheet" href="/static/css/print.css?v=1">
 </head>
-<body class="pdf">
-  <div class="pdf-toolbar no-print">
+<body class="print-page">
+  <div class="print-toolbar no-print">
     <button type="button" class="btn primary" onclick="window.print()">Print / Save PDF</button>
   </div>
 
-  <main class="content sheet">
-    <h1>{{ $c.Name }}</h1>
-    <p class="muted">Level {{ $c.Level }}</p>
+  <main class="print-sheet">
+    <header class="print-head">
+      <h1>{{ $c.Name }}</h1>
+      <p class="print-sub">Level {{ $c.Level }} &middot; {{ $cfg.Title }}</p>
+    </header>
 
-    {{ range traits .Cfg }}
-    <section>
+    {{/* Derived figures first: the numbers looked up most often during play. */}}
+    <section class="print-section">
+      <h2>Totals</h2>
+      <div class="print-stat-row">
+        <div class="print-stat">
+          <span class="print-stat-label">Perk Points</span>
+          <span class="print-stat-value">{{ sub .PerkBudget .PerkUsed }}/{{ .PerkBudget }}</span>
+        </div>
+        <div class="print-stat">
+          <span class="print-stat-label">Skill Points</span>
+          <span class="print-stat-value">{{ sub .SkillBudget .SkillUsed }}/{{ .SkillBudget }}</span>
+        </div>
+        <div class="print-stat">
+          <span class="print-stat-label">Invoke Points</span>
+          <span class="print-stat-value">{{ .InvokeCurrent }}/{{ .InvokeBudget }}</span>
+        </div>
+        {{ range .Vitals }}
+        <div class="print-stat">
+          <span class="print-stat-label">{{ .Skill }}</span>
+          <span class="print-stat-value">{{ if .Editable }}{{ .Current }}/{{ .Max }}{{ else }}{{ .Max }}{{ end }}</span>
+        </div>
+        {{ end }}
+      </div>
+    </section>
+
+    {{ range traits $cfg }}
+    <section class="print-section">
       <h2>{{ .Label }}</h2>
-      <dl class="kv">
+      <dl class="print-kv">
         {{ range .Fields }}
         <dt>{{ .Label }}</dt>
         <dd>{{ attrStr $c .Key }}</dd>
@@ -29,34 +63,65 @@
     </section>
     {{ end }}
 
-    {{ range skillGroups .Cfg }}
+    {{/* Skills print with the die their tier grants (e.g. "Trained (d8)"), not
+         the raw tier id, so the sheet can be rolled from directly. */}}
+    {{ range skillGroups $cfg }}
     {{ $g := . }}
-    <section>
+    <section class="print-section">
       <h2>{{ .Label }}</h2>
-      <dl class="kv">
-        {{ range .Skills }}
-        <dt>{{ . }}</dt>
-        <dd>{{ skillProf $c $g.ID . }}</dd>
-        {{ end }}
-      </dl>
+      <table class="print-table">
+        <tbody>
+          {{ range .Skills }}
+          <tr>
+            <th scope="row">{{ . }}</th>
+            <td>{{ skillProfLabel $cfg $c $g.ID . }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
     </section>
     {{ end }}
 
-    {{ if $c.Perks }}
-    <section>
-      <h2>Perks</h2>
-      {{ range $c.Perks }}
-      <div class="perk-card">
-        <h3>{{ .Name }} <span class="muted">({{ .Type }})</span></h3>
-        {{ if .Description }}<p>{{ .Description }}</p>{{ end }}
-        {{ if .Enactments }}
-        <ul>
-          {{ range .Enactments }}
-          <li>{{ .Type }}{{ if .Interaction }} &middot; {{ .Interaction }}{{ end }}</li>
-          {{ end }}
-        </ul>
+    {{ if $c.Packages }}
+    <section class="print-section">
+      <h2>Packages</h2>
+      <ul class="print-list">
+        {{ range $c.Packages }}
+        <li>{{ .Name }}{{ if and .Toggleable (not .Enabled) }} <span class="print-muted">(disabled)</span>{{ end }}</li>
         {{ end }}
-      </div>
+      </ul>
+    </section>
+    {{ end }}
+
+    {{ if .Perks }}
+    <section class="print-section">
+      <h2>Perks</h2>
+      {{ range .Perks }}
+      {{ $ab := .Perk }}
+      <article class="print-perk">
+        <h3>{{ $ab.Name }}</h3>
+        <p class="print-perk-meta">
+          {{ componentName $cfg "perk_type" $ab.Type }}
+          &middot; {{ .Cost.Build }} pt
+          {{ if .Cost.Energy }}&middot; {{ .Cost.Energy }} E{{ end }}
+          {{ if .Cost.Action }}&middot; {{ .Cost.Action }} action(s){{ end }}
+        </p>
+        {{ if $ab.Description }}<p>{{ $ab.Description }}</p>{{ end }}
+        {{/* The generated rules text is the play-facing description; without it
+             a printed perk says what it is but not what it does. */}}
+        {{ range .Instructions }}
+        <div class="print-instruction">
+          <h4>{{ .Index }}. {{ .Title }}</h4>
+          <dl class="print-kv">
+            {{ if .Interaction }}<dt>Interaction</dt><dd>{{ .Interaction }}</dd>{{ end }}
+            {{ if .Validation }}<dt>Validation</dt><dd>{{ .Validation }}</dd>{{ end }}
+            {{ if .Success }}<dt>On success</dt><dd>{{ .Success }}</dd>{{ end }}
+            {{ if .Solution }}<dt>Solution</dt><dd>{{ .Solution }}</dd>{{ end }}
+          </dl>
+          {{ if .Note }}<p class="print-muted">{{ .Note }}</p>{{ end }}
+        </div>
+        {{ end }}
+      </article>
       {{ end }}
     </section>
     {{ end }}

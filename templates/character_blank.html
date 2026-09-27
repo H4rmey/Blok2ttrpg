@@ -1,0 +1,112 @@
+{{/* Blank, printable character sheet. Nothing here comes from a stored
+     character: the config's trait groups, skill groups and proficiency ladder
+     drive the whole page, so the printed sheet always matches the ruleset the
+     app is running. Every skill row offers one tick box per proficiency tier,
+     labelled with the die (or vital value) that tier grants for that group, so
+     the sheet can be filled in with a pencil and no rulebook. */}}
+{{ define "character_blank.html" }}
+{{ $cfg := .Cfg }}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Title }}</title>
+  <link rel="stylesheet" href="/static/css/app.css?v=9">
+  <link rel="stylesheet" href="/static/css/print.css?v=1">
+</head>
+<body class="print-page">
+  <div class="print-toolbar no-print">
+    <button type="button" class="btn primary" onclick="window.print()">Print / Save PDF</button>
+    <a class="btn" href="/">Back</a>
+  </div>
+
+  <main class="print-sheet">
+    <header class="print-head">
+      <h1>Character Sheet</h1>
+      <p class="print-sub">{{ $cfg.Title }} &middot; fill in by hand</p>
+    </header>
+
+    <section class="print-section">
+      <h2>Character</h2>
+      <div class="print-line-row">
+        <span>Name</span><span class="print-line"></span>
+        <span>Level</span><span class="print-line"></span>
+      </div>
+    </section>
+
+    {{/* Point pools and vitals are left blank: the player computes them from
+         their level using the leveling tables in the rulebook. */}}
+    <section class="print-section">
+      <h2>Totals</h2>
+      <div class="print-line-row">
+        <span>Perk Points (used / total)</span><span class="print-line"></span>
+        <span>Skill Points (used / total)</span><span class="print-line"></span>
+        <span>Invoke Points (current / max)</span><span class="print-line"></span>
+      </div>
+    </section>
+
+    {{ range traits $cfg }}
+    <section class="print-section">
+      <h2>{{ .Label }}</h2>
+      <div class="print-line-row">
+        {{ range .Fields }}
+        <span>{{ .Label }}</span><span class="print-line"></span>
+        {{ end }}
+      </div>
+    </section>
+    {{ end }}
+
+    {{ range skillGroups $cfg }}
+    {{ $g := . }}
+    <section class="print-section">
+      <h2>{{ .Label }}</h2>
+      <p class="print-note">Tick one tier per skill. The value in brackets is what that tier grants.</p>
+      <table class="print-table">
+        <tbody>
+          {{ range $skill := .Skills }}
+          <tr>
+            <th scope="row">{{ $skill }}</th>
+            <td>
+              <span class="print-ticks">
+                {{ range proficiencies $cfg }}
+                <span class="print-tick"><span class="print-box"></span>{{ profSkillLabel $cfg . $g.ID $skill }}</span>
+                {{ end }}
+              </span>
+            </td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </section>
+    {{ end }}
+
+    <section class="print-section">
+      <h2>Packages</h2>
+      <div class="print-line-row">
+        <span>1</span><span class="print-line"></span>
+        <span>2</span><span class="print-line"></span>
+        <span>3</span><span class="print-line"></span>
+        <span>4</span><span class="print-line"></span>
+      </div>
+    </section>
+
+    {{/* One blank card per perk slot. The count comes from ?rows= so a player
+         can print as much space as their character needs. */}}
+    {{ range .Rows }}
+    <section class="print-perk">
+      <h3>Perk {{ . }}</h3>
+      <div class="print-line-row">
+        <span>Name</span><span class="print-line"></span>
+        <span>Type</span><span class="print-line"></span>
+        <span>Cost (pt / E / actions)</span><span class="print-line"></span>
+      </div>
+      <span class="print-line"></span>
+      <span class="print-line"></span>
+      <span class="print-line"></span>
+    </section>
+    {{ end }}
+  </main>
+</body>
+</html>
+{{ end }}

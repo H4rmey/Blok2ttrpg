@@ -40,6 +40,11 @@ func (a *App) Router() http.Handler {
 	mux.HandleFunc("/characters/new", a.handleNewCharacter)
 	mux.HandleFunc("/characters/create", a.handleCreateCharacter)
 	mux.HandleFunc("/characters/import", a.handleImportCharacter)
+	// Printable, fill-in-by-hand templates. They take no character and no perk:
+	// the config alone drives what appears on them, so they are reachable from
+	// the top bar on every page.
+	mux.HandleFunc("/print/character", a.handleBlankCharacterSheet)
+	mux.HandleFunc("/print/perk", a.handlePerkTemplate)
 
 	// /characters/{id}/...  dispatched in handleCharacter.
 	mux.HandleFunc("/characters/", a.handleCharacter)
