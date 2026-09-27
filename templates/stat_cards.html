@@ -1,6 +1,6 @@
 {{ define "stat_cards" }}
 {{ $abilityRemaining := sub .AbilityBudget .AbilityUsed }}
-{{ $traitRemaining := sub .TraitBudget .TraitUsed }}
+{{ $skillRemaining := sub .SkillBudget .SkillUsed }}
 <div class="cost-card">
   <span class="cost-card-label">Perk Points</span>
 
@@ -10,8 +10,8 @@
 </div>
 <div class="cost-card">
   <span class="cost-card-label">Skill Points</span>
-  <span class="cost-card-value {{ if lt $traitRemaining 0 }}over{{ else }}ok{{ end }}">
-    {{ $traitRemaining }}/{{ .TraitBudget }}
+  <span class="cost-card-value {{ if lt $skillRemaining 0 }}over{{ else }}ok{{ end }}">
+    {{ $skillRemaining }}/{{ .SkillBudget }}
   </span>
 </div>
 <div class="cost-card">
@@ -20,7 +20,7 @@
 </div>
 {{ range .Vitals }}
 <div class="cost-card vital-card">
-  <span class="cost-card-label">{{ .Trait }}</span>
+  <span class="cost-card-label">{{ .Skill }}</span>
   {{ if and .Editable (not $.ReadOnlyStats) }}
   <span class="cost-card-value vital-editable">
     <input type="number" class="vital-current" name="current_{{ .Key }}"
@@ -37,6 +37,25 @@
   {{ end }}
 </div>
 {{ end }}
+{{/* Invoke points sit alongside the vitals rather than with the two build
+     budgets, because they behave like a vital: a live current/maximum counter
+     the player spends down during play and refreshes each session. The input is
+     named current_invoke so the same stats-bar serialiser that posts the
+     editable vitals picks it up. */}}
+<div class="cost-card vital-card">
+  <span class="cost-card-label">Invoke Points</span>
+  {{ if .ReadOnlyStats }}
+  <span class="cost-card-value">{{ .InvokeCurrent }}<span class="vital-sep">/</span>{{ .InvokeBudget }}</span>
+  {{ else }}
+  <span class="cost-card-value vital-editable">
+    <input type="number" class="vital-current" name="current_invoke"
+           value="{{ .InvokeCurrent }}" form="character-form" min="0">
+    <span class="vital-sep">/</span>
+    <span class="vital-max">{{ .InvokeBudget }}</span>
+  </span>
+  {{ end }}
+</div>
 {{ end }}
+
 
 

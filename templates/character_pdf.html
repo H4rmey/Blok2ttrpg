@@ -17,7 +17,7 @@
     <h1>{{ $c.Name }}</h1>
     <p class="muted">Level {{ $c.Level }}</p>
 
-    {{ range attributes .Cfg }}
+    {{ range traits .Cfg }}
     <section>
       <h2>{{ .Label }}</h2>
       <dl class="kv">
@@ -29,14 +29,14 @@
     </section>
     {{ end }}
 
-    {{ range traitGroups .Cfg }}
+    {{ range skillGroups .Cfg }}
     {{ $g := . }}
     <section>
       <h2>{{ .Label }}</h2>
       <dl class="kv">
-        {{ range .Traits }}
+        {{ range .Skills }}
         <dt>{{ . }}</dt>
-        <dd>{{ traitProf $c $g.ID . }}</dd>
+        <dd>{{ skillProf $c $g.ID . }}</dd>
         {{ end }}
       </dl>
     </section>

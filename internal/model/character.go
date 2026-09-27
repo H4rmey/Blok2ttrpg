@@ -1,25 +1,25 @@
 package model
 
-// Character is fully generic: all identity/vital fields live in Attributes,
-// all skills live in Traits, keyed by the ids the config defines. This is what
-// lets config authors add or remove character attributes without any code
+// Character is fully generic: all identity/vital fields live in Traits,
+// all skills live in Skills, keyed by the ids the config defines. This is what
+// lets config authors add or remove character traits without any code
 // change.
 type Character struct {
 	ID    string `json:"id"`
 	Level int    `json:"level"`
 
-	// Attributes maps a config field key to its stored value. Values are
+	// Traits maps a config field key to its stored value. Values are
 	// strings/numbers/bools depending on the field type.
-	Attributes map[string]any `json:"attributes"`
+	Traits map[string]any `json:"traits"`
 
-	// Traits maps "<group_id>.<trait_name>" to a proficiency id.
-	Traits map[string]string `json:"traits"`
+	// Skills maps "<group_id>.<skill_name>" to a proficiency id.
+	Skills map[string]string `json:"skills"`
 
 	Abilities []Ability `json:"abilities"`
 
 	// Packages lists the currently installed content packages. Each records
 	// exactly what it applied (proficiency shifts) so removal is precise and
-	// reversible even when multiple packages stack shifts on the same trait.
+	// reversible even when multiple packages stack shifts on the same skill.
 	Packages []InstalledPackage `json:"packages,omitempty"`
 }
 
@@ -46,8 +46,8 @@ type InstalledPackage struct {
 
 // Name returns a display name, falling back to the id.
 func (c *Character) Name() string {
-	if c.Attributes != nil {
-		if v, ok := c.Attributes["name"]; ok {
+	if c.Traits != nil {
+		if v, ok := c.Traits["name"]; ok {
 			if s, ok := v.(string); ok && s != "" {
 				return s
 			}
@@ -56,16 +56,16 @@ func (c *Character) Name() string {
 	return c.ID
 }
 
-// Attr returns a stored attribute value (or nil).
+// Attr returns a stored trait value (or nil).
 func (c *Character) Attr(key string) any {
-	if c.Attributes == nil {
+	if c.Traits == nil {
 		return nil
 	}
-	return c.Attributes[key]
+	return c.Traits[key]
 }
 
-// TraitKey builds the composite key used to store a trait proficiency.
-func TraitKey(groupID, trait string) string { return groupID + "." + trait }
+// SkillKey builds the composite key used to store a skill proficiency.
+func SkillKey(groupID, skill string) string { return groupID + "." + skill }
 
 // Ability is a built ability. Its structured data lives generically in Fields
 // and its attached enactments; there are no hardcoded ability-type fields.

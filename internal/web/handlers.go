@@ -51,11 +51,19 @@ type pageData struct {
 // bar. It is embedded in every envelope that renders the bar so the perks list
 // and the perk builder can show the same numbers as the character sheet.
 type charStats struct {
-	TraitBudget   int
-	TraitUsed     int
+	SkillBudget   int
+	SkillUsed     int
 	AbilityBudget int
 	AbilityUsed   int
 	Vitals        []engine.VitalStat
+
+	// InvokeBudget is the maximum invoke points the character's level grants;
+	// InvokeCurrent is how many are unspent right now. Unlike the two point
+	// pools above, this is not a build budget: it is a live counter the player
+	// edits during play, so it is stored and shown like a vital (current/max)
+	// rather than computed from what has been bought.
+	InvokeBudget  int
+	InvokeCurrent int
 }
 
 // characterStats computes the character bar figures for a character.
@@ -64,13 +72,68 @@ func (a *App) characterStats(c *model.Character) charStats {
 	for _, ab := range c.Abilities {
 		abilityUsed += engine.AbilityCost(a.Cfg.Config, ab).Build
 	}
+	invokeBudget := a.Cfg.InvokePointBudget(c.Level)
 	return charStats{
-		TraitBudget:   a.Cfg.TraitPointBudget(c.Level),
-		TraitUsed:     engine.TraitPointsUsed(a.Cfg.Config, *c),
+		SkillBudget:   a.Cfg.SkillPointBudget(c.Level),
+		SkillUsed:     engine.SkillPointsUsed(a.Cfg.Config, *c),
 		AbilityBudget: a.Cfg.AbilityPointBudget(c.Level),
 		AbilityUsed:   abilityUsed,
 		Vitals:        engine.CharacterVitals(a.Cfg.Config, *c),
+		InvokeBudget:  invokeBudget,
+		InvokeCurrent: a.invokeCurrent(c, invokeBudget),
 	}
+}
+
+// invokeCurrentKey is the trait key the unspent invoke point count is stored
+// under. It follows the "current_<thing>" convention the editable vitals use so
+// it round-trips through the same character sheet form.
+const invokeCurrentKey = "current_invoke"
+
+// invokeCurrent reads the stored unspent invoke points, clamped to the range the
+// rules allow. A character that has never been edited has no stored value, which
+// is read as a full pool: a fresh character starts a session with every point
+// available rather than with none.
+func (a *App) invokeCurrent(c *model.Character, budget int) int {
+	raw, ok := c.Traits[invokeCurrentKey]
+	if !ok {
+		return budget
+	}
+	n, ok := atoiAny(raw)
+	if !ok {
+		return budget
+	}
+	return a.clampInvoke(n, budget)
+}
+
+// clampInvoke constrains an invoke point count to the playable range. The upper
+// bound is the level's budget unless the ruleset sets
+// invoking.allow_over_maximum, in which case banked points may exceed it.
+func (a *App) clampInvoke(n, budget int) int {
+	if n < 0 {
+		return 0
+	}
+	if !a.Cfg.Invoking.AllowsOverMaximum() && n > budget {
+		return budget
+	}
+	return n
+}
+
+// atoiAny parses an int out of a stored trait value. Values arrive from the form
+// as strings and from JSON as float64, so both are accepted.
+func atoiAny(v any) (int, bool) {
+	switch t := v.(type) {
+	case int:
+		return t, true
+	case float64:
+		return int(t), true
+	case string:
+		n, err := strconv.Atoi(strings.TrimSpace(t))
+		if err != nil {
+			return 0, false
+		}
+		return n, true
+	}
+	return 0, false
 }
 
 type crumb struct {
@@ -123,9 +186,9 @@ func (a *App) handleCreateCharacter(w http.ResponseWriter, r *http.Request) {
 	c := a.blankCharacter(id)
 	a.applyCharacterForm(&c, r)
 	// Ensure the name provided in the creation modal is always stored, even if
-	// "name" is not a configured attribute field.
+	// "name" is not a configured trait field.
 	if name := r.FormValue("attr_name"); name != "" {
-		c.Attributes["name"] = name
+		c.Traits["name"] = name
 	}
 	if err := a.Store.Save(c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -191,7 +254,7 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 		w.Write(b)
 	case "stats":
 		// Recompute from the current (unsaved) form values so the bar reflects
-		// edits to level and trait dropdowns before saving.
+		// edits to level and skill dropdowns before saving.
 		a.applyCharacterForm(&c, r)
 		if lvl := r.URL.Query().Get("level"); lvl != "" {
 			if n, err := strconv.Atoi(lvl); err == nil {
@@ -250,19 +313,19 @@ func (a *App) handleImportCharacter(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/characters/"+c.ID, http.StatusSeeOther)
 }
 
-// blankCharacter builds a character with defaults for every configured trait.
+// blankCharacter builds a character with defaults for every configured skill.
 func (a *App) blankCharacter(id string) model.Character {
 	c := model.Character{
-		ID:         id,
-		Level:      1,
-		Attributes: map[string]any{},
-		Traits:     map[string]string{},
-		Abilities:  []model.Ability{},
+		ID:        id,
+		Level:     1,
+		Traits:    map[string]any{},
+		Skills:    map[string]string{},
+		Abilities: []model.Ability{},
 	}
 	def := a.Cfg.DefaultProficiencyID()
-	for _, g := range a.Cfg.Traits.List() {
-		for _, t := range g.Traits {
-			c.Traits[model.TraitKey(g.ID, t)] = def
+	for _, g := range a.Cfg.Skills.List() {
+		for _, t := range g.Skills {
+			c.Skills[model.SkillKey(g.ID, t)] = def
 		}
 	}
 
@@ -270,7 +333,7 @@ func (a *App) blankCharacter(id string) model.Character {
 }
 
 // applyCharacterForm reads posted form fields into the generic character maps.
-// It returns a warning message when the posted trait selections had to be
+// It returns a warning message when the posted skill selections had to be
 // rejected for overspending the skill-point budget; an empty string means the
 // form was applied as posted.
 func (a *App) applyCharacterForm(c *model.Character, r *http.Request) string {
@@ -282,45 +345,53 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) string {
 			c.Level = a.Cfg.ClampLevel(n)
 		}
 	}
-	for _, g := range a.Cfg.Attributes.List() {
+	for _, g := range a.Cfg.Traits.List() {
 		for _, f := range g.Fields {
 			name := "attr_" + f.Key
 			if _, ok := r.Form[name]; ok {
-				c.Attributes[f.Key] = r.FormValue(name)
+				c.Traits[f.Key] = r.FormValue(name)
 			}
 		}
 	}
-	// Snapshot the trait tiers so an overspending selection can be rolled back
+	// Snapshot the skill tiers so an overspending selection can be rolled back
 	// wholesale. Skill points are only allowed to go negative when the ruleset
 	// sets allow_negative_skill_points.
-	before := make(map[string]string, len(c.Traits))
-	for k, v := range c.Traits {
+	before := make(map[string]string, len(c.Skills))
+	for k, v := range c.Skills {
 		before[k] = v
 	}
-	for _, g := range a.Cfg.Traits.List() {
+	for _, g := range a.Cfg.Skills.List() {
 
-		for _, t := range g.Traits {
-			name := "trait_" + g.ID + "_" + t
+		for _, t := range g.Skills {
+			name := "skill_" + g.ID + "_" + t
 			if v := r.FormValue(name); v != "" {
-				c.Traits[model.TraitKey(g.ID, t)] = v
+				c.Skills[model.SkillKey(g.ID, t)] = v
 			}
 		}
 	}
 	warning := ""
 	if !a.Cfg.AllowsNegativeSkillPoints() {
-		budget := a.Cfg.TraitPointBudget(c.Level)
-		if used := engine.TraitPointsUsed(a.Cfg.Config, *c); used > budget {
-			c.Traits = before
+		budget := a.Cfg.SkillPointBudget(c.Level)
+		if used := engine.SkillPointsUsed(a.Cfg.Config, *c); used > budget {
+			c.Skills = before
 			warning = fmt.Sprintf("That selection would use %d skill points but only %d are available at level %d. Your skill changes were not applied.", used, budget, c.Level)
 		}
 	}
-	// Current values for editable vitals (HP/Energy). Stored as attributes
+	// Current values for editable vitals (HP/Energy). Stored as traits
 	// keyed "current_<vital>" so they persist alongside the character.
-	for _, trait := range a.Cfg.Traits.Items[engine.VitalGroupID(a.Cfg.Config)] {
-		key := strings.ToLower(trait)
+	for _, skill := range a.Cfg.Skills.Items[engine.VitalGroupID(a.Cfg.Config)] {
+		key := strings.ToLower(skill)
 		name := "current_" + key
 		if _, ok := r.Form[name]; ok {
-			c.Attributes[name] = r.FormValue(name)
+			c.Traits[name] = r.FormValue(name)
+		}
+	}
+	// Unspent invoke points. This is clamped rather than stored verbatim,
+	// because the input is a live play counter: a stale form or a hand-edited
+	// request must not be able to bank more points than the ruleset allows.
+	if _, ok := r.Form[invokeCurrentKey]; ok {
+		if n, ok := atoiAny(r.FormValue(invokeCurrentKey)); ok {
+			c.Traits[invokeCurrentKey] = strconv.Itoa(a.clampInvoke(n, a.Cfg.InvokePointBudget(c.Level)))
 		}
 	}
 	return warning

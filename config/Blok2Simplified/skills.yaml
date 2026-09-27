@@ -1,0 +1,38 @@
+# Dice-backed skill groups. These render under the "Skills" heading on the
+# character page and each selection costs skill points.
+#
+# These used to be called "traits". The name moved to the narrative descriptors
+# in traits.yaml, which are the things a player invokes; the dice-backed roster
+# below is now "skills", matching how other systems use the word.
+skills:
+  general:
+    - Stealth
+    - Perception
+    - Nature
+    - Crafting
+    - People Skill
+    - Performance
+    - Thievery
+    - Knowledge
+    - Magic
+    - Medicine
+    - Provoke
+    - Intimidate
+    - Athletics
+    - Deceive
+    - Resources
+
+  offense:
+    - Strength
+    - Precision
+    - Wisdom
+    - Magic
+  defense:
+    - Constitution
+    - Reflex
+    - Wisdom
+    - Magic
+  vital:
+    - HP
+    - Movement
+    - Energy

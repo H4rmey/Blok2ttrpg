@@ -15,7 +15,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex
   - type: damage
     # The counter-thrust goes back at the attacker, not at you, so this
@@ -35,5 +35,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex

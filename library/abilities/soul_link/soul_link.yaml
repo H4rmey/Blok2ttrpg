@@ -23,7 +23,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom
   - type: condition
     # Your half of the link is on you, not on the ally, so this enactment buys
@@ -42,5 +42,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom

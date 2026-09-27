@@ -22,10 +22,10 @@
       data-stats-url="/characters/{{ $c.ID }}/stats">
 
 
-  <h2 class="section-heading">Attributes</h2>
-  {{ range attributes .Cfg }}
+  <h2 class="section-heading">Traits</h2>
+  {{ range traits .Cfg }}
 
-  <fieldset class="section section-attributes">
+  <fieldset class="section section-traits">
     <legend>{{ .Label }}</legend>
 
     {{ range .Fields }}
@@ -38,22 +38,22 @@
   {{ end }}
 
   <h2 class="section-heading">Skills</h2>
-  {{ range traitGroups .Cfg }}
+  {{ range skillGroups .Cfg }}
 
   {{ $g := . }}
   <fieldset class="section section-{{ $g.ID }}">
     <legend>{{ .Label }}</legend>
 
-    <div class="trait-grid">
+    <div class="skill-grid">
 
-      {{ range .Traits }}
+      {{ range .Skills }}
       <div class="field">
         <label>{{ . }}</label>
-        {{ $trait := . }}
-        <select name="trait_{{ $g.ID }}_{{ $trait }}">
-          {{ $current := traitProf $c $g.ID $trait }}
+        {{ $skill := . }}
+        <select name="skill_{{ $g.ID }}_{{ $skill }}">
+          {{ $current := skillProf $c $g.ID $skill }}
           {{ range $.Cfg.Proficiencies }}
-          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profTraitLabel $.Cfg . $g.ID $trait }}</option>
+          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profSkillLabel $.Cfg . $g.ID $skill }}</option>
           {{ end }}
         </select>
 
@@ -106,8 +106,8 @@
         {{ end }}
         {{ if .Shifts }}
         <div class="pkg-shifts">
-          {{ range $trait, $delta := .Shifts }}
-          <span class="pkg-shift">{{ $trait }} {{ printf "%+d" $delta }}</span>
+          {{ range $skill, $delta := .Shifts }}
+          <span class="pkg-shift">{{ $skill }} {{ printf "%+d" $delta }}</span>
           {{ end }}
         </div>
         {{ end }}

@@ -22,7 +22,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Constitution
   - type: condition
     # Everyone caught in the burst above is the one left ringing, so this

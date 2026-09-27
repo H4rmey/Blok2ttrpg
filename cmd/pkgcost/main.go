@@ -26,17 +26,17 @@ func main() {
 		log.Fatalf("list packages: %v", err)
 	}
 
-	// A blank level 1 character: every trait sits at the default tier.
-	c := model.Character{Level: 1, Traits: map[string]string{}}
+	// A blank level 1 character: every skill sits at the default tier.
+	c := model.Character{Level: 1, Skills: map[string]string{}}
 	def := cfg.DefaultProficiencyID()
-	for _, g := range cfg.Traits.List() {
-		for _, t := range g.Traits {
-			c.Traits[model.TraitKey(g.ID, t)] = def
+	for _, g := range cfg.Skills.List() {
+		for _, t := range g.Skills {
+			c.Skills[model.SkillKey(g.ID, t)] = def
 		}
 	}
 
 	perkBudget := cfg.AbilityPointBudget(1)
-	skillBudget := cfg.TraitPointBudget(1)
+	skillBudget := cfg.SkillPointBudget(1)
 	fmt.Printf("Level 1 budgets: %d perk pt, %d skill pt\n\n", perkBudget, skillBudget)
 
 	for _, pkg := range pkgs {

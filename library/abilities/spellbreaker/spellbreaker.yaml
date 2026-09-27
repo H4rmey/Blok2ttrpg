@@ -15,7 +15,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom
   - type: condition
     # The silence is pinned on the caster, while the negation protected you, so
@@ -37,5 +37,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom

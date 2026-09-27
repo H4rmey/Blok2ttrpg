@@ -30,7 +30,7 @@ The subpages are modules that can be used int he Blok2ttrpg. The following Modul
 
 ### Character Presets (races/classes)
 
-Basically preset traits that are usable by users to have a quick start. maybe even adding specific level up charts for thoses classes/races. Also maybe make it so there are abilities you get by selecting a specific race/class. But i never want to make abilities be tied to anything, anyone should be able to cast a fireball, that should not be a Wizard exclusive ability. 
+Basically preset skills that are usable by users to have a quick start. maybe even adding specific level up charts for thoses classes/races. Also maybe make it so there are abilities you get by selecting a specific race/class. But i never want to make abilities be tied to anything, anyone should be able to cast a fireball, that should not be a Wizard exclusive ability. 
 
 ### Predefined Abilities
 
@@ -49,18 +49,20 @@ The current list of enactments is great but it's missing a ton of features, curr
 
 Luckely the configuration is flexible enough that adding these should not be so hard.
 
-# character-attributes
-## Character Attributes
+# character-traits
+## Character Traits
 
-## Attributes
+## Traits
 
-Attributes define a character, situation, or environment by providing specific, factual details. They are not inherently positive or negative, and they can be permanent or temporary. Attributes can be invoked during gameplay to influence outcomes, either positively or negatively.
+Traits define a character, situation, or environment by providing specific, factual details. They are not inherently positive or negative, and they can be permanent or temporary. Traits can be invoked during gameplay to influence outcomes, either positively or negatively.
+
+Traits are not the same thing as skills. A skill is a die you roll; a trait is a fact about the fiction. Skills live in their own chapter and are bought with skill points, while traits cost nothing to write down and are instead spent and earned through [invoke points](#invoking).
 
 ---
 
-## Character Attributes
+## Character Traits
 
-A character’s attributes describe their traits, background, and abilities. Not all attributes need to be filled in, but they should be unique and avoid duplication. Below are the attribute sections a character sheet is organised into:
+A character's traits describe their background, personality, and circumstances. Not all traits need to be filled in, but they should be unique and avoid duplication. Below are the trait sections a character sheet is organised into:
 
 **Identity**
 
@@ -76,88 +78,83 @@ A character’s attributes describe their traits, background, and abilities. Not
 *   Trait 2
 *   Trait 3
 
+---
+
+## Temporary Traits
+
+Temporary Traits are created by the GM to reflect short-term effects or conditions. They can be used to challenge or reward players and must include a duration and conditions for removal. For example:
+
+*   A character who stayed up all night studying a case might gain the Temporary Trait "Knowledgeable about the case" for the next day.
+*   A character who touched a magic stone and lost part of their memory might gain the Temporary Trait "Partial Memory Loss" until they defeat a great evil to regain it.
+
+Temporary Traits should always be discussed with the player to ensure agreement.
 
 ---
 
-## Temporary Attributes
+## Environment Traits
 
-Temporary Attributes are created by the GM to reflect short-term effects or conditions. They can be used to challenge or reward players and must include a duration and conditions for removal. For example:
+Environment Traits describe the setting where the player characters are located. These traits can be used by players to enhance their chances of success or by the GM to introduce challenges. For example:
 
-*   A character who stayed up all night studying a case might gain the Temporary Attribute “Knowledgeable about the case” for the next day.
-*   A character who touched a magic stone and lost part of their memory might gain the Temporary Attribute “Partial Memory Loss” until they defeat a great evil to regain it.
-
-Temporary Attributes should always be discussed with the player to ensure agreement.
+*   In a rainforest, the GM might assign the Traits: "Wet," "Hunting Animals," and "Untouched by Civilization."
+*   Players can use these Traits to their advantage (e.g., using "Wet" to create a slippery terrain for enemies) or face penalties (e.g., "Wet" making it harder to light a fire).
 
 ---
 
-## Environment Attributes
+## Crafting Effective Traits
 
-Environment Attributes describe the setting where the player characters are located. These attributes can be used by players to enhance their chances of success or by the GM to introduce challenges. For example:
-
-*   In a rainforest, the GM might assign the Attributes: “Wet,” “Hunting Animals,” and “Untouched by Civilization.”
-*   Players can use these Attributes to their advantage (e.g., using “Wet” to create a slippery terrain for enemies) or face penalties (e.g., “Wet” making it harder to light a fire).
-
----
-
-## Crafting Effective Attributes
-
-Attributes should be specific, factual, and avoid vague language. Below are guidelines for creating effective attributes:
+Traits should be specific, factual, and avoid vague language. Below are guidelines for creating effective traits:
 
 1.  **Be Specific**
 
-*   **Bad:** “Smooth Talker” —> Too broad. This could apply to multiple scenario’s such as: romance, business, crime.
-*   **Good:** “Flirt with the Ladies” —> Nice an specific, you are a player.
+*   **Bad:** "Smooth Talker" -> Too broad. This could apply to multiple scenario's such as: romance, business, crime.
+*   **Good:** "Flirt with the Ladies" -> Nice an specific, you are a player.
 
 1.  **Make It Factual**
 
-*   **Bad:** “Good at working with hands” —> Vague, when is something defined as good?
-*   **Good:** “Carpenter by Trade” —> This specifies that you are a carpenter, so presumable you know how to handle wood
+*   **Bad:** "Good at working with hands" -> Vague, when is something defined as good?
+*   **Good:** "Carpenter by Trade" -> This specifies that you are a carpenter, so presumable you know how to handle wood
 
 1.  **Avoid Vague Language**
 
-*   **Bad:** “Tends to have a lot of luck” —> Ok so you sometimes have luck and sometimes you don’t?
-*   **Better:** “Lucky” —> Better but needs more specifing
-*   **Good:** “Lucky when it comes to money” —> Slotmachines, gambling, haggling you are just a lucky bastard when money is involved
+*   **Bad:** "Tends to have a lot of luck" -> Ok so you sometimes have luck and sometimes you don't?
+*   **Better:** "Lucky" -> Better but needs more specifing
+*   **Good:** "Lucky when it comes to money" -> Slotmachines, gambling, haggling you are just a lucky bastard when money is involved
 
-1.  **Link to a Specific Trait**
+1.  **Link to a Specific Skill**
 
-*   **Bad:** “Great Investigator” —> Same as before, when is something defined as “Great”
-*   **Good:** “Used to be a Detective” —> Now we specify that we have experience in being a detective
+*   **Bad:** "Great Investigator" -> Same as before, when is something defined as "Great"
+*   **Good:** "Used to be a Detective" -> Now we specify that we have experience in being a detective
 
-Note that these rules are only a guideline, if you want to specify “Lucky” as a character attribute and be done with it i’m not going to stop you.
+Note that these rules are only a guideline, if you want to specify "Lucky" as a character trait and be done with it i'm not going to stop you.
 
 ---
 
-## Using Attributes in Gameplay
+## Using Traits in Gameplay
 
-Attributes can be invoked at any time to influence the outcome of a roll or event. Players or the GM can use them to modify the Dice Tier (e.g., increase or decrease the die size used for a roll). Each attribute can only grant one penalty or bonus per use.
+Traits are brought into play by invoking them. Invoking costs an invoke point when it helps you and earns one when it hurts you, which is what keeps the two directions in balance: the full economy, including how many points you have and how they refresh, is in the [Invoking](#invoking) chapter.
 
-#### Examples of Attribute Use
+The usual effect of an invocation is a change of one Dice Tier on a roll, up when the trait helps and down when it hinders. Each trait can only grant one penalty or bonus per use.
+
+#### Examples of Trait Use
 
 1.  **Positive Use**
 
-*   Michael, a wooden puppet, wants to climb a tree. Instead of making an Athletics check, he uses his Attribute “Likes Making Furniture of Wood” to craft a makeshift ladder. The GM allows him to make a Crafting check with a higher Dice Tier.
+*   Michael, a wooden puppet, wants to climb a tree. Instead of making an Athletics check, he uses his Trait "Likes Making Furniture of Wood" to craft a makeshift ladder. The GM allows him to make a Crafting check with a higher Dice Tier.
 
 1.  **Negative Use**
 
-*   During combat, a barrel of alcohol catches fire. The GM rules that Michael, being made of wood, is more vulnerable to fire. His Saving Throw roll is reduced by one Dice Tier (e.g., from d8 to d6).
+*   During combat, a barrel of alcohol catches fire. The GM rules that Michael, being made of wood, is more vulnerable to fire. His Saving Throw roll is reduced by one Dice Tier (e.g., from d8 to d6). Michael's player earns an invoke point for accepting it.
 
 1.  **Balancing Penalties**
 
-*   If Michael already has the Temporary Attribute “Stuck,” the GM should avoid multiple penalties. In the above example, the GM agrees that applying both penalties would be too harsh, so they reduce the penalty to one Dice Tier.
+*   If Michael already has the Temporary Trait "Stuck," the GM should avoid multiple penalties. In the above example, the GM agrees that applying both penalties would be too harsh, so they reduce the penalty to one Dice Tier.
 
 ---
 
-## Attribute economy
-
-An optional way to manage how many attributes a player and the GM is has used. The GM and the players get 1 to 2 tokens. When players want to use an attribute to help themself, they have to give the GM one token. If a player chooses to hinder themself using an attribute, they gain a token from the GM.
-
-The GM can also hinder the players by spending their tokens. If it hinders two or more players it goes to a global pool which each player can pick from. When the GM hinders a specific player, that player receives the token.
-
 ## Example 1 - Michael
 
-**Name:** Michael  
-**Type:** Wooden Puppet  
+**Name:** Michael
+**Type:** Wooden Puppet
 **Description:** A rebellious puppet who broke free from the Ylten Guild but still has lingering connections to them.
 
 *   **Age:** 2 months
@@ -170,17 +167,17 @@ The GM can also hinder the players by spending their tokens. If it hinders two o
 *   **Hobbies:** Likes Making Furniture of Wood
 *   **Inventory:** Hidden Compartments in His Body
 *   **Quirks:** Likes Bullying Insecure People
-*   **Temporary Attribute:** Lost His Left Arm (Must Rebuild It or Find It Back)
+*   **Temporary Trait:** Lost His Left Arm (Must Rebuild It or Find It Back)
 
 ---
 
 ## Example 2 - Tavern
 
-Michael is fighting in a tavern with the following Environment Attributes: “Alcohol,” “Wood,” “Tables,” and “Bar.”
+Michael is fighting in a tavern with the following Environment Traits: "Alcohol," "Wood," "Tables," and "Bar."
 
 1.  **Positive Use:**
 
-*   Michael uses his Attribute “Likes Making Furniture of Wood” to craft a shield from the wooden tables. The GM allows him to make a Crafting check with a higher Dice Tier (e.g., d12).
+*   Michael uses his Trait "Likes Making Furniture of Wood" to craft a shield from the wooden tables. The GM allows him to make a Crafting check with a higher Dice Tier (e.g., d12).
 
 1.  **Negative Use:**
 
@@ -188,38 +185,36 @@ Michael is fighting in a tavern with the following Environment Attributes: “Al
 
 1.  **Balancing Penalties:**
 
-*   After failing the Saving Throw, Michael catches fire. The GM initially rules that the damage dice increases by one tier (e.g., d4 to d6). However, Michael’s player argues that applying both a penalty to the Saving Throw and increased damage is too harsh. The GM agrees and decides to apply only one penalty
+*   After failing the Saving Throw, Michael catches fire. The GM initially rules that the damage dice increases by one tier (e.g., d4 to d6). However, Michael's player argues that applying both a penalty to the Saving Throw and increased damage is too harsh. The GM agrees and decides to apply only one penalty
 
 ---
 
-# character-traits
-## Character Traits
+# skills
+## Skills
 
-## **Traits**
-
-Character Attributes form the core of your character, while Traits determine the success of your actions. Below are two lists of Traits your character might possess. Depending on the world setting, you may modify some of these Traits.
+Traits say who your character is; Skills determine whether what they attempt works. Below are the Skills your character might possess, grouped by what they are used for. Depending on the world setting, you may modify some of these Skills.
 
 ---
 
-## **Trait Points**
+## Skill Points
 
-Your Trait Point budget is set by your level:
+Your Skill Point budget is set by your level:
 
-$$TraitPoints = 13 + 3 \times (Level - 1)$$
+$$SkillPoints = 13 + 3 \times (Level - 1)$$
 
 So you begin with **13** points at Level 1 and gain **3** more each level, up to level 10. See [Leveling](leveling.md) for the reasoning behind those numbers.
 
-You can also gain Trait Points back by lowering a Proficiency. For instance, if you are an Expert in a Trait but want to balance out your spread, you can lower it back toward the starting rung and recover what you spent; dropping below the starting rung refunds an extra point. Spending points does not lock you into your choices; you can always reallocate them as needed.
+You can also gain Skill Points back by lowering a Proficiency. For instance, if you are an Expert in a Skill but want to balance out your spread, you can lower it back toward the starting rung and recover what you spent; dropping below the starting rung refunds an extra point. Spending points does not lock you into your choices; you can always reallocate them as needed.
 
 ---
 
-## Trait List
+## Skill List
 
-Each Trait is rated by a Proficiency tier. Dice-backed Traits roll the die shown for their tier; Vital Traits use the numeric value shown instead. The *Cost* row is the Trait Point cost to raise a Trait into that tier.
+Each Skill is rated by a Proficiency tier. Dice-backed Skills roll the die shown for their tier; Vital Skills use the numeric value shown instead. The *Cost* row is the Skill Point cost to raise a Skill into that tier.
 
-### General Traits
+### General Skills
 
-| Trait | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
+| Skill | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | *Cost* | 1 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 3 |
 | **Stealth** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
@@ -238,9 +233,9 @@ Each Trait is rated by a Proficiency tier. Dice-backed Traits roll the die shown
 | **Deceive** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 | **Resources** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 
-### Offense Traits
+### Offense Skills
 
-| Trait | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
+| Skill | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | *Cost* | 1 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 3 |
 | **Strength** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
@@ -248,9 +243,9 @@ Each Trait is rated by a Proficiency tier. Dice-backed Traits roll the die shown
 | **Wisdom** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 | **Magic** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 
-### Defense Traits
+### Defense Skills
 
-| Trait | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
+| Skill | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | *Cost* | 1 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 3 |
 | **Constitution** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
@@ -258,11 +253,11 @@ Each Trait is rated by a Proficiency tier. Dice-backed Traits roll the die shown
 | **Wisdom** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 | **Magic** | 1 | d4 | d6 | d8 | d10 | d12 | d12+1 | d12+2 | d12+3 |
 
-### Vital Traits
+### Vital Skills
 
-These traits use numeric values rather than dice.
+These skills use numeric values rather than dice.
 
-| Trait | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
+| Skill | Inept | Untrained | Novice | Proficient | Expert | Master | Grandmaster | Champion | Legendary |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | **HP** | 7 | 10 | 13 | 16 | 19 | 22 | 25 | 28 | 31 |
 | **Movement** | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
@@ -273,7 +268,7 @@ These traits use numeric values rather than dice.
 
 ## Introduction
 
-Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Trait. The ladder runs from 1 at the bottom rung to d12+3 at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
+Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Skill. The ladder runs from 1 at the bottom rung to d12+3 at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
 
 | Proficiency | Die |
 | --- | --- |
@@ -287,7 +282,7 @@ Every roll in this system uses the die granted by your **Proficiency Level** in 
 | Champion | d12+2 |
 | Legendary | d12+3 |
 
-Untrained is the rung every Trait starts at and is free; the rung below it is a deliberate weakness and refunds a point.
+Untrained is the rung every Skill starts at and is free; the rung below it is a deliberate weakness and refunds a point.
 
 ---
 
@@ -306,11 +301,11 @@ Each Proficiency Level is directly tied to its Dice Tier. When referring to dice
 
 ### Engagement and Counter Rolls
 
-When attempting an action where the outcome is uncertain, the acting character must make a **Trait Check**. Unlike systems that use a d20 and flat modifiers, this system relies entirely on variable Dice Tiers.
+When attempting an action where the outcome is uncertain, the acting character must make a **Skill Check**. Unlike systems that use a d20 and flat modifiers, this system relies entirely on variable Dice Tiers.
 
 **1\. The Engagement Roll**
 
-The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Trait and rolls the corresponding die (ranging from 1 to d12+3). This is the **Engagement Roll**.
+The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Skill and rolls the corresponding die (ranging from 1 to d12+3). This is the **Engagement Roll**.
 
 **2\. The Counter Roll**
 
@@ -321,7 +316,7 @@ The obstacle, creature, or entity the Engager is acting against is called the **
 
 **3\. Resolution**
 
-Compare the **Engagement Roll** to the **Counter Roll** (or static difficulty). If the **Engager's** total is **equal to or higher** than the Target's total, the Trait Check is a Success. Ties always favor the Engager.
+Compare the **Engagement Roll** to the **Counter Roll** (or static difficulty). If the **Engager's** total is **equal to or higher** than the Target's total, the Skill Check is a Success. Ties always favor the Engager.
 
 > **Example:** You attempt to hide in a bustling market. You are an Expert in Stealth, making you the **Engager** with an Engagement Roll of a d8.
 > 
@@ -366,7 +361,103 @@ The idea is that when someone in the group fails. the other PC's can still aid t
 
 ### Aid/Help
 
-You can choose to help someone on a **Trait Check**. This uses the same rules as a **Group Roll**. But only the people aiding and the PC making the **Trait Check** have to roll. **Aiding/Helping** someone can also be done after noticing the PC making the **Trait Check** has failed.
+You can choose to help someone on a **Skill Check**. This uses the same rules as a **Group Roll**. But only the people aiding and the PC making the **Skill Check** have to roll. **Aiding/Helping** someone can also be done after noticing the PC making the **Skill Check** has failed.
+
+# invoking
+## Invoking
+
+Invoke points are the currency of the fiction. Skill points buy dice and perk points buy abilities, but invoke points buy *moments*: the instant where your background turns out to matter, or where you step out of turn order because you saw it coming.
+
+Every player has their own pool. Points are not shared, not pooled with the party, and not held by the GM on your behalf.
+
+Every character's invoke points return to their maximum at the start of every session or scenario. Points earned in play stop at that maximum: a full pool must be spent before more can be banked.
+
+---
+
+## How many points you have
+
+The pool is small on purpose. A point is a scene-changing decision, not small change, so the curve steps up every few levels rather than climbing every level:
+
+| Level | Points Gained | Invoke Points |
+| --- | --- | --- |
+| **1** | 3 (starting) | 3 |
+| **2** | - | 3 |
+| **3** | +1 | 4 |
+| **4** | - | 4 |
+| **5** | +1 | 5 |
+| **6** | - | 5 |
+| **7** | +1 | 6 |
+| **8** | - | 6 |
+| **9** | +1 | 7 |
+| **10** | - | 7 |
+
+Your current and maximum invoke points are shown on the character sheet next to Energy, as `current / maximum`.
+
+---
+
+## Spending a point
+
+| Spend | Cost | Effect |
+| --- | --- | --- |
+| **Invoke a trait** | 1 invoke point | Bring one of your traits to bear on a roll or a scene. The trait must plausibly apply. The usual effect is a one-step bonus on the dice ladder, but the GM may instead grant a fact, an opening, or an advantage that follows from the trait. |
+| **Invoke a reaction** | 1 invoke point + 1 energy | Take an out-of-turn action in combat. See the reactions block below for the timing and frequency limits. |
+| **Reroll a negotiation argument** | 1 invoke point | Reroll a failed argument during a negotiation, no questions asked. The argument still costs the NPC's patience either way. |
+
+When you invoke a trait, you are making a claim about the fiction: *this thing that is true about me matters right now*. The GM may ask you to explain how. If the two of you cannot agree that the trait applies, it does not, and you keep your point.
+
+---
+
+## Earning a point
+
+The pool is refilled by letting your own traits work against you. This is the engine of the whole system: a trait that only ever helps you is not a character detail, it is a bonus, and a trait that only ever hurts you is a punishment. Invocation makes it cut both ways, and pays you for the half that hurts.
+
+| How | Points | Detail |
+| --- | --- | --- |
+| **Invoke a trait against yourself** | +1 | Volunteer one of your own traits as a complication and accept the penalty or the consequence that follows. Available in and out of combat. |
+| **Accept a GM invocation** | +1 | The GM invokes one of your traits against you. You may always accept it for a point. Declining is a conversation, not a mechanic: if you and the GM cannot agree the trait applies, it does not. |
+
+Either side of the table can start this. You may volunteer a complication, and the GM may propose one. A GM invocation is an offer, not an order: you can always accept it for a point, and if you genuinely disagree the trait applies, say so and it does not happen.
+
+---
+
+## Earning points in combat
+
+A long fight can run a pool dry, so combat has a few extra taps:
+
+| Trigger | Points | Limit | Detail |
+| --- | --- | --- | --- |
+| **Critical failure** | +1 | Each time it happens | Roll the lowest possible result on an engagement roll. Bad luck becomes fuel rather than only a setback. |
+| **Take a hit you could have avoided** | +1 | Each time it happens | Decline a reaction or mitigation you were able to use, and take the consequence in full. |
+| **Every third round** | +1 | Start of every 3rd round | A slow trickle so a drawn-out fight does not leave everyone empty. |
+
+No matter how many of these trigger, a character may earn at most **3** invoke points from a single combat.
+
+---
+
+## Reactions
+
+A reaction is an action taken out of turn. It is not built in the perk builder and it is not written on your sheet in advance: you describe what you do, pay for it, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw." "I grab the rope as it goes past."
+
+| Rule | Value |
+| --- | --- |
+| Cost | 1 invoke point + 1 energy |
+| Frequency | 1 per round |
+| Timing | Between actions. A reaction resolves before or after a whole action, never in the middle of one, so it cannot undo a roll that has already been made. |
+| What it is | An out-of-order action. A reaction is not built in advance and is not listed on your sheet: describe what you do, pay the cost, and the GM resolves it like any other action. |
+
+Because a reaction resolves between actions rather than inside one, it is a way to *pre-empt* something, not to undo it. You can throw yourself in front of an arrow before it is loosed; you cannot wait to see the damage roll and then decide to have blocked it.
+
+The once-per-round limit is what keeps a wealthy character from simply taking over an enemy's turn. It also means the interesting question is not whether to react but *when*: spending your reaction on the first threat you see means having nothing left for the worse one behind it.
+
+---
+
+## Advice for the GM
+
+**Invoke against the players early.** Players are usually slow to volunteer complications, because it feels like arguing against themselves. Offering a couple of invocations in the first session teaches the table that traits are a currency rather than a decoration, and it puts points in their hands so they can start spending.
+
+**Do not let the pool sit full.** A player who never spends is a player whose character sheet has stopped mattering. If the pool is untouched for a whole session, aim a complication at a trait they wrote down and see what happens.
+
+**Say yes to strange invocations.** "Used to be a Detective" applying to a tavern brawl sounds like a stretch until the player explains they are reading the room for who throws the first punch. The stretch is the fun part.
 
 # combat
 ## Combat
@@ -381,7 +472,21 @@ Rolling for initiative is done by rolling your perception + movement. PC's go be
 
 On your turn you get three actions. By default you have 3 of actions. How much actions an ability costs can may differ. 
 
+### Reactions
+
+Your actions are spent on your turn, but a **Reaction** lets you act out of turn. A reaction is freeform: it is not built in advance and not listed on your sheet, you simply describe what you do and pay for it.
+
+| Rule | Value |
+| --- | --- |
+| Cost | 1 invoke point + 1 energy |
+| Frequency | 1 per round |
+| Timing | Between actions. A reaction resolves before or after a whole action, never in the middle of one, so it cannot undo a roll that has already been made. |
+| What it is | An out-of-order action. A reaction is not built in advance and is not listed on your sheet: describe what you do, pay the cost, and the GM resolves it like any other action. |
+
+The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own abilities, so a character who reacts every round has less left to spend when their turn comes around.
+
 ### Movement
+
 
 Movement costs one action; it is fully allowed to just keep using actions just to move, however each subsequent movement action costs 1 energy extra (this stacks between turns).So moving 3 times in a row will cost 0 + 1 + 2 = 3 Energy.
 
@@ -389,7 +494,7 @@ Movement costs one action; it is fully allowed to just keep using actions just t
 
 Energy is the resource that using Abilities spends. Each Enactment in an Ability costs 1 Energy, so a full turn of three actions costs roughly 3 Energy, and a Concentration costs a further point of upkeep every round it stays up. Repeated movement in a single stretch also drains Energy as described above.
 
-Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Trait, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
+Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Skill, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
 
 Energy does not come back on its own. On a rest you regain **5 Energy**. That is deliberately less than a single fight consumes, so Energy is a resource to be managed across a whole day rather than reset between encounters. The GM may grant more for an especially long or comfortable rest.
 
@@ -399,47 +504,154 @@ Oppenents are not willing to get hit by your attacks/abilities. That is why when
 
 When Attacking/Healing/Prepping/Anythinging you always first roll the Engagement Roll to see if you hit, then you resolve the action/enactment/thing.
 
+# negotiation
+## Negotiation
+
+A negotiation is what happens when the party wants something from someone who is not simply going to hand it over. It is the social equivalent of combat: a structured back-and-forth with a clock on it, resolved by rolls, that ends in a state everyone can see coming.
+
+It runs on two numbers the GM sets for each NPC:
+
+*   **Motivation** - how inclined they are to give you what you want.
+*   **Patience** - how much longer they are willing to keep listening.
+
+Arguments push motivation up and down. Patience only ever runs down. When patience hits zero the conversation is over, and wherever motivation ended up is what you got.
+
+---
+
+## The motivation ladder
+
+| Motivation | Name | Outcome |
+| --- | --- | --- |
+| **5** | Invested | You get what you asked for and more. The NPC volunteers help, information, or a favour you did not think to ask for. |
+| **4** | Willing | You get what you asked for, on the terms you asked for it. |
+| **3** | Indifferent | Nothing happens. No deal, no harm; the NPC is unmoved and the party leaves with what they walked in with. |
+| **2** | Unwilling | You do not get what you want. The NPC refuses and the door closes, though they do not go out of their way to hurt you. |
+| **1** | Hostile | You do not get what you want, and it costs you. The NPC acts against you: they raise an alarm, tell someone, demand payment, or fight. |
+
+> **The ladder is not a lookup table.** It tells you how well the conversation went, not what the NPC does next. That is the GM's call, read from the fiction.
+>
+> Ending at a **2** is a refusal, but a proud noble badgered down to a 2 by someone who insulted their house may well call for the guards. Even a **3** can turn violent: "no deal" from a nervous smuggler who now knows your face is not a neutral outcome. A **1** almost always costs you something, and often that something is a fight.
+>
+> Conversely, a **4** from someone who hates you but owes you a debt looks nothing like a 4 from a new friend, even though both hand over what you asked for. Read the rung, then decide what that particular person does about it.
+
+---
+
+## Running a negotiation
+
+1.  The GM sets the NPC's starting **motivation** and **patience**, and notes their **traits**. None of these are announced to the players.
+2.  A player makes an **argument**: something specific, aimed at this NPC, for why they should help.
+3.  The GM picks a **relevant skill** for that argument, and the player rolls it. A plea to their greed might be a People Skill check; a veiled threat might be Intimidate; a forged writ of passage might be Deceive.
+4.  Motivation moves by the result. Patience drops.
+5.  Repeat until patience reaches zero, or until the party walks away.
+
+| Rule | Value |
+| --- | --- |
+| Motivation range | 1 to 5 |
+| Patience range | 0 to 5 |
+| Patience per argument | -1, whether the argument succeeds or fails. When patience reaches zero the negotiation ends. |
+| Successful argument | +1 motivation |
+| Failed argument | -1 motivation |
+| Repeating an argument | Not permitted. An argument, and the trait behind it, may each be used only once per negotiation. |
+| Starting values | Set by the GM per NPC. A guard who owes you a favour and one you just insulted do not open at the same motivation or with the same patience. |
+
+Because every argument costs patience whether it lands or not, a negotiation is a limited number of attempts, not an endurance contest. Four or five arguments is a whole scene.
+
+---
+
+## The NPC's traits
+
+An NPC has traits of their own, exactly like a player character does, and those traits are what make one negotiation different from another. They clamp the ladder:
+
+| The argument | Effect on motivation |
+| --- | --- |
+| **Goes against** one of the NPC's traits | Cannot rise. A success holds motivation where it is instead of gaining ground; a failure still loses it. |
+| **Goes with** one of the NPC's traits | Cannot fall. A failure holds motivation where it is instead of losing ground; a success still gains it. |
+| Touches none of their traits | Resolves normally: it rises on a success and falls on a failure. |
+
+This is the heart of the system. The party's real job is not to roll well, it is to work out **what this person cares about** - because an argument that cuts against what they care about can never persuade them, however well it is rolled. A bribe offered to an incorruptible magistrate is not a hard sell, it is an impossible one. Find the trait, aim at it, and the dice start working for you.
+
+The GM should not read the traits out, but should absolutely *telegraph* them. An NPC who mentions their daughter twice, or who keeps glancing at the shrine in the corner, is handing the players the key.
+
+---
+
+## Invoking in a negotiation
+
+You may spend an invoke point to reroll a failed argument, no questions asked. The argument still costs the NPC's patience either way, so a reroll buys you a better result on this attempt, not an extra attempt.
+
+You may also invoke your own traits normally, to improve the skill check before it is rolled.
+
+---
+
+## NPC stat block
+
+An NPC in a negotiation needs three lines of prep. There is no separate sheet for this; a note in the margin is enough:
+
+```
+Name:       Serik, dock warden
+Motivation: 2 (Unwilling)
+Patience:   4
+Traits:     Terrified of the harbour guild
+            Proud of thirty years without an incident
+            Feeding a sick brother at home
+```
+
+Read that block and the negotiation plays itself. Threatening him with the guild goes *against* his fear, so it cannot raise motivation no matter how well it is rolled. Offering coin for medicine goes *with* his brother, so it cannot lower it. And appealing to his record cuts both ways depending on whether you are praising it or threatening it.
+
+Three traits is a good number: enough that the party has something to find, few enough that the GM can hold them in their head.
+
+---
+
+## Advice for the GM
+
+**Set patience by how much they want to leave.** A merchant behind a stall has patience to spare. A guard on a round, or an assassin with somewhere to be, has almost none. Patience is the NPC's answer to "why am I still standing here?"
+
+**Set motivation by history, not by difficulty.** A 3 is the default for a stranger. Move it up for someone who likes the party and down for someone with a reason to resent them. Do not set it low just to make a scene hard; set it low because this person has a reason.
+
+**Do not hide the clock entirely.** You need not read out numbers, but the NPC should visibly grow impatient: checking the door, shortening their answers, turning back to their work. The players should be able to feel the last argument coming.
+
+**Let them walk away.** Ending a negotiation early at a 3 to avoid sliding to a 2 is a real tactical choice, and one of the better ones the system offers.
+
 # Conditions
 
 ## Conditions
 
-**Conditions** can either boost or limit your character. They can either be a collection of nerfs/buffs to your **Traits**, have some special properties, or be a combination of both.
+**Conditions** can either boost or limit your character. They can either be a collection of nerfs/buffs to your **Skills**, have some special properties, or be a combination of both.
 
 We separate them into two groups: **Shifting Conditions** and **Fixed Conditions**.
 
-**Shifting Conditions**: Conditions that are flexible in their use. They only **Shift** a collection of Traits up or down by x amount. For example, Blinded, Encumbered, Encouraged or Frightened.
+**Shifting Conditions**: Conditions that are flexible in their use. They only **Shift** a collection of Skills up or down by x amount. For example, Blinded, Encumbered, Encouraged or Frightened.
 
-**Fixed Conditions**: Conditions that impact something other than the Traits, like action economy or character behaviour. For example: When you are Stunned you lose one of your actions. When you are Taunted, you may only attack one preset Target.
+**Fixed Conditions**: Conditions that impact something other than the Skills, like action economy or character behaviour. For example: When you are Stunned you lose one of your actions. When you are Taunted, you may only attack one preset Target.
 
-When a **Condition** has impact on your **Traits** it always has a value representing **Die Shifts** in your **Traits**. So each Condition shifts x amount of traits in your character a y amount. This can either be temporary or permanent, depending on how the **Condition** was applied and what was discussed with the DM.
+When a **Condition** has impact on your **Skills** it always has a value representing **Die Shifts** in your **Skills**. So each Condition shifts x amount of skills in your character a y amount. This can either be temporary or permanent, depending on how the **Condition** was applied and what was discussed with the DM.
 
 > **Example:** Your character gets **Blinded** by a flash of light because you failed a **Counter Roll**. The DM tells you that you are now **Blinded -2**. You now have **-2 Die Shift** on **Offensive Precision Rolls** and **Defensive Reflex Rolls**. The DM now rules that you will be blinded for 2 rounds.
 
 > [!NOTE]
-> As the number and type of **Traits** can differ between games, the DM or group may need to tweak what a Condition applies to. For example, in some games you may not have a **Crafting Trait**. Because it is highly encouraged to create your own list of **Traits**, we cannot make a clear definition of what does what. There is also the issue that **Conditions** are not always applicable to all scenarios.
+> As the number and type of **Skills** can differ between games, the DM or group may need to tweak what a Condition applies to. For example, in some games you may not have a **Crafting Skill**. Because it is highly encouraged to create your own list of **Skills**, we cannot make a clear definition of what does what. There is also the issue that **Conditions** are not always applicable to all scenarios.
 
 > **Example:** Being **Frightened** can be either you are scared in the dark, or you are afraid of public speaking.
 
-> **Example:** Being **Encumbered** might be a Condition that applies to all movement type traits but also strength. As you carry too much you also do not have any strength left to lift anything else, so it will also impact your Offensive Power stat. At least that is how I would maybe rule it, but another DM/group might not agree. It is also highly dependent on how you are Encumbered, so the removal method might change depending on the situation.
+> **Example:** Being **Encumbered** might be a Condition that applies to all movement type skills but also strength. As you carry too much you also do not have any strength left to lift anything else, so it will also impact your Offensive Power stat. At least that is how I would maybe rule it, but another DM/group might not agree. It is also highly dependent on how you are Encumbered, so the removal method might change depending on the situation.
 
 ## Condition List
 
-The following Conditions are available. For Shifting Conditions the affected Traits are up to the DM to decide and depend on the situation.
+The following Conditions are available. For Shifting Conditions the affected Skills are up to the DM to decide and depend on the situation.
 
 ### Shifting Conditions
 
-These conditions raise or lower a collection of traits. The value is a number of die shifts within the range shown; which traits are affected is decided at the table.
+These conditions raise or lower a collection of skills. The value is a number of die shifts within the range shown; which skills are affected is decided at the table.
 
 | Condition | Shift Range | Effect |
 | --- | --- | --- |
-| **Blinded** | -6 to 0 | Reduces certain trait rolls |
-| **Encumbered** | -6 to 0 | Reduces movement and relevant traits |
-| **Encouraged** | +1 to +6 | Positive trait shifts |
-| **Frightened** | -6 to 0 | Negative trait shifts |
+| **Blinded** | -6 to 0 | Reduces certain skill rolls |
+| **Encumbered** | -6 to 0 | Reduces movement and relevant skills |
+| **Encouraged** | +1 to +6 | Positive skill shifts |
+| **Frightened** | -6 to 0 | Negative skill shifts |
 
 ### Fixed Conditions
 
-These conditions apply a set effect rather than a trait shift.
+These conditions apply a set effect rather than a skill shift.
 
 | Condition | Effect |
 | --- | --- |
@@ -485,7 +697,7 @@ These conditions apply a set effect rather than a trait shift.
 | **Dying** | Your HP went below 0; you are out of combat until revived by an ally. |
 | **Doomed** | You will move to Dying in x turns. |
 | **Zombified** | Healing damages instead; Damage heals instead. |
-| **Linked** | You are linked to a Target; what happens to you happens to the linked Target. This links per Trait. |
+| **Linked** | You are linked to a Target; what happens to you happens to the linked Target. This links per Skill. |
 | **Incorporeal** | Phase through walls. |
 | **Marked** | Everything that happens to you is buffed or nerfed (pick one). |
 | **Invincible** | You cannot be damaged. |
@@ -577,9 +789,9 @@ Specialized Abilities are still being written. When one is added to the library 
 
 ## Introduction
 
-A **Package** is a ready-made bundle of character content: a set of Proficiency shifts plus, sometimes, a few Abilities. Importing one applies its shifts to your Traits and copies its Abilities onto your sheet, so you can pick a Class, Race and Background without hand-building everything from scratch.
+A **Package** is a ready-made bundle of character content: a set of Proficiency shifts plus, sometimes, a few Abilities. Importing one applies its shifts to your Skills and copies its Abilities onto your sheet, so you can pick a Class, Race and Background without hand-building everything from scratch.
 
-Packages are a convenience, not a restriction. Everything a Package grants can be bought by hand with Trait Points and Ability Points, and nothing stops you from adjusting a Trait after importing one.
+Packages are a convenience, not a restriction. Everything a Package grants can be bought by hand with Skill Points and Ability Points, and nothing stops you from adjusting a Skill after importing one.
 
 ## Identity and Equipment
 
@@ -587,13 +799,13 @@ Packages come in two kinds:
 
 **Identity packages** (Class, Race, Background) describe who your character is. Once chosen they are always applied and cannot be switched off, because they are not something a character puts down.
 
-**Equipment packages** (Items) can be toggled on and off freely. Their Trait shifts apply only while the package is active, which is how a piece of gear that grants a bonus stops granting it once it is dropped, stolen, or broken.
+**Equipment packages** (Items) can be toggled on and off freely. Their Skill shifts apply only while the package is active, which is how a piece of gear that grants a bonus stops granting it once it is dropped, stolen, or broken.
 
 ## Budgets and Clamping
 
-A Package's shifts are paid for out of the same Trait Point budget as a manual Proficiency change, so importing one is not free: it spends points, and a Package you cannot afford is refused.
+A Package's shifts are paid for out of the same Skill Point budget as a manual Proficiency change, so importing one is not free: it spends points, and a Package you cannot afford is refused.
 
-A shift can also run out of ladder. If a Package would push a Trait above the top rung or below the bottom rung, the Trait stops at the end of the ladder and you are warned which Traits were clamped. The import still goes through; you simply do not get the part of the shift that had nowhere to go.
+A shift can also run out of ladder. If a Package would push a Skill above the top rung or below the bottom rung, the Skill stops at the end of the ladder and you are warned which Skills were clamped. The import still goes through; you simply do not get the part of the shift that had nowhere to go.
 
 ## Available Packages
 
@@ -601,7 +813,7 @@ A shift can also run out of ladder. If a Package would push a Trait above the to
 
 This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
 
-| Name | Description | Trait Shifts | Abilities Granted |
+| Name | Description | Skill Shifts | Abilities Granted |
 | --- | --- | --- | --- |
 | **Cleric** | A devoted healer and smiter. Keeps the party upright and the unholy down. | Medicine +1, Wisdom +2 | Healing Light |
 | **Fighter** | A disciplined front-line combatant. Trades blows, holds ground and keeps standing. | Constitution +1, Strength +2 | Power Cleave |
@@ -613,7 +825,7 @@ This is part of a character's core identity: once chosen it is always applied an
 
 This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
 
-| Name | Description | Trait Shifts | Abilities Granted |
+| Name | Description | Skill Shifts | Abilities Granted |
 | --- | --- | --- | --- |
 | **Dwarf** | Stone-stubborn and hard to move. Dwarves endure what others cannot. | Constitution +1, Crafting +1, HP +1 | Guarded Stance |
 | **Elf** | Long-lived, keen-eyed and attuned to magic. Elves move lightly and see far. | Reflex +1, Magic +1, Perception +1 | Arcane Spark |
@@ -625,7 +837,7 @@ This is part of a character's core identity: once chosen it is always applied an
 
 This is part of a character's core identity: once chosen it is always applied and cannot be switched off.
 
-| Name | Description | Trait Shifts | Abilities Granted |
+| Name | Description | Skill Shifts | Abilities Granted |
 | --- | --- | --- | --- |
 | **Artisan** | A trained trade and a paying clientele. You make things and you know their worth. | Crafting +1, Resources +1 | Field Dressing |
 | **Criminal** | A past best left undescribed. You know locks, fences and when to leave. | Deceive +1, Thievery +1 | Handful of Sand |
@@ -642,19 +854,19 @@ In the Ability Builder, you can often select the **Has item dependency** perk, w
 
 ## Item Categories
 
-**Equipment (Weapons & Armor):** Items that grant a passive Die Shift to specific Traits while equipped. For example, a well-crafted sword might grant a +1 Die Shift to Offensive Power rolls, while heavy armor might grant a +1 Die Shift to Defensive Constitution rolls but a -1 Die Shift to Stealth.
+**Equipment (Weapons & Armor):** Items that grant a passive Die Shift to specific Skills while equipped. For example, a well-crafted sword might grant a +1 Die Shift to Offensive Power rolls, while heavy armor might grant a +1 Die Shift to Defensive Constitution rolls but a -1 Die Shift to Stealth.
 
 **Consumables:** Single-use items like potions, bombs, or rations. These often trigger an Area Interaction or Direct Interaction with a predefined Enactment (like Enact Healing).
 
 ## Available Items
 
-Items are Packages, so they can be picked up and put down: their Trait shifts apply only while the item is carried and active. See [Packages](packages.md) for how importing and toggling works.
+Items are Packages, so they can be picked up and put down: their Skill shifts apply only while the item is carried and active. See [Packages](packages.md) for how importing and toggling works.
 
 ### Items
 
-These may be picked up and put down freely: the trait shifts apply only while the package is active.
+These may be picked up and put down freely: the skill shifts apply only while the package is active.
 
-| Name | Description | Trait Shifts | Abilities Granted |
+| Name | Description | Skill Shifts | Abilities Granted |
 | --- | --- | --- | --- |
 | **Dagger** | A short concealable blade. Fast in the hand and easy to coat with something nasty. | - | Dagger |
 | **Healer's Kit** | Bandages, salves and a needle. Enough to stop bleeding and steady a shaking hand. | - | Field Dressing, Battle Focus |
@@ -667,13 +879,13 @@ These may be picked up and put down freely: the trait shifts apply only while th
 
 ## Introduction
 
-As your character progresses through the world, they will gain levels. Leveling up represents your character's growth, allowing them to improve their Traits, increase their Vital stats, and become more capable in both combat and roleplay.
+As your character progresses through the world, they will gain levels. Leveling up represents your character's growth, allowing them to improve their Skills, increase their Vital stats, and become more capable in both combat and roleplay.
 
 The maximum level a character can reach is Level 10.
 
-## Trait Points
+## Skill Points
 
-Trait Points are used to upgrade your Proficiency Levels in various Traits (e.g., shifting a Trait from Untrained to Trained, or Expert to Master).
+Skill Points are used to upgrade your Proficiency Levels in various Skills (e.g., shifting a Skill from Untrained to Trained, or Expert to Master).
 
 ### Starting and Gaining Points
 
@@ -681,13 +893,13 @@ Both point pools follow the same rule: you start with a fixed amount at Level 1 
 
 $$Points = Start + PerLevel \times (Level - 1)$$
 
-For Trait Points that is **13** at Level 1 and **+3** per level thereafter. For Ability Points it is **9** at Level 1 and **+3** per level.
+For Skill Points that is **13** at Level 1 and **+3** per level thereafter. For Ability Points it is **9** at Level 1 and **+3** per level.
 
-Starting Trait Points are set so a new character can raise their Vital Traits off the bottom rung and still put a handful of Traits into their speciality. The per-level gain is one visible die step plus change, and it matches the Ability Point gain so both halves of your character sheet grow at the same rate.
+Starting Skill Points are set so a new character can raise their Vital Skills off the bottom rung and still put a handful of Skills into their speciality. The per-level gain is one visible die step plus change, and it matches the Ability Point gain so both halves of your character sheet grow at the same rate.
 
 ### Refunding Points
 
-You can dynamically gain Trait Points by lowering a Proficiency. For instance, if you are an Expert in a Trait but want to balance things out, you can lower it back toward the starting rung and recover the points you spent. Dropping a Trait *below* the starting rung to Inept even refunds an extra point. Spending points never locks you into your choices; you can always reallocate them.
+You can dynamically gain Skill Points by lowering a Proficiency. For instance, if you are an Expert in a Skill but want to balance things out, you can lower it back toward the starting rung and recover the points you spent. Dropping a Skill *below* the starting rung to Inept even refunds an extra point. Spending points never locks you into your choices; you can always reallocate them.
 
 ## Proficiency Tiers
 
@@ -706,9 +918,9 @@ The dice ladder rises by a flat +1 average per rung. The die is capped at d12+3;
 | Legendary | 3 | d12+3 | 31 | 10 | 29 |
 
 
-## Leveling Table: Trait Points
+## Leveling Table: Skill Points
 
-| Level | Points Gained | Total Trait Points |
+| Level | Points Gained | Total Skill Points |
 | --- | --- | --- |
 | **1** | 13 (starting) | 13 |
 | **2** | +3 | 16 |
@@ -733,14 +945,14 @@ The dice ladder rises by a flat +1 average per rung. The die is capped at d12+3;
 # skill-trees
 ## Skills Trees
 
-Skill Trees are thematic collections of Abilities, Traits, and Perks. Instead of building Abilities completely from scratch every time, a player can adopt a Skill Tree (e.g., The Pyromancer, The Master Thief, The Telepath).
+Skill Trees are thematic collections of Abilities, Skills, and Perks. Instead of building Abilities completely from scratch every time, a player can adopt a Skill Tree (e.g., The Pyromancer, The Master Thief, The Telepath).
 
 Skill trees guide character progression by locking powerful, complex Abilities behind foundational ones. This ensures a character naturally grows into a specialized role.
 Rules
 
-*   **Nodes:** A Skill Tree is made up of interconnected Nodes. A Node can be a new Ability, a Perk for an existing Ability, a new Trait, or a flat stat boost (like +Max Energy).
+*   **Nodes:** A Skill Tree is made up of interconnected Nodes. A Node can be a new Ability, a Perk for an existing Ability, a new Skill, or a flat stat boost (like +Max Energy).
 
-*   **Progression:** You must unlock the prerequisite Node before you can spend Ability Points or Trait Points to unlock the next Node connected to it.
+*   **Progression:** You must unlock the prerequisite Node before you can spend Ability Points or Skill Points to unlock the next Node connected to it.
 
 *   **Creating Trees:** GMs and players are encouraged to build custom Skill Trees during character creation by bundling custom-built Abilities and mapping out how they evolve.
 
@@ -1636,7 +1848,7 @@ Will it hit or miss? I guess they never miss huh?
 ## Ability Builder
 
 > [!NOTE]
-> This document assumes you've read the core chapters, character-attribute, character-traits, leveling and multi-dice-system.
+> This document assumes you've read the core chapters, character-trait, character-skills, leveling and multi-dice-system.
 
 ## Introduction
 
@@ -2463,7 +2675,7 @@ Enact Damage allows characters to inflict harm on their enemies. It always has a
 
 **How to build it**
 
-1. **Source** - The offensive trait whose die is rolled for damage. Choose one of:
+1. **Source** - The offensive skill whose die is rolled for damage. Choose one of:
    - *Offense:* Strength, Precision, Wisdom, Magic
    - *Generic:* 1 (flat, no roll) (-1 build (refund)), 1d4, 1d6 (1 build), 1d8 (2 build), 1d10 (3 build), 1d12 (4 build), 1d12+1 (5 build), 1d12+2 (6 build), 1d12+3 (7 build)
    - *General:* Stealth (1 build), Perception (1 build), Nature (1 build), Crafting (1 build), People Skill (1 build), Performance (1 build), Thievery (1 build), Knowledge (1 build), Magic (1 build), Medicine (1 build), Provoke (1 build), Intimidate (1 build), Athletics (1 build), Deceive (1 build), Resources (1 build)
@@ -2518,7 +2730,7 @@ Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or pro
 
 **How to build it**
 
-1. **Trait** - Choose one of:
+1. **Skill** - Choose one of:
    - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
    - *Offense:* Strength, Precision, Wisdom, Magic
    - *Defense:* Constitution, Reflex, Wisdom, Magic
@@ -2531,26 +2743,26 @@ Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or pro
 
 ## Enact Phase
 
-Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds.
+Enact Phase allows you to shift some skills now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a skill up for 2 rounds, after those two rounds those skills are shifted down for 2 rounds.
 
 **How to build it**
 
 1. **Duration (rounds)** - Any whole number from **1 to 5** (starts at 1). Cost: 1 build per round.
 2. **Shift -/+** - Any whole number from **-6 to 6** (starts at 0). Cost: 1 build per step.
-3. **Affected Trait(s)** - You start with **one** affected trait (Precision and Power) and may add or remove affected traits. Cost: 1 build per affected trait.
+3. **Affected Skill(s)** - You start with **one** affected skill (Precision and Power) and may add or remove affected skills. Cost: 1 build per affected skill.
 
-   For each affected trait, choose one of:
+   For each affected skill, choose one of:
    - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
    - *Offense:* Strength, Precision, Wisdom, Magic
    - *Defense:* Constitution, Reflex, Wisdom, Magic
 
 ## Enact Modification
 
-Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens.
+Enact Shift allows you to temporarily enhance or weaken Skills. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens.
 
 **How to build it**
 
-1. **Trait** - Choose one of:
+1. **Skill** - Choose one of:
    - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
    - *Offense:* Strength, Precision, Wisdom, Magic
    - *Defense:* Constitution, Reflex, Wisdom, Magic
@@ -2563,7 +2775,7 @@ Enact Adjustment allows you to adjust the effect of another enactment that someo
 
 **How to build it**
 
-1. **Source** - The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die. Choose one of:
+1. **Source** - The offensive skill whose die is rolled for damage. Higher proficiency in the skill means a larger die. Choose one of:
    - 1 (flat, no roll) (-1 build (refund)), 1d4, 1d6 (1 build), 1d8 (2 build), 1d10 (3 build), 1d12 (4 build), 1d12+1 (5 build), 1d12+2 (6 build), 1d12+3 (7 build)
 
 # Interactions
@@ -2605,9 +2817,9 @@ Area Interactions encompass actions like bombs, splash potions, and traps. These
    - *General:* Stealth (1 build), Perception (1 build), Nature (1 build), Crafting (1 build), People Skill (1 build), Performance (1 build), Thievery (1 build), Knowledge (1 build), Magic (1 build), Medicine (1 build), Provoke (1 build), Intimidate (1 build), Athletics (1 build), Deceive (1 build), Resources (1 build)
    - *Offense:* Strength, Precision, Wisdom, Magic
    - *Defense:* Constitution (2 build), Reflex (2 build), Wisdom (2 build), Magic (2 build)
-2. **Counter Trait** - You start with **two** counter traits (Reflex and Constitution) and may add or remove counter traits. Cost: 1 build per counter trait.
+2. **Counter Skill** - You start with **two** counter skills (Reflex and Constitution) and may add or remove counter skills. Cost: 1 build per counter skill.
 
-   For each counter trait, choose one of:
+   For each counter skill, choose one of:
    - *General:* Stealth (1 build), Perception (1 build), Nature (1 build), Crafting (1 build), People Skill (1 build), Performance (1 build), Thievery (1 build), Knowledge (1 build), Magic (1 build), Medicine (1 build), Provoke (1 build), Intimidate (1 build), Athletics (1 build), Deceive (1 build), Resources (1 build)
    - *Offense:* Strength (2 build), Precision (2 build), Wisdom (2 build), Magic (2 build)
    - *Defense:* Constitution, Reflex, Wisdom, Magic
@@ -2623,7 +2835,7 @@ As you level up, your character gains a deeper understanding of their powers, te
 
 ## Ability Points
 
-At Level 1 a character starts with **9** Ability Points and gains **3** more with every level after that, up to level 10. The gain is flat: there are no bonus points at milestone levels, and the same **+3** per level applies to Trait Points, so both halves of your character sheet grow at the same rate.
+At Level 1 a character starts with **9** Ability Points and gains **3** more with every level after that, up to level 10. The gain is flat: there are no bonus points at milestone levels, and the same **+3** per level applies to Skill Points, so both halves of your character sheet grow at the same rate.
 
 These points are permanently invested into your abilities during character creation or level-ups.
 
@@ -2674,14 +2886,16 @@ The ruleset is a directory of YAML section files. Loading is strict: unknown key
 The currently loaded ruleset is assembled from these files:
 
 - `ability_types.yaml`
-- `attributes.yaml`
 - `conditions.yaml`
 - `enactments.yaml`
 - `file_order.yaml`
 - `general.yaml`
 - `interactions.yaml`
+- `invoking.yaml`
 - `leveling.yaml`
+- `negotiation.yaml`
 - `proficiencies.yaml`
+- `skills.yaml`
 - `traits.yaml`
 
 `file_order.yaml` deserves a note of its own: it lists the markdown chapters, in order, that make up the generated rulebook. The list is checked in both directions when the config loads. Every entry must exist on disk, and every `.md` file under `./docs/` must be listed exactly once, so a chapter cannot be written and then quietly left out of the book. Maintainer notes that are deliberately not chapters are named in `docsOrderExempt` in `internal/config/docsorder.go`.
@@ -2738,14 +2952,14 @@ A field is one choice in the builder. Fields appear under a component's `fields`
 | `visibility_when` | text | Name of the sibling field that controls whether this field is shown. |
 | `show_when` | text | The value the controlling field must have for this field to be shown. A hidden field contributes no cost. |
 | `inline_builder` | `InlineBuilder` block (optional) | Turns a dropdown into a nested builder for the component the selected value names. |
-| `group_offsets` | `GroupOffsets` block (optional) | Per-trait-group cost offsets for a dropdown backed by a multi-group trait source. |
+| `group_offsets` | `GroupOffsets` block (optional) | Per-skill-group cost offsets for a dropdown backed by a multi-group skill source. |
 
 ### Supported field types
 
 | Type | Behaviour |
 | --- | --- |
 | `checkbox` | A toggle. Its `cost` applies only while it is checked. |
-| `dropdown` | Pick one value, from inline `options` or a named `options_source`. The field `cost` applies when a non-empty value is selected, plus the selected option's own cost and any `group_offsets` for its trait group. |
+| `dropdown` | Pick one value, from inline `options` or a named `options_source`. The field `cost` applies when a non-empty value is selected, plus the selected option's own cost and any `group_offsets` for its skill group. |
 | `free_text` | Free-form text. Never carries a cost. |
 | `free_number` | A bounded whole number using `min`, `max`, `step` and `rounding`. `per_step.increase` or `per_step.decrease` is charged per step away from `default`. |
 | `multiselect` | A repeatable set of rows built from `row_fields`, starting at `default_count` and pre-filled from `row_defaults`. `per_item` is charged per row added or removed relative to `default_count`. |
@@ -2764,14 +2978,14 @@ An inline dropdown option looks like this:
 | `cost` | `Cost` block (optional) | Cost added when this option is the selected one. |
 | `fields` | list of `Field` block | Extra fields revealed when this option is selected. |
 
-### Trait group offsets
+### Skill group offsets
 
-A dropdown backed by a multi-group trait source can lean toward one trait group, making a pick from another group cost more.
+A dropdown backed by a multi-group skill source can lean toward one skill group, making a pick from another group cost more.
 
 | Key | Value | Purpose |
 | --- | --- | --- |
-| `default_group` | text | The trait group the field leans toward. A value with no group prefix is treated as belonging to this group. |
-| `offsets` | mapping of text to `Cost` block (optional) | Extra cost added per trait group, keyed by group id. Picking a trait outside the preferred group normally costs more. |
+| `default_group` | text | The skill group the field leans toward. A value with no group prefix is treated as belonging to this group. |
+| `offsets` | mapping of text to `Cost` block (optional) | Extra cost added per skill group, keyed by group id. Picking a skill outside the preferred group normally costs more. |
 
 ### Inline builders
 
@@ -2819,7 +3033,7 @@ Ability types, enactments and interactions are all the same underlying shape. No
 | --- | --- | --- |
 | `information` | text | Help text for the validation section as a whole. |
 | `render_information` | true/false | When true, show the section information as plain text under the header instead of behind a hover indicator. |
-| `fields` | list of `Field` block | The validation choices offered, such as which trait resolves the engagement roll and what counters it. |
+| `fields` | list of `Field` block | The validation choices offered, such as which skill resolves the engagement roll and what counters it. |
 
 ## Option sources
 
@@ -2840,34 +3054,35 @@ These are the grouped sources, which concatenate several member sources and rend
 | Grouped Source | Member Groups |
 | --- | --- |
 | `conditions_all` | Conditions (`conditions`) |
-| `roll_all` | Generic (`roll_generic`), General (`traits.general`), Offense (`traits.offense`), Defense (`traits.defense`) |
-| `roll_damage` | Offense (`traits.offense`), Generic (`roll_generic`), General (`traits.general`) |
+| `roll_all` | Generic (`roll_generic`), General (`skills.general`), Offense (`skills.offense`), Defense (`skills.defense`) |
+| `roll_damage` | Offense (`skills.offense`), Generic (`roll_generic`), General (`skills.general`) |
 | `roll_heal` | Generic (`roll_generic`), Medicine (`roll_medicine`) |
-| `traits_all` | General (`traits.general`), Offense (`traits.offense`), Defense (`traits.defense`) |
-| `traits_general_defense` | General (`traits.general`), Defense (`traits.defense`) |
-| `traits_generic_offense` | Generic (`roll_generic`), Defense (`traits.offense`) |
+| `skills_all` | General (`skills.general`), Offense (`skills.offense`), Defense (`skills.defense`) |
+| `skills_general_defense` | General (`skills.general`), Defense (`skills.defense`) |
+| `skills_generic_offense` | Generic (`roll_generic`), Defense (`skills.offense`) |
 
-Two further source forms are resolved dynamically rather than being declared: a dotted `traits.<category>` reference expands to that trait category, and `ability_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
+Two further source forms are resolved dynamically rather than being declared: a dotted `skills.<category>` reference expands to that skill category, and `ability_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
 
 ## Proficiencies and leveling
 
 | Key | Value | Purpose |
 | --- | --- | --- |
-| `id` | text | Stable identifier for the tier, referenced by traits and by default_proficiency. |
+| `id` | text | Stable identifier for the tier, referenced by skills and by default_proficiency. |
 | `name` | text | Display name of the tier. |
-| `cost` | whole number | Trait points charged to climb onto this rung from the one below it. |
+| `cost` | whole number | Skill points charged to climb onto this rung from the one below it. |
 | `note` | text | Optional remark about the tier. |
-| `die` | text | Die rolled by a dice-backed trait at this tier. Used for every trait group unless dice overrides it. |
-| `dice` | mapping of text to text | Per-trait-group die overrides, keyed by group id. Only needed when a group differs from die. |
-| `vitals` | mapping of text to any scalar | Numeric values this tier grants for the vital traits, keyed by lowercase trait name (hp, movement, energy). |
+| `die` | text | Die rolled by a dice-backed skill at this tier. Used for every skill group unless dice overrides it. |
+| `dice` | mapping of text to text | Per-skill-group die overrides, keyed by group id. Only needed when a group differs from die. |
+| `vitals` | mapping of text to any scalar | Numeric values this tier grants for the vital skills, keyed by lowercase skill name (hp, movement, energy). |
 
 Point budgets are computed from a formula rather than a hand-written table, which is what keeps the documented curve and the served numbers identical.
 
 | Key | Value | Purpose |
 | --- | --- | --- |
 | `max_level` | whole number | Highest level a character may reach. Levels are clamped to this value on every edit and on import. |
-| `trait_points` | `LevelTable` block | Budget progression for the trait (skill) point pool. |
+| `skill_points` | `LevelTable` block | Budget progression for the skill point pool. |
 | `ability_points` | `LevelTable` block | Budget progression for the ability (perk) point pool. |
+| `invoke_points` | `InvokeTable` block | Pool progression for the per-session invoke point currency. |
 
 | Key | Value | Purpose |
 | --- | --- | --- |
@@ -2902,7 +3117,7 @@ The rules are:
 *   Each enactment beyond the first pays its full `base_cost` plus the additional-enactment surcharge. See [Enactments](enactments.md) for the surcharge and the separate-target option.
 *   Ability types start from `base_energy` and `base_action`.
 *   A `checkbox` charges its cost only while checked.
-*   A `dropdown` charges its field `cost` when a non-empty value is selected, plus the selected option's own cost, plus any group offset for the selected trait's group.
+*   A `dropdown` charges its field `cost` when a non-empty value is selected, plus the selected option's own cost, plus any group offset for the selected skill's group.
 *   A `free_number` charges `per_step.increase` or `per_step.decrease` per step away from its `default`, with `rounding` deciding how a partial step is treated.
 *   A repeatable field charges `per_item` per row added beyond `default_count`, or refunds per row removed below it.
 *   A condition row charges a shiftable condition's `shift_cost` per unit of shift, or a fixed condition's flat cost.

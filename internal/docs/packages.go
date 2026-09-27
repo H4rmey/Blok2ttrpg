@@ -138,11 +138,11 @@ func categoryOrder(byCategory map[string][]premade.Package) []string {
 func writePackageCategory(b *strings.Builder, category string, list []premade.Package) {
 	fmt.Fprintf(b, "### %s\n\n", categoryLabel(category))
 	if premade.Toggleable(category) {
-		b.WriteString("These may be picked up and put down freely: the trait shifts apply only while the package is active.\n\n")
+		b.WriteString("These may be picked up and put down freely: the skill shifts apply only while the package is active.\n\n")
 	} else {
 		b.WriteString("This is part of a character's core identity: once chosen it is always applied and cannot be switched off.\n\n")
 	}
-	b.WriteString("| Name | Description | Trait Shifts | Abilities Granted |\n")
+	b.WriteString("| Name | Description | Skill Shifts | Abilities Granted |\n")
 	b.WriteString("| --- | --- | --- | --- |\n")
 	for _, p := range list {
 		fmt.Fprintf(b, "| **%s** | %s | %s | %s |\n",
@@ -162,9 +162,9 @@ func categoryLabel(category string) string {
 	return titleCaseWord(category)
 }
 
-// shiftsPhrase renders a package's trait shifts as a readable list, e.g.
-// "Power +2, Stealth -1". Trait keys are namespaced as "group.Trait"; the group
-// prefix is dropped because the trait names are unique to the reader.
+// shiftsPhrase renders a package's skill shifts as a readable list, e.g.
+// "Power +2, Stealth -1". Skill keys are namespaced as "group.Skill"; the group
+// prefix is dropped because the skill names are unique to the reader.
 func shiftsPhrase(shifts map[string]int) string {
 	if len(shifts) == 0 {
 		return ""
@@ -176,13 +176,13 @@ func shiftsPhrase(shifts map[string]int) string {
 	sort.Strings(keys)
 	parts := make([]string, 0, len(keys))
 	for _, k := range keys {
-		parts = append(parts, fmt.Sprintf("%s %s", traitDisplayName(k), signed(shifts[k])))
+		parts = append(parts, fmt.Sprintf("%s %s", skillDisplayName(k), signed(shifts[k])))
 	}
 	return strings.Join(parts, ", ")
 }
 
-// traitDisplayName strips the group namespace from a "group.Trait" key.
-func traitDisplayName(key string) string {
+// skillDisplayName strips the group namespace from a "group.Skill" key.
+func skillDisplayName(key string) string {
 	if i := strings.IndexByte(key, '.'); i >= 0 {
 		return key[i+1:]
 	}

@@ -16,7 +16,7 @@ func twoEnactmentPerk(newTarget bool) model.Ability {
 	direct := map[string]any{"range": "5", "targets": 1}
 	validation := map[string]any{
 		"engage":        "d6",
-		"counter_trait": []map[string]any{{"value": "defense.Reflex"}},
+		"counter_skill": []map[string]any{{"value": "defense.Reflex"}},
 	}
 	return model.Ability{
 		Name: "Test Perk",

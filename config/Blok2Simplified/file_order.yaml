@@ -7,11 +7,14 @@
 # listed in docsOrderExempt in internal/config/docsorder.go rather than here.
 file_order:
   - ./docs/blok2ttrpg.md
-  - ./docs/core/character-attributes.md
   - ./docs/core/character-traits.md
+  - ./docs/core/skills.md
   - ./docs/core/dice-rolling.md
+  - ./docs/core/invoking.md
   - ./docs/core/combat.md
+  - ./docs/core/negotiation.md
   - ./docs/core/conditions.md
+
   - ./docs/core/abilities.md
   - ./docs/core/packages.md
   - ./docs/core/items.md

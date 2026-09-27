@@ -21,7 +21,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Constitution
   - type: healing
     # The healing lands on you, not on the enemy that was drained, so this
@@ -36,5 +36,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Constitution

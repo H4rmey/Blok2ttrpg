@@ -25,11 +25,11 @@ func funcMap() template.FuncMap {
 			}
 			return ""
 		},
-		"traitProf": func(c model.Character, group, trait string) string {
-			if c.Traits == nil {
+		"skillProf": func(c model.Character, group, skill string) string {
+			if c.Skills == nil {
 				return ""
 			}
-			return c.Traits[model.TraitKey(group, trait)]
+			return c.Skills[model.SkillKey(group, skill)]
 		},
 		"resolveOptions": func(cfg *config.Config, f config.Field) []config.Option {
 			return cfg.ResolveOptions(f)
@@ -69,8 +69,8 @@ func funcMap() template.FuncMap {
 		"abilityTypes": func(cfg *config.Config) []*config.Component { return cfg.AbilityTypes.List() },
 		"enactments":   func(cfg *config.Config) []*config.Component { return cfg.Enactments.List() },
 		"interactions": func(cfg *config.Config) []*config.Component { return cfg.Interactions.List() },
-		"attributes":   func(cfg *config.Config) []*config.AttributeGroup { return cfg.Attributes.List() },
-		"traitGroups":  func(cfg *config.Config) []config.TraitGroup { return cfg.Traits.List() },
+		"traits":   func(cfg *config.Config) []*config.TraitGroup { return cfg.Traits.List() },
+		"skillGroups":  func(cfg *config.Config) []config.SkillGroup { return cfg.Skills.List() },
 		// enactmentsFor/interactionsFor/validationFieldsFor apply the UI-only
 		// allowed/blocked filtering for a given ability-type or enactment id.
 		"enactmentsFor": func(cfg *config.Config, abilityTypeID string) []*config.Component {
@@ -151,29 +151,29 @@ func funcMap() template.FuncMap {
 			return out
 		},
 		// profLabel renders a proficiency choice with its dice value for the
-		// given trait group, e.g. "Trained (d8)".
+		// given skill group, e.g. "Trained (d8)".
 		"profLabel": func(p config.Proficiency, groupID string) string {
 			if d := p.DieFor(groupID); d != "" {
 				return fmt.Sprintf("%s (%s)", p.Name, d)
 			}
-			// Vital traits show hp/movement/energy rather than dice.
+			// Vital skills show hp/movement/energy rather than dice.
 			if v, ok := p.Vitals[groupID]; ok {
 				return fmt.Sprintf("%s (%v)", p.Name, v)
 			}
 			return p.Name
 		},
-		// profTraitLabel renders a proficiency choice for a specific trait. For
-		// vital traits it shows the numeric vital value (keyed by trait name)
+		// profSkillLabel renders a proficiency choice for a specific skill. For
+		// vital skills it shows the numeric vital value (keyed by skill name)
 		// rather than a die; otherwise it falls back to the dice-based label.
-		// The configured vital group id (cfg.VitalGroup) selects which trait
+		// The configured vital group id (cfg.VitalGroup) selects which skill
 		// group is treated as vitals.
-		"profTraitLabel": func(cfg *config.Config, p config.Proficiency, groupID, trait string) string {
+		"profSkillLabel": func(cfg *config.Config, p config.Proficiency, groupID, skill string) string {
 			vitalGroup := "vital"
 			if cfg != nil && cfg.VitalGroup != "" {
 				vitalGroup = cfg.VitalGroup
 			}
 			if groupID == vitalGroup {
-				key := strings.ToLower(trait)
+				key := strings.ToLower(skill)
 				if v, ok := p.Vitals[key]; ok {
 					return fmt.Sprintf("%s (%v)", p.Name, v)
 				}

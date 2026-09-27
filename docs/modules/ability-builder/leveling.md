@@ -9,7 +9,7 @@ As you level up, your character gains a deeper understanding of their powers, te
 
 ## Ability Points
 
-At Level 1 a character starts with **{{ .Leveling.AbilityPoints.Start }}** Ability Points and gains **{{ .Leveling.AbilityPoints.PerLevel }}** more with every level after that, up to level {{ .Leveling.MaxLevel }}. The gain is flat: there are no bonus points at milestone levels, and the same **+{{ .Leveling.AbilityPoints.PerLevel }}** per level applies to Trait Points, so both halves of your character sheet grow at the same rate.
+At Level 1 a character starts with **{{ .Leveling.AbilityPoints.Start }}** Ability Points and gains **{{ .Leveling.AbilityPoints.PerLevel }}** more with every level after that, up to level {{ .Leveling.MaxLevel }}. The gain is flat: there are no bonus points at milestone levels, and the same **+{{ .Leveling.AbilityPoints.PerLevel }}** per level applies to Skill Points, so both halves of your character sheet grow at the same rate.
 
 These points are permanently invested into your abilities during character creation or level-ups.
 

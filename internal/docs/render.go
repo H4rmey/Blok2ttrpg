@@ -71,25 +71,25 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 		},
 		// conditionsTable renders the full list of conditions defined in the
 		// config as reader-facing markdown tables: shiftable conditions (those
-		// that move traits up or down within a shift range) are listed with
+		// that move skills up or down within a shift range) are listed with
 		// their range, and fixed conditions are listed with their effect. This
 		// keeps the rulebook's condition list in sync with the config.
 		"conditionsTable": func() string {
 			return conditionsTable(cfg)
 		},
-		// traitsTable renders the trait roster from the config: one table per
-		// dice-backed trait group (general, offense, defense) showing the die
+		// skillsTable renders the skill roster from the config: one table per
+		// dice-backed skill group (general, offense, defense) showing the die
 		// each proficiency tier grants, plus a vital table showing the numeric
 		// values each tier grants for HP, Movement and Energy. This keeps the
-		// trait list and its tier progression in sync with the config.
-		"traitsTable": func() string {
-			return traitsTable(cfg)
+		// skill list and its tier progression in sync with the config.
+		"skillsTable": func() string {
+			return skillsTable(cfg)
 		},
-		// attributeSections renders the character attribute sheet sections from
+		// traitSections renders the character trait sheet sections from
 		// the config: one bulleted list per section (Identity, Description,
 		// etc.) with each field's label.
-		"attributeSections": func() string {
-			return attributeSections(cfg)
+		"traitSections": func() string {
+			return traitSections(cfg)
 		},
 
 		// perksTable renders a markdown table of every cost-bearing choice on a
@@ -144,7 +144,7 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 		},
 
 		// levelingTable renders the point budget for every level of a pool
-		// ("trait" or "ability"). The rows are computed with the same budget
+		// ("skill" or "ability"). The rows are computed with the same budget
 		// accessors the application uses, so the documented curve cannot drift
 		// from the numbers a character actually receives.
 		"levelingTable": func(pool string) string {
@@ -163,6 +163,24 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 		// rulesFlagsTable documents the cost floors, the skill-point budget
 		// enforcement and the level cap.
 		"rulesFlagsTable": func() string { return rulesFlagsTable(cfg) },
+
+		// Invoking. Each of these reads invoking.yaml (and the invoke pool in
+		// leveling.yaml) so the invoke chapter's numbers are the ones the app
+		// serves rather than a second copy written into the prose.
+		"invokePointsTable":   func() string { return invokePointsTable(cfg) },
+		"invokeSpendsTable":   func() string { return invokeSpendsTable(cfg) },
+		"invokeGainsTable":    func() string { return invokeGainsTable(cfg) },
+		"combatGainsTable":    func() string { return combatGainsTable(cfg) },
+		"invokeRefreshPhrase": func() string { return invokeRefreshPhrase(cfg) },
+		// reactionRules documents the cost, frequency and timing of the
+		// out-of-turn action. It is used by the combat chapter.
+		"reactionRules": func() string { return reactionRules(cfg) },
+
+		// Negotiation. The motivation ladder, the patience/argument rules and
+		// the NPC trait-alignment clamps, all read from negotiation.yaml.
+		"motivationTable":       func() string { return motivationTable(cfg) },
+		"negotiationRulesTable": func() string { return negotiationRulesTable(cfg) },
+		"traitAlignmentTable":   func() string { return traitAlignmentTable(cfg) },
 
 		// packagesTable renders the built-in content library. With no
 		// arguments every category is rendered; otherwise only the named
@@ -330,14 +348,14 @@ func writeDropdownRows(b *strings.Builder, cfg *config.Config, f config.Field, n
 		}
 	}
 
-	// Group offsets attach a cost to picking a trait from a given group.
+	// Group offsets attach a cost to picking a skill from a given group.
 	if f.GroupOffsets != nil {
 		for _, grp := range orderedGroups(f.GroupOffsets) {
 			c := f.GroupOffsets.Offsets[grp]
 			if !hasCost(c) {
 				continue // the preferred group is free; not worth a row.
 			}
-			b.WriteString(row("Use "+groupPhrase(grp)+" trait for "+orDash(f.Label), costWords(c)))
+			b.WriteString(row("Use "+groupPhrase(grp)+" skill for "+orDash(f.Label), costWords(c)))
 			rows++
 		}
 	}
@@ -384,7 +402,7 @@ func costWords(c *config.Cost) string {
 	return strings.Join(parts, ", ")
 }
 
-// groupPhrase turns a trait group id into a readable article + adjective, e.g.
+// groupPhrase turns a skill group id into a readable article + adjective, e.g.
 // "offense" -> "an Offensive", "defense" -> "a Defensive".
 func groupPhrase(group string) string {
 	switch group {
@@ -403,7 +421,7 @@ func groupPhrase(group string) string {
 // phrasing. It is deliberately simple; irregular plurals are rare here.
 func singular(label string) string {
 	l := strings.TrimSpace(label)
-	// Strip an explicit "(s)" plural marker, e.g. "Affected Trait(s)".
+	// Strip an explicit "(s)" plural marker, e.g. "Affected Skill(s)".
 	if strings.HasSuffix(l, "(s)") {
 		return strings.TrimSpace(l[:len(l)-3])
 	}

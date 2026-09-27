@@ -189,7 +189,7 @@ var supportedFieldTypes = []struct {
 	behaviour string
 }{
 	{"checkbox", "A toggle. Its `cost` applies only while it is checked."},
-	{"dropdown", "Pick one value, from inline `options` or a named `options_source`. The field `cost` applies when a non-empty value is selected, plus the selected option's own cost and any `group_offsets` for its trait group."},
+	{"dropdown", "Pick one value, from inline `options` or a named `options_source`. The field `cost` applies when a non-empty value is selected, plus the selected option's own cost and any `group_offsets` for its skill group."},
 	{"free_text", "Free-form text. Never carries a cost."},
 	{"free_number", "A bounded whole number using `min`, `max`, `step` and `rounding`. `per_step.increase` or `per_step.decrease` is charged per step away from `default`."},
 	{"multiselect", "A repeatable set of rows built from `row_fields`, starting at `default_count` and pre-filled from `row_defaults`. `per_item` is charged per row added or removed relative to `default_count`."},
@@ -253,7 +253,7 @@ func optionGroupsTable(cfg *config.Config) string {
 // configFilesList lists the YAML section files the ruleset directory actually
 // contains, so the reference names the real files rather than a hardcoded list
 // that can fall out of date. The previous hand-written list was missing
-// attributes.yaml and still named a states.yaml that no longer exists.
+// traits.yaml and still named a states.yaml that no longer exists.
 func configFilesList(loaded *config.Loaded) string {
 	if loaded == nil || loaded.Dir == "" {
 		return "_No ruleset directory recorded._"

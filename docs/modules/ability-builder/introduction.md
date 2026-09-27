@@ -2,7 +2,7 @@
 ## Ability Builder
 
 > [!NOTE]
-> This document assumes you've read the core chapters, character-attribute, character-traits, leveling and multi-dice-system.
+> This document assumes you've read the core chapters, character-trait, character-skills, leveling and multi-dice-system.
 
 ## Introduction
 

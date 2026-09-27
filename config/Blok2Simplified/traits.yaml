@@ -1,34 +1,42 @@
-# Dice-backed skill groups. These render under the "Skills" heading on the
-# character page and each selection costs skill (trait) points.
+# Character trait sections. These are free-form character sheet fields stored
+# generically on the character. They do not affect ability cost.
+#
+# Traits are the narrative descriptors a character is described by, and they are
+# what a player invokes: spending an invoke point to bring a trait to bear for a
+# bonus, or accepting a penalty from one to earn a point back. See
+# docs/core/invoking.md for the invoke rules and docs/core/skills.md for the
+# dice-backed roster, which lives in skills.yaml.
+#
+# This file used to be called attributes.yaml and its sections "attributes".
+# The rulebook now uses one word, "trait", for all of it.
 traits:
-  general:
-    - Stealth
-    - Perception
-    - Nature
-    - Crafting
-    - People Skill
-    - Performance
-    - Thievery
-    - Knowledge
-    - Magic
-    - Medicine
-    - Provoke
-    - Intimidate
-    - Athletics
-    - Deceive
-    - Resources
-
-  offense:
-    - Strength
-    - Precision
-    - Wisdom
-    - Magic
-  defense:
-    - Constitution
-    - Reflex
-    - Wisdom
-    - Magic
-  vital:
-    - HP
-    - Movement
-    - Energy
+  identity:
+    label: "Identity"
+    fields:
+      - key: name
+        label: "Name"
+        type: free_text
+      - key: age
+        label: "Age"
+        type: free_text
+      - key: description
+        label: "Description"
+        type: free_text
+  descriptors:
+    label: "Traits"
+    fields:
+      - key: motivation
+        label: "Motivation"
+        type: free_text
+      - key: problem
+        label: "Problem"
+        type: free_text
+      - key: trait_1
+        label: "Trait 1"
+        type: free_text
+      - key: trait_2
+        label: "Trait 2"
+        type: free_text
+      - key: trait_3
+        label: "Trait 3"
+        type: free_text

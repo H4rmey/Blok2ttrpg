@@ -23,7 +23,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom
   - type: motion
     # You are the one who moves, not the enemy you taunted, so this enactment
@@ -40,5 +40,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom

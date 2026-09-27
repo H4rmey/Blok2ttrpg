@@ -23,13 +23,13 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom
   - type: modification
     # The same cursed enemy is the one whose guard slips, so this enactment
     # inherits the target above.
     fields:
       comment: Their guard slips with it.
-      modification-traits: defense.Reflex
+      modification-skills: defense.Reflex
       modification-shift-amount: -1
       modificaiton-shift-duration: 2

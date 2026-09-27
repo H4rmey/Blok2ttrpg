@@ -9,7 +9,7 @@ enactments:
   - type: modification
     fields:
       comment: Sharpen your aim.
-      modification-traits: offense.Precision
+      modification-skills: offense.Precision
       modification-shift-amount: 1
       modificaiton-shift-duration: 2
     interaction: self
@@ -18,5 +18,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom

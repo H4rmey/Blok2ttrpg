@@ -76,7 +76,7 @@ func FieldsCost(cfg *config.Config, fields []config.Field, values map[string]any
 			if f.Cost != nil && val != "" {
 				total.plus(*f.Cost)
 			}
-			// Trait group offsets: leaning cost applied per selected group.
+			// Skill group offsets: leaning cost applied per selected group.
 			if off := cfg.GroupOffsetFor(f, val); off != nil {
 				total.plus(*off)
 			}
@@ -392,31 +392,31 @@ func AbilityCost(cfg *config.Config, a model.Ability) Cost {
 	return total
 }
 
-// TraitPointsUsed sums the trait-point cost of all trait assignments. Cost is
+// SkillPointsUsed sums the skill-point cost of all skill assignments. Cost is
 // cumulative across proficiency tiers: the default (starting) tier is free, and
-// raising a trait to a higher tier costs the sum of the per-tier costs for
+// raising a skill to a higher tier costs the sum of the per-tier costs for
 // every tier above the default up to and including the selected one. A brand
-// new character sits at the default tier on every trait and therefore uses zero
+// new character sits at the default tier on every skill and therefore uses zero
 // points; each tier upgrade progressively consumes more.
-func TraitPointsUsed(cfg *config.Config, c model.Character) int {
+func SkillPointsUsed(cfg *config.Config, c model.Character) int {
 	used := 0
-	for _, g := range cfg.Traits.List() {
-		for _, trait := range g.Traits {
-			profID := c.Traits[model.TraitKey(g.ID, trait)]
-			used += cumulativeTraitCost(cfg, profID)
+	for _, g := range cfg.Skills.List() {
+		for _, skill := range g.Skills {
+			profID := c.Skills[model.SkillKey(g.ID, skill)]
+			used += cumulativeSkillCost(cfg, profID)
 		}
 	}
 	return used
 }
 
-// cumulativeTraitCost returns the total points needed to raise a trait from the
+// cumulativeSkillCost returns the total points needed to raise a skill from the
 // default tier to the given proficiency tier. Tiers are ordered by their
 // position in cfg.Proficiencies; the configured default tier is free. The cost
 // is the sum of the per-tier `cost` values for each tier strictly above the
 // default up to and including the selected tier. Selecting a tier at or below
 // the default costs zero, so tiers below the default (e.g. negative modifiers)
 // are free choices rather than discounts.
-func cumulativeTraitCost(cfg *config.Config, profID string) int {
+func cumulativeSkillCost(cfg *config.Config, profID string) int {
 	base := cfg.DefaultProficiencyIndex()
 	target := -1
 	for i, p := range cfg.Proficiencies {
@@ -436,22 +436,22 @@ func cumulativeTraitCost(cfg *config.Config, profID string) int {
 }
 
 // PackageCost is the price of importing a package, expressed in the two budgets
-// a character actually spends: perk (ability) points and skill (trait) points.
+// a character actually spends: perk (ability) points and skill (skill) points.
 type PackageCost struct {
 	// Perk is the sum of the build cost of every ability the package installs.
 	Perk int `json:"perk"`
-	// Skill is the number of trait points the package's proficiency shifts
+	// Skill is the number of skill points the package's proficiency shifts
 	// consume on top of what the character already spends.
 	Skill int `json:"skill"`
 }
 
 // PackageCostFor computes what a package would cost the given character. Perk
 // points are the summed build cost of the package's abilities. Skill points are
-// the difference in cumulative trait cost between the character's current tier
+// the difference in cumulative skill cost between the character's current tier
 // and the tier the shift would move it to, so a shift that is already paid for
-// (or that moves a trait downward) does not charge again.
+// (or that moves a skill downward) does not charge again.
 //
-// The character is not modified. A trait the character has no entry for is
+// The character is not modified. A skill the character has no entry for is
 // treated as sitting at the configured default tier.
 func PackageCostFor(cfg *config.Config, c model.Character, shifts map[string]int, abilities []model.Ability) PackageCost {
 	var out PackageCost
@@ -459,16 +459,16 @@ func PackageCostFor(cfg *config.Config, c model.Character, shifts map[string]int
 		out.Perk += AbilityCost(cfg, ab).Build
 	}
 	def := cfg.DefaultProficiencyID()
-	for traitKey, delta := range shifts {
+	for skillKey, delta := range shifts {
 		if delta == 0 {
 			continue
 		}
-		current, ok := c.Traits[traitKey]
+		current, ok := c.Skills[skillKey]
 		if !ok || current == "" {
 			current = def
 		}
-		before := cumulativeTraitCost(cfg, current)
-		after := cumulativeTraitCost(cfg, cfg.ShiftProficiency(current, delta))
+		before := cumulativeSkillCost(cfg, current)
+		after := cumulativeSkillCost(cfg, cfg.ShiftProficiency(current, delta))
 		out.Skill += after - before
 	}
 	return out

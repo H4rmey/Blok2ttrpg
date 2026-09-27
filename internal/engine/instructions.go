@@ -141,10 +141,10 @@ func interactionLine(cfg *config.Config, en model.Enactment) (string, bool) {
 }
 
 // validationLine describes the contested roll. An engage source with no counter
-// traits (or a self interaction) needs no roll.
+// skills (or a self interaction) needs no roll.
 func validationLine(cfg *config.Config, en model.Enactment, plural bool) string {
 	engage := asString(en.ValidationData["engage"])
-	counters := traitNames(asRows(en.ValidationData["counter_trait"]))
+	counters := skillNames(asRows(en.ValidationData["counter_skill"]))
 	if engage == "" || len(counters) == 0 {
 		return "No roll required."
 	}
@@ -172,7 +172,7 @@ func successLine(cfg *config.Config, en model.Enactment, plural bool) string {
 		return fmt.Sprintf("Restore %s health.", rollText(asString(f["source"])))
 	case "motion":
 		dist := asInt(f["distance"])
-		dirs := traitNames(asRows(f["direction"]))
+		dirs := skillNames(asRows(f["direction"]))
 		dir := ""
 		if len(dirs) > 0 {
 			dir = " " + strings.ToLower(joinOr(dirs))
@@ -207,25 +207,25 @@ func successLine(cfg *config.Config, en model.Enactment, plural bool) string {
 		}
 		return line + "."
 	case "modification":
-		trait := traitName(asString(f["modification-traits"]))
+		skill := skillName(asString(f["modification-skills"]))
 		shift := asInt(f["modification-shift-amount"])
 		rounds := asInt(f["modificaiton-shift-duration"])
 		return fmt.Sprintf("Shift %s's %s %s for %s.",
-			targets, trait, shiftWords(shift), rounds2str(maxInt(rounds, 1)))
+			targets, skill, shiftWords(shift), rounds2str(maxInt(rounds, 1)))
 	case "phase":
-		traits := traitNames(asRows(f["shift-affected-traits"]))
+		skills := skillNames(asRows(f["shift-affected-skills"]))
 		shift := asInt(f["phase-shift-amount"])
 		rounds := maxInt(asInt(f["phase-duration"]), 1)
-		if len(traits) == 0 {
+		if len(skills) == 0 {
 			return ""
 		}
 		return fmt.Sprintf("Shift %s %s for %s, then %s for the same duration.",
-			joinAnd(traits), shiftWords(shift), rounds2str(rounds), shiftWords(-shift))
+			joinAnd(skills), shiftWords(shift), rounds2str(rounds), shiftWords(-shift))
 	case "nerf":
-		trait := traitName(asString(f["nerf-shifted-trait"]))
+		skill := skillName(asString(f["nerf-shifted-skill"]))
 		shift := asInt(f["nerf-shift-amount"])
 		rounds := maxInt(asInt(f["nerf-duration"]), 1)
-		return fmt.Sprintf("Shift your %s %s for %s.", trait, shiftWords(shift), rounds2str(rounds))
+		return fmt.Sprintf("Shift your %s %s for %s.", skill, shiftWords(shift), rounds2str(rounds))
 	case "negation":
 		return "The targeted enactment is nullified and has no effect."
 	case "adjustment":
@@ -248,7 +248,7 @@ func noteLine(cfg *config.Config, en model.Enactment) string {
 // only produced for enactments that define solution fields.
 func solutionLine(cfg *config.Config, en model.Enactment) string {
 	rows := asRows(en.Fields["solution"])
-	names := traitNames(rows)
+	names := skillNames(rows)
 	if len(names) == 0 {
 		return ""
 	}
@@ -261,7 +261,7 @@ func solutionLine(cfg *config.Config, en model.Enactment) string {
 }
 
 // rollText renders a roll source. A plain die (d4..d20) prints literally as
-// "1dX"; a namespaced trait prints as "your <Trait> die" so it scales with the
+// "1dX"; a namespaced skill prints as "your <Skill> die" so it scales with the
 // character's proficiency.
 func rollText(v string) string {
 	if v == "" {
@@ -284,7 +284,7 @@ func rollText(v string) string {
 }
 
 // isNumeric reports whether s consists only of digits, i.e. it is a flat
-// numeric result rather than a die or a trait name.
+// numeric result rather than a die or a skill name.
 func isNumeric(s string) bool {
 	if s == "" {
 		return false
@@ -297,20 +297,20 @@ func isNumeric(s string) bool {
 	return true
 }
 
-// traitName strips the option-source namespace from a trait value.
-func traitName(v string) string {
+// skillName strips the option-source namespace from a skill value.
+func skillName(v string) string {
 	if i := strings.IndexByte(v, '.'); i >= 0 {
 		return v[i+1:]
 	}
 	return v
 }
 
-// traitNames pulls the "value" column out of multiselect rows, de-namespacing
+// skillNames pulls the "value" column out of multiselect rows, de-namespacing
 // each entry and dropping blanks.
-func traitNames(rows []map[string]any) []string {
+func skillNames(rows []map[string]any) []string {
 	var out []string
 	for _, r := range rows {
-		v := traitName(asString(r["value"]))
+		v := skillName(asString(r["value"]))
 		if v != "" {
 			out = append(out, v)
 		}

@@ -53,7 +53,7 @@ func (l OptionList) Options() []Option {
 
 // OptionGroupDef defines a named grouped dropdown source: an ordered set of
 // member groups, each resolving to an underlying option source. It replaces the
-// hardcoded traits_all/roll_all/conditions_all grouping in Go.
+// hardcoded skills_all/roll_all/conditions_all grouping in Go.
 type OptionGroupDef struct {
 	Groups []OptionGroupMember `yaml:"groups" json:"groups"`
 }
@@ -61,22 +61,22 @@ type OptionGroupDef struct {
 // OptionGroupMember is one <optgroup> within a grouped source.
 type OptionGroupMember struct {
 	// Source names the underlying option source to resolve for this group. It
-	// may be a plain source name (e.g. "damage_types"), a dotted trait/dice
-	// reference (e.g. "traits.general", "dice.generic"), or one of the built-in
+	// may be a plain source name (e.g. "damage_types"), a dotted skill/dice
+	// reference (e.g. "skills.general", "dice.generic"), or one of the built-in
 	// dynamic sources ("general_conditions", "specific_conditions").
 	Source string `yaml:"source" json:"source"`
 
 	// Label is the optgroup heading. When empty a heading is derived from the
-	// source (its trait category title, or the source name).
+	// source (its skill category title, or the source name).
 	Label string `yaml:"label,omitempty" json:"label,omitempty"`
 
 	// Namespace, when set, prefixes each option value as "<namespace>.<value>"
 	// so options from different groups stay distinct (e.g. "general.Blinded").
-	// When empty and the source is a trait category, the category id is used as
+	// When empty and the source is a skill category, the category id is used as
 	// the namespace so group offsets can key off it.
 	Namespace string `yaml:"namespace,omitempty" json:"namespace,omitempty"`
 
 	// OffsetKey names the group_offsets key applied to every option in this
-	// group. When empty it falls back to Namespace (or the trait category id).
+	// group. When empty it falls back to Namespace (or the skill category id).
 	OffsetKey string `yaml:"offset_key,omitempty" json:"offset_key,omitempty"`
 }

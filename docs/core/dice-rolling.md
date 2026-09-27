@@ -3,11 +3,11 @@
 
 ## Introduction
 
-Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Trait. The ladder runs from {{ lowestDie }} at the bottom rung to {{ highestDie }} at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
+Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Skill. The ladder runs from {{ lowestDie }} at the bottom rung to {{ highestDie }} at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
 
 {{ proficiencyDiceTable }}
 
-{{ defaultProficiencyName }} is the rung every Trait starts at and is free; the rung below it is a deliberate weakness and refunds a point.
+{{ defaultProficiencyName }} is the rung every Skill starts at and is free; the rung below it is a deliberate weakness and refunds a point.
 
 ---
 
@@ -26,11 +26,11 @@ Each Proficiency Level is directly tied to its Dice Tier. When referring to dice
 
 ### Engagement and Counter Rolls
 
-When attempting an action where the outcome is uncertain, the acting character must make a **Trait Check**. Unlike systems that use a d20 and flat modifiers, this system relies entirely on variable Dice Tiers.
+When attempting an action where the outcome is uncertain, the acting character must make a **Skill Check**. Unlike systems that use a d20 and flat modifiers, this system relies entirely on variable Dice Tiers.
 
 **1\. The Engagement Roll**
 
-The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Trait and rolls the corresponding die (ranging from {{ lowestDie }} to {{ highestDie }}). This is the **Engagement Roll**.
+The character initiating the action is called the **Engager**. To determine their success, the Engager checks their Proficiency Level for the relevant Skill and rolls the corresponding die (ranging from {{ lowestDie }} to {{ highestDie }}). This is the **Engagement Roll**.
 
 **2\. The Counter Roll**
 
@@ -41,7 +41,7 @@ The obstacle, creature, or entity the Engager is acting against is called the **
 
 **3\. Resolution**
 
-Compare the **Engagement Roll** to the **Counter Roll** (or static difficulty). If the **Engager's** total is **equal to or higher** than the Target's total, the Trait Check is a Success. Ties always favor the Engager.
+Compare the **Engagement Roll** to the **Counter Roll** (or static difficulty). If the **Engager's** total is **equal to or higher** than the Target's total, the Skill Check is a Success. Ties always favor the Engager.
 
 > **Example:** You attempt to hide in a bustling market. You are an Expert in Stealth, making you the **Engager** with an Engagement Roll of a d8.
 > 
@@ -86,4 +86,4 @@ The idea is that when someone in the group fails. the other PC's can still aid t
 
 ### Aid/Help
 
-You can choose to help someone on a **Trait Check**. This uses the same rules as a **Group Roll**. But only the people aiding and the PC making the **Trait Check** have to roll. **Aiding/Helping** someone can also be done after noticing the PC making the **Trait Check** has failed. 
+You can choose to help someone on a **Skill Check**. This uses the same rules as a **Group Roll**. But only the people aiding and the PC making the **Skill Check** have to roll. **Aiding/Helping** someone can also be done after noticing the PC making the **Skill Check** has failed. 

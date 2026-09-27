@@ -11,7 +11,16 @@ Rolling for initiative is done by rolling your perception + movement. PC's go be
 
 On your turn you get three actions. By default you have {{ .Combat.Actions.Amount }} of actions. How much actions an ability costs can may differ. 
 
+### Reactions
+
+Your actions are spent on your turn, but a **Reaction** lets you act out of turn. A reaction is freeform: it is not built in advance and not listed on your sheet, you simply describe what you do and pay for it.
+
+{{ reactionRules }}
+
+The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own abilities, so a character who reacts every round has less left to spend when their turn comes around.
+
 ### Movement
+
 
 Movement costs one action; it is fully allowed to just keep using actions just to move, however each subsequent movement action costs 1 energy extra (this stacks between turns).So moving 3 times in a row will cost 0 + 1 + 2 = 3 Energy.
 
@@ -19,7 +28,7 @@ Movement costs one action; it is fully allowed to just keep using actions just t
 
 Energy is the resource that using Abilities spends. Each Enactment in an Ability costs 1 Energy, so a full turn of three actions costs roughly 3 Energy, and a Concentration costs a further point of upkeep every round it stays up. Repeated movement in a single stretch also drains Energy as described above.
 
-Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Trait, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
+Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Skill, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
 
 Energy does not come back on its own. On a rest you regain **{{ .Combat.EnergyRecoveryPerRest }} Energy**. That is deliberately less than a single fight consumes, so Energy is a resource to be managed across a whole day rather than reset between encounters. The GM may grant more for an especially long or comfortable rest.
 

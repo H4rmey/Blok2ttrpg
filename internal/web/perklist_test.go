@@ -38,7 +38,7 @@ func testAppWithPerk(t *testing.T) (*App, *model.Character) {
 	// actually stored on a character.
 	ab = engine.NormalizeAbility(cfg.Config, ab)
 	c := app.blankCharacter("char-1")
-	c.Attributes["name"] = "Tester"
+	c.Traits["name"] = "Tester"
 	c.Abilities = append(c.Abilities, ab)
 	return app, &c
 }

@@ -10,13 +10,13 @@ import (
 )
 
 // CharacterYAML is the portable, human-friendly YAML shape of a character. It
-// intentionally mirrors the generic model so any config's attributes survive a
+// intentionally mirrors the generic model so any config's traits survive a
 // round trip without code changes.
 type CharacterYAML struct {
 	ID         string                   `yaml:"id,omitempty"`
 	Level      int                      `yaml:"level"`
-	Attributes map[string]any           `yaml:"attributes,omitempty"`
-	Traits     map[string]string        `yaml:"traits,omitempty"`
+	Traits map[string]any           `yaml:"traits,omitempty"`
+	Skills     map[string]string        `yaml:"skills,omitempty"`
 	Abilities  []model.Ability          `yaml:"abilities,omitempty"`
 	Packages   []model.InstalledPackage `yaml:"packages,omitempty"`
 }
@@ -26,8 +26,8 @@ func MarshalCharacter(c model.Character) ([]byte, error) {
 	out := CharacterYAML{
 		ID:         c.ID,
 		Level:      c.Level,
-		Attributes: c.Attributes,
-		Traits:     c.Traits,
+		Traits: c.Traits,
+		Skills:     c.Skills,
 		Abilities:  c.Abilities,
 		Packages:   c.Packages,
 	}
@@ -44,19 +44,19 @@ func UnmarshalCharacter(data []byte) (model.Character, error) {
 	c := model.Character{
 		ID:         in.ID,
 		Level:      in.Level,
-		Attributes: in.Attributes,
-		Traits:     in.Traits,
+		Traits: in.Traits,
+		Skills:     in.Skills,
 		Abilities:  in.Abilities,
 		Packages:   in.Packages,
 	}
 	if c.Level < 1 {
 		c.Level = 1
 	}
-	if c.Attributes == nil {
-		c.Attributes = map[string]any{}
-	}
 	if c.Traits == nil {
-		c.Traits = map[string]string{}
+		c.Traits = map[string]any{}
+	}
+	if c.Skills == nil {
+		c.Skills = map[string]string{}
 	}
 	return c, nil
 }

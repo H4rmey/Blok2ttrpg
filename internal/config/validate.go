@@ -40,8 +40,8 @@ func (c *Config) Validate() error {
 		return err
 	}
 
-	for _, g := range c.Attributes.List() {
-		if err := validateFields("attributes."+g.ID, g.Fields); err != nil {
+	for _, g := range c.Traits.List() {
+		if err := validateFields("traits."+g.ID, g.Fields); err != nil {
 			return err
 		}
 	}

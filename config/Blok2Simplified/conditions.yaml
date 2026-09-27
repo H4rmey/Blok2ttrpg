@@ -39,26 +39,26 @@ conditions:
   # four previously set only build_cost, which made them free at any magnitude.
   - id: blinded
     name: "Blinded"
-    description: "Reduces certain trait rolls"
+    description: "Reduces certain skill rolls"
     min_shift: -6
     max_shift: 0
     shift_cost: { build_cost: 1 }
   - id: encumbered
     name: "Encumbered"
-    description: "Reduces movement and relevant traits"
+    description: "Reduces movement and relevant skills"
     min_shift: -6
     max_shift: 0
     shift_cost: { build_cost: 1 }
   - id: encouraged
     name: "Encouraged"
-    description: "Positive trait shifts"
+    description: "Positive skill shifts"
     min_shift: 1
     max_shift: 6
     # A buff costs more per step than the mirrored debuff (see Frightened).
     shift_cost: { build_cost: 2 }
   - id: frightened
     name: "Frightened"
-    description: "Negative trait shifts"
+    description: "Negative skill shifts"
     min_shift: -6
     max_shift: 0
     shift_cost: { build_cost: 1 }
@@ -185,7 +185,7 @@ conditions:
   - id: slowed
     name: "Slowed"
     description: "Movement speed shifted one down."
-    # One die shift on a trait, which is the tier 2 "shifts one die" line. Was 1.
+    # One die shift on a skill, which is the tier 2 "shifts one die" line. Was 1.
     build_cost: 2
   - id: terrified
     name: "Terrified"
@@ -277,7 +277,7 @@ conditions:
     build_cost: 3
   - id: linked
     name: "Linked"
-    description: "You are linked to a Target; what happens to you happens to the linked Target. This links per Trait."
+    description: "You are linked to a Target; what happens to you happens to the linked Target. This links per Skill."
     build_cost: 3
   - id: incorporeal
     name: "Incorporeal"

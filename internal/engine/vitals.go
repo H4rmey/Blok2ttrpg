@@ -8,12 +8,12 @@ import (
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
 
-// defaultVitalGroupID is the fallback trait group id whose traits (HP,
+// defaultVitalGroupID is the fallback skill group id whose skills (HP,
 // Movement, Energy, ...) map to numeric vital values rather than dice, used
 // when the config does not set vital_group.
 const defaultVitalGroupID = "vital"
 
-// VitalGroupID returns the configured vital trait group id, or the default.
+// VitalGroupID returns the configured vital skill group id, or the default.
 func VitalGroupID(cfg *config.Config) string {
 	if cfg != nil && cfg.VitalGroup != "" {
 		return cfg.VitalGroup
@@ -22,11 +22,11 @@ func VitalGroupID(cfg *config.Config) string {
 }
 
 // VitalStat is a computed vital value for a character. Max is the value granted
-// by the selected proficiency tier for that vital trait. For editable vitals
+// by the selected proficiency tier for that vital skill. For editable vitals
 // (HP and Energy) Current holds the character's current value, which may be
 // below Max; for non-editable vitals (e.g. Movement) Current equals Max.
 type VitalStat struct {
-	Trait    string // display name, e.g. "HP"
+	Skill    string // display name, e.g. "HP"
 	Key      string // lowercase key into the proficiency vitals map, e.g. "hp"
 	Max      string // proficiency-granted value, formatted
 	Current  string // current value (== Max when not editable)
@@ -38,18 +38,18 @@ var editableVitals = map[string]bool{"hp": true, "energy": true}
 
 // CharacterVitals returns the computed vital stats for a character, in config
 // order. The Max of each vital comes from the proficiency tier the character
-// selected for that vital trait. The current value of an editable vital is read
-// from the character attribute "current_<key>"; if unset it defaults to Max.
+// selected for that vital skill. The current value of an editable vital is read
+// from the character trait "current_<key>"; if unset it defaults to Max.
 func CharacterVitals(cfg *config.Config, c model.Character) []VitalStat {
 	var out []VitalStat
 	vg := VitalGroupID(cfg)
-	traits, ok := cfg.Traits.Items[vg]
+	skills, ok := cfg.Skills.Items[vg]
 	if !ok {
 		return out
 	}
-	for _, trait := range traits {
-		key := strings.ToLower(trait)
-		profID := c.Traits[model.TraitKey(vg, trait)]
+	for _, skill := range skills {
+		key := strings.ToLower(skill)
+		profID := c.Skills[model.SkillKey(vg, skill)]
 
 		max := ""
 		if p, ok := cfg.Proficiency(profID); ok {
@@ -67,7 +67,7 @@ func CharacterVitals(cfg *config.Config, c model.Character) []VitalStat {
 			}
 		}
 		out = append(out, VitalStat{
-			Trait:    trait,
+			Skill:    skill,
 			Key:      key,
 			Max:      max,
 			Current:  current,

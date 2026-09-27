@@ -46,9 +46,9 @@ An inline dropdown option looks like this:
 
 {{ schemaTable "Option" }}
 
-### Trait group offsets
+### Skill group offsets
 
-A dropdown backed by a multi-group trait source can lean toward one trait group, making a pick from another group cost more.
+A dropdown backed by a multi-group skill source can lean toward one skill group, making a pick from another group cost more.
 
 {{ schemaTable "GroupOffsets" }}
 
@@ -78,7 +78,7 @@ These are the grouped sources, which concatenate several member sources and rend
 
 {{ optionGroupsTable }}
 
-Two further source forms are resolved dynamically rather than being declared: a dotted `traits.<category>` reference expands to that trait category, and `ability_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
+Two further source forms are resolved dynamically rather than being declared: a dotted `skills.<category>` reference expands to that skill category, and `ability_types`, `enactment_types` and `interaction_types` expand to the corresponding component lists.
 
 ## Proficiencies and leveling
 
@@ -107,7 +107,7 @@ The rules are:
 *   Each enactment beyond the first pays its full `base_cost` plus the additional-enactment surcharge. See [Enactments](enactments.md) for the surcharge and the separate-target option.
 *   Ability types start from `base_energy` and `base_action`.
 *   A `checkbox` charges its cost only while checked.
-*   A `dropdown` charges its field `cost` when a non-empty value is selected, plus the selected option's own cost, plus any group offset for the selected trait's group.
+*   A `dropdown` charges its field `cost` when a non-empty value is selected, plus the selected option's own cost, plus any group offset for the selected skill's group.
 *   A `free_number` charges `per_step.increase` or `per_step.decrease` per step away from its `default`, with `rounding` deciding how a partial step is treated.
 *   A repeatable field charges `per_item` per row added beyond `default_count`, or refunds per row removed below it.
 *   A condition row charges a shiftable condition's `shift_cost` per unit of shift, or a fixed condition's flat cost.

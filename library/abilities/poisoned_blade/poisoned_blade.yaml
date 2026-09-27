@@ -21,7 +21,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex
   - type: effect
     # The poison works on the enemy the blade cut, so this enactment inherits

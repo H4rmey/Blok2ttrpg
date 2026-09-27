@@ -24,7 +24,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex
   - type: modification
     # The sharpened aim is yours, not the marked enemy's, so this enactment
@@ -32,7 +32,7 @@ enactments:
     new_target: true
     fields:
       comment: Your aim settles on them.
-      modification-traits: offense.Precision
+      modification-skills: offense.Precision
       modification-shift-amount: 1
       modificaiton-shift-duration: 3
     interaction: self
@@ -41,5 +41,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex

@@ -20,7 +20,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex
   - type: motion
     # You are the one riding the gust forward, not the enemy it pushed, so this
@@ -37,5 +37,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex

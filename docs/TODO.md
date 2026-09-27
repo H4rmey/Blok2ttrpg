@@ -1,4 +1,4 @@
-- [ ] healing traits.general.medicine doesn't work
+- [ ] healing skills.general.medicine doesn't work
 - [ ] cost for adding solution
 - [ ] rename solution to multiselect 
 - [ ] multiselect add small or/and to lef of items

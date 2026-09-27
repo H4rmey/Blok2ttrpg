@@ -11,7 +11,7 @@ enactments:
       comment: Constitution surges, then gives out.
       phase-duration: 2
       phase-shift-amount: 2
-      shift-affected-traits:
+      shift-affected-skills:
         - value: defense.Constitution
     interaction: self
     interaction_data:
@@ -19,7 +19,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Constitution
   - type: condition
     # The resolve is on you, the same target the phase above shifted, so this

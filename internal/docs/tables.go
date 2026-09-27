@@ -3,7 +3,7 @@
 //
 // The leveling tables are the important case. The point budgets stopped being a
 // hand-written `levels:` list and became the formula start + per_level*(level-1),
-// computed by config.TraitPointBudget / AbilityPointBudget. The docs still
+// computed by config.SkillPointBudget / AbilityPointBudget. The docs still
 // ranged over the now-absent list, so the table rendered as a bare header with
 // no rows. Generating the rows by asking the config for each level's budget
 // keeps the documented numbers identical to the numbers the application serves,
@@ -19,7 +19,7 @@ import (
 )
 
 // levelingTable renders the point budget for every level as Level / Points
-// Gained / Total. The pool argument selects which budget to render: "trait" for
+// Gained / Total. The pool argument selects which budget to render: "skill" for
 // skill points or "ability" for perk points.
 //
 // Budgets are read through the config's budget accessors, which are the same
@@ -61,8 +61,12 @@ func levelingTable(cfg *config.Config, pool string) string {
 // budget, plus the reader-facing name of the pool.
 func budgetAccessor(cfg *config.Config, pool string) (func(int) int, string, bool) {
 	switch strings.ToLower(strings.TrimSpace(pool)) {
-	case "trait", "traits", "skill", "skills":
-		return cfg.TraitPointBudget, "Trait Points", true
+	// "trait"/"traits" are accepted as legacy aliases: the skill pool was
+	// called the trait pool before the rename, and doc templates may still
+	// ask for it under the old name.
+	case "skill", "skills", "trait", "traits":
+
+		return cfg.SkillPointBudget, "Skill Points", true
 	case "ability", "abilities", "perk", "perks":
 		return cfg.AbilityPointBudget, "Ability Points", true
 	}

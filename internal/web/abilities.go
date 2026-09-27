@@ -687,7 +687,7 @@ func (a *App) handleConditionShift(w http.ResponseWriter, r *http.Request) {
 }
 
 // name2attr is a tiny guard that keeps a form-field name safe for direct
-// embedding in an HTML attribute. Builder field names are already limited to
+// embedding in an HTML trait. Builder field names are already limited to
 // [A-Za-z0-9_], so this only strips the double-quote character defensively.
 func name2attr(s string) string {
 	return strings.ReplaceAll(s, `"`, "")

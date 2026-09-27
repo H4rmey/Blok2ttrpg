@@ -1,10 +1,10 @@
 version: 1
 profile_id: blok2simplified
 title: "Blok2 Simplified"
-# The trait group treated as vitals (HP/Movement/Energy) rather than dice.
+# The skill group treated as vitals (HP/Movement/Energy) rather than dice.
 vital_group: vital
-# Ordered trait categories that make up the grouped "traits_all" source.
-trait_categories:
+# Ordered skill categories that make up the grouped "skills_all" source.
+skill_categories:
   - general
   - offense
   - defense
@@ -17,7 +17,7 @@ combat:
   # rules parameter for the table, surfaced in the generated documentation.
   energy_recovery_per_rest: 5
 
-# The proficiency rung every trait starts at, and the one that is free. This
+# The proficiency rung every skill starts at, and the one that is free. This
 # must be set explicitly: the ladder now opens with the below-baseline "Inept"
 # rung, so falling back to the first entry would start every character there.
 default_proficiency: untrained
@@ -29,8 +29,8 @@ default_proficiency: untrained
 allow_negative_build_cost: false
 allow_negative_energy_cost: false
 
-# Skill (trait) point budget enforcement. When false (the default) a character
-# may not spend more skill points than its level grants: manual trait edits and
+# Skill (skill) point budget enforcement. When false (the default) a character
+# may not spend more skill points than its level grants: manual skill edits and
 # package imports that would overspend the budget are rejected. Set to true to
 # let a character go into negative skill points.
 allow_negative_skill_points: false
@@ -65,9 +65,9 @@ additional_enactment:
 option_sources:
   # Dice half of the combined roll source. Referenced by the "roll_all" grouped
   # source (see option_groups) which renders these as a "Generic" optgroup and
-  # then appends the trait categories as grouped optgroups. Used by Damage/Heal/
+  # then appends the skill categories as grouped optgroups. Used by Damage/Heal/
   # Mitigation "Source" and the Validation "Engage" dropdown. Dice scale in cost
-  # with size; trait cost comes from the field's group_offsets.
+  # with size; skill cost comes from the field's group_offsets.
   #
   # This mirrors the proficiency ladder in proficiencies.yaml: the die is capped
   # at d12 and higher rungs add a flat bonus instead. Each entry raises the
@@ -163,9 +163,9 @@ option_sources:
 
 
 # Config-defined grouped dropdown sources. Each names an ordered set of member
-# groups, replacing the previously hardcoded traits_all/roll_all grouping.
+# groups, replacing the previously hardcoded skills_all/roll_all grouping.
 option_groups:
-  # All trait categories, grouped by category. Trait cost comes from a field's
+  # All skill categories, grouped by category. Skill cost comes from a field's
   # group_offsets keyed on the category id (general/offense/defense).
   conditions_all:
     groups:
@@ -174,11 +174,11 @@ option_groups:
 
   roll_damage:
     groups:
-      - source: traits.offense
+      - source: skills.offense
         label: "Offense"
       - source: roll_generic
         label: "Generic"
-      - source: traits.general
+      - source: skills.general
         label: "General"
 
   roll_heal:
@@ -188,40 +188,40 @@ option_groups:
       - source: roll_medicine
         label: "Medicine"
 
-  traits_generic_offense:
+  skills_generic_offense:
     groups:
       - source: roll_generic
         label: "Generic"
-      - source: traits.offense
+      - source: skills.offense
         label: "Defense"
 
-  traits_general_defense:
+  skills_general_defense:
     groups:
-      - source: traits.general
+      - source: skills.general
         label: "General"
-      - source: traits.defense
+      - source: skills.defense
         label: "Defense"
 
-  traits_all:
+  skills_all:
     groups:
-      - source: traits.general
+      - source: skills.general
         label: "General"
-      - source: traits.offense
+      - source: skills.offense
         label: "Offense"
-      - source: traits.defense
+      - source: skills.defense
         label: "Defense"
-  # A "Generic" group of costed dice followed by the trait categories. Dice
-  # carry no namespace (so bare defaults like d6 keep matching); traits are
+  # A "Generic" group of costed dice followed by the skill categories. Dice
+  # carry no namespace (so bare defaults like d6 keep matching); skills are
   # namespaced by category so group_offsets apply.
   roll_all:
     groups:
       - source: roll_generic
         label: "Generic"
-      - source: traits.general
+      - source: skills.general
         label: "General"
-      - source: traits.offense
+      - source: skills.offense
         label: "Offense"
-      - source: traits.defense
+      - source: skills.defense
         label: "Defense"
 
 validations:
@@ -239,21 +239,21 @@ validations:
           offense: { build_cost: 0 }
           general: { build_cost: 1 }
           defense: { build_cost: 2 }
-    - key: counter_trait
-      label: "Counter Trait"
+    - key: counter_skill
+      label: "Counter Skill"
       type: multiselect
       default_count: 2
-      options_source: traits_all
+      options_source: skills_all
       row_defaults:
         - value: "defense.Reflex"
         - value: "defense.Constitution"
       row_fields:
         - key: value
-          label: "Counter Trait"
+          label: "Counter Skill"
           type: dropdown
-          options_source: traits_all
-          # A counter roll is expected to use a Defensive trait. Choosing a
-          # trait from any other category costs extra build points.
+          options_source: skills_all
+          # A counter roll is expected to use a Defensive skill. Choosing a
+          # skill from any other category costs extra build points.
           group_offsets:
             default_group: defense
             offsets:

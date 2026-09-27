@@ -85,8 +85,8 @@ func lintEmptyTables(lines []string) []Finding {
 // means a doc is asking for data the config does not supply.
 var placeholderMarkers = []string{
 	"_No conditions configured._",
-	"_No traits configured._",
-	"_No attribute sections configured._",
+	"_No skills configured._",
+	"_No trait sections configured._",
 	"_No options configured._",
 	"_No packages configured._",
 	"_This component has no cost-bearing perks",

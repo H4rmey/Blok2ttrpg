@@ -21,7 +21,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Constitution
   - type: motion
     # Same enemy as the hit above, so this enactment inherits its target and

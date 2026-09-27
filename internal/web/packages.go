@@ -28,7 +28,7 @@ type packageRow struct {
 	SkillAffordable bool
 	Affordable      bool
 
-	// Clamped lists the trait keys whose shift would run off the top or bottom
+	// Clamped lists the skill keys whose shift would run off the top or bottom
 	// of the proficiency ladder for this character, so the browser can warn
 	// about them before the import happens. It is empty when every shift fits.
 	Clamped []string
@@ -66,7 +66,7 @@ func (a *App) handlePackageLibrary(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	perkLeft := data.AbilityBudget - data.AbilityUsed
-	skillLeft := data.TraitBudget - data.TraitUsed
+	skillLeft := data.SkillBudget - data.SkillUsed
 
 	for _, pkg := range pkgs {
 		cost := engine.PackageCostFor(a.Cfg.Config, c, pkg.Shifts, pkg.Abilities)
@@ -90,22 +90,22 @@ func (a *App) handlePackageLibrary(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// clampedShifts returns the trait keys whose shift cannot be applied in full
+// clampedShifts returns the skill keys whose shift cannot be applied in full
 // because the character already sits at an end of the proficiency ladder. It is
 // a preview only: it does not modify the character. Keys are returned sorted so
 // the warning text is stable between renders.
 func (a *App) clampedShifts(c *model.Character, shifts map[string]int) []string {
 	var out []string
-	for traitKey, delta := range shifts {
+	for skillKey, delta := range shifts {
 		if delta == 0 {
 			continue
 		}
-		current, ok := c.Traits[traitKey]
+		current, ok := c.Skills[skillKey]
 		if !ok || current == "" {
 			current = a.Cfg.DefaultProficiencyID()
 		}
 		if a.Cfg.ShiftClamped(current, delta) {
-			out = append(out, traitKey)
+			out = append(out, skillKey)
 		}
 	}
 	sort.Strings(out)
@@ -122,7 +122,7 @@ func (a *App) affordPackage(c *model.Character, pkg *premade.Package) (bool, str
 	if perkLeft := stats.AbilityBudget - stats.AbilityUsed; cost.Perk > perkLeft {
 		return false, fmt.Sprintf("%q costs %d perk points but only %d remain.", pkg.Name, cost.Perk, perkLeft)
 	}
-	if skillLeft := stats.TraitBudget - stats.TraitUsed; !a.Cfg.AllowsNegativeSkillPoints() && cost.Skill > skillLeft {
+	if skillLeft := stats.SkillBudget - stats.SkillUsed; !a.Cfg.AllowsNegativeSkillPoints() && cost.Skill > skillLeft {
 		return false, fmt.Sprintf("%q costs %d skill points but only %d remain.", pkg.Name, cost.Skill, skillLeft)
 	}
 	return true, ""
@@ -158,34 +158,34 @@ func (a *App) handlePackages(w http.ResponseWriter, r *http.Request, c *model.Ch
 }
 
 // applyPackage applies a loaded package to a character: it shifts the relevant
-// traits, copies the package's abilities in (each with a fresh id and a
+// skills, copies the package's abilities in (each with a fresh id and a
 // PackageID tag), and records an InstalledPackage so removal is exact.
 //
-// It returns the list of trait keys whose shift was clamped at an end of the
+// It returns the list of skill keys whose shift was clamped at an end of the
 // proficiency ladder (i.e. the requested delta could not be fully applied).
 // The caller uses this to surface a non-blocking warning; the stored delta is
 // left as requested per the "just warn" policy.
 func (a *App) applyPackage(c *model.Character, pkg *premade.Package) []string {
-	if c.Traits == nil {
-		c.Traits = map[string]string{}
+	if c.Skills == nil {
+		c.Skills = map[string]string{}
 	}
 	// Only record shifts we actually applied so removal reverses exactly what
 	// was done.
 	applied := map[string]int{}
 	var clamped []string
-	for traitKey, delta := range pkg.Shifts {
+	for skillKey, delta := range pkg.Shifts {
 		if delta == 0 {
 			continue
 		}
-		current, ok := c.Traits[traitKey]
+		current, ok := c.Skills[skillKey]
 		if !ok {
 			current = a.Cfg.DefaultProficiencyID()
 		}
 		if a.Cfg.ShiftClamped(current, delta) {
-			clamped = append(clamped, traitKey)
+			clamped = append(clamped, skillKey)
 		}
-		c.Traits[traitKey] = a.Cfg.ShiftProficiency(current, delta)
-		applied[traitKey] = delta
+		c.Skills[skillKey] = a.Cfg.ShiftProficiency(current, delta)
+		applied[skillKey] = delta
 	}
 	for _, ab := range pkg.Abilities {
 		ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
@@ -210,20 +210,20 @@ func (a *App) applyPackage(c *model.Character, pkg *premade.Package) []string {
 // a package that was previously disabled; the caller owns the existing record
 // and updates its recorded shifts from the returned map.
 func (a *App) applyPackageEffects(c *model.Character, pkg *premade.Package) map[string]int {
-	if c.Traits == nil {
-		c.Traits = map[string]string{}
+	if c.Skills == nil {
+		c.Skills = map[string]string{}
 	}
 	applied := map[string]int{}
-	for traitKey, delta := range pkg.Shifts {
+	for skillKey, delta := range pkg.Shifts {
 		if delta == 0 {
 			continue
 		}
-		current, ok := c.Traits[traitKey]
+		current, ok := c.Skills[skillKey]
 		if !ok {
 			current = a.Cfg.DefaultProficiencyID()
 		}
-		c.Traits[traitKey] = a.Cfg.ShiftProficiency(current, delta)
-		applied[traitKey] = delta
+		c.Skills[skillKey] = a.Cfg.ShiftProficiency(current, delta)
+		applied[skillKey] = delta
 	}
 	for _, ab := range pkg.Abilities {
 		ab.ID = fmt.Sprintf("ability-%d", time.Now().UnixNano())
@@ -238,12 +238,12 @@ func (a *App) applyPackageEffects(c *model.Character, pkg *premade.Package) map[
 // all abilities tagged with the package id, leaving the InstalledPackage record
 // in place. It is used when disabling a toggleable package.
 func (a *App) reversePackageEffects(c *model.Character, rec *model.InstalledPackage) {
-	for traitKey, delta := range rec.Shifts {
-		current, ok := c.Traits[traitKey]
+	for skillKey, delta := range rec.Shifts {
+		current, ok := c.Skills[skillKey]
 		if !ok {
 			current = a.Cfg.DefaultProficiencyID()
 		}
-		c.Traits[traitKey] = a.Cfg.ShiftProficiency(current, -delta)
+		c.Skills[skillKey] = a.Cfg.ShiftProficiency(current, -delta)
 	}
 	kept := c.Abilities[:0]
 	for _, ab := range c.Abilities {
@@ -309,7 +309,7 @@ func (a *App) togglePackage(w http.ResponseWriter, r *http.Request, c *model.Cha
 }
 
 // packageRedirect sends the user back to the character sheet after an import,
-// attaching a non-blocking warning about any clamped trait shifts.
+// attaching a non-blocking warning about any clamped skill shifts.
 func packageRedirect(w http.ResponseWriter, r *http.Request, charID string, clamped []string) {
 	target := "/characters/" + charID
 	if len(clamped) > 0 {
@@ -404,13 +404,13 @@ func (a *App) removePackage(w http.ResponseWriter, r *http.Request, c *model.Cha
 
 	// Reverse the recorded shifts. Because we stored the exact deltas applied,
 	// subtracting them is safe even when other installed packages also shifted
-	// the same trait.
-	for traitKey, delta := range rec.Shifts {
-		current, ok := c.Traits[traitKey]
+	// the same skill.
+	for skillKey, delta := range rec.Shifts {
+		current, ok := c.Skills[skillKey]
 		if !ok {
 			current = a.Cfg.DefaultProficiencyID()
 		}
-		c.Traits[traitKey] = a.Cfg.ShiftProficiency(current, -delta)
+		c.Skills[skillKey] = a.Cfg.ShiftProficiency(current, -delta)
 	}
 
 	// Remove abilities tagged with this package id. User-created abilities and

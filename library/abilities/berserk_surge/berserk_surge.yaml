@@ -14,7 +14,7 @@ enactments:
       comment: Strength surges now, collapses after.
       phase-duration: 2
       phase-shift-amount: 2
-      shift-affected-traits:
+      shift-affected-skills:
         - value: offense.Strength
     interaction: self
     interaction_data:
@@ -22,11 +22,11 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Constitution
   - type: nerf
     fields:
       comment: Abandon your guard to fuel the surge.
-      nerf-shifted-trait: defense.Reflex
+      nerf-shifted-skill: defense.Reflex
       nerf-shift-amount: -1
       nerf-duration: 2

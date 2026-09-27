@@ -38,8 +38,8 @@ other systems, much of this will feel familiar.
 | Document | Topic |
 | --- | --- |
 | `abilities.md` | How abilities work |
-| `character-attributes.md` | Character attributes |
 | `character-traits.md` | Character traits |
+| `character-skills.md` | Character skills |
 | `combat.md` | Combat rules |
 | `dice-rolling.md` | Dice rolling |
 | `items.md` | Items |
@@ -68,7 +68,7 @@ A config-driven character and ability builder written in Go with
 
 **The config leads.** Everything the app renders and costs is derived from a
 directory of YAML files. There are no hardcoded ability types, enactments,
-traits, or character attributes anywhere in the Go code.
+skills, or character traits anywhere in the Go code.
 
 ### Features
 
@@ -125,8 +125,8 @@ A ruleset is a directory of YAML files, merged in filename order. See
 | File | Purpose |
 | --- | --- |
 | `general.yaml` | version, profile id, title |
-| `attributes.yaml` | character attribute groups/fields |
-| `traits.yaml` | trait groups and reusable option lists |
+| `traits.yaml` | character trait groups/fields |
+| `skills.yaml` | skill groups and reusable option lists |
 | `ability_types.yaml` | ability types |
 | `enactments.yaml` | enactment building blocks |
 | `interactions.yaml` | interaction building blocks |

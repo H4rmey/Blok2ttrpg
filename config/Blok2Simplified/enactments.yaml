@@ -48,7 +48,7 @@ enactments:
           - key: value
             label: "Solution"
             type: dropdown
-            options_source: traits_general_defense
+            options_source: skills_general_defense
             group_offsets:
               default_group: defense
               offsets:
@@ -79,9 +79,9 @@ enactments:
         label: "Source"
         type: dropdown
         options_source: roll_damage
-        information: "The offensive trait whose die is rolled for damage."
+        information: "The offensive skill whose die is rolled for damage."
         group_offsets:
-          default_group: traits.offensive
+          default_group: skills.offensive
           offsets:
             general: { build_cost: 1 }
 
@@ -125,7 +125,7 @@ enactments:
           - key: value
             label: "Solution"
             type: dropdown
-            options_source: traits_general_defense
+            options_source: skills_general_defense
             group_offsets:
               default_group: defense
               offsets:
@@ -210,10 +210,10 @@ enactments:
     allowed_interactions:
       - self
     fields:
-      - key: nerf-shifted-trait
-        label: "Trait"
+      - key: nerf-shifted-skill
+        label: "Skill"
         type: dropdown
-        options_source: traits_all
+        options_source: skills_all
       - key: nerf-shift-amount
         label: "Shift -/+"
         type: free_number
@@ -245,7 +245,7 @@ enactments:
 
   phase:
     name: "Enact Phase"
-    information: "Enact Phase allows you to shift some traits now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a trait up for 2 rounds, after those two rounds those traits are shifted down for 2 rounds."
+    information: "Enact Phase allows you to shift some skills now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a skill up for 2 rounds, after those two rounds those skills are shifted down for 2 rounds."
     render_information: false
     base_cost: 
       build_cost: 2
@@ -271,19 +271,19 @@ enactments:
         per_step:
           increase: { build_cost: 1 }
           decrease: { build_cost: 1 }
-      - key: shift-affected-traits
-        label: "Affected Trait(s)"
+      - key: shift-affected-skills
+        label: "Affected Skill(s)"
         type: multiselect
         default_count: 1
-        options_source: traits_all
+        options_source: skills_all
         row_defaults:
           - value: "offense.precision"
           - value: "offense.power"
         row_fields:
           - key: value
-            label: "Affected Trait"
+            label: "Affected Skill"
             type: dropdown
-            options_source: traits_all
+            options_source: skills_all
             group_offsets:
               default_group: defense
               offsets:
@@ -296,16 +296,16 @@ enactments:
 
   modification:
     type: "Enact Modification"
-    information: "Enact Shift allows you to temporarily enhance or weaken Traits. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens."
+    information: "Enact Shift allows you to temporarily enhance or weaken Skills. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens."
     render_information: false
     base_cost:
       build_cost: 2
       energy_cost: 0
     fields:
-      - key: modification-traits
-        label: "Trait"
+      - key: modification-skills
+        label: "Skill"
         type: dropdown
-        options_source: traits_all
+        options_source: skills_all
       - key: modification-shift-amount
         label: "Shift -/+"
         type: free_number
@@ -339,4 +339,4 @@ enactments:
         label: "Source"
         type: dropdown
         options_source: roll_generic
-        information: "The offensive trait whose die is rolled for damage. Higher proficiency in the trait means a larger die."
+        information: "The offensive skill whose die is rolled for damage. Higher proficiency in the skill means a larger die."

@@ -21,7 +21,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom
   - type: condition
     # The blessing lands on you, not on the enemy the first enactment struck,
@@ -40,5 +40,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom

@@ -20,7 +20,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Constitution
   - type: condition
     # The same enemy that was dragged in is the one now tangled in the chain,

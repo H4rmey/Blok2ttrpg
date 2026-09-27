@@ -22,14 +22,15 @@
 # level, ending at 36 (about 12 perks) at level 10.
 #
 #
-# Skill (trait) points
-# -------------------
-# The old "(trait_count + 2) / 3" starting formula no longer matched the cost
+# Skill points
+# ------------
+
+# The old "(skill_count + 2) / 3" starting formula no longer matched the cost
 # model and has been dropped. Two things broke it:
 #
 #   1. Every rung of the proficiency ladder in proficiencies.yaml costs 1
 #      point (untrained is the free default, legendary is 0), so raising a
-#      single trait from untrained to master costs 4 and the whole 26-trait
+#      single skill from untrained to master costs 4 and the whole 26-skill
 #      roster costs 104 points to max out. The old curve granted 9 at level 1
 #      and only 20 at level 10, under 20% of the ladder, which left a level 10
 #      character's dice almost indistinguishable from a level 1 character's.
@@ -51,11 +52,35 @@
 # Master in two or three skills and stay broadly competent elsewhere, without
 # trivialising a 26-skill roster. The arbitrary bonus points that used to be
 # handed out at levels 5 and 10 are gone: the flat +3 replaces them.
+#
+#
+# Invoke points
+# -------------
+# Unlike the two pools above, invoke points are not spent at build time: they
+# are a per-session currency refreshed at the start of every session, spent to
+# invoke a trait or a reaction and earned back by letting a trait work against
+# you. See docs/core/invoking.md and invoking.yaml for what they buy.
+#
+# The curve uses levels_per_step rather than per_level because the pool is tiny
+# and a point is a whole extra scene-changing action: +1 every level would take
+# a level 10 character to 12 points, which is more invocations than a session
+# has room for. Granting +1 every 2 levels gives 3 at level 1 and 7 at level 10,
+# so the pool slightly more than doubles over a campaign while every single
+# point stays a real decision.
+#
+#   L1 3   L2 3   L3 4   L4 4   L5 5
+#   L6 5   L7 6   L8 6   L9 7   L10 7
 leveling:
   max_level: 10
-  trait_points:
+  skill_points:
     start: 13
     per_level: 3
   ability_points:
     start: 9
     per_level: 3
+  invoke_points:
+    start: 3
+    # per_step points are granted every levels_per_step levels after the first.
+    per_step: 1
+    levels_per_step: 2
+

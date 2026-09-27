@@ -237,7 +237,7 @@ func (c *Config) Proficiency(id string) (Proficiency, bool) {
 	return Proficiency{}, false
 }
 
-// ProficiencyCost returns the trait-point cost of a proficiency id (0 if none).
+// ProficiencyCost returns the skill-point cost of a proficiency id (0 if none).
 func (c *Config) ProficiencyCost(id string) int {
 	if p, ok := c.Proficiency(id); ok {
 		return p.Cost
@@ -246,7 +246,7 @@ func (c *Config) ProficiencyCost(id string) int {
 }
 
 // DefaultProficiencyID returns the id of the tier new characters start every
-// trait at. When default_proficiency is configured and valid it is used;
+// skill at. When default_proficiency is configured and valid it is used;
 // otherwise the first proficiency in the ladder is the default.
 func (c *Config) DefaultProficiencyID() string {
 	if c.DefaultProficiency != "" {
@@ -305,7 +305,7 @@ func (c *Config) ShiftProficiency(current string, delta int) string {
 // ShiftClamped reports whether shifting the given proficiency id by delta
 // rungs would run off either end of the ladder (i.e. the requested delta could
 // not be fully applied). It is used to surface a non-blocking warning when a
-// package pushes a trait above or below the possible range.
+// package pushes a skill above or below the possible range.
 func (c *Config) ShiftClamped(current string, delta int) bool {
 	if len(c.Proficiencies) == 0 || delta == 0 {
 		return false
@@ -357,7 +357,7 @@ func (c *Config) expandOptionGroups(f Field, def OptionGroupDef) []OptionGroup {
 		}
 		ns := m.Namespace
 		if ns == "" {
-			ns = traitCategoryOf(m.Source)
+			ns = skillCategoryOf(m.Source)
 		}
 		offsetKey := m.OffsetKey
 		if offsetKey == "" {
@@ -404,11 +404,11 @@ func mergeCost(a, b *Cost) *Cost {
 	return &out
 }
 
-// traitCategoryOf returns the trait category id when source is a dotted
-// "traits.<cat>" reference, or "" otherwise. The category id doubles as the
-// default namespace/offset key for a trait group.
-func traitCategoryOf(source string) string {
-	const prefix = "traits."
+// skillCategoryOf returns the skill category id when source is a dotted
+// "skills.<cat>" reference, or "" otherwise. The category id doubles as the
+// default namespace/offset key for a skill group.
+func skillCategoryOf(source string) string {
+	const prefix = "skills."
 	if len(source) > len(prefix) && source[:len(prefix)] == prefix {
 		return source[len(prefix):]
 	}
@@ -417,7 +417,7 @@ func traitCategoryOf(source string) string {
 
 // groupLabel derives a default optgroup heading from a source name.
 func (c *Config) groupLabel(source string) string {
-	if cat := traitCategoryOf(source); cat != "" {
+	if cat := skillCategoryOf(source); cat != "" {
 		return titleCase(cat)
 	}
 	return titleCase(source)
@@ -425,13 +425,13 @@ func (c *Config) groupLabel(source string) string {
 
 // OptionsFor resolves a named options_source into a concrete option list. It
 
-// understands dotted trait/dice references (traits.<cat>, dice.<kind>), the
+// understands dotted skill/dice references (skills.<cat>, dice.<kind>), the
 // built-in condition sources, component sources, config-defined grouped sources
 // (flattened for the cost engine), and the config-driven option_sources map.
 func (c *Config) OptionsFor(source string) []Option {
-	// Dotted references: "traits.<category>" and "dice.<kind>".
-	if cat := traitCategoryOf(source); cat != "" {
-		return strOptions(c.Traits.Items[cat])
+	// Dotted references: "skills.<category>" and "dice.<kind>".
+	if cat := skillCategoryOf(source); cat != "" {
+		return strOptions(c.Skills.Items[cat])
 	}
 	switch source {
 	case "dice.damage":
@@ -491,7 +491,7 @@ func (c *Config) OptionsFor(source string) []Option {
 			opts := c.OptionsFor(m.Source)
 			ns := m.Namespace
 			if ns == "" {
-				ns = traitCategoryOf(m.Source)
+				ns = skillCategoryOf(m.Source)
 			}
 			for _, o := range opts {
 				if ns != "" {
@@ -516,10 +516,10 @@ func (c *Config) OptionsFor(source string) []Option {
 	return nil
 }
 
-// GroupOffsetFor returns the group-offset cost for a selected trait value on a
+// GroupOffsetFor returns the group-offset cost for a selected skill value on a
 // field, or nil when the field has no group offsets or the value's group has no
-// configured offset. The value is expected to be namespaced as "group.Trait"
-// (as produced by the traits_all source); a value without a prefix uses the
+// configured offset. The value is expected to be namespaced as "group.Skill"
+// (as produced by the skills_all source); a value without a prefix uses the
 // default group.
 func (c *Config) GroupOffsetFor(f Field, value string) *Cost {
 	if f.GroupOffsets == nil || value == "" {
@@ -570,7 +570,7 @@ func (c *Config) MaxLevel() int {
 		return c.Leveling.MaxLevel
 	}
 	max := 0
-	for _, t := range []LevelTable{c.Leveling.TraitPoints, c.Leveling.AbilityPoints} {
+	for _, t := range []LevelTable{c.Leveling.SkillPoints, c.Leveling.AbilityPoints} {
 		for _, e := range t.Levels {
 			if e.Level > max {
 				max = e.Level
@@ -596,11 +596,11 @@ func (c *Config) ClampLevel(level int) int {
 	return level
 }
 
-// TraitPointBudget returns the trait-point budget for a given character level.
+// SkillPointBudget returns the skill-point budget for a given character level.
 // The level is clamped to the configured maximum first, so an out-of-range
 // level never grants more than the cap.
-func (c *Config) TraitPointBudget(level int) int {
-	return budgetForLevel(c.Leveling.TraitPoints, c.ClampLevel(level))
+func (c *Config) SkillPointBudget(level int) int {
+	return budgetForLevel(c.Leveling.SkillPoints, c.ClampLevel(level))
 }
 
 // AbilityPointBudget returns the ability-point budget for a given level.

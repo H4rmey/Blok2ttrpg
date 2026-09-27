@@ -30,7 +30,7 @@ The subpages are modules that can be used int he Blok2ttrpg. The following Modul
 
 ### Character Presets (races/classes)
 
-Basically preset traits that are usable by users to have a quick start. maybe even adding specific level up charts for thoses classes/races. Also maybe make it so there are abilities you get by selecting a specific race/class. But i never want to make abilities be tied to anything, anyone should be able to cast a fireball, that should not be a Wizard exclusive ability. 
+Basically preset skills that are usable by users to have a quick start. maybe even adding specific level up charts for thoses classes/races. Also maybe make it so there are abilities you get by selecting a specific race/class. But i never want to make abilities be tied to anything, anyone should be able to cast a fireball, that should not be a Wizard exclusive ability. 
 
 ### Predefined Abilities
 

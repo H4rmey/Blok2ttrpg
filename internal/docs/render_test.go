@@ -88,7 +88,7 @@ func TestDocsOrderIsComplete(t *testing.T) {
 func TestLevelingTableHasEveryLevel(t *testing.T) {
 	loaded := loadRuleset(t)
 	cfg := loaded.Config
-	for _, pool := range []string{"trait", "ability"} {
+	for _, pool := range []string{"skill", "ability"} {
 		table := levelingTable(cfg, pool)
 		rows := countTableRows(table)
 		if want := cfg.MaxLevel(); rows != want {

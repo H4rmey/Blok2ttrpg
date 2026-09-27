@@ -17,7 +17,7 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex
   - type: nerf
     # The cost of intercepting lands on you, not on the ally you protected, so
@@ -25,7 +25,7 @@ enactments:
     new_target: true
     fields:
       comment: You are off balance for having stepped in.
-      nerf-shifted-trait: defense.Reflex
+      nerf-shifted-skill: defense.Reflex
       nerf-shift-amount: -1
       nerf-duration: 1
     interaction: self
@@ -34,5 +34,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Reflex

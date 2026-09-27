@@ -9,7 +9,7 @@ enactments:
   - type: modification
     fields:
       comment: Tighten your guard.
-      modification-traits: defense.Reflex
+      modification-skills: defense.Reflex
       modification-shift-amount: 1
       modificaiton-shift-duration: 2
     interaction: self
@@ -18,5 +18,5 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Constitution

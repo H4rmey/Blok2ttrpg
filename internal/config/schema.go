@@ -37,8 +37,8 @@ type Config struct {
 	AllowNegativeEnergyCost *bool `yaml:"allow_negative_energy_cost,omitempty" json:"allow_negative_energy_cost,omitempty"`
 
 	// AllowNegativeSkillPoints controls whether a character may spend more
-	// skill (trait) points than its level budget grants. It defaults to false,
-	// which makes the app reject any change (manual trait edit or package
+	// skill (skill) points than its level budget grants. It defaults to false,
+	// which makes the app reject any change (manual skill edit or package
 	// import) that would push the used total past the budget.
 	AllowNegativeSkillPoints *bool `yaml:"allow_negative_skill_points,omitempty" json:"allow_negative_skill_points,omitempty"`
 
@@ -64,33 +64,43 @@ type Config struct {
 	// OptionGroups defines named grouped dropdown sources. A field referencing
 	// one of these names via options_source is rendered as <optgroup> blocks in
 	// author order, and its flattened option list backs the cost engine. This
-	// replaces the hardcoded traits_all/roll_all/conditions_all grouping.
+	// replaces the hardcoded skills_all/roll_all/conditions_all grouping.
 	OptionGroups map[string]OptionGroupDef `yaml:"option_groups,omitempty" json:"option_groups,omitempty"`
 
-	// TraitCategories lists the trait group ids that make up the "traits_all"
+	// SkillCategories lists the skill group ids that make up the "skills_all"
 	// option source and its grouped display. When empty the app falls back to
 	// the historical general/offense/defense set.
-	TraitCategories []string `yaml:"trait_categories,omitempty" json:"trait_categories,omitempty"`
+	SkillCategories []string `yaml:"skill_categories,omitempty" json:"skill_categories,omitempty"`
 
-	// VitalGroup names the trait group id whose traits (HP, Movement, Energy)
+	// VitalGroup names the skill group id whose skills (HP, Movement, Energy)
 	// map to numeric vital values rather than dice. Defaults to "vital".
 	VitalGroup string `yaml:"vital_group,omitempty" json:"vital_group,omitempty"`
 
-	// Character attributes and traits are fully config-driven, keyed by id.
-	Attributes AttributeMap `yaml:"attributes,omitempty" json:"attributes,omitempty"`
-	Traits     TraitMap     `yaml:"traits,omitempty" json:"traits,omitempty"`
+	// Character traits and skills are fully config-driven, keyed by id.
+	Traits TraitMap `yaml:"traits,omitempty" json:"traits,omitempty"`
+	Skills SkillMap `yaml:"skills,omitempty" json:"skills,omitempty"`
 
-	// Proficiency tiers referenced by traits.
+	// Proficiency tiers referenced by skills.
 	Proficiencies []Proficiency `yaml:"proficiencies,omitempty" json:"proficiencies,omitempty"`
 
 	// DefaultProficiency names the proficiency tier id that new characters
-	// start every trait at (the "free" baseline). When empty the first tier in
+	// start every skill at (the "free" baseline). When empty the first tier in
 	// the Proficiencies list is used. Tiers below the default are free; tiers
 	// above the default accrue their cumulative per-tier cost.
 	DefaultProficiency string `yaml:"default_proficiency,omitempty" json:"default_proficiency,omitempty"`
 
 	// Leveling budgets, given as per-level tables.
 	Leveling Leveling `yaml:"leveling,omitempty" json:"leveling,omitempty"`
+
+	// Invoking is the invoke point economy: what a point buys, how one is
+	// earned, and the limits on reactions. The pool size per level lives in
+	// Leveling.InvokePoints.
+	Invoking Invoking `yaml:"invoking,omitempty" json:"invoking,omitempty"`
+
+	// Negotiation is the structured social encounter: the motivation ladder,
+	// the patience clock and the NPC trait-alignment rules. It is unrelated to
+	// Interactions, which are the ability-builder's targeting components.
+	Negotiation Negotiation `yaml:"negotiation,omitempty" json:"negotiation,omitempty"`
 
 	// Ability building blocks, keyed by id but with author ordering preserved.
 	AbilityTypes ComponentMap `yaml:"ability_types,omitempty" json:"ability_types,omitempty"`
@@ -130,7 +140,7 @@ func (c *Config) AllowsNegativeEnergyCost() bool {
 }
 
 // AllowsNegativeSkillPoints reports whether a character is permitted to
-// overspend its skill (trait) point budget. Defaults to false when unset.
+// overspend its skill (skill) point budget. Defaults to false when unset.
 func (c *Config) AllowsNegativeSkillPoints() bool {
 	return c.AllowNegativeSkillPoints != nil && *c.AllowNegativeSkillPoints
 }
@@ -234,7 +244,7 @@ type Proficiency struct {
 	Name string `yaml:"name" json:"name"`
 	Cost int    `yaml:"cost" json:"cost"`
 	Note string `yaml:"note,omitempty" json:"note,omitempty"`
-	// Die is the fallback die used for every dice-backed trait group at this
+	// Die is the fallback die used for every dice-backed skill group at this
 	// tier. Per-group overrides in Dice take precedence when present, so a tier
 	// only needs the verbose Dice map when a group differs from the rest.
 	Die    string            `yaml:"die,omitempty" json:"die,omitempty"`
@@ -242,7 +252,7 @@ type Proficiency struct {
 	Vitals map[string]any    `yaml:"vitals,omitempty" json:"vitals,omitempty"`
 }
 
-// DieFor returns the die this tier grants for a trait group: the per-group
+// DieFor returns the die this tier grants for a skill group: the per-group
 // override in Dice when present, otherwise the shared Die fallback.
 func (p Proficiency) DieFor(group string) string {
 	if p.Dice != nil {
@@ -256,8 +266,13 @@ func (p Proficiency) DieFor(group string) string {
 // Leveling describes the point budgets available to a character by level.
 type Leveling struct {
 	MaxLevel      int        `yaml:"max_level,omitempty" json:"max_level,omitempty"`
-	TraitPoints   LevelTable `yaml:"trait_points,omitempty" json:"trait_points,omitempty"`
+	SkillPoints   LevelTable `yaml:"skill_points,omitempty" json:"skill_points,omitempty"`
 	AbilityPoints LevelTable `yaml:"ability_points,omitempty" json:"ability_points,omitempty"`
+
+	// InvokePoints is the per-session invoke point pool. It uses its own table
+	// type because it grows in steps every few levels rather than every level;
+	// see InvokeTable in invoking.go.
+	InvokePoints InvokeTable `yaml:"invoke_points,omitempty" json:"invoke_points,omitempty"`
 }
 
 // LevelTable holds the budget progression for one point pool. The budget is
@@ -336,7 +351,7 @@ func (c Condition) IsSelectable() bool {
 	return c.Selectable == nil || *c.Selectable
 }
 
-// Shiftable reports whether the condition applies a trait shift (and therefore
+// Shiftable reports whether the condition applies a skill shift (and therefore
 // pays a per-shift cost) rather than a flat build/energy cost.
 func (c Condition) Shiftable() bool {
 	return c.MinShift != 0 || c.MaxShift != 0
@@ -476,18 +491,18 @@ type Field struct {
 	// their (field-driven) cost to the total.
 	InlineBuilder *InlineBuilder `yaml:"inline_builder,omitempty" json:"inline_builder,omitempty"`
 
-	// GroupOffsets applies a per-trait-group cost offset on a dropdown backed
-	// by a multi-group trait source (traits_all). The selected option value is
-	// namespaced as "group.Trait"; the group prefix selects which offset to
-	// add. This lets a field "lean" toward a preferred trait group: picking a
-	// trait outside the leaning group can cost extra (or a preferred group can
+	// GroupOffsets applies a per-skill-group cost offset on a dropdown backed
+	// by a multi-group skill source (skills_all). The selected option value is
+	// namespaced as "group.Skill"; the group prefix selects which offset to
+	// add. This lets a field "lean" toward a preferred skill group: picking a
+	// skill outside the leaning group can cost extra (or a preferred group can
 	// cost less).
 	GroupOffsets *GroupOffsets `yaml:"group_offsets,omitempty" json:"group_offsets,omitempty"`
 }
 
-// GroupOffsets configures per-trait-group cost offsets for a trait dropdown.
-// DefaultGroup names the preferred (leaning) group; Offsets maps each trait
-// group id to the cost added when a trait from that group is selected. Groups
+// GroupOffsets configures per-skill-group cost offsets for a skill dropdown.
+// DefaultGroup names the preferred (leaning) group; Offsets maps each skill
+// group id to the cost added when a skill from that group is selected. Groups
 // not present in Offsets contribute no offset.
 type GroupOffsets struct {
 	DefaultGroup string           `yaml:"default_group,omitempty" json:"default_group,omitempty"`
@@ -508,7 +523,7 @@ type Option struct {
 	Value string `yaml:"value" json:"value"`
 	Label string `yaml:"label,omitempty" json:"label,omitempty"`
 	// Information is optional help text surfaced as a native hover tooltip on
-	// the dropdown option (rendered via the option's title attribute).
+	// the dropdown option (rendered via the option's title trait).
 	Information string `yaml:"information,omitempty" json:"information,omitempty"`
 	// RenderInformation, when true, renders this option's Information as plain
 	// text below the dropdown once selected instead of behind the trailing
@@ -518,8 +533,8 @@ type Option struct {
 	Fields            []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
 }
 
-// AttributeGroup is a titled section of character fields.
-type AttributeGroup struct {
+// TraitGroup is a titled section of character fields.
+type TraitGroup struct {
 	ID     string  `yaml:"-" json:"id"`
 	Label  string  `yaml:"label" json:"label"`
 	Fields []Field `yaml:"fields" json:"fields"`
@@ -591,25 +606,25 @@ func (m ComponentMap) Get(id string) (*Component, bool) {
 	return c, ok
 }
 
-// AttributeMap is an ordered, id-keyed collection of attribute groups.
-type AttributeMap struct {
+// TraitMap is an ordered, id-keyed collection of trait groups.
+type TraitMap struct {
 	Order []string
-	Items map[string]*AttributeGroup
+	Items map[string]*TraitGroup
 }
 
-// UnmarshalYAML decodes a mapping node into an ordered AttributeMap.
-func (m *AttributeMap) UnmarshalYAML(n *yaml.Node) error {
+// UnmarshalYAML decodes a mapping node into an ordered TraitMap.
+func (m *TraitMap) UnmarshalYAML(n *yaml.Node) error {
 	if n.Kind != yaml.MappingNode {
-		return fmt.Errorf("expected mapping for attribute map, got kind %d", n.Kind)
+		return fmt.Errorf("expected mapping for trait map, got kind %d", n.Kind)
 	}
 	if m.Items == nil {
-		m.Items = map[string]*AttributeGroup{}
+		m.Items = map[string]*TraitGroup{}
 	}
 	for i := 0; i+1 < len(n.Content); i += 2 {
 		key := n.Content[i].Value
-		var g AttributeGroup
+		var g TraitGroup
 		if err := n.Content[i+1].Decode(&g); err != nil {
-			return fmt.Errorf("attribute group %q: %w", key, err)
+			return fmt.Errorf("trait group %q: %w", key, err)
 		}
 		g.ID = key
 		if _, seen := m.Items[key]; !seen {
@@ -620,55 +635,55 @@ func (m *AttributeMap) UnmarshalYAML(n *yaml.Node) error {
 	return nil
 }
 
-// List returns the attribute groups in author order.
-func (m AttributeMap) List() []*AttributeGroup {
-	out := make([]*AttributeGroup, 0, len(m.Order))
+// List returns the trait groups in author order.
+func (m TraitMap) List() []*TraitGroup {
+	out := make([]*TraitGroup, 0, len(m.Order))
 	for _, k := range m.Order {
 		out = append(out, m.Items[k])
 	}
 	return out
 }
 
-// TraitMap is an ordered, category-keyed collection of trait lists.
-type TraitMap struct {
+// SkillMap is an ordered, category-keyed collection of skill lists.
+type SkillMap struct {
 	Order []string
 	Items map[string][]string
 }
 
-// UnmarshalYAML decodes a mapping node into an ordered TraitMap.
-func (m *TraitMap) UnmarshalYAML(n *yaml.Node) error {
+// UnmarshalYAML decodes a mapping node into an ordered SkillMap.
+func (m *SkillMap) UnmarshalYAML(n *yaml.Node) error {
 	if n.Kind != yaml.MappingNode {
-		return fmt.Errorf("expected mapping for trait map, got kind %d", n.Kind)
+		return fmt.Errorf("expected mapping for skill map, got kind %d", n.Kind)
 	}
 	if m.Items == nil {
 		m.Items = map[string][]string{}
 	}
 	for i := 0; i+1 < len(n.Content); i += 2 {
 		key := n.Content[i].Value
-		var traits []string
-		if err := n.Content[i+1].Decode(&traits); err != nil {
-			return fmt.Errorf("trait group %q: %w", key, err)
+		var skills []string
+		if err := n.Content[i+1].Decode(&skills); err != nil {
+			return fmt.Errorf("skill group %q: %w", key, err)
 		}
 		if _, seen := m.Items[key]; !seen {
 			m.Order = append(m.Order, key)
 		}
-		m.Items[key] = traits
+		m.Items[key] = skills
 	}
 	return nil
 }
 
-// TraitGroup is an ordered view of one trait category.
-type TraitGroup struct {
+// SkillGroup is an ordered view of one skill category.
+type SkillGroup struct {
 	ID     string
 	Label  string
-	Traits []string
+	Skills []string
 }
 
-// List returns the trait categories as ordered groups.
-func (m TraitMap) List() []TraitGroup {
-	out := make([]TraitGroup, 0, len(m.Order))
+// List returns the skill categories as ordered groups.
+func (m SkillMap) List() []SkillGroup {
+	out := make([]SkillGroup, 0, len(m.Order))
 	for _, k := range m.Order {
-		out = append(out, TraitGroup{ID: k, Label: titleCase(k), Traits: m.Items[k]})
+		out = append(out, SkillGroup{ID: k, Label: titleCase(k), Skills: m.Items[k]})
 	}
 	return out
 }

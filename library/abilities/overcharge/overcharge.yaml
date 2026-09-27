@@ -16,13 +16,13 @@ enactments:
     validation_data:
       comment: ""
       engage: d6
-      counter_trait:
+      counter_skill:
         - value: defense.Wisdom
   - type: nerf
     # The backlash is on you, and the adjustment above already resolved against
     # its own target, so this stays on the same target and needs no new one.
     fields:
       comment: The backlash dulls your senses.
-      nerf-shifted-trait: defense.Wisdom
+      nerf-shifted-skill: defense.Wisdom
       nerf-shift-amount: -1
       nerf-duration: 2

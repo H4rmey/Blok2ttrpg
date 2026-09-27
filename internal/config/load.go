@@ -158,8 +158,8 @@ func merge(base, in *Config) {
 			base.OptionGroups[k] = v
 		}
 	}
-	if len(in.TraitCategories) > 0 {
-		base.TraitCategories = in.TraitCategories
+	if len(in.SkillCategories) > 0 {
+		base.SkillCategories = in.SkillCategories
 	}
 	if in.VitalGroup != "" {
 		base.VitalGroup = in.VitalGroup
@@ -169,8 +169,8 @@ func merge(base, in *Config) {
 		base.DefaultProficiency = in.DefaultProficiency
 	}
 
-	mergeAttributeMap(&base.Attributes, in.Attributes)
 	mergeTraitMap(&base.Traits, in.Traits)
+	mergeSkillMap(&base.Skills, in.Skills)
 	mergeComponentMap(&base.AbilityTypes, in.AbilityTypes)
 	mergeComponentMap(&base.Enactments, in.Enactments)
 	mergeComponentMap(&base.Interactions, in.Interactions)
@@ -180,6 +180,16 @@ func merge(base, in *Config) {
 
 	if levelingConfigured(in.Leveling) {
 		base.Leveling = in.Leveling
+	}
+
+	// The invoking and negotiation sections each live in a single file, so a
+	// whole-block overwrite is enough; the guards keep a file that does not
+	// mention them from blanking what another file declared.
+	if invokingConfigured(in.Invoking) {
+		base.Invoking = in.Invoking
+	}
+	if negotiationConfigured(in.Negotiation) {
+		base.Negotiation = in.Negotiation
 	}
 
 	if (in.AdditionalCondition != Cost{}) {
@@ -198,7 +208,7 @@ func levelingConfigured(l Leveling) bool {
 	if l.MaxLevel != 0 {
 		return true
 	}
-	for _, t := range []LevelTable{l.TraitPoints, l.AbilityPoints} {
+	for _, t := range []LevelTable{l.SkillPoints, l.AbilityPoints} {
 		if t.Start != 0 || t.PerLevel != 0 || len(t.Levels) > 0 {
 			return true
 		}
@@ -231,12 +241,12 @@ func mergeComponentMap(base *ComponentMap, in ComponentMap) {
 	}
 }
 
-func mergeAttributeMap(base *AttributeMap, in AttributeMap) {
+func mergeTraitMap(base *TraitMap, in TraitMap) {
 	if len(in.Order) == 0 {
 		return
 	}
 	if base.Items == nil {
-		base.Items = map[string]*AttributeGroup{}
+		base.Items = map[string]*TraitGroup{}
 	}
 	for _, k := range in.Order {
 		if _, seen := base.Items[k]; !seen {
@@ -246,7 +256,7 @@ func mergeAttributeMap(base *AttributeMap, in AttributeMap) {
 	}
 }
 
-func mergeTraitMap(base *TraitMap, in TraitMap) {
+func mergeSkillMap(base *SkillMap, in SkillMap) {
 	if len(in.Order) == 0 {
 		return
 	}

@@ -2,7 +2,7 @@
 // former Rules/Perks split, a chapter simply asks for buildGuide of a component
 // and gets a self-contained, numbered walkthrough that a reader can follow to
 // build the ability entirely by hand: every field, its range/default, and every
-// concrete choice (traits, dice, damage types, etc.) is listed with its cost.
+// concrete choice (skills, dice, damage types, etc.) is listed with its cost.
 //
 // The output deliberately avoids any application or configuration terminology.
 // It reads as a standalone rulebook; the builder application is a convenience
@@ -18,7 +18,7 @@ import (
 
 // conditionsTable renders the full set of conditions defined in the config as
 // reader-facing markdown. Shiftable conditions (those that move a collection of
-// traits up or down within a shift range) are grouped into one table showing
+// skills up or down within a shift range) are grouped into one table showing
 // their range; every other condition is a fixed effect and is listed in a
 // second table with its plain-language effect. The output keeps the rulebook's
 // condition list automatically in sync with the config definitions.
@@ -37,9 +37,9 @@ func conditionsTable(cfg *config.Config) string {
 	var b strings.Builder
 	if len(shiftable) > 0 {
 		b.WriteString("### Shifting Conditions\n\n")
-		b.WriteString("These conditions raise or lower a collection of traits. ")
+		b.WriteString("These conditions raise or lower a collection of skills. ")
 		b.WriteString("The value is a number of die shifts within the range shown; ")
-		b.WriteString("which traits are affected is decided at the table.\n\n")
+		b.WriteString("which skills are affected is decided at the table.\n\n")
 		b.WriteString("| Condition | Shift Range | Effect |\n")
 		b.WriteString("| --- | --- | --- |\n")
 		for _, c := range shiftable {
@@ -52,7 +52,7 @@ func conditionsTable(cfg *config.Config) string {
 			b.WriteString("\n")
 		}
 		b.WriteString("### Fixed Conditions\n\n")
-		b.WriteString("These conditions apply a set effect rather than a trait shift.\n\n")
+		b.WriteString("These conditions apply a set effect rather than a skill shift.\n\n")
 		b.WriteString("| Condition | Effect |\n")
 		b.WriteString("| --- | --- |\n")
 		for _, c := range fixed {
@@ -77,14 +77,14 @@ func signed(n int) string {
 	return fmt.Sprintf("%d", n)
 }
 
-// traitsTable renders the trait roster and proficiency progression from the
-// config. Dice-backed trait groups (everything except the vital group) each get
+// skillsTable renders the skill roster and proficiency progression from the
+// config. Dice-backed skill groups (everything except the vital group) each get
 // a table listing the die every proficiency tier grants; the vital group gets a
 // table listing the numeric HP/Movement/Energy each tier grants. This keeps the
-// trait list and its tier progression in sync with the config definitions.
-func traitsTable(cfg *config.Config) string {
-	if cfg == nil || len(cfg.Traits.Order) == 0 {
-		return "_No traits configured._"
+// skill list and its tier progression in sync with the config definitions.
+func skillsTable(cfg *config.Config) string {
+	if cfg == nil || len(cfg.Skills.Order) == 0 {
+		return "_No skills configured._"
 	}
 	vitalGroup := cfg.VitalGroup
 	if vitalGroup == "" {
@@ -92,21 +92,21 @@ func traitsTable(cfg *config.Config) string {
 	}
 	tiers := cfg.Proficiencies
 	var b strings.Builder
-	for _, g := range cfg.Traits.List() {
+	for _, g := range cfg.Skills.List() {
 		if g.ID == vitalGroup {
 			writeVitalTable(&b, g, tiers)
 			continue
 		}
-		writeDiceTraitTable(&b, g, tiers)
+		writeDiceSkillTable(&b, g, tiers)
 	}
 	return strings.TrimSpace(b.String())
 }
 
-// writeDiceTraitTable writes a table for a dice-backed trait group: rows are
-// traits, columns are proficiency tiers, cells are the die that tier grants.
-func writeDiceTraitTable(b *strings.Builder, g config.TraitGroup, tiers []config.Proficiency) {
-	fmt.Fprintf(b, "### %s Traits\n\n", g.Label)
-	b.WriteString("| Trait |")
+// writeDiceSkillTable writes a table for a dice-backed skill group: rows are
+// skills, columns are proficiency tiers, cells are the die that tier grants.
+func writeDiceSkillTable(b *strings.Builder, g config.SkillGroup, tiers []config.Proficiency) {
+	fmt.Fprintf(b, "### %s Skills\n\n", g.Label)
+	b.WriteString("| Skill |")
 	for _, t := range tiers {
 		fmt.Fprintf(b, " %s |", t.Name)
 	}
@@ -119,7 +119,7 @@ func writeDiceTraitTable(b *strings.Builder, g config.TraitGroup, tiers []config
 		fmt.Fprintf(b, " %d |", t.Cost)
 	}
 	b.WriteString("\n")
-	for _, tr := range g.Traits {
+	for _, tr := range g.Skills {
 		fmt.Fprintf(b, "| **%s** |", tr)
 		for _, t := range tiers {
 			fmt.Fprintf(b, " %s |", orDash(t.DieFor(g.ID)))
@@ -129,12 +129,12 @@ func writeDiceTraitTable(b *strings.Builder, g config.TraitGroup, tiers []config
 	b.WriteString("\n")
 }
 
-// writeVitalTable writes the vital group's table: rows are vital traits,
+// writeVitalTable writes the vital group's table: rows are vital skills,
 // columns are proficiency tiers, cells are the numeric value that tier grants.
-func writeVitalTable(b *strings.Builder, g config.TraitGroup, tiers []config.Proficiency) {
-	fmt.Fprintf(b, "### %s Traits\n\n", g.Label)
-	b.WriteString("These traits use numeric values rather than dice.\n\n")
-	b.WriteString("| Trait |")
+func writeVitalTable(b *strings.Builder, g config.SkillGroup, tiers []config.Proficiency) {
+	fmt.Fprintf(b, "### %s Skills\n\n", g.Label)
+	b.WriteString("These skills use numeric values rather than dice.\n\n")
+	b.WriteString("| Skill |")
 	for _, t := range tiers {
 		fmt.Fprintf(b, " %s |", t.Name)
 	}
@@ -143,7 +143,7 @@ func writeVitalTable(b *strings.Builder, g config.TraitGroup, tiers []config.Pro
 		b.WriteString(" --- |")
 	}
 	b.WriteString("\n")
-	for _, tr := range g.Traits {
+	for _, tr := range g.Skills {
 		key := strings.ToLower(tr)
 		fmt.Fprintf(b, "| **%s** |", tr)
 		for _, t := range tiers {
@@ -167,14 +167,14 @@ func vitalValue(t config.Proficiency, key string) string {
 	return defaultStr(v)
 }
 
-// attributeSections renders the character attribute sheet sections from the
+// traitSections renders the character trait sheet sections from the
 // config: one bulleted list per section, each listing its field labels.
-func attributeSections(cfg *config.Config) string {
-	if cfg == nil || len(cfg.Attributes.Order) == 0 {
-		return "_No attribute sections configured._"
+func traitSections(cfg *config.Config) string {
+	if cfg == nil || len(cfg.Traits.Order) == 0 {
+		return "_No trait sections configured._"
 	}
 	var b strings.Builder
-	for _, sec := range cfg.Attributes.List() {
+	for _, sec := range cfg.Traits.List() {
 		fmt.Fprintf(&b, "**%s**\n\n", orDash(sec.Label))
 		for _, f := range sec.Fields {
 			fmt.Fprintf(&b, "*   %s\n", orDash(f.Label))
@@ -520,7 +520,7 @@ func ensureSentence(s string) string {
 	return s + "."
 }
 
-// numberWord spells out small counts (used for "start with two traits").
+// numberWord spells out small counts (used for "start with two skills").
 func numberWord(n int) string {
 	words := []string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"}
 	if n >= 0 && n < len(words) {

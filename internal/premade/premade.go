@@ -15,8 +15,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// PackageYAML is the on-disk shape of a package definition. Shifts map a trait
-// key ("group.Trait") to a relative proficiency delta (e.g. +2, -1). Imports
+// PackageYAML is the on-disk shape of a package definition. Shifts map a skill
+// key ("group.Skill") to a relative proficiency delta (e.g. +2, -1). Imports
 // lists abilities to include; each entry is either a short name (resolved to
 // ../../abilities/<name>/<name>.yaml relative to the package file) or an
 // explicit path relative to the package file.

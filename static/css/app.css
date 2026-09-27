@@ -11,7 +11,35 @@
   --warn: #fbbf24;
   --cyan: #22d3ee;
   --radius: 8px;
+
+  /* Character bar geometry. The reading column's width is computed from these
+     rather than hardcoded, so the bar always fits its cards on one row: change
+     a card's size or add a card and the column follows automatically.
+
+     --stat-card-count is the number of nodes in the bar: the level box plus one
+     card per stat. It depends on the ruleset, because the vitals come from the
+     config (HP / Movement / Energy here), so it is the one value to bump if a
+     profile adds a vital. Anything wider than the column still scrolls, so an
+     out-of-date count degrades to a scrollbar rather than a broken layout. */
+  --stat-card-w: 104px;
+  --stat-card-count: 8;
+  --stat-card-gap: 0.6rem;
+  --stats-bar-gap: 1rem;
+  --stats-bar-pad: 1rem;
+  --content-pad: 1.25rem;
+
+  /* Total width the bar needs: every card, the gaps between the stat cards, the
+     wider gap after the level box, the bar's own padding and border, and the
+     reading column's horizontal padding. */
+  --stats-bar-width: calc(
+    var(--stat-card-count) * var(--stat-card-w) +
+    (var(--stat-card-count) - 2) * var(--stat-card-gap) +
+    var(--stats-bar-gap) +
+    2 * var(--stats-bar-pad) + 2px +
+    2 * var(--content-pad)
+  );
 }
+
 [data-theme="dark"] { color-scheme: dark; }
 
 /* Generated perk instructions (play-facing rules text). */
@@ -200,11 +228,19 @@ a:hover { text-decoration: underline; }
 }
 .breadcrumbs .sep { margin: 0 0.25rem; }
 
+/* The reading column. Its width is exactly what the sticky character bar needs
+   for one row of cards (--stats-bar-width, computed in :root from the card size
+   and count), so the bar always fits by construction rather than by a guessed
+   number. On a window narrower than that the column shrinks to the viewport and
+   the bar scrolls sideways instead of wrapping. */
 .content {
-  max-width: 900px;
+  width: 100%;
+  max-width: var(--stats-bar-width);
   margin: 1.5rem auto;
-  padding: 0 1.25rem;
+  padding: 0 var(--content-pad);
 }
+
+
 
 .page-head {
   display: flex;
@@ -236,12 +272,12 @@ legend { padding: 0 0.5rem; font-weight: 700; color: var(--accent); font-size: 1
 /* Per-section color themes on the character sheet. Each fieldset gets a
    colored border and a faint tinted background so the sections read as
    distinct at a glance, reusing the same color-mix pattern as .region-*. */
-.section-attributes {
+.section-traits {
   border-color: var(--warn);
   border-left: 3px solid var(--warn);
   background: color-mix(in srgb, var(--warn) 7%, var(--surface));
 }
-.section-attributes legend { color: var(--warn); }
+.section-traits legend { color: var(--warn); }
 
 .section-general {
   border-color: var(--accent);
@@ -294,7 +330,7 @@ select {
 input[type="checkbox"] { width: auto; }
 textarea { min-height: 5rem; resize: vertical; }
 
-.trait-grid {
+.skill-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.75rem;
@@ -368,7 +404,12 @@ textarea { min-height: 5rem; resize: vertical; }
 }
 .builder-head h1 { margin: 0; font-size: 1.5rem; }
 
-/* Sticky stats bar on the character sheet, mirroring .builder-head. */
+/* Sticky stats bar on the character sheet, mirroring .builder-head.
+   The bar is a single row that scrolls sideways rather than wrapping onto a
+   second line. Wrapping made the bar grow taller as cards were added (the
+   invoke point card tipped it over), and because the bar is sticky every extra
+   row permanently eats vertical space on every scroll position. Scrolling keeps
+   its height fixed at one row on any window, which matters most on a phone. */
 .stats-bar {
   position: sticky;
   top: 0;
@@ -376,7 +417,13 @@ textarea { min-height: 5rem; resize: vertical; }
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  /* Momentum scrolling on touch, and a thin scrollbar so the track does not
+     add noticeable height to the bar. */
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
   margin-bottom: 1.25rem;
   padding: 0.75rem 1rem;
   background: var(--surface);
@@ -384,13 +431,41 @@ textarea { min-height: 5rem; resize: vertical; }
   border-radius: var(--radius);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
+.stats-bar::-webkit-scrollbar { height: 6px; }
+.stats-bar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+/* Every node in the bar is exactly one card wide and never flexes. Fixing the
+   width is what makes --stats-bar-width above exact: if cards were free to grow
+   to fit their longest label the total would be unpredictable and the column
+   width could no longer guarantee a single row. */
+.stats-bar > *,
+.stats-bar .cost-card {
+  flex: 0 0 var(--stat-card-w);
+  width: var(--stat-card-w);
+}
+/* The wrapper holding the cards is sized by its contents, not by one card. */
+.stats-bar .cost-cards {
+  flex: 0 0 auto;
+  width: auto;
+}
+/* Labels are short ("Invoke Points" is the longest), but a long one must not be
+   allowed to widen its card and break the row. */
+.stats-bar .cost-card-label {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* The Level control is styled to match the cost cards so it reads as part of
    the same set of stat nodes. */
 .stats-bar-level {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 96px;
+
   padding: 0.35rem 0.75rem;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -419,13 +494,20 @@ textarea { min-height: 5rem; resize: vertical; }
 }
 
 
-.cost-cards { display: flex; align-items: stretch; gap: 0.6rem; flex-wrap: wrap; }
+.cost-cards { display: flex; align-items: stretch; gap: var(--stat-card-gap); flex-wrap: wrap; }
+/* Inside the sticky character bar the cards are one non-wrapping row: the bar
+   itself provides the sideways scroll, so this inner wrapper must not wrap or
+   the row would break onto a second line. The builder header keeps the wrapping
+   default, since it is not sticky in the same way. */
+.stats-bar .cost-cards { flex-wrap: nowrap; }
+
 .cost-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 96px;
+  min-width: var(--stat-card-w);
   padding: 0.35rem 0.75rem;
+
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);

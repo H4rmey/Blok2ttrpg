@@ -22,8 +22,8 @@ var schemaPurposes = map[string]map[string]string{
 	},
 
 	"GroupOffsets": {
-		"default_group": "The trait group the field leans toward. A value with no group prefix is treated as belonging to this group.",
-		"offsets":       "Extra cost added per trait group, keyed by group id. Picking a trait outside the preferred group normally costs more.",
+		"default_group": "The skill group the field leans toward. A value with no group prefix is treated as belonging to this group.",
+		"offsets":       "Extra cost added per skill group, keyed by group id. Picking a skill outside the preferred group normally costs more.",
 	},
 
 	"InlineBuilder": {
@@ -64,7 +64,7 @@ var schemaPurposes = map[string]map[string]string{
 		"visibility_when":    "Name of the sibling field that controls whether this field is shown.",
 		"show_when":          "The value the controlling field must have for this field to be shown. A hidden field contributes no cost.",
 		"inline_builder":     "Turns a dropdown into a nested builder for the component the selected value names.",
-		"group_offsets":      "Per-trait-group cost offsets for a dropdown backed by a multi-group trait source.",
+		"group_offsets":      "Per-skill-group cost offsets for a dropdown backed by a multi-group skill source.",
 	},
 
 	"Component": {
@@ -98,19 +98,110 @@ var schemaPurposes = map[string]map[string]string{
 	},
 
 	"Proficiency": {
-		"id":     "Stable identifier for the tier, referenced by traits and by default_proficiency.",
+		"id":     "Stable identifier for the tier, referenced by skills and by default_proficiency.",
 		"name":   "Display name of the tier.",
-		"cost":   "Trait points charged to climb onto this rung from the one below it.",
+		"cost":   "Skill points charged to climb onto this rung from the one below it.",
 		"note":   "Optional remark about the tier.",
-		"die":    "Die rolled by a dice-backed trait at this tier. Used for every trait group unless dice overrides it.",
-		"dice":   "Per-trait-group die overrides, keyed by group id. Only needed when a group differs from die.",
-		"vitals": "Numeric values this tier grants for the vital traits, keyed by lowercase trait name (hp, movement, energy).",
+		"die":    "Die rolled by a dice-backed skill at this tier. Used for every skill group unless dice overrides it.",
+		"dice":   "Per-skill-group die overrides, keyed by group id. Only needed when a group differs from die.",
+		"vitals": "Numeric values this tier grants for the vital skills, keyed by lowercase skill name (hp, movement, energy).",
 	},
 
 	"Leveling": {
 		"max_level":      "Highest level a character may reach. Levels are clamped to this value on every edit and on import.",
-		"trait_points":   "Budget progression for the trait (skill) point pool.",
+		"skill_points":   "Budget progression for the skill point pool.",
 		"ability_points": "Budget progression for the ability (perk) point pool.",
+		"invoke_points":  "Pool progression for the per-session invoke point currency.",
+	},
+
+	"InvokeTable": {
+		"start":           "Invoke points available at level 1.",
+		"per_step":        "Invoke points added by each step of the curve.",
+		"levels_per_step": "How many levels apart the steps are. With a value of 2, per_step points are granted at levels 3, 5, 7 and so on.",
+		"levels":          "Optional explicit per-level overrides for an irregular curve. A row for the requested level wins over the formula.",
+	},
+
+	"Invoking": {
+		"refresh":            "When every character's invoke points return to their maximum, written as a phrase for the rulebook.",
+		"allow_over_maximum": "Whether points earned in play may be banked above the level maximum. Defaults to false, so a full pool must be spent before more can be banked.",
+		"spends":             "The ways an invoke point can be spent.",
+		"gains":              "The ways an invoke point is earned, in and out of combat.",
+		"combat_gains":       "Extra earning triggers that apply only during combat, plus the per-combat cap on them.",
+		"reactions":          "Cost, frequency and timing limits for the out-of-turn action.",
+	},
+
+	"InvokeSpend": {
+		"id":          "Stable identifier for the spend.",
+		"name":        "Display name shown in the rulebook.",
+		"invoke_cost": "Invoke points charged for this spend.",
+		"energy_cost": "Energy charged for this spend, on top of the invoke points.",
+		"description": "What the spend does and any conditions on using it.",
+	},
+
+	"InvokeGain": {
+		"id":          "Stable identifier for the gain.",
+		"name":        "Display name shown in the rulebook.",
+		"points":      "Invoke points earned.",
+		"description": "What has to happen to earn the points.",
+	},
+
+	"CombatGains": {
+		"max_per_combat": "Ceiling on invoke points a character may earn from a single combat, no matter how many triggers fire.",
+		"triggers":       "The in-combat events that earn invoke points.",
+	},
+
+	"CombatGainTrigger": {
+		"id":              "Stable identifier for the trigger.",
+		"name":            "Display name shown in the rulebook.",
+		"points":          "Invoke points earned when the trigger fires.",
+		"once_per_combat": "Whether the trigger may only fire a single time per fight.",
+		"every_rounds":    "When set, the trigger fires at the start of every Nth round instead of on an event.",
+		"description":     "What has to happen for the trigger to fire.",
+	},
+
+	"Reactions": {
+		"invoke_cost":   "Invoke points charged to take a reaction.",
+		"energy_cost":   "Energy charged to take a reaction.",
+		"max_per_round": "How many reactions a character may take in one round.",
+		"timing":        "When a reaction may interrupt: between_actions resolves it before or after a whole action, anytime allows it mid-action.",
+		"description":   "Reader-facing explanation of what a reaction is.",
+	},
+
+	"Negotiation": {
+		"motivation":      "The ladder of outcomes a negotiation can end on.",
+		"patience":        "The countdown that bounds how long an NPC keeps listening.",
+		"argument":        "How a single attempt to persuade resolves.",
+		"trait_alignment": "How the NPC's own traits clamp movement on the motivation ladder.",
+	},
+
+	"Motivation": {
+		"min":   "Lowest rung of the ladder.",
+		"max":   "Highest rung of the ladder.",
+		"rungs": "The rungs themselves, each with the outcome it produces. The starting rung is set by the GM per NPC, not here.",
+	},
+
+	"MotivationRung": {
+		"id":      "Stable identifier for the rung.",
+		"value":   "The numeric motivation this rung sits at.",
+		"name":    "Display name of the rung.",
+		"outcome": "What happens when a negotiation ends here. Guidance for the GM rather than a result applied mechanically.",
+	},
+
+	"Patience": {
+		"min":               "Value at which the negotiation ends, normally zero.",
+		"max":               "Highest patience an NPC may have. The starting value is set by the GM per NPC.",
+		"loss_per_argument": "Patience spent by each argument, whether it succeeds or fails.",
+	},
+
+	"Argument": {
+		"on_success":    "Motivation change when the skill check succeeds.",
+		"on_failure":    "Motivation change when the skill check fails.",
+		"allow_repeats": "Whether the same argument or trait may be raised more than once in one negotiation. Defaults to false.",
+	},
+
+	"TraitAlignment": {
+		"against": "Clamp applied when an argument runs against one of the NPC's traits. cannot_increase stops motivation rising.",
+		"with":    "Clamp applied when an argument runs with one of the NPC's traits. cannot_decrease stops motivation falling.",
 	},
 
 	"LevelTable": {
@@ -134,6 +225,6 @@ var schemaPurposes = map[string]map[string]string{
 	"Validations": {
 		"information":        "Help text for the validation section as a whole.",
 		"render_information": "When true, show the section information as plain text under the header instead of behind a hover indicator.",
-		"fields":             "The validation choices offered, such as which trait resolves the engagement roll and what counters it.",
+		"fields":             "The validation choices offered, such as which skill resolves the engagement roll and what counters it.",
 	},
 }
