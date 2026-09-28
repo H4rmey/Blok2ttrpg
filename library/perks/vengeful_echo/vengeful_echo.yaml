@@ -1,0 +1,31 @@
+name: Vengeful Echo
+description: "Someone falls nearby and the grief goes out of you as a wave of force."
+type: reaction
+tags: [damage, zone, reaction]
+fields:
+  comment: Lash out when someone near you drops.
+  # someone_drops is deliberately target-neutral: this fires whether the one who
+  # fell was an ally or an enemy. Rare and dramatic, so the trigger itself is
+  # free and the wide watch radius is what you actually pay for.
+  trigger: someone_drops
+  trigger_range: 3
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: Force rolls outward from where they fell.
+      source: d8
+      flat: 0
+      damage_type:
+        - value: Force
+    interaction: zone
+    interaction_data:
+      comment: ""
+      range: "3"
+      targets: 3
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_skill:
+        - value: defense.Constitution

@@ -1,0 +1,31 @@
+name: Parting Blow
+description: "They break away, and you make them pay for the step."
+type: reaction
+tags: [damage, melee, reaction]
+fields:
+  comment: Strike someone who disengages from you.
+  # The attack-of-opportunity trigger. Per its config note this one is bounded
+  # by your own reach rather than by trigger_range, so the range below is set to
+  # melee and the enactment matches it.
+  trigger: moves_out_of_reach
+  trigger_range: 1
+  energy_steps: 0
+  action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: A cut taken on the way past.
+      source: offense.Strength
+      flat: 0
+      damage_type:
+        - value: Slashing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_skill:
+        - value: defense.Reflex
