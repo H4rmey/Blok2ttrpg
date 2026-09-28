@@ -33,3 +33,80 @@ perk_types:
         label: "Upkeep Cost"
         type: dropdown
         options_source: concentration_upkeep
+
+  reaction:
+    name: "Reaction"
+    information: "A Reaction is a perk that fires out of turn, when a trigger you picked at build time happens. You do not choose to use it on your turn; you choose the circumstance in advance and it goes off when that circumstance arrives. Only one reaction may be used per round, counting every reaction you own together with any freeform reaction you improvise."
+    render_information: false
+    # A reaction costs one more build point and one more energy than an
+    # Execution: acting out of turn is worth a premium, and paying for it in
+    # both currencies keeps a character from filling their sheet with them.
+    #
+    # Unlike a freeform reaction (see invoking.reactions) a prebuilt reaction
+    # costs no invoke point, because it was already paid for at build time.
+    base_cost:
+      build_cost: 2
+      energy_cost: 2
+    # Prebuilt reactions are exempt from the invoke point cost that a freeform
+    # out-of-turn action pays. Read by the documentation and the character
+    # sheet; the cost engine never charges invoke points in the first place.
+    skip_invoke_cost: true
+    fields:
+      # The circumstance that sets the reaction off. Entries and their costs
+      # live in option_sources.reaction_triggers in general.yaml.
+      - key: trigger
+        label: "Trigger"
+        type: dropdown
+        options_source: reaction_triggers
+        information: "When this reaction goes off. Broader triggers fire more often and therefore cost more build points."
+      # How far from you the trigger may happen. This is the watch radius, and
+      # is deliberately separate from an enactment's own interaction range: a
+      # reaction can watch a wide area and still only reach an adjacent target,
+      # or the reverse.
+      - key: trigger_range
+        label: "Trigger Range"
+        type: free_number
+        default: 1
+        min: 0
+        max: 10
+        step: 1
+        information: "How far away the trigger may happen, in the same units as an interaction range. 0 means it must happen to you or in your own space."
+        per_step:
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
+
+  passive:
+    name: "Passive"
+    information: "A Passive is a perk that is already written for you. Instead of building it out of enactments you pick one from the passive list, which is why a passive can bend a rule the builder cannot express. It is always on and costs no energy. Each passive may be taken only once."
+    render_information: false
+    # A passive costs one perk point and no energy. The real price of a strong
+    # passive lives on the entry itself (passives.yaml), because the entries
+    # differ wildly in power; this is only the floor for taking any of them.
+    #
+    # Note the cost engine adds the selected entry's build cost on top of this
+    # via the passive_id dropdown, so a 1-point entry costs 1 point in total.
+    base_cost:
+      build_cost: 0
+      energy_cost: 0
+    # A passive has no enactments: its effect is the text on the entry. Listing
+    # an empty allowed_enactments hides the enactment dropdown entirely.
+    allowed_enactments: []
+    fields:
+      # The catalogue entry. Options and their costs are generated from
+      # passives.entries, so adding a passive in passives.yaml adds it here.
+      - key: passive_id
+        label: "Passive"
+        type: dropdown
+        options_source: passives
+        information: "Which predefined passive this is. Its cost and rules text come from the passive list."
+      # The upgradeable amount, for entries that carry one. Its cost is charged
+      # per step by the passive engine rather than by this field, because the
+      # per-step price differs per entry.
+      - key: passive_value
+        label: "Value"
+        type: free_number
+        default: 0
+        min: 0
+        max: 99
+        step: 1
+        information: "The upgradeable amount of this passive, for entries that have one. Leave at 0 to use the entry's default."

@@ -1,8 +1,22 @@
 name: Quick Dodge
-description: A reflexive movement that lets you slip out of harm's way.
+description: "You read the swing coming and are not where it lands."
 type: reaction
 fields:
-  comment: Triggered when an attack is aimed your way.
-  energy_steps: 0
-  range: 1
-  uses: 1
+  comment: Slip aside the moment an attack comes in at you.
+  # Fires when an attack aimed at you actually connects, which is the moment a
+  # dodge is worth spending energy on. Range 0 keeps it to yourself: this is your
+  # own footwork, not a rescue of someone else.
+  trigger: attack_hits
+  trigger_range: 0
+enactments:
+  - type: negation
+    fields:
+      comment: You are simply not there any more.
+    interaction: self
+    interaction_data:
+      comment: ""
+    validation_data:
+      comment: ""
+      engage: defense.Reflex
+      counter_skill:
+        - value: defense.Reflex

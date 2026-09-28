@@ -184,6 +184,16 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 		// out-of-turn action. It is used by the combat chapter.
 		"reactionRules": func() string { return reactionRules(cfg) },
 
+		// reactionTriggersTable lists the triggers a prebuilt Reaction perk can
+		// be built around, with the extra build cost each one carries. Used by
+		// the combat chapter alongside reactionRules.
+		"reactionTriggersTable": func() string { return reactionTriggersTable(cfg) },
+
+		// Passives. The predefined perk catalogue and the category-wide rules,
+		// read from passives.yaml so the rulebook and the picker agree.
+		"passivesTable": func() string { return passivesTable(cfg) },
+		"passiveRules":  func() string { return passiveRules(cfg) },
+
 		// Negotiation. The motivation ladder, the patience/argument rules and
 		// the NPC trait-alignment clamps, all read from negotiation.yaml.
 		"motivationTable":       func() string { return motivationTable(cfg) },

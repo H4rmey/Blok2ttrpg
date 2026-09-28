@@ -321,6 +321,19 @@ func PerkCost(cfg *config.Config, a model.Perk) Cost {
 		}
 	}
 
+	// A passive's cost is its catalogue entry plus whatever its own fields add.
+	// The entry's flat build cost arrives via the passive_id dropdown option (see
+	// OptionsFor "passives"); the fields are priced here with the same generic
+	// coster every other component uses, so a passive gets free text, numbers,
+	// checkboxes and dropdowns without any passive-specific cost code.
+	//
+	// A passive has no enactments, so the loop below is a no-op for it.
+	if p, ok := cfg.PassiveByID(asString(a.Fields["passive_id"])); ok {
+		fc := FieldsCost(cfg, p.Fields, passiveFieldValues(a))
+		total.Build += fc.Build
+		total.Energy += fc.Energy
+	}
+
 	// Track the first *present* enactment rather than relying on slice index.
 	// Enactments can be removed and re-added in the builder, so the first slot
 	// is not guaranteed to hold the first real enactment. The additional-
@@ -385,11 +398,47 @@ func PerkCost(cfg *config.Config, a model.Perk) Cost {
 	// refund-style options (Enact Nerf, energy offsets) from making a perk free.
 	// A ruleset that opts into negative energy cost (via
 	// allow_negative_energy_cost) keeps whatever the options computed.
-	if !cfg.AllowsNegativeEnergyCost() && total.Energy < 1 {
+	//
+	// Passives are exempt from the energy floor: they are always on, so there is
+	// no moment at which energy would be paid, and forcing them to 1 would make
+	// every passive look like it had a running cost.
+	if !cfg.AllowsNegativeEnergyCost() && total.Energy < 1 && !isPassive(cfg, a.Type) {
 		total.Energy = 1
 	}
 
 	return total
+}
+
+// isPassive reports whether a perk type is the predefined (passive) kind. It is
+// identified by carrying the passive catalogue dropdown rather than by a
+// hardcoded id, so a ruleset may name the type whatever it likes.
+func isPassive(cfg *config.Config, perkType string) bool {
+	at, ok := cfg.PerkType(perkType)
+	if !ok {
+		return false
+	}
+	for _, f := range at.Fields {
+		if f.OptionsSource == "passives" {
+			return true
+		}
+	}
+	return false
+}
+
+// passiveFieldsKey is where a passive's configured field values are stored on
+// the perk. It is a nested map so the passive's own field keys cannot collide
+// with the perk-type fields around them.
+const passiveFieldsKey = "passive_fields"
+
+// passiveFieldValues returns the configured values of a passive perk, or nil
+// when it has none yet. A nil map is fine: FieldsCost falls back to each field's
+// default, which is what an unconfigured passive is priced at.
+func passiveFieldValues(a model.Perk) map[string]any {
+	if a.Fields == nil {
+		return nil
+	}
+	v, _ := a.Fields[passiveFieldsKey].(map[string]any)
+	return v
 }
 
 // SkillPointsUsed sums the skill-point cost of all skill assignments. Cost is

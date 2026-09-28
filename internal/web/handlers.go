@@ -147,6 +147,39 @@ type perkSummary struct {
 	Perk         model.Perk
 	Cost         engine.Cost
 	Instructions []engine.Instruction
+
+	// Passive carries the catalogue view of this perk when it is a passive. A
+	// passive is a perk, but it is not built out of enactments, interactions and
+	// validations, so the list must render it differently: no enactment count,
+	// no generated instructions, and no Edit or Export (there is nothing to edit
+	// but its value, and nothing portable to export). It is nil for every
+	// ordinary perk.
+	Passive *passiveSummary
+}
+
+// IsPassive reports whether the perk is a predefined passive, so the template
+// can branch without reaching into the pointer.
+func (s perkSummary) IsPassive() bool { return s.Passive != nil }
+
+// passiveSummary is the in-list view of a selected passive: which catalogue
+// entry it is and its rules text at the configured values.
+//
+// The values themselves are not carried here. Changing them happens in the
+// configure modal, which fetches the entry and the stored values itself, so the
+// list only needs to render the text and decide whether to offer the button.
+type passiveSummary struct {
+	ID   string
+	Name string
+
+	// Segments is the rules text split so each configured value can be
+	// highlighted where it sits in the sentence, which is what makes it obvious
+	// which parts of the passive were chosen rather than fixed.
+	Segments []config.DescriptionSegment
+
+	// Configurable reports whether the entry has any fields, and therefore
+	// whether a Configure button is worth showing. A fixed passive has nothing
+	// to open.
+	Configurable bool
 }
 
 func (a *App) render(w http.ResponseWriter, name string, data pageData) {

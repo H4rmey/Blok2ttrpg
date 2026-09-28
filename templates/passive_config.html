@@ -1,0 +1,82 @@
+{{/* The passive configure modal. It serves both taking a new passive and
+     changing one already owned: the only difference is which route the form
+     posts to, so the fields, the live cost and the preview are shared. */}}
+{{ define "passive_config" }}
+{{ $cfg := .Cfg }}
+{{ $p := .Passive }}
+<div class="pkg-library passive-config">
+  <div class="pkg-library-head">
+    <h2>{{ $p.Name }}</h2>
+    <button class="btn" type="button" onclick="closePerkModal()">Close</button>
+  </div>
+
+  {{/* The whole modal re-renders as fields change, so the cost and the preview
+       below always describe what is currently selected rather than what was
+       selected when it opened. */}}
+  <form id="passive-config-form"
+        hx-get="/perks/passive-config"
+        hx-target="#perk-modal-body" hx-swap="innerHTML"
+        hx-trigger="change">
+    <input type="hidden" name="character" value="{{ .CharacterID }}">
+    <input type="hidden" name="passive" value="{{ $p.ID }}">
+    {{ if .Editing }}<input type="hidden" name="perk" value="{{ .PerkID }}">{{ end }}
+    {{/* Always present, so the handler can tell a posted form from a fresh open
+         even when every field is an unticked checkbox. */}}
+    <input type="hidden" name="pf__submitted" value="1">
+
+    {{/* The entry's own fields, rendered by the same partial the perk builder
+         uses. Everything the builder can ask for works here unchanged. */}}
+    {{ range $p.Fields }}
+    {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" "pf_" "Values" $.Values }}
+    {{ end }}
+  </form>
+
+  {{/* What the passive will actually say once confirmed. */}}
+  <div class="region region-enactment">
+    <p class="region-title">Reads as</p>
+    <p class="passive-text">{{ template "passive_text" .Segments }}</p>
+  </div>
+
+  <div class="perk-cost-chips">
+    <span class="perk-chip build{{ if not .Affordable }} over{{ end }}">{{ .Cost }} perk pt</span>
+    {{ if .Editing }}
+    {{/* When editing, the delta is the number that matters: it is what the
+         change costs, not what the passive costs. */}}
+    <span class="perk-chip{{ if not .Affordable }} over{{ end }}">
+      {{ if gt .Delta 0 }}+{{ end }}{{ .Delta }} pt change
+    </span>
+    {{ end }}
+    <span class="perk-chip">{{ .Remaining }} pt left</span>
+  </div>
+
+  {{ if not .Affordable }}
+  <p class="pkg-blocked">
+    {{ if .Editing }}That change costs more perk points than remain.
+    {{ else }}This passive costs more perk points than remain.{{ end }}
+  </p>
+  {{ end }}
+
+  {{/* Confirming posts the same fields to whichever route applies. The form is
+       separate from the live-preview form above so the preview's change trigger
+       cannot accidentally submit it. */}}
+  <form class="toolbar"
+        {{ if .Editing }}
+        hx-post="/characters/{{ .CharacterID }}/perks/{{ .PerkID }}/configure"
+        hx-target="#perk-list" hx-swap="innerHTML"
+        hx-on::after-request="closePerkModal()"
+        {{ else }}
+        action="/characters/{{ .CharacterID }}/perks/passives" method="post"
+        {{ end }}
+        hx-include="#passive-config-form">
+    {{ if not .Editing }}<input type="hidden" name="passive_id" value="{{ $p.ID }}">{{ end }}
+    <button class="btn primary" type="submit" {{ if not .Affordable }}disabled{{ end }}>
+      {{ if .Editing }}Save changes{{ else }}Take this passive{{ end }}
+    </button>
+    <button class="btn" type="button"
+            hx-get="/perks/passives?character={{ .CharacterID }}"
+            hx-target="#perk-modal-body" hx-swap="innerHTML">
+      {{ if .Editing }}Cancel{{ else }}Back to the list{{ end }}
+    </button>
+  </form>
+</div>
+{{ end }}

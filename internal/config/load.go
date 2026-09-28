@@ -191,6 +191,9 @@ func merge(base, in *Config) {
 	if negotiationConfigured(in.Negotiation) {
 		base.Negotiation = in.Negotiation
 	}
+	if passivesConfigured(in.Passives) {
+		base.Passives = in.Passives
+	}
 
 	if (in.AdditionalCondition != Cost{}) {
 		base.AdditionalCondition = in.AdditionalCondition

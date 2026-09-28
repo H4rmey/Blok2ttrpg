@@ -93,15 +93,38 @@ type CombatGainTrigger struct {
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 }
 
-// Reactions configures the out-of-turn action: what it costs and how often it
-// may be taken. A reaction itself is freeform, so there is nothing to model
-// beyond its price and its frequency.
+// Reactions configures acting out of turn: what it costs and how often it may
+// be done. There are two routes to it and both are priced here.
+//
+// A freeform reaction is improvised at the table and pays InvokeCost plus
+// EnergyCost. A prebuilt reaction is the Reaction perk type: it was bought with
+// build points, so it pays PrebuiltInvokeCost (normally zero) and only its own
+// perk energy cost. MaxPerRound bounds them together when SharedPerRound is set.
 type Reactions struct {
-	InvokeCost  int    `yaml:"invoke_cost,omitempty" json:"invoke_cost,omitempty"`
-	EnergyCost  int    `yaml:"energy_cost,omitempty" json:"energy_cost,omitempty"`
-	MaxPerRound int    `yaml:"max_per_round,omitempty" json:"max_per_round,omitempty"`
+	InvokeCost int `yaml:"invoke_cost,omitempty" json:"invoke_cost,omitempty"`
+	EnergyCost int `yaml:"energy_cost,omitempty" json:"energy_cost,omitempty"`
+
+	// PrebuiltInvokeCost is what a Reaction perk costs in invoke points to
+	// fire. It is normally zero: the invoke point is considered pre-paid by the
+	// build point spent on the perk.
+	PrebuiltInvokeCost int `yaml:"prebuilt_invoke_cost,omitempty" json:"prebuilt_invoke_cost,omitempty"`
+
+	MaxPerRound int `yaml:"max_per_round,omitempty" json:"max_per_round,omitempty"`
+
+	// SharedPerRound reports whether MaxPerRound is a single budget covering
+	// freeform and prebuilt reactions together. It is a pointer so an unset
+	// value defaults to true, which is the limit that keeps a character with
+	// several reaction perks from taking one of each in the same round.
+	SharedPerRound *bool `yaml:"shared_per_round,omitempty" json:"shared_per_round,omitempty"`
+
 	Timing      string `yaml:"timing,omitempty" json:"timing,omitempty"`
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
+}
+
+// SharesPerRound reports whether the per-round reaction limit is shared between
+// freeform and prebuilt reactions. Defaults to true when unset.
+func (r Reactions) SharesPerRound() bool {
+	return r.SharedPerRound == nil || *r.SharedPerRound
 }
 
 // Negotiation is the structured social encounter.
@@ -174,7 +197,20 @@ func invokingConfigured(i Invoking) bool {
 		len(i.Gains) > 0 ||
 		i.CombatGains.MaxPerCombat != 0 ||
 		len(i.CombatGains.Triggers) > 0 ||
-		i.Reactions != Reactions{}
+		reactionsConfigured(i.Reactions)
+}
+
+// reactionsConfigured reports whether a reactions block was declared. It cannot
+// be a struct comparison against the zero value because Reactions now holds a
+// pointer field (SharedPerRound), which makes the type non-comparable.
+func reactionsConfigured(r Reactions) bool {
+	return r.InvokeCost != 0 ||
+		r.EnergyCost != 0 ||
+		r.PrebuiltInvokeCost != 0 ||
+		r.MaxPerRound != 0 ||
+		r.SharedPerRound != nil ||
+		r.Timing != "" ||
+		r.Description != ""
 }
 
 // negotiationConfigured reports whether a section file actually declared a

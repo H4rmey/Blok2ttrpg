@@ -440,10 +440,11 @@ A reaction is an action taken out of turn. It is not built in the perk builder a
 
 | Rule | Value |
 | --- | --- |
-| Cost | 1 invoke point + 1 energy |
-| Frequency | 1 per round |
+| Freeform reaction | 1 invoke point + 1 energy |
+| Prebuilt reaction | Free, plus the perk's own energy cost |
+| Frequency | 1 per round, counting freeform and prebuilt reactions together. Owning several Reaction perks does not let you use more than one in a round |
 | Timing | Between actions. A reaction resolves before or after a whole action, never in the middle of one, so it cannot undo a roll that has already been made. |
-| What it is | An out-of-order action. A reaction is not built in advance and is not listed on your sheet: describe what you do, pay the cost, and the GM resolves it like any other action. |
+| What it is | An out-of-order action. A freeform reaction is improvised: describe what you do, pay the invoke point and the energy, and the GM resolves it like any other action. A prebuilt reaction is a Reaction perk on your sheet with a trigger and a trigger range chosen in advance; it costs no invoke point, only its own energy cost. |
 
 Because a reaction resolves between actions rather than inside one, it is a way to *pre-empt* something, not to undo it. You can throw yourself in front of an arrow before it is loosed; you cannot wait to see the damage roll and then decide to have blocked it.
 
@@ -474,14 +475,48 @@ On your turn you get three actions. By default you have 3 of actions. How much a
 
 ### Reactions
 
-Your actions are spent on your turn, but a **Reaction** lets you act out of turn. A reaction is freeform: it is not built in advance and not listed on your sheet, you simply describe what you do and pay for it.
+Your actions are spent on your turn, but a **Reaction** lets you act out of turn. There are two ways to do it.
+
+A **freeform** reaction is improvised: it is not built in advance and not listed on your sheet, you simply describe what you do and pay an invoke point and the energy for it.
+
+A **prebuilt** reaction is a perk of the Reaction type, sitting on your sheet with a trigger chosen in advance. It costs no invoke point, because you already paid for it with a perk point when you built it.
+
+Either way you get one reaction per round, not one of each.
 
 | Rule | Value |
 | --- | --- |
-| Cost | 1 invoke point + 1 energy |
-| Frequency | 1 per round |
+| Freeform reaction | 1 invoke point + 1 energy |
+| Prebuilt reaction | Free, plus the perk's own energy cost |
+| Frequency | 1 per round, counting freeform and prebuilt reactions together. Owning several Reaction perks does not let you use more than one in a round |
 | Timing | Between actions. A reaction resolves before or after a whole action, never in the middle of one, so it cannot undo a roll that has already been made. |
-| What it is | An out-of-order action. A reaction is not built in advance and is not listed on your sheet: describe what you do, pay the cost, and the GM resolves it like any other action. |
+| What it is | An out-of-order action. A freeform reaction is improvised: describe what you do, pay the invoke point and the energy, and the GM resolves it like any other action. A prebuilt reaction is a Reaction perk on your sheet with a trigger and a trigger range chosen in advance; it costs no invoke point, only its own energy cost. |
+
+#### Reaction Triggers
+
+A prebuilt reaction is a perk of the Reaction type. You pick its trigger and its
+trigger range when you build it, and it fires on its own when that trigger
+happens. The trigger range is the distance from you at which the trigger may
+occur; it is independent of how far the reaction's own enactments reach, so a
+reaction can watch a wide area and still only strike something next to you.
+
+Every trigger is written target-neutral: it does not care whether the creature
+involved is a friend or an enemy. Which of them the reaction actually affects is
+decided by its enactments.
+
+Broader triggers fire more often, so they cost more build points on top of the
+Reaction type's own cost.
+
+| Trigger | Build Cost | Notes |
+| --- | --- | --- |
+| **An attack against someone within range hits** | Included | Resolved after the attack roll lands, so you already know it hit. |
+| **An attack against someone within range misses** | Included | The riposte trigger: the attack resolved and failed. |
+| **Someone leaves your reach** | Included | The attack-of-opportunity trigger. Bounded by your own reach rather than the trigger range. |
+| **Someone within range is reduced to 0 HP** | Included | Rare and dramatic, so it is priced as a conditional trigger. |
+| **Someone enters your range** | +1 point | Zone control. Fires often in a fight where anyone is moving. |
+| **Someone within range critically succeeds or critically fails** | +1 point | Either end of the dice ladder, so it comes up regularly across a table of rolls. |
+| **Someone within range is attacked** | +2 points | Fires on every attack regardless of outcome, which makes it the broadest trigger here. |
+| **Someone within range takes damage** | +2 points | Near-unconditional in any real fight. |
+| **Someone within range uses a perk** | +2 points | The counterspell trigger. Near-unconditional once more than one creature is acting. |
 
 The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own perks, so a character who reacts every round has less left to spend when their turn comes around.
 
@@ -783,6 +818,77 @@ Perks like Message, Mind Reading, or Illusion often lack hard numbers. Predefine
 ### Specialized Perks List
 
 Specialized Perks are still being written. When one is added to the library it appears in the list above alongside the Perk Builder perks, because both are loaded from the same place.
+
+# passives
+## Passives
+
+Most perks you own are ones you built. You picked a perk type, attached
+enactments, chose who they reach and what roll resolves them, and the cost came
+out of those choices. A **Passive** is the other kind: it is already written, and
+you pick it off a list.
+
+That difference is the point. The builder is good at describing things you *do* -
+strike, heal, hinder, hold. It is deliberately bad at describing things that
+change a rule, because a rule change is not an effect aimed at a target. A
+passive can say "your critical hits multiply damage" or "conditions you apply
+last a round longer", and no arrangement of enactments expresses that.
+
+A passive is still a perk. It costs perk points from the same budget as
+everything else on your sheet, and it appears in the same list. It does not cost
+energy, because there is no moment at which you use it: it is simply true.
+
+| Rule | Value |
+| --- | --- |
+| Cost to take | 1 perk point, or whatever the entry states, plus whatever its configured parts add |
+| Cost to use | Nothing. A passive is always on, so there is no moment at which energy is paid. |
+| Taking one twice | Not permitted. Each passive may be taken only once, so breadth is the only way to spend more points here. |
+| Budget | Perk points, the same pool every other perk is bought from. |
+
+### Configuring a passive
+
+Most passives have parts you fill in. Some are a single number; some are a
+number and a word. **Resistance** is the clearest case: you type what you are
+resistant to, and pick by how much. There is no list of damage types to choose
+from, because the list would be wrong for somebody's setting.
+
+Naming a thing is free. Choosing *how much* is what costs perk points. That is
+the whole pricing rule: a free text field is flavour, a number or a tick-box is a
+purchase. Each entry's parts and their prices are in the table below.
+
+Passives are the cheapest thing on your sheet to *take* and among the most
+expensive to *raise*. An upgrade is usually priced well above the entry itself,
+because the first point of an effect is worth far less than the second.
+
+A passive you cannot use is still a passive you paid for. Silver Tongue is dead
+weight in a campaign with no negotiation; Deep Pockets is dead weight if you
+carry one weapon. Read the list against the game you are actually playing.
+
+You may take each passive only once. Spending more points here means taking more
+different passives, not stacking one.
+
+Nothing you configure is locked in. Change it later and you pay the difference;
+lower it and the points come back. What you cannot do is rebuild a passive: it has
+no enactments, no target and no roll, so there is nothing to edit but the parts
+the entry offers. If a passive turns out to be the wrong choice entirely, give it
+up and take another.
+
+### The list
+
+| Passive | Cost | Configure | Effect |
+| --- | --- | --- | --- |
+| **Resistance** | 1 perk point | Resistant to (free text, free); Reduction (1 to 9, 3 perk points per step above 1); Immune instead of resistant (optional, 6 perk points) | You are resistant to fire. When you take damage from fire, reduce that damage by 1. Fully immune: no. |
+| **Brutal Critical** | 1 perk point | Multiplier (2 to 3, 3 perk points per step above 2) | When you critically succeed a validation for a damaging enactment, multiply the damage by 2 instead of applying it normally. |
+| **Silver Tongue** | 1 perk point | Extra motivation (1 to 2, 2 perk points per step above 1) | Once per negotiation, a successful argument shifts motivation by 1 extra beyond its normal result. |
+| **Grudge Keeper** | 1 perk point | Extra points (1 to 2, 3 perk points per step above 1) | When you accept a GM invocation of one of your traits, gain 1 extra invoke point. This still respects the per-combat cap on invoke gains. |
+| **Quick Recovery** | 1 perk point | Extra energy (1 to 5, 1 perk point per step above 2) | You regain 2 extra Energy on a rest. |
+| **Practiced Hand** | 1 perk point | Skill (free) | Once per scene you may reroll the lowest die of a roll using general.Stealth. |
+| **Sure Footed** | 2 perk points | Nothing to configure | Ignore the first movement-restricting condition applied to you each round. It still applies to everyone else normally. |
+| **Efficient Caster** | 2 perk points | Build cost limit (2 to 6, 1 perk point per step above 3) | Once per combat, use one perk whose build cost is 3 or less without paying its energy cost. |
+| **Opportunist** | 4 perk points | Reactions per round (2 to 3, 4 perk points per step above 2) | Your reaction limit becomes 2 per round instead of one. Every reaction after the first in a round costs 1 extra energy. |
+| **Thick Skinned** | 3 perk points | Reduction (1 to 3, 4 perk points per step above 1) | Reduce all incoming damage by 1, whatever its source. |
+| **Deep Pockets** | 1 perk point | Extra items (1 to 2, 2 perk points per step above 1) | You may have 1 extra toggleable item package active at a time beyond your normal allowance. |
+| **Prepared Mind** | 1 perk point | Banked energy (1 to 3, 2 perk points per step above 1) | At the start of a combat, pre-pay 1 energy toward a perk of your choice. It stays banked until that perk is used. |
+| **Lingering Touch** | 2 perk points | Extra rounds (1 to 2, 3 perk points per step above 1) | Conditions you apply last 1 extra round before they can be shaken off. |
 
 # packages
 ## Packages
@@ -2649,6 +2755,26 @@ Concentration is an Perk Type that allows an effect to persist over multiple rou
 1. **Upkeep Cost** - Choose one of:
    - 1 Action or 1 Energy, 1 Action (1 build), 1 Energy (2 build), Effortless (no upkeep cost) (4 build)
 
+## Reaction
+
+A Reaction is a perk that fires out of turn, when a trigger you picked at build time happens. You do not choose to use it on your turn; you choose the circumstance in advance and it goes off when that circumstance arrives. Only one reaction may be used per round, counting every reaction you own together with any freeform reaction you improvise.
+
+**How to build it**
+
+1. **Trigger** - When this reaction goes off. Broader triggers fire more often and therefore cost more build points. Choose one of:
+   - An attack against someone within range hits, An attack against someone within range misses, Someone leaves your reach, Someone within range is reduced to 0 HP, Someone enters your range (1 build), Someone within range critically succeeds or critically fails (1 build), Someone within range is attacked (2 build), Someone within range takes damage (2 build), Someone within range uses a perk (2 build)
+2. **Trigger Range** - How far away the trigger may happen, in the same units as an interaction range. 0 means it must happen to you or in your own space. Any whole number from **0 to 10** (starts at 1). Cost: 1 build per meter.
+
+## Passive
+
+A Passive is a perk that is already written for you. Instead of building it out of enactments you pick one from the passive list, which is why a passive can bend a rule the builder cannot express. It is always on and costs no energy. Each passive may be taken only once.
+
+**How to build it**
+
+1. **Passive** - Which predefined passive this is. Its cost and rules text come from the passive list. Choose one of:
+   - Resistance (1 build), Brutal Critical (1 build), Silver Tongue (1 build), Grudge Keeper (1 build), Quick Recovery (1 build), Practiced Hand (1 build), Sure Footed (2 build), Efficient Caster (2 build), Opportunist (4 build), Thick Skinned (3 build), Deep Pockets (1 build), Prepared Mind (1 build), Lingering Touch (2 build)
+2. **Value** - The upgradeable amount of this passive, for entries that have one. Leave at 0 to use the entry's default. Any whole number from **0 to 99** (starts at 0). Cost: Free per step.
+
 # Enactments
 
 
@@ -2894,6 +3020,7 @@ The currently loaded ruleset is assembled from these files:
 - `invoking.yaml`
 - `leveling.yaml`
 - `negotiation.yaml`
+- `passives.yaml`
 - `proficiencies.yaml`
 - `skills.yaml`
 - `traits.yaml`
@@ -3015,6 +3142,7 @@ Perk types, enactments and interactions are all the same underlying shape. Nothi
 | `base_lifetime` | whole number | Starting lifetime in rounds, used by summoned minions. |
 | `base_upkeep_action` | whole number | Actions required each round to sustain the perk. |
 | `base_upkeep_energy` | whole number | Energy required each round to sustain the perk. |
+| `skip_invoke_cost` | true/false (optional) | When true, using this perk type is exempt from the invoke point cost that the equivalent improvised action pays. Set on Reaction: a freeform out-of-turn action costs an invoke point, but a reaction bought with build points does not. |
 | `default_range` | whole number | Default range of an interaction, in metres. |
 | `default_targets` | whole number | Default number of targets an interaction affects. |
 | `default_radius` | whole number | Default radius of an area interaction, in metres. |
@@ -3046,6 +3174,7 @@ These are the plain sources the loaded ruleset defines:
 | `concentration_upkeep` | 4 | Yes |
 | `directions` | 2 | No |
 | `knockout_options` | 16 | Yes |
+| `reaction_triggers` | 9 | Yes |
 | `roll_generic` | 9 | Yes |
 | `roll_medicine` | 1 | No |
 

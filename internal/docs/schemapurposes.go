@@ -84,6 +84,7 @@ var schemaPurposes = map[string]map[string]string{
 		"base_lifetime":         "Starting lifetime in rounds, used by summoned minions.",
 		"base_upkeep_action":    "Actions required each round to sustain the perk.",
 		"base_upkeep_energy":    "Energy required each round to sustain the perk.",
+		"skip_invoke_cost":      "When true, using this perk type is exempt from the invoke point cost that the equivalent improvised action pays. Set on Reaction: a freeform out-of-turn action costs an invoke point, but a reaction bought with build points does not.",
 		"default_range":         "Default range of an interaction, in metres.",
 		"default_targets":       "Default number of targets an interaction affects.",
 		"default_radius":        "Default radius of an area interaction, in metres.",
@@ -160,11 +161,13 @@ var schemaPurposes = map[string]map[string]string{
 	},
 
 	"Reactions": {
-		"invoke_cost":   "Invoke points charged to take a reaction.",
-		"energy_cost":   "Energy charged to take a reaction.",
-		"max_per_round": "How many reactions a character may take in one round.",
-		"timing":        "When a reaction may interrupt: between_actions resolves it before or after a whole action, anytime allows it mid-action.",
-		"description":   "Reader-facing explanation of what a reaction is.",
+		"invoke_cost":          "Invoke points charged to improvise a freeform reaction at the table.",
+		"energy_cost":          "Energy charged to improvise a freeform reaction.",
+		"prebuilt_invoke_cost": "Invoke points charged to fire a prebuilt Reaction perk. Normally zero, because the point is considered pre-paid by the build point spent on the perk.",
+		"max_per_round":        "How many reactions a character may take in one round.",
+		"shared_per_round":     "Whether max_per_round is a single budget covering freeform and prebuilt reactions together. Defaults to true, so owning several Reaction perks does not allow more than one reaction per round.",
+		"timing":               "When a reaction may interrupt: between_actions resolves it before or after a whole action, anytime allows it mid-action.",
+		"description":          "Reader-facing explanation of what a reaction is.",
 	},
 
 	"Negotiation": {

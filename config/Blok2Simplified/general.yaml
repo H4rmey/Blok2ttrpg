@@ -161,6 +161,57 @@ option_sources:
       label: "Medicine"
       cost: { build_cost: 0, energy_cost: 0 }
 
+  # What sets a Reaction off. Every trigger is written target-neutral
+  # ("someone") so a reaction never cares whether the creature involved is an
+  # ally or an enemy; the enactments decide who is actually affected.
+  #
+  # Cost is extra build cost on top of the reaction perk type's base_cost,
+  # priced purely on how often the trigger realistically fires:
+  #   0 - genuinely conditional, fires on a subset of events
+  #   1 - frequent, comes up most rounds
+  #   2 - near-unconditional, effectively fires whenever you want it to
+  #
+  # Add, remove, reword or reprice entries freely: the builder dropdown, the
+  # generated perk instructions and the rulebook all read this list. The value
+  # is the stored id, so renaming a label never invalidates a saved reaction.
+  reaction_triggers:
+    - value: attack_hits
+      label: "An attack against someone within range hits"
+      information: "Resolved after the attack roll lands, so you already know it hit."
+      cost: { build_cost: 0 }
+    - value: attack_misses
+      label: "An attack against someone within range misses"
+      information: "The riposte trigger: the attack resolved and failed."
+      cost: { build_cost: 0 }
+    - value: moves_out_of_reach
+      label: "Someone leaves your reach"
+      information: "The attack-of-opportunity trigger. Bounded by your own reach rather than the trigger range."
+      cost: { build_cost: 0 }
+    - value: someone_drops
+      label: "Someone within range is reduced to 0 HP"
+      information: "Rare and dramatic, so it is priced as a conditional trigger."
+      cost: { build_cost: 0 }
+    - value: moves_into_range
+      label: "Someone enters your range"
+      information: "Zone control. Fires often in a fight where anyone is moving."
+      cost: { build_cost: 1 }
+    - value: crit_or_crit_fail
+      label: "Someone within range critically succeeds or critically fails"
+      information: "Either end of the dice ladder, so it comes up regularly across a table of rolls."
+      cost: { build_cost: 1 }
+    - value: attacked
+      label: "Someone within range is attacked"
+      information: "Fires on every attack regardless of outcome, which makes it the broadest trigger here."
+      cost: { build_cost: 2 }
+    - value: damage_taken
+      label: "Someone within range takes damage"
+      information: "Near-unconditional in any real fight."
+      cost: { build_cost: 2 }
+    - value: uses_perk
+      label: "Someone within range uses a perk"
+      information: "The counterspell trigger. Near-unconditional once more than one creature is acting."
+      cost: { build_cost: 2 }
+
 
 # Config-defined grouped dropdown sources. Each names an ordered set of member
 # groups, replacing the previously hardcoded skills_all/roll_all grouping.

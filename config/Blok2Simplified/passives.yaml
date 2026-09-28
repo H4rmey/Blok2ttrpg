@@ -1,0 +1,260 @@
+# Passives: predefined perks.
+#
+# Every other perk is assembled in the builder out of enactments, interactions
+# and validations, and the cost engine prices whatever was built. A passive is
+# the opposite: it is written here, picked from a list, and costs a flat number
+# of perk points plus whatever its own fields add. That is deliberate, because it
+# lets a passive do things the builder cannot express at all - bend the dice
+# ladder, change a vital, alter the invoke economy, or modify another rule.
+#
+# A passive is still a perk. It is stored as a perk of the "passive" perk type
+# and counts against the same perk point budget, so it competes with built perks
+# rather than sitting in a pool of its own.
+#
+# CONFIGURABLE PARTS
+#
+# An entry's "fields" are ordinary builder fields: the same types (free_text,
+# free_number, checkbox, dropdown, multiselect), the same renderer, and the same
+# cost model. Anything the perk builder can ask for, a passive can ask for, and
+# the cost engine prices it without any passive-specific code.
+#
+# Reference a field in the description with "{key}" and it is replaced by the
+# configured value wherever it appears - as many times as you like. A field with
+# no cost (a free_text naming what you are resistant to) is free; a field with a
+# cost or per_step (a number, a checkbox) is charged for.
+#
+# An entry with no fields is fixed: taking it asks nothing and it has no
+# configure step.
+#
+# Guidance for adding entries: if the builder can already make it, it should not
+# be a passive. A reaction that heals you when someone drops is a Reaction perk,
+# not a passive; a flat Energy increase is a Vital skill upgrade, not a passive.
+passives:
+  information: >-
+    Passives are pre-written perks. They are always on, cost no energy to use,
+    and are chosen from the list below rather than built. Each costs perk points
+    like any other perk, and each may be taken only once. Many have parts you
+    configure when you take them, and those choices can change the price.
+
+  # Default perk-point cost of taking a passive, before its fields are priced.
+  # An entry overrides it with its own build_cost when it is worth more or less.
+  build_cost: 1
+
+  # Passives are always on, so there is no moment at which energy would be paid.
+  energy_cost: 0
+
+  # Whether the same passive may be taken more than once. False keeps a character
+  # broadening instead of stacking one strong effect.
+  allow_duplicates: false
+
+  entries:
+    # The example the field system exists for: no fixed list of damage types, a
+    # free text field for what you resist, and a number for how much. Naming the
+    # source costs nothing; the reduction is what is paid for.
+    - id: resistance
+      name: "Resistance"
+      description: >-
+        You are resistant to {source}. When you take damage from {source}, reduce
+        that damage by {amount}. Fully immune: {immune}.
+      fields:
+        - key: source
+          label: "Resistant to"
+          type: free_text
+          default: "fire"
+          information: "Whatever you are resistant to: a damage type, a material, a creature kind. The GM decides what counts."
+        - key: amount
+          label: "Reduction"
+          type: free_number
+          default: 1
+          min: 1
+          max: 9
+          information: "How much damage from that source is ignored."
+          # Flat reduction compounds against many small hits, so each point
+          # after the first is expensive.
+          per_step:
+            increase: { build_cost: 3 }
+        # A costed checkbox: an optional upgrade that is not a number. It reads
+        # into the sentence as "yes" or "no" via {immune}, which is why the
+        # description phrases it as a label rather than a clause.
+        - key: immune
+          label: "Immune instead of resistant"
+          type: checkbox
+          default: false
+          information: "Ignore damage from that source entirely rather than reducing it. Far stronger, and priced accordingly."
+          cost: { build_cost: 6 }
+
+    - id: brutal_critical
+      name: "Brutal Critical"
+      description: >-
+        When you critically succeed a validation for a damaging enactment,
+        multiply the damage by {multiplier} instead of applying it normally.
+      fields:
+        - key: multiplier
+          label: "Multiplier"
+          type: free_number
+          default: 2
+          min: 2
+          max: 3
+          per_step:
+            increase: { build_cost: 3 }
+
+    - id: silver_tongue
+      name: "Silver Tongue"
+      description: >-
+        Once per negotiation, a successful argument shifts motivation by
+        {extra} extra beyond its normal result.
+      fields:
+        - key: extra
+          label: "Extra motivation"
+          type: free_number
+          default: 1
+          min: 1
+          max: 2
+          per_step:
+            increase: { build_cost: 2 }
+
+    - id: grudge_keeper
+      name: "Grudge Keeper"
+      description: >-
+        When you accept a GM invocation of one of your traits, gain {extra}
+        extra invoke point. This still respects the per-combat cap on invoke
+        gains.
+      fields:
+        - key: extra
+          label: "Extra points"
+          type: free_number
+          default: 1
+          min: 1
+          max: 2
+          per_step:
+            increase: { build_cost: 3 }
+
+    - id: quick_recovery
+      name: "Quick Recovery"
+      description: "You regain {extra} extra Energy on a rest."
+      fields:
+        - key: extra
+          label: "Extra energy"
+          type: free_number
+          default: 2
+          min: 1
+          max: 5
+          per_step:
+            increase: { build_cost: 1 }
+
+    - id: practiced_hand
+      name: "Practiced Hand"
+      description: >-
+        Once per scene you may reroll the lowest die of a roll using {skill}.
+      fields:
+        # A dropdown sourced from the skill list: picking which skill is free,
+        # but it has to be chosen and recorded.
+        - key: skill
+          label: "Skill"
+          type: dropdown
+          options_source: skills_all
+          information: "The one skill this applies to, chosen when you take the passive."
+
+    - id: sure_footed
+      name: "Sure Footed"
+      description: >-
+        Ignore the first movement-restricting condition applied to you each
+        round. It still applies to everyone else normally.
+      build_cost: 2
+
+    - id: efficient_caster
+      name: "Efficient Caster"
+      description: >-
+        Once per combat, use one perk whose build cost is {limit} or less without
+        paying its energy cost.
+      build_cost: 2
+      fields:
+        - key: limit
+          label: "Build cost limit"
+          type: free_number
+          default: 3
+          min: 2
+          max: 6
+          per_step:
+            increase: { build_cost: 1 }
+
+    - id: opportunist
+      name: "Opportunist"
+      description: >-
+        Your reaction limit becomes {limit} per round instead of one. Every
+        reaction after the first in a round costs 1 extra energy.
+      # The per-round reaction limit is the main brake on a reaction build, so
+      # lifting it is the most expensive entry here.
+      build_cost: 4
+      fields:
+        - key: limit
+          label: "Reactions per round"
+          type: free_number
+          default: 2
+          min: 2
+          max: 3
+          per_step:
+            increase: { build_cost: 4 }
+
+    - id: thick_skinned
+      name: "Thick Skinned"
+      description: >-
+        Reduce all incoming damage by {amount}, whatever its source.
+      # Untyped reduction is strictly better than Resistance, so it starts dearer
+      # and climbs faster.
+      build_cost: 3
+      fields:
+        - key: amount
+          label: "Reduction"
+          type: free_number
+          default: 1
+          min: 1
+          max: 3
+          per_step:
+            increase: { build_cost: 4 }
+
+    - id: deep_pockets
+      name: "Deep Pockets"
+      description: >-
+        You may have {extra} extra toggleable item package active at a time
+        beyond your normal allowance.
+      fields:
+        - key: extra
+          label: "Extra items"
+          type: free_number
+          default: 1
+          min: 1
+          max: 2
+          per_step:
+            increase: { build_cost: 2 }
+
+    - id: prepared_mind
+      name: "Prepared Mind"
+      description: >-
+        At the start of a combat, pre-pay {energy} energy toward a perk of your
+        choice. It stays banked until that perk is used.
+      fields:
+        - key: energy
+          label: "Banked energy"
+          type: free_number
+          default: 1
+          min: 1
+          max: 3
+          per_step:
+            increase: { build_cost: 2 }
+
+    - id: lingering_touch
+      name: "Lingering Touch"
+      description: >-
+        Conditions you apply last {rounds} extra round before they can be shaken
+        off.
+      build_cost: 2
+      fields:
+        - key: rounds
+          label: "Extra rounds"
+          type: free_number
+          default: 1
+          min: 1
+          max: 2
+          per_step:
+            increase: { build_cost: 3 }

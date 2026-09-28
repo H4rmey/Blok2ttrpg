@@ -1,0 +1,76 @@
+{{ define "passive_library" }}
+<div class="pkg-library">
+  <div class="pkg-library-head">
+    <h2>Passives</h2>
+    <button class="btn" type="button" onclick="closePerkModal()">Close</button>
+  </div>
+
+  {{ if .Information }}<p class="muted">{{ .Information }}</p>{{ end }}
+
+  {{ if .HasCharacter }}
+  {{/* Remaining perk points, so the price on each card can be read against what
+       the character actually has left to spend. */}}
+  <p class="pkg-budget">
+    Perk points: <strong>{{ .PerkUsed }}/{{ .PerkBudget }}</strong> used
+  </p>
+  {{ end }}
+
+  {{ if .Rows }}
+  <ul class="pkg-list">
+    {{ $charID := .CharacterID }}
+    {{ range .Rows }}
+    {{ $p := .Passive }}
+    <li class="pkg-card{{ if not .Selectable }} unaffordable{{ end }}">
+      <div class="pkg-card-head">
+        <strong>{{ $p.Name }}</strong>
+        {{ if .Configurable }}
+        {{/* An entry with fields opens the configure modal, which is where it is
+             actually taken. Nothing is added to the character yet. */}}
+        <button class="btn primary" type="button"
+                hx-get="/perks/passive-config?character={{ $charID }}&passive={{ $p.ID }}"
+                hx-target="#perk-modal-body" hx-swap="innerHTML"
+                {{ if not .Selectable }}disabled{{ end }}>Configure</button>
+        {{ else }}
+        {{/* A fixed entry has nothing to ask, so it is taken straight away. */}}
+        <form action="/characters/{{ $charID }}/perks/passives" method="post">
+          <input type="hidden" name="passive_id" value="{{ $p.ID }}">
+          <button class="btn primary" type="submit" {{ if not .Selectable }}disabled{{ end }}>Select</button>
+        </form>
+        {{ end }}
+      </div>
+
+      {{/* Priced with the same chips as the perk list, at the entry's defaults.
+           A passive never costs energy, so only the perk-point chip is shown. */}}
+      <div class="perk-cost-chips">
+        <span class="perk-chip build{{ if not .Affordable }} over{{ end }}">{{ .Cost }} perk pt</span>
+        {{ if .Configurable }}<span class="perk-chip">configurable</span>{{ end }}
+        {{ if .Taken }}<span class="perk-chip">already taken</span>{{ end }}
+      </div>
+
+      {{ if .Taken }}
+      <p class="pkg-blocked">You already have this passive, and a passive may be taken only once.</p>
+      {{ else if not .Affordable }}
+      <p class="pkg-blocked">Not enough perk points to take this passive.</p>
+      {{ end }}
+
+      {{/* The rules text at its defaults, with each configurable value picked out
+           where it sits in the sentence so it is obvious what can be changed. */}}
+      <p class="muted passive-text">{{ template "passive_text" .Segments }}</p>
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <p class="muted">No passives are configured in this ruleset.</p>
+  {{ end }}
+</div>
+{{ end }}
+
+{{/* Renders a passive's rules text from its description segments, highlighting
+     each field value in place. Shared by the picker, the configure modal and the
+     perk list so the three always read identically. */}}
+{{ define "passive_text" }}
+{{- range . -}}
+{{- .Text -}}
+{{- if .Key }}<strong class="passive-text-value">{{ .Value }}</strong>{{ end -}}
+{{- end -}}
+{{ end }}

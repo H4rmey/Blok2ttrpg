@@ -6,6 +6,7 @@
       "age": "",
       "current_energy": "8",
       "current_hp": "10",
+      "current_invoke": "3",
       "description": "",
       "motivation": "",
       "name": "micheal",
@@ -28,31 +29,20 @@
       "general.Medicine": "untrained",
       "general.Nature": "untrained",
       "general.People Skill": "untrained",
-      "general.Perception": "novice",
+      "general.Perception": "untrained",
       "general.Performance": "untrained",
       "general.Provoke": "untrained",
       "general.Resources": "untrained",
       "general.Stealth": "untrained",
       "general.Thievery": "untrained",
       "offense.Magic": "untrained",
-      "offense.Precision": "proficient",
+      "offense.Precision": "untrained",
       "offense.Strength": "untrained",
       "offense.Wisdom": "untrained",
       "vital.Energy": "untrained",
       "vital.HP": "untrained",
       "vital.Movement": "untrained"
     },
-    "perks": [],
-    "packages": [
-      {
-        "id": "ranger",
-        "name": "Ranger",
-        "shifts": {
-          "general.Perception": 1,
-          "offense.Precision": 2
-        },
-        "enabled": true
-      }
-    ]
+    "perks": []
   }
 }

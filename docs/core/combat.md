@@ -13,9 +13,32 @@ On your turn you get three actions. By default you have {{ .Combat.Actions.Amoun
 
 ### Reactions
 
-Your actions are spent on your turn, but a **Reaction** lets you act out of turn. A reaction is freeform: it is not built in advance and not listed on your sheet, you simply describe what you do and pay for it.
+Your actions are spent on your turn, but a **Reaction** lets you act out of turn. There are two ways to do it.
+
+A **freeform** reaction is improvised: it is not built in advance and not listed on your sheet, you simply describe what you do and pay an invoke point and the energy for it.
+
+A **prebuilt** reaction is a perk of the Reaction type, sitting on your sheet with a trigger chosen in advance. It costs no invoke point, because you already paid for it with a perk point when you built it.
+
+Either way you get one reaction per round, not one of each.
 
 {{ reactionRules }}
+
+#### Reaction Triggers
+
+A prebuilt reaction is a perk of the Reaction type. You pick its trigger and its
+trigger range when you build it, and it fires on its own when that trigger
+happens. The trigger range is the distance from you at which the trigger may
+occur; it is independent of how far the reaction's own enactments reach, so a
+reaction can watch a wide area and still only strike something next to you.
+
+Every trigger is written target-neutral: it does not care whether the creature
+involved is a friend or an enemy. Which of them the reaction actually affects is
+decided by its enactments.
+
+Broader triggers fire more often, so they cost more build points on top of the
+Reaction type's own cost.
+
+{{ reactionTriggersTable }}
 
 The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own perks, so a character who reacts every round has less left to spend when their turn comes around.
 

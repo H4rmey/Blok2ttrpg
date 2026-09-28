@@ -97,17 +97,36 @@ invoking:
         description: >-
           A slow trickle so a drawn-out fight does not leave everyone empty.
 
-  # Reactions are freeform: a reaction is whatever the player describes, taken
-  # out of turn. These limits are what keeps that from unbalancing a round.
+  # Limits on acting out of turn. There are two ways to do it:
+  #
+  #   Freeform  - improvised at the table. Costs invoke_cost invoke points plus
+  #               energy_cost energy, and is not written on your sheet.
+  #   Prebuilt  - the Reaction perk type. Bought at build time with an extra
+  #               perk point and an extra energy, so it costs
+  #               prebuilt_invoke_cost (0) invoke points to fire.
+  #
+  # max_per_round is shared across both: one reaction per round, full stop,
+  # however it was paid for.
   reactions:
     invoke_cost: 1
     energy_cost: 1
+    # What a prebuilt reaction (the Reaction perk type) costs in invoke points.
+    # Zero, because the invoke point was effectively pre-paid with the perk
+    # point spent to build it. Raise it if prebuilt reactions prove too cheap.
+    prebuilt_invoke_cost: 0
     max_per_round: 1
+    # Whether max_per_round counts freeform and prebuilt reactions against the
+    # same limit. True means owning three reaction perks does not let you take
+    # three reactions in a round, which is what keeps a reaction-heavy build
+    # from dominating the round order.
+    shared_per_round: true
     # When a reaction may interrupt. "between_actions" means a reaction resolves
     # before or after a whole action, never in the middle of one, so it cannot
     # be used to undo a roll that has already happened.
     timing: "between_actions"
     description: >-
-      An out-of-order action. A reaction is not built in advance and is not
-      listed on your sheet: describe what you do, pay the cost, and the GM
-      resolves it like any other action.
+      An out-of-order action. A freeform reaction is improvised: describe what
+      you do, pay the invoke point and the energy, and the GM resolves it like
+      any other action. A prebuilt reaction is a Reaction perk on your sheet
+      with a trigger and a trigger range chosen in advance; it costs no invoke
+      point, only its own energy cost.

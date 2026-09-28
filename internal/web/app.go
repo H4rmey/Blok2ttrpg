@@ -66,6 +66,11 @@ func (a *App) Router() http.Handler {
 	// Package and perk library browsers (built-in content).
 	mux.HandleFunc("/packages/library", a.handlePackageLibrary)
 	mux.HandleFunc("/perks/library", a.handlePerkLibrary)
+	// The passive picker and its configure modal. Both share the perk modal on
+	// the perks page, so they are routed alongside the perk library rather than
+	// under a character path.
+	mux.HandleFunc("/perks/passives", a.handlePassiveLibrary)
+	mux.HandleFunc("/perks/passive-config", a.handlePassiveConfig)
 
 	// Docs.
 	mux.HandleFunc("/docs", a.handleDocs)

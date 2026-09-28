@@ -76,6 +76,12 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 		return
 	}
 
+	// /perks/passives      -> add a predefined passive by catalogue id
+	if rest[0] == "passives" {
+		a.addPassive(w, r, c)
+		return
+	}
+
 	// /perks/new    -> builder for a new perk
 	if rest[0] == "new" {
 
@@ -99,13 +105,31 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 		return
 	}
 
+	// A passive is a perk, but it is not built from enactments, interactions and
+	// validations, so the builder cannot express it and there is nothing portable
+	// to export: the definition lives in the ruleset, not on the character. Both
+	// routes are refused here as well as hidden in the UI, so a bookmarked or
+	// hand-typed URL cannot reach a builder that would silently strip the
+	// passive's fields on save.
+	isPassivePerk := passiveIDOf(c.Perks[idx]) != ""
+
 	if len(rest) == 1 {
 		switch r.Method {
 		case http.MethodGet:
+			if isPassivePerk {
+				http.Error(w, "A passive is predefined and cannot be edited in the builder. Change its value from the perk list, or delete it and pick another.", http.StatusBadRequest)
+				return
+			}
 			a.renderBuilder(w, c, &c.Perks[idx], false)
 		case http.MethodPost:
+			if isPassivePerk {
+				http.Error(w, "A passive cannot be saved from the builder.", http.StatusBadRequest)
+				return
+			}
 			a.savePerk(w, r, c, aid)
 		case http.MethodDelete:
+			// Deleting is always allowed: giving a passive back is how its perk
+			// points are recovered.
 			c.Perks = append(c.Perks[:idx], c.Perks[idx+1:]...)
 			_ = a.Store.Save(*c)
 			w.Header().Set("HX-Redirect", "/characters/"+c.ID+"/perks")
@@ -113,7 +137,19 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 		return
 	}
 
+	// /perks/{id}/configure -> apply the configure modal's field values to a
+	// passive already owned. This is the only edit a passive supports, which is
+	// why it is its own route rather than a trip through the builder.
+	if rest[1] == "configure" {
+		a.configurePassive(w, r, c, idx)
+		return
+	}
+
 	if rest[1] == "export" {
+		if isPassivePerk {
+			http.Error(w, "A passive is defined by the ruleset rather than by the character, so there is nothing to export.", http.StatusBadRequest)
+			return
+		}
 		b, err := export.MarshalPerk(c.Perks[idx])
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -278,15 +314,72 @@ func (a *App) importBuiltinPerk(w http.ResponseWriter, r *http.Request, c *model
 // character owns. Costs are always derived here rather than stored, so the
 // figures follow the current config even for perks built long ago.
 func (a *App) perkSummaries(c *model.Character) []perkSummary {
+	// How many perk points are free once every perk (including this one) is paid
+	// for. A passive's value change is priced as a delta against its current
+	// cost, so the points it already occupies are available to it.
+	stats := a.characterStats(c)
+	remaining := stats.PerkBudget - stats.PerkUsed
+
 	perks := make([]perkSummary, 0, len(c.Perks))
 	for _, ab := range c.Perks {
-		perks = append(perks, perkSummary{
-			Perk:         ab,
-			Cost:         engine.PerkCost(a.Cfg.Config, ab),
-			Instructions: engine.PerkInstructions(a.Cfg.Config, ab),
-		})
+		s := perkSummary{
+			Perk: ab,
+			Cost: engine.PerkCost(a.Cfg.Config, ab),
+		}
+		// A passive is not built from enactments, so it has no generated
+		// instruction text: its rules are the catalogue entry's description.
+		// Generating instructions for one would produce an empty block.
+		if p := a.passiveSummaryFor(ab, remaining); p != nil {
+			s.Passive = p
+		} else {
+			s.Instructions = engine.PerkInstructions(a.Cfg.Config, ab)
+		}
+		perks = append(perks, s)
 	}
 	return perks
+}
+
+// passiveSummaryFor builds the in-list view of a passive perk, or nil when the
+// perk is not a passive. remaining is the character's unspent perk points, used
+// to decide which value changes they can currently afford.
+func (a *App) passiveSummaryFor(ab model.Perk, remaining int) *passiveSummary {
+	id := passiveIDOf(ab)
+	if id == "" {
+		return nil
+	}
+	p, ok := a.Cfg.PassiveByID(id)
+	if !ok {
+		// The entry was removed from the config. The perk is still a passive, so
+		// it must not be treated as a buildable one; it simply has nothing left
+		// to configure. The stored description is all there is to show.
+		return &passiveSummary{
+			ID:       id,
+			Name:     ab.Name,
+			Segments: []config.DescriptionSegment{{Text: ab.Description}},
+		}
+	}
+
+	// Stored values overlaid on the entry's defaults, so a passive saved before
+	// a field was added still renders every field.
+	values := mergePassiveFields(a.Cfg.PassiveDefaults(p), storedPassiveFields(ab))
+
+	return &passiveSummary{
+		ID:   p.ID,
+		Name: p.Name,
+		// The rules text is split so the template can highlight each configured
+		// value in place rather than burying it in the sentence.
+		Segments: a.Cfg.PassiveDescriptionSegments(p, values),
+		// Only a passive with fields offers a Configure button; a fixed one has
+		// nothing to open a modal for.
+		Configurable: p.Configurable(),
+	}
+}
+
+// asInt reads an int out of a stored field value. Values arrive as int from the
+// form parser and as float64 from JSON, so both are accepted.
+func asInt(v any) int {
+	n, _ := atoiAny(v)
+	return n
 }
 
 // perkListPage builds the envelope shared by the full Perks page and the

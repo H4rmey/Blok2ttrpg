@@ -102,6 +102,11 @@ type Config struct {
 	// Interactions, which are the perk-builder's targeting components.
 	Negotiation Negotiation `yaml:"negotiation,omitempty" json:"negotiation,omitempty"`
 
+	// Passives is the predefined perk catalogue: perks written by the ruleset
+	// author and picked from a list rather than assembled in the builder. See
+	// passives.go for why they exist alongside the builder.
+	Passives Passives `yaml:"passives,omitempty" json:"passives,omitempty"`
+
 	// Perk building blocks, keyed by id but with author ordering preserved.
 	PerkTypes    ComponentMap `yaml:"perk_types,omitempty" json:"perk_types,omitempty"`
 	Enactments   ComponentMap `yaml:"enactments,omitempty" json:"enactments,omitempty"`
@@ -390,6 +395,17 @@ type Component struct {
 	BaseUpkeepAction    int `yaml:"base_upkeep_action,omitempty" json:"base_upkeep_action,omitempty"`
 	BaseUpkeepEnergy    int `yaml:"base_upkeep_energy,omitempty" json:"base_upkeep_energy,omitempty"`
 
+	// SkipInvokeCost marks a perk type whose use is exempt from an invoke point
+	// cost that the equivalent improvised action would pay. The Reaction perk
+	// type sets it: a freeform out-of-turn action costs an invoke point, but a
+	// reaction bought with build points does not.
+	//
+	// Nothing in the cost engine reads this, because invoke points are not a
+	// build currency and are never summed by the engine. It exists so the
+	// generated documentation and the character sheet can state the exemption
+	// instead of a config author having to write it out in prose.
+	SkipInvokeCost *bool `yaml:"skip_invoke_cost,omitempty" json:"skip_invoke_cost,omitempty"`
+
 	// DefaultRange/DefaultTargets etc. are used by interaction components.
 	DefaultRange    int `yaml:"default_range,omitempty" json:"default_range,omitempty"`
 	DefaultTargets  int `yaml:"default_targets,omitempty" json:"default_targets,omitempty"`
@@ -413,6 +429,12 @@ type Component struct {
 	BlockedEnactments   []string `yaml:"blocked_enactments,omitempty" json:"blocked_enactments,omitempty"`
 
 	Fields []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
+}
+
+// SkipsInvokeCost reports whether using this perk type is exempt from the
+// invoke point cost of an improvised equivalent. Defaults to false when unset.
+func (c Component) SkipsInvokeCost() bool {
+	return c.SkipInvokeCost != nil && *c.SkipInvokeCost
 }
 
 // DisplayName returns the human-facing label for a component. Perk types use

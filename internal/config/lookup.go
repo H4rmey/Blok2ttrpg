@@ -473,6 +473,27 @@ func (c *Config) OptionsFor(source string) []Option {
 			out = append(out, Option{Value: s.ID, Label: s.Name, Information: s.Description, Cost: cost})
 		}
 		return out
+	case "passives":
+		// The passive catalogue as dropdown options. Each entry carries its flat
+		// build cost, so the generic cost engine prices the selected passive
+		// without knowing anything about passives. The cost of the entry's own
+		// fields is added by the engine from those fields directly.
+		out := make([]Option, 0, len(c.Passives.Entries))
+		for _, p := range c.Passives.Entries {
+			out = append(out, Option{
+				Value: p.ID,
+				Label: p.Name,
+				// The rules text doubles as the option tooltip so a player can
+				// read what a passive does before picking it. Placeholders are
+				// left unsubstituted here: nothing has been configured yet.
+				Information: p.Description,
+				Cost: &Cost{
+					BuildCost:  c.PassiveFlatCost(p),
+					EnergyCost: c.Passives.EnergyCost,
+				},
+			})
+		}
+		return out
 	case "perk_types":
 		return componentOptions(c.PerkTypes)
 

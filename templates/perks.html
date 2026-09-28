@@ -5,12 +5,19 @@
   <div class="toolbar">
     <button class="btn primary" type="button" onclick="document.getElementById('new-perk-modal').showModal()">+ New Perk</button>
 
-    <button class="btn" type="button"
+    {{/* Passives are predefined perks, so they are picked rather than built.
+         The picker reuses the same modal as the perk library. */}}
+
+    <button class="btn primary" type="button"
             hx-get="/perks/library?character={{ $c.ID }}"
             hx-target="#perk-modal-body" hx-swap="innerHTML"
-            onclick="openPerkModal()">Import from Library</button>
+            onclick="openPerkModal()">+ Premade Perk</button>
+    <button class="btn primary" type="button"
+            hx-get="/perks/passives?character={{ $c.ID }}"
+            hx-target="#perk-modal-body" hx-swap="innerHTML"
+            onclick="openPerkModal()">+ Add Passive</button>
     <button class="btn" type="button"
-            onclick="document.getElementById('perk-import-input').click()">Import Custom</button>
+            onclick="document.getElementById('perk-import-input').click()">Import Custom Perk</button>
     {{/* Recomputes the point and energy cost of every perk from the current
          config and swaps the list in place. */}}
     <button class="btn" type="button" title="Recalculate the cost of every perk"

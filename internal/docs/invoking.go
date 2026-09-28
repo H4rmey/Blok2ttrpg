@@ -109,22 +109,25 @@ func triggerLimit(t config.CombatGainTrigger) string {
 	}
 }
 
-// reactionRules renders the reaction cost and frequency as prose, because there
-// is only one reaction and a table of one row reads worse than a sentence.
+// reactionRules renders the cost, frequency and timing of acting out of turn.
+// Both routes to it are covered: an improvised freeform reaction, and a prebuilt
+// Reaction perk, which are priced differently but share the per-round limit.
 func reactionRules(cfg *config.Config) string {
 	if cfg == nil {
 		return "_No reaction rules configured._"
 	}
 	r := cfg.Invoking.Reactions
-	if r == (config.Reactions{}) {
+	if !reactionsDeclared(r) {
 		return "_No reaction rules configured._"
 	}
 	var b strings.Builder
 	b.WriteString("| Rule | Value |\n")
 	b.WriteString("| --- | --- |\n")
-	fmt.Fprintf(&b, "| Cost | %s |\n", invokeCostWords(r.InvokeCost, r.EnergyCost))
+	fmt.Fprintf(&b, "| Freeform reaction | %s |\n", invokeCostWords(r.InvokeCost, r.EnergyCost))
+	fmt.Fprintf(&b, "| Prebuilt reaction | %s, plus the perk's own energy cost |\n",
+		invokeCostWords(r.PrebuiltInvokeCost, 0))
 	if r.MaxPerRound > 0 {
-		fmt.Fprintf(&b, "| Frequency | %d per round |\n", r.MaxPerRound)
+		fmt.Fprintf(&b, "| Frequency | %d per round%s |\n", r.MaxPerRound, sharedPhrase(r))
 	}
 	if r.Timing != "" {
 		fmt.Fprintf(&b, "| Timing | %s |\n", timingPhrase(r.Timing))
@@ -133,6 +136,67 @@ func reactionRules(cfg *config.Config) string {
 		fmt.Fprintf(&b, "| What it is | %s |\n", oneLine(r.Description))
 	}
 	return strings.TrimSpace(b.String())
+}
+
+// reactionsDeclared reports whether a reactions block carries any value. It
+// mirrors the loader's own check and exists because Reactions holds a pointer
+// field, so it cannot be compared against its zero value.
+func reactionsDeclared(r config.Reactions) bool {
+	return r.InvokeCost != 0 ||
+		r.EnergyCost != 0 ||
+		r.PrebuiltInvokeCost != 0 ||
+		r.MaxPerRound != 0 ||
+		r.SharedPerRound != nil ||
+		r.Timing != "" ||
+		r.Description != ""
+}
+
+// sharedPhrase spells out whether the per-round limit is one budget covering
+// every reaction or a separate allowance per route.
+func sharedPhrase(r config.Reactions) string {
+	if r.SharesPerRound() {
+		return ", counting freeform and prebuilt reactions together. Owning several Reaction perks does not let you use more than one in a round"
+	}
+	return ", counted separately for freeform and prebuilt reactions"
+}
+
+// reactionTriggersTable renders the triggers a prebuilt Reaction may be built
+// around, with the extra build cost each one carries. The list comes from the
+// reaction_triggers option source, so adding a trigger in the config adds a row
+// here without a code change.
+func reactionTriggersTable(cfg *config.Config) string {
+	if cfg == nil {
+		return "_No reaction triggers configured._"
+	}
+	opts := cfg.OptionsFor("reaction_triggers")
+	if len(opts) == 0 {
+		return "_No reaction triggers configured._"
+	}
+	var b strings.Builder
+	b.WriteString("| Trigger | Build Cost | Notes |\n")
+	b.WriteString("| --- | --- | --- |\n")
+	for _, o := range opts {
+		label := o.Label
+		if label == "" {
+			label = o.Value
+		}
+		cost := 0
+		if o.Cost != nil {
+			cost = o.Cost.BuildCost
+		}
+		fmt.Fprintf(&b, "| **%s** | %s | %s |\n",
+			label, buildCostWords(cost), orDash(oneLine(o.Information)))
+	}
+	return strings.TrimSpace(b.String())
+}
+
+// buildCostWords renders a build-point surcharge, naming zero explicitly so a
+// free trigger does not read as a missing value.
+func buildCostWords(build int) string {
+	if build == 0 {
+		return "Included"
+	}
+	return fmt.Sprintf("%s point%s", signed(build), plural(build))
 }
 
 // timingPhrase turns a timing id into a reader-facing sentence.

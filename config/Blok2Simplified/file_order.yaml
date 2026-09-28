@@ -16,6 +16,7 @@ file_order:
   - ./docs/core/conditions.md
 
   - ./docs/core/perks.md
+  - ./docs/core/passives.md
   - ./docs/core/packages.md
   - ./docs/core/items.md
   - ./docs/core/leveling.md

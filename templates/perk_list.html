@@ -20,6 +20,32 @@
       {{ if .Cost.Energy }}<span class="perk-chip energy">{{ .Cost.Energy }} E</span>{{ end }}
       {{ if .Cost.Action }}<span class="perk-chip action">{{ .Cost.Action }} action(s)</span>{{ end }}
     </div>
+    {{ if .IsPassive }}
+    {{/* A passive is a perk, but it is not built from enactments, so it has no
+         enactment count, no interaction and no validation to show. Its rules are
+         the catalogue description, and the only thing that can be changed is its
+         value. */}}
+    {{ $p := .Passive }}
+    <span class="muted">Passive</span>
+
+    {{/* The rules text with every configured value highlighted in place, so it is
+         obvious which parts were chosen rather than fixed. */}}
+    <p class="muted passive-text">{{ template "passive_text" $p.Segments }}</p>
+
+    <div class="actions">
+      {{ if $p.Configurable }}
+      {{/* Configure opens the same modal the passive was taken through, so the
+           fields, the live cost and the preview are identical to first time. */}}
+      <button class="btn" type="button"
+              hx-get="/perks/passive-config?character={{ $c.ID }}&perk={{ $ab.ID }}"
+              hx-target="#perk-modal-body" hx-swap="innerHTML"
+              onclick="openPerkModal()">Configure</button>
+      {{ end }}
+      {{/* No Edit: a passive is predefined, so there is nothing to build. No
+           Export: its definition lives in the ruleset, not on the character. */}}
+      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}" hx-confirm="Give up this passive? Its perk points are refunded.">Delete</button>
+    </div>
+    {{ else }}
     <span class="muted">{{ $ab.Type }} &middot; {{ len $ab.Enactments }} enactment(s)</span>
     {{ if $ab.Description }}<p class="muted">{{ $ab.Description }}</p>{{ end }}
     {{/* The generated rules text is shown inline so the perk does not have to
@@ -30,6 +56,7 @@
       <a class="btn" href="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}/export">Export</a>
       <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}" hx-confirm="Delete perk?">Delete</button>
     </div>
+    {{ end }}
   </li>
   {{ end }}
 </ul>
