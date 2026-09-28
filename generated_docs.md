@@ -755,21 +755,20 @@ This page will list some predefined perks that players and DM's can use to creat
 | **Bait and Switch** | execution |
 | **Battle Focus** | execution |
 | **Berserk Surge** | execution |
-| **Bodyguard** | execution |
+| **Bodyguard** | reaction |
 | **Caltrops** | execution |
 | **Chain Lightning** | execution |
 | **Creeping Frost** | execution |
 | **Dagger** | execution |
 | **Disarming Strike** | execution |
 | **Entangling Vines** | execution |
-| **Evasive Reflex** | execution |
+| **Evasive Reflex** | reaction |
 | **Field Dressing** | execution |
 | **Flame Burst** | execution |
 | **Frost Lance** | execution |
 | **Gale Step** | execution |
 | **Guarded Stance** | execution |
 | **Hamstring** | execution |
-| **Handful of Sand** | execution |
 | **Healing Light** | execution |
 | **Hex of Ruin** | execution |
 | **Holy Smite** | execution |
@@ -782,24 +781,23 @@ This page will list some predefined perks that players and DM's can use to creat
 | **Mind Spike** | execution |
 | **Mocking Jeer** | execution |
 | **Overcharge** | execution |
+| **Parting Blow** | reaction |
 | **Piercing Shot** | execution |
 | **Poisoned Blade** | execution |
 | **Power Cleave** | execution |
 | **Power Strike** | execution |
 | **Pressure Point** | execution |
 | **Quick Dodge** | reaction |
-| **Quick Jab** | execution |
 | **Rallying Banner** | concentration |
-| **Riposte** | execution |
+| **Riposte** | reaction |
 | **Sap Strength** | execution |
 | **Second Breath** | execution |
 | **Shield Bash** | execution |
 | **Shield Wall** | concentration |
 | **Shove** | execution |
-| **Sling Stone** | execution |
 | **Smoke Bomb** | execution |
 | **Soul Link** | concentration |
-| **Spellbreaker** | execution |
+| **Spellbreaker** | reaction |
 | **Staff** | execution |
 | **Stunning Blow** | execution |
 | **Tar Bomb** | execution |
@@ -807,6 +805,7 @@ This page will list some predefined perks that players and DM's can use to creat
 | **Time Slip** | execution |
 | **Trip Attack** | execution |
 | **Veil of Shadows** | concentration |
+| **Vengeful Echo** | reaction |
 | **War Cry** | execution |
 
 ## Specialized Perks
@@ -876,16 +875,14 @@ up and take another.
 
 | Passive | Cost | Configure | Effect |
 | --- | --- | --- | --- |
-| **Resistance** | 1 perk point | Resistant to (free text, free); Reduction (1 to 9, 3 perk points per step above 1); Immune instead of resistant (optional, 6 perk points) | You are resistant to fire. When you take damage from fire, reduce that damage by 1. Fully immune: no. |
+| **Resistance** | 1 perk point | Resistant to (free text, free); Reduction (1 to 9, 3 perk points per step above 1); Immune instead of resistant (optional, 6 perk points); Untyped (applies to all damage) (optional, 4 perk points) | You are resistant to fire. When you take damage from fire, reduce that damage by 1. Applies to every source instead: no. Fully immune: no. |
 | **Brutal Critical** | 1 perk point | Multiplier (2 to 3, 3 perk points per step above 2) | When you critically succeed a validation for a damaging enactment, multiply the damage by 2 instead of applying it normally. |
 | **Silver Tongue** | 1 perk point | Extra motivation (1 to 2, 2 perk points per step above 1) | Once per negotiation, a successful argument shifts motivation by 1 extra beyond its normal result. |
 | **Grudge Keeper** | 1 perk point | Extra points (1 to 2, 3 perk points per step above 1) | When you accept a GM invocation of one of your traits, gain 1 extra invoke point. This still respects the per-combat cap on invoke gains. |
-| **Quick Recovery** | 1 perk point | Extra energy (1 to 5, 1 perk point per step above 2) | You regain 2 extra Energy on a rest. |
 | **Practiced Hand** | 1 perk point | Skill (free) | Once per scene you may reroll the lowest die of a roll using general.Stealth. |
 | **Sure Footed** | 2 perk points | Nothing to configure | Ignore the first movement-restricting condition applied to you each round. It still applies to everyone else normally. |
 | **Efficient Caster** | 2 perk points | Build cost limit (2 to 6, 1 perk point per step above 3) | Once per combat, use one perk whose build cost is 3 or less without paying its energy cost. |
 | **Opportunist** | 4 perk points | Reactions per round (2 to 3, 4 perk points per step above 2) | Your reaction limit becomes 2 per round instead of one. Every reaction after the first in a round costs 1 extra energy. |
-| **Thick Skinned** | 3 perk points | Reduction (1 to 3, 4 perk points per step above 1) | Reduce all incoming damage by 1, whatever its source. |
 | **Deep Pockets** | 1 perk point | Extra items (1 to 2, 2 perk points per step above 1) | You may have 1 extra toggleable item package active at a time beyond your normal allowance. |
 | **Prepared Mind** | 1 perk point | Banked energy (1 to 3, 2 perk points per step above 1) | At the start of a combat, pre-pay 1 energy toward a perk of your choice. It stays banked until that perk is used. |
 | **Lingering Touch** | 2 perk points | Extra rounds (1 to 2, 3 perk points per step above 1) | Conditions you apply last 1 extra round before they can be shaken off. |
@@ -946,7 +943,7 @@ This is part of a character's core identity: once chosen it is always applied an
 | Name | Description | Skill Shifts | Perks Granted |
 | --- | --- | --- | --- |
 | **Artisan** | A trained trade and a paying clientele. You make things and you know their worth. | Crafting +1, Resources +1 | Field Dressing |
-| **Criminal** | A past best left undescribed. You know locks, fences and when to leave. | Deceive +1, Thievery +1 | Handful of Sand |
+| **Criminal** | A past best left undescribed. You know locks, fences and when to leave. | Deceive +1, Thievery +1 | Disarming Strike |
 | **Scholar** | Years in libraries and laboratories. You have read about most things at least once. | Knowledge +1, Medicine +1 | Battle Focus |
 | **Soldier** | Drilled in formation fighting. You know how to take an order and shout one. | Athletics +1, Intimidate +1 | War Cry |
 | **Wanderer** | No fixed home, many roads walked. You read weather, terrain and strangers well. | Nature +1, Perception +1 | Second Breath |
@@ -974,11 +971,11 @@ These may be picked up and put down freely: the skill shifts apply only while th
 
 | Name | Description | Skill Shifts | Perks Granted |
 | --- | --- | --- | --- |
-| **Dagger** | A short concealable blade. Fast in the hand and easy to coat with something nasty. | - | Dagger |
+| **Dagger Kit** | A short concealable blade. Fast in the hand and easy to coat with something nasty. | - | Dagger |
 | **Healer's Kit** | Bandages, salves and a needle. Enough to stop bleeding and steady a shaking hand. | - | Field Dressing, Battle Focus |
-| **Longsword** | A balanced martial blade. Grants a basic swing and a heavy committed strike. | - | Longsword, Power Strike |
-| **Quarterstaff** | A length of hardwood, equally useful for tripping legs and channelling magic. | - | Staff, Trip Attack |
-| **Shield** | A sturdy board of banded wood. Blocks, shoves and occasionally breaks noses. | - | Shield Bash, Quick Dodge |
+| **Longsword Kit** | A balanced martial blade. Grants a basic swing and a heavy committed strike. | - | Longsword, Power Strike |
+| **Quarterstaff Kit** | A length of hardwood, equally useful for tripping legs and channelling magic. | - | Staff, Trip Attack |
+| **Shield Kit** | A sturdy board of banded wood. Blocks, shoves and occasionally breaks noses. | - | Shield Bash, Quick Dodge |
 
 # leveling
 ## Leveling
@@ -2772,7 +2769,7 @@ A Passive is a perk that is already written for you. Instead of building it out 
 **How to build it**
 
 1. **Passive** - Which predefined passive this is. Its cost and rules text come from the passive list. Choose one of:
-   - Resistance (1 build), Brutal Critical (1 build), Silver Tongue (1 build), Grudge Keeper (1 build), Quick Recovery (1 build), Practiced Hand (1 build), Sure Footed (2 build), Efficient Caster (2 build), Opportunist (4 build), Thick Skinned (3 build), Deep Pockets (1 build), Prepared Mind (1 build), Lingering Touch (2 build)
+   - Resistance (1 build), Brutal Critical (1 build), Silver Tongue (1 build), Grudge Keeper (1 build), Practiced Hand (1 build), Sure Footed (2 build), Efficient Caster (2 build), Opportunist (4 build), Deep Pockets (1 build), Prepared Mind (1 build), Lingering Touch (2 build)
 2. **Value** - The upgradeable amount of this passive, for entries that have one. Leave at 0 to use the entry's default. Any whole number from **0 to 99** (starts at 0). Cost: Free per step.
 
 # Enactments

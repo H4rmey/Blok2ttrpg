@@ -1,6 +1,7 @@
 name: Guarded Stance
 description: "Weight back, shield high. You give up ground but become much harder to hit."
 type: execution
+tags: [defense, buff, self]
 fields:
   comment: Temporary defensive buff on yourself.
   energy_steps: 0
@@ -11,7 +12,7 @@ enactments:
       comment: Tighten your guard.
       modification-skills: defense.Reflex
       modification-shift-amount: 1
-      modificaiton-shift-duration: 2
+      modification-shift-duration: 2
     interaction: self
     interaction_data:
       comment: ""

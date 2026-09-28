@@ -1,8 +1,14 @@
 name: Evasive Reflex
 description: "A last-instant twist of the body that lets an incoming effect pass harmlessly through where you were."
-type: execution
+type: reaction
+tags: [defense, reaction, self]
 fields:
   comment: Negate an incoming enactment aimed at you.
+  # attacked fires the moment you are targeted, before the roll is known, so
+  # this commits blind. That is what separates it from Quick Dodge, which waits
+  # until an attack has already landed: broader, and priced 2 points higher.
+  trigger: attacked
+  trigger_range: 0
   energy_steps: 0
   action_steps: 0
 enactments:

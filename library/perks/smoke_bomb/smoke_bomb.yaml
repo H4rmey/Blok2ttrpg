@@ -1,6 +1,7 @@
 name: Smoke Bomb
 description: "A clay pellet that bursts into choking grey smoke, blinding everyone caught in the cloud."
 type: execution
+tags: [zone, debuff, item]
 fields:
   comment: Zone blind in a small cloud.
   energy_steps: 0

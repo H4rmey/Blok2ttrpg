@@ -1,6 +1,7 @@
 name: Flame Burst
 description: "A detonating bloom of fire that engulfs a wide area and leaves the ground burning."
 type: execution
+tags: [spell, zone, damage, fire]
 fields:
   comment: Large fire zone with a lingering burn.
   energy_steps: 0

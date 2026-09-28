@@ -27,6 +27,15 @@ type Instruction struct {
 	Index int
 	// Title is the enactment's display name (e.g. "Enact Damage").
 	Title string
+	// Trigger states the circumstance that sets a reaction off, and is set only
+	// on the first instruction of a perk that selected one. A reaction is not
+	// used on your turn, so without this line the generated text describes what
+	// the perk does but never says when it happens - which is the single most
+	// important thing to know about a reaction at the table.
+	//
+	// It is perk-level rather than per-enactment: one trigger fires the whole
+	// perk, however many enactments follow.
+	Trigger string
 	// Interaction, Validation, Success and Solution are the generated lines.
 	// An empty string means the line does not apply and is not rendered.
 	Interaction string
@@ -62,6 +71,11 @@ func PerkInstructions(cfg *config.Config, a model.Perk) []Instruction {
 		} else {
 			ins.Title = en.Type
 		}
+		// The trigger belongs to the perk, so it is stated once on the first
+		// enactment rather than repeated on every one.
+		if n == 1 {
+			ins.Trigger = triggerLine(cfg, a)
+		}
 		plural := false
 		// An enactment owns its target when it is the first one, or when the
 		// author ticked "different target than the enactment before it". One
@@ -86,6 +100,84 @@ func PerkInstructions(cfg *config.Config, a model.Perk) []Instruction {
 		out = append(out, ins)
 	}
 	return out
+}
+
+// triggerLine renders the reaction trigger a perk selected, together with the
+// watch radius that bounds where the trigger may happen. It returns "" for any
+// perk without a trigger, which is every non-reaction perk, so no caller needs
+// to test the perk type.
+//
+// The human-readable text is the configured option's label, so rewording a
+// trigger in general.yaml rewords it here with no code change. A stored value
+// with no matching option falls back to the raw id rather than vanishing, which
+// keeps a hand-edited or outdated perk legible.
+func triggerLine(cfg *config.Config, a model.Perk) string {
+	id := asString(a.Fields["trigger"])
+	if id == "" {
+		return ""
+	}
+	label := id
+	for _, o := range cfg.ResolveOptions(config.Field{OptionsSource: "reaction_triggers"}) {
+		if o.Value == id {
+			if o.Label != "" {
+				label = o.Label
+			}
+			break
+		}
+	}
+	line := strings.TrimSuffix(label, ".")
+
+	// The labels are written with a "within range" / "your reach" placeholder
+	// standing in for the radius, because one label has to serve every range a
+	// player might pick. Substituting the actual figure into that phrase reads
+	// far better than appending a qualifier after it: tacking ", it must happen
+	// to you" onto "someone within range is attacked" produces a sentence that
+	// contradicts itself.
+	//
+	// Range 0 is not "no range" - it restricts the trigger to the engager, which
+	// is the whole difference between a self-defence reaction and one that
+	// guards a neighbour, so it collapses the phrase to "you" instead.
+	if raw, ok := a.Fields["trigger_range"]; ok {
+		r := asInt(raw)
+		var who string
+		if r == 0 {
+			who = "you"
+		} else {
+			who = fmt.Sprintf("someone within %dm of you", r)
+		}
+		switch {
+		case strings.Contains(line, "Someone within range"):
+			line = strings.Replace(line, "Someone within range", capitalize(who), 1)
+		case strings.Contains(line, "someone within range"):
+			line = strings.Replace(line, "someone within range", who, 1)
+		case r == 0 && strings.Contains(line, "Someone"):
+			// A label with no range placeholder ("Someone leaves your reach")
+			// already implies proximity, so at range 0 it only needs narrowing.
+			line = strings.Replace(line, "Someone", "The creature", 1)
+		default:
+			// No placeholder to fill and a real radius: state it plainly rather
+			// than silently dropping the number.
+			if r > 0 {
+				line += fmt.Sprintf(" (within %dm)", r)
+			}
+		}
+		// Substituting "you" for a third-person subject leaves the verb
+		// disagreeing ("You is attacked"). The labels are third-person singular
+		// by convention, so the few verbs that actually appear are corrected
+		// here. This is a small closed set, not general-purpose conjugation: if a
+		// new label needs a form that is not listed, it shows up immediately as
+		// bad grammar in the generated text rather than as a silent error.
+		if r == 0 {
+			for from, to := range map[string]string{
+				"You is ":   "You are ",
+				"You has ":  "You have ",
+				"You does ": "You do ",
+			} {
+				line = strings.Replace(line, from, to, 1)
+			}
+		}
+	}
+	return line + "."
 }
 
 // interactionLine describes who the enactment hits. It also reports whether the
@@ -209,7 +301,7 @@ func successLine(cfg *config.Config, en model.Enactment, plural bool) string {
 	case "modification":
 		skill := skillName(asString(f["modification-skills"]))
 		shift := asInt(f["modification-shift-amount"])
-		rounds := asInt(f["modificaiton-shift-duration"])
+		rounds := asInt(f["modification-shift-duration"])
 		return fmt.Sprintf("Shift %s's %s %s for %s.",
 			targets, skill, shiftWords(shift), rounds2str(maxInt(rounds, 1)))
 	case "phase":

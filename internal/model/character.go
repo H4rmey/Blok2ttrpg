@@ -77,6 +77,17 @@ type Perk struct {
 	// Type is an perk-type component id from the config.
 	Type string `json:"type"`
 
+	// Tags are free-form labels set by the perk author. Deliberately not
+	// validated against any list: there is no tag vocabulary in the config, so a
+	// tag is whatever a perk file says it is and the library groups by whatever
+	// tags it finds. Adding a label to a file makes it appear; removing its last
+	// use makes it disappear. Nothing in the code reads a specific tag value.
+	//
+	// The tradeoff is that a misspelled tag silently becomes a new group rather
+	// than an error. cmd/libaudit reports per-tag counts so a typo shows up as a
+	// group of one.
+	Tags []string `json:"tags,omitempty" yaml:"tags,omitempty"`
+
 	// Fields holds the perk-type-level field values.
 	Fields map[string]any `json:"fields,omitempty"`
 

@@ -1,6 +1,7 @@
 name: Entangling Vines
 description: "Thorned creepers burst from the soil, binding a foe's arms tight against their body."
 type: execution
+tags: [spell, control, debuff]
 fields:
   comment: Restrain a target for two turns.
   energy_steps: 0

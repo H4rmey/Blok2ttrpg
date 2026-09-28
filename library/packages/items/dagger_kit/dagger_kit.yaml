@@ -1,5 +1,5 @@
-id: dagger
-name: Dagger
+id: dagger_kit
+name: Dagger Kit
 description: "A short concealable blade. Fast in the hand and easy to coat with something nasty."
 # Poisoned Blade costs 7 perk points on its own, which makes the kit unaffordable
 # at level 1, so the item ships as the plain weapon; the poison perk stays in the

@@ -1,6 +1,7 @@
 name: Hooked Chain
 description: "A weighted hook snaps out, bites into cloth or armour, and hauls its owner to your feet."
 type: execution
+tags: [movement, control, item]
 fields:
   comment: Pull a distant enemy into melee and pin them.
   energy_steps: 0

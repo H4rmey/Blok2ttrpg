@@ -1,6 +1,7 @@
 name: Hamstring
 description: "A vicious low cut behind the knee that pins a fleeing enemy in place."
 type: execution
+tags: [damage, control, melee]
 fields:
   comment: Damage plus a hard stop on movement.
   energy_steps: 0

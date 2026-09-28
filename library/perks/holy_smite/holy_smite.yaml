@@ -1,6 +1,7 @@
 name: Holy Smite
 description: "Radiant judgement falls on your enemy while the same light settles as a blessing on you."
 type: execution
+tags: [spell, damage, buff, radiant]
 fields:
   comment: Radiant damage and a self blessing.
   energy_steps: 0

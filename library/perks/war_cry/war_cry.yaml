@@ -1,6 +1,7 @@
 name: War Cry
 description: "A roar that drags an enemy's attention squarely onto you and nobody else."
 type: execution
+tags: [control, taunt, debuff]
 fields:
   comment: Force a foe to focus on you.
   energy_steps: 0

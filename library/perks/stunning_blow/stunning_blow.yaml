@@ -1,6 +1,7 @@
 name: Stunning Blow
 description: "A precise, brutal hit to the temple that robs an enemy of an action entirely."
 type: execution
+tags: [damage, control, melee]
 fields:
   comment: Damage plus a stun. A capstone perk.
   energy_steps: 0

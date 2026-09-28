@@ -1,0 +1,9 @@
+# Named "kit" rather than "Longsword" so it is not confused with the Longsword
+# perk it imports: the perk is the swing, this is the weapon plus what it
+# teaches you to do with it.
+id: longsword_kit
+name: Longsword Kit
+description: "A balanced martial blade. Grants a basic swing and a heavy committed strike."
+imports:
+  - longsword
+  - power_strike

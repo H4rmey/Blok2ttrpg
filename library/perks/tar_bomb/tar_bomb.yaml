@@ -1,6 +1,7 @@
 name: Tar Bomb
 description: "A glass flask of black pitch bursts across the floor and everything in it stops moving quickly."
 type: execution
+tags: [zone, control, item]
 fields:
   comment: Zone that anchors everyone in it.
   energy_steps: 0

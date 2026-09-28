@@ -1,6 +1,7 @@
 name: Battle Focus
 description: "A breath, a grip check, and total clarity. Your strikes land truer for a short while."
 type: execution
+tags: [buff, self]
 fields:
   comment: Temporary offensive buff on yourself.
   energy_steps: 0
@@ -11,7 +12,7 @@ enactments:
       comment: Sharpen your aim.
       modification-skills: offense.Precision
       modification-shift-amount: 1
-      modificaiton-shift-duration: 2
+      modification-shift-duration: 2
     interaction: self
     interaction_data:
       comment: ""

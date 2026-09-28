@@ -316,7 +316,7 @@ enactments:
         per_step:
           increase: { build_cost: 1 }
           decrease: { build_cost: 1 }
-      - key: modificaiton-shift-duration
+      - key: modification-shift-duration
         label: "Duration"
         type: free_number
         default: 1

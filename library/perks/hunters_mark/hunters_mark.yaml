@@ -1,6 +1,7 @@
 name: Hunter's Mark
 description: "You pick one target out of the crowd and from then on you simply do not lose them."
 type: concentration
+tags: [debuff, buff, concentration]
 fields:
   comment: Sustained mark that also sharpens your aim.
   energy_steps: 0
@@ -34,7 +35,7 @@ enactments:
       comment: Your aim settles on them.
       modification-skills: offense.Precision
       modification-shift-amount: 1
-      modificaiton-shift-duration: 3
+      modification-shift-duration: 3
     interaction: self
     interaction_data:
       comment: ""

@@ -1,6 +1,7 @@
 name: Life Tap
 description: "You open a thin red thread between you and your enemy, and what leaves them arrives in you."
 type: execution
+tags: [spell, damage, heal, necrotic]
 fields:
   comment: Drain an enemy to heal yourself.
   energy_steps: 0

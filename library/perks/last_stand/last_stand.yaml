@@ -1,6 +1,7 @@
 name: Last Stand
 description: "You set your feet, refuse to fall, and become very hard to move for as long as it lasts."
 type: execution
+tags: [defense, buff, self]
 fields:
   comment: Strong self phase that later reverses.
   energy_steps: 0

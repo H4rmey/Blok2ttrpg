@@ -1,6 +1,7 @@
 name: Mass Mend
 description: "A pulse of restorative energy that washes over a wide area and mends every ally caught in it."
 type: execution
+tags: [spell, heal, zone, support]
 fields:
   comment: Area healing over a two meter radius.
   energy_steps: 0

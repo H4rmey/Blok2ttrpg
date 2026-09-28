@@ -1,8 +1,14 @@
 name: Riposte
 description: "You turn the blow aside on your guard and answer it along the same line before they recover."
-type: execution
+type: reaction
+tags: [defense, damage, reaction]
 fields:
   comment: Nullify an attack, then punish it.
+  # attack_misses is the trigger this perk was written for: the swing already
+  # resolved and failed, so the opening exists before they recover. Range 0
+  # keeps it to attacks aimed at you - this is your guard, not a rescue.
+  trigger: attack_misses
+  trigger_range: 0
   energy_steps: 0
   action_steps: 0
 enactments:

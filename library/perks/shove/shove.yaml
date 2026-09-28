@@ -1,6 +1,11 @@
 name: Shove
 description: "A blunt two-handed push that sends an enemy stumbling backwards out of reach."
 type: execution
+tags: [movement, control, melee]
+# The plain end of the forced-movement trio: this pushes and nothing else.
+# Hooked Chain pulls and then restrains, Gale Step pushes them and moves you
+# into the space they left. Keeping this one bare is what makes it the cheap
+# option rather than a worse version of the other two.
 fields:
   comment: Push an enemy away from you.
   energy_steps: 0

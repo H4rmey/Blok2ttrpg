@@ -1,6 +1,7 @@
 name: Sap Strength
 description: "You siphon the power out of an enemy's arms and pour it straight into your own."
 type: execution
+tags: [debuff, buff, drain]
 fields:
   comment: Steal a skill shift from an enemy.
   energy_steps: 0
@@ -11,7 +12,7 @@ enactments:
       comment: Their arms go slack.
       modification-skills: offense.Strength
       modification-shift-amount: -1
-      modificaiton-shift-duration: 2
+      modification-shift-duration: 2
     interaction: direct
     interaction_data:
       comment: ""
@@ -30,7 +31,7 @@ enactments:
       comment: And yours fill out.
       modification-skills: offense.Strength
       modification-shift-amount: 1
-      modificaiton-shift-duration: 2
+      modification-shift-duration: 2
     interaction: self
     interaction_data:
       comment: ""

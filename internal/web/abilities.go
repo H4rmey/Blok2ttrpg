@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -217,10 +218,64 @@ type perkLibraryPage struct {
 	CharacterID string
 	Perks       []perkLibraryRow
 
+	// Groups is the same perks bucketed by tag, for browsing a long list. A
+	// perk with several tags appears in several groups, so this is a view over
+	// Perks rather than a partition of it.
+	Groups []perkTagGroup
+
 	// HasCharacter reports whether budget figures are available. When false the
 	// browser hides the remaining-points header and never blocks an import.
 	HasCharacter bool
 	charStats
+}
+
+// perkTagGroup is one tag heading and the perks carrying it.
+type perkTagGroup struct {
+	Tag   string
+	Perks []perkLibraryRow
+}
+
+// untaggedGroupLabel is the bucket for perks with no tags at all. It is a
+// display label, not a tag: no perk file should contain it.
+const untaggedGroupLabel = "Untagged"
+
+// groupPerksByTag buckets perks by their free-form tags, alphabetically by tag,
+// with the untagged bucket last so a perk that was never tagged is still
+// reachable instead of silently disappearing from the browser.
+//
+// There is no tag whitelist by design (see model.Perk.Tags): whatever tags the
+// files carry become the headings. A misspelled tag therefore shows up as its
+// own one-item group, which is the intended way to notice it.
+func groupPerksByTag(rows []perkLibraryRow) []perkTagGroup {
+	byTag := map[string][]perkLibraryRow{}
+	var untagged []perkLibraryRow
+	for _, r := range rows {
+		if len(r.Perk.Tags) == 0 {
+			untagged = append(untagged, r)
+			continue
+		}
+		for _, t := range r.Perk.Tags {
+			t = strings.TrimSpace(t)
+			if t == "" {
+				continue
+			}
+			byTag[t] = append(byTag[t], r)
+		}
+	}
+	tags := make([]string, 0, len(byTag))
+	for t := range byTag {
+		tags = append(tags, t)
+	}
+	sort.Strings(tags)
+
+	groups := make([]perkTagGroup, 0, len(tags)+1)
+	for _, t := range tags {
+		groups = append(groups, perkTagGroup{Tag: t, Perks: byTag[t]})
+	}
+	if len(untagged) > 0 {
+		groups = append(groups, perkTagGroup{Tag: untaggedGroupLabel, Perks: untagged})
+	}
+	return groups
 }
 
 // handlePerkLibrary renders the built-in perk browser. It expects a
@@ -258,6 +313,7 @@ func (a *App) handlePerkLibrary(w http.ResponseWriter, r *http.Request) {
 		}
 		data.Perks = append(data.Perks, row)
 	}
+	data.Groups = groupPerksByTag(data.Perks)
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if err := a.Tmpl.ExecuteTemplate(w, "perk_library", data); err != nil {

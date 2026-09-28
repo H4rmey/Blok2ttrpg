@@ -1,6 +1,7 @@
 name: Soul Link
 description: "You tie your fate to an ally's. What reaches them reaches you, and neither of you stands alone."
 type: concentration
+tags: [support, buff, concentration]
 fields:
   comment: Sustained link between you and an ally.
   energy_steps: 0

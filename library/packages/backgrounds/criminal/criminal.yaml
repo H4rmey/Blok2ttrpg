@@ -4,5 +4,10 @@ description: "A past best left undescribed. You know locks, fences and when to l
 shifts:
   general.Thievery: 1
   general.Deceive: 1
+# Replaces the old Handful of Sand import, which was a strict re-skin of Smoke
+# Bomb with the zone removed. Bait and Switch was the obvious thematic swap but
+# prices at 9 points - a level 1 character's entire budget - which would leave
+# no room for a class and a race on top. Disarming Strike fits a thief who wins
+# by taking the other person's weapon away and is affordable at first level.
 imports:
-  - handful_of_sand
+  - disarming_strike

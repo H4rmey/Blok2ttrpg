@@ -1,6 +1,7 @@
 name: Shield Wall
 description: "You plant your shield beside an ally and hold the line as long as your focus holds."
 type: concentration
+tags: [defense, support, concentration]
 fields:
   comment: Sustained defensive buff on an ally.
   energy_steps: 0
@@ -12,7 +13,7 @@ enactments:
       comment: Ally gains cover behind your shield.
       modification-skills: defense.Constitution
       modification-shift-amount: 1
-      modificaiton-shift-duration: 2
+      modification-shift-duration: 2
     interaction: direct
     interaction_data:
       comment: ""

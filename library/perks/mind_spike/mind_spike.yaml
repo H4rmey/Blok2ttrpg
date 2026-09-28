@@ -1,6 +1,7 @@
 name: Mind Spike
 description: "A lance of psychic pressure that splits a foe's thoughts and leaves them lashing out at random."
 type: execution
+tags: [spell, damage, debuff, psychic]
 fields:
   comment: Psychic damage plus confusion.
   energy_steps: 0

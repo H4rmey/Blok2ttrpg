@@ -1,6 +1,7 @@
 name: Arcane Spark
 description: "A crackling mote of raw magic, the first cantrip every apprentice learns."
 type: execution
+tags: [spell, damage, ranged]
 fields:
   comment: A minor magical bolt.
   energy_steps: 0

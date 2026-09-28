@@ -1,5 +1,5 @@
-id: quarterstaff
-name: Quarterstaff
+id: quarterstaff_kit
+name: Quarterstaff Kit
 description: "A length of hardwood, equally useful for tripping legs and channelling magic."
 imports:
   - staff

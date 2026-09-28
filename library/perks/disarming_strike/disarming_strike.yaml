@@ -1,6 +1,7 @@
 name: Disarming Strike
 description: "A twisting parry-and-flick that sends an enemy's weapon clattering across the floor."
 type: execution
+tags: [control, debuff, melee]
 fields:
   comment: Knock the weapon out of their hands.
   energy_steps: 0

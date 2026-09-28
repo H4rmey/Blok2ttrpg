@@ -1,6 +1,7 @@
 name: Shield Bash
 description: "You lead with the boss of the shield, drive them backwards, and follow the step yourself."
 type: execution
+tags: [damage, control, melee]
 fields:
   comment: Damage plus a shove on the same target.
   energy_steps: 0

@@ -1,6 +1,7 @@
 name: Chain Lightning
 description: "An arc of lightning that leaps from one enemy to the next, striking three targets in a breath."
 type: execution
+tags: [spell, damage, multi-target]
 fields:
   comment: Multi-target magical damage.
   energy_steps: 0

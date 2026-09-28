@@ -1,6 +1,7 @@
 name: Piercing Shot
 description: "A carefully drawn arrow loosed at distance, aimed for the gap in the armour."
 type: execution
+tags: [weapon, damage, ranged]
 fields:
   comment: Medium-range precision attack.
   energy_steps: 0

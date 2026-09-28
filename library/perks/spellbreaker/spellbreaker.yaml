@@ -1,8 +1,13 @@
 name: Spellbreaker
 description: "You catch a spell mid-word, unravel it, and leave the caster unable to find the word again."
-type: execution
+type: reaction
+tags: [defense, debuff, reaction, counter]
 fields:
   comment: Negate an enactment and silence its source.
+  # The counterspell trigger. Range 5 matches the silence enactment below so
+  # you can only unravel something you could reach the caster of.
+  trigger: uses_perk
+  trigger_range: 5
   energy_steps: 0
   action_steps: 0
 enactments:

@@ -16,8 +16,15 @@
   {{ end }}
 
   {{ if .Perks }}
+  {{/* Grouped by the free-form tags on each perk file. A perk with several
+       tags appears under each of them, so these headings are a browsing aid
+       rather than a partition - the same perk can legitimately show up more
+       than once. Tags come from the content, so this list changes when the
+       library does without any template edit. */}}
+  {{ $charID := .CharacterID }}
+  {{ range .Groups }}
+  <h3 class="pkg-group-head">{{ .Tag }} <span class="muted">({{ len .Perks }})</span></h3>
   <ul class="pkg-list">
-    {{ $charID := .CharacterID }}
     {{ range .Perks }}
     {{ $ab := .Perk }}
     <li class="pkg-card{{ if not .Affordable }} unaffordable{{ end }}">
@@ -43,9 +50,13 @@
       {{ end }}
       <p class="muted">{{ $ab.Type }} &middot; {{ len $ab.Enactments }} enactment(s)</p>
       {{ if $ab.Description }}<p class="muted">{{ $ab.Description }}</p>{{ end }}
+      {{ if $ab.Tags }}
+      <p class="perk-tags">{{ range $ab.Tags }}<span class="perk-tag">{{ . }}</span>{{ end }}</p>
+      {{ end }}
     </li>
     {{ end }}
   </ul>
+  {{ end }}
   {{ else }}
   <p class="muted">No built-in perks are available.</p>
   {{ end }}

@@ -1,6 +1,7 @@
 name: Hex of Ruin
 description: "A muttered word settles on an enemy, and from that moment everything they try goes slightly wrong."
 type: execution
+tags: [spell, debuff, curse]
 fields:
   comment: Curse plus a defensive shift on the same target.
   energy_steps: 0
@@ -32,4 +33,4 @@ enactments:
       comment: Their guard slips with it.
       modification-skills: defense.Reflex
       modification-shift-amount: -1
-      modificaiton-shift-duration: 2
+      modification-shift-duration: 2

@@ -1,6 +1,7 @@
 name: Overcharge
 description: "You push far more power through the spell than it was meant to carry, and pay for it afterwards."
 type: execution
+tags: [spell, buff, risky, self]
 fields:
   comment: Add to another enactment's Source, funded by a nerf.
   energy_steps: 0

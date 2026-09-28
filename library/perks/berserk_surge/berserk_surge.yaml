@@ -4,6 +4,7 @@ description: "You throw defence to the wind and swing with everything you have. 
 # resolved to no perk type at all and silently paid no base cost. The Phase
 # effect itself is the first enactment below.
 type: execution
+tags: [buff, self, risky]
 fields:
   comment: Big offensive phase paid for with a nerf.
   energy_steps: 0

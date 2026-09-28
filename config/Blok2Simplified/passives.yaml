@@ -55,13 +55,14 @@ passives:
       name: "Resistance"
       description: >-
         You are resistant to {source}. When you take damage from {source}, reduce
-        that damage by {amount}. Fully immune: {immune}.
+        that damage by {amount}. Applies to every source instead: {untyped}.
+        Fully immune: {immune}.
       fields:
         - key: source
           label: "Resistant to"
           type: free_text
           default: "fire"
-          information: "Whatever you are resistant to: a damage type, a material, a creature kind. The GM decides what counts."
+          information: "Whatever you are resistant to: a damage type, a material, a creature kind. The GM decides what counts. Ignored when Untyped is checked."
         - key: amount
           label: "Reduction"
           type: free_number
@@ -82,6 +83,17 @@ passives:
           default: false
           information: "Ignore damage from that source entirely rather than reducing it. Far stronger, and priced accordingly."
           cost: { build_cost: 6 }
+        # This replaces the old separate Thick Skinned entry. That entry was
+        # this same effect with the source field removed, which made it strictly
+        # better than Resistance at every budget and left Resistance surviving
+        # only on being cheaper. As a costed checkbox the two sit on one entry
+        # and the broad version is visibly the thing you pay extra for.
+        - key: untyped
+          label: "Untyped (applies to all damage)"
+          type: checkbox
+          default: false
+          information: "Reduce all incoming damage rather than damage from one source. Ignores the Resistant to field."
+          cost: { build_cost: 4 }
 
     - id: brutal_critical
       name: "Brutal Critical"
@@ -128,19 +140,6 @@ passives:
           max: 2
           per_step:
             increase: { build_cost: 3 }
-
-    - id: quick_recovery
-      name: "Quick Recovery"
-      description: "You regain {extra} extra Energy on a rest."
-      fields:
-        - key: extra
-          label: "Extra energy"
-          type: free_number
-          default: 2
-          min: 1
-          max: 5
-          per_step:
-            increase: { build_cost: 1 }
 
     - id: practiced_hand
       name: "Practiced Hand"
@@ -192,23 +191,6 @@ passives:
           type: free_number
           default: 2
           min: 2
-          max: 3
-          per_step:
-            increase: { build_cost: 4 }
-
-    - id: thick_skinned
-      name: "Thick Skinned"
-      description: >-
-        Reduce all incoming damage by {amount}, whatever its source.
-      # Untyped reduction is strictly better than Resistance, so it starts dearer
-      # and climbs faster.
-      build_cost: 3
-      fields:
-        - key: amount
-          label: "Reduction"
-          type: free_number
-          default: 1
-          min: 1
           max: 3
           per_step:
             increase: { build_cost: 4 }

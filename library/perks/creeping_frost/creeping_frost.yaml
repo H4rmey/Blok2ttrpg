@@ -1,6 +1,7 @@
 name: Creeping Frost
 description: "Hoarfrost spreads across the ground and keeps biting at anything still standing on it."
 type: execution
+tags: [spell, zone, damage, cold]
 fields:
   comment: Persistent damaging zone.
   energy_steps: 0

@@ -890,6 +890,34 @@ textarea { min-height: 5rem; resize: vertical; }
 }
 
 
+/* Tag heading above each group in the perk library. Tags are free-form content,
+   so there is no per-tag colour: one neutral style has to serve whatever labels
+   the library files happen to carry. */
+.pkg-group-head {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 0.95rem;
+  text-transform: capitalize;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.25rem;
+}
+
+.perk-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.4rem 0 0;
+}
+
+.perk-tag {
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
 .pkg-list {
   list-style: none;
 

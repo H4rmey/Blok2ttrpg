@@ -26,6 +26,9 @@ type PackageYAML struct {
 	Description string         `yaml:"description,omitempty"`
 	Shifts      map[string]int `yaml:"shifts,omitempty"`
 	Imports     []string       `yaml:"imports,omitempty"`
+	// Tags are free-form labels, same contract as model.Perk.Tags: no
+	// predefined vocabulary, nothing validates them.
+	Tags []string `yaml:"tags,omitempty"`
 }
 
 // Package is a loaded package: its metadata, the proficiency shifts it applies,
@@ -38,6 +41,7 @@ type Package struct {
 	Description string
 	Shifts      map[string]int
 	Perks       []model.Perk
+	Tags        []string
 }
 
 // Library is the built-in content library rooted at a directory. It exposes the
@@ -228,6 +232,7 @@ func ParsePackage(data []byte, baseDir string) (*Package, error) {
 		Name:        in.Name,
 		Description: in.Description,
 		Shifts:      in.Shifts,
+		Tags:        in.Tags,
 	}
 	if pkg.Name == "" {
 		pkg.Name = pkg.ID

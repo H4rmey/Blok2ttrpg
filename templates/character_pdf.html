@@ -113,6 +113,7 @@
         <div class="print-instruction">
           <h4>{{ .Index }}. {{ .Title }}</h4>
           <dl class="print-kv">
+            {{ if .Trigger }}<dt>Trigger</dt><dd>{{ .Trigger }}</dd>{{ end }}
             {{ if .Interaction }}<dt>Interaction</dt><dd>{{ .Interaction }}</dd>{{ end }}
             {{ if .Validation }}<dt>Validation</dt><dd>{{ .Validation }}</dd>{{ end }}
             {{ if .Success }}<dt>On success</dt><dd>{{ .Success }}</dd>{{ end }}

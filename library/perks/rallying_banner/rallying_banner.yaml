@@ -1,6 +1,7 @@
 name: Rallying Banner
 description: "You plant the standard and hold it up. Everyone who can see it stands a little straighter."
 type: concentration
+tags: [buff, zone, support, concentration]
 fields:
   comment: Sustained area encouragement for allies.
   energy_steps: 0

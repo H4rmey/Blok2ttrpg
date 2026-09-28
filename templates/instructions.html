@@ -5,6 +5,11 @@
   <div class="instruction-block">
     <h4 class="instruction-title">{{ .Index }}. {{ .Title }}</h4>
     <dl class="instruction-lines">
+      {{/* Only a reaction has a trigger, and only its first enactment carries
+           the line, so this renders once per perk. It comes before Interaction
+           because "when does this happen" has to be read before "who does it
+           hit". */}}
+      {{ if .Trigger }}<dt>Trigger</dt><dd>{{ .Trigger }}</dd>{{ end }}
       {{ if .Interaction }}<dt>Interaction</dt><dd>{{ .Interaction }}</dd>{{ end }}
       {{ if .Validation }}<dt>Validation</dt><dd>{{ .Validation }}</dd>{{ end }}
       {{ if .Success }}<dt>On success</dt><dd>{{ .Success }}</dd>{{ end }}

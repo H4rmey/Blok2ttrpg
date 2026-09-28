@@ -1,6 +1,7 @@
 name: Quick Dodge
 description: "You read the swing coming and are not where it lands."
 type: reaction
+tags: [defense, reaction, self]
 fields:
   comment: Slip aside the moment an attack comes in at you.
   # Fires when an attack aimed at you actually connects, which is the moment a

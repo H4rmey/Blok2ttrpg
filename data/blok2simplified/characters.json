@@ -43,6 +43,54 @@
       "vital.HP": "untrained",
       "vital.Movement": "untrained"
     },
-    "perks": []
+    "perks": [
+      {
+        "id": "perk-1790607500136581600",
+        "name": "Parting Blow",
+        "description": "They break away, and you make them pay for the step.",
+        "type": "reaction",
+        "tags": [
+          "damage",
+          "melee",
+          "reaction"
+        ],
+        "fields": {
+          "action_steps": 0,
+          "comment": "Strike someone who disengages from you.",
+          "energy_steps": 0,
+          "trigger": "moves_out_of_reach",
+          "trigger_range": 1
+        },
+        "enactments": [
+          {
+            "type": "damage",
+            "fields": {
+              "comment": "A cut taken on the way past.",
+              "damage_type": [
+                {
+                  "value": "Slashing"
+                }
+              ],
+              "flat": 0,
+              "source": "offense.Strength"
+            },
+            "interaction": "direct",
+            "interaction_data": {
+              "range": "1",
+              "targets": 1
+            },
+            "validation_data": {
+              "comment": "",
+              "counter_skill": [
+                {
+                  "value": "defense.Reflex"
+                }
+              ],
+              "engage": "d6"
+            }
+          }
+        ]
+      }
+    ]
   }
 }

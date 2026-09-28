@@ -1,6 +1,7 @@
 name: Healing Light
 description: "A warm glow that knits an ally's wounds shut and lifts their spirits."
 type: execution
+tags: [spell, heal, support]
 fields:
   comment: Heal an ally and encourage them.
   energy_steps: 0

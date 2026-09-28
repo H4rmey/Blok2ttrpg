@@ -1,6 +1,7 @@
 name: Thunderclap
 description: "You bring your palms together and the air itself hits everyone standing near you."
 type: execution
+tags: [spell, damage, zone, control]
 fields:
   comment: Self-centred burst that deafens the area.
   energy_steps: 0

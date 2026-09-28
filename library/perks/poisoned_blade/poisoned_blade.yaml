@@ -1,6 +1,7 @@
 name: Poisoned Blade
 description: "A shallow cut is enough. The coating on the steel does the rest over the next few rounds."
 type: execution
+tags: [damage, debuff, melee, poison]
 fields:
   comment: Light hit that leaves a lingering poison.
   energy_steps: 0

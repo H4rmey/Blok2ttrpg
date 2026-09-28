@@ -1,6 +1,7 @@
 name: Trip Attack
 description: "A low sweep of the leg or haft that drops a foe flat on their back."
 type: execution
+tags: [control, debuff, melee]
 fields:
   comment: Knock the target to the ground.
   energy_steps: 0

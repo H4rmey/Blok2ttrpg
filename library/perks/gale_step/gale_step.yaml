@@ -1,6 +1,7 @@
 name: Gale Step
 description: "A hard gust throws an enemy off their line and carries you into the space they left."
 type: execution
+tags: [spell, movement, control]
 fields:
   comment: Reposition an enemy and then yourself.
   energy_steps: 0

@@ -1,6 +1,7 @@
 name: Frost Lance
 description: "A spear of hoarfrost that cracks on impact and leaves the target's limbs stiff with cold."
 type: execution
+tags: [spell, damage, control, cold]
 fields:
   comment: Cold damage plus a slow.
   energy_steps: 0

@@ -1,6 +1,7 @@
 name: Veil of Shadows
 description: "Darkness gathers around you and nothing can find you while you hold your focus."
 type: concentration
+tags: [stealth, self, concentration]
 fields:
   comment: Sustained untargetable state on yourself.
   energy_steps: 0

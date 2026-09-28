@@ -1,6 +1,0 @@
-id: longsword
-name: Longsword
-description: "A balanced martial blade. Grants a basic swing and a heavy committed strike."
-imports:
-  - longsword
-  - power_strike

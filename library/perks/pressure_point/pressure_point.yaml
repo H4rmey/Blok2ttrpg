@@ -1,6 +1,7 @@
 name: Pressure Point
 description: "One thumb in exactly the right place and the arm stops answering its owner."
 type: execution
+tags: [control, debuff, melee]
 fields:
   comment: Cheap melee disable with no damage.
   energy_steps: 0

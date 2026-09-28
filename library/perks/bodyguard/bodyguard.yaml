@@ -1,8 +1,14 @@
 name: Bodyguard
 description: "You step into the path of the blow meant for your ally and wear it on your own shoulder."
-type: execution
+type: reaction
+tags: [defense, support, reaction]
 fields:
   comment: Cancel an effect on an ally, take the strain yourself.
+  # Same trigger as Evasive Reflex, but range 1 instead of 0: you are watching
+  # the space beside you rather than your own. That one number is the whole
+  # difference between guarding yourself and guarding someone else.
+  trigger: attacked
+  trigger_range: 1
   energy_steps: 0
   action_steps: 0
 enactments:

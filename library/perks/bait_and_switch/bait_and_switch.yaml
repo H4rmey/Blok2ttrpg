@@ -1,6 +1,7 @@
 name: Bait and Switch
 description: "You make yourself the obvious threat, then step somewhere much less convenient for them."
 type: execution
+tags: [trick, movement, control]
 fields:
   comment: Taunt an enemy, then reposition yourself.
   energy_steps: 0

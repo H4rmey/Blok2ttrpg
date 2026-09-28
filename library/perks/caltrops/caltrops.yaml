@@ -1,6 +1,7 @@
 name: Caltrops
 description: "Scattered iron spikes that shred the feet of anyone crossing the ground for a few rounds."
 type: execution
+tags: [zone, control, item]
 fields:
   comment: Lingering damage zone on the floor.
   energy_steps: 0

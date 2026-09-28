@@ -1,6 +1,7 @@
 name: Time Slip
 description: "You step half a heartbeat ahead of the fight while your enemy stumbles half a heartbeat behind."
 type: execution
+tags: [spell, buff, debuff, tempo]
 fields:
   comment: Turn order manipulation, both directions.
   energy_steps: 0

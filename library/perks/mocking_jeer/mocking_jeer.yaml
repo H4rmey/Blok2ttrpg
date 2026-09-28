@@ -1,6 +1,7 @@
 name: Mocking Jeer
 description: "A cutting insult that rattles a foe's concentration and makes them second-guess every swing."
 type: execution
+tags: [debuff, control, taunt]
 fields:
   comment: Two light mental debuffs.
   energy_steps: 0

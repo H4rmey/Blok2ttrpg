@@ -1,6 +1,7 @@
 name: Second Breath
 description: "You dig deep, ignore the pain, and find one more fight left in you."
 type: execution
+tags: [heal, self]
 fields:
   comment: Strong self-heal.
   energy_steps: 0

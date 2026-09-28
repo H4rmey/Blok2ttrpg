@@ -64,11 +64,11 @@ func TestPassiveCostAtDefault(t *testing.T) {
 	}{
 		// Uses the category default of 1.
 		{"brutal_critical", 1},
-		{"quick_recovery", 1},
+		{"grudge_keeper", 1},
 		{"resistance", 1},
 		// Entries with their own build_cost override.
 		{"sure_footed", 2},
-		{"thick_skinned", 3},
+		{"lingering_touch", 2},
 		{"opportunist", 4},
 	}
 	for _, tc := range cases {
@@ -93,16 +93,21 @@ func TestPassiveCostWithConfiguredFields(t *testing.T) {
 	}{
 		// build 1, multiplier default 2, +3 per step. One step up is 1 + 3.
 		{"brutal_critical raised", "brutal_critical", vals("multiplier", 3), 4},
-		// build 3, amount default 1, +4 per step. Two steps up is 3 + 8.
-		{"thick_skinned raised", "thick_skinned", vals("amount", 3), 11},
-		// build 1, extra default 2, +1 per step. Three steps up is 1 + 3.
-		{"quick_recovery raised", "quick_recovery", vals("extra", 5), 4},
+		// build 2, limit default 3, +1 per step. Two steps up is 2 + 2.
+		{"efficient_caster raised", "efficient_caster", vals("limit", 5), 4},
 		// Free text costs nothing: naming the source is flavour.
 		{"resistance text only", "resistance", vals("source", "acid", "amount", 1), 1},
 		// amount 1 -> 3 at +3 per step is 1 + 6.
 		{"resistance raised", "resistance", vals("source", "fire", "amount", 3), 7},
 		// The immune checkbox is a flat 6 on top of the raised amount.
 		{"resistance immune", "resistance", vals("source", "fire", "amount", 3, "immune", true), 13},
+		// The untyped checkbox is a flat 4. This is the path that replaced the
+		// old standalone Thick Skinned entry, so it is pinned here: broad
+		// reduction must cost strictly more than the same amount typed.
+		{"resistance untyped", "resistance", vals("source", "fire", "amount", 3, "untyped", true), 11},
+		// Both upgrades together, to pin that they stack additively rather than
+		// one silently overriding the other.
+		{"resistance untyped immune", "resistance", vals("source", "fire", "amount", 1, "untyped", true, "immune", true), 11},
 	}
 	for _, tc := range cases {
 		got := engine.PerkCost(cfg, passivePerk(tc.id, tc.values)).Build
@@ -135,7 +140,7 @@ func TestPassiveNumberClampedToRange(t *testing.T) {
 		t.Errorf("value beyond max: build = %d, want at least the max %d", beyond, atMax)
 	}
 	// Below the minimum must never refund into a negative cost.
-	below := engine.PerkCost(cfg, passivePerk("thick_skinned", vals("amount", -5))).Build
+	below := engine.PerkCost(cfg, passivePerk("resistance", vals("amount", -5))).Build
 	if below < 0 {
 		t.Errorf("value below min: build = %d, want no refund", below)
 	}
@@ -257,9 +262,9 @@ func TestPassiveDescriptionSegmentsFixedEntry(t *testing.T) {
 func TestPassiveConfigurable(t *testing.T) {
 	cfg := loadCfg(t)
 	for id, want := range map[string]bool{
-		"resistance":    true,
-		"thick_skinned": true,
-		"sure_footed":   false,
+		"resistance":      true,
+		"lingering_touch": true,
+		"sure_footed":     false,
 	} {
 		p, ok := cfg.PassiveByID(id)
 		if !ok {
@@ -276,8 +281,8 @@ func TestPassiveConfigurable(t *testing.T) {
 // control) keys off it, so a false negative would quietly let a passive into the
 // builder.
 func TestPassiveIDOf(t *testing.T) {
-	if got := passiveIDOf(passivePerk("thick_skinned", vals("amount", 1))); got != "thick_skinned" {
-		t.Errorf("passive perk: id = %q, want thick_skinned", got)
+	if got := passiveIDOf(passivePerk("resistance", vals("amount", 1))); got != "resistance" {
+		t.Errorf("passive perk: id = %q, want resistance", got)
 	}
 	// An ordinary built perk has no passive id.
 	built := model.Perk{

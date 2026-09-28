@@ -1,6 +1,7 @@
 name: Power Cleave
 description: "A wide two-handed arc that bites into two adjacent foes and staggers them off balance."
 type: execution
+tags: [damage, multi-target, melee]
 fields:
   comment: Sweeping strike against two enemies.
   energy_steps: 0

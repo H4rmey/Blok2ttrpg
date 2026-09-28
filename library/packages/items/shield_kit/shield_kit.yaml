@@ -1,5 +1,5 @@
-id: shield
-name: Shield
+id: shield_kit
+name: Shield Kit
 description: "A sturdy board of banded wood. Blocks, shoves and occasionally breaks noses."
 imports:
   - shield_bash

@@ -1,6 +1,7 @@
 name: Field Dressing
 description: "Bandages, a tourniquet and a steady hand. Enough to keep yourself standing."
 type: execution
+tags: [heal, self, support]
 fields:
   comment: Patch up your own wounds.
   energy_steps: 0

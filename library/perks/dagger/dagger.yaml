@@ -1,6 +1,7 @@
 name: Dagger
 description: A light, concealable blade rewarding precision and speed. A weapon is a type of perk - a quick, accurate stab.
 type: execution
+tags: [weapon, damage, melee]
 fields:
   comment: A fast, precise thrust with a light blade.
   energy_steps: 0
