@@ -180,14 +180,21 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 		"invokeGainsTable":    func() string { return invokeGainsTable(cfg) },
 		"combatGainsTable":    func() string { return combatGainsTable(cfg) },
 		"invokeRefreshPhrase": func() string { return invokeRefreshPhrase(cfg) },
-		// reactionRules documents the cost, frequency and timing of the
-		// out-of-turn action. It is used by the combat chapter.
-		"reactionRules": func() string { return reactionRules(cfg) },
+		// outOfTurnRules documents the cost, frequency and timing of acting out
+		// of turn, covering both an improvised invoke action and a built
+		// Reaction perk. It is used by the combat chapter.
+		"outOfTurnRules": func() string { return outOfTurnRules(cfg) },
 
-		// reactionTriggersTable lists the triggers a prebuilt Reaction perk can
+		// reactionTriggersTable lists the triggers a built Reaction perk can
 		// be built around, with the extra build cost each one carries. Used by
-		// the combat chapter alongside reactionRules.
+		// the combat chapter alongside outOfTurnRules.
 		"reactionTriggersTable": func() string { return reactionTriggersTable(cfg) },
+
+		// energyRules documents the Energy economy: spend rate, recovery, and
+		// what happens when a character runs out. Used by the combat chapter.
+		// The overdraft rate is the HP-for-Energy trade and is read from config
+		// so it can be retuned without rewriting prose.
+		"energyRules": func() string { return energyRules(cfg) },
 
 		// Passives. The predefined perk catalogue and the category-wide rules,
 		// read from passives.yaml so the rulebook and the picker agree.

@@ -110,16 +110,41 @@ a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 .topbar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
   padding: 0.75rem 1.25rem;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
-.topbar .brand { font-weight: 700; font-size: 1.1rem; color: var(--text); }
+.topbar .brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text);
+  /* The brand must never push the nav off the bar on a narrow screen. */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .topbar nav { display: flex; align-items: center; gap: 1rem; }
+
+/* The hamburger only exists below the breakpoint; on desktop the links are
+   always visible and the button would be redundant. */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+}
 
 /* Name of the open character, centred in the banner on every page scoped to it.
    It is positioned absolutely so it sits in the true centre of the bar rather
@@ -1109,3 +1134,298 @@ dialog .toolbar {
 .pkg-toggle input { cursor: pointer; }
 .installed-package.pkg-disabled { opacity: 0.55; }
 .installed-package.pkg-disabled .pkg-name { text-decoration: line-through; }
+
+/* ---------------------------------------------------------------------------
+   Conditions.
+
+   Colour is never the only signal here. A shifted skill also carries a signed
+   badge and an explicit "Now: ..." reading, so the sheet stays usable in
+   greyscale, on a printout, and for a colour-blind player. The colours are
+   reinforcement, not information.
+   --------------------------------------------------------------------------- */
+.conditions-strip { margin: 0.75rem 0 1.25rem; }
+.conditions-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.condition-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.condition {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border, #555);
+  border-radius: 999px;
+  background: var(--panel, rgba(127, 127, 127, 0.08));
+}
+/* An applied condition the ruleset no longer defines has no effect, so it is
+   dimmed and struck through rather than silently looking active. */
+.condition-unknown { opacity: 0.55; }
+.condition-unknown .condition-name { text-decoration: line-through; }
+
+.condition-name { font-weight: 600; }
+.condition-shift { padding: 0 0.2rem; }
+.condition-fixed-shift {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+.condition-remove {
+  padding: 0 0.4rem;
+  line-height: 1.4;
+}
+
+/* The hover "i". Implemented purely in CSS so it needs no script and degrades
+   to nothing rather than to a broken control. :focus-within is included so the
+   tooltip is reachable by keyboard, not mouse only. */
+.condition-info {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 1px solid var(--border, #555);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-style: italic;
+  font-weight: 700;
+  cursor: help;
+}
+.condition-tip {
+  position: absolute;
+  bottom: 125%;
+  left: 0;
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: max-content;
+  max-width: 320px;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border, #555);
+  border-radius: 6px;
+  background: var(--bg, #1e1e1e);
+  color: var(--fg, #eee);
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 400;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+.condition-info:hover .condition-tip,
+.condition-info:focus .condition-tip,
+.condition-info:focus-within .condition-tip { display: flex; }
+.condition-tip-text { display: block; }
+.condition-tip-skills {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* A shifted skill. The tint is deliberately faint: the whole grid would become
+   unreadable if a handful of conditions painted half of it in saturated colour. */
+.skill-field { position: relative; }
+.skill-shifted-down {
+  border-left: 3px solid var(--danger, #c0392b);
+  padding-left: 0.4rem;
+  background: rgba(192, 57, 43, 0.08);
+}
+.skill-shifted-up {
+  border-left: 3px solid var(--ok, #27893f);
+  padding-left: 0.4rem;
+  background: rgba(39, 137, 63, 0.08);
+}
+.skill-shift-badge {
+  display: inline-block;
+  margin-left: 0.3rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.skill-shifted-down .skill-shift-badge { color: var(--danger, #c0392b); }
+.skill-shifted-up .skill-shift-badge { color: var(--ok, #27893f); }
+.skill-effective {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+/* "capped" marks a shift the ladder could not absorb in full. Without it a
+   further debuff on a bottomed-out skill looks like it did nothing. */
+.skill-clamped { font-style: italic; }
+
+/* A vital card whose value a condition is shifting. The accent border overrides
+   the nth-child colour cycle above, so it must come after it: while a condition
+   is active the card's own position colour is less useful than knowing which way
+   the number moved. */
+.stats-bar .cost-card.vital-shifted-down {
+  border-color: var(--danger, #c0392b);
+  border-top-color: var(--danger, #c0392b);
+  background: color-mix(in srgb, var(--danger) 12%, var(--bg));
+}
+.stats-bar .cost-card.vital-shifted-up {
+  border-color: #4ade80;
+  border-top-color: #4ade80;
+  background: color-mix(in srgb, #4ade80 12%, var(--bg));
+}
+.vital-shifted-down .cost-card-value { color: var(--danger, #c0392b); }
+.vital-shifted-up .cost-card-value { color: #4ade80; }
+.vital-shift-badge {
+  margin-left: 0.2rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.vital-shifted-down .vital-shift-badge { color: var(--danger, #c0392b); }
+.vital-shifted-up .vital-shift-badge { color: #4ade80; }
+/* The pre-condition value, struck through so the card never looks like the
+   player's own purchase changed. */
+.vital-base {
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+/* The Apply Condition picker. */
+.cond-library-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.cond-cat { margin-top: 0.5rem; }
+.cond-cat-head { cursor: pointer; font-weight: 600; }
+.cond-cat-body {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+.cond-card {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border, #555);
+  border-radius: 6px;
+}
+.cond-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.cond-skills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+}
+.cond-label { color: var(--muted); }
+.cond-skill {
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--border, #555);
+  border-radius: 999px;
+}
+
+/* ---------------------------------------------------------------------------
+   Changelog page.
+
+   The markdown is one long document, so the release and section headings have
+   to do all the work of separating it. Each h2 is a release and gets a rule and
+   generous space above it; each h3 is a themed group inside that release and is
+   pulled out with an accent bar, so scanning for "what changed about perks"
+   does not mean reading every bullet.
+   --------------------------------------------------------------------------- */
+.changelog h1 { margin-top: 0; }
+.changelog h2 {
+  margin-top: 2.75rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--accent-strong);
+  color: var(--accent);
+  font-size: 1.6rem;
+}
+.changelog h1 + p,
+.changelog h2 + p {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.changelog h3 {
+  margin-top: 1.75rem;
+  padding: 0.35rem 0 0.35rem 0.7rem;
+  border-left: 3px solid var(--cyan);
+  color: var(--cyan);
+  font-size: 1.1rem;
+}
+.changelog ul { margin: 0.5rem 0 0; padding-left: 1.25rem; }
+.changelog li { margin: 0.3rem 0; }
+.changelog strong { color: var(--text); }
+
+/* ---------------------------------------------------------------------------
+   Narrow screens.
+
+   The desktop bar is one row with the character name absolutely centred, which
+   on a phone means the name is painted straight over the brand and the links.
+   Below the breakpoint the name is taken out of the absolute flow onto its own
+   line, and the links collapse behind the hamburger so the bar stays one row of
+   controls however many links are added later.
+   --------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .topbar {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+  }
+
+  .nav-toggle { display: inline-flex; }
+
+  /* The drawer: a full-width panel under the bar, so its items get real tap
+     targets instead of being squeezed onto the bar itself. */
+  .topbar nav#nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 29;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0.35rem 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  }
+  .topbar nav#nav-links.open { display: flex; }
+  .topbar nav#nav-links > a,
+  .topbar nav#nav-links > button {
+    width: 100%;
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 0;
+    background: none;
+  }
+  .topbar nav#nav-links > a + a,
+  .topbar nav#nav-links > button { border-top: 1px solid var(--border); }
+
+  /* Out of the absolute centre and onto its own line: this is the overlap. */
+  .topbar .char-name {
+    position: static;
+    left: auto;
+    transform: none;
+    order: 9;
+    flex: 1 0 100%;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .breadcrumbs { padding: 0.5rem 0.9rem; }
+  .content { margin: 1rem auto; padding: 0 0.9rem; }
+}

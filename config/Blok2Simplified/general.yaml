@@ -17,6 +17,36 @@ combat:
   # rules parameter for the table, surfaced in the generated documentation.
   energy_recovery_per_rest: 5
 
+  # What happens when a character uses a perk they cannot pay the Energy for.
+  #
+  # This is the HP-for-Energy trade, and it is the most load-bearing number in
+  # the resource economy. HP and Energy both climb +3 per proficiency rung (see
+  # proficiencies.yaml), so the two pools stay roughly the same size at every
+  # tier. At a 1:1 rate that makes the entire Energy pool purchasable with the
+  # entire HP pool at no loss, at every level, which stops Energy being a
+  # resource at all - it just becomes a second health bar.
+  #
+  # At 3 HP per Energy, one extra three-Energy round costs 9 HP: nearly a whole
+  # Untrained health bar (10) and still a real bite at Legendary (31). That keeps
+  # the overdraft an emergency button rather than a routine optimisation.
+  energy_overdraft:
+    # HP paid for each point of missing Energy.
+    hp_per_energy: 3
+    # Added to hp_per_energy on each later overdraft in the same scene, the same
+    # way repeated movement gets progressively more expensive. Zero keeps the
+    # rate flat, which is less to track at the table; raise it to 1 if players
+    # start treating the overdraft as routine.
+    escalation_per_use: 0
+    # A condition applied on overdraw. Fatigued raises the Energy cost of perks
+    # by 1, so overdrawing makes the next overdraw worse on its own - the rule
+    # limits itself without any per-scene bookkeeping. Set to "" for none.
+    condition_on_overdraft: fatigued
+    # Whether a character may instead pay nothing and drop the enactments they
+    # cannot afford. This is the more interesting choice of the two, because it
+    # degrades the perk rather than the character: the fireball still burns, it
+    # just no longer explodes.
+    allow_partial_execution: true
+
 # The proficiency rung every skill starts at, and the one that is free. This
 # must be set explicitly: the ladder now opens with the below-baseline "Inept"
 # rung, so falling back to the first entry would start every character there.

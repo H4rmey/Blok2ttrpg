@@ -162,6 +162,69 @@ type Combat struct {
 	// does not spend or restore Energy automatically, so nothing in the engine
 	// reads it.
 	EnergyRecoveryPerRest int `yaml:"energy_recovery_per_rest,omitempty" json:"energy_recovery_per_rest,omitempty"`
+
+	// EnergyOverdraft is what happens when a character uses a perk they cannot
+	// pay the Energy for. It is the HP-for-Energy trade, and it is the single
+	// most load-bearing number in the resource economy: set it too low and
+	// Energy stops being a resource at all, because HP simply becomes a second
+	// Energy pool.
+	EnergyOverdraft EnergyOverdraft `yaml:"energy_overdraft,omitempty" json:"energy_overdraft,omitempty"`
+}
+
+// EnergyOverdraft configures running out of Energy mid-perk.
+//
+// The rule exists so that being empty is a hard decision rather than a wall: a
+// perk may still be used, but it has to be paid for out of the character's own
+// body, or paid for by cutting the perk short.
+//
+// HPPerEnergy is deliberately well above 1. HP and Energy climb at the same rate
+// per proficiency rung, so a 1:1 rate makes the whole Energy pool purchasable
+// with the whole HP pool at no loss, at every tier. A rate of 3 makes a single
+// extra round cost most of a low-tier character's health, which is what keeps
+// the overdraft an emergency button instead of a routine optimisation.
+type EnergyOverdraft struct {
+	// HPPerEnergy is the HP paid for each point of missing Energy.
+	HPPerEnergy int `yaml:"hp_per_energy,omitempty" json:"hp_per_energy,omitempty"`
+
+	// EscalationPerUse is added to HPPerEnergy on each subsequent overdraft in
+	// the same scene, mirroring how repeated movement gets progressively more
+	// expensive. Zero keeps the rate flat, which is simpler at the table.
+	EscalationPerUse int `yaml:"escalation_per_use,omitempty" json:"escalation_per_use,omitempty"`
+
+	// ConditionOnOverdraft names a condition applied when a character
+	// overdraws, or "" for none. Pointing it at a condition that raises energy
+	// costs makes the rule self-limiting without any per-scene bookkeeping.
+	ConditionOnOverdraft string `yaml:"condition_on_overdraft,omitempty" json:"condition_on_overdraft,omitempty"`
+
+	// AllowPartialExecution permits paying nothing and instead dropping
+	// enactments the character cannot afford. It is a pointer so an unset value
+	// defaults to true: it is the more interesting of the two choices, because
+	// it degrades the perk rather than the character.
+	AllowPartialExecution *bool `yaml:"allow_partial_execution,omitempty" json:"allow_partial_execution,omitempty"`
+}
+
+// AllowsPartialExecution reports whether an unaffordable perk may be used at
+// reduced effect instead of paying HP. Defaults to true when unset.
+func (e EnergyOverdraft) AllowsPartialExecution() bool {
+	return e.AllowPartialExecution == nil || *e.AllowPartialExecution
+}
+
+// OverdraftRateForUse returns the HP-per-Energy rate for the nth overdraft in a
+// scene, where n is 1-based. With EscalationPerUse at zero the rate is flat.
+func (e EnergyOverdraft) OverdraftRateForUse(n int) int {
+	if n < 1 {
+		n = 1
+	}
+	return e.HPPerEnergy + e.EscalationPerUse*(n-1)
+}
+
+// EnergyOverdraftConfigured reports whether an energy_overdraft block was
+// declared. It cannot be a struct comparison because the type holds a pointer.
+func EnergyOverdraftConfigured(e EnergyOverdraft) bool {
+	return e.HPPerEnergy != 0 ||
+		e.EscalationPerUse != 0 ||
+		e.ConditionOnOverdraft != "" ||
+		e.AllowPartialExecution != nil
 }
 
 // AdditionalEnactment is the surcharge for each enactment beyond the first.
@@ -340,6 +403,21 @@ type Condition struct {
 	MaxShift  int  `yaml:"max_shift,omitempty" json:"max_shift,omitempty"`
 	ShiftCost Cost `yaml:"shift_cost,omitempty" json:"shift_cost,omitempty"`
 
+	// AffectsSkills lists the skills this condition moves, as "<group>.<skill>"
+	// keys matching the character's skill map. A shiftable condition moves every
+	// listed skill by the shift the player picked; a fixed condition moves them
+	// by FixedShift. An empty list means the condition changes no skill numbers
+	// at all - it only changes what the character may do - which is what leaves
+	// its row on the character sheet without a value picker.
+	AffectsSkills []string `yaml:"affects_skills,omitempty" json:"affects_skills,omitempty"`
+
+	// FixedShift is the shift applied to every skill in AffectsSkills by a
+	// non-shiftable condition. It exists so a condition whose own text already
+	// names its magnitude ("movement speed shifted one down") can colour the
+	// sheet without turning into a player-chosen range. It is ignored for
+	// shiftable conditions, which take their magnitude from the applied value.
+	FixedShift int `yaml:"fixed_shift,omitempty" json:"fixed_shift,omitempty"`
+
 	// Selectable controls whether the condition appears in the builder's
 	// condition dropdown. Some conditions are states the rules impose (Dying),
 	// gear states, or GM-only effects, and must not be purchasable as an
@@ -360,6 +438,34 @@ func (c Condition) IsSelectable() bool {
 // pays a per-shift cost) rather than a flat build/energy cost.
 func (c Condition) Shiftable() bool {
 	return c.MinShift != 0 || c.MaxShift != 0
+}
+
+// ShiftsSkills reports whether applying this condition changes any skill
+// number. It is false for a condition that only changes what a character may
+// do (Silenced, Charmed), which is why such a condition needs no value picker.
+func (c Condition) ShiftsSkills() bool {
+	return len(c.AffectsSkills) > 0
+}
+
+// NeedsShiftValue reports whether the player must choose a magnitude when
+// applying this condition. Only a shiftable condition that actually moves
+// skills asks for one; every other condition applies at a magnitude the
+// ruleset already decided.
+func (c Condition) NeedsShiftValue() bool {
+	return c.Shiftable() && c.ShiftsSkills()
+}
+
+// SkillShift returns the per-skill shift this condition applies when it was
+// applied at the given value. A shiftable condition uses the chosen value; a
+// fixed condition ignores it and uses its configured FixedShift.
+func (c Condition) SkillShift(applied int) int {
+	if !c.ShiftsSkills() {
+		return 0
+	}
+	if c.Shiftable() {
+		return applied
+	}
+	return c.FixedShift
 }
 
 // Component is a generic perk building block: an perk type, enactment or

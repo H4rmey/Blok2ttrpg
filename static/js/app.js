@@ -11,6 +11,18 @@ function closePackageModal() {
   if (modal) modal.hidden = true;
 }
 
+// The condition picker uses its own modal rather than sharing the package one,
+// so a half-open package browser cannot be replaced out from under the user.
+function openConditionModal() {
+  var modal = document.getElementById("condition-modal");
+  if (modal) modal.hidden = false;
+}
+
+function closeConditionModal() {
+  var modal = document.getElementById("condition-modal");
+  if (modal) modal.hidden = true;
+}
+
 // Perk import modal. The Import button loads the built-in perk browser
 // into the modal body via HTMX; these helpers just toggle visibility.
 function openPerkModal() {
@@ -22,6 +34,52 @@ function closePerkModal() {
   if (modal) modal.hidden = true;
 }
 
+
+// ---------------------------------------------------------------------------
+// Mobile navigation drawer.
+//
+// The top bar links do not fit beside the brand and the character name on a
+// phone, so below the CSS breakpoint they collapse behind a hamburger. The
+// handler is delegated from the document rather than bound to the button, so it
+// keeps working on pages whose header is swapped in by HTMX. Everything below
+// degrades to a plain always-visible nav if scripting is unavailable, because
+// the drawer is only hidden inside the media query.
+// ---------------------------------------------------------------------------
+(function () {
+  function links() {
+    return document.getElementById("nav-links");
+  }
+  function toggleBtn() {
+    return document.getElementById("nav-toggle");
+  }
+  function setOpen(open) {
+    var nav = links();
+    var btn = toggleBtn();
+    if (!nav) return;
+    nav.classList.toggle("open", open);
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target && e.target.closest ? e.target.closest("#nav-toggle") : null;
+    if (btn) {
+      e.preventDefault();
+      setOpen(!links() || !links().classList.contains("open"));
+      return;
+    }
+    // Any click outside the drawer closes it, including a click on one of its
+    // own links: navigating away should not leave the panel open behind the
+    // next page's paint.
+    var nav = links();
+    if (nav && nav.classList.contains("open") && !nav.contains(e.target)) {
+      setOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setOpen(false);
+  });
+})();
 
 // Theme toggle with persistence.
 (function () {

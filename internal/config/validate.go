@@ -48,7 +48,72 @@ func (c *Config) Validate() error {
 	if err := validateFields("validations", c.Validations.Fields); err != nil {
 		return err
 	}
+	if err := c.validateConditions(); err != nil {
+		return err
+	}
 	return nil
+}
+
+// validateConditions checks the referential integrity of every condition's
+// affects_skills list. A typo there would silently produce a condition that
+// colours nothing on the character sheet and shifts nothing, which is the kind
+// of failure a player only notices mid-session, so it is a load error instead.
+//
+// The vital group is restricted to a single allowed skill (movement): letting a
+// condition shift HP or Energy would change a character's maximum pool as a
+// side effect of a temporary state, which is a different rule than "your rolls
+// get worse" and is not what conditions are for.
+func (c *Config) validateConditions() error {
+	if len(c.Conditions) == 0 {
+		return nil
+	}
+	known := map[string]bool{}
+	for _, g := range c.Skills.List() {
+		for _, s := range g.Skills {
+			known[g.ID+"."+s] = true
+		}
+	}
+	vitalGroup := c.VitalGroup
+	if vitalGroup == "" {
+		vitalGroup = "vital"
+	}
+	for _, cond := range c.Conditions {
+		for _, key := range cond.AffectsSkills {
+			if !known[key] {
+				return fmt.Errorf("condition %q: affects_skills references unknown skill %q "+
+					"(expected \"<group>.<skill>\" from the skills list)", cond.ID, key)
+			}
+			group, skill := splitSkillKey(key)
+			if group == vitalGroup && !allowedVitalShift[skill] {
+				return fmt.Errorf("condition %q: affects_skills may not shift the vital %q; "+
+					"conditions only shift %q in the vital group", cond.ID, skill, vitalMovementSkill)
+			}
+		}
+		// A fixed condition that names skills but no magnitude would render a
+		// coloured, unshifted skill, which reads as a display bug.
+		if cond.ShiftsSkills() && !cond.Shiftable() && cond.FixedShift == 0 {
+			return fmt.Errorf("condition %q: affects_skills is set but the condition is neither "+
+				"shiftable (min_shift/max_shift) nor has a fixed_shift, so it would shift nothing", cond.ID)
+		}
+	}
+	return nil
+}
+
+// vitalMovementSkill is the one vital a condition is permitted to shift. HP and
+// Energy are pools a character buys, not numbers a temporary state moves.
+const vitalMovementSkill = "Movement"
+
+var allowedVitalShift = map[string]bool{vitalMovementSkill: true}
+
+// splitSkillKey splits a "<group>.<skill>" key. A key without a separator is
+// treated as having no group, which the caller reports as unknown anyway.
+func splitSkillKey(key string) (group, skill string) {
+	for i := 0; i < len(key); i++ {
+		if key[i] == '.' {
+			return key[:i], key[i+1:]
+		}
+	}
+	return "", key
 }
 
 var validFieldTypes = map[string]bool{

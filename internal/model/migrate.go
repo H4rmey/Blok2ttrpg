@@ -35,6 +35,12 @@ type characterJSON struct {
 
 	Perks    []Perk             `json:"perks"`
 	Packages []InstalledPackage `json:"packages,omitempty"`
+
+	// Conditions needs an explicit entry here for the same reason every other
+	// field does: this struct fully replaces Character for decoding purposes, so
+	// a field missing from it is silently dropped on read. Nothing about it is
+	// legacy - it predates no rename - it just has to be listed.
+	Conditions []AppliedCondition `json:"conditions,omitempty"`
 }
 
 // UnmarshalJSON decodes a character, migrating the pre-rename key layout when it
@@ -49,6 +55,7 @@ func (c *Character) UnmarshalJSON(data []byte) error {
 	c.Level = raw.Level
 	c.Perks = raw.Perks
 	c.Packages = raw.Packages
+	c.Conditions = raw.Conditions
 
 	// A legacy document is one that carries the old "attributes" key. In that
 	// layout "traits" holds the dice-backed roster, so it becomes Skills and

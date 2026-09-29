@@ -18,6 +18,13 @@
 
 {{ template "character_bar" . }}
 
+{{/* Conditions come before the sheet body because they change how everything
+     below them is read. A new character has no id yet and nothing to apply a
+     condition to, so the strip only appears once the character exists. */}}
+{{ if $c.ID }}
+{{ template "condition_strip" . }}
+{{ end }}
+
 <form method="post" id="character-form" action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
       data-stats-url="/characters/{{ $c.ID }}/stats">
 
@@ -47,16 +54,37 @@
     <div class="skill-grid">
 
       {{ range .Skills }}
-      <div class="field">
-        <label>{{ . }}</label>
-        {{ $skill := . }}
+      {{ $skill := . }}
+      {{/* The view is the post-condition reading of this skill. The dropdown
+           keeps showing the character's OWN proficiency, because that is what
+           the form saves and editing it must never be a way to bake a temporary
+           condition into the character. The shifted value is shown beside it
+           instead, which also keeps the colour honest: the red marks the
+           effect, not the purchase. */}}
+      {{ $view := skillView $.SkillViews $g.ID $skill }}
+      <div class="field skill-field{{ if $view.Down }} skill-shifted-down{{ else if $view.Up }} skill-shifted-up{{ end }}">
+        <label>
+          {{ $skill }}
+          {{ if $view.Shifted }}
+          {{/* The badge repeats the shift as a number so the row still reads
+               correctly in greyscale, on a printout, and for a colour-blind
+               player: colour is never the only signal. */}}
+          <span class="skill-shift-badge">{{ signedInt $view.Shift }}</span>
+          {{ end }}
+        </label>
         <select name="skill_{{ $g.ID }}_{{ $skill }}">
           {{ $current := skillProf $c $g.ID $skill }}
           {{ range $.Cfg.Proficiencies }}
           <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profSkillLabel $.Cfg . $g.ID $skill }}</option>
           {{ end }}
         </select>
-
+        {{ if $view.Shifted }}
+        <span class="skill-effective">
+          Now:
+          {{ range $.Cfg.Proficiencies }}{{ if eq .ID $view.Effective }}{{ profSkillLabel $.Cfg . $g.ID $skill }}{{ end }}{{ end }}
+          {{ if $view.Clamped }}<span class="skill-clamped" title="Already at the end of the proficiency ladder, so the full shift could not be applied.">(capped)</span>{{ end }}
+        </span>
+        {{ end }}
       </div>
       {{ end }}
     </div>

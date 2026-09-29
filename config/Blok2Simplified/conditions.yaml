@@ -32,6 +32,44 @@ option_groups:
 # rules impose (Dying), a property of gear, or a GM-only effect: it is never
 # offered in the Enact Condition dropdown, but it keeps its id, name and
 # description so existing perks and the rules reference still resolve it.
+#
+#
+# affects_skills
+# --------------
+# A condition may name the skills it moves, as "<group>.<skill>" keys from
+# skills.yaml. Naming them is what lets a character sheet show the effect: an
+# applied condition recolours exactly those skills (red when shifted down, green
+# when shifted up) and the sheet's proficiency reads at its shifted value.
+#
+# There are three shapes, and which one a condition uses is inferred - there is
+# no extra flag to set:
+#
+#   1. Shiftable + affects_skills   The player picks a magnitude from the
+#                                   min_shift..max_shift range when applying it,
+#                                   and every named skill moves by that much.
+#                                   Blinded, Frightened, Encouraged.
+#
+#   2. Fixed + affects_skills + fixed_shift
+#                                   The magnitude is part of the rule, not a
+#                                   choice. The condition's own text already
+#                                   names it ("shifted one down"), so the sheet
+#                                   applies fixed_shift and shows no picker.
+#                                   Slowed, Weakened, Broken Gear.
+#
+#   3. No affects_skills            The condition changes what a character may
+#                                   DO, not what they roll. There is nothing to
+#                                   recolour and no magnitude, so it shows no
+#                                   picker either. Silenced, Charmed, Prone.
+#
+# Shifts from several applied conditions on the same skill STACK (they are
+# summed), and the result is clamped at the ends of the proficiency ladder. Two
+# cheap debuffs can therefore add up to a large penalty, which is deliberate:
+# it is what makes piling conditions on one target a real tactic. It is also the
+# main balance risk in this file, so keep single-condition ranges modest.
+#
+# A condition may shift Movement but not HP or Energy. Those are pools a
+# character buys with skill points, and a temporary state must not change a
+# maximum; the loader rejects a condition that tries.
 
 conditions:
   # Shiftable conditions. IMPORTANT: a condition that declares a shift range is
@@ -39,29 +77,57 @@ conditions:
   # four previously set only build_cost, which made them free at any magnitude.
   - id: blinded
     name: "Blinded"
-    description: "Reduces certain skill rolls"
+    description: "You cannot see. Shifts down every skill that relies on sight."
     min_shift: -6
     max_shift: 0
     shift_cost: { build_cost: 1 }
+    # Sight-dependent skills only. Losing your eyes does not make you weaker or
+    # less tough, which is why Strength and Constitution are absent: this is the
+    # difference between Blinded and a general-purpose penalty.
+    affects_skills:
+      - general.Perception
+      - general.Stealth
+      - general.Thievery
+      - offense.Precision
+      - defense.Reflex
   - id: encumbered
     name: "Encumbered"
-    description: "Reduces movement and relevant skills"
+    description: "You are overloaded. Shifts down movement and anything physical."
     min_shift: -6
     max_shift: 0
     shift_cost: { build_cost: 1 }
+    affects_skills:
+      - vital.Movement
+      - general.Athletics
+      - general.Stealth
+      - defense.Reflex
   - id: encouraged
     name: "Encouraged"
-    description: "Positive skill shifts"
+    description: "You are emboldened. Shifts up your offensive and social skills."
     min_shift: 1
     max_shift: 6
     # A buff costs more per step than the mirrored debuff (see Frightened).
     shift_cost: { build_cost: 2 }
+    # The mirror of Frightened, on the same skills, so the pair reads as one
+    # dial with two directions rather than two unrelated conditions.
+    affects_skills:
+      - offense.Strength
+      - offense.Precision
+      - general.Intimidate
+      - general.Provoke
+      - general.Performance
   - id: frightened
     name: "Frightened"
-    description: "Negative skill shifts"
+    description: "You are afraid. Shifts down your offensive and social skills."
     min_shift: -6
     max_shift: 0
     shift_cost: { build_cost: 1 }
+    affects_skills:
+      - offense.Strength
+      - offense.Precision
+      - general.Intimidate
+      - general.Provoke
+      - general.Performance
   - id: taunted
     name: "Taunted"
     description: "You can only target a preset Target."
@@ -187,6 +253,12 @@ conditions:
     description: "Movement speed shifted one down."
     # One die shift on a skill, which is the tier 2 "shifts one die" line. Was 1.
     build_cost: 2
+    # The magnitude is part of the rule ("one down"), so it is a fixed_shift and
+    # the sheet offers no picker. Making this shiftable instead would turn a
+    # named condition into a generic movement dial and duplicate Encumbered.
+    affects_skills:
+      - vital.Movement
+    fixed_shift: -1
   - id: terrified
     name: "Terrified"
     description: "You move 1m away from the target (or take 1d4 damage)."
@@ -198,6 +270,14 @@ conditions:
     name: "Weakened"
     description: "Damaging rolls are shifted one die down."
     build_cost: 2
+    # "Damaging rolls" is the offense group, so every offensive skill drops one
+    # rung. Fixed rather than shiftable for the same reason as Slowed.
+    affects_skills:
+      - offense.Strength
+      - offense.Precision
+      - offense.Wisdom
+      - offense.Magic
+    fixed_shift: -1
   - id: fragile
     name: "Fragile"
     description: "Engager that targets you, may shift their damage die by +1."
@@ -223,10 +303,14 @@ conditions:
     # not an effect a perk buys, so it is not offered in the dropdown.
     selectable: false
     build_cost: 2
+    # Which gear is broken is a table decision, so this deliberately names no
+    # skills: there is no single correct set, and guessing one would recolour
+    # skills the broken item has nothing to do with. It stays a reminder.
   - id: amplified_gear
     name: "Amplified Gear"
     description: "Rolls for this gear are upgraded by one die shift."
-    # Gear state like Broken Gear: granted by the item, not purchased.
+    # Gear state like Broken Gear: granted by the item, not purchased, and
+    # likewise names no skills because the item decides which rolls it touches.
     selectable: false
     build_cost: 3
 

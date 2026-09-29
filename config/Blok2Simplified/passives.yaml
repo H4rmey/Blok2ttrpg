@@ -7,9 +7,10 @@
 # lets a passive do things the builder cannot express at all - bend the dice
 # ladder, change a vital, alter the invoke economy, or modify another rule.
 #
-# A passive is still a perk. It is stored as a perk of the "passive" perk type
-# and counts against the same perk point budget, so it competes with built perks
-# rather than sitting in a pool of its own.
+# A passive is still a perk. It counts against the same perk point budget, so it
+# competes with built perks rather than sitting in a pool of its own. It is not a
+# perk type, though: passives are added with the "Add passive" button rather than
+# selected in the builder, so there is no "passive" entry in perk_types.
 #
 # CONFIGURABLE PARTS
 #
@@ -33,8 +34,9 @@ passives:
   information: >-
     Passives are pre-written perks. They are always on, cost no energy to use,
     and are chosen from the list below rather than built. Each costs perk points
-    like any other perk, and each may be taken only once. Many have parts you
-    configure when you take them, and those choices can change the price.
+    like any other perk. Many have parts you configure when you take them, and
+    those choices can change the price. The same passive may be taken more than
+    once, so you can hold several copies configured differently.
 
   # Default perk-point cost of taking a passive, before its fields are priced.
   # An entry overrides it with its own build_cost when it is worth more or less.
@@ -43,9 +45,11 @@ passives:
   # Passives are always on, so there is no moment at which energy would be paid.
   energy_cost: 0
 
-  # Whether the same passive may be taken more than once. False keeps a character
-  # broadening instead of stacking one strong effect.
-  allow_duplicates: false
+  # Whether the same passive may be taken more than once. True lets a character
+  # hold several copies of an entry, each configured independently - taking
+  # Resistance twice for two different damage sources, for instance. Each copy is
+  # paid for in full, so stacking is a spending choice rather than a discount.
+  allow_duplicates: true
 
   entries:
     # The example the field system exists for: no fixed list of damage types, a
@@ -240,3 +244,8 @@ passives:
           max: 2
           per_step:
             increase: { build_cost: 3 }
+
+    - id: mobile_attacker
+      name: "Mobile Attacker"
+      description: >-
+         Your movement is still one action, but you can split it between other actions. Example: move 1m; attack; move 2m; heal; move 1m.

@@ -6,9 +6,11 @@
 
 We separate them into two groups: **Shifting Conditions** and **Fixed Conditions**.
 
-**Shifting Conditions**: Conditions that are flexible in their use. They only **Shift** a collection of Skills up or down by x amount. For example, Blinded, Encumbered, Encouraged or Frightened.
+**Shifting Conditions**: Conditions that **Shift** a collection of Skills up or down. Whoever applies one picks the amount, within the range the Condition allows. Which Skills move is part of the Condition, not a table call: Blinded moves the Skills you need your eyes for, Frightened moves the ones you need your nerve for. For example, Blinded, Encumbered, Encouraged or Frightened.
 
-**Fixed Conditions**: Conditions that impact something other than the Skills, like action economy or character behaviour. For example: When you are Stunned you lose one of your actions. When you are Taunted, you may only attack one preset Target.
+**Fixed Conditions**: Conditions that apply at an amount the rules already decided, so there is nothing to choose when one lands. Most of them impact something other than your Skills - action economy or behaviour - and move no numbers at all: when you are Stunned you lose one of your actions, when you are Taunted you may only attack one preset Target. A few do name Skills and their own amount, because their wording already fixes it: Slowed is always one down on Movement.
+
+**Stacking**: When several Conditions push the same Skill, the Shifts add together. Frightened at -1 twice is -2. That makes piling Conditions onto one Target a real tactic, but it stops at the ends of the proficiency ladder: a Skill already at the bottom cannot be pushed lower, and the extra Shift is simply lost.
 
 When a **Condition** has impact on your **Skills** it always has a value representing **Die Shifts** in your **Skills**. So each Condition shifts x amount of skills in your character a y amount. This can either be temporary or permanent, depending on how the **Condition** was applied and what was discussed with the DM.
 
@@ -23,6 +25,6 @@ When a **Condition** has impact on your **Skills** it always has a value represe
 
 ## Condition List
 
-The following Conditions are available. For Shifting Conditions the affected Skills are up to the DM to decide and depend on the situation.
+The following Conditions are available. The Affects column lists the Skills each one moves; a Condition affecting no Skills changes what you may do rather than what you roll.
 
 {{ conditionsTable }}

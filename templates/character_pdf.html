@@ -101,7 +101,10 @@
       <article class="print-perk">
         <h3>{{ $ab.Name }}</h3>
         <p class="print-perk-meta">
-          {{ componentName $cfg "perk_type" $ab.Type }}
+          {{/* A passive is not a perk type, so there is no component to resolve a
+               display name from. The label is stated here instead, because the
+               reader still needs the at-a-glance "always on" cue. */}}
+          {{ if .IsPassive }}Passive{{ else }}{{ componentName $cfg "perk_type" $ab.Type }}{{ end }}
           &middot; {{ .Cost.Build }} pt
           {{ if .Cost.Energy }}&middot; {{ .Cost.Energy }} E{{ end }}
           {{ if .Cost.Action }}&middot; {{ .Cost.Action }} action(s){{ end }}

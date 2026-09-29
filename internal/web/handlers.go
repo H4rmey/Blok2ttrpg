@@ -40,6 +40,13 @@ type pageData struct {
 	// controls visibly confirm what they did.
 	RefreshNotice string
 
+	// Conditions are the conditions currently applied, resolved against the
+	// config for display. SkillViews is the post-condition reading of every
+	// skill, keyed as "<group>.<skill>", which is what lets the skill grid show
+	// the shifted proficiency and colour it.
+	Conditions []conditionRow
+	SkillViews map[string]engine.SkillView
+
 	// ReadOnlyStats renders the character bar without editable inputs. The
 	// level box and the current-value boxes for vitals are bound to the
 	// character form, which only exists on the sheet itself, so every other
@@ -306,6 +313,8 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 		a.handlePerks(w, r, &c, parts[2:])
 	case "packages":
 		a.handlePackages(w, r, &c, parts[2:])
+	case "conditions":
+		a.handleCharacterConditions(w, r, &c, parts[2:])
 	default:
 		http.NotFound(w, r)
 	}
@@ -442,6 +451,12 @@ func (a *App) characterPage(c *model.Character, isNew bool) pageData {
 			{Label: "Home", URL: "/"},
 			{Label: title, URL: "/characters/" + c.ID},
 		},
-		charStats: a.characterStats(c),
+		charStats:  a.characterStats(c),
+		Conditions: a.conditionRows(c),
+		SkillViews: engine.EffectiveSkills(a.Cfg.Config, *c),
+		// A clamped condition shift is reported here rather than only at apply
+		// time, because the clamp can start being true later: lowering a skill by
+		// hand can push an already-applied condition off the end of the ladder.
+		Warning: a.conditionWarning(c),
 	}
 }

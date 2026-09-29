@@ -27,7 +27,9 @@ The Perk Builder is intentionally **system-agnostic** with regard to flavor. A f
 
 Applying perks has a cost. The first cost is the **Perk Cost** to add the Perk. Each level you gain **Perk Points** that can be spent to create perks.
 
-Then there is the **Energy Cost**. This cost is used to use your perk. Sometimes you do not have enough energy to use your perk. In this system it is allowed to still use your perk, but there is a catch: either you take damage equal to the amount of energy you are missing, or you only partially use your perk. The latter is done by not executing all enactments of the perk. The fireball you cast will still burn someone, but will not explode on impact anymore because you don't have the energy for that.
+Then there is the **Energy Cost**. This is what you pay every time you use the perk, as opposed to the Perk Cost which you pay once when you build it.
+
+Running out of Energy does not stop you using a perk, but it costs you something else instead. That rule belongs to the resource economy rather than the builder, so it lives in [Combat](../../core/combat.md#running-out-of-energy) under "Running out of Energy".
 
 ## Executing Perks
 

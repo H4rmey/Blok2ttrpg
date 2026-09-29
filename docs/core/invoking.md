@@ -45,15 +45,17 @@ A long fight can run a pool dry, so combat has a few extra taps:
 
 ---
 
-## Reactions
+## Invoke Actions
 
-A reaction is an action taken out of turn. It is not built in the perk builder and it is not written on your sheet in advance: you describe what you do, pay for it, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw." "I grab the rope as it goes past."
+An **Invoke Action** is an action taken out of turn, bought with an invoke point. It is not built in the perk builder and it is not written on your sheet in advance: you describe what you do, pay for it, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw." "I grab the rope as it goes past."
 
-{{ reactionRules }}
+It is deliberately not called a reaction. A **Reaction** is a perk you built, with a trigger you chose in advance; an Invoke Action is improvised on the spot and paid for in the moment. They do the same job by opposite routes, and the one limit they share is how often you may act out of turn at all.
 
-Because a reaction resolves between actions rather than inside one, it is a way to *pre-empt* something, not to undo it. You can throw yourself in front of an arrow before it is loosed; you cannot wait to see the damage roll and then decide to have blocked it.
+{{ outOfTurnRules }}
 
-The once-per-round limit is what keeps a wealthy character from simply taking over an enemy's turn. It also means the interesting question is not whether to react but *when*: spending your reaction on the first threat you see means having nothing left for the worse one behind it.
+Because an Invoke Action resolves between actions rather than inside one, it is a way to *pre-empt* something, not to undo it. You can throw yourself in front of an arrow before it is loosed; you cannot wait to see the damage roll and then decide to have blocked it.
+
+The once-per-round limit is what keeps a wealthy character from simply taking over an enemy's turn. It also means the interesting question is not whether to act but *when*: spending it on the first threat you see means having nothing left for the worse one behind it.
 
 ---
 

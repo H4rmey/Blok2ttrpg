@@ -46,8 +46,16 @@ type Invoking struct {
 	// CombatGains are the extra in-combat earning triggers.
 	CombatGains CombatGains `yaml:"combat_gains,omitempty" json:"combat_gains,omitempty"`
 
-	// Reactions holds the out-of-turn action limits.
-	Reactions Reactions `yaml:"reactions,omitempty" json:"reactions,omitempty"`
+	// InvokeActions is the improvised out-of-turn action bought with invoke
+	// points. It is deliberately not called a "reaction": that name belongs to
+	// the Reaction perk type, and having two things called a reaction was the
+	// single most confusing overlap in the rules.
+	InvokeActions InvokeActions `yaml:"invoke_actions,omitempty" json:"invoke_actions,omitempty"`
+
+	// ReactionLimit bounds how often a character may act out of turn at all,
+	// counting invoke actions and Reaction perks together. It is separate from
+	// InvokeActions because it governs both routes rather than one.
+	ReactionLimit ReactionLimit `yaml:"reaction_limit,omitempty" json:"reaction_limit,omitempty"`
 }
 
 // AllowsOverMaximum reports whether the invoke pool may exceed its maximum.
@@ -93,38 +101,63 @@ type CombatGainTrigger struct {
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 }
 
-// Reactions configures acting out of turn: what it costs and how often it may
-// be done. There are two routes to it and both are priced here.
+// InvokeActions configures the improvised out-of-turn action: what it costs and
+// when it may interrupt.
 //
-// A freeform reaction is improvised at the table and pays InvokeCost plus
-// EnergyCost. A prebuilt reaction is the Reaction perk type: it was bought with
-// build points, so it pays PrebuiltInvokeCost (normally zero) and only its own
-// perk energy cost. MaxPerRound bounds them together when SharedPerRound is set.
-type Reactions struct {
+// This is the kind you buy in play with an invoke point, as opposed to a
+// Reaction perk built in the perk builder. The two used to share the name
+// "reaction", which made every rules sentence about them ambiguous; an invoke
+// action is now its own named thing and the word "reaction" is reserved for the
+// perk type. How often either may be used lives in ReactionLimit, because that
+// limit covers both.
+type InvokeActions struct {
+	// Name is what the rulebook calls this action. It is configurable so a
+	// ruleset can rename the currency and the action it buys together.
+	Name string `yaml:"name,omitempty" json:"name,omitempty"`
+
 	InvokeCost int `yaml:"invoke_cost,omitempty" json:"invoke_cost,omitempty"`
 	EnergyCost int `yaml:"energy_cost,omitempty" json:"energy_cost,omitempty"`
 
-	// PrebuiltInvokeCost is what a Reaction perk costs in invoke points to
-	// fire. It is normally zero: the invoke point is considered pre-paid by the
-	// build point spent on the perk.
-	PrebuiltInvokeCost int `yaml:"prebuilt_invoke_cost,omitempty" json:"prebuilt_invoke_cost,omitempty"`
-
-	MaxPerRound int `yaml:"max_per_round,omitempty" json:"max_per_round,omitempty"`
-
-	// SharedPerRound reports whether MaxPerRound is a single budget covering
-	// freeform and prebuilt reactions together. It is a pointer so an unset
-	// value defaults to true, which is the limit that keeps a character with
-	// several reaction perks from taking one of each in the same round.
-	SharedPerRound *bool `yaml:"shared_per_round,omitempty" json:"shared_per_round,omitempty"`
-
+	// Timing names when the action may interrupt (e.g. "between_actions").
 	Timing      string `yaml:"timing,omitempty" json:"timing,omitempty"`
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 }
 
-// SharesPerRound reports whether the per-round reaction limit is shared between
-// freeform and prebuilt reactions. Defaults to true when unset.
-func (r Reactions) SharesPerRound() bool {
-	return r.SharedPerRound == nil || *r.SharedPerRound
+// DisplayName returns what to call an invoke action, defaulting to "Invoke
+// Action" so the rulebook never renders a blank label.
+func (a InvokeActions) DisplayName() string {
+	if a.Name != "" {
+		return a.Name
+	}
+	return "Invoke Action"
+}
+
+// ReactionLimit bounds acting out of turn, whichever route was used.
+//
+// It is a separate block from InvokeActions because it is the one rule the two
+// routes genuinely share: without a shared cap, a character with several
+// Reaction perks could take one of each in a round and effectively act as often
+// out of turn as in it.
+type ReactionLimit struct {
+	// MaxPerRound is how many out-of-turn actions are allowed each round.
+	MaxPerRound int `yaml:"max_per_round,omitempty" json:"max_per_round,omitempty"`
+
+	// Shared reports whether MaxPerRound is a single budget covering invoke
+	// actions and Reaction perks together. It is a pointer so an unset value
+	// defaults to true, which is the limit that keeps a reaction-heavy build
+	// from dominating the round.
+	Shared *bool `yaml:"shared,omitempty" json:"shared,omitempty"`
+
+	// PerkInvokeCost is what a Reaction perk costs in invoke points to fire. It
+	// is normally zero: the invoke point is considered pre-paid by the perk
+	// point spent to build it. Raise it if built reactions prove too cheap.
+	PerkInvokeCost int `yaml:"perk_invoke_cost,omitempty" json:"perk_invoke_cost,omitempty"`
+}
+
+// IsShared reports whether the per-round limit is one budget covering invoke
+// actions and Reaction perks together. Defaults to true when unset.
+func (r ReactionLimit) IsShared() bool {
+	return r.Shared == nil || *r.Shared
 }
 
 // Negotiation is the structured social encounter.
@@ -197,20 +230,22 @@ func invokingConfigured(i Invoking) bool {
 		len(i.Gains) > 0 ||
 		i.CombatGains.MaxPerCombat != 0 ||
 		len(i.CombatGains.Triggers) > 0 ||
-		reactionsConfigured(i.Reactions)
+		invokeActionsConfigured(i.InvokeActions) ||
+		reactionLimitConfigured(i.ReactionLimit)
 }
 
-// reactionsConfigured reports whether a reactions block was declared. It cannot
-// be a struct comparison against the zero value because Reactions now holds a
-// pointer field (SharedPerRound), which makes the type non-comparable.
-func reactionsConfigured(r Reactions) bool {
-	return r.InvokeCost != 0 ||
-		r.EnergyCost != 0 ||
-		r.PrebuiltInvokeCost != 0 ||
-		r.MaxPerRound != 0 ||
-		r.SharedPerRound != nil ||
-		r.Timing != "" ||
-		r.Description != ""
+// invokeActionsConfigured reports whether an invoke_actions block was declared.
+func invokeActionsConfigured(a InvokeActions) bool {
+	return a != (InvokeActions{})
+}
+
+// reactionLimitConfigured reports whether a reaction_limit block was declared.
+// It cannot be a struct comparison against the zero value because ReactionLimit
+// holds a pointer field (Shared), which makes the type non-comparable.
+func reactionLimitConfigured(r ReactionLimit) bool {
+	return r.MaxPerRound != 0 ||
+		r.Shared != nil ||
+		r.PerkInvokeCost != 0
 }
 
 // negotiationConfigured reports whether a section file actually declared a

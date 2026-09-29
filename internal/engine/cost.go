@@ -321,14 +321,18 @@ func PerkCost(cfg *config.Config, a model.Perk) Cost {
 		}
 	}
 
-	// A passive's cost is its catalogue entry plus whatever its own fields add.
-	// The entry's flat build cost arrives via the passive_id dropdown option (see
-	// OptionsFor "passives"); the fields are priced here with the same generic
-	// coster every other component uses, so a passive gets free text, numbers,
-	// checkboxes and dropdowns without any passive-specific cost code.
+	// A passive's cost is its catalogue entry's flat build cost plus whatever its
+	// own fields add. Both are charged here because a passive is not a perk type:
+	// it is added from the passive picker rather than built, so there is no
+	// perk-type component above to carry the entry cost on a dropdown option.
+	//
+	// The fields are priced with the same generic coster every other component
+	// uses, so a passive gets free text, numbers, checkboxes and dropdowns
+	// without any passive-specific cost code.
 	//
 	// A passive has no enactments, so the loop below is a no-op for it.
-	if p, ok := cfg.PassiveByID(asString(a.Fields["passive_id"])); ok {
+	if p, ok := cfg.PassiveByID(asString(a.Fields[passiveIDKey])); ok {
+		total.Build += cfg.PassiveFlatCost(p)
 		fc := FieldsCost(cfg, p.Fields, passiveFieldValues(a))
 		total.Build += fc.Build
 		total.Energy += fc.Energy
@@ -402,32 +406,30 @@ func PerkCost(cfg *config.Config, a model.Perk) Cost {
 	// Passives are exempt from the energy floor: they are always on, so there is
 	// no moment at which energy would be paid, and forcing them to 1 would make
 	// every passive look like it had a running cost.
-	if !cfg.AllowsNegativeEnergyCost() && total.Energy < 1 && !isPassive(cfg, a.Type) {
+	if !cfg.AllowsNegativeEnergyCost() && total.Energy < 1 && !isPassive(cfg, a) {
 		total.Energy = 1
 	}
 
 	return total
 }
 
-// isPassive reports whether a perk type is the predefined (passive) kind. It is
-// identified by carrying the passive catalogue dropdown rather than by a
-// hardcoded id, so a ruleset may name the type whatever it likes.
-func isPassive(cfg *config.Config, perkType string) bool {
-	at, ok := cfg.PerkType(perkType)
-	if !ok {
-		return false
-	}
-	for _, f := range at.Fields {
-		if f.OptionsSource == "passives" {
-			return true
-		}
-	}
-	return false
+// isPassive reports whether a perk is a predefined passive. It keys off the
+// catalogue id stored on the perk rather than off its type, because a passive is
+// not a perk type: it is picked from the passive list, so there is no perk-type
+// component to inspect. An id that no longer resolves is still treated as a
+// passive, so removing an entry from the catalogue cannot retroactively saddle a
+// character's passive with an energy cost.
+func isPassive(cfg *config.Config, a model.Perk) bool {
+	return asString(a.Fields[passiveIDKey]) != ""
 }
+
+// passiveIDKey is where a passive's catalogue id is stored on the perk. It is
+// the discriminator that marks a perk as a passive at all.
+const passiveIDKey = "passive_id"
 
 // passiveFieldsKey is where a passive's configured field values are stored on
 // the perk. It is a nested map so the passive's own field keys cannot collide
-// with the perk-type fields around them.
+// with the surrounding perk fields.
 const passiveFieldsKey = "passive_fields"
 
 // passiveFieldValues returns the configured values of a passive perk, or nil

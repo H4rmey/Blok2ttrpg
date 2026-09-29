@@ -400,7 +400,7 @@ Your current and maximum invoke points are shown on the character sheet next to 
 | Spend | Cost | Effect |
 | --- | --- | --- |
 | **Invoke a trait** | 1 invoke point | Bring one of your traits to bear on a roll or a scene. The trait must plausibly apply. The usual effect is a one-step bonus on the dice ladder, but the GM may instead grant a fact, an opening, or an advantage that follows from the trait. |
-| **Invoke a reaction** | 1 invoke point + 1 energy | Take an out-of-turn action in combat. See the reactions block below for the timing and frequency limits. |
+| **Take an invoke action** | 1 invoke point + 1 energy | Act out of turn in combat, improvised on the spot. This is not a Reaction perk: nothing is written on your sheet in advance. See the invoke_actions and reaction_limit blocks below for timing and frequency. |
 | **Reroll a negotiation argument** | 1 invoke point | Reroll a failed argument during a negotiation, no questions asked. The argument still costs the NPC's patience either way. |
 
 When you invoke a trait, you are making a claim about the fiction: *this thing that is true about me matters right now*. The GM may ask you to explain how. If the two of you cannot agree that the trait applies, it does not, and you keep your point.
@@ -434,21 +434,23 @@ No matter how many of these trigger, a character may earn at most **3** invoke p
 
 ---
 
-## Reactions
+## Invoke Actions
 
-A reaction is an action taken out of turn. It is not built in the perk builder and it is not written on your sheet in advance: you describe what you do, pay for it, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw." "I grab the rope as it goes past."
+An **Invoke Action** is an action taken out of turn, bought with an invoke point. It is not built in the perk builder and it is not written on your sheet in advance: you describe what you do, pay for it, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw." "I grab the rope as it goes past."
+
+It is deliberately not called a reaction. A **Reaction** is a perk you built, with a trigger you chose in advance; an Invoke Action is improvised on the spot and paid for in the moment. They do the same job by opposite routes, and the one limit they share is how often you may act out of turn at all.
 
 | Rule | Value |
 | --- | --- |
-| Freeform reaction | 1 invoke point + 1 energy |
-| Prebuilt reaction | Free, plus the perk's own energy cost |
-| Frequency | 1 per round, counting freeform and prebuilt reactions together. Owning several Reaction perks does not let you use more than one in a round |
+| Invoke Action (improvised) | 1 invoke point + 1 energy |
+| Reaction perk (built) | Free, plus the perk's own energy cost |
+| Frequency | 1 per round, counting invoke actions and Reaction perks together. Owning several Reaction perks does not let you act out of turn more than once in a round |
 | Timing | Between actions. A reaction resolves before or after a whole action, never in the middle of one, so it cannot undo a roll that has already been made. |
-| What it is | An out-of-order action. A freeform reaction is improvised: describe what you do, pay the invoke point and the energy, and the GM resolves it like any other action. A prebuilt reaction is a Reaction perk on your sheet with a trigger and a trigger range chosen in advance; it costs no invoke point, only its own energy cost. |
+| What it is | An action taken out of turn, improvised on the spot. Describe what you do, pay the invoke point and the energy, and the GM resolves it like any other action. Nothing is written on your sheet in advance. |
 
-Because a reaction resolves between actions rather than inside one, it is a way to *pre-empt* something, not to undo it. You can throw yourself in front of an arrow before it is loosed; you cannot wait to see the damage roll and then decide to have blocked it.
+Because an Invoke Action resolves between actions rather than inside one, it is a way to *pre-empt* something, not to undo it. You can throw yourself in front of an arrow before it is loosed; you cannot wait to see the damage roll and then decide to have blocked it.
 
-The once-per-round limit is what keeps a wealthy character from simply taking over an enemy's turn. It also means the interesting question is not whether to react but *when*: spending your reaction on the first threat you see means having nothing left for the worse one behind it.
+The once-per-round limit is what keeps a wealthy character from simply taking over an enemy's turn. It also means the interesting question is not whether to act but *when*: spending it on the first threat you see means having nothing left for the worse one behind it.
 
 ---
 
@@ -473,27 +475,27 @@ Rolling for initiative is done by rolling your perception + movement. PC's go be
 
 On your turn you get three actions. By default you have 3 of actions. How much actions an perk costs can may differ. 
 
-### Reactions
+### Acting out of turn
 
-Your actions are spent on your turn, but a **Reaction** lets you act out of turn. There are two ways to do it.
+Your actions are spent on your turn, but there are two ways to act outside it. They are different things with different names, and the distinction matters.
 
-A **freeform** reaction is improvised: it is not built in advance and not listed on your sheet, you simply describe what you do and pay an invoke point and the energy for it.
+An **Invoke Action** is improvised. It is not built in advance and not listed on your sheet: you describe what you do, pay an invoke point and the energy, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw."
 
-A **prebuilt** reaction is a perk of the Reaction type, sitting on your sheet with a trigger chosen in advance. It costs no invoke point, because you already paid for it with a perk point when you built it.
+A **Reaction** is a perk of the Reaction type, sitting on your sheet with a trigger chosen in advance. It fires on its own when that trigger happens, and it costs no invoke point, because you already paid for it with a perk point when you built it.
 
-Either way you get one reaction per round, not one of each.
+Either way you act out of turn once per round, not once of each.
 
 | Rule | Value |
 | --- | --- |
-| Freeform reaction | 1 invoke point + 1 energy |
-| Prebuilt reaction | Free, plus the perk's own energy cost |
-| Frequency | 1 per round, counting freeform and prebuilt reactions together. Owning several Reaction perks does not let you use more than one in a round |
+| Invoke Action (improvised) | 1 invoke point + 1 energy |
+| Reaction perk (built) | Free, plus the perk's own energy cost |
+| Frequency | 1 per round, counting invoke actions and Reaction perks together. Owning several Reaction perks does not let you act out of turn more than once in a round |
 | Timing | Between actions. A reaction resolves before or after a whole action, never in the middle of one, so it cannot undo a roll that has already been made. |
-| What it is | An out-of-order action. A freeform reaction is improvised: describe what you do, pay the invoke point and the energy, and the GM resolves it like any other action. A prebuilt reaction is a Reaction perk on your sheet with a trigger and a trigger range chosen in advance; it costs no invoke point, only its own energy cost. |
+| What it is | An action taken out of turn, improvised on the spot. Describe what you do, pay the invoke point and the energy, and the GM resolves it like any other action. Nothing is written on your sheet in advance. |
 
 #### Reaction Triggers
 
-A prebuilt reaction is a perk of the Reaction type. You pick its trigger and its
+A Reaction is a perk of the Reaction type. You pick its trigger and its
 trigger range when you build it, and it fires on its own when that trigger
 happens. The trigger range is the distance from you at which the trigger may
 occur; it is independent of how far the reaction's own enactments reach, so a
@@ -518,7 +520,7 @@ Reaction type's own cost.
 | **Someone within range takes damage** | +2 points | Near-unconditional in any real fight. |
 | **Someone within range uses a perk** | +2 points | The counterspell trigger. Near-unconditional once more than one creature is acting. |
 
-The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own perks, so a character who reacts every round has less left to spend when their turn comes around.
+The invoke point cost is what makes an Invoke Action a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means acting out of turn competes with your own perks, so a character who does it every round has less left to spend when their turn comes around.
 
 ### Movement
 
@@ -532,6 +534,25 @@ Energy is the resource that using Perks spends. Each Enactment in an Perk costs 
 Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Skill, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
 
 Energy does not come back on its own. On a rest you regain **5 Energy**. That is deliberately less than a single fight consumes, so Energy is a resource to be managed across a whole day rather than reset between encounters. The GM may grant more for an especially long or comfortable rest.
+
+| Rule | Value |
+| --- | --- |
+| Cost to use a perk | Its own Energy cost, which is 1 per enactment before any options. |
+| Regained on a rest | 5 Energy. Energy never returns on its own. |
+| Running out | You may still use the perk. Pay for the Energy you are missing out of your own HP, or cut the perk short. |
+| Overdraft rate | 3 HP per point of missing Energy. |
+| Partial execution | Permitted. Instead of paying HP, drop the enactments you cannot afford: the fireball still burns, it just no longer explodes. |
+| Also applies | The **Fatigued** condition: Energy cost of perks is increased by 1. |
+
+#### Running out of Energy
+
+Being empty is not a wall. You may still use a Perk you cannot pay for, but you pay for it some other way: out of your own body, or by cutting the Perk short.
+
+**Pay in blood.** Take damage for the Energy you are missing, at the rate in the table above. This is deliberately expensive. Health and Energy grow at the same rate as you level, so a cheap exchange rate would make your health bar into a second Energy bar and Energy would stop being a resource at all. At the current rate one extra full round costs most of a starting character's health, which is exactly what it should feel like to push past your limit.
+
+**Or cut it short.** Drop the Enactments you cannot afford and resolve the rest. The fireball you cast will still burn someone, but it will not explode on impact any more, because you did not have the Energy for that part. This is usually the better choice, and it is the more interesting one: it degrades the Perk rather than the character.
+
+Either way, pushing past empty leaves a mark. See the table above for the condition it applies, which makes your next Perk cost more, so overdrawing twice in a row is progressively worse without anyone needing to track a counter.
 
 ### Attacking/Healing/Doing
 
@@ -654,9 +675,11 @@ Three traits is a good number: enough that the party has something to find, few 
 
 We separate them into two groups: **Shifting Conditions** and **Fixed Conditions**.
 
-**Shifting Conditions**: Conditions that are flexible in their use. They only **Shift** a collection of Skills up or down by x amount. For example, Blinded, Encumbered, Encouraged or Frightened.
+**Shifting Conditions**: Conditions that **Shift** a collection of Skills up or down. Whoever applies one picks the amount, within the range the Condition allows. Which Skills move is part of the Condition, not a table call: Blinded moves the Skills you need your eyes for, Frightened moves the ones you need your nerve for. For example, Blinded, Encumbered, Encouraged or Frightened.
 
-**Fixed Conditions**: Conditions that impact something other than the Skills, like action economy or character behaviour. For example: When you are Stunned you lose one of your actions. When you are Taunted, you may only attack one preset Target.
+**Fixed Conditions**: Conditions that apply at an amount the rules already decided, so there is nothing to choose when one lands. Most of them impact something other than your Skills - action economy or behaviour - and move no numbers at all: when you are Stunned you lose one of your actions, when you are Taunted you may only attack one preset Target. A few do name Skills and their own amount, because their wording already fixes it: Slowed is always one down on Movement.
+
+**Stacking**: When several Conditions push the same Skill, the Shifts add together. Frightened at -1 twice is -2. That makes piling Conditions onto one Target a real tactic, but it stops at the ends of the proficiency ladder: a Skill already at the bottom cannot be pushed lower, and the extra Shift is simply lost.
 
 When a **Condition** has impact on your **Skills** it always has a value representing **Die Shifts** in your **Skills**. So each Condition shifts x amount of skills in your character a y amount. This can either be temporary or permanent, depending on how the **Condition** was applied and what was discussed with the DM.
 
@@ -671,71 +694,73 @@ When a **Condition** has impact on your **Skills** it always has a value represe
 
 ## Condition List
 
-The following Conditions are available. For Shifting Conditions the affected Skills are up to the DM to decide and depend on the situation.
+The following Conditions are available. The Affects column lists the Skills each one moves; a Condition affecting no Skills changes what you may do rather than what you roll.
 
 ### Shifting Conditions
 
-These conditions raise or lower a collection of skills. The value is a number of die shifts within the range shown; which skills are affected is decided at the table.
+These conditions raise or lower a named set of skills. Whoever applies one picks a number of die shifts from the range shown, and every skill in the Affects column moves by that amount.
 
-| Condition | Shift Range | Effect |
-| --- | --- | --- |
-| **Blinded** | -6 to 0 | Reduces certain skill rolls |
-| **Encumbered** | -6 to 0 | Reduces movement and relevant skills |
-| **Encouraged** | +1 to +6 | Positive skill shifts |
-| **Frightened** | -6 to 0 | Negative skill shifts |
+| Condition | Shift Range | Affects | Effect |
+| --- | --- | --- | --- |
+| **Blinded** | -6 to 0 | general.Perception, general.Stealth, general.Thievery, offense.Precision, defense.Reflex | You cannot see. Shifts down every skill that relies on sight. |
+| **Encumbered** | -6 to 0 | vital.Movement, general.Athletics, general.Stealth, defense.Reflex | You are overloaded. Shifts down movement and anything physical. |
+| **Encouraged** | +1 to +6 | offense.Strength, offense.Precision, general.Intimidate, general.Provoke, general.Performance | You are emboldened. Shifts up your offensive and social skills. |
+| **Frightened** | -6 to 0 | offense.Strength, offense.Precision, general.Intimidate, general.Provoke, general.Performance | You are afraid. Shifts down your offensive and social skills. |
 
 ### Fixed Conditions
 
-These conditions apply a set effect rather than a skill shift.
+These conditions apply at a magnitude the rules already fixed, so there is nothing to choose when one is applied. A dash in the Shift column means the condition changes what a character may do rather than any of their numbers.
 
-| Condition | Effect |
-| --- | --- |
-| **Taunted** | You can only target a preset Target. |
-| **Swayed** | You cannot target a preset Target anymore. |
-| **Untouchable** | You cannot be targeted. |
-| **Ignored** | You cannot be targeted, but you can still get hit. |
-| **Confused** | You indiscriminately target anyone. |
-| **Vengeful** | You can only target the last entity that dealt damage to you. |
-| **Distracted** | If you change your current target to a new one, your rolls will shift one down for that new target. |
-| **Isolated** | You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent. |
-| **Charmed** | You must do what the Charmer says. |
-| **Hypnotized** | You mimic the exact movement and action of the person who hypnotized you on their last turn. |
-| **Stubborn** | You cannot repeat the same action or use the same perk two turns in a row. |
-| **Paranoid** | You refuse help from anyone. |
-| **Insane** | At the start of your turn, roll a die (d4) to determine random behavior. |
-| **Stunned** | You are stunned; you lose one of your actions. |
-| **Paralyzed** | Lose your turn. |
-| **Pacified** | You can no longer attack any Target. |
-| **Enraged** | You can no longer use weapons. |
-| **Disarmed** | You no longer have a weapon. |
-| **Silenced** | You can no longer talk. |
-| **Deafened** | You can no longer listen. |
-| **Stifled** | Your hands are bound; you cannot use items, potions, or consumables from your inventory. |
-| **Staggered** | You can no longer use Reactions or your Preparation is cancelled. |
-| **Prone** | You are knocked on the ground; use one of your actions to get up. |
-| **Anchored** | You can no longer move. |
-| **Restrained** | You can no longer use your hands. |
-| **Slowed** | Movement speed shifted one down. |
-| **Terrified** | You move 1m away from the target (or take 1d4 damage). |
-| **Weakened** | Damaging rolls are shifted one die down. |
-| **Fragile** | Engager that targets you, may shift their damage die by +1. |
-| **Cursed** | Die shifts up are converted to die shifts down. |
-| **Blessed** | Die shifts down are converted to die shifts up. |
-| **Hesitant** | Your Engagement Roll must be rolled twice. |
-| **Broken Gear** | Rolls for this gear are reduced by one die shift. |
-| **Amplified Gear** | Rolls for this gear are upgraded by one die shift. |
-| **Fatigued** | Energy cost of perks is increased by 1. |
-| **Energized** | Energy cost of perks is reduced by 1. |
-| **Delayed** | You move down one in the turn order. |
-| **Hastened** | You move up one in the turn order. |
-| **Echoed** | Whatever action you took last round will be executed automatically next round. |
-| **Dying** | Your HP went below 0; you are out of combat until revived by an ally. |
-| **Doomed** | You will move to Dying in x turns. |
-| **Zombified** | Healing damages instead; Damage heals instead. |
-| **Linked** | You are linked to a Target; what happens to you happens to the linked Target. This links per Skill. |
-| **Incorporeal** | Phase through walls. |
-| **Marked** | Everything that happens to you is buffed or nerfed (pick one). |
-| **Invincible** | You cannot be damaged. |
+| Condition | Shift | Affects | Effect |
+| --- | --- | --- | --- |
+| **Taunted** | - | _no skills_ | You can only target a preset Target. |
+| **Swayed** | - | _no skills_ | You cannot target a preset Target anymore. |
+| **Untouchable** | - | _no skills_ | You cannot be targeted. |
+| **Ignored** | - | _no skills_ | You cannot be targeted, but you can still get hit. |
+| **Confused** | - | _no skills_ | You indiscriminately target anyone. |
+| **Vengeful** | - | _no skills_ | You can only target the last entity that dealt damage to you. |
+| **Distracted** | - | _no skills_ | If you change your current target to a new one, your rolls will shift one down for that new target. |
+| **Isolated** | - | _no skills_ | You cannot target, heal, or buff your allies; you can only interact with yourself or your direct opponent. |
+| **Charmed** | - | _no skills_ | You must do what the Charmer says. |
+| **Hypnotized** | - | _no skills_ | You mimic the exact movement and action of the person who hypnotized you on their last turn. |
+| **Stubborn** | - | _no skills_ | You cannot repeat the same action or use the same perk two turns in a row. |
+| **Paranoid** | - | _no skills_ | You refuse help from anyone. |
+| **Insane** | - | _no skills_ | At the start of your turn, roll a die (d4) to determine random behavior. |
+| **Stunned** | - | _no skills_ | You are stunned; you lose one of your actions. |
+| **Paralyzed** | - | _no skills_ | Lose your turn. |
+| **Pacified** | - | _no skills_ | You can no longer attack any Target. |
+| **Enraged** | - | _no skills_ | You can no longer use weapons. |
+| **Disarmed** | - | _no skills_ | You no longer have a weapon. |
+| **Silenced** | - | _no skills_ | You can no longer talk. |
+| **Deafened** | - | _no skills_ | You can no longer listen. |
+| **Stifled** | - | _no skills_ | Your hands are bound; you cannot use items, potions, or consumables from your inventory. |
+| **Staggered** | - | _no skills_ | You can no longer use Reactions or your Preparation is cancelled. |
+| **Prone** | - | _no skills_ | You are knocked on the ground; use one of your actions to get up. |
+| **Anchored** | - | _no skills_ | You can no longer move. |
+| **Restrained** | - | _no skills_ | You can no longer use your hands. |
+| **Slowed** | -1 | vital.Movement | Movement speed shifted one down. |
+| **Terrified** | - | _no skills_ | You move 1m away from the target (or take 1d4 damage). |
+| **Weakened** | -1 | offense.Strength, offense.Precision, offense.Wisdom, offense.Magic | Damaging rolls are shifted one die down. |
+| **Fragile** | - | _no skills_ | Engager that targets you, may shift their damage die by +1. |
+| **Cursed** | - | _no skills_ | Die shifts up are converted to die shifts down. |
+| **Blessed** | - | _no skills_ | Die shifts down are converted to die shifts up. |
+| **Hesitant** | - | _no skills_ | Your Engagement Roll must be rolled twice. |
+| **Broken Gear** | - | _no skills_ | Rolls for this gear are reduced by one die shift. |
+| **Amplified Gear** | - | _no skills_ | Rolls for this gear are upgraded by one die shift. |
+| **Fatigued** | - | _no skills_ | Energy cost of perks is increased by 1. |
+| **Energized** | - | _no skills_ | Energy cost of perks is reduced by 1. |
+| **Delayed** | - | _no skills_ | You move down one in the turn order. |
+| **Hastened** | - | _no skills_ | You move up one in the turn order. |
+| **Echoed** | - | _no skills_ | Whatever action you took last round will be executed automatically next round. |
+| **Dying** | - | _no skills_ | Your HP went below 0; you are out of combat until revived by an ally. |
+| **Doomed** | - | _no skills_ | You will move to Dying in x turns. |
+| **Zombified** | - | _no skills_ | Healing damages instead; Damage heals instead. |
+| **Linked** | - | _no skills_ | You are linked to a Target; what happens to you happens to the linked Target. This links per Skill. |
+| **Incorporeal** | - | _no skills_ | Phase through walls. |
+| **Marked** | - | _no skills_ | Everything that happens to you is buffed or nerfed (pick one). |
+| **Invincible** | - | _no skills_ | You cannot be damaged. |
+
+Shifts from several conditions on the same skill add together, and the result stops at the ends of the proficiency ladder. Stacking two cheap penalties is therefore a real tactic, but a skill that has already bottomed out cannot be pushed any lower.
 
 # perks
 ## Perks
@@ -840,7 +865,7 @@ energy, because there is no moment at which you use it: it is simply true.
 | --- | --- |
 | Cost to take | 1 perk point, or whatever the entry states, plus whatever its configured parts add |
 | Cost to use | Nothing. A passive is always on, so there is no moment at which energy is paid. |
-| Taking one twice | Not permitted. Each passive may be taken only once, so breadth is the only way to spend more points here. |
+| Taking one twice | Permitted: the same passive may be taken more than once and its effects stack. |
 | Budget | Perk points, the same pool every other perk is bought from. |
 
 ### Configuring a passive
@@ -862,8 +887,10 @@ A passive you cannot use is still a passive you paid for. Silver Tongue is dead
 weight in a campaign with no negotiation; Deep Pockets is dead weight if you
 carry one weapon. Read the list against the game you are actually playing.
 
-You may take each passive only once. Spending more points here means taking more
-different passives, not stacking one.
+You may take the same passive more than once. Each copy is configured separately
+and paid for in full, so taking Resistance twice for two different damage sources
+costs what both would cost on their own. Stacking is a spending choice, not a
+discount.
 
 Nothing you configure is locked in. Change it later and you pay the difference;
 lower it and the points come back. What you cannot do is rebuild a passive: it has
@@ -1906,8 +1933,7 @@ It lies on the **outside of an infinite sphere**, beneath a sky that lies, in a 
 
 The when part of the perk
 
-passive 		--> when the trigger condition is met, at any time 
-reaction 		--> when the trigger condition is met, only once per turn, during combat 
+reaction 		--> when the trigger condition is met, only once per turn, during combat
 preparation 	--> when the trigger condition is met, only once per preperation
 execution 		--> right now
 concentration 	--> after activation & at the start of your turn
@@ -1976,7 +2002,9 @@ The Perk Builder is intentionally **system-agnostic** with regard to flavor. A f
 
 Applying perks has a cost. The first cost is the **Perk Cost** to add the Perk. Each level you gain **Perk Points** that can be spent to create perks.
 
-Then there is the **Energy Cost**. This cost is used to use your perk. Sometimes you do not have enough energy to use your perk. In this system it is allowed to still use your perk, but there is a catch: either you take damage equal to the amount of energy you are missing, or you only partially use your perk. The latter is done by not executing all enactments of the perk. The fireball you cast will still burn someone, but will not explode on impact anymore because you don't have the energy for that.
+Then there is the **Energy Cost**. This is what you pay every time you use the perk, as opposed to the Perk Cost which you pay once when you build it.
+
+Running out of Energy does not stop you using a perk, but it costs you something else instead. That rule belongs to the resource economy rather than the builder, so it lives in [Combat](../../core/combat.md#running-out-of-energy) under "Running out of Energy".
 
 ## Executing Perks
 
@@ -2754,23 +2782,13 @@ Concentration is an Perk Type that allows an effect to persist over multiple rou
 
 ## Reaction
 
-A Reaction is a perk that fires out of turn, when a trigger you picked at build time happens. You do not choose to use it on your turn; you choose the circumstance in advance and it goes off when that circumstance arrives. Only one reaction may be used per round, counting every reaction you own together with any freeform reaction you improvise.
+A Reaction is a perk that fires out of turn, when a trigger you picked at build time happens. You do not choose to use it on your turn; you choose the circumstance in advance and it goes off when that circumstance arrives. You may only act out of turn once per round, counting every Reaction you own together with any Invoke Action you improvise.
 
 **How to build it**
 
 1. **Trigger** - When this reaction goes off. Broader triggers fire more often and therefore cost more build points. Choose one of:
    - An attack against someone within range hits, An attack against someone within range misses, Someone leaves your reach, Someone within range is reduced to 0 HP, Someone enters your range (1 build), Someone within range critically succeeds or critically fails (1 build), Someone within range is attacked (2 build), Someone within range takes damage (2 build), Someone within range uses a perk (2 build)
 2. **Trigger Range** - How far away the trigger may happen, in the same units as an interaction range. 0 means it must happen to you or in your own space. Any whole number from **0 to 10** (starts at 1). Cost: 1 build per meter.
-
-## Passive
-
-A Passive is a perk that is already written for you. Instead of building it out of enactments you pick one from the passive list, which is why a passive can bend a rule the builder cannot express. It is always on and costs no energy. Each passive may be taken only once.
-
-**How to build it**
-
-1. **Passive** - Which predefined passive this is. Its cost and rules text come from the passive list. Choose one of:
-   - Resistance (1 build), Brutal Critical (1 build), Silver Tongue (1 build), Grudge Keeper (1 build), Practiced Hand (1 build), Sure Footed (2 build), Efficient Caster (2 build), Opportunist (4 build), Deep Pockets (1 build), Prepared Mind (1 build), Lingering Touch (2 build)
-2. **Value** - The upgradeable amount of this passive, for entries that have one. Leave at 0 to use the entry's default. Any whole number from **0 to 99** (starts at 0). Cost: Free per step.
 
 # Enactments
 
@@ -3139,7 +3157,7 @@ Perk types, enactments and interactions are all the same underlying shape. Nothi
 | `base_lifetime` | whole number | Starting lifetime in rounds, used by summoned minions. |
 | `base_upkeep_action` | whole number | Actions required each round to sustain the perk. |
 | `base_upkeep_energy` | whole number | Energy required each round to sustain the perk. |
-| `skip_invoke_cost` | true/false (optional) | When true, using this perk type is exempt from the invoke point cost that the equivalent improvised action pays. Set on Reaction: a freeform out-of-turn action costs an invoke point, but a reaction bought with build points does not. |
+| `skip_invoke_cost` | true/false (optional) | When true, using this perk type is exempt from the invoke point cost that the equivalent improvised action pays. Set on Reaction: an improvised invoke action costs an invoke point, but a Reaction perk bought with build points does not. |
 | `default_range` | whole number | Default range of an interaction, in metres. |
 | `default_targets` | whole number | Default number of targets an interaction affects. |
 | `default_radius` | whole number | Default radius of an area interaction, in metres. |
@@ -3230,6 +3248,8 @@ Conditions are a single unified list. An entry is *shiftable* when it declares a
 | `min_shift` | whole number | Lowest shift a shiftable condition may apply. A non-zero min or max shift is what makes a condition shiftable. |
 | `max_shift` | whole number | Highest shift a shiftable condition may apply. |
 | `shift_cost` | `Cost` block | Cost charged per unit of shift applied by a shiftable condition. |
+| `affects_skills` | list of text | The skills this condition moves, as "<group>.<skill>" keys from the skills list. Naming them is what lets a character sheet recolour those skills and read them at their shifted value. Leave it empty for a condition that changes what a character may do rather than what they roll; such a condition asks for no value when applied. Movement may be shifted, HP and Energy may not. |
+| `fixed_shift` | whole number | The shift applied to every skill in affects_skills by a non-shiftable condition, for a condition whose own text already names its magnitude ("shifted one down"). It is ignored for shiftable conditions, which take their magnitude from the value chosen when they are applied. |
 | `selectable` | true/false (optional) | Whether the condition can be purchased in the builder. Defaults to true; set false for states the rules impose rather than ones a player buys. |
 
 ## Cost evaluation

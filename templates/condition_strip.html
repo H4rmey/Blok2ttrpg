@@ -1,0 +1,82 @@
+{{/*
+  The applied-condition strip at the top of the character sheet.
+
+  It sits above Traits and Skills deliberately: a condition changes how the
+  numbers below it are read, so it has to be visible before them. Each row
+  carries only three controls, because at the table a condition is only ever
+  removed, re-valued, or looked up:
+
+    [i] Name  [value]  [X]
+
+  The value dropdown is rendered only when the condition asks for one. A
+  condition that changes what you may do rather than what you roll has no
+  magnitude, so showing a picker there would invite a choice that means nothing.
+*/}}
+{{ define "condition_strip" }}
+{{ $c := .Character }}
+<section class="conditions-strip">
+  <div class="conditions-head">
+    <h2 class="section-heading">Conditions</h2>
+    <button class="btn primary" type="button"
+            hx-get="/conditions/library?character={{ $c.ID }}"
+            hx-target="#condition-modal-body" hx-swap="innerHTML"
+            onclick="openConditionModal()">Apply Condition</button>
+  </div>
+
+  {{ if .Conditions }}
+  <ul class="condition-list">
+    {{ range $i, $row := .Conditions }}
+    <li class="condition{{ if not $row.Known }} condition-unknown{{ end }}">
+      {{/* The hover "i" is plain CSS: no script, and it keeps working on a
+           printed sheet where a click-to-open panel would be blank. */}}
+      <span class="condition-info" tabindex="0" aria-label="What this condition does">
+        i
+        <span class="condition-tip" role="tooltip">
+          <strong>{{ $row.Name }}</strong>
+          {{ if $row.Description }}<span class="condition-tip-text">{{ $row.Description }}</span>{{ end }}
+          {{ if $row.AffectedSkills }}
+          <span class="condition-tip-skills">
+            Affects: {{ joinList $row.AffectedSkills }}
+          </span>
+          {{ else }}
+          <span class="condition-tip-skills">Changes no skill values.</span>
+          {{ end }}
+          {{ if not $row.Known }}
+          <span class="condition-tip-text">This condition is no longer part of the
+            ruleset, so it has no effect. Remove it.</span>
+          {{ end }}
+        </span>
+      </span>
+
+      <span class="condition-name">{{ $row.Name }}</span>
+
+      {{ if $row.NeedsShiftValue }}
+      <select class="condition-shift"
+              name="shift"
+              hx-post="/characters/{{ $c.ID }}/conditions/{{ $i }}/shift">
+        {{ range $row.ShiftOptions }}
+        <option value="{{ . }}" {{ if eq . $row.Shift }}selected{{ end }}>{{ signedInt . }}</option>
+        {{ end }}
+      </select>
+      {{ else if $row.EffectiveShift }}
+      {{/* A fixed condition still shows its magnitude, as text rather than a
+           control, so the sheet explains the colour it caused. */}}
+      <span class="condition-fixed-shift">{{ signedInt $row.EffectiveShift }}</span>
+      {{ end }}
+
+      <button class="btn danger condition-remove" type="button"
+              hx-delete="/characters/{{ $c.ID }}/conditions/{{ $i }}"
+              aria-label="Remove {{ $row.Name }}">X</button>
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <p class="muted">No conditions applied.</p>
+  {{ end }}
+</section>
+
+<div id="condition-modal" class="modal" hidden>
+  <div class="modal-backdrop" onclick="closeConditionModal()"></div>
+  <div class="modal-content" id="condition-modal-body"></div>
+</div>
+{{ end }}

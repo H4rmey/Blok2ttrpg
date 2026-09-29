@@ -43,13 +43,9 @@
            A passive never costs energy, so only the perk-point chip is shown. */}}
       <div class="perk-cost-chips">
         <span class="perk-chip build{{ if not .Affordable }} over{{ end }}">{{ .Cost }} perk pt</span>
-        {{ if .Configurable }}<span class="perk-chip">configurable</span>{{ end }}
-        {{ if .Taken }}<span class="perk-chip">already taken</span>{{ end }}
       </div>
 
-      {{ if .Taken }}
-      <p class="pkg-blocked">You already have this passive, and a passive may be taken only once.</p>
-      {{ else if not .Affordable }}
+      {{ if not .Affordable }}
       <p class="pkg-blocked">Not enough perk points to take this passive.</p>
       {{ end }}
 

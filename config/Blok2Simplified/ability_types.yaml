@@ -36,19 +36,19 @@ perk_types:
 
   reaction:
     name: "Reaction"
-    information: "A Reaction is a perk that fires out of turn, when a trigger you picked at build time happens. You do not choose to use it on your turn; you choose the circumstance in advance and it goes off when that circumstance arrives. Only one reaction may be used per round, counting every reaction you own together with any freeform reaction you improvise."
+    information: "A Reaction is a perk that fires out of turn, when a trigger you picked at build time happens. You do not choose to use it on your turn; you choose the circumstance in advance and it goes off when that circumstance arrives. You may only act out of turn once per round, counting every Reaction you own together with any Invoke Action you improvise."
     render_information: false
     # A reaction costs one more build point and one more energy than an
     # Execution: acting out of turn is worth a premium, and paying for it in
     # both currencies keeps a character from filling their sheet with them.
     #
-    # Unlike a freeform reaction (see invoking.reactions) a prebuilt reaction
-    # costs no invoke point, because it was already paid for at build time.
+    # Unlike an improvised Invoke Action (see invoking.invoke_actions) a built
+    # Reaction costs no invoke point: it was already paid for at build time.
     base_cost:
       build_cost: 2
       energy_cost: 2
-    # Prebuilt reactions are exempt from the invoke point cost that a freeform
-    # out-of-turn action pays. Read by the documentation and the character
+    # Built Reactions are exempt from the invoke point cost an improvised
+    # Invoke Action pays. Read by the documentation and the character
     # sheet; the cost engine never charges invoke points in the first place.
     skip_invoke_cost: true
     fields:
@@ -75,38 +75,7 @@ perk_types:
           increase: { build_cost: 1 }
           decrease: { build_cost: -1 }
 
-  passive:
-    name: "Passive"
-    information: "A Passive is a perk that is already written for you. Instead of building it out of enactments you pick one from the passive list, which is why a passive can bend a rule the builder cannot express. It is always on and costs no energy. Each passive may be taken only once."
-    render_information: false
-    # A passive costs one perk point and no energy. The real price of a strong
-    # passive lives on the entry itself (passives.yaml), because the entries
-    # differ wildly in power; this is only the floor for taking any of them.
-    #
-    # Note the cost engine adds the selected entry's build cost on top of this
-    # via the passive_id dropdown, so a 1-point entry costs 1 point in total.
-    base_cost:
-      build_cost: 0
-      energy_cost: 0
-    # A passive has no enactments: its effect is the text on the entry. Listing
-    # an empty allowed_enactments hides the enactment dropdown entirely.
-    allowed_enactments: []
-    fields:
-      # The catalogue entry. Options and their costs are generated from
-      # passives.entries, so adding a passive in passives.yaml adds it here.
-      - key: passive_id
-        label: "Passive"
-        type: dropdown
-        options_source: passives
-        information: "Which predefined passive this is. Its cost and rules text come from the passive list."
-      # The upgradeable amount, for entries that carry one. Its cost is charged
-      # per step by the passive engine rather than by this field, because the
-      # per-step price differs per entry.
-      - key: passive_value
-        label: "Value"
-        type: free_number
-        default: 0
-        min: 0
-        max: 99
-        step: 1
-        information: "The upgradeable amount of this passive, for entries that have one. Leave at 0 to use the entry's default."
+# Note: there is deliberately no "passive" perk type. A passive is not something
+# you build out of enactments, so it has no place in the perk builder's type
+# dropdown - it is added with the "Add passive" button and priced from its own
+# catalogue entry in passives.yaml.

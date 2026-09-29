@@ -37,14 +37,14 @@ func conditionsTable(cfg *config.Config) string {
 	var b strings.Builder
 	if len(shiftable) > 0 {
 		b.WriteString("### Shifting Conditions\n\n")
-		b.WriteString("These conditions raise or lower a collection of skills. ")
-		b.WriteString("The value is a number of die shifts within the range shown; ")
-		b.WriteString("which skills are affected is decided at the table.\n\n")
-		b.WriteString("| Condition | Shift Range | Effect |\n")
-		b.WriteString("| --- | --- | --- |\n")
+		b.WriteString("These conditions raise or lower a named set of skills. ")
+		b.WriteString("Whoever applies one picks a number of die shifts from the range shown, ")
+		b.WriteString("and every skill in the Affects column moves by that amount.\n\n")
+		b.WriteString("| Condition | Shift Range | Affects | Effect |\n")
+		b.WriteString("| --- | --- | --- | --- |\n")
 		for _, c := range shiftable {
-			fmt.Fprintf(&b, "| **%s** | %s | %s |\n",
-				orDash(c.Name), shiftRange(c), orDash(c.Description))
+			fmt.Fprintf(&b, "| **%s** | %s | %s | %s |\n",
+				orDash(c.Name), shiftRange(c), affectedSkills(c), orDash(c.Description))
 		}
 	}
 	if len(fixed) > 0 {
@@ -52,15 +52,37 @@ func conditionsTable(cfg *config.Config) string {
 			b.WriteString("\n")
 		}
 		b.WriteString("### Fixed Conditions\n\n")
-		b.WriteString("These conditions apply a set effect rather than a skill shift.\n\n")
-		b.WriteString("| Condition | Effect |\n")
-		b.WriteString("| --- | --- |\n")
+		b.WriteString("These conditions apply at a magnitude the rules already fixed, ")
+		b.WriteString("so there is nothing to choose when one is applied. ")
+		b.WriteString("A dash in the Shift column means the condition changes what a ")
+		b.WriteString("character may do rather than any of their numbers.\n\n")
+		b.WriteString("| Condition | Shift | Affects | Effect |\n")
+		b.WriteString("| --- | --- | --- | --- |\n")
 		for _, c := range fixed {
-			fmt.Fprintf(&b, "| **%s** | %s |\n",
-				orDash(c.Name), orDash(c.Description))
+			shift := "-"
+			if c.ShiftsSkills() {
+				shift = signed(c.FixedShift)
+			}
+			fmt.Fprintf(&b, "| **%s** | %s | %s | %s |\n",
+				orDash(c.Name), shift, affectedSkills(c), orDash(c.Description))
 		}
 	}
+	b.WriteString("\n")
+	b.WriteString("Shifts from several conditions on the same skill add together, and the ")
+	b.WriteString("result stops at the ends of the proficiency ladder. Stacking two cheap ")
+	b.WriteString("penalties is therefore a real tactic, but a skill that has already ")
+	b.WriteString("bottomed out cannot be pushed any lower.\n")
 	return strings.TrimSpace(b.String())
+}
+
+// affectedSkills renders a condition's affected-skill list for the rules table.
+// A condition that names none changes no numbers, which the table states rather
+// than leaving blank: an empty cell reads as missing data.
+func affectedSkills(c config.Condition) string {
+	if !c.ShiftsSkills() {
+		return "_no skills_"
+	}
+	return strings.Join(c.AffectsSkills, ", ")
 }
 
 // shiftRange renders a shiftable condition's shift range as a readable string,

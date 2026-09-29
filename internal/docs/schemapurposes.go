@@ -84,7 +84,7 @@ var schemaPurposes = map[string]map[string]string{
 		"base_lifetime":         "Starting lifetime in rounds, used by summoned minions.",
 		"base_upkeep_action":    "Actions required each round to sustain the perk.",
 		"base_upkeep_energy":    "Energy required each round to sustain the perk.",
-		"skip_invoke_cost":      "When true, using this perk type is exempt from the invoke point cost that the equivalent improvised action pays. Set on Reaction: a freeform out-of-turn action costs an invoke point, but a reaction bought with build points does not.",
+		"skip_invoke_cost":      "When true, using this perk type is exempt from the invoke point cost that the equivalent improvised action pays. Set on Reaction: an improvised invoke action costs an invoke point, but a Reaction perk bought with build points does not.",
 		"default_range":         "Default range of an interaction, in metres.",
 		"default_targets":       "Default number of targets an interaction affects.",
 		"default_radius":        "Default radius of an area interaction, in metres.",
@@ -128,7 +128,8 @@ var schemaPurposes = map[string]map[string]string{
 		"spends":             "The ways an invoke point can be spent.",
 		"gains":              "The ways an invoke point is earned, in and out of combat.",
 		"combat_gains":       "Extra earning triggers that apply only during combat, plus the per-combat cap on them.",
-		"reactions":          "Cost, frequency and timing limits for the out-of-turn action.",
+		"invoke_actions":     "Cost and timing of the improvised out-of-turn action bought with an invoke point.",
+		"reaction_limit":     "How often a character may act out of turn at all, counting invoke actions and Reaction perks together.",
 	},
 
 	"InvokeSpend": {
@@ -160,14 +161,25 @@ var schemaPurposes = map[string]map[string]string{
 		"description":     "What has to happen for the trigger to fire.",
 	},
 
-	"Reactions": {
-		"invoke_cost":          "Invoke points charged to improvise a freeform reaction at the table.",
-		"energy_cost":          "Energy charged to improvise a freeform reaction.",
-		"prebuilt_invoke_cost": "Invoke points charged to fire a prebuilt Reaction perk. Normally zero, because the point is considered pre-paid by the build point spent on the perk.",
-		"max_per_round":        "How many reactions a character may take in one round.",
-		"shared_per_round":     "Whether max_per_round is a single budget covering freeform and prebuilt reactions together. Defaults to true, so owning several Reaction perks does not allow more than one reaction per round.",
-		"timing":               "When a reaction may interrupt: between_actions resolves it before or after a whole action, anytime allows it mid-action.",
-		"description":          "Reader-facing explanation of what a reaction is.",
+	"InvokeActions": {
+		"name":        "What the rulebook calls this action. Defaults to \"Invoke Action\". It is named so the improvised out-of-turn action is never confused with the Reaction perk type.",
+		"invoke_cost": "Invoke points charged to improvise an out-of-turn action at the table.",
+		"energy_cost": "Energy charged to improvise an out-of-turn action.",
+		"timing":      "When an invoke action may interrupt: between_actions resolves it before or after a whole action, anytime allows it mid-action.",
+		"description": "Reader-facing explanation of what an invoke action is, rendered into the rulebook.",
+	},
+
+	"ReactionLimit": {
+		"max_per_round":    "How many times a character may act out of turn in one round, by either route.",
+		"shared":           "Whether max_per_round is a single budget covering invoke actions and Reaction perks together. Defaults to true, so owning several Reaction perks does not allow acting out of turn more than once per round.",
+		"perk_invoke_cost": "Invoke points charged to fire a Reaction perk. Normally zero, because the point is considered pre-paid by the perk point spent to build it.",
+	},
+
+	"EnergyOverdraft": {
+		"hp_per_energy":           "HP paid for each point of missing Energy when using a perk you cannot afford. Keep this well above 1: HP and Energy grow at the same rate per proficiency rung, so a 1:1 rate turns the HP pool into a second Energy pool and Energy stops being a resource.",
+		"escalation_per_use":      "Added to hp_per_energy on each later overdraft in the same scene, the way repeated movement gets progressively more expensive. Zero keeps the rate flat.",
+		"condition_on_overdraft":  "Condition id applied when a character overdraws, or empty for none. Pointing it at a condition that raises energy costs makes the rule self-limiting.",
+		"allow_partial_execution": "Whether a character may instead drop the enactments they cannot pay for. Defaults to true; it degrades the perk rather than the character.",
 	},
 
 	"Negotiation": {
@@ -222,7 +234,14 @@ var schemaPurposes = map[string]map[string]string{
 		"min_shift":   "Lowest shift a shiftable condition may apply. A non-zero min or max shift is what makes a condition shiftable.",
 		"max_shift":   "Highest shift a shiftable condition may apply.",
 		"shift_cost":  "Cost charged per unit of shift applied by a shiftable condition.",
-		"selectable":  "Whether the condition can be purchased in the builder. Defaults to true; set false for states the rules impose rather than ones a player buys.",
+		"affects_skills": "The skills this condition moves, as \"<group>.<skill>\" keys from the skills list. " +
+			"Naming them is what lets a character sheet recolour those skills and read them at their shifted value. " +
+			"Leave it empty for a condition that changes what a character may do rather than what they roll; such a " +
+			"condition asks for no value when applied. Movement may be shifted, HP and Energy may not.",
+		"fixed_shift": "The shift applied to every skill in affects_skills by a non-shiftable condition, for a " +
+			"condition whose own text already names its magnitude (\"shifted one down\"). It is ignored for shiftable " +
+			"conditions, which take their magnitude from the value chosen when they are applied.",
+		"selectable": "Whether the condition can be purchased in the builder. Defaults to true; set false for states the rules impose rather than ones a player buys.",
 	},
 
 	"Validations": {

@@ -38,6 +38,13 @@ var documentedTypes = map[string]reflect.Type{
 	"LevelTable":    reflect.TypeOf(config.LevelTable{}),
 	"Condition":     reflect.TypeOf(config.Condition{}),
 	"Validations":   reflect.TypeOf(config.Validations{}),
+
+	// Play-time rules blocks. These are not build components, but they are
+	// config-driven rules parameters and a ruleset author needs their keys
+	// documented just as much.
+	"InvokeActions":   reflect.TypeOf(config.InvokeActions{}),
+	"ReactionLimit":   reflect.TypeOf(config.ReactionLimit{}),
+	"EnergyOverdraft": reflect.TypeOf(config.EnergyOverdraft{}),
 }
 
 // schemaKey is one yaml key discovered on a documented struct.

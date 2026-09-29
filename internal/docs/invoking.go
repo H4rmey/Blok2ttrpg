@@ -109,55 +109,120 @@ func triggerLimit(t config.CombatGainTrigger) string {
 	}
 }
 
-// reactionRules renders the cost, frequency and timing of acting out of turn.
-// Both routes to it are covered: an improvised freeform reaction, and a prebuilt
-// Reaction perk, which are priced differently but share the per-round limit.
-func reactionRules(cfg *config.Config) string {
+// outOfTurnRules renders the cost, frequency and timing of acting out of turn.
+// Both routes are covered, because the reader needs to compare them: an invoke
+// action bought in play, and a Reaction perk built in advance. They are priced
+// differently but share the per-round limit.
+func outOfTurnRules(cfg *config.Config) string {
 	if cfg == nil {
-		return "_No reaction rules configured._"
+		return "_No out-of-turn rules configured._"
 	}
-	r := cfg.Invoking.Reactions
-	if !reactionsDeclared(r) {
-		return "_No reaction rules configured._"
+	a := cfg.Invoking.InvokeActions
+	lim := cfg.Invoking.ReactionLimit
+	if a == (config.InvokeActions{}) && !reactionLimitDeclared(lim) {
+		return "_No out-of-turn rules configured._"
 	}
 	var b strings.Builder
 	b.WriteString("| Rule | Value |\n")
 	b.WriteString("| --- | --- |\n")
-	fmt.Fprintf(&b, "| Freeform reaction | %s |\n", invokeCostWords(r.InvokeCost, r.EnergyCost))
-	fmt.Fprintf(&b, "| Prebuilt reaction | %s, plus the perk's own energy cost |\n",
-		invokeCostWords(r.PrebuiltInvokeCost, 0))
-	if r.MaxPerRound > 0 {
-		fmt.Fprintf(&b, "| Frequency | %d per round%s |\n", r.MaxPerRound, sharedPhrase(r))
+	fmt.Fprintf(&b, "| %s (improvised) | %s |\n",
+		a.DisplayName(), invokeCostWords(a.InvokeCost, a.EnergyCost))
+	fmt.Fprintf(&b, "| Reaction perk (built) | %s, plus the perk's own energy cost |\n",
+		invokeCostWords(lim.PerkInvokeCost, 0))
+	if lim.MaxPerRound > 0 {
+		fmt.Fprintf(&b, "| Frequency | %d per round%s |\n", lim.MaxPerRound, sharedPhrase(lim, a))
 	}
-	if r.Timing != "" {
-		fmt.Fprintf(&b, "| Timing | %s |\n", timingPhrase(r.Timing))
+	if a.Timing != "" {
+		fmt.Fprintf(&b, "| Timing | %s |\n", timingPhrase(a.Timing))
 	}
-	if r.Description != "" {
-		fmt.Fprintf(&b, "| What it is | %s |\n", oneLine(r.Description))
+	if a.Description != "" {
+		fmt.Fprintf(&b, "| What it is | %s |\n", oneLine(a.Description))
 	}
 	return strings.TrimSpace(b.String())
 }
 
-// reactionsDeclared reports whether a reactions block carries any value. It
-// mirrors the loader's own check and exists because Reactions holds a pointer
-// field, so it cannot be compared against its zero value.
-func reactionsDeclared(r config.Reactions) bool {
-	return r.InvokeCost != 0 ||
-		r.EnergyCost != 0 ||
-		r.PrebuiltInvokeCost != 0 ||
-		r.MaxPerRound != 0 ||
-		r.SharedPerRound != nil ||
-		r.Timing != "" ||
-		r.Description != ""
+// reactionLimitDeclared reports whether a reaction_limit block carries any
+// value. It mirrors the loader's own check and exists because ReactionLimit
+// holds a pointer field, so it cannot be compared against its zero value.
+func reactionLimitDeclared(r config.ReactionLimit) bool {
+	return r.MaxPerRound != 0 ||
+		r.Shared != nil ||
+		r.PerkInvokeCost != 0
 }
 
 // sharedPhrase spells out whether the per-round limit is one budget covering
-// every reaction or a separate allowance per route.
-func sharedPhrase(r config.Reactions) string {
-	if r.SharesPerRound() {
-		return ", counting freeform and prebuilt reactions together. Owning several Reaction perks does not let you use more than one in a round"
+// both routes or a separate allowance for each.
+func sharedPhrase(r config.ReactionLimit, a config.InvokeActions) string {
+	if r.IsShared() {
+		return fmt.Sprintf(", counting %ss and Reaction perks together. Owning several Reaction perks does not let you act out of turn more than once in a round",
+			strings.ToLower(a.DisplayName()))
 	}
-	return ", counted separately for freeform and prebuilt reactions"
+	return fmt.Sprintf(", counted separately for %ss and Reaction perks",
+		strings.ToLower(a.DisplayName()))
+}
+
+// energyRules renders the Energy economy: what a perk costs to use, what a rest
+// gives back, and what happens when a character cannot pay.
+//
+// The overdraft rule used to live as prose in the perk builder introduction,
+// where a player looking up "I am out of Energy" would never find it, and its
+// HP rate was written into the markdown. Reading it from the config means the
+// rate can be retuned without touching a sentence.
+func energyRules(cfg *config.Config) string {
+	if cfg == nil {
+		return "_No energy rules configured._"
+	}
+	var b strings.Builder
+	b.WriteString("| Rule | Value |\n")
+	b.WriteString("| --- | --- |\n")
+	fmt.Fprintf(&b, "| Cost to use a perk | Its own Energy cost, which is 1 per enactment before any options. |\n")
+	if cfg.Combat.EnergyRecoveryPerRest > 0 {
+		fmt.Fprintf(&b, "| Regained on a rest | %d Energy. Energy never returns on its own. |\n",
+			cfg.Combat.EnergyRecoveryPerRest)
+	}
+
+	o := cfg.Combat.EnergyOverdraft
+	if !config.EnergyOverdraftConfigured(o) {
+		fmt.Fprintf(&b, "| Running out | Not configured: a perk you cannot pay for simply cannot be used. |\n")
+		return strings.TrimSpace(b.String())
+	}
+
+	fmt.Fprintf(&b, "| Running out | You may still use the perk. Pay for the Energy you are missing out of your own HP, or cut the perk short. |\n")
+	fmt.Fprintf(&b, "| Overdraft rate | %s |\n", overdraftRateWords(o))
+	if o.AllowsPartialExecution() {
+		fmt.Fprintf(&b, "| Partial execution | Permitted. Instead of paying HP, drop the enactments you cannot afford: the fireball still burns, it just no longer explodes. |\n")
+	} else {
+		fmt.Fprintf(&b, "| Partial execution | Not permitted. The only way to use a perk you cannot pay for is to pay the HP. |\n")
+	}
+	if o.ConditionOnOverdraft != "" {
+		fmt.Fprintf(&b, "| Also applies | %s |\n", overdraftConditionWords(cfg, o.ConditionOnOverdraft))
+	}
+	return strings.TrimSpace(b.String())
+}
+
+// overdraftRateWords states the HP-per-Energy rate, including the escalation
+// when the ruleset makes repeated overdrafts progressively worse.
+func overdraftRateWords(o config.EnergyOverdraft) string {
+	base := fmt.Sprintf("%d HP per point of missing Energy", o.HPPerEnergy)
+	if o.EscalationPerUse == 0 {
+		return base + "."
+	}
+	return fmt.Sprintf("%s the first time in a scene, rising by %d per point on each overdraft after that (%d, then %d, then %d).",
+		base, o.EscalationPerUse,
+		o.OverdraftRateForUse(1), o.OverdraftRateForUse(2), o.OverdraftRateForUse(3))
+}
+
+// overdraftConditionWords names the condition applied on overdraw and quotes
+// what it does, so the reader does not have to look it up.
+func overdraftConditionWords(cfg *config.Config, id string) string {
+	c, ok := cfg.ConditionByID(id)
+	if !ok {
+		return fmt.Sprintf("The **%s** condition.", id)
+	}
+	if c.Description == "" {
+		return fmt.Sprintf("The **%s** condition.", c.Name)
+	}
+	return fmt.Sprintf("The **%s** condition: %s", c.Name, oneLine(c.Description))
 }
 
 // reactionTriggersTable renders the triggers a prebuilt Reaction may be built

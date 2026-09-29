@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Title }}</title>
-  <link rel="stylesheet" href="/static/css/app.css?v=9">
+  <link rel="stylesheet" href="/static/css/app.css?v=10">
 
 
 
@@ -21,15 +21,21 @@
     {{ with .Character }}{{ if .ID }}
     
     {{ end }}{{ end }}
-    <nav>
+    {{/* On narrow screens the links collapse behind this button instead of
+         wrapping into the character name. The theme toggle stays outside the
+         drawer so it is always one tap away. */}}
+    <button id="nav-toggle" class="nav-toggle" type="button"
+            aria-expanded="false" aria-controls="nav-links" aria-label="Menu">&#9776;</button>
+    <nav id="nav-links">
       {{/* The two printable templates are config-driven and take no character,
            so they belong in the banner rather than on a single page: a blank
            sheet or perk worksheet may be wanted from anywhere in the app. */}}
       <a href="/print/character" target="_blank" rel="noopener">Character PDF</a>
       <a href="/print/perk" target="_blank" rel="noopener">Perk Template PDF</a>
       <a href="/docs">Docs</a>
-      <button id="theme-toggle" type="button" title="Toggle theme">&#9788;</button>
+      <a href="/changelog">Changelog</a>
     </nav>
+    <button id="theme-toggle" type="button" title="Toggle theme">&#9788;</button>
   </header>
   {{ if .Breadcrumbs }}
   <nav class="breadcrumbs">
@@ -41,7 +47,7 @@
 
 {{ define "foot" }}
   </main>
-  <script src="/static/js/app.js?v=8"></script>
+  <script src="/static/js/app.js?v=9"></script>
 
 </body>
 </html>

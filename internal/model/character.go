@@ -17,6 +17,19 @@ type Character struct {
 
 	Perks []Perk `json:"perks"`
 
+	// Conditions are the conditions currently applied to the character. They are
+	// play state, not build state: nothing here costs points and nothing here is
+	// written into Skills. The stored proficiency in Skills always remains the
+	// character's own, and a condition's effect is computed as an overlay at
+	// render time (see engine.EffectiveSkills).
+	//
+	// Keeping them separate is what makes removal exact. Writing shifts into
+	// Skills instead would mean a condition applied before a package toggle and
+	// removed after it would subtract from a different baseline than it added
+	// to, silently corrupting the character - the same trap InstalledPackage.
+	// Shifts exists to avoid.
+	Conditions []AppliedCondition `json:"conditions,omitempty"`
+
 	// Packages lists the currently installed content packages. Each records
 	// exactly what it applied (proficiency shifts) so removal is precise and
 	// reversible even when multiple packages stack shifts on the same skill.
@@ -42,6 +55,25 @@ type InstalledPackage struct {
 	// package is disabled its proficiency shifts are reversed and its perks
 	// are removed, but the record is kept so it can be re-enabled later.
 	Enabled bool `json:"enabled"`
+}
+
+// AppliedCondition is one condition currently affecting a character.
+type AppliedCondition struct {
+	// ID is the config condition id.
+	ID string `json:"id"`
+
+	// Shift is the magnitude the player chose, for a condition whose config
+	// declares a shift range. It is ignored for every other condition: a fixed
+	// condition's magnitude comes from its own config, and a condition that
+	// affects no skills has no magnitude at all.
+	Shift int `json:"shift,omitempty"`
+
+	// Note is free text for whatever the rules attach to this instance but the
+	// app does not model: the remaining duration, the solution the perk set, or
+	// which target a Taunt points at. It exists because the alternative is a
+	// table forgetting to clear a condition that never had anywhere to record
+	// when it ends.
+	Note string `json:"note,omitempty"`
 }
 
 // Name returns a display name, falling back to the id.

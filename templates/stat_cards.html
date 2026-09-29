@@ -19,8 +19,15 @@
   <span class="cost-card-value">{{ len .Character.Perks }}</span>
 </div>
 {{ range .Vitals }}
-<div class="cost-card vital-card">
-  <span class="cost-card-label">{{ .Skill }}</span>
+{{/* A vital a condition is shifting is coloured the same way as the skill row
+     further down, and shows the value the player bought struck through beside
+     the new one. Showing only the shifted number would make the card silently
+     disagree with the proficiency dropdown on the sheet. */}}
+<div class="cost-card vital-card{{ if .Down }} vital-shifted-down{{ else if .Up }} vital-shifted-up{{ end }}">
+  <span class="cost-card-label">
+    {{ .Skill }}
+    {{ if .Shifted }}<span class="vital-shift-badge">{{ signedInt .Shift }}</span>{{ end }}
+  </span>
   {{ if and .Editable (not $.ReadOnlyStats) }}
   <span class="cost-card-value vital-editable">
     <input type="number" class="vital-current" name="current_{{ .Key }}"
@@ -34,6 +41,11 @@
   <span class="cost-card-value">{{ .Current }}<span class="vital-sep">/</span>{{ .Max }}</span>
   {{ else }}
   <span class="cost-card-value">{{ .Max }}</span>
+  {{ end }}
+  {{ if .Shifted }}
+  <span class="vital-base" title="The value your proficiency grants, before conditions.">
+    was {{ .Base }}{{ if .Clamped }} (capped){{ end }}
+  </span>
   {{ end }}
 </div>
 {{ end }}

@@ -65,6 +65,10 @@ func (a *App) Router() http.Handler {
 
 	// Package and perk library browsers (built-in content).
 	mux.HandleFunc("/packages/library", a.handlePackageLibrary)
+	// The condition picker behind the character sheet's "Apply Condition"
+	// button. It is character-scoped only through a query parameter, the same
+	// way the package browser is, so the partial stays reusable.
+	mux.HandleFunc("/conditions/library", a.handleConditionLibrary)
 	mux.HandleFunc("/perks/library", a.handlePerkLibrary)
 	// The passive picker and its configure modal. Both share the perk modal on
 	// the perks page, so they are routed alongside the perk library rather than
@@ -75,6 +79,11 @@ func (a *App) Router() http.Handler {
 	// Docs.
 	mux.HandleFunc("/docs", a.handleDocs)
 	mux.HandleFunc("/docs/markdown", a.handleDocsMarkdown)
+
+	// Changelog. Rendered from the repository's CHANGELOG.md so the file and
+	// the in-app page can never drift apart.
+	mux.HandleFunc("/changelog", a.handleChangelog)
+	mux.HandleFunc("/changelog/markdown", a.handleChangelogMarkdown)
 
 	return mux
 }

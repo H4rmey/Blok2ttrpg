@@ -37,8 +37,10 @@ A passive you cannot use is still a passive you paid for. Silver Tongue is dead
 weight in a campaign with no negotiation; Deep Pockets is dead weight if you
 carry one weapon. Read the list against the game you are actually playing.
 
-You may take each passive only once. Spending more points here means taking more
-different passives, not stacking one.
+You may take the same passive more than once. Each copy is configured separately
+and paid for in full, so taking Resistance twice for two different damage sources
+costs what both would cost on their own. Stacking is a spending choice, not a
+discount.
 
 Nothing you configure is locked in. Change it later and you pay the difference;
 lower it and the points come back. What you cannot do is rebuild a passive: it has

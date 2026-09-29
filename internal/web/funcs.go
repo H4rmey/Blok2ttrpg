@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
+	"github.com/harmey/blok2ttrpg-v5/internal/engine"
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
 
@@ -300,6 +301,29 @@ func funcMap() template.FuncMap {
 		// defaults (row_defaults / field defaults up to default_count).
 		"resolveRows": func(f config.Field, values map[string]any) []map[string]any {
 			return resolveRows(f, values)
+		},
+
+		// skillView looks up the post-condition reading of one skill from the
+		// map the page envelope carries. A skill no condition touches still has
+		// an entry, so the template never has to branch on presence.
+		"skillView": func(views map[string]engine.SkillView, group, skill string) engine.SkillView {
+			if views == nil {
+				return engine.SkillView{}
+			}
+			return views[model.SkillKey(group, skill)]
+		},
+		// signedInt renders a shift with an explicit sign, so a badge reads
+		// "-2" / "+2" rather than an ambiguous bare number.
+		"signedInt": func(n int) string {
+			if n > 0 {
+				return fmt.Sprintf("+%d", n)
+			}
+			return strconv.Itoa(n)
+		},
+		// joinList renders a string slice as a comma-separated sentence, used by
+		// the condition tooltip to list the skills it affects.
+		"joinList": func(items []string) string {
+			return strings.Join(items, ", ")
 		},
 	}
 }

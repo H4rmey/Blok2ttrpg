@@ -25,6 +25,9 @@ COPY --from=build /src/templates /app/templates
 COPY --from=build /src/static /app/static
 COPY --from=build /src/docs /app/docs
 COPY --from=build /src/library /app/library
+# The /changelog page renders this file at request time, so it has to ship with
+# the image rather than only existing in the repository.
+COPY --from=build /src/CHANGELOG.md /app/CHANGELOG.md
 
 # Character data is persisted here; mount a volume to keep it across restarts.
 RUN mkdir -p /app/data

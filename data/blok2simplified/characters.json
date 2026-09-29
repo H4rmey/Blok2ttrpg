@@ -45,45 +45,37 @@
     },
     "perks": [
       {
-        "id": "perk-1790607500136581600",
-        "name": "Parting Blow",
-        "description": "They break away, and you make them pay for the step.",
+        "id": "perk-1790682407919-619409457",
+        "name": "asdf",
         "type": "reaction",
-        "tags": [
-          "damage",
-          "melee",
-          "reaction"
-        ],
         "fields": {
-          "action_steps": 0,
-          "comment": "Strike someone who disengages from you.",
-          "energy_steps": 0,
-          "trigger": "moves_out_of_reach",
+          "trigger": "attack_hits",
           "trigger_range": 1
         },
         "enactments": [
           {
-            "type": "damage",
+            "type": "condition",
             "fields": {
-              "comment": "A cut taken on the way past.",
-              "damage_type": [
+              "condition": "blinded",
+              "duration": "1",
+              "solution": [
                 {
-                  "value": "Slashing"
+                  "value": "general.Stealth"
+                },
+                {
+                  "value": "general.Stealth"
                 }
               ],
-              "flat": 0,
-              "source": "offense.Strength"
+              "solution_dc": 2
             },
-            "interaction": "direct",
-            "interaction_data": {
-              "range": "1",
-              "targets": 1
-            },
+            "interaction": "self",
             "validation_data": {
-              "comment": "",
               "counter_skill": [
                 {
                   "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
                 }
               ],
               "engage": "d6"

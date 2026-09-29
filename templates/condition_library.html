@@ -1,0 +1,65 @@
+{{/*
+  The "Apply Condition" picker.
+
+  Conditions are split into two lists rather than one alphabetical roll. The two
+  kinds do different things at the table - one moves your numbers, the other
+  changes what you are allowed to do - and a player looking for "make his attacks
+  worse" should not have to read past twenty targeting restrictions to find it.
+  Each entry states which skills it will move, so the effect is visible before
+  it is applied rather than only after.
+*/}}
+{{ define "condition_library" }}
+<div class="cond-library">
+  <div class="cond-library-head">
+    <h2>Apply Condition</h2>
+    <button class="btn" type="button" onclick="closeConditionModal()">Close</button>
+  </div>
+
+  {{ if .Conditions }}
+  {{ $charID := .CharacterID }}
+
+  <details class="cond-cat" open>
+    <summary class="cond-cat-head">Shifts your skills</summary>
+    <div class="cond-cat-body">
+      {{ range .Conditions }}{{ if .ShiftsSkills }}
+      <div class="cond-card">
+        <div class="cond-card-head">
+          <strong>{{ .Name }}</strong>
+          <form action="/characters/{{ $charID }}/conditions/apply" method="post">
+            <input type="hidden" name="condition_id" value="{{ .ID }}">
+            <button class="btn primary" type="submit">Apply</button>
+          </form>
+        </div>
+        {{ if .Description }}<p class="muted">{{ .Description }}</p>{{ end }}
+        <div class="cond-skills">
+          <span class="cond-label">Affects:</span>
+          {{ range .AffectedSkills }}<span class="cond-skill">{{ . }}</span>{{ end }}
+        </div>
+      </div>
+      {{ end }}{{ end }}
+    </div>
+  </details>
+
+  <details class="cond-cat">
+    <summary class="cond-cat-head">Changes what you can do</summary>
+    <div class="cond-cat-body">
+      {{ range .Conditions }}{{ if not .ShiftsSkills }}
+      <div class="cond-card">
+        <div class="cond-card-head">
+          <strong>{{ .Name }}</strong>
+          <form action="/characters/{{ $charID }}/conditions/apply" method="post">
+            <input type="hidden" name="condition_id" value="{{ .ID }}">
+            <button class="btn primary" type="submit">Apply</button>
+          </form>
+        </div>
+        {{ if .Description }}<p class="muted">{{ .Description }}</p>{{ end }}
+      </div>
+      {{ end }}{{ end }}
+    </div>
+  </details>
+
+  {{ else }}
+  <p class="muted">No conditions are configured.</p>
+  {{ end }}
+</div>
+{{ end }}

@@ -11,21 +11,21 @@ Rolling for initiative is done by rolling your perception + movement. PC's go be
 
 On your turn you get three actions. By default you have {{ .Combat.Actions.Amount }} of actions. How much actions an perk costs can may differ. 
 
-### Reactions
+### Acting out of turn
 
-Your actions are spent on your turn, but a **Reaction** lets you act out of turn. There are two ways to do it.
+Your actions are spent on your turn, but there are two ways to act outside it. They are different things with different names, and the distinction matters.
 
-A **freeform** reaction is improvised: it is not built in advance and not listed on your sheet, you simply describe what you do and pay an invoke point and the energy for it.
+An **Invoke Action** is improvised. It is not built in advance and not listed on your sheet: you describe what you do, pay an invoke point and the energy, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw."
 
-A **prebuilt** reaction is a perk of the Reaction type, sitting on your sheet with a trigger chosen in advance. It costs no invoke point, because you already paid for it with a perk point when you built it.
+A **Reaction** is a perk of the Reaction type, sitting on your sheet with a trigger chosen in advance. It fires on its own when that trigger happens, and it costs no invoke point, because you already paid for it with a perk point when you built it.
 
-Either way you get one reaction per round, not one of each.
+Either way you act out of turn once per round, not once of each.
 
-{{ reactionRules }}
+{{ outOfTurnRules }}
 
 #### Reaction Triggers
 
-A prebuilt reaction is a perk of the Reaction type. You pick its trigger and its
+A Reaction is a perk of the Reaction type. You pick its trigger and its
 trigger range when you build it, and it fires on its own when that trigger
 happens. The trigger range is the distance from you at which the trigger may
 occur; it is independent of how far the reaction's own enactments reach, so a
@@ -40,7 +40,7 @@ Reaction type's own cost.
 
 {{ reactionTriggersTable }}
 
-The invoke point cost is what makes a reaction a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means a reaction competes with your own perks, so a character who reacts every round has less left to spend when their turn comes around.
+The invoke point cost is what makes an Invoke Action a real decision rather than a free bonus turn; see the [Invoking](#invoking) chapter for where those points come from. The energy cost means acting out of turn competes with your own perks, so a character who does it every round has less left to spend when their turn comes around.
 
 ### Movement
 
@@ -54,6 +54,18 @@ Energy is the resource that using Perks spends. Each Enactment in an Perk costs 
 Your maximum Energy comes from the Proficiency tier you bought for the Energy Vital Skill, and it climbs by 3 for every rung of that ladder. Read the column as rounds of sustained play: the bottom rung supports not quite two full turns, while the top supports nine or ten.
 
 Energy does not come back on its own. On a rest you regain **{{ .Combat.EnergyRecoveryPerRest }} Energy**. That is deliberately less than a single fight consumes, so Energy is a resource to be managed across a whole day rather than reset between encounters. The GM may grant more for an especially long or comfortable rest.
+
+{{ energyRules }}
+
+#### Running out of Energy
+
+Being empty is not a wall. You may still use a Perk you cannot pay for, but you pay for it some other way: out of your own body, or by cutting the Perk short.
+
+**Pay in blood.** Take damage for the Energy you are missing, at the rate in the table above. This is deliberately expensive. Health and Energy grow at the same rate as you level, so a cheap exchange rate would make your health bar into a second Energy bar and Energy would stop being a resource at all. At the current rate one extra full round costs most of a starting character's health, which is exactly what it should feel like to push past your limit.
+
+**Or cut it short.** Drop the Enactments you cannot afford and resolve the rest. The fireball you cast will still burn someone, but it will not explode on impact any more, because you did not have the Energy for that part. This is usually the better choice, and it is the more interesting one: it degrades the Perk rather than the character.
+
+Either way, pushing past empty leaves a mark. See the table above for the condition it applies, which makes your next Perk cost more, so overdrawing twice in a row is progressively worse without anyone needing to track a counter.
 
 ### Attacking/Healing/Doing
 

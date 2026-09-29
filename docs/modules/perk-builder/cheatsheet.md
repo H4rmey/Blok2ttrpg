@@ -5,8 +5,7 @@
 
 The when part of the perk
 
-passive 		--> when the trigger condition is met, at any time 
-reaction 		--> when the trigger condition is met, only once per turn, during combat 
+reaction 		--> when the trigger condition is met, only once per turn, during combat
 preparation 	--> when the trigger condition is met, only once per preperation
 execution 		--> right now
 concentration 	--> after activation & at the start of your turn

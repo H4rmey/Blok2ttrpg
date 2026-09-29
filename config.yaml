@@ -1660,7 +1660,6 @@ file_order:
   - ./docs/modules/perk-builder/perk-types/preparation.md
   - ./docs/modules/perk-builder/perk-types/reaction.md
   - ./docs/modules/perk-builder/perk-types/concentration.md
-  - ./docs/modules/perk-builder/perk-types/passive.md
   - ./docs/modules/perk-builder/enactments/amplification.md
   - ./docs/modules/perk-builder/enactments/condition.md
   - ./docs/modules/perk-builder/enactments/damage.md
