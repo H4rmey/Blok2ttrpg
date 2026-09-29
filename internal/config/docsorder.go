@@ -22,9 +22,24 @@ import (
 )
 
 // docsOrderExempt names markdown files under the docs tree that are deliberately
-// not part of the generated rulebook. They are maintainer notes, not chapters.
+// not part of the generated rulebook. Keys are paths relative to the docs
+// directory, using forward slashes.
+//
+// Paths are matched rather than base names so that exempting one chapter cannot
+// silently exempt an unrelated file that happens to share its file name.
 var docsOrderExempt = map[string]bool{
+	// Maintainer notes, not a chapter.
 	"TODO.md": true,
+
+	// Module drafts that are still in progress. They are intentionally kept
+	// out of the generated rulebook until their content is finished; remove
+	// them from this map and add them to file_order to publish them.
+	"modules/magic-system/curses.md":       true,
+	"modules/magic-system/imbuing.md":      true,
+	"modules/magic-system/magic-system.md": true,
+	"modules/skill-trees.md":               true,
+	"modules/world/culture.md":             true,
+	"modules/world/world.md":               true,
 }
 
 // ValidateDocsOrder reports whether file_order and the markdown files under
@@ -109,16 +124,18 @@ func docsOnDisk(docsDir string) ([]string, error) {
 		if strings.ToLower(filepath.Ext(path)) != ".md" {
 			return nil
 		}
-		if docsOrderExempt[d.Name()] {
-			return nil
-		}
 		rel, err := filepath.Rel(docsDir, path)
 		if err != nil {
 			return err
 		}
-		out = append(out, filepath.ToSlash(rel))
+		rel = filepath.ToSlash(rel)
+		if docsOrderExempt[rel] {
+			return nil
+		}
+		out = append(out, rel)
 		return nil
 	})
+
 	if err != nil {
 		return nil, fmt.Errorf("walking %s: %w", docsDir, err)
 	}

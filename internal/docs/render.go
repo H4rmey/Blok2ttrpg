@@ -229,14 +229,8 @@ func funcMap(loaded *config.Loaded, lib PackageLister) template.FuncMap {
 	}
 }
 
-// FuncMapForTest exposes the template helpers for out-of-package verification
-// tools. It is a thin wrapper over the unexported funcMap. The content library
-// is optional: helpers that need it degrade to a placeholder when it is nil.
-func FuncMapForTest(loaded *config.Loaded, lib PackageLister) template.FuncMap {
-	return funcMap(loaded, lib)
-}
-
 // findField returns a field by key from a slice.
+
 func findField(fields []config.Field, key string) (config.Field, bool) {
 	for _, f := range fields {
 		if f.Key == key {
@@ -563,16 +557,4 @@ func RenderMarkdown(loaded *config.Loaded, lib PackageLister) (string, error) {
 		sections = append(sections, strings.TrimSpace(buf.String()))
 	}
 	return strings.Join(sections, "\n\n"), nil
-}
-
-// RenderHTML converts the markdown documentation to an HTML fragment.
-//
-// Conversion is delegated to markdownToHTML so the docs page, the changelog page
-// and this function all emit the same heading ids; see internal/docs/outline.go.
-func RenderHTML(loaded *config.Loaded, lib PackageLister) (string, error) {
-	md, err := RenderMarkdown(loaded, lib)
-	if err != nil {
-		return "", err
-	}
-	return markdownToHTML([]byte(md))
 }

@@ -82,6 +82,41 @@
             }
           }
         ]
+      },
+      {
+        "id": "perk-1790697403619-536369867",
+        "name": "asdf",
+        "type": "execution",
+        "enactments": [
+          {
+            "type": "condition",
+            "fields": {
+              "condition": "blinded",
+              "duration": "1",
+              "solution": [
+                {
+                  "value": "general.Intimidate"
+                },
+                {
+                  "value": "general.Stealth"
+                }
+              ],
+              "solution_dc": 2
+            },
+            "interaction": "self",
+            "validation_data": {
+              "counter_skill": [
+                {
+                  "value": "defense.Reflex"
+                },
+                {
+                  "value": "defense.Constitution"
+                }
+              ],
+              "engage": "defense.Constitution"
+            }
+          }
+        ]
       }
     ]
   }

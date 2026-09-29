@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http"
+	"slices"
 	"strconv"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
@@ -267,18 +268,7 @@ func (a *App) conditionWarning(c *model.Character) string {
 	if len(clamped) == 0 {
 		return ""
 	}
-	sortStrings(clamped)
+	slices.Sort(clamped)
 	return "These skills are already at the end of the proficiency ladder, so the " +
 		"full condition shift could not be applied: " + joinComma(clamped) + "."
-}
-
-// sortStrings sorts in place. It exists so the warning text is stable between
-// renders: map iteration order is random, and an unstable warning looks like the
-// state is changing on its own.
-func sortStrings(s []string) {
-	for i := 1; i < len(s); i++ {
-		for j := i; j > 0 && s[j] < s[j-1]; j-- {
-			s[j], s[j-1] = s[j-1], s[j]
-		}
-	}
 }
