@@ -192,13 +192,13 @@ enactments:
         per_item:
           increase: { build_cost: 0 }
 
-  negation:
-    type: "Enact Negation"
-    information: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
-    render_information: false
-    base_cost:
-      build_cost: 4
-      energy_cost: 0
+  # negation:
+  #   type: "Enact Negation"
+  #   information: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
+  #   render_information: false
+  #   base_cost:
+  #     build_cost: 4
+  #     energy_cost: 0
 
   nerf:
     type: "Enact Nerf"
