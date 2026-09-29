@@ -12,6 +12,15 @@
   --cyan: #22d3ee;
   --radius: 8px;
 
+  /* Height of the sticky site header, and the z-index layer it occupies.
+     Anything else that sticks to the top of the viewport must offset itself by
+     --topbar-h, otherwise it scrolls underneath the header instead of coming to
+     rest below it. Defining it once here keeps those offsets in agreement when
+     the header's padding or font size changes. */
+  --topbar-h: 3.25rem;
+  --z-topbar: 30;
+  --z-sticky: 20;
+
   /* Character bar geometry. The reading column's width is computed from these
      rather than hardcoded, so the bar always fits its cards on one row: change
      a card's size or add a card and the column follows automatically.
@@ -112,7 +121,7 @@ a:hover { text-decoration: underline; }
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: var(--z-topbar);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -148,7 +157,15 @@ a:hover { text-decoration: underline; }
 
 /* Name of the open character, centred in the banner on every page scoped to it.
    It is positioned absolutely so it sits in the true centre of the bar rather
-   than being pushed off-centre by the differing widths of the brand and nav. */
+   than being pushed off-centre by the differing widths of the brand and nav.
+
+   NOTE: nothing currently emits this element. templates/layout.html still has
+   the surrounding "{{ with .Character }}{{ if .ID }}" block and the comment
+   describing the feature, but the span itself is missing, so the name never
+   renders. The styling is kept because the data is available (pageData carries
+   Character, which has a Name method) and the intent is documented in the
+   template: this is an unfinished feature, not dead styling. Restoring it means
+   putting the span back in that block. */
 .topbar .char-name {
   position: absolute;
   left: 50%;
@@ -213,21 +230,6 @@ a:hover { text-decoration: underline; }
   font-size: 0.85rem;
 }
 
-/* The upgrade stepper on a passive card. Inline so the label sits beside its
-   dropdown rather than stacking, which keeps the card compact. */
-.passive-value {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin: 0.4rem 0 0;
-  font-size: 0.85rem;
-}
-
-.passive-value select {
-  width: auto;
-  min-width: 4rem;
-}
-
 /* A passive's rules text. The upgradeable amount is highlighted where it sits in
    the sentence, so it is obvious which number the value control changes and what
    the extra perk points are buying. */
@@ -237,15 +239,6 @@ a:hover { text-decoration: underline; }
   background: color-mix(in srgb, var(--accent) 22%, transparent);
   color: var(--text);
   font-weight: 700;
-}
-
-/* Note that an entry can be improved later. The picker does not offer the choice
-   itself, so this is the only signal that the entry has room to grow. */
-.passive-upgrade-hint {
-  margin: 0.35rem 0 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  font-style: italic;
 }
 
 /* Heads-up that a package's shift would be clamped at an end of the
@@ -331,7 +324,14 @@ legend { padding: 0 0.5rem; font-weight: 700; color: var(--accent); font-size: 1
 
 /* Per-section color themes on the character sheet. Each fieldset gets a
    colored border and a faint tinted background so the sections read as
-   distinct at a glance, reusing the same color-mix pattern as .region-*. */
+   distinct at a glance, reusing the same color-mix pattern as .region-*.
+
+   NOTE: the class names below are built at render time by character.html as
+   "section-{{ $g.ID }}" from the skill group ids in skills.yaml (general,
+   offense, defense, vital). They therefore never appear as literal strings in
+   any template, and a search for ".section-general" finds only this file. They
+   are live styling: do not remove them as unused. Adding a skill group to the
+   config means adding a matching rule here. */
 .section-traits {
   border-color: var(--warn);
   border-left: 3px solid var(--warn);
@@ -448,8 +448,9 @@ textarea { min-height: 5rem; resize: vertical; }
 /* Builder header with the live cost cards, matching the original layout. */
 .builder-head {
   position: sticky;
-  top: 0;
-  z-index: 20;
+  /* Comes to rest below the sticky site header rather than sliding under it. */
+  top: var(--topbar-h);
+  z-index: var(--z-sticky);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -472,8 +473,9 @@ textarea { min-height: 5rem; resize: vertical; }
    its height fixed at one row on any window, which matters most on a phone. */
 .stats-bar {
   position: sticky;
-  top: 0;
-  z-index: 20;
+  /* Comes to rest below the sticky site header rather than sliding under it. */
+  top: var(--topbar-h);
+  z-index: var(--z-sticky);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -618,8 +620,6 @@ textarea { min-height: 5rem; resize: vertical; }
 .cost-warning { color: var(--danger); font-size: 0.85rem; font-weight: 600; align-self: center; }
 
 
-.card-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
-
 /* The perk list. list-style is cleared so no bullet appears in front of a perk,
    and the gap gives the cards room to read as separate items. */
 .card-grid {
@@ -671,13 +671,6 @@ textarea { min-height: 5rem; resize: vertical; }
 .kv { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; }
 .kv dt { color: var(--muted); }
 .kv dd { margin: 0; }
-.perk-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.75rem 1rem;
-  margin: 0.75rem 0;
-}
-.pdf-toolbar { padding: 1rem 1.25rem; }
 
 /* Enactment collapsible regions */
 .enactment { border-color: var(--accent-strong); }
@@ -1393,8 +1386,8 @@ dialog .toolbar {
 .doc-sidebar {
   position: sticky;
   /* Clears the sticky top bar. */
-  top: 3.5rem;
-  max-height: calc(100vh - 4.5rem);
+  top: var(--topbar-h);
+  max-height: calc(100vh - var(--topbar-h) - 1rem);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -1573,7 +1566,7 @@ h4:hover > .heading-anchor,
 /* Anchored headings must not land underneath the sticky top bar. */
 .doc-body h2,
 .doc-body h3,
-.doc-body h4 { scroll-margin-top: 4.5rem; }
+.doc-body h4 { scroll-margin-top: calc(var(--topbar-h) + 1rem); }
 
 .back-to-top {
   position: fixed;
@@ -1603,6 +1596,13 @@ h4:hover > .heading-anchor,
    controls however many links are added later.
    --------------------------------------------------------------------------- */
 @media (max-width: 720px) {
+  /* The header is taller here because the character name is taken out of the
+     absolutely-centred position and given its own row below the brand. Every
+     sticky element offsets itself by --topbar-h, so raising it once here keeps
+     the character bar and the contents column clear of the header instead of
+     each needing its own override. */
+  :root { --topbar-h: 5.5rem; }
+
   .topbar {
     flex-wrap: wrap;
     row-gap: 0.5rem;

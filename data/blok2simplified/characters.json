@@ -45,12 +45,11 @@
     },
     "perks": [
       {
-        "id": "perk-1790682407919-619409457",
-        "name": "asdf",
-        "type": "reaction",
+        "id": "perk-1790706557366-851451515",
+        "name": "test",
+        "type": "concentration",
         "fields": {
-          "trigger": "attack_hits",
-          "trigger_range": 1
+          "upkeep_cost": "1 Action or 1 Energy"
         },
         "enactments": [
           {
@@ -84,40 +83,96 @@
         ]
       },
       {
-        "id": "perk-1790697403619-536369867",
-        "name": "asdf",
-        "type": "execution",
-        "enactments": [
-          {
-            "type": "condition",
-            "fields": {
-              "condition": "blinded",
-              "duration": "1",
-              "solution": [
-                {
-                  "value": "general.Intimidate"
-                },
-                {
-                  "value": "general.Stealth"
-                }
-              ],
-              "solution_dc": 2
-            },
-            "interaction": "self",
-            "validation_data": {
-              "counter_skill": [
-                {
-                  "value": "defense.Reflex"
-                },
-                {
-                  "value": "defense.Constitution"
-                }
-              ],
-              "engage": "defense.Constitution"
-            }
-          }
-        ]
+        "id": "perk-1790706599254663200",
+        "name": "Resistance",
+        "description": "You are resistant to fire. When you take damage from fire, reduce that damage by 1. Applies to every source instead: no. Fully immune: no.",
+        "type": "passive",
+        "fields": {
+          "passive_fields": {
+            "amount": 1,
+            "immune": false,
+            "source": "fire",
+            "untyped": false
+          },
+          "passive_id": "resistance"
+        }
+      },
+      {
+        "id": "perk-1790706603927237500",
+        "name": "Arcane Focus",
+        "description": "A sustained channeling of magical energy that empowers your spells.",
+        "type": "concentration",
+        "tags": [
+          "spell",
+          "buff",
+          "concentration"
+        ],
+        "fields": {
+          "action_steps": 0,
+          "comment": "Maintain focus each round to keep the magic flowing.",
+          "energy_steps": 0,
+          "upkeep_cost": "1 Action or 1 Energy"
+        }
+      }
+    ],
+    "conditions": [
+      {
+        "id": "blinded",
+        "shift": -1
+      },
+      {
+        "id": "encouraged",
+        "shift": 1
+      },
+      {
+        "id": "slowed"
       }
     ]
+  },
+  "char-1790706623170921000": {
+    "id": "char-1790706623170921000",
+    "level": 10,
+    "traits": {
+      "age": "",
+      "current_energy": "8",
+      "current_hp": "10",
+      "current_invoke": "3",
+      "description": "",
+      "motivation": "",
+      "name": "test",
+      "problem": "",
+      "trait_1": "",
+      "trait_2": "",
+      "trait_3": ""
+    },
+    "skills": {
+      "defense.Constitution": "untrained",
+      "defense.Magic": "untrained",
+      "defense.Reflex": "untrained",
+      "defense.Wisdom": "untrained",
+      "general.Athletics": "untrained",
+      "general.Crafting": "untrained",
+      "general.Deceive": "untrained",
+      "general.Intimidate": "untrained",
+      "general.Knowledge": "untrained",
+      "general.Magic": "untrained",
+      "general.Medicine": "untrained",
+      "general.Nature": "untrained",
+      "general.People Skill": "untrained",
+      "general.Perception": "untrained",
+      "general.Performance": "untrained",
+      "general.Provoke": "untrained",
+      "general.Resources": "untrained",
+      "general.Stealth": "untrained",
+      "general.Thievery": "untrained",
+      "offense.Magic": "untrained",
+      "offense.Precision": "untrained",
+      "offense.Strength": "untrained",
+      "offense.Wisdom": "untrained",
+      "vital.Energy": "untrained",
+      "vital.HP": "untrained",
+      "vital.Movement": "untrained"
+    },
+    "perks": []
   }
 }

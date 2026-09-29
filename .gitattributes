@@ -1,0 +1,40 @@
+# Normalize line endings in the repository.
+#
+# This repo is developed on Windows, where core.autocrlf=true was checking Go
+# sources out with CRLF. gofmt requires LF, so `gofmt -l .` reported every such
+# file as unformatted even when its content was already correct, which made the
+# formatting gate useless. Pinning eol=lf keeps working copies LF on all
+# platforms so gofmt stays authoritative.
+
+# Default: let Git detect text and normalize to LF in the index.
+* text=auto eol=lf
+
+# Go toolchain files must be LF.
+*.go    text eol=lf
+go.mod  text eol=lf
+go.sum  text eol=lf
+
+# Web assets and content served or parsed by the app.
+*.html  text eol=lf
+*.css   text eol=lf
+*.js    text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+
+# Shell scripts break if checked out with CRLF.
+*.sh        text eol=lf
+Dockerfile  text eol=lf
+
+# Binary content Git must not touch.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
