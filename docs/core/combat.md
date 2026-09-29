@@ -13,13 +13,15 @@ On your turn you get three actions. By default you have {{ .Combat.Actions.Amoun
 
 ### Acting out of turn
 
-Your actions are spent on your turn, but there are two ways to act outside it. They are different things with different names, and the distinction matters.
+Your actions are spent on your turn, but there are three ways to act outside it. They are different things with different names, and the distinction matters.
+
+A **Prepared Action** is declared. You spend one of your actions on your turn to say what will set it off and what you will do, and it waits until then. It costs nothing but that action; if the trigger never comes, the action is wasted. See [Preparing an Action](#preparing-an-action).
 
 An **Invoke Action** is improvised. It is not built in advance and not listed on your sheet: you describe what you do, pay an invoke point and the energy, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw."
 
 A **Reaction** is a perk of the Reaction type, sitting on your sheet with a trigger chosen in advance. It fires on its own when that trigger happens, and it costs no invoke point, because you already paid for it with a perk point when you built it.
 
-Either way you act out of turn once per round, not once of each.
+Whichever route you take, you act out of turn once per round, not once of each.
 
 {{ outOfTurnRules }}
 

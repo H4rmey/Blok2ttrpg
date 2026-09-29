@@ -49,7 +49,9 @@ A long fight can run a pool dry, so combat has a few extra taps:
 
 An **Invoke Action** is an action taken out of turn, bought with an invoke point. It is not built in the perk builder and it is not written on your sheet in advance: you describe what you do, pay for it, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw." "I grab the rope as it goes past."
 
-It is deliberately not called a reaction. A **Reaction** is a perk you built, with a trigger you chose in advance; an Invoke Action is improvised on the spot and paid for in the moment. They do the same job by opposite routes, and the one limit they share is how often you may act out of turn at all.
+It is deliberately not called a reaction. A **Reaction** is a perk you built, with a trigger you chose in advance; an Invoke Action is improvised on the spot and paid for in the moment. There is a third route as well: a **Prepared Action**, where you spend one of your own actions to declare a trigger and wait for it (see [Preparing an Action](#preparing-an-action)). All three do the same job in different currencies, and the one limit they share is how often you may act out of turn at all.
+
+Prepare when you can see it coming and are willing to give up an action. Invoke when you did not see it coming and have a point to spare.
 
 {{ outOfTurnRules }}
 

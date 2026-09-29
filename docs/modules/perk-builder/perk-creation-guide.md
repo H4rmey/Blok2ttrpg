@@ -1,5 +1,4 @@
-# Perk Creation Guide
-
+# perk-creation-guide
 ## Perk Creation Guide
 
 So you've read the docs and now you're staring at the Perk Builder thinking:
@@ -8,729 +7,263 @@ So you've read the docs and now you're staring at the Perk Builder thinking:
 
 Yeah, that's fair.
 
-The Builder is intentionally mechanical and flavorless. It doesn't care if you're casting a fireball, performing a monk punch, firing a laser cannon, throwing an angry goose, or summoning a giant rubber duck.
+The Builder is deliberately mechanical and flavourless. It does not care whether you are casting a fireball, throwing a punch, firing a laser, or summoning a giant rubber duck. A sword slash and a laser beam can be the exact same perk mechanically.
 
-What matters is:
+What it does care about is four questions:
 
-- What happens? (**Enactments**)
-- Who does it happen to? (**Interactions**)
-- How do we determine success? (**Validations**)
-- When does it happen? (**Perk Type**)
+- **What happens?** - the Enactments
+- **Who does it happen to?** - each Enactment's Interaction
+- **How do we find out if it worked?** - each Enactment's Validation
+- **When does it happen?** - the Perk Type
 
-Everything else is flavor.
-
-A sword slash and a laser beam can easily be the exact same Perk mechanically.
+Everything else is flavour, and flavour is free.
 
 ---
 
-### Step 1 - Pick an Perk Type
+## Step 1 - Pick a Perk Type
 
-Most people should start with **Execution**.
+The Perk Type is *timing*, and nothing else. There are three.
 
-Execution simply means:
+| Perk Type | What it really means |
+|---|---|
+| Execution | I want this to happen now |
+| Concentration | I want this to keep happening while I hold it |
+| Reaction | I want this to happen when a specific thing occurs |
 
-> I want thing happen now.
+**Start with Execution.** It is the plain "thing happens now" type and it covers the large majority of perks: a strike, a bolt, a heal, a shove, a knockdown.
 
-Examples:
+Reach for the other two only when you specifically want their timing:
 
-- Fireball
-- Sword Slash
-- Healing Touch
-- Stunning Strike
-- Dash Attack
-- Throw Rock
+- **Concentration** costs an action to start and then an upkeep every round to keep going. Use it for effects that should persist because you are actively maintaining them, and accept that you are paying for them every round.
+- **Reaction** fires out of turn, on a trigger you choose when you build it. It costs more build points *and* more energy than an Execution, because acting out of turn is worth a premium.
 
-Only use the other Perk Types when you specifically want special timing or behavior.
+Two things that are **not** perk types, despite what you might expect:
 
-| Perk Type | What It Really Means |
-|-------------|----------------------|
-| Execution | Do thing now |
-| Reaction | Do thing when something happens |
-| Preparation | Spend actions now, trigger later |
-| Concentration | Keep doing thing every round |
-| Phase | Gain something now, pay for it later |
-| Passive | Always on, free to use, triggers whenever |
-| Minion | Create another dude |
+- **Passives** are not built here. A passive is always on and is not made of enactments, so it has no entry in the type dropdown - you add one with the "Add passive" button and it is priced from the passive catalogue.
+- **Preparing an action** is not a perk type either. It is a thing every character can do in play: spend an action to declare a trigger and hold a perk ready. See the [Preparing an Action](#preparing-an-action) chapter. It means you do not need to build a Reaction just to use something out of turn once.
 
 ---
 
-### Step 2 - Pick the Main Enactment
+## Step 2 - Pick your main Enactment
 
-This is the actual effect.
-
-Ask yourself:
-
-> What should my perk do?
-
-Usually the answer is one of these:
+The Enactment is the actual effect. Ask yourself what the perk should *do*, then find it here:
 
 | Goal | Enactment |
-|--------|--------|
-| Hurt someone | Damage |
-| Heal someone | Healing |
-| Move something | Movement |
-| Apply a condition | State |
-| Buff/Nerf a roll | Proficiency Shift |
-| Create an ongoing effect | Persistent Effect |
-| Block or reduce something | Negation |
+|---|---|
+| Hurt someone | Enact Damage |
+| Restore someone | Enact Healing |
+| Move something or someone | Enact Motion |
+| Apply a condition (prone, stunned, burning...) | Enact Condition |
+| Leave something ticking on the target | Enact Effect |
+| Make a skill better or worse for a while | Enact Modification |
+| Borrow power now and pay it back later | Enact Phase |
+| Cripple yourself on purpose to afford more | Enact Nerf |
+| Stop an effect landing on you or an ally | Enact Negation |
+| Add to somebody else's damage, healing or motion | Enact Adjustment |
 
-Think of Enactments as LEGO blocks.
+Think of Enactments as LEGO blocks. Most perks are one or two of these chained together, and almost every iconic effect from any other system decomposes into this list.
 
-Most perks are simply multiple Enactments chained together.
-
-**Example - Acid Splash**
-
-**D&D**
-
-Throw acid at somebody.
-
-**Builder Version**
+**A basic strike**
 
 ```text
 Execution
-  Damage
-    Ranged Interaction
+  Enact Damage
+    Direct, 1m
 ```
 
-Done.
+Done. That is a whole perk.
 
----
-
-**Example - Stunning Strike**
-
-**D&D**
-
-Punch someone and potentially stun them.
-
-**Builder Version**
+**A knockdown**
 
 ```text
 Execution
-  Damage
-  State(Stunned)
+  Enact Damage
+    Direct, 1m
+  Enact Condition (Prone)
 ```
 
-Damage happens first.
-
-State happens second.
-
-Simple.
+Damage resolves first, then the condition. Two enactments, so two energy.
 
 ---
 
-### Step 3 - Combine Enactments
+## Step 3 - Chain Enactments together
 
-This is where the fun starts.
+This is where it gets fun. Every enactment after the first adds to both the build cost and the energy cost, so a chain is powerful and expensive in equal measure.
 
-Most iconic perks are just multiple Enactments chained together.
-
-**Ice Lance**
-
-Deals damage and slows.
+**Lingering burn** - hit them, then leave them burning.
 
 ```text
 Execution
-  Damage
-  State(Slowed)
+  Enact Damage
+  Enact Effect (Damage, 3 rounds)
 ```
 
----
-
-**Explosive Arrow**
-
-Deals damage and pushes people away.
+**Pull and pin** - drag them to you and hold them there.
 
 ```text
 Execution
-  Damage
-  Movement(Away)
+  Enact Motion (towards, 3m)
+  Enact Condition (Restrained)
 ```
 
----
-
-**Vampiric Touch**
-
-Deals damage and heals the caster.
+**Drain** - hurt them, mend yourself.
 
 ```text
 Execution
-  Damage
-  Healing(Self)
+  Enact Damage
+    Direct
+  Enact Healing
+    Self
 ```
 
----
-
-**Hook Shot**
-
-Pulls an enemy towards you.
+**Blessing** - make an ally better at something for a few rounds.
 
 ```text
 Execution
-  Damage
-  Movement(Towards)
+  Enact Modification (+1, 2 rounds)
+    Direct
 ```
 
----
-
-**Divine Blessing**
-
-Buff an ally's next roll.
+**All-out swing** - weaken your own defence to hit harder.
 
 ```text
 Execution
-  Proficiency Shift(UP)
+  Enact Nerf (own defence, -1)
+  Enact Damage
 ```
+
+Enact Nerf is worth understanding: it targets **only yourself** and it *gives you back* budget. It is how you build something that is genuinely reckless rather than merely expensive.
 
 ---
 
-**Poison Blade**
+### How a chain resolves
 
-Deals damage and applies poison.
+Each enactment is resolved in order, and each one goes through the same three steps:
+
+1. **Interaction** - who is affected?
+2. **Validation** - does it land on them?
+3. **Enactment** - apply the effect.
+
+So a two-enactment perk makes its own roll for each part. The damage can land and the condition can still be shrugged off, because they were validated separately.
+
+### Targets flow down the chain
+
+By default, every enactment after the first hits **the same target as the one before it**. That is almost always what you want: the creature you hit is the creature you knock down.
+
+When it is not, tick **"this enactment has a different target than the enactment before it"**. That enactment then gets its own Interaction and Validation, and costs accordingly. This is how you build "damage them, heal me" - the healing needs its own target, so it needs its own interaction.
+
+The rule of thumb: **if the whole perk happens to one creature, leave the box alone.** Every extra target you introduce is another roll and another chunk of your budget.
+
+---
+
+## Step 4 - Choose your Interaction
+
+The Interaction answers *who*. There are three, and they are priced by how much reach and how many bodies they cover.
+
+| Interaction | Use it for |
+|---|---|
+| Self | Anything that only affects you |
+| Direct | One or more specific creatures, at a chosen range |
+| Zone | An area, with a radius and a range, optionally lasting rounds |
+
+Two things that cost real points and are easy to overspend on:
+
+- **Range.** 1m is free. 5m, 25m and 50m each cost more. Buy the range you will actually use - a melee perk does not need 25m "just in case".
+- **Targets and radius.** Each extra target on a Direct interaction, and each extra metre of Zone radius, is a significant addition. A 6m-radius blast is a very expensive perk, and it should be.
+
+A Zone can also have a **duration**, which is how you build a lingering hazard: a patch of ground that keeps affecting whoever stands in it, rather than a one-off explosion.
+
+---
+
+## Step 5 - Timing in practice
+
+The effect does not determine the Perk Type. The *timing* does. The same Enact Damage is a different perk depending on when it goes off.
+
+**A thrown bomb** - now, in an area.
 
 ```text
 Execution
-  Damage
-  Persistent Effect
-    Damage
+  Enact Damage
+    Zone, radius 2, range 5
 ```
 
----
-
-### Understanding Enactment Chains
-
-By default, Enactments are executed in order.
-
-If an Enactment fails its Validation, the chain stops.
-
-**Example**
-
-```text
-Execution
-  Damage
-  State(Stunned)
-  Movement(Away)
-```
-
-Suppose the Damage Enactment fails.
-
-Result:
-
-```text
-Damage    -> Failed
-State     -> Not Executed
-Movement  -> Not Executed
-```
-
-The chain ends.
-
----
-
-### Understanding "Will Always Resolve"
-
-A common misunderstanding is:
-
-> Will Always Resolve = Automatically Hits
-
-That is **not** how it works.
-
-Validation still happens normally.
-
-Counter Rolls still happen normally.
-
-The target can still resist the effect.
-
-The only thing this perk changes is:
-
-> The Enactment is processed even if previous Enactments failed.
-
-**Example**
-
-```text
-Execution
-  Damage
-  State(Stunned)
-    Will Always Resolve
-```
-
-Suppose Damage fails.
-
-Normally the chain would end.
-
-Instead:
-
-```text
-Damage -> Failed
-State  -> Still Executed
-```
-
-The State still attempts to resolve.
-
-Its own Validation still happens.
-
-The target can still resist it.
-
-The perk only ignores failures from earlier Enactments.
-
----
-
-**Example - Stunning Strike**
-
-```text
-Execution
-  Damage
-  State(Stunned)
-    Will Always Resolve
-```
-
-The punch can fail.
-
-The stun attempt still occurs.
-
----
-
-**Example - Lingering Acid**
-
-```text
-Execution
-  Damage
-
-  Persistent Effect
-    Damage
-    Will Always Resolve
-```
-
-Even if the direct acid splash doesn't land, the acid pool may still be created.
-
----
-
-### Design Philosophy
-
-**Without Always Resolve**
-
-```text
-Damage
-  ↓
-State
-  ↓
-Movement
-```
-
-Failure stops the chain.
-
----
-
-**With Always Resolve**
-
-```text
-Damage -> Failed
-
-State -> Still Executed
-
-Movement -> Still Executed
-```
-
-This allows utility effects to continue even when earlier effects fail.
-
----
-
-### Examples From Other Systems
-
-**Magic Missile**
-
-**D&D**
-
-Automatically damages a target.
-
-**Builder Version**
-
-```text
-Execution
-  Damage
-    Reliable Validation
-```
-
----
-
-**Fireball**
-
-**D&D**
-
-Explosion at range.
-
-**Builder Version**
-
-```text
-Execution
-  Damage
-    Area Interaction
-```
-
----
-
-**Thunderwave**
-
-**D&D**
-
-Deals damage and pushes.
-
-**Builder Version**
-
-```text
-Execution
-  Damage
-  Movement(Away)
-```
-
----
-
-**Guiding Bolt**
-
-**D&D**
-
-Damage and easier to hit afterwards.
-
-**Builder Version**
-
-```text
-Execution
-  Damage
-  State(Marked)
-```
-
----
-
-**Hold Person**
-
-**D&D**
-
-Prevents movement.
-
-**Builder Version**
-
-```text
-Execution
-  State(Paralyzed)
-```
-
----
-
-**Haste**
-
-**D&D**
-
-Moves faster and acts faster.
-
-**Builder Version**
-
-```text
-Phase
-  State(Hastened)
-
-Reverse
-  State(Fatigued)
-```
-
----
-
-**Hunter's Mark**
-
-**D&D**
-
-Extra damage against one target.
-
-**Builder Version**
+**A sustained beam** - every round, while you hold it.
 
 ```text
 Concentration
-  State(Marked)
+  Enact Damage
+    Direct
 ```
 
----
+Remember the upkeep. A Concentration costs energy at the start of each of your turns on top of what it cost to start, so an expensive one you hold for four rounds can quietly empty your pool.
 
-**Shield**
-
-**D&D**
-
-Protects when attacked.
-
-**Builder Version**
+**A counter-strike** - when they come at you.
 
 ```text
 Reaction
-  Negation
+  Trigger: Someone within range is attacked
+  Trigger Range: 1
+  Enact Damage
+    Direct
 ```
 
 ---
 
-### Step 4 - Choose Timing
+### Triggers, for Reactions
 
-The effect itself does **not** determine the Perk Type.
+A Reaction's trigger is chosen from a fixed list when you build it. You cannot write your own - if you want a bespoke trigger described in your own words, that is what [Preparing an Action](#preparing-an-action) is for.
 
-The timing does.
+Two things matter about triggers:
 
----
+**Broader triggers cost more.** "Someone within range takes damage" fires far more often than "someone within range is reduced to 0 HP", and the price reflects that. Pick the narrowest trigger that still catches the moment you care about.
 
-**Opportunity Attack**
+**Triggers are target-neutral.** Every trigger is written without caring whether the creature involved is friend or foe. "Someone within range is attacked" means *anyone*. Which of them your reaction actually affects is decided by your enactments, not by the trigger. That is what lets one trigger power both a bodyguard and a counter-attacker.
 
-```text
-Reaction
-  Damage
-```
+**Trigger Range is separate from your enactment's range.** Trigger Range is how far away the trigger may happen - your watch radius. Your enactment's interaction range is how far your response reaches. They are deliberately independent, so you can watch a wide area and still only strike something adjacent, or the reverse. A trigger range of 0 means it must happen to you or in your own space.
 
-Trigger:
-
-```text
-Target moves away
-```
+The full trigger list with prices lives in the [Combat](#reaction-triggers) chapter.
 
 ---
 
-**Trap**
+## Worked example - build one from scratch
 
-```text
-Preparation
-  Damage
-```
+Let's make something deliberately over-engineered.
 
-Trigger:
+**Chain Prison.** You throw out barbed chains. They yank the target to you, pin them, and keep grinding while they struggle.
 
-```text
-Target enters area
-```
+Work through the four questions:
 
----
-
-**Flame Beam**
+- **When?** It should keep working while you hold it, so: **Concentration**.
+- **What?** Pull, pin, grind: **Motion**, **Condition**, **Effect**.
+- **Who?** One creature at a short distance: **Direct**, 5m.
+- **Does it land?** Each part rolls separately, so a strong target might be pulled but not pinned.
 
 ```text
 Concentration
-  Damage
+  Upkeep: 1 Energy
+
+  Enact Motion (towards, 3m)
+    Direct, 5m
+
+  Enact Condition (Restrained, 2 turns)
+
+  Enact Effect (Damage, 2 rounds)
 ```
 
-Maintains continuous damage.
+The second and third enactments do not repeat the interaction, because they inherit the target of the first. Three enactments means three energy to start, plus the upkeep every round you keep it.
+
+Now look at what it costs and ask the honest question: is this better than a plain Enact Damage for a third of the price? Sometimes. That is the decision the builder exists to make you take.
 
 ---
 
-**Rage**
+## Common mistakes
 
-```text
-Phase
-  Proficiency Shift UP
+**Buying range you never use.** Range is one of the easiest places to waste build points. If the perk is something you do while standing next to someone, leave it at 1m.
 
-Reverse Phase
-  Proficiency Shift DOWN
-```
+**A trigger that fires too often.** A Reaction on a broad trigger is expensive *and* will constantly go off at the wrong moment, burning your one out-of-turn act per round on something trivial. Narrow triggers are usually the better build.
 
-Gain power now.
+**Forgetting Concentration upkeep.** The build cost is the cheap part. Look at the per-round energy and multiply by how long you actually intend to hold it.
 
-Pay for it later.
+**Building a Reaction when preparing would do.** If you only want to use something out of turn occasionally, prepare an action instead and spend the perk points elsewhere. Build a Reaction when it is a defining part of how the character fights, not to cover a one-off.
 
----
-
-### Example For Every Enactment
-
-**Damage**
-
-```text
-Execution
-  Damage
-```
-
-*Sword Slash*
-
----
-
-**Healing**
-
-```text
-Execution
-  Healing
-```
-
-*Healing Word*
-
----
-
-**Movement**
-
-```text
-Execution
-  Movement(Away)
-```
-
-*Force Push*
-
----
-
-**State**
-
-```text
-Execution
-  State(Anchored)
-```
-
-*Root*
-
----
-
-**Persistent Effect**
-
-```text
-Execution
-  Persistent Effect
-    Damage
-```
-
-*Poison*
-
----
-
-**Proficiency Shift**
-
-```text
-Execution
-  Proficiency Shift UP
-```
-
-*Bless*
-
----
-
-**Negation**
-
-```text
-Reaction
-  Negation
-```
-
-*Shield*
-
----
-
-### Example For Every Perk Type
-
-**Execution**
-
-**Fireball**
-
-```text
-Execution
-  Damage
-```
-
----
-
-**Reaction**
-
-**Riposte**
-
-```text
-Reaction
-  Damage
-```
-
-Trigger:
-
-```text
-Target damages engager
-```
-
----
-
-**Preparation**
-
-**Land Mine**
-
-```text
-Preparation
-  Damage
-  Movement(Away)
-```
-
----
-
-**Concentration**
-
-**Mind Prison**
-
-```text
-Concentration
-  State(Anchored)
-```
-
-Reapplies every round.
-
----
-
-**Phase**
-
-**Battle Trance**
-
-```text
-Phase
-  Proficiency Shift UP
-
-Reverse
-  Proficiency Shift DOWN
-```
-
----
-
-**Minion**
-
-**Wolf Companion**
-
-```text
-Minion
-
-Bite:
-  Damage
-
-Howl:
-  State(Frightened)
-```
-
----
-
-### Full Example Using Almost Everything
-
-Let's make something stupid.
-
-**Thunder Chain Prison**
-
-You throw magical chains.
-
-If they hit:
-
-- Deal damage
-- Pull target closer
-- Restrain them
-- Continuously shock them
-
-**Builder Version**
-
-```text
-Concentration
-  Damage
-
-  Movement
-    Direction: Towards
-
-  State(Restrained)
-
-  Persistent Effect
-    Damage
-```
-
-This combines:
-
-- ✅ Damage
-- ✅ Movement
-- ✅ State
-- ✅ Persistent Effect
-- ✅ Concentration
-
-All in a single perk.
-
----
-
+**Adding enactments because you can.** Every extra enactment costs build points *and* energy every single time you use the perk. A three-enactment perk you cannot afford to use twice in a fight is worse than a one-enactment perk you can use all day.

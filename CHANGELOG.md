@@ -4,6 +4,51 @@ All notable changes to Blok2 TTRPG are recorded here. The newest release is
 listed first. Entries are written for players and game masters: they describe
 what changed in the rules and in the app, not how the code was refactored.
 
+## 2026-09-29
+
+A rules addition and a documentation repair.
+
+### Added: Preparing an Action
+
+- You may now spend one of your actions on your turn to **prepare**: declare, in
+  your own words, what will set you off and what you will do about it. When that
+  circumstance happens, you act.
+- Preparing costs **one action and nothing else**. No invoke point, no perk
+  point, no energy reserved up front.
+- If you prepared a perk, its cost is worked out at the moment it actually
+  fires. Nothing is set aside in advance, so if something drains your Energy
+  while you are waiting you may reach the trigger unable to afford what you
+  planned. That is too bad.
+- A prepared action resolves between actions, so it pre-empts rather than undoes,
+  and it counts against the same once-per-round limit on acting out of turn that
+  Reactions and Invoke Actions share.
+- This means you no longer need to build a Reaction perk just to use something
+  out of turn occasionally. Reactions are for circumstances worth watching for
+  permanently; preparing covers the one-off.
+- New rules chapter, cross-referenced from Combat and Invoking.
+
+### Changed: Perk Creation Guide rewritten
+
+The guide had drifted a long way from the actual builder and was teaching
+mechanics that no longer exist. It has been rewritten against the live ruleset:
+
+- It listed seven perk types; there are three (Execution, Concentration,
+  Reaction). Passives are not a perk type, and Preparation, Phase and Minion are
+  gone as types - Phase survives as an enactment.
+- Its enactment and interaction names were all obsolete. The guide now uses the
+  real ones throughout.
+- The long section on "Will Always Resolve" described a rule the builder does not
+  have. It is replaced by an explanation of how a chain actually resolves, how
+  targets are inherited from the previous enactment, and when to give an
+  enactment its own target.
+- Reaction triggers are no longer described as free text. The guide explains the
+  fixed trigger list, why broader triggers cost more, why triggers are
+  target-neutral, and how Trigger Range differs from an enactment's own range.
+- Examples no longer borrow another system's spell names, and there is a new
+  "common mistakes" section covering the easiest ways to waste points.
+
+---
+
 ## 2026-09-28
 
 The largest update so far. Abilities became Perks, three new subsystems were

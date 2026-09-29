@@ -438,7 +438,9 @@ No matter how many of these trigger, a character may earn at most **3** invoke p
 
 An **Invoke Action** is an action taken out of turn, bought with an invoke point. It is not built in the perk builder and it is not written on your sheet in advance: you describe what you do, pay for it, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw." "I grab the rope as it goes past."
 
-It is deliberately not called a reaction. A **Reaction** is a perk you built, with a trigger you chose in advance; an Invoke Action is improvised on the spot and paid for in the moment. They do the same job by opposite routes, and the one limit they share is how often you may act out of turn at all.
+It is deliberately not called a reaction. A **Reaction** is a perk you built, with a trigger you chose in advance; an Invoke Action is improvised on the spot and paid for in the moment. There is a third route as well: a **Prepared Action**, where you spend one of your own actions to declare a trigger and wait for it (see [Preparing an Action](#preparing-an-action)). All three do the same job in different currencies, and the one limit they share is how often you may act out of turn at all.
+
+Prepare when you can see it coming and are willing to give up an action. Invoke when you did not see it coming and have a point to spare.
 
 | Rule | Value |
 | --- | --- |
@@ -477,13 +479,15 @@ On your turn you get three actions. By default you have 3 of actions. How much a
 
 ### Acting out of turn
 
-Your actions are spent on your turn, but there are two ways to act outside it. They are different things with different names, and the distinction matters.
+Your actions are spent on your turn, but there are three ways to act outside it. They are different things with different names, and the distinction matters.
+
+A **Prepared Action** is declared. You spend one of your actions on your turn to say what will set it off and what you will do, and it waits until then. It costs nothing but that action; if the trigger never comes, the action is wasted. See [Preparing an Action](#preparing-an-action).
 
 An **Invoke Action** is improvised. It is not built in advance and not listed on your sheet: you describe what you do, pay an invoke point and the energy, and the GM resolves it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw."
 
 A **Reaction** is a perk of the Reaction type, sitting on your sheet with a trigger chosen in advance. It fires on its own when that trigger happens, and it costs no invoke point, because you already paid for it with a perk point when you built it.
 
-Either way you act out of turn once per round, not once of each.
+Whichever route you take, you act out of turn once per round, not once of each.
 
 | Rule | Value |
 | --- | --- |
@@ -560,6 +564,109 @@ Oppenents are not willing to get hit by your attacks/perks. That is why when att
 
 When Attacking/Healing/Prepping/Anythinging you always first roll the Engagement Roll to see if you hit, then you resolve the action/enactment/thing.
 
+# preparing-actions
+## Preparing an Action
+
+Sometimes the right move is to do nothing yet.
+
+You can see the fight forming up: the brute is winding up on your friend, the door is about to open, the caster is about to finish something you would rather they did not finish. Waiting for your next turn is too late, and you have no perk built for this exact moment. So instead of spending an action now, you spend it on **being ready**.
+
+A **Prepared Action** is an action you spend on your turn to declare, out loud, what you will do and what will set it off. Then you wait. When the circumstance you named happens, it happens.
+
+> "I hold my shield up. If he swings at Mira, I block it."
+>
+> "I keep my bow on the door. The first thing that comes through it, I shoot."
+>
+> "If anyone attacks me before my next turn, I answer with Riposte."
+
+---
+
+## How to prepare
+
+1. **Spend one of your actions** on your turn. That is the whole cost of preparing.
+2. **Say the trigger and the response**, in your own words. One clear circumstance, one clear thing you do about it.
+3. **The GM confirms it.** If the declaration is too vague to adjudicate - "I react if anything bad happens" - the GM will ask you to narrow it down before it is locked in.
+4. **Wait.** It stays ready until the start of your next turn.
+
+If the trigger never happens, the action is simply gone. That is the trade: you bought certainty about *when* you act, and paid for it with the risk of not acting at all.
+
+---
+
+## What it costs
+
+Preparing costs **one action and nothing else**. No invoke point, no perk point, no energy up front.
+
+If what you prepared was a perk, that perk's cost is worked out **at the moment you actually use it**, exactly as if you had used it on your turn. Nothing is reserved or set aside in advance.
+
+That has a consequence worth knowing before you rely on it: if something drains your Energy while you are holding the action, you may reach the trigger unable to afford what you prepared. Your declaration does not protect you from that. You can still fall back on the rules for [running out of Energy](#running-out-of-energy) - pay in blood, or cut the perk short - but the clean version of what you planned is not guaranteed to you just because you called it early.
+
+---
+
+## When it resolves
+
+A Prepared Action resolves **between actions**, never inside one. It is a way to get ahead of something, not a way to undo it.
+
+You can throw yourself in front of the arrow before it is loosed. You cannot watch the damage roll land and then decide that you blocked it.
+
+A prepared action counts against the **once-per-round limit on acting out of turn**. That limit is shared: one out-of-turn act per round, whether it came from a Prepared Action, a Reaction perk, or an Invoke Action.
+
+| Rule | Value |
+| --- | --- |
+| Invoke Action (improvised) | 1 invoke point + 1 energy |
+| Reaction perk (built) | Free, plus the perk's own energy cost |
+| Frequency | 1 per round, counting invoke actions and Reaction perks together. Owning several Reaction perks does not let you act out of turn more than once in a round |
+| Timing | Between actions. A reaction resolves before or after a whole action, never in the middle of one, so it cannot undo a roll that has already been made. |
+| What it is | An action taken out of turn, improvised on the spot. Describe what you do, pay the invoke point and the energy, and the GM resolves it like any other action. Nothing is written on your sheet in advance. |
+
+---
+
+## Preparing versus reacting versus invoking
+
+There are now three ways to act outside your turn. They are different things and it is worth keeping them straight.
+
+| | Prepared Action | Reaction perk | Invoke Action |
+|---|---|---|---|
+| When you decide | On your turn, this round | When you built the perk | On the spot |
+| What you pay to set it up | One action | Perk points, once | Nothing |
+| What you pay to use it | Whatever the perk costs, when it fires | The perk's energy cost | 1 invoke point + energy |
+| Trigger | Described in words, agreed with the GM | Chosen from the trigger list at build time | None; you just act |
+| Written on your sheet | No | Yes | No |
+| Counts against the out-of-turn limit | Yes | Yes | Yes |
+
+Read that table as three answers to the same question, each paid for in a different currency:
+
+- A **Prepared Action** is paid for with *tempo*. You gave up an action to buy certainty.
+- A **Reaction** is paid for with *build points*. You decided months ago, in character-building terms, that this circumstance was worth watching for, and now it watches for free.
+- An **Invoke Action** is paid for with *invoke points*. You did not see it coming and you are buying your way in anyway.
+
+None of them is the "right" one. The Prepared Action is the one available to every character at every level with no investment at all, which makes it the default tool rather than the fallback.
+
+---
+
+## Examples
+
+**Guarding an ally.** "If the brute swings at Mira, I step in and block." You spend an action. When the swing comes, you resolve your block as though you had used it on your turn.
+
+**Covering a doorway.** "My bow stays on that door. First thing through it gets shot." The trigger is a place and an event, not a named creature - that is fine, as long as it is unambiguous.
+
+**Answering an attack with a perk.** "If anyone attacks me, I use Riposte." Perfectly legal, and note what it is *not*: you do not need Riposte to be a Reaction-type perk for this. Preparing is how any perk can be used out of turn once.
+
+**Waiting for a caster.** "The moment she starts another spell, I tackle her." This is a pre-empt, so it lands before her perk resolves, not after you have seen what it did.
+
+**A trigger that never came.** "If the guard reaches for the alarm, I shoot him." The guard never reaches. Your action is spent and you get nothing. This is normal and it is the point.
+
+---
+
+## Advice for the GM
+
+**Make them commit to a trigger, then hold them to it.** The value of a prepared action comes from it being specific. "I react to danger" is not a trigger; "if he moves toward the child, I tackle him" is. Ask once, get a real answer, and then let it fire exactly as described even if something better comes along first.
+
+**Do not let it become a free extra turn.** The shared once-per-round limit is what prevents this. A player who prepares an action *and* wants to fire a Reaction perk in the same round gets one of the two.
+
+**Reward calling it early.** A player who correctly predicts what an enemy will do has earned the pre-empt. Resolve it before the thing they predicted, not alongside it.
+
+**Say yes to preparing perks.** A player using Preparation to fire an ordinary Execution perk out of turn is not cheating the system; they paid an action for it and may still lose it. It is the cheapest interesting decision in the whole action economy.
+
 # negotiation
 ## Negotiation
 
@@ -594,7 +701,7 @@ Arguments push motivation up and down. Patience only ever runs down. When patien
 
 ## Running a negotiation
 
-1.  The GM sets the NPC's starting **motivation** and **patience**, and notes their **traits**. None of these are announced to the players.
+1.  The GM sets the NPC's starting **motivation** and **patience**, and notes their **traits**. None of these are announced to the players, but the GM might give some context clues about the situation.
 2.  A player makes an **argument**: something specific, aimed at this NPC, for why they should help.
 3.  The GM picks a **relevant skill** for that argument, and the player rolls it. A plea to their greed might be a People Skill check; a veiled threat might be Intimidate; a forged writ of passage might be Deceive.
 4.  Motivation moves by the result. Patience drops.
@@ -759,6 +866,7 @@ These conditions apply at a magnitude the rules already fixed, so there is nothi
 | **Incorporeal** | - | _no skills_ | Phase through walls. |
 | **Marked** | - | _no skills_ | Everything that happens to you is buffed or nerfed (pick one). |
 | **Invincible** | - | _no skills_ | You cannot be damaged. |
+| **Stealthed** | - | _no skills_ | You cannot be seen. |
 
 Shifts from several conditions on the same skill add together, and the result stops at the ends of the proficiency ladder. Stacking two cheap penalties is therefore a real tactic, but a skill that has already bottomed out cannot be pushed any lower.
 
@@ -913,6 +1021,8 @@ up and take another.
 | **Deep Pockets** | 1 perk point | Extra items (1 to 2, 2 perk points per step above 1) | You may have 1 extra toggleable item package active at a time beyond your normal allowance. |
 | **Prepared Mind** | 1 perk point | Banked energy (1 to 3, 2 perk points per step above 1) | At the start of a combat, pre-pay 1 energy toward a perk of your choice. It stays banked until that perk is used. |
 | **Lingering Touch** | 2 perk points | Extra rounds (1 to 2, 3 perk points per step above 1) | Conditions you apply last 1 extra round before they can be shaken off. |
+| **Mobile Attacker** | 1 perk point | Nothing to configure | Your movement is still one action, but you can split it between other actions. Example: move 1m; attack; move 2m; heal; move 1m. |
+| **Conditional Enhancement** | 2 perk points | Condition (free); Skill (free); Value (1 to 3, 3 perk points per step above 1) | When you have the condition blinded your general.Stealth is increased by 1 |
 
 # packages
 ## Packages
@@ -1072,907 +1182,6 @@ The dice ladder rises by a flat +1 average per rung. The die is capped at d12+3;
 | Skill point budget | A character may not spend more skill points than its level grants; edits and package imports that would overspend are refused. |
 | Maximum level | A character's level is capped at 10. |
 
-# skill-trees
-## Skills Trees
-
-Skill Trees are thematic collections of Perks, Skills, and Perks. Instead of building Perks completely from scratch every time, a player can adopt a Skill Tree (e.g., The Pyromancer, The Master Thief, The Telepath).
-
-Skill trees guide character progression by locking powerful, complex Perks behind foundational ones. This ensures a character naturally grows into a specialized role.
-Rules
-
-*   **Nodes:** A Skill Tree is made up of interconnected Nodes. A Node can be a new Perk, a Perk for an existing Perk, a new Skill, or a flat stat boost (like +Max Energy).
-
-*   **Progression:** You must unlock the prerequisite Node before you can spend Perk Points or Skill Points to unlock the next Node connected to it.
-
-*   **Creating Trees:** GMs and players are encouraged to build custom Skill Trees during character creation by bundling custom-built Perks and mapping out how they evolve.
-
-# magic-system
-## Magic System
-
-Designing a believable magic system is difficult, especially when the goal is to ground it in a reality that feels internally consistent and understandable.
-
-The goal of the Lettuce magic system is to make interaction with the world feel **systematic rather than mystical**.
-
-While this document refers to a “magic system” for convenience, the world of Lettuce does **not** necessarily recognize these mechanics as magic. Instead, they are understood as natural phenomena that can be observed, measured, and manipulated.
-
-The system is designed so that:
-
-*   Curious players can understand _how_ things work and design effects themselves.
-*   Other players can use perks without needing to understand the underlying mechanics.
-*   All interactions remain predictable and explainable.
-
-This document explains the foundational concepts of the system and how spells or effects can be constructed within the rules of Lettuce.
-
-:::warning Although this document describes a “magic system”, this does **not** mean the world of Lettuce perceives these effects as magic. :::
-
----
-
-## What to Discuss
-
-- [ ] Limits
-- [ ] Materials
-- [ ] Body
-- [ ] Passives
-- [ ] Basic spells explained
-- [ ] Interactions
-- [ ] Rituals
-- [ ] Items
-- [ ] Pulse disturbances
-- [ ] Harmonization
-
----
-
-
-
-Travel by mantles never really goes into a straight line as mantles are just everywhere. 
-
-direction control ideas: 
- - move mantles out of the way so they cannot act as a condiute
- - beam forming
- - modulation 
-
-
-default state, atoms always reform into a default state after concentration is released. If the effect linguars longer it is proportonal to how long it takes to reform to  a default state. There is however a threshold for permanent transmution.
-
-physcial bodies have organs that manage the mantles inside their body. These work in balance, missing one may handicap you, but also won't disable you from interaction with mantles, losing all of them will however. These organs act like muscles so they grow with training. These organs are connected by veins that flow the mantles in the body.
-
-mastering movement inside materials is quite hard. Moving an object in one direction is simple, pull/push. But you can also split the mantles inside the material into groups and control them. This can either be done by parrallel sending of slices or in very quick succession, the latter of which is more inefficient. the more orgens the bette the parrallel sending of slices is. But it still requires training.
-
-## The body
-
-## The Soul 
-
----
-
-## Mantles
-
-Atoms exist everywhere in the world of Lettuce. Each atom is surrounded by Mantles. Mantles are not bound my an atom and may move between atom of the same type. You can imagine that a piece of wood contains atoms and therefor Mantles. The Mantles inside the wood are free to float around like a gas, they do not have a sense of gravity, but they are bound by that piece of wood and cannot normally leave it. Interacting with those mantles can make the wood do specific things. Pulling all the mantles to one side will make it move to that side for example. Focussing them on one point and shaking them may cause a specific point to burst into flames. 
-
-An Atom that does not contain a Mantle at a given moment is called a dead atom.
-
----
-
-## Frequencyknot and Mantleveins
-
-To interact with a mantle bodies have evolved. There is an organ called the Frequencyknot. That is connected using Mantelveins. Some bodies have multiple frequencyknot's while others only have one. Without a frequencyknot, interaction is almost impossible.
-
-The frequencyknot's are connected using mantleveins. They make the flow of mantle possible within a body. So even though the body consists out of multiple materials, with mantleveins that is no longer an issue. The most special thing about a mantlevein is that it is one of the rare materials that allows for it's mantles to move about 1cm outside of the it, so a mantle is less contraint.
-
-With the frequencyknot it is possible to generate a slice that can then interact with other mantles.
-
----
-
-## Slices and profiles
-
-A Profile is a collection of slices. Where each slice represents a component or property of the relevant material. So there is a slice that decides interactions for movement, temperature, atom interaction, size etc... Same materials share the same profile. To give an example, all iron share the same profile, as iron is just a material and not unique. So all iron slices have the same slice that represent temperature. By resonating you can read or modify that slice, heating it up or cooling it down. 
-
-A Slice is a wave with an amplitude, frequency, fluctuation and modulation.
-
-**Amplitude:** decides the range the wave will travel. The higher the Amplitude the further the range.
-**Frequency:** the key of what slice in the profile to target, a frequency of 10Hz might apply movement to atoms. As that slice will resonate when applied
-**Fluctuation:** decides the data or command send to the mantle. 
-**Modulation:** decides the direction in which the slice will travel, this is another sinus applied to the already existing wave.
-
----
-
-## interaction with mantles and spellcasting
-
-Now that we know what mantles, slices and profiles are, we can focus on interactions between mantles. As stated before, mantles are everywhere, that includes the air. To explain how these interactions work it will be best to use an example of pulling a rock towards yourself.
-
-To interact with a material, you can use the frequencyknot to generate one or multiple slices in a direction. The Mantles in the air will all resonate to that and that is what makes it possilble to pull a rock towards yourself for example. 
-
-To do this you have to generate a Slice that with the instruction that tells the Mantles in the rock to move towards yourself.
-1. To target the correct rock you induce the correct modulation to the slice, this can be done by pointing at it for example.
-2. To make sure the you can reach the targetted rock you Amplify the slice.
-2. To make sure the you target the movement slice of the rock you generate a slice of 10Hz as that falls into the movement range of the profile of the mantles in the rock.
-3. To then make sure you induce the command to move towards yourself you have to apply in the correct fluctuations in the generated slice/wave.
-
-The hard part is getting to know how the material behaves. You can imagine that one of the most studied materials is the air (nitrogen and oxygen). You can imagine that you have to discover the correct fluctuations and slice frequencies to burst air into flames to create a fireball.
-
-Some spend a lot of time studying different materials to become a master, others invest more into general knowledge to be more flexible. 
-
----
-
-## Signature
-
-Every Aggregate emits a **Signature**. This is a unique and immutable combination of Slices, comparable to a fingerprint.
-
-Signatures are emitted passively and continuously. Because of this, they are sometimes referred to as **send profiles**.
-
----
-
----
-
-## Souls and Spirits
-
-## Imbuing
-
-## Cursed
-
-_(To be expanded)_
-
-# imbuing
-## Imbuing
-
-## Imbuing
-
-**Imbuing** is the act of permanently altering an object by imprinting it with a **Resonance Signature**.
-
-Unlike temporary interactions or active effects, imbuing causes an object to **retain resonance characteristics indefinitely**. Once imbued, an object no longer behaves purely according to its material Response Profile — it becomes a hybrid, influenced by both its material composition and the Resonance Signature embedded within it.
-
-Imbuing is not a spell, ritual, or momentary act. It is a **process of resonance adaptation**.
-
----
-
-### Nature of Imbuing
-
-When an object is imbued, its surrounding **Mantles** partially realign to respond to a foreign Resonance Signature. Over time, the object begins to behave as if that signature were a natural part of its structure.
-
-This can result in:
-
-*   Enhanced properties
-*   Altered behavior
-*   Structural reinforcement
-*   Unintended degradation or instperk
-
-Importantly:
-
-> An imbued object is not “powered” by an Aggregate.  
-> It has been **permanently reclassified by the world**.
-
----
-
-### Examples of Imbuing
-
-*   **A sword imbued with a fire‑aligned Resonance Signature**  
-    The blade resonates with heat‑related Resonance Slices, causing it to ignite, scorch, or burn on impact.
-*   **A stone imbued to increase density**  
-    The stone’s Mantles respond as if the material were more massive than it physically is, increasing weight and resistance without changing volume.
-*   **A bow or arrow imbued for durperk**  
-    The object’s Mantles reinforce structural integrity, reducing wear, splintering, or deformation under repeated stress.
-
-Not all imbuing results are beneficial. Poor alignment between the Resonance Signature and the material’s Response Profile can weaken an object or cause unpredictable behavior.
-
----
-
-### The Process of Imbuing
-
-Imbuing is **slow and demanding**.
-
-To successfully imbue an object, a Aggregate must:
-
-*   Sustain a stable Resonance Signature over an extended period
-*   Maintain precise alignment with the object’s Response Profile
-*   Gradually force the object’s Mantles to adapt
-
-This process often takes:
-
-*   Hours, days, or weeks of continuous work
-*   Specialized environments
-*   Significant mental and physical strain
-
-Imbuing cannot be rushed. Attempts to accelerate the process frequently result in flawed or unstable imprints.
-
----
-
-### Accidental Imbuing
-
-Objects can also become imbued **without intent**.
-
-When an object is used repeatedly by the same individual over a long period, it may begin to absorb aspects of that individual’s Resonance Signature. This is especially common when:
-
-*   The object is in constant physical contact
-*   The user experiences strong emotional states while using it
-*   The user’s Resonance Signature is particularly intense or unstable
-
-Such imbuing occurs extremely slowly, often over years.
-
-Examples include:
-
-*   A weapon becoming unnaturally reliable in the hands of its long‑time owner
-*   Armor subtly adapting to its wearer’s movement patterns
-*   Tools behaving differently depending on who uses them
-
-Accidentally imbued objects are often mistaken for legendary artifacts, despite having no intentional design behind them.
-
----
-
-### Limits and Risks
-
-Imbuing has inherent limitations.
-
-*   An object can only sustain **so much resonance distortion** before becoming unstable
-*   Multiple incompatible Resonance Signatures may cause interference
-*   Some materials resist imbuing entirely
-
-In rare cases, an imbued object may begin to **feed back** into the Aggregate that created it, subtly influencing the individual’s Resonance Signature in return.
-
----
-
-### Cultural and Scientific Views
-
-From a scientific perspective, imbuing is understood as **long‑term resonance conditioning**.
-
-Culturally, however:
-
-*   Imbued objects are often mythologized
-*   Ownership may be associated with destiny or fate
-*   Accidental imbuing is frequently misinterpreted as divine intervention
-
-As with curses, the disconnect between understanding and perception plays a significant role in how imbued objects are treated in the world of SAS.
-
----
-
-### Relationship to Curses
-
-Imbuing and curses are closely related phenomena.
-
-A curse alters how the world responds to a Aggregate.  
-Imbuing alters how the world responds to an object.
-
-Both arise from:
-
-*   Resonance misalignment
-*   Long‑term exposure
-*   Instperk or over‑resonance
-
-In some cases, an improperly imbued object may act as a **vector for curse‑like effects**, particularly when used extensively by the same individual.
-
----
-
-# curses
-## Curses
-
-In the world of SAS, a **curse is not a supernatural judgment or imposed effect**.  
-A curse is a **natural abnormality** — comparable to a birth defect, genetic disorder, chronic illness, or degenerative disease.
-
-Curses arise when a Aggregate’s **Resonance Signature** deviates from what is considered stable or typical. This deviation can be congenital, acquired, progressive, or situational, and may cause the Aggregate to interact with the world in **unexpected or harmful ways**.
-
-From an in‑world perspective, curses are not magic — they are **faulty resonance behavior**.
-
----
-
-## Origin of Curses
-
-A curse occurs when one or more of the following conditions apply:
-
-*   A Resonance Signature is **unstable**, fluctuating between Resonance Slices
-*   A Resonance Signature **overlaps too strongly** with a material’s Response Profile
-*   A Resonance Signature contains **fractured or noisy slices**
-*   A Resonance Signature resonates with **unintended domains**
-
-These abnormalities cause Mantles in the surrounding environment to react in ways that were not consciously intended by the Aggregate.
-
-Importantly:
-
-> A cursed individual is not actively causing the effect —  
-> the effect happens _because the world responds to them differently_.
-
----
-
-## Types of Curses
-
-Curses can be broadly categorized by how they manifest.
-
-### Unstable Signature Curses
-
-Some Aggregates emit a Resonance Signature that is **inconsistent or noisy**.  
-Their Resonance Slices fluctuate unpredictably, causing subtle but persistent interference with nearby systems.
-
-**Example: Curse of Misfortune**
-
-An individual believed to be “unlucky” may have an unstable Resonance Signature that interferes with probperk‑sensitive interactions.
-
-*   Tools malfunction more often
-*   Structures fail at inopportune moments
-*   Minor accidents cluster around the individual
-
-There is no intent, malice, or conscious control — only resonance instperk.
-
----
-
-### Over‑Resonant Curses
-
-In some cases, a Aggregate’s Resonance Signature resonates **too strongly** with a specific Response Profile.
-
-**Example: Petrification**
-
-If a Aggregate’s Resonance Signature aligns excessively with the Response Profile of stone, the Mantles surrounding the individual’s body may begin to respond as if the body itself were stone.
-
-This can manifest as:
-
-*   Gradual stiffening of tissue
-*   Loss of mobility
-*   Progressive mineralization of skin or bone
-
-From the outside, this appears as a curse.  
-From a resonance perspective, it is a **misclassification of the body by the environment**.
-
----
-
-### Degenerative Curses
-
-Some curses worsen over time as the Aggregate’s Resonance Signature slowly drifts further from stperk.
-
-These curses may:
-
-*   Begin with mild symptoms
-*   Escalate under stress
-*   Be accelerated by repeated resonance exposure
-
-Degenerative curses are often confused with traditional diseases, but differ in that they originate from **Aggregate‑level resonance**, not physical pathogens.
-
----
-
-### Reactive Curses
-
-Reactive curses only manifest under specific conditions.
-
-For example:
-
-*   A Aggregate whose Resonance Signature reacts violently to heat
-*   A Aggregate that destabilizes near certain materials
-*   A Aggregate that disrupts other Aggregates in close proximity
-
-Such curses may remain dormant for long periods and only activate when specific Resonance Slices are stimulated.
-
----
-
-## Curses Are Not Moral
-
-In SAS, curses carry **no moral weight**.
-
-They are:
-
-*   Not punishments
-*   Not signs of corruption
-*   Not inherently evil
-
-A cursed individual is simply someone whose Resonance Signature does not align cleanly with the surrounding world.
-
-As a result:
-
-*   Curses cannot be “broken” through willpower
-*   Faith has no inherent effect
-*   Understanding and intervention are required
-
----
-
-## Treatment and Mitigation
-
-Curses cannot always be removed, but they can often be **managed**.
-
-Common approaches include:
-
-*   Stabilizing a Aggregate’s Resonance Signature
-*   Dampening specific Resonance Slices
-*   Introducing controlled interference to counteract harmful alignment
-*   Isolating the Aggregate from triggering Response Profiles
-
-In extreme cases, partial suppression of a Aggregate’s Resonance Signature may be required — often at great personal cost.
-
----
-
-## Cultural Interpretation
-
-While scholars and engineers understand curses as resonance phenomena, most societies do not.
-
-As a result:
-
-*   Cursed individuals may be feared or ostracized
-*   Superstitions arise around certain manifestations
-*   Curses are often mythologized or ritualized
-
-This disconnect between understanding and perception is one of the primary sources of social tension surrounding curses in SAS.
-
----
-
-## Summary
-
-A curse is not an external force acting upon a person.
-
-A curse is:
-
-> **The world responding honestly to a flawed Resonance Signature.**
-
-# world
-## World
-
-## Universes
-
-Reality consists of **multiple universes**.
-
-Each universe appears to be a globe of infinite size. This appearance is **not caused by physical boundaries**, but by large‑scale **light bending** driven by resonance interactions between matter, Mantles, and the surrounding medium.
-
-There is no enclosing shell, no inner surface, and no central point.
-
-The universe only _appears_ to be a globe.
-
----
-
-## Apparent Geometry vs True Geometry
-
-Light does not travel in perfectly straight lines over extreme distances. Instead, it bends gradually due to continuous resonance interactions.
-
-This causes:
-
-*   Distant objects to appear overhead
-*   The sky to appear dome‑like
-*   Space to feel enclosed
-
-In reality, all civilizations exist on the **outside** of an infinitely large sphere.
-
-Each universe is best described as a **sphere of infinite radius**:
-
-*   Locally flat everywhere
-*   Globally unbounded
-*   Without edges, ceilings, or walls
-
-The spherical appearance is an optical effect, not a physical structure.
-
----
-
-## Islands (Worlds)
-
-Within each universe exist massive structures known as **Islands**.
-
-An Island:
-
-*   Is comparable in size to a planet
-*   Is considered a complete world by its inhabitants
-*   Exists on the surface of the universe
-
-Because the universe is infinitely large, the surface of an Island appears perfectly flat. There is no visible curvature or horizon drop.
-
----
-
-## Vertical Space: Infinite Ascent
-
-Traveling **upward**, away from the surface of an Island, has no finite limit.
-
-There is:
-
-*   No ceiling
-*   No boundary
-*   No enclosing shell
-
-An individual may continue upward indefinitely.
-
-However, **eventually**, far beyond any finite distance, another universe (another infinite sphere) exists above.
-
-The distance required to reach another universe is **infinite**.
-
-This means:
-
-*   At or below the speed of light, another universe can never be reached
-*   Only movement beyond light‑speed could theoretically bridge this distance
-*   For all practical purposes, upward travel leads forever into empty space
-
----
-
-## Lateral Space: Reaching Other Worlds
-
-Movement **sideways**, relative to an Island’s surface, follows the surface of the universe.
-
-By traveling laterally for a sufficient amount of time, one may eventually reach another Island.
-
-Distances between Islands vary:
-
-*   Some are separated by immense distances, comparable to interplanetary travel
-*   Others may be relatively close, similar to the distance between a planet and its moon
-
-Because of this:
-
-*   Some Islands appear as bright stars
-*   Others appear large and distinct in the sky
-*   Rarely, multiple Islands may be visible as clearly separate bodies
-
----
-
-## Inter‑Island Medium
-
-The space between Islands is **not empty**.
-
-Depending on the universe, this medium may consist of:
-
-*   Water
-*   Sand
-*   Dust
-*   Other particulate or fluid matter
-
-This medium exists **along the surface** of the universe.
-
-Vertical travel moves away from all Islands.  
-Lateral travel moves between Islands.
-
----
-
-## The Sky and the Stars
-
-The sky is a **misleading representation of space**.
-
-Stars are not distant points of light in a void. They are:
-
-*   Other Islands
-*   Other worlds
-*   Other planets
-
-Light bending causes laterally distant Islands to appear overhead instead of on the horizon.
-
-Navigation by sight alone is unreliable.
-
----
-
-## Suns and Light‑Islands
-
-A “sun” is an Island whose **Response Profile causes it to emit light**.
-
-Light emission is not permanent.
-
-Due to the properties of the materials composing these light‑Islands:
-
-*   Resonance alignment degrades
-*   Mantles lose coherence
-*   Light emission weakens and ceases
-
-The sun does not set.
-
-**The sun turns off.**
-
-After sufficient resonance realignment, the light‑Island may emit again, creating a new day.
-
----
-
-## Motion, Interaction, and Pseudo‑Gravity
-
-Traditional gravity does not govern the movement of Islands.
-
-Instead, **Response Profiles act as the primary organizing force**.
-
-Each Island’s materials interact resonantly with:
-
-*   The surrounding medium
-*   Nearby Islands
-*   Large‑scale resonance gradients
-
-These interactions function as a form of **pseudo‑gravity**:
-
-*   Islands are guided into stable configurations
-*   Close Islands tend to avoid destructive trajectories
-*   Long‑term balance is maintained through resonance alignment
-
----
-
-## Island Collisions and Merging
-
-Although rare, **Island collisions are possible**.
-
-When two Islands approach one another:
-
-*   Their Response Profiles begin to interact
-*   Materials slowly transmute at the boundary
-*   The Islands tend to **merge rather than collide catastrophically**
-
-In most cases, this merging is gradual and non‑violent, forming:
-
-*   Larger composite Islands
-*   Complex layered worlds
-*   Shared ecosystems over long timescales
-
-However, catastrophic outcomes are possible.
-
-If a **light‑emitting Island (sun)** merges with a living world:
-
-*   Resonance overload may occur
-*   Ecosystems may collapse
-*   The event may resemble an apocalyptic catastrophe
-
----
-
-## Motion Through Transmutation
-
-All matter continuously interacts via resonance.
-
-Stone interacts with air.  
-Air interacts with stone.
-
-Over immense spans of time, these interactions cause **gradual transmutation**.
-
-To preserve balance:
-
-*   Some matter converts into other forms
-*   Equivalent matter elsewhere converts back
-
-This slow, distributed process creates the **illusion of motion**:
-
-*   Islands appear to drift
-*   Suns appear to move
-*   Stars shift position
-
-Nothing truly travels through space.
-
-**Space itself is re‑categorizing matter.**
-
----
-
-## Accelerated Change and Imbuing
-
-Some materials have closely aligned Response Profiles and transmute more easily.
-
-This process can be **artificially accelerated** through **Imbuing**.
-
-By imprinting a Resonance Signature onto an object or region:
-
-*   Certain transmutation pathways are favored
-*   Local equilibrium shifts
-*   Changes that would normally take millennia can occur rapidly
-
-Imbuing does not violate the laws of reality.
-
-It forces resonance interactions to occur **faster than intended**.
-
----
-
-## Consequences
-
-This structure of reality implies several truths:
-
-*   Worlds are not eternal
-*   Islands may slowly merge or drift apart
-*   Space travel is possible, but slow and dangerous
-*   Ancient composite Islands may exist
-*   Legends of ascension may describe attempts to reach other universes
-*   Catastrophic events are resonance failures, not random disasters
-
----
-
-## Summary
-
-The universe is not a globe.
-
-It only **appears** to be one.
-
-You live on the outside of an infinite sphere shaped by resonance and curved light. You can ascend forever, never reaching a boundary. Other worlds lie not above you, but far to the side.
-
-Worlds do not orbit.
-
-Worlds **interact**, **align**, and sometimes **become one**.
-
-# culture
-## Culture
-
-## The Accepted Worldview
-
-For most civilizations, the world is believed to be **flat and enclosed**.
-
-The sky is perceived as a dome.  
-Stars are thought to be distant lights embedded in that dome.  
-The sun is believed to move across the world and disappear beyond its edge or behind a barrier.
-
-This belief is reinforced by daily experience:
-
-*   The ground appears flat
-*   There is no visible curvature
-*   The sky curves overhead
-*   No edge of the world can be reached
-
-As a result, the idea that the universe is anything other than a flat, enclosed world is considered **dangerous nonsense**.
-
----
-
-## The Heresy of Curvature
-
-At various points in history, individuals and small groups proposed an alternative idea:
-
-> That the world is not flat,  
-> that it does not exist _inside_ a globe,  
-> but rather on the **outside of an infinite sphere**.
-
-They claimed:
-
-*   The sky only _appears_ curved because of light bending
-*   Stars are other worlds, not lights
-*   There is no ceiling above the world
-*   Traveling upward never ends
-*   Other worlds can only be reached sideways
-
-These claims were met with hostility.
-
-To most cultures, they sounded absurd — or worse, destabilizing.
-
----
-
-## Social Response and Suppression
-
-Those who argued that the world curves, or that the universe is a sphere rather than a globe, were often labeled as:
-
-*   Liars
-*   Madmen
-*   Blasphemers
-*   Enemies of social order
-
-In many societies:
-
-*   Their teachings were banned
-*   Their writings were destroyed
-*   Their gatherings were broken up
-*   Their voices were silenced
-
-The idea that the world “curves away beneath your feet” was seen as an attack on common sense, tradition, and authority.
-
-In extreme cases, speaking openly about curvature or infinite ascent was punishable by exile, imprisonment, or death.
-
----
-
-## The Reason for Fear
-
-This suppression was not only ideological — it was **practical**.
-
-If the world had no ceiling:
-
-*   Then gods did not live above it
-*   Then authority was not anchored to the sky
-*   Then the universe was not designed _for_ the people living in it
-
-If other worlds existed:
-
-*   Then isolation was a lie
-*   Then myths became geography
-*   Then power structures based on uniqueness collapsed
-
-The truth was destabilizing.
-
----
-
-## Cultural Myths and Distortions
-
-Over time, suppressed ideas resurfaced in distorted forms:
-
-*   Legends of “endless ascent”
-*   Myths of people who climbed forever and vanished
-*   Stories of forbidden heights
-*   Religious tales of souls ascending beyond creation
-
-These stories were tolerated as metaphor, but not as fact.
-
-The truth survived only in fragments.
-
----
-
-## The Eventual Discovery
-
-Eventually, knowledge advanced.
-
-Through careful observation, experimentation, and resonance science, it became undeniable that:
-
-*   Light bends over distance
-*   The sky is an illusion
-*   No ceiling exists
-*   Upward travel never returns
-*   Lateral travel can reach other Islands
-
-What had once been heresy became **measurable reality**.
-
-The universe was proven to be a sphere of infinite size — not a globe containing the world, but a surface upon which the world rests.
-
----
-
-## Cultural Fallout
-
-The revelation caused immense cultural shock.
-
-Some societies:
-
-*   Rewrote history
-*   Claimed the knowledge had always been known
-*   Reframed ancient myths as intentional allegory
-
-Others collapsed under the weight of the truth.
-
-Institutions built on the enclosed‑world model lost legitimacy. Religions fractured. Philosophies rewrote themselves.
-
-Even after proof, many refused to accept it.
-
----
-
-## Modern Attitudes
-
-In the present age:
-
-*   Some cultures accept the true structure of reality
-*   Others acknowledge it academically but ignore it culturally
-*   A few still deny it entirely
-
-Belief in a flat, enclosed world persists not because it is correct, but because it is **comforting**.
-
-Knowing the truth means accepting that:
-
-*   The universe has no top
-*   The world is not central
-*   You are not contained
-*   You are not protected
-
----
-
-## Summary
-
-For most of history, people believed the world was flat and enclosed.
-
-Those who claimed otherwise were silenced.
-
-Only much later was the truth discovered:
-
-The world does not sit _inside_ a globe.
-
-It lies on the **outside of an infinite sphere**, beneath a sky that lies, in a universe far larger — and far less comforting — than anyone was prepared to accept.
-
-# cheat-sheet
-## Cheat Sheet
-
-## Perk Types
-
-The when part of the perk
-
-reaction 		--> when the trigger condition is met, only once per turn, during combat
-preparation 	--> when the trigger condition is met, only once per preperation
-execution 		--> right now
-concentration 	--> after activation & at the start of your turn
-
-## Enactments
-
-The what part of the perk
-
-damage 		    --> lose hp
-heal 		    --> gain hp 
-movement 	    --> move away/towards
-reduction 	    --> reduce the effect of an enactment 
-amplification 	--> reduce the effect of an enactment 
-
-condition	    --> apply a condition to someone
-negation 	    --> negate a condition completely
-
-effect 	        --> lose/gain hp over time or move over time
-shift           --> shift proficiencies now
-phase 		    --> shift proficiencies now, reverse the proficiency later
-
-stack           --> stack points now, use them later for other perks
-
-minion 	        --> create a minion to fight for you
-
-## Interactions
-
-The who part of the perk
-
-Self    --> Target yourself (no validation needed)
-Direct  --> right next to you
-Ranged  --> within range
-Area    --> Around a specific area triggers once
-AoE     --> Around a specific area hangs around for a while
-
-## Validation
-
-Will it hit or miss? I guess they never miss huh?
-
 # introduction
 ## Perk Builder
 
@@ -2026,8 +1235,7 @@ Let's say you want to hit someone with a an **Damage Enactment**. You first chec
 
 The first enactment of an perk always declares who it affects and what roll resolves it. Enactments after the first inherit both the target and the resolving roll of the enactment before them. Taking the separate-target option on a later enactment gives that enactment its own interaction and validation, so their costs apply on top of the surcharge above.
 
-# Perk Creation Guide
-
+# perk-creation-guide
 ## Perk Creation Guide
 
 So you've read the docs and now you're staring at the Perk Builder thinking:
@@ -2036,731 +1244,266 @@ So you've read the docs and now you're staring at the Perk Builder thinking:
 
 Yeah, that's fair.
 
-The Builder is intentionally mechanical and flavorless. It doesn't care if you're casting a fireball, performing a monk punch, firing a laser cannon, throwing an angry goose, or summoning a giant rubber duck.
+The Builder is deliberately mechanical and flavourless. It does not care whether you are casting a fireball, throwing a punch, firing a laser, or summoning a giant rubber duck. A sword slash and a laser beam can be the exact same perk mechanically.
 
-What matters is:
+What it does care about is four questions:
 
-- What happens? (**Enactments**)
-- Who does it happen to? (**Interactions**)
-- How do we determine success? (**Validations**)
-- When does it happen? (**Perk Type**)
+- **What happens?** - the Enactments
+- **Who does it happen to?** - each Enactment's Interaction
+- **How do we find out if it worked?** - each Enactment's Validation
+- **When does it happen?** - the Perk Type
 
-Everything else is flavor.
-
-A sword slash and a laser beam can easily be the exact same Perk mechanically.
+Everything else is flavour, and flavour is free.
 
 ---
 
-### Step 1 - Pick an Perk Type
+## Step 1 - Pick a Perk Type
 
-Most people should start with **Execution**.
+The Perk Type is *timing*, and nothing else. There are three.
 
-Execution simply means:
+| Perk Type | What it really means |
+|---|---|
+| Execution | I want this to happen now |
+| Concentration | I want this to keep happening while I hold it |
+| Reaction | I want this to happen when a specific thing occurs |
 
-> I want thing happen now.
+**Start with Execution.** It is the plain "thing happens now" type and it covers the large majority of perks: a strike, a bolt, a heal, a shove, a knockdown.
 
-Examples:
+Reach for the other two only when you specifically want their timing:
 
-- Fireball
-- Sword Slash
-- Healing Touch
-- Stunning Strike
-- Dash Attack
-- Throw Rock
+- **Concentration** costs an action to start and then an upkeep every round to keep going. Use it for effects that should persist because you are actively maintaining them, and accept that you are paying for them every round.
+- **Reaction** fires out of turn, on a trigger you choose when you build it. It costs more build points *and* more energy than an Execution, because acting out of turn is worth a premium.
 
-Only use the other Perk Types when you specifically want special timing or behavior.
+Two things that are **not** perk types, despite what you might expect:
 
-| Perk Type | What It Really Means |
-|-------------|----------------------|
-| Execution | Do thing now |
-| Reaction | Do thing when something happens |
-| Preparation | Spend actions now, trigger later |
-| Concentration | Keep doing thing every round |
-| Phase | Gain something now, pay for it later |
-| Passive | Always on, free to use, triggers whenever |
-| Minion | Create another dude |
+- **Passives** are not built here. A passive is always on and is not made of enactments, so it has no entry in the type dropdown - you add one with the "Add passive" button and it is priced from the passive catalogue.
+- **Preparing an action** is not a perk type either. It is a thing every character can do in play: spend an action to declare a trigger and hold a perk ready. See the [Preparing an Action](#preparing-an-action) chapter. It means you do not need to build a Reaction just to use something out of turn once.
 
 ---
 
-### Step 2 - Pick the Main Enactment
+## Step 2 - Pick your main Enactment
 
-This is the actual effect.
-
-Ask yourself:
-
-> What should my perk do?
-
-Usually the answer is one of these:
+The Enactment is the actual effect. Ask yourself what the perk should *do*, then find it here:
 
 | Goal | Enactment |
-|--------|--------|
-| Hurt someone | Damage |
-| Heal someone | Healing |
-| Move something | Movement |
-| Apply a condition | State |
-| Buff/Nerf a roll | Proficiency Shift |
-| Create an ongoing effect | Persistent Effect |
-| Block or reduce something | Negation |
+|---|---|
+| Hurt someone | Enact Damage |
+| Restore someone | Enact Healing |
+| Move something or someone | Enact Motion |
+| Apply a condition (prone, stunned, burning...) | Enact Condition |
+| Leave something ticking on the target | Enact Effect |
+| Make a skill better or worse for a while | Enact Modification |
+| Borrow power now and pay it back later | Enact Phase |
+| Cripple yourself on purpose to afford more | Enact Nerf |
+| Stop an effect landing on you or an ally | Enact Negation |
+| Add to somebody else's damage, healing or motion | Enact Adjustment |
 
-Think of Enactments as LEGO blocks.
+Think of Enactments as LEGO blocks. Most perks are one or two of these chained together, and almost every iconic effect from any other system decomposes into this list.
 
-Most perks are simply multiple Enactments chained together.
-
-**Example - Acid Splash**
-
-**D&D**
-
-Throw acid at somebody.
-
-**Builder Version**
+**A basic strike**
 
 ```text
 Execution
-  Damage
-    Ranged Interaction
+  Enact Damage
+    Direct, 1m
 ```
 
-Done.
+Done. That is a whole perk.
 
----
-
-**Example - Stunning Strike**
-
-**D&D**
-
-Punch someone and potentially stun them.
-
-**Builder Version**
+**A knockdown**
 
 ```text
 Execution
-  Damage
-  State(Stunned)
+  Enact Damage
+    Direct, 1m
+  Enact Condition (Prone)
 ```
 
-Damage happens first.
-
-State happens second.
-
-Simple.
+Damage resolves first, then the condition. Two enactments, so two energy.
 
 ---
 
-### Step 3 - Combine Enactments
+## Step 3 - Chain Enactments together
 
-This is where the fun starts.
+This is where it gets fun. Every enactment after the first adds to both the build cost and the energy cost, so a chain is powerful and expensive in equal measure.
 
-Most iconic perks are just multiple Enactments chained together.
-
-**Ice Lance**
-
-Deals damage and slows.
+**Lingering burn** - hit them, then leave them burning.
 
 ```text
 Execution
-  Damage
-  State(Slowed)
+  Enact Damage
+  Enact Effect (Damage, 3 rounds)
 ```
 
----
-
-**Explosive Arrow**
-
-Deals damage and pushes people away.
+**Pull and pin** - drag them to you and hold them there.
 
 ```text
 Execution
-  Damage
-  Movement(Away)
+  Enact Motion (towards, 3m)
+  Enact Condition (Restrained)
 ```
 
----
-
-**Vampiric Touch**
-
-Deals damage and heals the caster.
+**Drain** - hurt them, mend yourself.
 
 ```text
 Execution
-  Damage
-  Healing(Self)
+  Enact Damage
+    Direct
+  Enact Healing
+    Self
 ```
 
----
-
-**Hook Shot**
-
-Pulls an enemy towards you.
+**Blessing** - make an ally better at something for a few rounds.
 
 ```text
 Execution
-  Damage
-  Movement(Towards)
+  Enact Modification (+1, 2 rounds)
+    Direct
 ```
 
----
-
-**Divine Blessing**
-
-Buff an ally's next roll.
+**All-out swing** - weaken your own defence to hit harder.
 
 ```text
 Execution
-  Proficiency Shift(UP)
+  Enact Nerf (own defence, -1)
+  Enact Damage
 ```
+
+Enact Nerf is worth understanding: it targets **only yourself** and it *gives you back* budget. It is how you build something that is genuinely reckless rather than merely expensive.
 
 ---
 
-**Poison Blade**
+### How a chain resolves
 
-Deals damage and applies poison.
+Each enactment is resolved in order, and each one goes through the same three steps:
+
+1. **Interaction** - who is affected?
+2. **Validation** - does it land on them?
+3. **Enactment** - apply the effect.
+
+So a two-enactment perk makes its own roll for each part. The damage can land and the condition can still be shrugged off, because they were validated separately.
+
+### Targets flow down the chain
+
+By default, every enactment after the first hits **the same target as the one before it**. That is almost always what you want: the creature you hit is the creature you knock down.
+
+When it is not, tick **"this enactment has a different target than the enactment before it"**. That enactment then gets its own Interaction and Validation, and costs accordingly. This is how you build "damage them, heal me" - the healing needs its own target, so it needs its own interaction.
+
+The rule of thumb: **if the whole perk happens to one creature, leave the box alone.** Every extra target you introduce is another roll and another chunk of your budget.
+
+---
+
+## Step 4 - Choose your Interaction
+
+The Interaction answers *who*. There are three, and they are priced by how much reach and how many bodies they cover.
+
+| Interaction | Use it for |
+|---|---|
+| Self | Anything that only affects you |
+| Direct | One or more specific creatures, at a chosen range |
+| Zone | An area, with a radius and a range, optionally lasting rounds |
+
+Two things that cost real points and are easy to overspend on:
+
+- **Range.** 1m is free. 5m, 25m and 50m each cost more. Buy the range you will actually use - a melee perk does not need 25m "just in case".
+- **Targets and radius.** Each extra target on a Direct interaction, and each extra metre of Zone radius, is a significant addition. A 6m-radius blast is a very expensive perk, and it should be.
+
+A Zone can also have a **duration**, which is how you build a lingering hazard: a patch of ground that keeps affecting whoever stands in it, rather than a one-off explosion.
+
+---
+
+## Step 5 - Timing in practice
+
+The effect does not determine the Perk Type. The *timing* does. The same Enact Damage is a different perk depending on when it goes off.
+
+**A thrown bomb** - now, in an area.
 
 ```text
 Execution
-  Damage
-  Persistent Effect
-    Damage
+  Enact Damage
+    Zone, radius 2, range 5
 ```
 
----
-
-### Understanding Enactment Chains
-
-By default, Enactments are executed in order.
-
-If an Enactment fails its Validation, the chain stops.
-
-**Example**
-
-```text
-Execution
-  Damage
-  State(Stunned)
-  Movement(Away)
-```
-
-Suppose the Damage Enactment fails.
-
-Result:
-
-```text
-Damage    -> Failed
-State     -> Not Executed
-Movement  -> Not Executed
-```
-
-The chain ends.
-
----
-
-### Understanding "Will Always Resolve"
-
-A common misunderstanding is:
-
-> Will Always Resolve = Automatically Hits
-
-That is **not** how it works.
-
-Validation still happens normally.
-
-Counter Rolls still happen normally.
-
-The target can still resist the effect.
-
-The only thing this perk changes is:
-
-> The Enactment is processed even if previous Enactments failed.
-
-**Example**
-
-```text
-Execution
-  Damage
-  State(Stunned)
-    Will Always Resolve
-```
-
-Suppose Damage fails.
-
-Normally the chain would end.
-
-Instead:
-
-```text
-Damage -> Failed
-State  -> Still Executed
-```
-
-The State still attempts to resolve.
-
-Its own Validation still happens.
-
-The target can still resist it.
-
-The perk only ignores failures from earlier Enactments.
-
----
-
-**Example - Stunning Strike**
-
-```text
-Execution
-  Damage
-  State(Stunned)
-    Will Always Resolve
-```
-
-The punch can fail.
-
-The stun attempt still occurs.
-
----
-
-**Example - Lingering Acid**
-
-```text
-Execution
-  Damage
-
-  Persistent Effect
-    Damage
-    Will Always Resolve
-```
-
-Even if the direct acid splash doesn't land, the acid pool may still be created.
-
----
-
-### Design Philosophy
-
-**Without Always Resolve**
-
-```text
-Damage
-  ↓
-State
-  ↓
-Movement
-```
-
-Failure stops the chain.
-
----
-
-**With Always Resolve**
-
-```text
-Damage -> Failed
-
-State -> Still Executed
-
-Movement -> Still Executed
-```
-
-This allows utility effects to continue even when earlier effects fail.
-
----
-
-### Examples From Other Systems
-
-**Magic Missile**
-
-**D&D**
-
-Automatically damages a target.
-
-**Builder Version**
-
-```text
-Execution
-  Damage
-    Reliable Validation
-```
-
----
-
-**Fireball**
-
-**D&D**
-
-Explosion at range.
-
-**Builder Version**
-
-```text
-Execution
-  Damage
-    Area Interaction
-```
-
----
-
-**Thunderwave**
-
-**D&D**
-
-Deals damage and pushes.
-
-**Builder Version**
-
-```text
-Execution
-  Damage
-  Movement(Away)
-```
-
----
-
-**Guiding Bolt**
-
-**D&D**
-
-Damage and easier to hit afterwards.
-
-**Builder Version**
-
-```text
-Execution
-  Damage
-  State(Marked)
-```
-
----
-
-**Hold Person**
-
-**D&D**
-
-Prevents movement.
-
-**Builder Version**
-
-```text
-Execution
-  State(Paralyzed)
-```
-
----
-
-**Haste**
-
-**D&D**
-
-Moves faster and acts faster.
-
-**Builder Version**
-
-```text
-Phase
-  State(Hastened)
-
-Reverse
-  State(Fatigued)
-```
-
----
-
-**Hunter's Mark**
-
-**D&D**
-
-Extra damage against one target.
-
-**Builder Version**
+**A sustained beam** - every round, while you hold it.
 
 ```text
 Concentration
-  State(Marked)
+  Enact Damage
+    Direct
 ```
 
----
+Remember the upkeep. A Concentration costs energy at the start of each of your turns on top of what it cost to start, so an expensive one you hold for four rounds can quietly empty your pool.
 
-**Shield**
-
-**D&D**
-
-Protects when attacked.
-
-**Builder Version**
+**A counter-strike** - when they come at you.
 
 ```text
 Reaction
-  Negation
+  Trigger: Someone within range is attacked
+  Trigger Range: 1
+  Enact Damage
+    Direct
 ```
 
 ---
 
-### Step 4 - Choose Timing
+### Triggers, for Reactions
 
-The effect itself does **not** determine the Perk Type.
+A Reaction's trigger is chosen from a fixed list when you build it. You cannot write your own - if you want a bespoke trigger described in your own words, that is what [Preparing an Action](#preparing-an-action) is for.
 
-The timing does.
+Two things matter about triggers:
 
----
+**Broader triggers cost more.** "Someone within range takes damage" fires far more often than "someone within range is reduced to 0 HP", and the price reflects that. Pick the narrowest trigger that still catches the moment you care about.
 
-**Opportunity Attack**
+**Triggers are target-neutral.** Every trigger is written without caring whether the creature involved is friend or foe. "Someone within range is attacked" means *anyone*. Which of them your reaction actually affects is decided by your enactments, not by the trigger. That is what lets one trigger power both a bodyguard and a counter-attacker.
 
-```text
-Reaction
-  Damage
-```
+**Trigger Range is separate from your enactment's range.** Trigger Range is how far away the trigger may happen - your watch radius. Your enactment's interaction range is how far your response reaches. They are deliberately independent, so you can watch a wide area and still only strike something adjacent, or the reverse. A trigger range of 0 means it must happen to you or in your own space.
 
-Trigger:
-
-```text
-Target moves away
-```
+The full trigger list with prices lives in the [Combat](#reaction-triggers) chapter.
 
 ---
 
-**Trap**
+## Worked example - build one from scratch
 
-```text
-Preparation
-  Damage
-```
+Let's make something deliberately over-engineered.
 
-Trigger:
+**Chain Prison.** You throw out barbed chains. They yank the target to you, pin them, and keep grinding while they struggle.
 
-```text
-Target enters area
-```
+Work through the four questions:
 
----
-
-**Flame Beam**
+- **When?** It should keep working while you hold it, so: **Concentration**.
+- **What?** Pull, pin, grind: **Motion**, **Condition**, **Effect**.
+- **Who?** One creature at a short distance: **Direct**, 5m.
+- **Does it land?** Each part rolls separately, so a strong target might be pulled but not pinned.
 
 ```text
 Concentration
-  Damage
+  Upkeep: 1 Energy
+
+  Enact Motion (towards, 3m)
+    Direct, 5m
+
+  Enact Condition (Restrained, 2 turns)
+
+  Enact Effect (Damage, 2 rounds)
 ```
 
-Maintains continuous damage.
+The second and third enactments do not repeat the interaction, because they inherit the target of the first. Three enactments means three energy to start, plus the upkeep every round you keep it.
+
+Now look at what it costs and ask the honest question: is this better than a plain Enact Damage for a third of the price? Sometimes. That is the decision the builder exists to make you take.
 
 ---
 
-**Rage**
+## Common mistakes
 
-```text
-Phase
-  Proficiency Shift UP
+**Buying range you never use.** Range is one of the easiest places to waste build points. If the perk is something you do while standing next to someone, leave it at 1m.
 
-Reverse Phase
-  Proficiency Shift DOWN
-```
+**A trigger that fires too often.** A Reaction on a broad trigger is expensive *and* will constantly go off at the wrong moment, burning your one out-of-turn act per round on something trivial. Narrow triggers are usually the better build.
 
-Gain power now.
+**Forgetting Concentration upkeep.** The build cost is the cheap part. Look at the per-round energy and multiply by how long you actually intend to hold it.
 
-Pay for it later.
+**Building a Reaction when preparing would do.** If you only want to use something out of turn occasionally, prepare an action instead and spend the perk points elsewhere. Build a Reaction when it is a defining part of how the character fights, not to cover a one-off.
 
----
-
-### Example For Every Enactment
-
-**Damage**
-
-```text
-Execution
-  Damage
-```
-
-*Sword Slash*
-
----
-
-**Healing**
-
-```text
-Execution
-  Healing
-```
-
-*Healing Word*
-
----
-
-**Movement**
-
-```text
-Execution
-  Movement(Away)
-```
-
-*Force Push*
-
----
-
-**State**
-
-```text
-Execution
-  State(Anchored)
-```
-
-*Root*
-
----
-
-**Persistent Effect**
-
-```text
-Execution
-  Persistent Effect
-    Damage
-```
-
-*Poison*
-
----
-
-**Proficiency Shift**
-
-```text
-Execution
-  Proficiency Shift UP
-```
-
-*Bless*
-
----
-
-**Negation**
-
-```text
-Reaction
-  Negation
-```
-
-*Shield*
-
----
-
-### Example For Every Perk Type
-
-**Execution**
-
-**Fireball**
-
-```text
-Execution
-  Damage
-```
-
----
-
-**Reaction**
-
-**Riposte**
-
-```text
-Reaction
-  Damage
-```
-
-Trigger:
-
-```text
-Target damages engager
-```
-
----
-
-**Preparation**
-
-**Land Mine**
-
-```text
-Preparation
-  Damage
-  Movement(Away)
-```
-
----
-
-**Concentration**
-
-**Mind Prison**
-
-```text
-Concentration
-  State(Anchored)
-```
-
-Reapplies every round.
-
----
-
-**Phase**
-
-**Battle Trance**
-
-```text
-Phase
-  Proficiency Shift UP
-
-Reverse
-  Proficiency Shift DOWN
-```
-
----
-
-**Minion**
-
-**Wolf Companion**
-
-```text
-Minion
-
-Bite:
-  Damage
-
-Howl:
-  State(Frightened)
-```
-
----
-
-### Full Example Using Almost Everything
-
-Let's make something stupid.
-
-**Thunder Chain Prison**
-
-You throw magical chains.
-
-If they hit:
-
-- Deal damage
-- Pull target closer
-- Restrain them
-- Continuously shock them
-
-**Builder Version**
-
-```text
-Concentration
-  Damage
-
-  Movement
-    Direction: Towards
-
-  State(Restrained)
-
-  Persistent Effect
-    Damage
-```
-
-This combines:
-
-- ✅ Damage
-- ✅ Movement
-- ✅ State
-- ✅ Persistent Effect
-- ✅ Concentration
-
-All in a single perk.
-
----
+**Adding enactments because you can.** Every extra enactment costs build points *and* energy every single time you use the perk. A three-enactment perk you cannot afford to use twice in a fight is worse than a one-enactment perk you can use all day.
 
 # Perk Types
 
@@ -2800,7 +1543,7 @@ Enact Condition will apply a condition to a target (e.g., prone, stunned, charme
 **How to build it**
 
 1. **Condition** - Choose one of:
-   - *Conditions:* Blinded, Encumbered, Encouraged, Frightened, Taunted (2 build), Swayed (2 build), Untouchable (5 build), Ignored (3 build), Confused (2 build), Vengeful (2 build), Distracted (1 build), Isolated (2 build), Charmed (5 build), Hypnotized (5 build), Stubborn (2 build), Paranoid (2 build), Insane (3 build), Stunned (3 build), Paralyzed (5 build), Pacified (3 build), Enraged (3 build), Disarmed (2 build), Silenced (2 build), Deafened (2 build), Stifled (2 build), Staggered (2 build), Prone (2 build), Anchored (2 build), Restrained (2 build), Slowed (2 build), Terrified (2 build), Weakened (2 build), Fragile (2 build), Cursed (2 build), Blessed (3 build), Hesitant (2 build), Fatigued (2 build), Energized (3 build), Delayed (2 build), Hastened (2 build), Echoed (3 build), Doomed (3 build), Zombified (3 build), Linked (3 build), Incorporeal (3 build), Marked (3 build)
+   - *Conditions:* Blinded, Encumbered, Encouraged, Frightened, Taunted (2 build), Swayed (2 build), Untouchable (5 build), Ignored (3 build), Confused (2 build), Vengeful (2 build), Distracted (1 build), Isolated (2 build), Charmed (5 build), Hypnotized (5 build), Stubborn (2 build), Paranoid (2 build), Insane (3 build), Stunned (3 build), Paralyzed (5 build), Pacified (3 build), Enraged (3 build), Disarmed (2 build), Silenced (2 build), Deafened (2 build), Stifled (2 build), Staggered (2 build), Prone (2 build), Anchored (2 build), Restrained (2 build), Slowed (2 build), Terrified (2 build), Weakened (2 build), Fragile (2 build), Cursed (2 build), Blessed (3 build), Hesitant (2 build), Fatigued (2 build), Energized (3 build), Delayed (2 build), Hastened (2 build), Echoed (3 build), Doomed (3 build), Zombified (3 build), Linked (3 build), Incorporeal (3 build), Marked (3 build), Stealthed (2 build)
 2. **Duration (turns)** - Choose one of:
    - 1 turn, 2 turns (1 build), 3 turns (2 build), 4 turns (3 build), 5 turns (4 build), 6 turns (5 build), Unlimited (8 build)
 3. **Solutions** - Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this perk then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action. You start with **two** solutions and may add or remove solutions. Cost: Free per solution.
@@ -3305,3 +2048,50 @@ go run ./cmd/gendocs
 *   Field keys are persisted in saved perks, so renaming a key breaks compatibility with existing data.
 *   Saved perks may not migrate cleanly when config keys change shape.
 *   The allowed/blocked lists filter what the builder offers; they are not enforced when an perk is saved, so an imported perk may hold a combination the builder would not have offered.
+
+# cheat-sheet
+## Cheat Sheet
+
+## Perk Types
+
+The when part of the perk
+
+reaction 		--> when the trigger condition is met, only once per turn, during combat
+preparation 	--> when the trigger condition is met, only once per preperation
+execution 		--> right now
+concentration 	--> after activation & at the start of your turn
+
+## Enactments
+
+The what part of the perk
+
+damage 		    --> lose hp
+heal 		    --> gain hp 
+movement 	    --> move away/towards
+reduction 	    --> reduce the effect of an enactment 
+amplification 	--> reduce the effect of an enactment 
+
+condition	    --> apply a condition to someone
+negation 	    --> negate a condition completely
+
+effect 	        --> lose/gain hp over time or move over time
+shift           --> shift proficiencies now
+phase 		    --> shift proficiencies now, reverse the proficiency later
+
+stack           --> stack points now, use them later for other perks
+
+minion 	        --> create a minion to fight for you
+
+## Interactions
+
+The who part of the perk
+
+Self    --> Target yourself (no validation needed)
+Direct  --> right next to you
+Ranged  --> within range
+Area    --> Around a specific area triggers once
+AoE     --> Around a specific area hangs around for a while
+
+## Validation
+
+Will it hit or miss? I guess they never miss huh?
