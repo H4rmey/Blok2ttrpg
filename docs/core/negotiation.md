@@ -26,7 +26,7 @@ Arguments push motivation up and down. Patience only ever runs down. When patien
 
 ## Running a negotiation
 
-1.  The GM sets the NPC's starting **motivation** and **patience**, and notes their **traits**. None of these are announced to the players.
+1.  The GM sets the NPC's starting **motivation** and **patience**, and notes their **traits**. None of these are announced to the players, but the GM might give some context clues about the situation.
 2.  A player makes an **argument**: something specific, aimed at this NPC, for why they should help.
 3.  The GM picks a **relevant skill** for that argument, and the player rolls it. A plea to their greed might be a People Skill check; a veiled threat might be Intimidate; a forged writ of passage might be Deceive.
 4.  Motivation moves by the result. Patience drops.

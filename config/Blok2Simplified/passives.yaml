@@ -249,3 +249,30 @@ passives:
       name: "Mobile Attacker"
       description: >-
          Your movement is still one action, but you can split it between other actions. Example: move 1m; attack; move 2m; heal; move 1m.
+         
+    - id: conditional_enhancement
+      name: "Conditional Enhancement"
+      description: >-
+        When you have the condition {condition} your {skill} is increased by {value}
+      build_cost: 2
+      fields:
+        - key: condition
+          label: "Condition"
+          type: dropdown
+          options_source: conditions_all
+          information: The condition that you have
+        - key: skill
+          label: "Skill"
+          type: dropdown
+          options_source: skills_all
+          information: "The one skill this applies to, chosen when you take the passive."
+        - key: value
+          label: "Value"
+          type: free_number
+          default: 1
+          min: 1
+          max: 3
+          per_step:
+            increase: { build_cost: 3 }
+
+
