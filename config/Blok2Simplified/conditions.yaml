@@ -381,3 +381,8 @@ conditions:
     # the top of the scale for reference.
     selectable: false
     build_cost: 8
+  - id: stealthed
+    name: "Stealthed"
+    description: "You cannot be seen."
+    selectable: true
+    build_cost: 2
