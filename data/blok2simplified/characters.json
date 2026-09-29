@@ -77,7 +77,7 @@
                   "value": "defense.Constitution"
                 }
               ],
-              "engage": "d6"
+              "engage": "d12+3"
             }
           }
         ]
@@ -119,13 +119,6 @@
       {
         "id": "blinded",
         "shift": -1
-      },
-      {
-        "id": "encouraged",
-        "shift": 1
-      },
-      {
-        "id": "slowed"
       }
     ]
   },

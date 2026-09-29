@@ -92,7 +92,7 @@ func normalizeFields(cfg *config.Config, fields []config.Field, values map[strin
 				out[f.Key] = asString(f.Default)
 			}
 			if asString(out[f.Key]) == "" {
-				out[f.Key] = firstOptionValue(cfg, f)
+				out[f.Key] = FirstOptionValue(cfg, f)
 			}
 			// An inline_builder dropdown carries a nested component builder;
 			// recurse so its nested values are normalized too.
@@ -115,10 +115,17 @@ func normalizeFields(cfg *config.Config, fields []config.Field, values map[strin
 	return out
 }
 
-// firstOptionValue returns the first selectable value for a dropdown, used as
+// FirstOptionValue returns the first selectable value for a dropdown, used as
 // the last-resort fallback when a field carries neither a stored value nor a
 // configured default.
-func firstOptionValue(cfg *config.Config, f config.Field) string {
+//
+// It is exported because the builder templates need the same answer when they
+// render a dropdown that has nothing selected yet. That used to be a second,
+// identical copy in internal/web, which meant the form could in principle
+// preselect one option while normalization stored another. Having one
+// implementation is what keeps the rendered form and the priced perk in
+// agreement.
+func FirstOptionValue(cfg *config.Config, f config.Field) string {
 	if cfg == nil {
 		return ""
 	}

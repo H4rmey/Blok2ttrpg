@@ -78,20 +78,15 @@ func funcMap() template.FuncMap {
 		// firstOption returns the first selectable value of a dropdown. Every
 		// dropdown must resolve to a real option (there is no empty "none"
 		// choice), so this is the fallback when a field carries neither a
-		// stored value nor a configured default. It mirrors the engine's
-		// normalization, which fills an unset dropdown the same way, keeping
-		// the rendered form and the stored perk in agreement.
-		"firstOption": func(cfg *config.Config, f config.Field) string {
-			if cfg == nil {
-				return ""
-			}
-			for _, opt := range cfg.ResolveOptions(f) {
-				if opt.Value != "" {
-					return opt.Value
-				}
-			}
-			return ""
-		},
+		// stored value nor a configured default.
+		//
+		// This delegates to the engine rather than reimplementing the rule. It
+		// used to be a second copy of the same loop, which meant the form could
+		// in principle preselect one option while normalization stored another,
+		// and the perk would then be priced as something the user never saw.
+		// Sharing one implementation makes that disagreement impossible.
+		"firstOption": engine.FirstOptionValue,
+
 		// componentByKind resolves a component (enactment/interaction/perk
 		// type) by kind and id for the inline builder. Returns nil when not
 		// found so the template can guard with `if`.

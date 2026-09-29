@@ -4,9 +4,9 @@ Maintenance/modernization plan. Behavior-preserving throughout: no changes to
 rules math, cost formulas, route paths, form field names, template output
 structure, YAML schema, or the character JSON/migration chain.
 
-Status: passes 0a-9, 11 and 12 landed and verified, plus a sticky-header layout
-fix reported during review. Pass 10 is deferred pending sign-off; it is the only
-remaining pass, and the only one with real behavioral risk.
+Status: complete. All twelve passes are landed and verified (2 and 3 were
+deliberately skipped as unsafe -- see the note on smell A), plus a sticky-header
+layout fix reported during review.
 
 
 ## Baseline (measured on a clean worktree, commit 4ff21d7)
@@ -82,9 +82,38 @@ listed per pass.
 | 7 | `docs` | `buildguide.go` 550 lines | DONE | 3 files; `generated_docs.md` byte-identical |
 | 8 | `config` | `schema.go` 714 lines | DONE | 4 files (max 241); 53 decls preserved |
 | 9 | `engine` | `cost.go` 499, `instructions.go` 484 | DONE | 5 files (max 340); decls preserved |
-| 10 | `web`, `engine` | G — rule-bearing template funcs behind engine | **DEFERRED** | needs sign-off; golden-HTML assertions first |
+| 10 | `web`, `engine` | G — rule-bearing template funcs behind engine | DONE | golden tests written first, still pass unchanged; docs and templates byte-identical |
 | 11 | `config` | I — table-driven tests for untested branches | DONE | coverage 0% to 14.6%; 58 subtests |
 | 12 | `static` | H — prune orphaned CSS, audit JS | DONE | 5 rules removed; braces balanced; suite green |
+
+### Pass 10 notes
+
+Golden-output tests were written *before* any change, so the existing behaviour
+was captured first and the refactor could be judged against it. They live in
+`internal/web/costhint_test.go` and all passed on the first run.
+
+Reading the three candidate helpers closely split them into two groups:
+
+- `costHintStr` and `perStepHintStr` are **not** rules. They take an
+  already-computed `config.Cost` and format it for display. They were pinned with
+  golden tests and left where they are, so the cost engine stays the only thing
+  that decides what a cost is. The tests assert exact emptiness for the zero
+  cases, because the templates call these through `{{ with costHint ... }}`:
+  returning `"()"` or `" "` instead of `""` would render an empty badge on every
+  uncosted field rather than no badge at all.
+- `firstOption` **was** a genuine duplicate. `web/funcs.go` and
+  `engine/normalize.go` contained the same loop character for character (same nil
+  guard, same `ResolveOptions` walk, same skip-empty rule). That is the smell this
+  pass targeted: the builder picked a dropdown's fallback with one copy while
+  normalization picked it again with the other, so a future edit to either could
+  have made the form preselect one option while the stored perk was priced as
+  another.
+
+The fix exports `engine.FirstOptionValue` and has the template func delegate to
+it, leaving one implementation. Verified by the golden tests still passing
+unchanged, `generated_docs.md` and `templates/` showing no diff, `deadcode`
+reporting nothing newly unreachable, and all four maintenance CLIs passing.
+
 
 ### Pass 11 notes
 
