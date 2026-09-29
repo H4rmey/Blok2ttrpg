@@ -4,9 +4,9 @@ Maintenance/modernization plan. Behavior-preserving throughout: no changes to
 rules math, cost formulas, route paths, form field names, template output
 structure, YAML schema, or the character JSON/migration chain.
 
-Status: passes 0a-9 and 12 landed and verified, plus a sticky-header layout fix
-reported during review. Pass 10 is deferred pending sign-off (it is the only
-remaining pass with real behavioral risk); pass 11 is not started.
+Status: passes 0a-9, 11 and 12 landed and verified, plus a sticky-header layout
+fix reported during review. Pass 10 is deferred pending sign-off; it is the only
+remaining pass, and the only one with real behavioral risk.
 
 
 ## Baseline (measured on a clean worktree, commit 4ff21d7)
@@ -83,8 +83,34 @@ listed per pass.
 | 8 | `config` | `schema.go` 714 lines | DONE | 4 files (max 241); 53 decls preserved |
 | 9 | `engine` | `cost.go` 499, `instructions.go` 484 | DONE | 5 files (max 340); decls preserved |
 | 10 | `web`, `engine` | G — rule-bearing template funcs behind engine | **DEFERRED** | needs sign-off; golden-HTML assertions first |
-| 11 | `config`, `engine` | I — table-driven tests for untested branches | TODO | `go test -cover` delta |
+| 11 | `config` | I — table-driven tests for untested branches | DONE | coverage 0% to 14.6%; 58 subtests |
 | 12 | `static` | H — prune orphaned CSS, audit JS | DONE | 5 rules removed; braces balanced; suite green |
+
+### Pass 11 notes
+
+`internal/config` had no test files at all, so the level budgets and the
+proficiency ladder -- both rules math despite living in the config package --
+were only covered indirectly, through handlers that happened to call them with
+valid input. Three table-driven files were added:
+
+- `lookup_levels_test.go` pins the three ways a budget resolves (explicit row,
+  formula, fallback), that an explicit row beats the formula, and that the public
+  accessors clamp *before* resolving so an out-of-range level can never mint
+  points beyond the cap.
+- `lookup_proficiency_test.go` covers tier lookup, the default-rung fallbacks and
+  the shift clamping. It also asserts that `ShiftProficiency` and `ShiftClamped`
+  agree across every rung and delta: the first decides where a skill lands, the
+  second decides whether the sheet warns that the shift was capped, and if they
+  disagree the sheet either warns about a shift that worked or hides one that did
+  not.
+- `lookup_components_test.go` pins the allow/block precedence in `filterByList`
+  (the allow list wins when both are set) and the unknown-id fallbacks that let a
+  perk built against an older ruleset still open.
+
+One expectation of mine was wrong on the first run: I asserted that landing
+exactly on the top rung counted as clamped. It does not, and should not -- the
+shift was applied in full. The test was corrected, not the code.
+
 
 ### Sticky header overlap (reported during review)
 

@@ -1602,23 +1602,6 @@ Enact Motion allows you to move a Target up to a preset amount of meters.
    For each direction, choose one of:
    - Towards, Away
 
-## Enact Nerf
-
-Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain perk points or energy.
-
-**How to build it**
-
-1. **Skill** - Choose one of:
-   - *General:* Stealth, Perception, Nature, Crafting, People Skill, Performance, Thievery, Knowledge, Magic, Medicine, Provoke, Intimidate, Athletics, Deceive, Resources
-   - *Offense:* Strength, Precision, Wisdom, Magic
-   - *Defense:* Constitution, Reflex, Wisdom, Magic
-2. **Shift -/+** - Any whole number from **-6 to -1** (starts at -1). Cost: 1 energy per step.
-3. **Duration (rounds)** - Any whole number from **1 to 5** (starts at 1). Cost: -1 energy per round.
-
-**Usable with**
-
-*   Interactions: Self
-
 ## Enact Phase
 
 Enact Phase allows you to shift some skills now and then reverse the effects later. It always lasts for a preset amount of turns. So if you shift a skill up for 2 rounds, after those two rounds those skills are shifted down for 2 rounds.

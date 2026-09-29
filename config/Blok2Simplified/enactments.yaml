@@ -200,48 +200,48 @@ enactments:
   #     build_cost: 4
   #     energy_cost: 0
 
-  nerf:
-    type: "Enact Nerf"
-    information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain perk points or energy."
-    render_information: false
-    base_cost: 
-      build_cost: 0
-      energy_cost: 0
-    allowed_interactions:
-      - self
-    fields:
-      - key: nerf-shifted-skill
-        label: "Skill"
-        type: dropdown
-        options_source: skills_all
-      - key: nerf-shift-amount
-        label: "Shift -/+"
-        type: free_number
-        default: -1
-        min: -6
-        max: -1
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: 1
-          decrease:
-            build_cost: 0
-            energy_cost: -1
-      - key: nerf-duration
-        label: "Duration (rounds)"
-        type: free_number
-        default: 1
-        min: 1
-        max: 5
-        step: 1
-        per_step:
-          increase:
-            build_cost: 0
-            energy_cost: -1
-          decrease:
-            build_cost: 0
-            energy_cost: 1
+  # nerf:
+  #   type: "Enact Nerf"
+  #   information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain perk points or energy."
+  #   render_information: false
+  #   base_cost: 
+  #     build_cost: 0
+  #     energy_cost: 0
+  #   allowed_interactions:
+  #     - self
+  #   fields:
+  #     - key: nerf-shifted-skill
+  #       label: "Skill"
+  #       type: dropdown
+  #       options_source: skills_all
+  #     - key: nerf-shift-amount
+  #       label: "Shift -/+"
+  #       type: free_number
+  #       default: -1
+  #       min: -6
+  #       max: -1
+  #       step: 1
+  #       per_step:
+  #         increase:
+  #           build_cost: 0
+  #           energy_cost: 1
+  #         decrease:
+  #           build_cost: 0
+  #           energy_cost: -1
+  #     - key: nerf-duration
+  #       label: "Duration (rounds)"
+  #       type: free_number
+  #       default: 1
+  #       min: 1
+  #       max: 5
+  #       step: 1
+  #       per_step:
+  #         increase:
+  #           build_cost: 0
+  #           energy_cost: -1
+  #         decrease:
+  #           build_cost: 0
+  #           energy_cost: 1
 
   phase:
     name: "Enact Phase"
