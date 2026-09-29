@@ -1602,12 +1602,6 @@ Enact Motion allows you to move a Target up to a preset amount of meters.
    For each direction, choose one of:
    - Towards, Away
 
-## Enact Negation
-
-Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for.
-
-
-
 ## Enact Nerf
 
 Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain perk points or energy.

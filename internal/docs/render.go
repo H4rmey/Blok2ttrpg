@@ -14,8 +14,6 @@ import (
 	"text/template"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
 )
 
 // funcMap returns the template helpers used by the markdown docs. All helpers
@@ -568,15 +566,13 @@ func RenderMarkdown(loaded *config.Loaded, lib PackageLister) (string, error) {
 }
 
 // RenderHTML converts the markdown documentation to an HTML fragment.
+//
+// Conversion is delegated to markdownToHTML so the docs page, the changelog page
+// and this function all emit the same heading ids; see internal/docs/outline.go.
 func RenderHTML(loaded *config.Loaded, lib PackageLister) (string, error) {
 	md, err := RenderMarkdown(loaded, lib)
 	if err != nil {
 		return "", err
 	}
-	var buf bytes.Buffer
-	gm := goldmark.New(goldmark.WithExtensions(extension.Table))
-	if err := gm.Convert([]byte(md), &buf); err != nil {
-		return "", fmt.Errorf("converting markdown: %w", err)
-	}
-	return buf.String(), nil
+	return markdownToHTML([]byte(md))
 }

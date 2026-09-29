@@ -5,28 +5,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Title }}</title>
-  <link rel="stylesheet" href="/static/css/app.css?v=10">
+  <link rel="stylesheet" href="/static/css/app.css?v=12">
   <script src="/static/js/htmx.min.js"></script>
 </head>
 <body>
   {{/* The changelog and docs pages stand outside the character-scoped layout,
-       so each carries its own header. They share the topbar classes so the
-       responsive behaviour is identical everywhere. */}}
+       so each carries its own header. They share the topbar and doc-layout
+       classes so navigation and the sidebar behave identically on both. */}}
   <header class="topbar">
     <a href="/" class="brand">Home</a>
     <button id="nav-toggle" class="nav-toggle" type="button"
             aria-expanded="false" aria-controls="nav-links" aria-label="Menu">&#9776;</button>
     <nav id="nav-links">
       <a href="/docs">Docs</a>
-      <a href="/changelog/markdown">Download Markdown</a>
-      <button type="button" class="btn" onclick="window.print()">Print / Save PDF</button>
+      <a href="/changelog">Changelog</a>
     </nav>
     <button id="theme-toggle" type="button" title="Toggle theme">&#9788;</button>
   </header>
-  <main class="content docs changelog">
-    {{ .Content }}
-  </main>
-  <script src="/static/js/app.js?v=9"></script>
+
+  <div class="doc-layout" data-doc-page>
+    <button class="doc-sidebar-toggle btn small" id="doc-sidebar-toggle" type="button"
+            aria-expanded="false" aria-controls="doc-sidebar">Releases</button>
+    {{ template "doc_sidebar" . }}
+    <main class="content docs changelog doc-body" id="doc-body">
+      {{ .Content }}
+    </main>
+  </div>
+
+  <button class="back-to-top" id="back-to-top" type="button" title="Back to top" hidden>&#8593;</button>
+  <script src="/static/js/app.js?v=10"></script>
 </body>
 </html>
 {{ end }}

@@ -15,16 +15,22 @@ import (
 func (a *App) handleDocs(w http.ResponseWriter, r *http.Request) {
 	// The app's content library is passed in so the generated rulebook lists
 	// the real classes, races, backgrounds and items it ships with.
-	html, err := docs.RenderHTML(a.Cfg, a.Library)
+	//
+	// The outline comes back alongside the HTML rather than being derived in the
+	// template, because it is read out of the rendered output: that guarantees
+	// the sidebar's links are exactly the anchors the page actually has.
+	html, outline, err := docs.RenderHTMLOutline(a.Cfg, a.Library)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	data := struct {
-		Title   string
-		Content template.HTML
-	}{a.Cfg.Title + " - Documentation", template.HTML(html)}
+		Title       string
+		Content     template.HTML
+		Outline     []docs.Children
+		MarkdownURL string
+	}{a.Cfg.Title + " - Documentation", template.HTML(html), outline, "/docs/markdown"}
 	if err := a.Tmpl.ExecuteTemplate(w, "docs.html", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

@@ -27,6 +27,14 @@ func NewApp(cfg *config.Loaded, st *store.Store, templateDir, libraryRoot string
 	if err != nil {
 		return nil, err
 	}
+	// Shared partials live one level down. They are parsed into the same set so
+	// a page can invoke them by name; the glob is tolerated when the directory
+	// is empty, because ParseGlob only errors on a malformed pattern here.
+	if matches, globErr := filepath.Glob(filepath.Join(templateDir, "partials", "*.html")); globErr == nil && len(matches) > 0 {
+		if tmpl, err = tmpl.ParseFiles(matches...); err != nil {
+			return nil, err
+		}
+	}
 	return &App{Cfg: cfg, Store: st, Tmpl: tmpl, Library: premade.New(libraryRoot)}, nil
 }
 

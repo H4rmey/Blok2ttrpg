@@ -1,0 +1,47 @@
+{{/* Wiki-style navigation for a long single-page document.
+
+     Shared by the rulebook and the changelog so both pages navigate identically.
+     The tree is built server-side from the rendered HTML (see
+     internal/docs/outline.go), which means every link here is guaranteed to
+     point at an anchor that exists on the page.
+
+     Search is client-side and scoped to this page: the document is already
+     fully in the DOM, so the page is its own index and there is nothing to keep
+     in sync. See the doc search block in static/js/app.js. */}}
+{{ define "doc_sidebar" }}
+<aside class="doc-sidebar" id="doc-sidebar">
+  <div class="doc-search">
+    <input type="search" id="doc-search-input" placeholder="Search this page..."
+           autocomplete="off" aria-label="Search this page"
+           aria-controls="doc-search-results">
+    {{/* Full-text hits render here and replace the tree while a query is
+         active; clearing the box brings the tree back. */}}
+    <ul class="doc-search-results" id="doc-search-results" hidden></ul>
+    <p class="doc-search-empty" id="doc-search-empty" hidden>No matches.</p>
+  </div>
+
+  <nav class="doc-nav" id="doc-nav" aria-label="Contents">
+    <ol class="doc-chapters">
+      {{ range .Outline }}
+      <li class="doc-chapter{{ if .Sections }} has-sections{{ end }}">
+        <a href="#{{ .ID }}" class="doc-chapter-link" data-target="{{ .ID }}">{{ .Text }}</a>
+        {{ if .Sections }}
+        <ul class="doc-sections">
+          {{ range .Sections }}
+          <li><a href="#{{ .ID }}" class="doc-section-link" data-target="{{ .ID }}">{{ .Text }}</a></li>
+          {{ end }}
+        </ul>
+        {{ end }}
+      </li>
+      {{ end }}
+    </ol>
+  </nav>
+
+  {{/* Export controls live at the foot of the sidebar rather than in the top
+       bar, so the banner stays uncluttered as pages are added. */}}
+  <div class="doc-sidebar-foot">
+    {{ if .MarkdownURL }}<a href="{{ .MarkdownURL }}" class="btn small">Download Markdown</a>{{ end }}
+    <button type="button" class="btn small" onclick="window.print()">Print / PDF</button>
+  </div>
+</aside>
+{{ end }}

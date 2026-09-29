@@ -6,7 +6,33 @@ what changed in the rules and in the app, not how the code was refactored.
 
 ## 2026-09-29
 
-A rules addition and a documentation repair.
+A rules addition, a documentation repair, and the docs became browsable.
+
+### Added: Wiki-style docs and changelog reader
+
+- The Docs and Changelog pages now have a **contents sidebar** listing every
+  chapter with its sections, so the rulebook can be navigated instead of
+  scrolled. The entry for whatever you are reading is highlighted as you go.
+- A **search box** filters the page as you type, matching both headings and body
+  text and showing where each hit is with a snippet. It searches the page you
+  are on, and Enter jumps to the first result.
+- Every heading now has its own **anchor link**, so a specific rule can be
+  linked directly.
+- Because both pages are generated from the ruleset and the changelog file on
+  every request, the contents and the search results are always current - there
+  is nothing to rebuild or publish.
+
+### Fixed: In-document links did nothing
+
+- Cross-references between chapters ("see the Invoking chapter") were rendered
+  without heading anchors, so clicking them did nothing at all. Every heading now
+  carries an id and all of those links work.
+
+### Changed: Docs page layout
+
+- Download Markdown and Print / Save PDF moved into the sidebar footer.
+- The sidebar collapses behind a Contents button on phones, and is left out of
+  printed output entirely.
 
 ### Added: Preparing an Action
 

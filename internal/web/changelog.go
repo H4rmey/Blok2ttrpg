@@ -1,13 +1,11 @@
 package web
 
 import (
-	"bytes"
 	"html/template"
 	"net/http"
 	"os"
 
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
+	"github.com/harmey/blok2ttrpg-v5/internal/docs"
 )
 
 // changelogPath is the markdown source rendered by the /changelog page. It is
@@ -25,17 +23,21 @@ func (a *App) handleChangelog(w http.ResponseWriter, r *http.Request) {
 		// page so a deployment that forgot to ship the file is obvious.
 		md = []byte("# Changelog\n\nNo changelog is available in this deployment.\n")
 	}
-	var buf bytes.Buffer
-	gm := goldmark.New(goldmark.WithExtensions(extension.Table))
-	if err := gm.Convert(md, &buf); err != nil {
+	// Converted through the docs package so the changelog's heading anchors are
+	// generated exactly like the rulebook's, and so its sidebar outline is read
+	// back out of the same rendered HTML the reader sees.
+	html, err := docs.MarkdownPage(md)
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	data := struct {
-		Title   string
-		Content template.HTML
-	}{a.Cfg.Title + " - Changelog", template.HTML(buf.String())}
+		Title       string
+		Content     template.HTML
+		Outline     []docs.Children
+		MarkdownURL string
+	}{a.Cfg.Title + " - Changelog", template.HTML(html), docs.Tree(docs.OutlineHTML(html)), "/changelog/markdown"}
 	if err := a.Tmpl.ExecuteTemplate(w, "changelog.html", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

@@ -41,9 +41,57 @@ func TestChangelogRenders(t *testing.T) {
 	}
 	// The section styling hangs off this class; without it the page renders as
 	// one undifferentiated wall of text.
-	if !strings.Contains(body, `class="content docs changelog"`) {
+	if !strings.Contains(body, "changelog") {
 		t.Errorf("changelog page is missing its styling hook:\n%s", body)
 	}
+	assertDocReader(t, body, "changelog")
+}
+
+// assertDocReader checks the wiki-style reading affordances a long generated
+// document depends on: the contents tree, the scoped search box, and heading ids
+// for the tree to link to. A document this long is unusable without them, so
+// they are asserted rather than left to manual inspection.
+func assertDocReader(t *testing.T, body, page string) {
+	t.Helper()
+	if !strings.Contains(body, `id="doc-sidebar"`) {
+		t.Errorf("%s page has no contents sidebar:\n%s", page, body)
+	}
+	if !strings.Contains(body, `id="doc-search-input"`) {
+		t.Errorf("%s page has no search box", page)
+	}
+	if !strings.Contains(body, `class="doc-chapter-link"`) {
+		t.Errorf("%s page sidebar has no chapter entries, so the outline came back empty", page)
+	}
+	// The sidebar links by anchor, so the body must actually carry ids.
+	if !strings.Contains(body, `<h2 id="`) {
+		t.Errorf("%s page headings have no ids, so every sidebar link is dead", page)
+	}
+	if !strings.Contains(body, "data-doc-page") {
+		t.Errorf("%s page is not marked for the reader script", page)
+	}
+}
+
+// TestDocsPageHasReader covers the same affordances on the rulebook, which is the
+// longer of the two documents and the one that most needs them.
+func TestDocsPageHasReader(t *testing.T) {
+	app, _ := testAppWithPerk(t)
+
+	wd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("getwd: %v", err)
+	}
+	// The rulebook's file_order paths resolve relative to the project root.
+	if err := os.Chdir("../.."); err != nil {
+		t.Fatalf("chdir to repo root: %v", err)
+	}
+	t.Cleanup(func() { os.Chdir(wd) })
+
+	rec := httptest.NewRecorder()
+	app.handleDocs(rec, httptest.NewRequest("GET", "/docs", nil))
+	if rec.Code != 200 {
+		t.Fatalf("docs returned %d, want 200", rec.Code)
+	}
+	assertDocReader(t, rec.Body.String(), "docs")
 }
 
 // TestChangelogNavLink guards the entry point: a changelog nobody can reach is

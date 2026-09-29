@@ -785,6 +785,10 @@ textarea { min-height: 5rem; resize: vertical; }
 
 @media print {
   .no-print, .topbar, .breadcrumbs { display: none !important; }
+  /* The contents column, its search box and the floating controls are screen
+     affordances; a printed rulebook needs the full page for the text. */
+  .doc-sidebar, .doc-sidebar-toggle, .back-to-top, .heading-anchor { display: none !important; }
+  .doc-layout { display: block; max-width: none; padding: 0; }
   body { background: #fff; color: #000; }
   .content { margin: 0; max-width: none; }
 }
@@ -1368,6 +1372,228 @@ dialog .toolbar {
 .changelog strong { color: var(--text); }
 
 /* ---------------------------------------------------------------------------
+   Documentation reader (rulebook and changelog).
+
+   The rulebook is one very long document, so it is presented as a fixed
+   contents column beside a scrolling body rather than as a single scroll. The
+   sidebar is the only navigation affordance the document has, so it gets its own
+   scroll and stays put while the body moves.
+   --------------------------------------------------------------------------- */
+.doc-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.doc-sidebar {
+  position: sticky;
+  /* Clears the sticky top bar. */
+  top: 3.5rem;
+  max-height: calc(100vh - 4.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 0.75rem;
+  border-right: 1px solid var(--border);
+}
+
+/* The body must not inherit the reading column's own centring, because the
+   sidebar already constrains it; and it needs room at the bottom so the last
+   section can scroll up under the viewport top when linked to. */
+.doc-body {
+  max-width: none;
+  margin: 1.5rem 0 4rem;
+  padding: 0;
+  min-width: 0;
+}
+
+.doc-search input[type="search"] {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+}
+.doc-search input[type="search"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.doc-search-results {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  overflow-y: auto;
+}
+.doc-search-results[hidden] { display: none; }
+.doc-search-hit {
+  display: block;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-decoration: none;
+}
+.doc-search-hit:hover { border-color: var(--accent); text-decoration: none; }
+.doc-search-hit-title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.doc-search-hit-snippet {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+.doc-search-empty { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.85rem; }
+
+/* The contents tree. It scrolls independently of the document so a long
+   rulebook does not push the export buttons out of reach. */
+.doc-nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.doc-nav[hidden] { display: none; }
+/* Chapters and sections are deliberately made to look like different *kinds* of
+   thing rather than two sizes of the same thing. Weight and a hairline alone
+   were not enough to tell them apart at a glance, so a chapter is now a small
+   uppercase banner with its own surface, while sections are lower-case, indented
+   and hung off a visible guide line with a tick marking each one. */
+.doc-chapters { list-style: none; margin: 0; padding: 0; }
+.doc-chapter { margin-bottom: 0.5rem; }
+.doc-chapter-link {
+  display: block;
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
+  border-left: 3px solid var(--accent-strong);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+/* The guide line is on the list, not on each item, so it reads as one continuous
+   spine that the sections hang from. */
+.doc-sections {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0 0 0 0.9rem;
+  border-left: 1px solid var(--border);
+  margin-left: 0.55rem;
+}
+.doc-sections > li { margin: 0; }
+.doc-section-link {
+  display: block;
+  position: relative;
+  padding: 0.22rem 0.4rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  text-decoration: none;
+}
+/* Tick joining each section to the spine. Decorative only, hence aria-hidden by
+   virtue of being a pseudo-element. */
+.doc-section-link::before {
+  content: "";
+  position: absolute;
+  left: -0.9rem;
+  top: 50%;
+  width: 0.55rem;
+  height: 1px;
+  background: var(--border);
+}
+.doc-chapter-link:hover,
+.doc-section-link:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+}
+/* Where you currently are. Reinforced with a colour *and* a weight change so it
+   reads without relying on colour alone. */
+.doc-chapter-link.active {
+  background: color-mix(in srgb, var(--accent) 25%, var(--surface-2));
+  border-left-color: var(--accent);
+  color: var(--accent);
+}
+.doc-section-link.active {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-radius: 4px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.doc-section-link.active::before { background: var(--accent); }
+
+.doc-sidebar-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+/* The "Contents" button only exists below the breakpoint. */
+.doc-sidebar-toggle { display: none; }
+
+/* Per-heading anchor. Hidden until the heading is hovered or the link itself is
+   focused, so it never competes with the heading text. */
+.heading-anchor {
+  margin-left: 0.4rem;
+  color: var(--muted);
+  font-size: 0.75em;
+  font-weight: 400;
+  opacity: 0;
+  text-decoration: none;
+  transition: opacity 120ms ease-in-out;
+}
+h2:hover > .heading-anchor,
+h3:hover > .heading-anchor,
+h4:hover > .heading-anchor,
+.heading-anchor:focus { opacity: 1; }
+
+/* Anchored headings must not land underneath the sticky top bar. */
+.doc-body h2,
+.doc-body h3,
+.doc-body h4 { scroll-margin-top: 4.5rem; }
+
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 25;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.back-to-top[hidden] { display: none; }
+.back-to-top:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------------------------------------------------------------------------
    Narrow screens.
 
    The desktop bar is one row with the character name absolutely centred, which
@@ -1428,4 +1654,31 @@ dialog .toolbar {
 
   .breadcrumbs { padding: 0.5rem 0.9rem; }
   .content { margin: 1rem auto; padding: 0 0.9rem; }
+
+  /* One column, and the contents tree becomes an overlay panel opened from its
+     own button. A 280px sidebar beside the text leaves neither enough room on a
+     phone, so the document gets the full width and navigation is on demand. */
+  .doc-layout {
+    display: block;
+    padding: 0 0.9rem;
+  }
+  .doc-sidebar-toggle {
+    display: inline-block;
+    margin: 0.75rem 0 0;
+  }
+  .doc-sidebar {
+    display: none;
+    position: static;
+    max-height: none;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .doc-sidebar.open { display: flex; }
+  /* Unbounded here: the panel is in the page flow rather than a fixed column,
+     so an inner scroll would trap the reader inside a nested scroll area. */
+  .doc-nav { max-height: 60vh; }
+  .doc-body { margin: 1rem 0 3rem; }
 }

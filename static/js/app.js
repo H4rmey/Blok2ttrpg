@@ -81,6 +81,228 @@ function closePerkModal() {
   });
 })();
 
+// ---------------------------------------------------------------------------
+// Documentation reader: sidebar, scoped search, active-section tracking,
+// heading anchors and back-to-top.
+//
+// This runs only on a page marked with [data-doc-page] (the rulebook and the
+// changelog), and it exits immediately elsewhere, so nothing here costs anything
+// on the character sheet.
+//
+// Search is deliberately client-side. The whole document is already in the DOM,
+// so the page is its own index: there is no server endpoint to call, no index to
+// build at deploy time, and no way for the index to disagree with the text. It
+// is also scoped to the current page, which keeps results predictable - a query
+// on the changelog never returns rulebook hits.
+// ---------------------------------------------------------------------------
+(function () {
+  var page = document.querySelector("[data-doc-page]");
+  if (!page) return;
+
+  var body = document.getElementById("doc-body");
+  var nav = document.getElementById("doc-nav");
+  var input = document.getElementById("doc-search-input");
+  var results = document.getElementById("doc-search-results");
+  var empty = document.getElementById("doc-search-empty");
+  var sidebar = document.getElementById("doc-sidebar");
+  var sidebarToggle = document.getElementById("doc-sidebar-toggle");
+  var toTop = document.getElementById("back-to-top");
+
+  // -- Index -----------------------------------------------------------------
+  //
+  // One record per section: its heading, the chapter it belongs to, and the
+  // text of everything between this heading and the next. Built once on load
+  // from the rendered page.
+  var index = [];
+
+  function buildIndex() {
+    if (!body) return;
+    var nodes = body.querySelectorAll("h2[id], h3[id], h4[id]");
+    var chapter = "";
+    nodes.forEach(function (h) {
+      if (h.tagName === "H2") chapter = h.textContent.trim();
+      var text = "";
+      // Walk forward to the next heading of any level, collecting body text.
+      var n = h.nextElementSibling;
+      while (n && !/^H[1-6]$/.test(n.tagName)) {
+        text += " " + (n.textContent || "");
+        n = n.nextElementSibling;
+      }
+      index.push({
+        id: h.id,
+        title: h.textContent.trim(),
+        chapter: h.tagName === "H2" ? "" : chapter,
+        haystack: (h.textContent + " " + text).toLowerCase(),
+        text: text.replace(/\s+/g, " ").trim(),
+      });
+    });
+  }
+
+  // snippet returns a short window of text around the first hit, so a result
+  // shows why it matched rather than just that it did.
+  function snippet(rec, q) {
+    var i = rec.text.toLowerCase().indexOf(q);
+    if (i < 0) return "";
+    var start = Math.max(0, i - 40);
+    var s = rec.text.slice(start, start + 160);
+    return (start > 0 ? "..." : "") + s + (start + 160 < rec.text.length ? "..." : "");
+  }
+
+  function clearSearch() {
+    if (results) {
+      results.innerHTML = "";
+      results.hidden = true;
+    }
+    if (empty) empty.hidden = true;
+    if (nav) nav.hidden = false;
+  }
+
+  function runSearch(raw) {
+    var q = raw.trim().toLowerCase();
+    if (q.length < 2) {
+      clearSearch();
+      return;
+    }
+    var hits = index.filter(function (rec) {
+      return rec.haystack.indexOf(q) >= 0;
+    });
+    // Title matches first: someone typing "energy" almost always wants the
+    // section called Energy, not the first paragraph that mentions it.
+    hits.sort(function (a, b) {
+      var at = a.title.toLowerCase().indexOf(q) >= 0 ? 0 : 1;
+      var bt = b.title.toLowerCase().indexOf(q) >= 0 ? 0 : 1;
+      return at - bt;
+    });
+    hits = hits.slice(0, 30);
+
+    if (nav) nav.hidden = true;
+    if (!results) return;
+    results.innerHTML = "";
+    hits.forEach(function (rec) {
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + rec.id;
+      a.className = "doc-search-hit";
+      a.dataset.target = rec.id;
+      var title = document.createElement("span");
+      title.className = "doc-search-hit-title";
+      title.textContent = rec.chapter ? rec.chapter + " -> " + rec.title : rec.title;
+      a.appendChild(title);
+      var sn = snippet(rec, q);
+      if (sn) {
+        var p = document.createElement("span");
+        p.className = "doc-search-hit-snippet";
+        p.textContent = sn;
+        a.appendChild(p);
+      }
+      li.appendChild(a);
+      results.appendChild(li);
+    });
+    results.hidden = hits.length === 0;
+    if (empty) empty.hidden = hits.length !== 0;
+  }
+
+  if (input) {
+    var timer = null;
+    input.addEventListener("input", function () {
+      clearTimeout(timer);
+      var v = input.value;
+      timer = setTimeout(function () { runSearch(v); }, 120);
+    });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        input.value = "";
+        clearSearch();
+        input.blur();
+        return;
+      }
+      if (e.key === "Enter") {
+        // Jump straight to the first hit, so a search can be done entirely
+        // from the keyboard.
+        var first = results && results.querySelector("a");
+        if (first) {
+          e.preventDefault();
+          first.click();
+        }
+      }
+    });
+  }
+
+  // -- Active section --------------------------------------------------------
+  //
+  // Highlights the sidebar entry for whatever is currently on screen. Falls
+  // back to doing nothing at all where IntersectionObserver is unavailable,
+  // since the sidebar links work regardless.
+  function markActive(id) {
+    if (!sidebar) return;
+    sidebar.querySelectorAll("a.active").forEach(function (a) {
+      a.classList.remove("active");
+    });
+    var link = sidebar.querySelector('a[data-target="' + id + '"]');
+    if (link) {
+      link.classList.add("active");
+      // Keep the highlighted entry in view in a long contents list.
+      if (link.scrollIntoView) link.scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  if (body && window.IntersectionObserver) {
+    var observed = body.querySelectorAll("h2[id], h3[id]");
+    var io = new IntersectionObserver(function (entries) {
+      // The topmost intersecting heading wins, which matches what a reader
+      // perceives as "where I am".
+      var visible = entries
+        .filter(function (e) { return e.isIntersecting; })
+        .sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
+      if (visible.length) markActive(visible[0].target.id);
+    }, { rootMargin: "-80px 0px -70% 0px" });
+    observed.forEach(function (h) { io.observe(h); });
+  }
+
+  // -- Sidebar collapse (narrow screens) ------------------------------------
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener("click", function () {
+      var open = sidebar.classList.toggle("open");
+      sidebarToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    // Following a link on a phone should reveal the section, not leave the
+    // contents panel covering it.
+    sidebar.addEventListener("click", function (e) {
+      if (e.target.closest && e.target.closest("a")) {
+        sidebar.classList.remove("open");
+        sidebarToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  // -- Heading anchors ------------------------------------------------------
+  //
+  // A clickable "#" beside each heading, so a section can be linked directly
+  // into a chat or a ticket without hunting for the id in the HTML.
+  if (body) {
+    body.querySelectorAll("h2[id], h3[id], h4[id]").forEach(function (h) {
+      var a = document.createElement("a");
+      a.className = "heading-anchor";
+      a.href = "#" + h.id;
+      a.textContent = "#";
+      a.setAttribute("aria-label", "Link to this section");
+      h.appendChild(a);
+    });
+  }
+
+  // -- Back to top ----------------------------------------------------------
+  if (toTop) {
+    window.addEventListener("scroll", function () {
+      toTop.hidden = window.scrollY < 600;
+    });
+    toTop.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  buildIndex();
+})();
+
 // Theme toggle with persistence.
 (function () {
   var KEY = "blok2-theme";
