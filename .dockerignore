@@ -1,17 +1,23 @@
-mpos# Version control and IDE
+# Version control and IDE
 .git
 .gitignore
 .vscode
 .idea
+.kilo
+.run
 
 # Local data and logs (data is persisted via a named volume instead)
 data
 *.log
 server.log
 
-# Build artifacts
+# Build artifacts and local tooling
 blok2ttrpg
 *.exe
+node_modules
+package.json
+package-lock.json
+tmp_test_new_perk.js
 
 # Docker files themselves
 Dockerfile

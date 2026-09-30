@@ -42,22 +42,56 @@ function closePerkModal() {
 // fragment with no page shell. Without JavaScript the form falls through to
 // its plain GET submit, which the server-side guard in handlePerks refuses
 // safely (see abilities.go) rather than opening a broken builder.
-(function () {
-  var form = document.getElementById("new-perk-form");
+//
+// The handler is delegated from the document rather than bound directly to
+// #new-perk-form. A direct binding runs once at script-parse time and silently
+// does nothing if the form is not in the DOM yet, or if the page region holding
+// it is later replaced by an HTMX swap. Delegation keeps it working in both
+// cases.
+//
+// The picker modal is revealed before the request is issued, not after it
+// resolves. Revealing it only in a promise callback meant any rejected request
+// (htmx rejects on target, send, abort and timeout errors) left the New Perk
+// dialog closed and the picker still hidden - an empty overlay with no
+// indication of what went wrong.
+document.addEventListener("submit", function (e) {
+  var form = e.target && e.target.closest ? e.target.closest("#new-perk-form") : null;
   if (!form) return;
-  form.addEventListener("submit", function (e) {
-    var typeSel = document.getElementById("new-perk-type");
-    if (typeSel && typeSel.value === "passive") {
-      e.preventDefault();
-      var name = document.getElementById("new-perk-name").value;
-      var charID = form.getAttribute("data-character-id");
-      document.getElementById("new-perk-modal").close();
-      htmx.ajax("GET", "/perks/passives?character=" + encodeURIComponent(charID) + "&name=" + encodeURIComponent(name), {
-        target: "#perk-modal-body", swap: "innerHTML"
-      }).then(openPerkModal);
-    }
-  });
-})();
+
+  var typeSel = document.getElementById("new-perk-type");
+  if (!typeSel || typeSel.value !== "passive") return;
+
+  e.preventDefault();
+
+  var nameInput = document.getElementById("new-perk-name");
+  var name = nameInput ? nameInput.value : "";
+  var charID = form.getAttribute("data-character-id") || "";
+
+  var newPerkModal = document.getElementById("new-perk-modal");
+  if (newPerkModal && newPerkModal.close) newPerkModal.close();
+
+  // Show the shell first so the user always gets visible feedback, even if the
+  // fragment request is slow or fails outright.
+  openPerkModal();
+
+  var body = document.getElementById("perk-modal-body");
+  var url = "/perks/passives?character=" + encodeURIComponent(charID) +
+    "&name=" + encodeURIComponent(name);
+
+  htmx.ajax("GET", url, { target: "#perk-modal-body", swap: "innerHTML" })
+    .catch(function (err) {
+      if (console && console.error) console.error("passive picker failed to load", err);
+      if (body) {
+        body.innerHTML =
+          '<div class="pkg-library"><div class="pkg-library-head">' +
+          '<h2>Passives</h2>' +
+          '<button class="btn" type="button" onclick="closePerkModal()">Close</button>' +
+          '</div><p class="pkg-blocked">The passive list could not be loaded. ' +
+          'Check your connection and try again.</p></div>';
+      }
+    });
+});
+
 
 
 // ---------------------------------------------------------------------------
