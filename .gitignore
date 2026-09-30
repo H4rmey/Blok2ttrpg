@@ -1,9 +1,9 @@
 err.log
-.run/
-*log
 out.log
 server.log
-data/*/*json
+*log
+.run/
 .kilo
 .vscode
 docs/!!!meta.json
+data/*/*json
