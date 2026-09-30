@@ -89,10 +89,24 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 			a.savePerk(w, r, c, "")
 			return
 		}
-		// The name is collected up front via a modal (mirroring the new
-		// character flow) and passed as a query parameter so the builder opens
-		// with the name already set and the rest of the form unlocked.
-		blank := model.Perk{Type: firstPerkTypeID(a.Cfg.Config), Name: strings.TrimSpace(r.URL.Query().Get("name"))}
+		// The name and type are collected up front via the New Perk modal and
+		// passed as query parameters so the builder opens with both already
+		// set and the rest of the form unlocked.
+		name := strings.TrimSpace(r.URL.Query().Get("name"))
+		ptype := r.URL.Query().Get("type")
+		if ptype == passivePerkType {
+			// The New Perk modal intercepts a Passive selection client-side
+			// (see app.js) and never lets this request happen with
+			// JavaScript enabled. This is the no-JS fallback: rather than
+			// silently open a builder that cannot express a passive, send
+			// the user back to the perk list.
+			http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
+			return
+		}
+		if ptype == "" {
+			ptype = firstPerkTypeID(a.Cfg.Config)
+		}
+		blank := model.Perk{Type: ptype, Name: name}
 		a.renderBuilder(w, c, &blank, true)
 		return
 
@@ -106,11 +120,13 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 	}
 
 	// A passive is a perk, but it is not built from enactments, interactions and
-	// validations, so the builder cannot express it and there is nothing portable
-	// to export: the definition lives in the ruleset, not on the character. Both
-	// routes are refused here as well as hidden in the UI, so a bookmarked or
-	// hand-typed URL cannot reach a builder that would silently strip the
-	// passive's fields on save.
+	// validations, so the builder cannot express it. Both the GET and POST
+	// builder routes are refused here as well as hidden in the UI, so a
+	// bookmarked or hand-typed URL cannot reach a builder that would silently
+	// strip the passive's fields on save. Export is not refused: the perk as
+	// stored (catalogue id, configured values, resolved description) is a
+	// normal model.Perk and round-trips through the same YAML shape as a
+	// built perk.
 	isPassivePerk := passiveIDOf(c.Perks[idx]) != ""
 
 	if len(rest) == 1 {
@@ -146,10 +162,6 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 	}
 
 	if rest[1] == "export" {
-		if isPassivePerk {
-			http.Error(w, "A passive is defined by the ruleset rather than by the character, so there is nothing to export.", http.StatusBadRequest)
-			return
-		}
 		b, err := export.MarshalPerk(c.Perks[idx])
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

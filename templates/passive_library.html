@@ -18,25 +18,21 @@
   {{ if .Rows }}
   <ul class="pkg-list">
     {{ $charID := .CharacterID }}
+    {{ $name := .Name }}
     {{ range .Rows }}
     {{ $p := .Passive }}
     <li class="pkg-card{{ if not .Selectable }} unaffordable{{ end }}">
       <div class="pkg-card-head">
         <strong>{{ $p.Name }}</strong>
-        {{ if .Configurable }}
-        {{/* An entry with fields opens the configure modal, which is where it is
-             actually taken. Nothing is added to the character yet. */}}
+        {{/* An entry is never taken straight from the picker: both a
+             configurable entry and a fixed one route to the configure modal,
+             which is where a name is confirmed and (for a configurable entry)
+             fields are set. A fixed entry's modal shows nothing beyond the
+             name because it has no fields. */}}
         <button class="btn primary" type="button"
-                hx-get="/perks/passive-config?character={{ $charID }}&passive={{ $p.ID }}"
+                hx-get="/perks/passive-config?character={{ $charID }}&passive={{ $p.ID }}{{ if $name }}&name={{ $name | urlquery }}{{ end }}"
                 hx-target="#perk-modal-body" hx-swap="innerHTML"
-                {{ if not .Selectable }}disabled{{ end }}>Configure</button>
-        {{ else }}
-        {{/* A fixed entry has nothing to ask, so it is taken straight away. */}}
-        <form action="/characters/{{ $charID }}/perks/passives" method="post">
-          <input type="hidden" name="passive_id" value="{{ $p.ID }}">
-          <button class="btn primary" type="submit" {{ if not .Selectable }}disabled{{ end }}>Select</button>
-        </form>
-        {{ end }}
+                {{ if not .Selectable }}disabled{{ end }}>{{ if .Configurable }}Configure{{ else }}Select{{ end }}</button>
       </div>
 
       {{/* Priced with the same chips as the perk list, at the entry's defaults.

@@ -4,6 +4,21 @@ All notable changes to Blok2 TTRPG are recorded here. The newest release is
 listed first. Entries are written for players and game masters: they describe
 what changed in the rules and in the app, not how the code was refactored.
 
+## 2026-09-30
+
+### Changed: Perk creation now starts from one modal
+
+- The Perks page toolbar's three separate buttons (**+ New Perk**, **+ Premade
+  Perk**, **+ Add Passive**) are now one **+ New Perk** button. It opens a
+  modal where you name your perk and pick its Type - Execution, Concentration,
+  Reaction, or **Passive** - and Continue takes you to the right next step.
+  Browsing the premade-perk library moved into the same modal as a secondary
+  option below the form.
+- Passives are now player-nameable, like every other perk. Picking one -
+  configurable or fixed - opens a short naming step before it is added, and a
+  configurable passive already on your sheet can still be renamed from its
+  Configure button.
+
 ## 2026-09-29
 
 A rules addition, a documentation repair, and the docs became browsable.

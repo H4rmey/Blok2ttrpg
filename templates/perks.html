@@ -5,17 +5,6 @@
   <div class="toolbar">
     <button class="btn primary" type="button" onclick="document.getElementById('new-perk-modal').showModal()">+ New Perk</button>
 
-    {{/* Passives are predefined perks, so they are picked rather than built.
-         The picker reuses the same modal as the perk library. */}}
-
-    <button class="btn primary" type="button"
-            hx-get="/perks/library?character={{ $c.ID }}"
-            hx-target="#perk-modal-body" hx-swap="innerHTML"
-            onclick="openPerkModal()">+ Premade Perk</button>
-    <button class="btn primary" type="button"
-            hx-get="/perks/passives?character={{ $c.ID }}"
-            hx-target="#perk-modal-body" hx-swap="innerHTML"
-            onclick="openPerkModal()">+ Add Passive</button>
     <button class="btn" type="button"
             onclick="document.getElementById('perk-import-input').click()">Import Custom Perk</button>
     {{/* Recomputes the point and energy cost of every perk from the current
@@ -37,15 +26,41 @@
 </div>
 
 <dialog id="new-perk-modal">
-  <form method="get" action="/characters/{{ $c.ID }}/perks/new">
+  <form method="get" action="/characters/{{ $c.ID }}/perks/new" id="new-perk-form" data-character-id="{{ $c.ID }}">
     <h2>New Perk</h2>
     <label for="new-perk-name">Name</label>
     <input id="new-perk-name" type="text" name="name" placeholder="Perk name" required autofocus>
+
+    <div class="field">
+      <label for="new-perk-type">Type</label>
+      <div class="select-row">
+        <select id="new-perk-type" name="type" class="opt-select">
+          {{ range perkTypes .Cfg }}
+          <option value="{{ .ID }}" title="{{ .Information }}">{{ .DisplayName }}</option>
+          {{ end }}
+          <option value="passive" data-info="Passive perks are picked from a predefined list rather than built." data-render-info="true">Passive</option>
+        </select>
+        <span class="info-icon option-info" tabindex="0" data-tooltip="" hidden>i</span>
+      </div>
+      <small class="field-info option-info-text" hidden></small>
+    </div>
+
     <div class="toolbar">
-      <button class="btn primary" type="submit">Create</button>
+      <button class="btn primary" type="submit" id="new-perk-continue">Continue</button>
       <button class="btn" type="button" onclick="document.getElementById('new-perk-modal').close()">Cancel</button>
     </div>
   </form>
+
+  <div class="dialog-section">
+    <hr>
+    <p class="muted">Or browse the built-in library:</p>
+    <button class="btn" type="button"
+            hx-get="/perks/library?character={{ $c.ID }}"
+            hx-target="#perk-modal-body" hx-swap="innerHTML"
+            onclick="document.getElementById('new-perk-modal').close(); openPerkModal();">
+      + Premade Perk
+    </button>
+  </div>
 </dialog>
 
 <div id="perk-list">

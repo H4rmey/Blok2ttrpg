@@ -34,6 +34,31 @@ function closePerkModal() {
   if (modal) modal.hidden = true;
 }
 
+// New Perk modal: picking "Passive" as the Type routes into the existing
+// HTMX passive-picker flow instead of the enactment builder. This has to be
+// a client-side intercept rather than a server redirect, because
+// /perks/passives is only ever loaded as an HTMX fragment into
+// #perk-modal-body; a plain full-page GET to it would render a bare
+// fragment with no page shell. Without JavaScript the form falls through to
+// its plain GET submit, which the server-side guard in handlePerks refuses
+// safely (see abilities.go) rather than opening a broken builder.
+(function () {
+  var form = document.getElementById("new-perk-form");
+  if (!form) return;
+  form.addEventListener("submit", function (e) {
+    var typeSel = document.getElementById("new-perk-type");
+    if (typeSel && typeSel.value === "passive") {
+      e.preventDefault();
+      var name = document.getElementById("new-perk-name").value;
+      var charID = form.getAttribute("data-character-id");
+      document.getElementById("new-perk-modal").close();
+      htmx.ajax("GET", "/perks/passives?character=" + encodeURIComponent(charID) + "&name=" + encodeURIComponent(name), {
+        target: "#perk-modal-body", swap: "innerHTML"
+      }).then(openPerkModal);
+    }
+  });
+})();
+
 
 // ---------------------------------------------------------------------------
 // Mobile navigation drawer.

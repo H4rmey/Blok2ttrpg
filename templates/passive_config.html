@@ -24,6 +24,16 @@
          even when every field is an unticked checkbox. */}}
     <input type="hidden" name="pf__submitted" value="1">
 
+    {{/* Passives are player-nameable like every other perk. Pre-filled with
+         (in priority order) a name typed earlier this round, the perk's own
+         stored name, or the catalogue entry's own name - see passiveConfigPage
+         in passives.go for the exact precedence. */}}
+    <div class="field">
+      <label for="passive-name">Name</label>
+      <input type="text" id="passive-name" name="passive_name"
+             value="{{ .Name }}" placeholder="{{ $p.Name }}">
+    </div>
+
     {{/* The entry's own fields, rendered by the same partial the perk builder
          uses. Everything the builder can ask for works here unchanged. */}}
     {{ range $p.Fields }}
@@ -74,6 +84,7 @@
     </button>
     <button class="btn" type="button"
             hx-get="/perks/passives?character={{ .CharacterID }}"
+            hx-include="#passive-config-form"
             hx-target="#perk-modal-body" hx-swap="innerHTML">
       {{ if .Editing }}Cancel{{ else }}Back to the list{{ end }}
     </button>

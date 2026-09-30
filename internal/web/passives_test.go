@@ -299,9 +299,9 @@ func TestPassiveIDOf(t *testing.T) {
 	}
 }
 
-// TestPassivePickerOpensConfigureModal pins the two-step flow: a configurable
-// entry routes to the configure modal rather than being taken on the spot, while
-// a fixed entry is taken straight from the picker.
+// TestPassivePickerOpensConfigureModal pins the two-step flow: every entry
+// routes through the same configure modal (so a name can be confirmed), a
+// configurable one is labelled "Configure" and a fixed one "Select".
 func TestPassivePickerOpensConfigureModal(t *testing.T) {
 	app, _ := testAppWithPerk(t)
 
@@ -321,9 +321,10 @@ func TestPassivePickerOpensConfigureModal(t *testing.T) {
 	if !strings.Contains(body, "/perks/passive-config?character=char-1&passive=resistance") {
 		t.Errorf("picker does not route a configurable entry to the modal:\n%s", body)
 	}
-	// A fixed entry posts straight to the add route.
-	if !strings.Contains(body, `value="sure_footed"`) {
-		t.Errorf("picker does not offer the fixed entry directly:\n%s", body)
+	// A fixed entry now also routes to the same modal, rather than posting
+	// straight to the add route, so it can pick up a name too.
+	if !strings.Contains(body, "/perks/passive-config?character=char-1&passive=sure_footed") {
+		t.Errorf("picker does not route the fixed entry to the modal:\n%s", body)
 	}
 }
 
@@ -374,7 +375,7 @@ func takePassive(t *testing.T, app *App, c *model.Character, id string, values m
 		t.Fatalf("%s not found", id)
 	}
 	merged := mergePassiveFields(app.Cfg.PassiveDefaults(p), values)
-	ab := app.buildPassivePerk("perk-passive-1", p, merged)
+	ab := app.buildPassivePerk("perk-passive-1", p, merged, "")
 	c.Perks = append(c.Perks, ab)
 	if err := app.Store.Save(*c); err != nil {
 		t.Fatalf("save: %v", err)
@@ -383,8 +384,8 @@ func takePassive(t *testing.T, app *App, c *model.Character, id string, values m
 }
 
 // TestPerkListPassiveOffersConfigureNotBuilder pins the perk-list half of the
-// rule: a configurable passive gets a Configure button, and the builder and
-// export are not offered because a passive has neither.
+// rule: a configurable passive gets a Configure button and an Export link, but
+// no link to the builder, since the builder cannot express a passive.
 func TestPerkListPassiveOffersConfigureNotBuilder(t *testing.T) {
 	app, c := testAppWithPerk(t)
 	takePassive(t, app, c, "resistance", vals("source", "fire", "amount", 1))
@@ -403,13 +404,14 @@ func TestPerkListPassiveOffersConfigureNotBuilder(t *testing.T) {
 	if !strings.Contains(body, "/perks/passive-config?character=char-1&perk=perk-passive-1") {
 		t.Errorf("perk list offers no way to reconfigure the passive:\n%s", body)
 	}
-	// Neither builder nor export is offered. The built perk in the fixture still
-	// has both, so the assertions are scoped to the passive's own id.
+	// No link to the builder. The built perk in the fixture still has one, so
+	// the assertion is scoped to the passive's own id.
 	if strings.Contains(body, `href="/characters/char-1/perks/perk-passive-1"`) {
 		t.Errorf("perk list still links a passive to the builder:\n%s", body)
 	}
-	if strings.Contains(body, "/perks/perk-passive-1/export") {
-		t.Errorf("perk list still offers to export a passive:\n%s", body)
+	// Export is offered, same as for a built perk.
+	if !strings.Contains(body, "/perks/perk-passive-1/export") {
+		t.Errorf("perk list does not offer to export the passive:\n%s", body)
 	}
 	// A passive has no enactments, so the built perk's phrasing must not appear.
 	if strings.Contains(body, "0 enactment(s)") {
@@ -417,10 +419,12 @@ func TestPerkListPassiveOffersConfigureNotBuilder(t *testing.T) {
 	}
 }
 
-// TestPassiveBuilderAndExportRefused pins the server-side half of the same rule.
-// Hiding the buttons is not enough: the builder would strip a passive's fields
-// on save, so a hand-typed URL has to be refused outright.
-func TestPassiveBuilderAndExportRefused(t *testing.T) {
+// TestPassiveBuilderRefused pins the server-side half of the same rule.
+// Hiding the builder link is not enough: the builder would silently drop a
+// passive's fields on save, so a hand-typed URL has to be refused outright.
+// Export, by contrast, is allowed: a passive is a normal model.Perk on the
+// character, so it round-trips through the same YAML shape as a built perk.
+func TestPassiveBuilderRefused(t *testing.T) {
 	app, c := testAppWithPerk(t)
 
 	takePassive(t, app, c, "resistance", nil)
@@ -433,12 +437,16 @@ func TestPassiveBuilderAndExportRefused(t *testing.T) {
 		t.Errorf("builder for a passive: status = %d, want 400", rec.Code)
 	}
 
-	// Exporting one is refused.
+	// Exporting one now succeeds: the perk is a normal model.Perk on the
+	// character, so there is nothing passive-specific to refuse.
 	rec = httptest.NewRecorder()
 	req = httptest.NewRequest("GET", "/characters/char-1/perks/perk-passive-1/export", nil)
 	app.handlePerks(rec, req, c, []string{"perk-passive-1", "export"})
-	if rec.Code != 400 {
-		t.Errorf("export of a passive: status = %d, want 400", rec.Code)
+	if rec.Code != 200 {
+		t.Errorf("export of a passive: status = %d, want 200", rec.Code)
+	}
+	if !strings.Contains(rec.Body.String(), "passive_id: resistance") {
+		t.Errorf("exported passive does not carry its catalogue id:\n%s", rec.Body.String())
 	}
 
 	// An ordinary built perk is still editable and exportable.

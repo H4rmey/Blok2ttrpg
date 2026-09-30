@@ -37,10 +37,11 @@ Reach for the other two only when you specifically want their timing:
 - **Concentration** costs an action to start and then an upkeep every round to keep going. Use it for effects that should persist because you are actively maintaining them, and accept that you are paying for them every round.
 - **Reaction** fires out of turn, on a trigger you choose when you build it. It costs more build points *and* more energy than an Execution, because acting out of turn is worth a premium.
 
-Two things that are **not** perk types, despite what you might expect:
+One thing that is **not** a perk type, despite what you might expect:
 
-- **Passives** are not built here. A passive is always on and is not made of enactments, so it has no entry in the type dropdown - you add one with the "Add passive" button and it is priced from the passive catalogue.
-- **Preparing an action** is not a perk type either. It is a thing every character can do in play: spend an action to declare a trigger and hold a perk ready. See the [Preparing an Action](#preparing-an-action) chapter. It means you do not need to build a Reaction just to use something out of turn once.
+- **Preparing an action** is not a perk type. It is a thing every character can do in play: spend an action to declare a trigger and hold a perk ready. See the [Preparing an Action](#preparing-an-action) chapter. It means you do not need to build a Reaction just to use something out of turn once.
+
+**Passive** is now in the same Type dropdown as Execution/Concentration/Reaction, but picking it does not open the builder above - it opens the passive catalogue instead, because a passive is always on and is not made of enactments. You pick one off the list rather than building it, and it is priced from the passive catalogue.
 
 ---
 

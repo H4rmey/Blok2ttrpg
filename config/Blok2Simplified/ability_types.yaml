@@ -75,7 +75,9 @@ perk_types:
           increase: { build_cost: 1 }
           decrease: { build_cost: -1 }
 
-# Note: there is deliberately no "passive" perk type. A passive is not something
-# you build out of enactments, so it has no place in the perk builder's type
-# dropdown - it is added with the "Add passive" button and priced from its own
-# catalogue entry in passives.yaml.
+# Note: there is still no "passive" perk_types entry here - Passive is offered
+# in the New Perk modal's Type dropdown as a hardcoded UI option (see
+# templates/perks.html), but it routes to the passive catalogue (passives.yaml)
+# instead of this config, because it has no enactments, fields here, or
+# base_cost to speak of. Adding real per-type "build differently" support is
+# out of scope until multiple predefined-style types exist.

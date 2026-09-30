@@ -1031,6 +1031,23 @@ dialog .toolbar {
   justify-content: flex-end;
   margin-top: 0.5rem;
 }
+/* A dialog can carry a second section below its main form (e.g. the New Perk
+   modal's "browse the library" option). dialog form already gets its own
+   padding; a plain <hr>/<p>/<button> outside that form would otherwise sit
+   flush against the dialog's edges, so this section gets the same padding
+   with no duplicate top padding against the form above it. */
+dialog .dialog-section {
+  padding: 0 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+dialog .dialog-section hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 0 0.75rem;
+  width: 100%;
+}
 
 /* Info icon + hover tooltip for fields and component selects. The small "i"
    badge sits next to a label; hovering (or focusing) it reveals data-tooltip. */

@@ -43,78 +43,7 @@
       "vital.HP": "untrained",
       "vital.Movement": "untrained"
     },
-    "perks": [
-      {
-        "id": "perk-1790706557366-851451515",
-        "name": "test",
-        "type": "concentration",
-        "fields": {
-          "upkeep_cost": "1 Action or 1 Energy"
-        },
-        "enactments": [
-          {
-            "type": "condition",
-            "fields": {
-              "condition": "blinded",
-              "duration": "1",
-              "solution": [
-                {
-                  "value": "general.Stealth"
-                },
-                {
-                  "value": "general.Stealth"
-                }
-              ],
-              "solution_dc": 2
-            },
-            "interaction": "self",
-            "validation_data": {
-              "counter_skill": [
-                {
-                  "value": "defense.Reflex"
-                },
-                {
-                  "value": "defense.Constitution"
-                }
-              ],
-              "engage": "d12+3"
-            }
-          }
-        ]
-      },
-      {
-        "id": "perk-1790706599254663200",
-        "name": "Resistance",
-        "description": "You are resistant to fire. When you take damage from fire, reduce that damage by 1. Applies to every source instead: no. Fully immune: no.",
-        "type": "passive",
-        "fields": {
-          "passive_fields": {
-            "amount": 1,
-            "immune": false,
-            "source": "fire",
-            "untyped": false
-          },
-          "passive_id": "resistance"
-        }
-      },
-      {
-        "id": "perk-1790706603927237500",
-        "name": "Arcane Focus",
-        "description": "A sustained channeling of magical energy that empowers your spells.",
-        "type": "concentration",
-        "tags": [
-          "spell",
-          "buff",
-          "concentration"
-        ],
-        "fields": {
-          "action_steps": 0,
-          "comment": "Maintain focus each round to keep the magic flowing.",
-          "energy_steps": 0,
-          "upkeep_cost": "1 Action or 1 Energy"
-        }
-      }
-    ],
+    "perks": [],
     "conditions": [
       {
         "id": "blinded",

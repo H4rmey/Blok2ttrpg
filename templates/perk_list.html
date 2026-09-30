@@ -41,8 +41,11 @@
               hx-target="#perk-modal-body" hx-swap="innerHTML"
               onclick="openPerkModal()">Configure</button>
       {{ end }}
-      {{/* No Edit: a passive is predefined, so there is nothing to build. No
-           Export: its definition lives in the ruleset, not on the character. */}}
+      {{/* No builder link: a passive is predefined, so there is nothing to
+           build. Export still works: the perk as stored on the character
+           (catalogue id, configured values, resolved description) round-trips
+           through the same YAML shape as a built perk. */}}
+      <a class="btn" href="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}/export">Export</a>
       <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}" hx-confirm="Give up this passive? Its perk points are refunded.">Delete</button>
     </div>
     {{ else }}
@@ -52,7 +55,7 @@
          be opened in the builder just to read what it does. */}}
     {{ template "instructions" . }}
     <div class="actions">
-      <a class="btn" href="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}">Edit</a>
+      <a class="btn" href="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}">Configure</a>
       <a class="btn" href="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}/export">Export</a>
       <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}" hx-confirm="Delete perk?">Delete</button>
     </div>

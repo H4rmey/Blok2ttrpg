@@ -1,0 +1,12 @@
+id: perk-1790769679683556500
+name: Resistance
+description: 'You are resistant to fire. When you take damage from fire, reduce that damage by 1. Applies to every source instead: no. Fully immune: no.'
+type: passive
+fields:
+    passive_fields:
+        amount: 1
+        immune: false
+        source: ice
+        untyped: false
+    passive_id: resistance
+enactments: []

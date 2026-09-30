@@ -20,6 +20,7 @@ package web
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
@@ -83,6 +84,11 @@ type passiveLibraryPage struct {
 	Information string
 	Rows        []passiveRow
 
+	// Name is the player-typed name carried through from the New Perk modal
+	// (or the perk-list rename flow), so whichever entry is picked next opens
+	// already carrying it forward as the perk's name.
+	Name string
+
 	// AllowDuplicates mirrors the config rule, so the picker can explain why an
 	// owned passive is greyed out.
 	AllowDuplicates bool
@@ -95,13 +101,24 @@ type passiveLibraryPage struct {
 
 // handlePassiveLibrary renders the passive picker. It expects a "character"
 // query parameter so the buttons post to the right route and so each entry can be
-// checked against that character's remaining perk points and owned passives.
+// checked against that character's remaining perk points and owned passives. An
+// optional "name" query parameter carries a player-typed name (from the New
+// Perk modal) forward to whichever entry is picked next.
 func (a *App) handlePassiveLibrary(w http.ResponseWriter, r *http.Request) {
 	charID := r.URL.Query().Get("character")
+
+	name := r.URL.Query().Get("name")
+	if name == "" {
+		// "Back to the list" from the configure modal includes that form's
+		// own passive_name field via hx-include, so a name typed there before
+		// backing out is not lost.
+		name = r.URL.Query().Get("passive_name")
+	}
 
 	data := passiveLibraryPage{
 		CharacterID:     charID,
 		Information:     a.Cfg.Passives.Information,
+		Name:            name,
 		AllowDuplicates: a.Cfg.Passives.AllowsDuplicates(),
 	}
 
@@ -155,6 +172,13 @@ type passiveConfigPage struct {
 	Cfg         *config.Config
 	CharacterID string
 	Passive     config.Passive
+
+	// Name is the perk name the form's Name field renders from. Priority
+	// order: the posted passive_name (a live re-render as the player types),
+	// the perk's own stored Name (editing an owned passive), the carried-
+	// through query name (a fresh pick, name typed in the New Perk modal),
+	// falling back to the catalogue entry's own Name.
+	Name string
 
 	// Values are the current field values the form renders from.
 	Values map[string]any
@@ -213,6 +237,7 @@ func (a *App) handlePassiveConfig(w http.ResponseWriter, r *http.Request) {
 		perkID = r.URL.Query().Get("perk")
 	}
 	var current int
+	var storedName string
 	if perkID != "" {
 		idx := findPerk(&c, perkID)
 		if idx < 0 {
@@ -226,6 +251,7 @@ func (a *App) handlePassiveConfig(w http.ResponseWriter, r *http.Request) {
 		}
 		data.Passive = p
 		data.PerkID = perkID
+		storedName = c.Perks[idx].Name
 		// What it costs today, so the modal can price the change rather than the
 		// whole passive.
 		current = a.passiveCost(p, storedPassiveFields(c.Perks[idx]))
@@ -239,6 +265,20 @@ func (a *App) handlePassiveConfig(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		data.Passive = p
+	}
+
+	// The name the form renders from. Priority: a posted passive_name (typed
+	// this round, live re-render), the perk's own stored name (editing an
+	// owned passive), the carried-through query name (a fresh pick, typed in
+	// the New Perk modal), then the catalogue entry's own name.
+	if v := r.FormValue("passive_name"); v != "" {
+		data.Name = v
+	} else if storedName != "" {
+		data.Name = storedName
+	} else if v := r.URL.Query().Get("name"); v != "" {
+		data.Name = v
+	} else {
+		data.Name = data.Passive.Name
 	}
 
 	// Values come from the posted form when there is one (a live re-render or a
@@ -387,7 +427,8 @@ func (a *App) addPassive(w http.ResponseWriter, r *http.Request, c *model.Charac
 		values = a.readPassiveFields(p, r)
 	}
 
-	ab := a.buildPassivePerk(fmt.Sprintf("perk-%d", time.Now().UnixNano()), p, values)
+	name := strings.TrimSpace(r.FormValue("passive_name"))
+	ab := a.buildPassivePerk(fmt.Sprintf("perk-%d", time.Now().UnixNano()), p, values, name)
 	if ok, reason := a.affordPerk(c, ab); !ok {
 		http.Error(w, reason, http.StatusBadRequest)
 		return
@@ -400,11 +441,16 @@ func (a *App) addPassive(w http.ResponseWriter, r *http.Request, c *model.Charac
 	http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
 }
 
-// buildPassivePerk assembles the stored form of a configured passive.
-func (a *App) buildPassivePerk(id string, p config.Passive, values map[string]any) model.Perk {
+// buildPassivePerk assembles the stored form of a configured passive. name is
+// the player-typed name; when empty the catalogue entry's own name is used,
+// matching how every passive worked before naming was added.
+func (a *App) buildPassivePerk(id string, p config.Passive, values map[string]any, name string) model.Perk {
+	if name == "" {
+		name = p.Name
+	}
 	ab := model.Perk{
 		ID:   id,
-		Name: p.Name,
+		Name: name,
 		// The stored description has every placeholder already substituted, so
 		// the perk list, the printed sheet and the export read correctly without
 		// resolving the catalogue again.
@@ -454,7 +500,13 @@ func (a *App) configurePassive(w http.ResponseWriter, r *http.Request, c *model.
 		return
 	}
 
-	c.Perks[idx] = a.buildPassivePerk(ab.ID, p, values)
+	// A posted name renames the passive; leaving it blank keeps the name it
+	// already has, rather than reverting to the catalogue's own name.
+	name := strings.TrimSpace(r.FormValue("passive_name"))
+	if name == "" {
+		name = ab.Name
+	}
+	c.Perks[idx] = a.buildPassivePerk(ab.ID, p, values, name)
 	if err := a.Store.Save(*c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
