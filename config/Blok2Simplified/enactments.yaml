@@ -340,3 +340,79 @@ enactments:
         type: dropdown
         options_source: roll_generic
         information: "The offensive skill whose die is rolled for damage. Higher proficiency in the skill means a larger die."
+    
+
+  resource:
+    type: "Enact Resource"
+    information: "Generate a named resource or consume stored resources to execute another enactment. Resources with the same name are linked. Note that if you have a Consume type of resource, you must have it available to use this option, so it relies on getting the resource (by for example: Enact Resource --> Generate)"
+    render_information: false
+
+    base_cost:
+      build_cost: 1
+      energy_cost: 0
+
+    fields:
+      - key: resource_mode
+        label: "Mode"
+        type: dropdown
+        default: generate
+        options:
+          - value: generate
+            label: "Generate"
+            information: "Generate resources when this enactment resolves successfully."
+
+          - value: consume
+            label: "Consume"
+            information: "Consume stored resources to execute another enactment."
+
+      - key: resource_name
+        label: "Resource Name"
+        type: free_text
+        information: "The name linking resource generation and consumption, such as Blood, Origami Bird, Rage, or Charge."
+        render_information: false
+
+      # Generate fields
+
+      - key: generate_amount
+        label: "Amount Generated"
+        type: free_number
+        default: 1
+        min: 1
+        max: 10
+        step: 1
+        visibility_when: resource_mode
+        show_when: generate
+        per_step:
+          increase: { build_cost: 1 }
+          decrease: { build_cost: -1 }
+
+      - key: consumed_effect
+        label: "Effect Per Consumed Resource"
+        type: dropdown
+        visibility_when: resource_mode
+        show_when: consume
+        information: "The selected enactment is executed once for every consumed resource."
+        options:
+          - value: damage
+            label: "Damage"
+
+          - value: healing
+            label: "Healing"
+
+          - value: motion
+            label: "Motion"
+
+          - value: condition
+            label: "Condition"
+
+          - value: modification
+            label: "Modification"
+
+          - value: adjustment
+            label: "Adjustment"
+
+          - value: phase
+            label: "Phase"
+
+        inline_builder:
+          kind: enactment
