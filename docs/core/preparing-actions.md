@@ -1,5 +1,4 @@
-# preparing-actions
-## Preparing an Action
+# Preparing an Action
 
 Sometimes the right move is to do nothing yet.
 

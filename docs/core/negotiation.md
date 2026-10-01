@@ -1,5 +1,4 @@
-# negotiation
-## Negotiation
+# Negotiation
 
 A negotiation is what happens when the party wants something from someone who is not simply going to hand it over. It is the social equivalent of combat: a structured back-and-forth with a clock on it, resolved by rolls, that ends in a state everyone can see coming.
 

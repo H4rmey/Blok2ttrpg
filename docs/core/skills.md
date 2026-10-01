@@ -1,5 +1,4 @@
-# skills
-## Skills
+# Skills
 
 Traits say who your character is; Skills determine whether what they attempt works. Below are the Skills your character might possess, grouped by what they are used for. Depending on the world setting, you may modify some of these Skills.
 

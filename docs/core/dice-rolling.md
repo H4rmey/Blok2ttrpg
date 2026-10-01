@@ -1,13 +1,12 @@
-# dice-rolling
-## Dice Rolling
+# Dice Rolling
 
 ## Introduction
 
-Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Skill. The ladder runs from {{ lowestDie }} at the bottom rung to {{ highestDie }} at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
+Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Skill. The ladder runs from {{ lowestDie }} at the bottom to {{ highestDie }} at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
 
 {{ proficiencyDiceTable }}
 
-{{ defaultProficiencyName }} is the rung every Skill starts at and is free; the rung below it is a deliberate weakness and refunds a point.
+{{ defaultProficiencyName }} is the default value every Skill starts at and is free; the one below it is a deliberate weakness.
 
 ---
 
@@ -43,7 +42,7 @@ The obstacle, creature, or entity the Engager is acting against is called the **
 
 Compare the **Engagement Roll** to the **Counter Roll** (or static difficulty). If the **Engager's** total is **equal to or higher** than the Target's total, the Skill Check is a Success. Ties always favor the Engager.
 
-> **Example:** You attempt to hide in a bustling market. You are an Expert in Stealth, making you the **Engager** with an Engagement Roll of a d8.
+> **Example:** You attempt to hide in a crowded market. You are an Expert in Stealth, making you the **Engager** with an Engagement Roll of a d8.
 > 
 > The **Target** is the crowd's general awareness. Because the crowd is thick and distracted, the GM decides it will be an opposed roll using a d6.
 > 
@@ -75,14 +74,16 @@ When attempting an action, compare your final total against the **Counter Roll**
 When doing a group roll such as Stealth. Everybody rolls a their die. 
 
 Count the successes/fails:
-**Critical Succes**: +2
-**Succes**: +1
-**Fail**: -1
-**Critical Fail**: -2
+| Result | Score |
+|:--|:--:|
+| Critical Success | +2 |
+| Success | +1 |
+| Failure | -1 |
+| Critical Failure | -2 |
 
 The total of the roll must be **zero or above** in order to succeed. If the final result is **4 or higher**, the group **Critically Succeeds**.
 
-The idea is that when someone in the group fails. the other PC's can still aid the PC that failed the roll. 
+The idea is that when someone in the group fails. The other PC's can still aid the PC that failed a roll and not bring the group down as a whole.
 
 ### Aid/Help
 

@@ -1,7 +1,4 @@
-# character-traits
-## Character Traits
-
-## Traits
+# Traits
 
 Traits define a character, situation, or environment by providing specific, factual details. They are not inherently positive or negative, and they can be permanent or temporary. Traits can be invoked during gameplay to influence outcomes, either positively or negatively.
 
@@ -84,7 +81,7 @@ The usual effect of an invocation is a change of one Dice Tier on a roll, up whe
 
 1.  **Balancing Penalties**
 
-*   If Michael already has the Temporary Trait "Stuck," the GM should avoid multiple penalties. In the above example, the GM agrees that applying both penalties would be too harsh, so they reduce the penalty to one Dice Tier.
+*   If Michael already has the Temporary Trait "Stuck, in a barrel" the GM should avoid multiple penalties. In the above example, the GM agrees that applying both penalties would be too harsh, so they reduce the penalty to one Dice Tier.
 
 ---
 
