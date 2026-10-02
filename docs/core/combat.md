@@ -67,3 +67,5 @@ Being empty is not a wall. You may still use a Perk you cannot pay for, but you 
 **Or cut it short.** Drop the Enactments you cannot afford and resolve the rest. The fireball you cast will still burn someone, but it will not explode on impact any more, because you did not have the Energy for that part. This is usually the better choice, and it is the more interesting one: it degrades the Perk rather than the character.
 
 Either way, pushing past empty leaves a mark. See the table above for the condition it applies, which makes your next Perk cost more, so overdrawing twice in a row is progressively worse without anyone needing to track a counter.
+
+\page

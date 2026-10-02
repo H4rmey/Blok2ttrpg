@@ -41,3 +41,5 @@ The dice ladder rises by a flat +1 average per rung. The die is capped at {{ hig
 ## Cost and Budget Rules
 
 {{ rulesFlagsTable }}
+
+\page

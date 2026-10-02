@@ -92,6 +92,12 @@
 
     // Reveal the finished pages; the staging area stays hidden.
     container.removeAttribute('hidden');
+
+    // Strip all id attributes from the hidden staging div so that anchor
+    // links (sidebar, heading-anchors) resolve to the live page cards and
+    // not to the invisible originals. Without this every #heading link
+    // scrolls to the hidden div and appears to do nothing.
+    raw.querySelectorAll('[id]').forEach(function(el) { el.removeAttribute('id'); });
   })();
   </script>
 </body>

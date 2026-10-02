@@ -17,7 +17,7 @@ This document explains the foundational concepts of the system and how spells or
 
 :::warning Although this document describes a “magic system”, this does **not** mean the world of Lettuce perceives these effects as magic. :::
 
----
+
 
 ## What to Discuss
 
@@ -32,7 +32,7 @@ This document explains the foundational concepts of the system and how spells or
 - [ ] Pulse disturbances
 - [ ] Harmonization
 
----
+
 
 
 
@@ -54,7 +54,7 @@ mastering movement inside materials is quite hard. Moving an object in one direc
 
 ## The Soul 
 
----
+
 
 ## Mantles
 
@@ -62,7 +62,7 @@ Atoms exist everywhere in the world of Lettuce. Each atom is surrounded by Mantl
 
 An Atom that does not contain a Mantle at a given moment is called a dead atom.
 
----
+
 
 ## Frequencyknot and Mantleveins
 
@@ -72,7 +72,7 @@ The frequencyknot's are connected using mantleveins. They make the flow of mantl
 
 With the frequencyknot it is possible to generate a slice that can then interact with other mantles.
 
----
+
 
 ## Slices and profiles
 
@@ -85,7 +85,7 @@ A Slice is a wave with an amplitude, frequency, fluctuation and modulation.
 **Fluctuation:** decides the data or command send to the mantle. 
 **Modulation:** decides the direction in which the slice will travel, this is another sinus applied to the already existing wave.
 
----
+
 
 ## interaction with mantles and spellcasting
 
@@ -103,7 +103,7 @@ The hard part is getting to know how the material behaves. You can imagine that 
 
 Some spend a lot of time studying different materials to become a master, others invest more into general knowledge to be more flexible. 
 
----
+
 
 ## Signature
 
@@ -111,9 +111,9 @@ Every Aggregate emits a **Signature**. This is a unique and immutable combinatio
 
 Signatures are emitted passively and continuously. Because of this, they are sometimes referred to as **send profiles**.
 
----
 
----
+
+
 
 ## Souls and Spirits
 

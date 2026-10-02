@@ -149,3 +149,5 @@ go run ./cmd/gendocs
 *   Field keys are persisted in saved perks, so renaming a key breaks compatibility with existing data.
 *   Saved perks may not migrate cleanly when config keys change shape.
 *   The allowed/blocked lists filter what the builder offers; they are not enforced when an perk is saved, so an imported perk may hold a combination the builder would not have offered.
+
+\page

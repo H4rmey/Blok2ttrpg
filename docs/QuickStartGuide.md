@@ -721,3 +721,5 @@ You may act outside your turn once per round using:
 | Marked | Effects on you are amplified or reduced. |
 | Stealthed | Cannot be seen. |
 | Invincible | Cannot take damage. |
+
+\page

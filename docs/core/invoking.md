@@ -18,8 +18,6 @@ The pool is refilled by letting your own traits work against you. By letting tha
 
 > This is why your traits have to be defined correctly. A trait that only ever helps you is not a character detail, it is a bonus, and a trait that only ever hurts you is a punishment. Invocation makes it cut both ways, and pays you for the half that hurts.
 
----
-
 ## Invoking During Combat
 
 During combat you can also invoke to get an **Invoked Action**. This will cost you 1 energy and 1 invoke point. This can be done at any time during combat, so it does not have to happen in order. However it can only be done once per round. It is also something the GM cannot deny. Resolve it like any other action. "I throw my shield in front of her." "I kick the table over before he can draw." "I grab the rope as it goes past."
@@ -29,8 +27,6 @@ Gaining Invoke points during combat can be done by doing stuff that hinders your
 Because an Invoke Action resolves between actions rather than inside one, it is a way to *pre-empt* something, not to undo it. You can throw yourself in front of an arrow before it is loosed; you cannot wait to see the damage roll and then decide to have blocked it.
 
 The once-per-round limit is what keeps a wealthy character from simply taking over an enemy's turn. It also means the interesting question is not whether to act but *when*: spending it on the first threat you see means having nothing left for the worse one behind it.
-
----
 
 ## Quick overview
 
@@ -46,8 +42,6 @@ The once-per-round limit is what keeps a wealthy character from simply taking ov
 
 {{ combatGainsTable }}
 
----
-
 ## Advice for the GM
 
 **Invoke against the players early.** Players are usually slow to volunteer complications, because it feels like arguing against themselves. Offering a couple of invocations in the first session teaches the table that traits are a currency rather than a decoration, and it puts points in their hands so they can start spending.
@@ -55,3 +49,5 @@ The once-per-round limit is what keeps a wealthy character from simply taking ov
 **Do not let the pool sit full.** A player who never spends is a player whose character sheet has stopped mattering. If the pool is untouched for a whole session, aim a complication at a trait they wrote down and see what happens.
 
 **Say yes to strange invocations.** "Used to be a Detective" applying to a tavern brawl sounds like a stretch until the player explains they are reading the room for who throws the first punch. The stretch is the fun part.
+
+\page

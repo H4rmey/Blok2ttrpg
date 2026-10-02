@@ -9,7 +9,7 @@ Unlike temporary interactions or active effects, imbuing causes an object to **r
 
 Imbuing is not a spell, ritual, or momentary act. It is a **process of resonance adaptation**.
 
----
+
 
 ### Nature of Imbuing
 
@@ -27,7 +27,7 @@ Importantly:
 > An imbued object is not “powered” by an Aggregate.  
 > It has been **permanently reclassified by the world**.
 
----
+
 
 ### Examples of Imbuing
 
@@ -40,7 +40,7 @@ Importantly:
 
 Not all imbuing results are beneficial. Poor alignment between the Resonance Signature and the material’s Response Profile can weaken an object or cause unpredictable behavior.
 
----
+
 
 ### The Process of Imbuing
 
@@ -60,7 +60,7 @@ This process often takes:
 
 Imbuing cannot be rushed. Attempts to accelerate the process frequently result in flawed or unstable imprints.
 
----
+
 
 ### Accidental Imbuing
 
@@ -82,7 +82,7 @@ Examples include:
 
 Accidentally imbued objects are often mistaken for legendary artifacts, despite having no intentional design behind them.
 
----
+
 
 ### Limits and Risks
 
@@ -94,7 +94,7 @@ Imbuing has inherent limitations.
 
 In rare cases, an imbued object may begin to **feed back** into the Aggregate that created it, subtly influencing the individual’s Resonance Signature in return.
 
----
+
 
 ### Cultural and Scientific Views
 
@@ -108,7 +108,7 @@ Culturally, however:
 
 As with curses, the disconnect between understanding and perception plays a significant role in how imbued objects are treated in the world of SAS.
 
----
+
 
 ### Relationship to Curses
 
@@ -125,4 +125,3 @@ Both arise from:
 
 In some cases, an improperly imbued object may act as a **vector for curse‑like effects**, particularly when used extensively by the same individual.
 
----

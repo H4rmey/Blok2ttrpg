@@ -17,3 +17,4 @@ Oh right, i also never playtested this, so there is that.
 uuuuh, anything else?
 i'm probably still missing a bunch of mechanics
 
+\page

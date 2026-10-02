@@ -1,5 +1,4 @@
-# perk-creation-guide
-## Perk Creation Guide
+# Perk Creation Guide
 
 So you've read the docs and now you're staring at the Perk Builder thinking:
 
@@ -17,8 +16,6 @@ What it does care about is four questions:
 - **When does it happen?** - the Perk Type
 
 Everything else is flavour, and flavour is free.
-
----
 
 ## Step 1 - Pick a Perk Type
 
@@ -43,8 +40,6 @@ One thing that is **not** a perk type, despite what you might expect:
 - **Preparing an action** is not a perk type. It is a thing every character can do in play: spend an action to declare a trigger and hold a perk ready. See the [Preparing an Action](#preparing-an-action) chapter. It means you do not need to build a Reaction just to use something out of turn once.
 
 **Passive** is now in the same Type dropdown as Execution/Concentration/Reaction, but picking it does not open the builder above - it opens the passive catalogue instead, because a passive is always on and is not made of enactments. You pick one off the list rather than building it, and it is priced from the passive catalogue.
-
----
 
 ## Step 2 - Pick your main Enactment
 
@@ -85,8 +80,6 @@ Execution
 ```
 
 Damage resolves first, then the condition. Two enactments, so two energy.
-
----
 
 ## Step 3 - Chain Enactments together
 
@@ -136,8 +129,6 @@ Execution
 
 Enact Nerf is worth understanding: it targets **only yourself** and it *gives you back* budget. It is how you build something that is genuinely reckless rather than merely expensive.
 
----
-
 ### How a chain resolves
 
 Each enactment is resolved in order, and each one goes through the same three steps:
@@ -156,8 +147,6 @@ When it is not, tick **"this enactment has a different target than the enactment
 
 The rule of thumb: **if the whole perk happens to one creature, leave the box alone.** Every extra target you introduce is another roll and another chunk of your budget.
 
----
-
 ## Step 4 - Choose your Interaction
 
 The Interaction answers *who*. There are three, and they are priced by how much reach and how many bodies they cover.
@@ -174,8 +163,6 @@ Two things that cost real points and are easy to overspend on:
 - **Targets and radius.** Each extra target on a Direct interaction, and each extra metre of Zone radius, is a significant addition. A 6m-radius blast is a very expensive perk, and it should be.
 
 A Zone can also have a **duration**, which is how you build a lingering hazard: a patch of ground that keeps affecting whoever stands in it, rather than a one-off explosion.
-
----
 
 ## Step 5 - Timing in practice
 
@@ -209,8 +196,6 @@ Reaction
     Direct
 ```
 
----
-
 ### Triggers, for Reactions
 
 A Reaction's trigger is chosen from a fixed list when you build it. You cannot write your own - if you want a bespoke trigger described in your own words, that is what [Preparing an Action](#preparing-an-action) is for.
@@ -224,8 +209,6 @@ Two things matter about triggers:
 **Trigger Range is separate from your enactment's range.** Trigger Range is how far away the trigger may happen - your watch radius. Your enactment's interaction range is how far your response reaches. They are deliberately independent, so you can watch a wide area and still only strike something adjacent, or the reverse. A trigger range of 0 means it must happen to you or in your own space.
 
 The full trigger list with prices lives in the [Combat](#reaction-triggers) chapter.
-
----
 
 ## Worked example - build one from scratch
 
@@ -256,8 +239,6 @@ The second and third enactments do not repeat the interaction, because they inhe
 
 Now look at what it costs and ask the honest question: is this better than a plain Enact Damage for a third of the price? Sometimes. That is the decision the builder exists to make you take.
 
----
-
 ## Common mistakes
 
 **Buying range you never use.** Range is one of the easiest places to waste build points. If the perk is something you do while standing next to someone, leave it at 1m.
@@ -269,3 +250,5 @@ Now look at what it costs and ask the honest question: is this better than a pla
 **Building a Reaction when preparing would do.** If you only want to use something out of turn occasionally, prepare an action instead and spend the perk points elsewhere. Build a Reaction when it is a defining part of how the character fights, not to cover a one-off.
 
 **Adding enactments because you can.** Every extra enactment costs build points *and* energy every single time you use the perk. A three-enactment perk you cannot afford to use twice in a fight is worse than a one-enactment perk you can use all day.
+
+\page

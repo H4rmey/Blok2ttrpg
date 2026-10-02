@@ -12,8 +12,6 @@ A **Prepared Action** is an action you spend on your turn to declare, out loud, 
 >
 > "If anyone attacks me before my next turn, I answer with Riposte."
 
----
-
 ## How to prepare
 
 1. **Spend one of your actions** on your turn. That is the whole cost of preparing.
@@ -23,8 +21,6 @@ A **Prepared Action** is an action you spend on your turn to declare, out loud, 
 
 If the trigger never happens, the action is simply gone. That is the trade: you bought certainty about *when* you act, and paid for it with the risk of not acting at all.
 
----
-
 ## What it costs
 
 Preparing costs **one action and nothing else**. No invoke point, no perk point, no energy up front.
@@ -32,8 +28,6 @@ Preparing costs **one action and nothing else**. No invoke point, no perk point,
 If what you prepared was a perk, that perk's cost is worked out **at the moment you actually use it**, exactly as if you had used it on your turn. Nothing is reserved or set aside in advance.
 
 That has a consequence worth knowing before you rely on it: if something drains your Energy while you are holding the action, you may reach the trigger unable to afford what you prepared. Your declaration does not protect you from that. You can still fall back on the rules for [running out of Energy](#running-out-of-energy) - pay in blood, or cut the perk short - but the clean version of what you planned is not guaranteed to you just because you called it early.
-
----
 
 ## When it resolves
 
@@ -44,8 +38,6 @@ You can throw yourself in front of the arrow before it is loosed. You cannot wat
 A prepared action counts against the **once-per-round limit on acting out of turn**. That limit is shared: one out-of-turn act per round, whether it came from a Prepared Action, a Reaction perk, or an Invoke Action.
 
 {{ outOfTurnRules }}
-
----
 
 ## Preparing versus reacting versus invoking
 
@@ -68,8 +60,6 @@ Read that table as three answers to the same question, each paid for in a differ
 
 None of them is the "right" one. The Prepared Action is the one available to every character at every level with no investment at all, which makes it the default tool rather than the fallback.
 
----
-
 ## Examples
 
 **Guarding an ally.** "If the brute swings at Mira, I step in and block." You spend an action. When the swing comes, you resolve your block as though you had used it on your turn.
@@ -82,8 +72,6 @@ None of them is the "right" one. The Prepared Action is the one available to eve
 
 **A trigger that never came.** "If the guard reaches for the alarm, I shoot him." The guard never reaches. Your action is spent and you get nothing. This is normal and it is the point.
 
----
-
 ## Advice for the GM
 
 **Make them commit to a trigger, then hold them to it.** The value of a prepared action comes from it being specific. "I react to danger" is not a trigger; "if he moves toward the child, I tackle him" is. Ask once, get a real answer, and then let it fire exactly as described even if something better comes along first.
@@ -93,3 +81,5 @@ None of them is the "right" one. The Prepared Action is the one available to eve
 **Reward calling it early.** A player who correctly predicts what an enemy will do has earned the pre-empt. Resolve it before the thing they predicted, not alongside it.
 
 **Say yes to preparing perks.** A player using Preparation to fire an ordinary Execution perk out of turn is not cheating the system; they paid an action for it and may still lose it. It is the cheapest interesting decision in the whole action economy.
+
+\page

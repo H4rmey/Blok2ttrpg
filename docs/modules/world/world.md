@@ -11,7 +11,7 @@ There is no enclosing shell, no inner surface, and no central point.
 
 The universe only _appears_ to be a globe.
 
----
+
 
 ## Apparent Geometry vs True Geometry
 
@@ -33,7 +33,7 @@ Each universe is best described as a **sphere of infinite radius**:
 
 The spherical appearance is an optical effect, not a physical structure.
 
----
+
 
 ## Islands (Worlds)
 
@@ -47,7 +47,7 @@ An Island:
 
 Because the universe is infinitely large, the surface of an Island appears perfectly flat. There is no visible curvature or horizon drop.
 
----
+
 
 ## Vertical Space: Infinite Ascent
 
@@ -71,7 +71,7 @@ This means:
 *   Only movement beyond light‑speed could theoretically bridge this distance
 *   For all practical purposes, upward travel leads forever into empty space
 
----
+
 
 ## Lateral Space: Reaching Other Worlds
 
@@ -90,7 +90,7 @@ Because of this:
 *   Others appear large and distinct in the sky
 *   Rarely, multiple Islands may be visible as clearly separate bodies
 
----
+
 
 ## Inter‑Island Medium
 
@@ -108,7 +108,7 @@ This medium exists **along the surface** of the universe.
 Vertical travel moves away from all Islands.  
 Lateral travel moves between Islands.
 
----
+
 
 ## The Sky and the Stars
 
@@ -124,7 +124,7 @@ Light bending causes laterally distant Islands to appear overhead instead of on 
 
 Navigation by sight alone is unreliable.
 
----
+
 
 ## Suns and Light‑Islands
 
@@ -144,7 +144,7 @@ The sun does not set.
 
 After sufficient resonance realignment, the light‑Island may emit again, creating a new day.
 
----
+
 
 ## Motion, Interaction, and Pseudo‑Gravity
 
@@ -164,7 +164,7 @@ These interactions function as a form of **pseudo‑gravity**:
 *   Close Islands tend to avoid destructive trajectories
 *   Long‑term balance is maintained through resonance alignment
 
----
+
 
 ## Island Collisions and Merging
 
@@ -190,7 +190,7 @@ If a **light‑emitting Island (sun)** merges with a living world:
 *   Ecosystems may collapse
 *   The event may resemble an apocalyptic catastrophe
 
----
+
 
 ## Motion Through Transmutation
 
@@ -216,7 +216,7 @@ Nothing truly travels through space.
 
 **Space itself is re‑categorizing matter.**
 
----
+
 
 ## Accelerated Change and Imbuing
 
@@ -234,7 +234,7 @@ Imbuing does not violate the laws of reality.
 
 It forces resonance interactions to occur **faster than intended**.
 
----
+
 
 ## Consequences
 
@@ -247,7 +247,7 @@ This structure of reality implies several truths:
 *   Legends of ascension may describe attempts to reach other universes
 *   Catastrophic events are resonance failures, not random disasters
 
----
+
 
 ## Summary
 

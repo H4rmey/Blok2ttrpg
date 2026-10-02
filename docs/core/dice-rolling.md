@@ -8,8 +8,6 @@ Every roll in this system uses the die granted by your **Proficiency Level** in 
 
 {{ defaultProficiencyName }} is the default value every Skill starts at and is free; the one below it is a deliberate weakness.
 
----
-
 ## Dice Tier Mechanics
 
 Each Proficiency Level is directly tied to its Dice Tier. When referring to dice rolls:
@@ -20,8 +18,6 @@ Each Proficiency Level is directly tied to its Dice Tier. When referring to dice
 *   Shifting down a **Dice Tier** means downgrading to the previous die in the sequence (e.g., d6 → d4).
 *   Shifting down a **Proficiency Level** means downgrading to the corresponding Dice Tier (e.g., Expert → Trained).
 *   You can also state that you can have a **die shift** of -2 (Shifting to tiers down) or a **die shift** of +1 Shifting up one time.
-
----
 
 ### Engagement and Counter Rolls
 
@@ -88,3 +84,5 @@ The idea is that when someone in the group fails. The other PC's can still aid t
 ### Aid/Help
 
 You can choose to help someone on a **Skill Check**. This uses the same rules as a **Group Roll**. But only the people aiding and the PC making the **Skill Check** have to roll. **Aiding/Helping** someone can also be done after noticing the PC making the **Skill Check** has failed. 
+
+\page

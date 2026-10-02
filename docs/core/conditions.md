@@ -28,3 +28,5 @@ When a **Condition** has impact on your **Skills** it always has a value represe
 The following Conditions are available. The Affects column lists the Skills each one moves; a Condition affecting no Skills changes what you may do rather than what you roll.
 
 {{ conditionsTable }}
+
+\page

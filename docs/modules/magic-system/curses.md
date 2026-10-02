@@ -8,7 +8,7 @@ Curses arise when a Aggregate’s **Resonance Signature** deviates from what is 
 
 From an in‑world perspective, curses are not magic — they are **faulty resonance behavior**.
 
----
+
 
 ## Origin of Curses
 
@@ -26,7 +26,7 @@ Importantly:
 > A cursed individual is not actively causing the effect —  
 > the effect happens _because the world responds to them differently_.
 
----
+
 
 ## Types of Curses
 
@@ -47,7 +47,7 @@ An individual believed to be “unlucky” may have an unstable Resonance Signat
 
 There is no intent, malice, or conscious control — only resonance instperk.
 
----
+
 
 ### Over‑Resonant Curses
 
@@ -66,7 +66,7 @@ This can manifest as:
 From the outside, this appears as a curse.  
 From a resonance perspective, it is a **misclassification of the body by the environment**.
 
----
+
 
 ### Degenerative Curses
 
@@ -80,7 +80,7 @@ These curses may:
 
 Degenerative curses are often confused with traditional diseases, but differ in that they originate from **Aggregate‑level resonance**, not physical pathogens.
 
----
+
 
 ### Reactive Curses
 
@@ -94,7 +94,7 @@ For example:
 
 Such curses may remain dormant for long periods and only activate when specific Resonance Slices are stimulated.
 
----
+
 
 ## Curses Are Not Moral
 
@@ -114,7 +114,7 @@ As a result:
 *   Faith has no inherent effect
 *   Understanding and intervention are required
 
----
+
 
 ## Treatment and Mitigation
 
@@ -129,7 +129,7 @@ Common approaches include:
 
 In extreme cases, partial suppression of a Aggregate’s Resonance Signature may be required — often at great personal cost.
 
----
+
 
 ## Cultural Interpretation
 
@@ -143,7 +143,7 @@ As a result:
 
 This disconnect between understanding and perception is one of the primary sources of social tension surrounding curses in SAS.
 
----
+
 
 ## Summary
 

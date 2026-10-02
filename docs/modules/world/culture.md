@@ -18,7 +18,7 @@ This belief is reinforced by daily experience:
 
 As a result, the idea that the universe is anything other than a flat, enclosed world is considered **dangerous nonsense**.
 
----
+
 
 ## The Heresy of Curvature
 
@@ -40,7 +40,7 @@ These claims were met with hostility.
 
 To most cultures, they sounded absurd — or worse, destabilizing.
 
----
+
 
 ## Social Response and Suppression
 
@@ -62,7 +62,7 @@ The idea that the world “curves away beneath your feet” was seen as an attac
 
 In extreme cases, speaking openly about curvature or infinite ascent was punishable by exile, imprisonment, or death.
 
----
+
 
 ## The Reason for Fear
 
@@ -82,7 +82,7 @@ If other worlds existed:
 
 The truth was destabilizing.
 
----
+
 
 ## Cultural Myths and Distortions
 
@@ -97,7 +97,7 @@ These stories were tolerated as metaphor, but not as fact.
 
 The truth survived only in fragments.
 
----
+
 
 ## The Eventual Discovery
 
@@ -115,7 +115,7 @@ What had once been heresy became **measurable reality**.
 
 The universe was proven to be a sphere of infinite size — not a globe containing the world, but a surface upon which the world rests.
 
----
+
 
 ## Cultural Fallout
 
@@ -133,7 +133,7 @@ Institutions built on the enclosed‑world model lost legitimacy. Religions frac
 
 Even after proof, many refused to accept it.
 
----
+
 
 ## Modern Attitudes
 
@@ -152,7 +152,7 @@ Knowing the truth means accepting that:
 *   You are not contained
 *   You are not protected
 
----
+
 
 ## Summary
 

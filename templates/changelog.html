@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Title }}</title>
-  <link rel="stylesheet" href="/static/css/app.css?v=14">
+  <link rel="stylesheet" href="/static/css/app.css?v=15">
   <script src="/static/js/htmx.min.js"></script>
 </head>
 <body>
@@ -27,13 +27,77 @@
     <button class="doc-sidebar-toggle btn small" id="doc-sidebar-toggle" type="button"
             aria-expanded="false" aria-controls="doc-sidebar">Releases</button>
     {{ template "doc_sidebar" . }}
-    <main class="content docs changelog doc-body" id="doc-body">
-      {{ .Content }}
+    <main class="content docs doc-body" id="doc-body">
+      {{/* Same paged rendering as the rulebook: the changelog is split into
+           one page card per h2 (release heading) so each release sits in its
+           own visual sheet. The split uses .page-break sentinels injected by
+           the changelog handler before the content reaches here, but since the
+           changelog markdown has no \page markers we fall back to a JS split
+           on h2 boundaries instead. */}}
+      <div id="doc-raw" hidden aria-hidden="true">{{ .Content }}</div>
+      <div id="doc-pages-container" class="doc-pages"></div>
+      <noscript>
+        <style>#doc-raw { display: block !important; } #doc-pages-container { display: none; }</style>
+      </noscript>
     </main>
   </div>
 
   <button class="back-to-top" id="back-to-top" type="button" title="Back to top" hidden>&#8593;</button>
   <script src="/static/js/app.js?v=12"></script>
+  <script>
+  // initChangelogPages -- wraps each h2 release section in a .doc-page card.
+  //
+  // The changelog has no \page markers, so instead of splitting on .page-break
+  // divs we split on h2 elements: every release heading starts a new page card.
+  // Everything before the first h2 (the h1 title and intro paragraph) goes into
+  // its own card so nothing is orphaned.
+  (function initChangelogPages() {
+    var raw = document.getElementById('doc-raw');
+    var container = document.getElementById('doc-pages-container');
+    if (!raw || !container) return;
+
+    var tmp = document.createElement('div');
+    tmp.innerHTML = raw.innerHTML;
+
+    var chunks = [[]];
+    Array.from(tmp.childNodes).forEach(function(node) {
+      // A .page-break sentinel (from explicit \page if ever added) or an h2
+      // both start a new chunk. h1 does NOT split -- it stays with the first
+      // chunk as the cover heading.
+      var isBreak = node.nodeType === 1 && node.classList && node.classList.contains('page-break');
+      var isH2    = node.nodeType === 1 && node.nodeName === 'H2';
+      if (isBreak) {
+        chunks.push([]);
+      } else if (isH2 && chunks[chunks.length - 1].length > 0) {
+        // Start a new page before this h2, then add the h2 to it.
+        chunks.push([node]);
+      } else {
+        chunks[chunks.length - 1].push(node);
+      }
+    });
+
+    // Drop empty or whitespace-only chunks.
+    chunks = chunks.filter(function(chunk) {
+      return chunk.some(function(n) {
+        return n.nodeType !== 3 || n.textContent.trim() !== '';
+      });
+    });
+
+    chunks.forEach(function(nodes, idx) {
+      var page = document.createElement('div');
+      page.className = 'doc-page';
+      page.setAttribute('data-page', 'p. ' + (idx + 1));
+      nodes.forEach(function(n) { page.appendChild(n.cloneNode(true)); });
+      container.appendChild(page);
+    });
+
+    container.removeAttribute('hidden');
+
+    // Strip IDs from the hidden staging div so sidebar anchor links resolve
+    // to the live page cards, not the invisible originals.
+    raw.querySelectorAll('[id]').forEach(function(el) { el.removeAttribute('id'); });
+  })();
+  </script>
 </body>
 </html>
 {{ end }}

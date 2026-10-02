@@ -45,3 +45,4 @@ Let's say you want to hit someone with a an **Damage Enactment**. You first chec
 
 {{enactmentSurchargeTable}}
 
+\page
