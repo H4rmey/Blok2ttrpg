@@ -1,5 +1,4 @@
 # passives
-## Passives
 
 Most perks you own are ones you built. You picked a perk type, attached
 enactments, chose who they reach and what roll resolves them, and the cost came
@@ -18,7 +17,7 @@ energy, because there is no moment at which you use it: it is simply true.
 
 {{ passiveRules }}
 
-### Configuring a passive
+## Configuring a passive
 
 Most passives have parts you fill in. Some are a single number; some are a
 number and a word. **Resistance** is the clearest case: you type what you are

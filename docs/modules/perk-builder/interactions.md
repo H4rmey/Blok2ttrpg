@@ -1,6 +1,7 @@
 # Interactions
 
 {{range allInteractions}}
+
 ## {{.DisplayName}}
 
 {{.Information}}

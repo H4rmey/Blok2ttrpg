@@ -20,15 +20,30 @@
     <p class="doc-search-empty" id="doc-search-empty" hidden>No matches.</p>
   </div>
 
+  {{/* Three depths, one per markdown heading level, so a reader can tell a
+       part (#) from a chapter (##) from a section (###) at a glance. The
+       markup carries the level in the class name and the styling in
+       static/css/app.css does the visual separation. */}}
   <nav class="doc-nav" id="doc-nav" aria-label="Contents">
-    <ol class="doc-chapters">
+    <ol class="doc-tree doc-tree-l1">
       {{ range .Outline }}
-      <li class="doc-chapter{{ if .Sections }} has-sections{{ end }}">
-        <a href="#{{ .ID }}" class="doc-chapter-link" data-target="{{ .ID }}">{{ .Text }}</a>
+      <li class="doc-node doc-node-l1{{ if .Sections }} has-children{{ end }}">
+        <a href="#{{ .ID }}" class="doc-link doc-link-l1" data-target="{{ .ID }}">{{ .Text }}</a>
         {{ if .Sections }}
-        <ul class="doc-sections">
+        <ul class="doc-tree doc-tree-l2">
           {{ range .Sections }}
-          <li><a href="#{{ .ID }}" class="doc-section-link" data-target="{{ .ID }}">{{ .Text }}</a></li>
+          <li class="doc-node doc-node-l2{{ if .Sections }} has-children{{ end }}">
+            <a href="#{{ .ID }}" class="doc-link doc-link-l2" data-target="{{ .ID }}">{{ .Text }}</a>
+            {{ if .Sections }}
+            <ul class="doc-tree doc-tree-l3">
+              {{ range .Sections }}
+              <li class="doc-node doc-node-l3">
+                <a href="#{{ .ID }}" class="doc-link doc-link-l3" data-target="{{ .ID }}">{{ .Text }}</a>
+              </li>
+              {{ end }}
+            </ul>
+            {{ end }}
+          </li>
           {{ end }}
         </ul>
         {{ end }}

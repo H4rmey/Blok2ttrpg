@@ -1,4 +1,4 @@
-# Perk Builder Configuration
+# Perk Builder Configuration for developers
 
 ## Overview
 

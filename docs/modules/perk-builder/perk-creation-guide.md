@@ -35,6 +35,7 @@ The Perk Type is *timing*, and nothing else. There are three.
 Reach for the other two only when you specifically want their timing:
 
 - **Concentration** costs an action to start and then an upkeep every round to keep going. Use it for effects that should persist because you are actively maintaining them, and accept that you are paying for them every round.
+
 - **Reaction** fires out of turn, on a trigger you choose when you build it. It costs more build points *and* more energy than an Execution, because acting out of turn is worth a premium.
 
 One thing that is **not** a perk type, despite what you might expect:

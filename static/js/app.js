@@ -176,7 +176,7 @@ document.addEventListener("submit", function (e) {
 
   function buildIndex() {
     if (!body) return;
-    var nodes = body.querySelectorAll("h2[id], h3[id], h4[id]");
+    var nodes = body.querySelectorAll("h1[id], h2[id], h3[id], h4[id]");
     var chapter = "";
     nodes.forEach(function (h) {
       if (h.tagName === "H2") chapter = h.textContent.trim();
@@ -306,7 +306,7 @@ document.addEventListener("submit", function (e) {
   }
 
   if (body && window.IntersectionObserver) {
-    var observed = body.querySelectorAll("h2[id], h3[id]");
+    var observed = body.querySelectorAll("h1[id], h2[id], h3[id]");
     var io = new IntersectionObserver(function (entries) {
       // The topmost intersecting heading wins, which matches what a reader
       // perceives as "where I am".
@@ -339,7 +339,7 @@ document.addEventListener("submit", function (e) {
   // A clickable "#" beside each heading, so a section can be linked directly
   // into a chat or a ticket without hunting for the id in the HTML.
   if (body) {
-    body.querySelectorAll("h2[id], h3[id], h4[id]").forEach(function (h) {
+    body.querySelectorAll("h1[id], h2[id], h3[id], h4[id]").forEach(function (h) {
       var a = document.createElement("a");
       a.className = "heading-anchor";
       a.href = "#" + h.id;

@@ -1,3 +1,3 @@
-## Validations
+# Validations
 
 {{validationsGuide}}

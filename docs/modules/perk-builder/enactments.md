@@ -1,6 +1,7 @@
 # Enactments
 
 {{range allEnactments}}
+
 ## {{.DisplayName}}
 
 {{.Information}}

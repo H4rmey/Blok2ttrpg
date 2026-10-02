@@ -16,21 +16,18 @@ file_order:
   - ./docs/core/negotiation.md
   - ./docs/core/conditions.md
 
-  - ./docs/core/perks.md
-  - ./docs/core/passives.md
-  - ./docs/core/packages.md
-  - ./docs/core/items.md
+  #- ./docs/core/perks.md
   - ./docs/core/leveling.md
   #- ./docs/modules/skill-trees.md
   - ./docs/modules/perk-builder/introduction.md
   - ./docs/modules/perk-builder/perk-creation-guide.md
-  - ./docs/modules/perk-builder/perk-types.md
+  - ./docs/modules/perk-builder/passives.md
   - ./docs/modules/perk-builder/enactments.md
   - ./docs/modules/perk-builder/interactions.md
   - ./docs/modules/perk-builder/validations.md
   - ./docs/modules/perk-builder/leveling.md
+  - ./docs/QuickStartGuide.md
   - ./docs/modules/perk-builder/configuration.md
-  - ./docs/modules/perk-builder/cheatsheet.md
   #- ./docs/modules/magic-system/magic-system.md
   #- ./docs/modules/magic-system/imbuing.md
   #- ./docs/modules/magic-system/curses.md

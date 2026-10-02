@@ -35,7 +35,8 @@ import (
 
 // Heading is one entry in a document's outline.
 type Heading struct {
-	// Level is the markdown heading level: 2 for a chapter, 3 for a section.
+	// Level is the markdown heading level: 1 for a part, 2 for a chapter,
+	// 3 for a section.
 	Level int
 	// Text is the heading's visible text, with any inline markup removed.
 	Text string
@@ -43,12 +44,13 @@ type Heading struct {
 	ID string
 }
 
-// Children is the nested outline used by the sidebar: a chapter and the sections
-// under it. Deeper headings are deliberately not nested further, because a
-// three-level tree stops being scannable.
+// Children is the nested outline used by the sidebar. It is recursive so the
+// sidebar can show the three markdown heading levels the documentation actually
+// uses (#, ## and ###) at three visually distinct depths. Level 4 and below are
+// still excluded, because a four-level tree stops being scannable.
 type Children struct {
 	Heading
-	Sections []Heading
+	Sections []Children
 }
 
 // MarkdownPage converts arbitrary documentation-style markdown to an HTML
@@ -87,13 +89,14 @@ var headingRe = regexp.MustCompile(`(?is)<h([1-6])[^>]*\sid="([^"]*)"[^>]*>(.*?)
 var tagRe = regexp.MustCompile(`(?s)<[^>]*>`)
 
 // OutlineHTML returns the headings of a rendered HTML fragment, in document
-// order. Only levels 2 and 3 are returned: level 1 is the document title and
-// levels 4 and below are too fine-grained for navigation.
+// order. Levels 1, 2 and 3 are returned, matching the three markdown heading
+// levels the documentation uses; levels 4 and below are too fine-grained for
+// navigation.
 func OutlineHTML(htmlFragment string) []Heading {
 	var out []Heading
 	for _, m := range headingRe.FindAllStringSubmatch(htmlFragment, -1) {
 		level, err := strconv.Atoi(m[1])
-		if err != nil || level < 2 || level > 3 {
+		if err != nil || level < 1 || level > 3 {
 			continue
 		}
 		text := strings.TrimSpace(html.UnescapeString(tagRe.ReplaceAllString(m[3], "")))
@@ -105,20 +108,29 @@ func OutlineHTML(htmlFragment string) []Heading {
 	return out
 }
 
-// Tree groups a flat outline into chapters with their sections, which is the
-// shape the sidebar template iterates.
+// Tree groups a flat outline into the nested shape the sidebar template
+// iterates: parts (#) contain chapters (##), which contain sections (###).
 //
-// A level-3 heading that appears before any level-2 heading is promoted to a
-// chapter of its own rather than dropped, so no section can become unreachable
-// from the sidebar because of how a document happens to start.
+// A heading that appears before any heading of a shallower level is promoted to
+// the shallowest open depth rather than dropped, so no entry can become
+// unreachable from the sidebar because of how a document happens to start.
 func Tree(headings []Heading) []Children {
 	var out []Children
 	for _, h := range headings {
-		if h.Level == 2 || len(out) == 0 {
+		// Shallowest level, or nothing to attach to yet: start a new branch.
+		if h.Level <= 1 || len(out) == 0 {
 			out = append(out, Children{Heading: h})
 			continue
 		}
-		out[len(out)-1].Sections = append(out[len(out)-1].Sections, h)
+		part := &out[len(out)-1]
+		// A chapter attaches to the current part. So does a section when the
+		// part has no chapter yet, which keeps it reachable.
+		if h.Level == 2 || len(part.Sections) == 0 {
+			part.Sections = append(part.Sections, Children{Heading: h})
+			continue
+		}
+		chapter := &part.Sections[len(part.Sections)-1]
+		chapter.Sections = append(chapter.Sections, Children{Heading: h})
 	}
 	return out
 }

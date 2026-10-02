@@ -4,12 +4,12 @@
 
 \page
 
-# Character Creation
-## Quick Start Guide
+## Character Creation
+### Quick Start Guide
 
 Follow these steps to create your first character.
 
-### 1. Create Your Character
+#### 1. Create Your Character
 
 Write down your character's basic identity:
 
@@ -17,7 +17,7 @@ Write down your character's basic identity:
 * **Age**
 * **Description**
 
-### Choose Your Traits
+#### Choose Your Traits
 
 Create the following Traits:
 
@@ -27,19 +27,17 @@ Create the following Traits:
 
 Traits are specific facts about your character. They describe their background, personality, experiences, connections, or unusual qualities.
 
-{{note
-##### invoking
-traits are an important part of the gameplay as they can be invoked for bonusses
-}}
+> ##### invoking
+> traits are an important part of the gameplay as they can be invoked for bonusses
 
-##### Good Traits
+###### Good Traits
 
 * Former City Guard
 * Lucky with Money
 * Raised by Wolves
 * Owes the Guild a Favour
 
-##### Avoid Overly Broad Traits
+###### Avoid Overly Broad Traits
 
 * Strong
 * Smart
@@ -47,7 +45,7 @@ traits are an important part of the gameplay as they can be invoked for bonusses
 
 A good Trait should be useful in some situations and create complications in others. We're tyring to make a nerative, it's not PC vs GM, but rather PC and GM create a story together.
 
-### 2. Spend Your Skill Points
+#### 2. Spend Your Skill Points
 
 At Level 1, you have:
 
@@ -57,7 +55,7 @@ At Level 1, you have:
 Skills begin at **Untrained**, unless stated otherwise. Lowering a Skill to **Inept** gives it a fixed result of **1**.
 
 \column
-##### Dice Tiers
+###### Dice Tiers
 
 | Tier | Roll |
 |:--|:--:|
@@ -73,7 +71,7 @@ Skills begin at **Untrained**, unless stated otherwise. Lowering a Skill to **In
 
 An **Inept** Skill does not roll a die. Its result is always **1**, before applying other modifiers.
 
-##### Example Skill Selection
+###### Example Skill Selection
 
 A stealth-focused character could choose:
 
@@ -84,7 +82,7 @@ A stealth-focused character could choose:
 
 Focus on two or three important Skills rather than trying to be good at everything.
 
-### Vital Skills
+#### Vital Skills
 
 Do not forget your Vital Skills:
 
@@ -92,7 +90,7 @@ Do not forget your Vital Skills:
 * **Energy** powers your Perks.
 * **Movement** determines how effectively you can move.
 
-### 3. Spend Your Perk Points
+#### 3. Spend Your Perk Points
 
 At Level 1, you have:
 
@@ -102,41 +100,41 @@ At Level 1, you have:
 
 \page
 
-# Creating Perks
+## Creating Perks
 
-## Quick Start Guide
+### Quick Start Guide
 
 A Perk is an action, ability, technique, spell, or passive benefit available to your character.
 
 When creating a Perk, answer four questions.
 
-### 1. When Is It Used?
+#### 1. When Is It Used?
 
 Choose a **Perk Type**.
 
-#### Execution
+##### Execution
 
 The Perk is performed immediately.
 
 Examples include a sword attack, fireball, healing spell, or combat manoeuvre.
 
-#### Concentration
+##### Concentration
 
 The Perk remains active while it is maintained.
 
 Examples include an aura, magical barrier, sustained transformation, or protective stance.
 
-#### Reaction
+##### Reaction
 
 The Perk triggers in response to something happening.
 
 Examples include dodging an attack, blocking a strike, performing a riposte, or protecting an ally.
 
-#### Passive
+##### Passive
 
 The Perk is always active and does not need to be used. Passives are selected from a predefined list rather than built from Enactments.
 
-### 2. What Does It Do?
+#### 2. What Does It Do?
 
 Choose one or more **Enactments**.
 
@@ -151,25 +149,25 @@ Choose one or more **Enactments**.
 
 Additional Enactments make a Perk more flexible or powerful, but also increase its Energy cost.
 
-### 3. Who Does It Affect?
+#### 3. Who Does It Affect?
 
 Choose an **Interaction**.
 
-#### Self
+##### Self
 
 The Perk only affects you.
 
-#### Direct
+##### Direct
 
 The Perk affects one or more selected targets.
 
-#### Zone
+##### Zone
 
 The Perk affects an area and anything within it.
 
 \column
 
-### 4. Does It Succeed?
+#### 4. Does It Succeed?
 
 Choose a **Validation**. The character using the Perk makes an **Engagement Roll**. The target or GM makes the associated **Counter Roll**.
 
@@ -180,14 +178,13 @@ Examples include:
 
 If the Engagement Roll is equal to or higher than the Counter Roll, the Perk succeeds. Favour to the engager.
 
-{{note
-##### willing target
-if the target is willing, the engagement roll is done agains a dc of 2 instead
-}}
+> ##### willing target
+> if the target is willing, the engagement roll is done agains a dc of 2 instead
 
-### Example Perks
 
-#### Power Strike
+#### Example Perks
+
+##### Power Strike
 
 * **Type:** Execution
 * **Enactment:** Damage
@@ -196,7 +193,7 @@ if the target is willing, the engagement roll is done agains a dc of 2 instead
 
 Make a powerful melee attack against a single target.
 
-#### Fireball
+##### Fireball
 
 * **Type:** Execution
 * **Enactment:** Damage
@@ -205,7 +202,7 @@ Make a powerful melee attack against a single target.
 
 Deal damage to targets within an area.
 
-#### Shield Bash
+##### Shield Bash
 
 * **Type:** Execution
 * **Enactments:** Damage and Condition
@@ -214,7 +211,7 @@ Deal damage to targets within an area.
 
 Strike a target and attempt to knock it Prone.
 
-#### Healing Light
+##### Healing Light
 
 * **Type:** Execution
 * **Enactment:** Healing
@@ -226,12 +223,12 @@ Restore HP to an ally.
 
 \page
 
-# How to Play
-## Quick Start Guide
+## How to Play
+### Quick Start Guide
 
 This guide covers the basic rules needed to play your first session.
 
-### The Core Rule
+#### The Core Rule
 
 When the outcome of an action is uncertain:
 
@@ -245,7 +242,7 @@ When the outcome of an action is uncertain:
 > ##### Ties Favour the Engager
 > The character initiating the action wins when both final results are equal.
 
-##### Example
+###### Example
 
 You attempt to pick a lock.
 
@@ -256,7 +253,7 @@ You attempt to pick a lock.
 
 Your result is higher, so the lock opens.
 
-### Dice Tiers
+#### Dice Tiers
 
 | Tier | Roll |
 |:--|:--:|
@@ -272,7 +269,7 @@ Your result is higher, so the lock opens.
 
 An **Inept** Skill always produces a result of **1** instead of rolling a die.
 
-### Die Shifts
+#### Die Shifts
 
 Some effects temporarily shift a Skill up or down the Dice Tier table.
 
@@ -285,7 +282,7 @@ Apply all Die Shifts before making the roll.
 
 \column
 
-### Die Overloading
+#### Die Overloading
 
 When a die lands on its maximum value, you may choose to **Overload** it:
 
@@ -295,13 +292,13 @@ When a die lands on its maximum value, you may choose to **Overload** it:
 
 If the new roll also lands on its maximum value, you may Overload again. The penalty increases by 1 for each additional Overload.
 
-### Critical Results
+#### Critical Results
 
-#### Critical Success
+##### Critical Success
 
 You score a Critical Success when your final result beats the Counter Roll by **4 or more**.
 
-#### Critical Failure
+##### Critical Failure
 
 You score a Critical Failure when your final result loses to the Counter Roll by **4 or more**.
 
@@ -309,9 +306,9 @@ The GM determines the additional consequences based on the situation.
 
 \page
 
-# Traits and Invoke Points
+## Traits and Invoke Points
 
-## Traits
+### Traits
 
 Traits are facts about your character that influence the story.
 
@@ -324,14 +321,12 @@ Examples:
 * Raised by Wolves
 * Wanted Criminal
 
-{{note
-##### Good Traits
-A good Trait should be useful sometimes and problematic sometimes.
+> ##### Good Traits
+> A good Trait should be useful sometimes and problematic sometimes.
+> 
+> If a Trait only helps or only hurts, it is usually not very interesting.
 
-If a Trait only helps or only hurts, it is usually not very interesting.
-}}
-
-## Invoking
+### Invoking
 
 Invoking is how Traits influence the story.
 
@@ -346,7 +341,7 @@ Invoking can happen during roleplay, exploration, combat, negotiations, or whene
 
 Traits are at their best when they both help and hinder your character. A former guard knows the city's patrol routes, but might also be recognised by old colleagues. A wanted criminal may know the underworld, but can never fully escape their past.
 
-### Positive Invoke
+#### Positive Invoke
 
 Spend **1 Invoke Point** to use a relevant Trait to your advantage.
 
@@ -357,7 +352,7 @@ A Positive Invoke can provide:
 * A narrative advantage.
 * Access to a contact, opportunity, or resource.
 
-##### Example
+###### Example
 
 > "I was a City Guard, so I know how guards usually patrol this district."
 
@@ -365,7 +360,7 @@ The GM agrees and grants a one-step bonus to your Perception roll.
 
 Sometimes an Invoke changes the situation instead of granting a bonus. Knowing the captain of the guard may open doors that would otherwise remain closed.
 
-### Negative Invoke
+#### Negative Invoke
 
 Traits can also create complications.
 
@@ -373,32 +368,29 @@ When a Trait causes a meaningful problem and you accept that complication, gain 
 
 Either the GM or the player may suggest a complication.
 
-##### Example
+###### Example
 
 > Your "Wanted Criminal" Trait causes a guard to recognise you.
 
 The situation becomes more difficult, but you gain **1 Invoke Point**.
 
-{{note
-##### Invite Trouble
-Players are encouraged to suggest complications caused by their own Traits. This creates interesting stories and is one of the main ways to earn Invoke Points.
-}}
+>##### Invite Trouble
+>Players are encouraged to suggest complications caused by their own Traits. This creates interesting stories and is one of the main ways to earn Invoke Points.
 
-
-### Invoke Point Pool
+#### Invoke Point Pool
 
 At Level 1, you begin each session or scenario with **3 Invoke Points**.
 
 Invoke Points represent narrative momentum. Characters gain them when their Traits create problems and spend them when those same Traits help overcome challenges.
 
-### Other Uses
+#### Other Uses
 
 Invoke Points can also be spent to:
 
 * Take an improvised action outside your turn.
 * Reroll a failed argument during a negotiation.
 
-### Quick Summary
+#### Quick Summary
 
 * Traits describe who your character is.
 * Positive Invokes cost 1 Invoke Point.
@@ -411,13 +403,13 @@ Invoke Points can also be spent to:
 
 \page
 
-# Combat
+## Combat
 
-## combat 
+### combat 
 
 Combat is divided into rounds. Each participant takes a turn during every round.
 
-### Initiative
+#### Initiative
 
 At the start of combat, roll Initiative using:
 
@@ -426,7 +418,7 @@ At the start of combat, roll Initiative using:
 
 Characters act from the highest result to the lowest. Player characters act before NPCs when their results are equal.
 
-### Your Turn
+#### Your Turn
 
 You receive **3 Actions** at the beginning of your turn.
 
@@ -439,7 +431,7 @@ Actions can be spent to:
 * Interact with the environment
 * Prepare an action
 
-### Movement
+#### Movement
 
 Moving normally costs **1 Action**.
 
@@ -451,7 +443,7 @@ You may move multiple times, but consecutive movement actions cost increasing am
 
 The additional cost continues to stack between turns until the movement chain is broken.
 
-### Using a Perk
+#### Using a Perk
 
 When using a Perk:
 
@@ -464,37 +456,37 @@ When using a Perk:
 
 \column
 
-### Energy
+#### Energy
 
 Energy powers Perks and other demanding actions.
 
 When you use a Perk, subtract its Energy cost from your current Energy.
 
-#### Recovering Energy
+##### Recovering Energy
 
 A rest restores **5 Energy**. Energy does not automatically refill after combat.
 
-#### Insufficient Energy
+##### Insufficient Energy
 
 If you do not have enough Energy, you can still use a Perk by choosing one of the following options.
 
-##### Pay with HP
+###### Pay with HP
 
 Each missing Energy costs **3 HP**.
 
-##### Reduce the Perk
+###### Reduce the Perk
 
 Remove one or more Enactments and perform a weaker version of the Perk.
 
-## Acting Outside Your Turn
+### Acting Outside Your Turn
 
 There are three common ways to act outside your normal turn.
 
-### Reaction Perk
+#### Reaction Perk
 
 A Reaction is a Perk built with a predefined trigger. It activates when that trigger occurs and costs the Perk's normal Energy cost.
 
-### Prepared Action
+#### Prepared Action
 
 Spend an Action during your turn and declare a trigger and response.
 
@@ -502,14 +494,14 @@ Spend an Action during your turn and declare a trigger and response.
 
 The Prepared Action remains ready until the start of your next turn. If the trigger never occurs, the Action is lost.
 
-### Invoke Action
+#### Invoke Action
 
 Spend the following to improvise an action outside your turn:
 
 * **1 Invoke Point**
 * **1 Energy**
 
-### Out-of-Turn Limit
+#### Out-of-Turn Limit
 
 > ##### Once Per Round
 > You may only act outside your turn once per round, regardless of whether you use a Reaction, Prepared Action, or Invoke Action.
@@ -518,13 +510,13 @@ Out-of-turn actions resolve between complete actions. They cannot undo an action
 
 \page
 
-# Conditions and Teamwork
+## Conditions and Teamwork
 
-## Conditions
+### Conditions
 
 Conditions temporarily change what a character can do.
 
-### Shifting Conditions
+#### Shifting Conditions
 
 Shifting Conditions apply one or more Die Shifts to specified Skills.
 
@@ -535,7 +527,7 @@ Examples include:
 * Encumbered
 * Encouraged
 
-### Fixed Conditions
+#### Fixed Conditions
 
 Fixed Conditions change a character's actions, targeting, movement, or behaviour.
 
@@ -549,13 +541,13 @@ Examples include:
 
 Read the individual Condition to determine its exact effect and duration.
 
-## Helping Allies
+### Helping Allies
 
 You can help another character with a Skill Check.
 
 Both characters roll and resolve the attempt using the Group Roll rules. Helping may also be offered after seeing that another character failed their roll.
 
-## Group Rolls
+### Group Rolls
 
 For a Group Roll, each participating character rolls.
 
@@ -574,11 +566,11 @@ Add the scores together:
 
 \page
 
-## Negotiation
+### Negotiation
 
 Important social encounters use **Motivation** and **Patience**.
 
-### Motivation
+#### Motivation
 
 Motivation represents how willing an NPC is to cooperate.
 
@@ -590,7 +582,7 @@ Motivation represents how willing an NPC is to cooperate.
 | 4 | Willing | Agrees to the request |
 | 5 | Invested | Agrees and offers additional help |
 
-### Patience
+#### Patience
 
 Patience determines how many arguments can be made before the conversation ends.
 
@@ -606,7 +598,7 @@ When Patience reaches 0, the negotiation ends.
 
 An argument and the Trait behind it may each only be used once per negotiation.
 
-### NPC Traits
+#### NPC Traits
 
 Arguments that align with or oppose an NPC's Traits can limit how Motivation changes:
 
@@ -616,9 +608,9 @@ Arguments that align with or oppose an NPC's Traits can limit how Motivation cha
 
 \page
 
-# Quick Reference
+## Quick Reference
 
-### Core Resolution
+#### Core Resolution
 
 1. Describe the action.
 2. Choose a Skill.
@@ -626,18 +618,18 @@ Arguments that align with or oppose an NPC's Traits can limit how Motivation cha
 4. Resolve the Counter Roll.
 5. Meet or beat the Counter Roll to succeed.
 
-### Dice Ladder
+#### Dice Ladder
 
 > 1 → d4 → d6 → d8 → d10 → d12 → d12+1 → d12+2 → d12+3
 
-### On Your Turn
+#### On Your Turn
 
 * You have **3 Actions**.
 * Movement normally costs **1 Action**.
 * Perks cost Actions and Energy as listed.
 * You may prepare an Action for a specific trigger.
 
-### Outside Your Turn
+#### Outside Your Turn
 
 You may act outside your turn once per round using:
 
@@ -645,7 +637,7 @@ You may act outside your turn once per round using:
 * A Prepared Action
 * An Invoke Action
 
-### Resource Reminders
+#### Resource Reminders
 
 * Spend Energy to use Perks.
 * Recover 5 Energy on a rest.
@@ -653,7 +645,7 @@ You may act outside your turn once per round using:
 * Spend Invoke Points to make Traits matter.
 * Accept relevant Trait complications to regain Invoke Points.
 
-### Perk Builder Questions
+#### Perk Builder Questions
 
 1. **When?** Choose the Perk Type.
 2. **What?** Choose the Enactments.
@@ -665,8 +657,8 @@ You may act outside your turn once per round using:
 
 
 \page
-# List of Conditions
-### Skill Conditions
+## List of Conditions
+#### Skill Conditions
 
 | Condition | Effect | Affected Skills |
 |:--|:--|:--|
@@ -688,7 +680,7 @@ You may act outside your turn once per round using:
 
 \column
 
-### Behavior Conditions
+#### Behavior Conditions
 
 | Condition | Effect |
 |:--|:--|

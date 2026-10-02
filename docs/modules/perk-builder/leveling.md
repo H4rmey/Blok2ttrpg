@@ -1,11 +1,7 @@
 # leveling
 ## Perk Builder Leveling
 
-## Introduction
-
 As you level up, your character gains a deeper understanding of their powers, techniques, and spells. This growth is represented by **Perk Points**. Perk Points are spent to pay the **Build Cost** of Perks, Enactments, Interactions, and Validations when constructing or upgrading your Perks.
-
----
 
 ## Perk Points
 
@@ -19,9 +15,7 @@ You do not need to create a brand new Perk every time you level up. You can spen
 
 ### Refunding Perk Points
 
-Some Perks in the Perk Builder apply drawbacks or restrictions to an Perk (such as giving it an Item Dependency or increasing its Action Cost). These Perks have a **negative Build Cost**. Taking these drawbacks refunds Perk Points, allowing you to spend them elsewhere on the same Perk to make it more powerful.
-
-There is a floor on this, however. See the table of cost rules below.
+Your character is evolving and sometimes that means that they no longer have a use for the perks you've created. So you can remove perks or reduce their power in order to refund the points spent on them.
 
 ### Cost and Budget Rules
 
