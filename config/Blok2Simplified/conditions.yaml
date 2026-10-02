@@ -75,59 +75,6 @@ conditions:
   # Shiftable conditions. IMPORTANT: a condition that declares a shift range is
   # charged shift_cost PER UNIT OF SHIFT and its build_cost is never read. These
   # four previously set only build_cost, which made them free at any magnitude.
-  - id: blinded
-    name: "Blinded"
-    description: "You cannot see. Shifts down every skill that relies on sight."
-    min_shift: -6
-    max_shift: 0
-    shift_cost: { build_cost: 1 }
-    # Sight-dependent skills only. Losing your eyes does not make you weaker or
-    # less tough, which is why Strength and Constitution are absent: this is the
-    # difference between Blinded and a general-purpose penalty.
-    affects_skills:
-      - general.Perception
-      - general.Stealth
-      - general.Thievery
-      - offense.Precision
-      - defense.Reflex
-  - id: encumbered
-    name: "Encumbered"
-    description: "You are overloaded. Shifts down movement and anything physical."
-    min_shift: -6
-    max_shift: 0
-    shift_cost: { build_cost: 1 }
-    affects_skills:
-      - vital.Movement
-      - general.Athletics
-      - general.Stealth
-      - defense.Reflex
-  - id: encouraged
-    name: "Encouraged"
-    description: "You are emboldened. Shifts up your offensive and social skills."
-    min_shift: 1
-    max_shift: 6
-    # A buff costs more per step than the mirrored debuff (see Frightened).
-    shift_cost: { build_cost: 2 }
-    # The mirror of Frightened, on the same skills, so the pair reads as one
-    # dial with two directions rather than two unrelated conditions.
-    affects_skills:
-      - offense.Strength
-      - offense.Precision
-      - general.Intimidate
-      - general.Provoke
-      - general.Performance
-  - id: frightened
-    name: "Frightened"
-    description: "You are afraid. Shifts down your offensive and social skills."
-    min_shift: -6
-    max_shift: 0
-    shift_cost: { build_cost: 1 }
-    affects_skills:
-      - offense.Strength
-      - offense.Precision
-      - general.Intimidate
-      - general.Provoke
-      - general.Performance
   - id: taunted
     name: "Taunted"
     description: "You can only target a preset Target."
@@ -248,17 +195,6 @@ conditions:
     name: "Restrained"
     description: "You can no longer use your hands."
     build_cost: 2
-  - id: slowed
-    name: "Slowed"
-    description: "Movement speed shifted one down."
-    # One die shift on a skill, which is the tier 2 "shifts one die" line. Was 1.
-    build_cost: 2
-    # The magnitude is part of the rule ("one down"), so it is a fixed_shift and
-    # the sheet offers no picker. Making this shiftable instead would turn a
-    # named condition into a generic movement dial and duplicate Encumbered.
-    affects_skills:
-      - vital.Movement
-    fixed_shift: -1
   - id: terrified
     name: "Terrified"
     description: "You move 1m away from the target (or take 1d4 damage)."
@@ -266,18 +202,6 @@ conditions:
     build_cost: 2
 
   # Dice & Stats Modifications
-  - id: weakened
-    name: "Weakened"
-    description: "Damaging rolls are shifted one die down."
-    build_cost: 2
-    # "Damaging rolls" is the offense group, so every offensive skill drops one
-    # rung. Fixed rather than shiftable for the same reason as Slowed.
-    affects_skills:
-      - offense.Strength
-      - offense.Precision
-      - offense.Wisdom
-      - offense.Magic
-    fixed_shift: -1
   - id: fragile
     name: "Fragile"
     description: "Engager that targets you, may shift their damage die by +1."
