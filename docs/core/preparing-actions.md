@@ -37,8 +37,6 @@ You can throw yourself in front of the arrow before it is loosed. You cannot wat
 
 A prepared action counts against the **once-per-round limit on acting out of turn**. That limit is shared: one out-of-turn act per round, whether it came from a Prepared Action, a Reaction perk, or an Invoke Action.
 
-{{ outOfTurnRules }}
-
 ## Preparing versus reacting versus invoking
 
 There are now three ways to act outside your turn. They are different things and it is worth keeping them straight.
