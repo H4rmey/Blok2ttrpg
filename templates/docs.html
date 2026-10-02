@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Title }}</title>
-  <link rel="stylesheet" href="/static/css/app.css?v=14">
+  <link rel="stylesheet" href="/static/css/app.css?v=15">
   <script src="/static/js/htmx.min.js"></script>
 </head>
 <body>
@@ -28,12 +28,72 @@
             aria-expanded="false" aria-controls="doc-sidebar">Contents</button>
     {{ template "doc_sidebar" . }}
     <main class="content docs doc-body" id="doc-body">
-      {{ .Content }}
+      {{/* The raw HTML from the markdown renderer is placed in a hidden staging
+           area. The initDocPages() script below then splits it at every
+           .page-break sentinel and wraps each chunk in a .doc-page card, so
+           the doc renders as a stack of physical-looking rulebook pages.
+           If JS is disabled the staging div is made visible as a fallback. */}}
+      <div id="doc-raw" hidden aria-hidden="true">{{ .Content }}</div>
+      <div id="doc-pages-container" class="doc-pages"></div>
+      <noscript>
+        <style>#doc-raw { display: block !important; } #doc-pages-container { display: none; }</style>
+      </noscript>
     </main>
   </div>
 
   <button class="back-to-top" id="back-to-top" type="button" title="Back to top" hidden>&#8593;</button>
   <script src="/static/js/app.js?v=12"></script>
+  <script>
+  // initDocPages -- splits the rendered markdown HTML into page cards.
+  //
+  // The markdown preprocessor replaced every "\page" line with
+  // <div class="page-break"></div>. This script uses those as split points,
+  // wraps each chunk in a .doc-page card, numbers them, then replaces the
+  // staging area with the finished stack.
+  (function initDocPages() {
+    var raw = document.getElementById('doc-raw');
+    var container = document.getElementById('doc-pages-container');
+    if (!raw || !container) return;
+
+    // Parse the raw HTML into a temporary DOM so we can split on page-break
+    // nodes without resorting to regex on markup.
+    var tmp = document.createElement('div');
+    tmp.innerHTML = raw.innerHTML;
+
+    // Walk the top-level children and collect them into page chunks. Every
+    // time a .page-break div is encountered we close the current chunk and
+    // start a new one.
+    var chunks = [[]];
+    Array.from(tmp.childNodes).forEach(function(node) {
+      if (node.nodeType === 1 && node.classList.contains('page-break')) {
+        chunks.push([]);
+      } else {
+        chunks[chunks.length - 1].push(node);
+      }
+    });
+
+    // Filter out chunks that are entirely whitespace text nodes (can happen
+    // when the markdown has a blank line before the first \page).
+    chunks = chunks.filter(function(chunk) {
+      return chunk.some(function(n) {
+        return n.nodeType !== 3 || n.textContent.trim() !== '';
+      });
+    });
+
+    // Build a .doc-page card for each chunk and append it to the container.
+    chunks.forEach(function(nodes, idx) {
+      var page = document.createElement('div');
+      page.className = 'doc-page';
+      // data-page drives the ::after page-number badge via CSS attr().
+      page.setAttribute('data-page', 'p. ' + (idx + 1));
+      nodes.forEach(function(n) { page.appendChild(n.cloneNode(true)); });
+      container.appendChild(page);
+    });
+
+    // Reveal the finished pages; the staging area stays hidden.
+    container.removeAttribute('hidden');
+  })();
+  </script>
 </body>
 </html>
 {{ end }}

@@ -31,6 +31,7 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
+	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 )
 
 // Heading is one entry in a document's outline.
@@ -65,18 +66,39 @@ func MarkdownPage(md []byte) (string, error) {
 //
 // Every documentation page must go through this, so the anchors on the docs page
 // and the anchors on the changelog page are generated the same way.
+//
+// Lines containing only "\page" (Homebrewery/PF2Scribe convention) are replaced
+// with a page-break sentinel before goldmark runs, so the rendered HTML contains
+// a <div class="page-break"> at each explicit page boundary.
 func markdownToHTML(md []byte) (string, error) {
+	md = preprocessPageBreaks(md)
 	gm := goldmark.New(
 		goldmark.WithExtensions(extension.Table),
 		// Without this no heading carries an id and every in-document link in
 		// the rulebook is dead.
 		goldmark.WithParserOptions(parser.WithAutoHeadingID()),
+		goldmark.WithRendererOptions(
+			goldmarkhtml.WithUnsafe(),
+		),
 	)
 	var buf bytes.Buffer
 	if err := gm.Convert(md, &buf); err != nil {
 		return "", fmt.Errorf("converting markdown: %w", err)
 	}
 	return buf.String(), nil
+}
+
+// preprocessPageBreaks replaces every line that consists solely of "\page"
+// (with optional surrounding whitespace) with a raw HTML page-break div that
+// goldmark will pass through unchanged when WithUnsafe is enabled.
+func preprocessPageBreaks(md []byte) []byte {
+	lines := bytes.Split(md, []byte("\n"))
+	for i, line := range lines {
+		if bytes.TrimSpace(line) != nil && string(bytes.TrimSpace(line)) == `\page` {
+			lines[i] = []byte(`<div class="page-break"></div>`)
+		}
+	}
+	return bytes.Join(lines, []byte("\n"))
 }
 
 // headingRe matches a rendered heading and captures its level, its id and its
