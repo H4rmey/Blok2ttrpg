@@ -20,25 +20,30 @@
 package engine
 
 import (
+	"slices"
+	"strings"
+
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
 
 // SkillView is one skill as it should be read right now: the proficiency to use
-// after conditions, and how far it moved from the character's own value.
+// after conditions and applied shift cards, and how far it moved from the
+// character's own value.
 type SkillView struct {
 	// Base is the proficiency id stored on the character, before conditions.
 	Base string
 
 	// Effective is the proficiency id to roll with, after every applied
-	// condition. It equals Base when no condition touches this skill.
+	// condition and shift card. It equals Base when no overlay touches this
+	// skill.
 	Effective string
 
-	// Shift is the total requested shift, summed across conditions. It is the
-	// number shown to the player, and it is deliberately the *requested* amount
-	// rather than the achieved one, so a skill sitting at the bottom of the
-	// ladder still reads as "-3" and does not look like the condition failed to
-	// apply. Clamped reports the discrepancy instead.
+	// Shift is the total requested shift, summed across conditions and shift
+	// cards. It is the number shown to the player, and it is deliberately the
+	// *requested* amount rather than the achieved one, so a skill sitting at the
+	// bottom of the ladder still reads as "-3" and does not look like the
+	// condition failed to apply. Clamped reports the discrepancy instead.
 	Shift int
 
 	// Clamped reports that the ladder ran out before the full shift could be
@@ -95,12 +100,70 @@ func ConditionShifts(cfg *config.Config, c model.Character) map[string]int {
 	return out
 }
 
+// SkillShifts returns the total shift each skill key receives from every play
+// overlay: the applied conditions AND the hand-applied "Enact Shift" cards
+// (Character.Shifts). This is the map every consumer of the effective reading
+// (skill grid, vital cards, clamp warning) must use, so a shift card and a
+// condition on the same skill behave as one summed effect.
+//
+// A shift card naming a key the config no longer defines is skipped rather than
+// treated as an error - a ruleset can drop a skill, and that must not make a
+// saved character unopenable. The exact-zero cleanup runs after both sources
+// are summed, so a condition and a shift card cancelling each other leave the
+// skill unmarked rather than coloured for nothing.
+func SkillShifts(cfg *config.Config, c model.Character) map[string]int {
+	out := ConditionShifts(cfg, c)
+	if len(c.Shifts) == 0 {
+		return out
+	}
+	if out == nil {
+		out = map[string]int{}
+	}
+	for _, card := range c.Shifts {
+		if card.SkillKey == "" || card.Shift == 0 {
+			continue
+		}
+		if cfg != nil && !skillKeyConfigured(cfg, card.SkillKey) {
+			continue
+		}
+		out[card.SkillKey] += card.Shift
+	}
+	for key, total := range out {
+		if total == 0 {
+			delete(out, key)
+		}
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
+}
+
+// skillKeyConfigured reports whether key names a "<group>.<skill>" pair the
+// ruleset still defines. A card whose skill was dropped by a ruleset change
+// must not colour anything, but the strip still renders it as removable.
+func skillKeyConfigured(cfg *config.Config, key string) bool {
+	if cfg == nil {
+		return false
+	}
+	group, skill, ok := strings.Cut(key, ".")
+	if !ok || skill == "" {
+		return false
+	}
+	for _, g := range cfg.Skills.List() {
+		if g.ID == group && slices.Contains(g.Skills, skill) {
+			return true
+		}
+	}
+	return false
+}
+
 // EffectiveSkills returns the post-condition view of every skill the character
 // has stored, keyed the same way as Character.Skills. Skills no condition
 // touches are still present, with Effective equal to Base and a zero Shift, so
 // a template can render the whole grid from one map.
 func EffectiveSkills(cfg *config.Config, c model.Character) map[string]SkillView {
-	shifts := ConditionShifts(cfg, c)
+	shifts := SkillShifts(cfg, c)
 	out := make(map[string]SkillView, len(c.Skills))
 	for key, base := range c.Skills {
 		view := SkillView{Base: base, Effective: base}
@@ -126,7 +189,7 @@ func EffectiveSkill(cfg *config.Config, c model.Character, group, skill string) 
 	if cfg == nil {
 		return view
 	}
-	shift := ConditionShifts(cfg, c)[key]
+	shift := SkillShifts(cfg, c)[key]
 	if shift == 0 {
 		return view
 	}

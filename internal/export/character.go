@@ -12,6 +12,9 @@ import (
 // CharacterYAML is the portable, human-friendly YAML shape of a character. It
 // intentionally mirrors the generic model so any config's traits survive a
 // round trip without code changes.
+//
+// Like Conditions, the applied Shifts cards are play state and are not part of
+// the exported build; they stay out of this shape on purpose.
 type CharacterYAML struct {
 	ID       string                   `yaml:"id,omitempty"`
 	Level    int                      `yaml:"level"`

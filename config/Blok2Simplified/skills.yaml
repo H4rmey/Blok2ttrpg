@@ -4,35 +4,71 @@
 # These used to be called "traits". The name moved to the narrative descriptors
 # in traits.yaml, which are the things a player invokes; the dice-backed roster
 # below is now "skills", matching how other systems use the word.
+#
+# information / render_information
+# --------------------------------
+# Each skill entry is either a bare name (no help text) or a
+# {name, information} object: "information" is a one-line play description
+# surfaced as a hover "i" on the character sheet's skill list, on the Apply
+# Shift picker and in the builder's skill dropdowns. Write the object once on
+# the skill's first occurrence; a bare name of the same skill elsewhere in this
+# file inherits that text, and writing the object again on a later copy
+# overrides the text for that group alone. render_information: false keeps the
+# hover badge behaviour (true renders the text under the field instead).
 skills:
+  render_information: false
+
   general:
-    - Stealth
-    - Perception
-    - Nature
-    - Crafting
-    - People Skill
-    - Performance
-    - Thievery
-    - Knowledge
-    - Magic
-    - Medicine
-    - Provoke
-    - Intimidate
-    - Athletics
-    - Deceive
-    - Resources
+    - name: Stealth
+      information: "Do things unseen: hiding, sneaking, ambushes and picking pockets."
+    - name: Perception
+      information: "Noticing things: spotting hides, traps, tells and ambushes before they land."
+    - name: Nature
+      information: "Survival in the wild: tracking, foraging, weather signs and beasts."
+    - name: Crafting
+      information: "Making and mending: tools, weapons, machines and repairs."
+    - name: People Skill
+      information: "Persuasion and manners: talking people around without lying outright."
+    - name: Performance
+      information: "Holding an audience: music, dance, acting or commanding a crowd."
+    - name: Thievery
+      information: "Locks, traps, sleight of hand and other light-fingered work."
+    - name: Knowledge
+      information: "What you know: lore, history, facts and forgotten details."
+    - name: Magic
+      information: "Understanding the arcane: rituals, glyphs, senses and spellwork."
+    - name: Medicine
+      information: "Patching bodies: diagnosing, treating wounds and stabilizing the downed."
+    - name: Provoke
+      information: "Getting under someone's skin so a target acts rashly."
+    - name: Intimidate
+      information: "Frightening people into compliance with menace or reputation."
+    - name: Athletics
+      information: "Raw physical feat: climbing, jumping, swimming and grappling."
+    - name: Deceive
+      information: "Lying with a straight face: bluffs, disguises and false alibis."
+    - name: Resources
+      information: "Money, gear and connections: what you can buy, bribe or call in."
 
   offense:
-    - Strength
-    - Precision
-    - Wisdom
+    - name: Strength
+      information: "Brutal force: smashing, bending and overpowering with muscle; backs most attacks."
+    - name: Precision
+      information: "Controlled accuracy: fine aim, precise strikes and steady hands; backs most attacks."
+    - name: Wisdom
+      information: "Insight and judgement: reading people, tactics and common sense; also a defense roll."
     - Magic
   defense:
-    - Constitution
-    - Reflex
+    - name: Constitution
+      information: "Resilience: enduring pain, poison and fatigue; defensive rolls for your body."
+    - name: Reflex
+      information: "Quick reactions: dodging, keeping balance and getting out of the way; defensive rolls."
     - Wisdom
     - Magic
   vital:
-    - HP
-    - Movement
-    - Energy
+    - name: HP
+      information: "Health: the damage a character can take before dropping."
+    - name: Movement
+      information: "How far the character moves each turn; shifting it changes their speed."
+    - name: Energy
+      information: "The pool perks are paid for; overdraw spends HP instead (see energy_overdraft)."

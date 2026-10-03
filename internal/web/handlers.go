@@ -47,6 +47,10 @@ type pageData struct {
 	Conditions []conditionRow
 	SkillViews map[string]engine.SkillView
 
+	// Shifts are the hand-applied "Enact Shift" cards, resolved against the
+	// config for display. They feed the same SkillViews overlay as Conditions.
+	Shifts []shiftRow
+
 	// ReadOnlyStats renders the character bar without editable inputs. The
 	// level box and the current-value boxes for vitals are bound to the
 	// character form, which only exists on the sheet itself, so every other
@@ -315,6 +319,8 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 		a.handlePackages(w, r, &c, parts[2:])
 	case "conditions":
 		a.handleCharacterConditions(w, r, &c, parts[2:])
+	case "shifts":
+		a.handleCharacterShifts(w, r, &c, parts[2:])
 	default:
 		http.NotFound(w, r)
 	}
@@ -453,6 +459,7 @@ func (a *App) characterPage(c *model.Character, isNew bool) pageData {
 		},
 		charStats:  a.characterStats(c),
 		Conditions: a.conditionRows(c),
+		Shifts:     a.shiftRows(c),
 		SkillViews: engine.EffectiveSkills(a.Cfg.Config, *c),
 		// A clamped condition shift is reported here rather than only at apply
 		// time, because the clamp can start being true later: lowering a skill by

@@ -320,6 +320,15 @@ func funcMap() template.FuncMap {
 		"joinList": func(items []string) string {
 			return strings.Join(items, ", ")
 		},
+		// skillInfo returns the hover help text configured for one skill (see
+		// SkillMap.Info). Empty when the ruleset describes none, so templates
+		// guard the "i" badge on it.
+		"skillInfo": func(cfg *config.Config, group, skill string) string {
+			if cfg == nil {
+				return ""
+			}
+			return cfg.Skills.Info(group, skill)
+		},
 	}
 }
 

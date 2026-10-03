@@ -68,7 +68,9 @@ var editableVitals = map[string]bool{"hp": true, "energy": true}
 // The current value of an editable vital is read from the character trait
 // "current_<key>"; if unset it defaults to Max. Conditions are not permitted to
 // shift HP or Energy (the loader rejects it), so an editable vital never has a
-// shifted Max and its stored current value is never second-guessed here.
+// shifted Max and its stored current value is never second-guessed here. A
+// hand-applied shift card MAY move a vital during play: only the derived Max
+// moves, and the player's own stored current count is never altered.
 func CharacterVitals(cfg *config.Config, c model.Character) []VitalStat {
 	var out []VitalStat
 	vg := VitalGroupID(cfg)
@@ -76,7 +78,7 @@ func CharacterVitals(cfg *config.Config, c model.Character) []VitalStat {
 	if !ok {
 		return out
 	}
-	shifts := ConditionShifts(cfg, c)
+	shifts := SkillShifts(cfg, c)
 	for _, skill := range skills {
 		key := strings.ToLower(skill)
 		baseProf := c.Skills[model.SkillKey(vg, skill)]

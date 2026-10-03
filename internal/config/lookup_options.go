@@ -116,7 +116,7 @@ func (c *Config) groupLabel(source string) string {
 func (c *Config) OptionsFor(source string) []Option {
 	// Dotted references: "skills.<category>" and "dice.<kind>".
 	if cat := skillCategoryOf(source); cat != "" {
-		return strOptions(c.Skills.Items[cat])
+		return skillOptions(c.Skills, cat)
 	}
 	switch source {
 	case "dice.damage":
@@ -247,6 +247,18 @@ func strOptions(vals []string) []Option {
 	out := make([]Option, 0, len(vals))
 	for _, v := range vals {
 		out = append(out, Option{Value: v, Label: v})
+	}
+	return out
+}
+
+// skillOptions turns one skill category into dropdown options carrying each
+// skill's configured information, so the builder's skill dropdowns (and any
+// grouped source built from them) show the same hover text the sheet does.
+func skillOptions(m SkillMap, cat string) []Option {
+	vals := m.Items[cat]
+	out := make([]Option, 0, len(vals))
+	for _, v := range vals {
+		out = append(out, Option{Value: v, Label: v, Information: m.Info(cat, v), RenderInformation: m.RenderInformation})
 	}
 	return out
 }

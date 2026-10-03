@@ -23,6 +23,18 @@ function closeConditionModal() {
   if (modal) modal.hidden = true;
 }
 
+// The shift picker follows the same rule - its own modal, no sharing with the
+// package or condition browsers.
+function openShiftModal() {
+  var modal = document.getElementById("shift-modal");
+  if (modal) modal.hidden = false;
+}
+
+function closeShiftModal() {
+  var modal = document.getElementById("shift-modal");
+  if (modal) modal.hidden = true;
+}
+
 // Perk import modal. The Import button loads the built-in perk browser
 // into the modal body via HTMX; these helpers just toggle visibility.
 function openPerkModal() {

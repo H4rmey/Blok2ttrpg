@@ -208,3 +208,120 @@ func TestUnaffectedSkillsStillPresent(t *testing.T) {
 		t.Errorf("unaffected skill was modified: %+v", v)
 	}
 }
+
+// The applied-shift card fixtures. The shift tests need a config that knows its
+// skills (SkillShifts refuses a card whose key no ruleset defines), so each
+// test that exercises a card adds the "offense" group it targets rather than
+// widening the shared testCfg fixture.
+func shiftCfg() *config.Config {
+	cfg := testCfg()
+	cfg.Skills.Order = []string{"offense", "vital"}
+	cfg.Skills.Items = map[string][]string{
+		"offense": {"Strength"},
+		"vital":   {"Movement"},
+	}
+	return cfg
+}
+
+func shiftChar(shifts ...model.AppliedShift) model.Character {
+	c := testChar()
+	c.Shifts = shifts
+	return c
+}
+
+// TestAppliedShiftMovesEffectiveSkill checks the core behaviour of the Enact
+// Shift play card: one card on one skill moves that skill's effective reading
+// while the stored proficiency stays untouched.
+func TestAppliedShiftMovesEffectiveSkill(t *testing.T) {
+	cfg := shiftCfg()
+	c := shiftChar(model.AppliedShift{SkillKey: "offense.Strength", Shift: -1})
+
+	view := EffectiveSkill(cfg, c, "offense", "Strength")
+	if !view.Shifted() || view.Shift != -1 || !view.Down() {
+		t.Fatalf("view = %+v, want a -1 shift", view)
+	}
+	if view.Effective != "untrained" {
+		t.Errorf("Effective = %q, want the rung one below novice %q", view.Effective, "untrained")
+	}
+	if got := c.Skills["offense.Strength"]; got != "novice" {
+		t.Errorf("stored proficiency changed to %q; shift cards must be a derived "+
+			"overlay, never written back into Character.Skills", got)
+	}
+}
+
+// TestConditionAndShiftCardStack is the bridge between the two overlays: a
+// condition and a shift card on the same skill must behave as one summed
+// effect, including cancelling each other exactly. Encouraged is used rather
+// than Frightened because the fixture's Frightened moves two skills, which
+// would make "everything cancelled" an assertion about a different skill.
+func TestConditionAndShiftCardStack(t *testing.T) {
+	cfg := shiftCfg()
+	c := testChar(model.AppliedCondition{ID: "encouraged", Shift: 2})
+	c.Shifts = []model.AppliedShift{{SkillKey: "offense.Strength", Shift: -1}}
+
+	if got := SkillShifts(cfg, c)["offense.Strength"]; got != 1 {
+		t.Errorf("shifts summed to %d, want 1 (encouraged +2, card -1)", got)
+	}
+
+	c.Shifts = []model.AppliedShift{{SkillKey: "offense.Strength", Shift: -2}}
+	if shifts := SkillShifts(cfg, c); len(shifts) != 0 {
+		t.Errorf("net-zero overlay still produced shifts: %v", shifts)
+	}
+	view := EffectiveSkill(cfg, c, "offense", "Strength")
+	if view.Shifted() || view.Effective != view.Base {
+		t.Errorf("a cancelled overlay must leave the skill unmarked: %+v", view)
+	}
+}
+
+// TestShiftCardsOnSameSkillStack mirrors TestShiftsStack for cards: two cards
+// on one skill each count, because each has its own remove button and the
+// player is meant to be able to revise one without rewriting the other.
+func TestShiftCardsOnSameSkillStack(t *testing.T) {
+	cfg := shiftCfg()
+	c := shiftChar(
+		model.AppliedShift{SkillKey: "offense.Strength", Shift: 1},
+		model.AppliedShift{SkillKey: "offense.Strength", Shift: 1},
+	)
+	if got := SkillShifts(cfg, c)["offense.Strength"]; got != 2 {
+		t.Errorf("stacked card shift = %d, want 2", got)
+	}
+}
+
+// TestShiftCardToUnknownSkillIgnored checks that a card whose skill key the
+// ruleset no longer defines shifts nothing and never makes a saved character
+// unopenable - the same degradation an unknown condition id gets.
+func TestShiftCardToUnknownSkillIgnored(t *testing.T) {
+	cfg := shiftCfg()
+	c := shiftChar(
+		model.AppliedShift{SkillKey: "offense.Gone", Shift: 3},
+		model.AppliedShift{SkillKey: "", Shift: 3},
+	)
+	if shifts := SkillShifts(cfg, c); len(shifts) != 0 {
+		t.Errorf("unknown shift card produced shifts: %v", shifts)
+	}
+}
+
+// TestAppliedShiftFeedsVitals guards the vitals path: Shifts comes straight
+// from ConditionShifts, so a shift card must arrive at the vital card the same
+// way a Slowed condition does.
+func TestAppliedShiftFeedsVitals(t *testing.T) {
+	cfg := shiftCfg()
+	cfg.Proficiencies = []config.Proficiency{
+		{ID: "inept", Vitals: map[string]any{"movement": 2}},
+		{ID: "untrained", Vitals: map[string]any{"movement": 3}},
+		{ID: "novice", Vitals: map[string]any{"movement": 4}},
+	}
+	c := shiftChar(model.AppliedShift{SkillKey: "vital.Movement", Shift: -1})
+	c.Skills["vital.Movement"] = "novice"
+
+	v := CharacterVitals(cfg, c)[0]
+	if v.Max != "3" {
+		t.Errorf("Max = %q, want %q: the card must show the shifted value", v.Max, "3")
+	}
+	if v.Base != "4" {
+		t.Errorf("Base = %q, want %q: the card must still report the unshifted value", v.Base, "4")
+	}
+	if v.Shift != -1 || !v.Down() {
+		t.Errorf("Shift = %d, want -1 and Down() true", v.Shift)
+	}
+}

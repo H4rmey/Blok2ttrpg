@@ -77,6 +77,9 @@ func (a *App) Router() http.Handler {
 	// button. It is character-scoped only through a query parameter, the same
 	// way the package browser is, so the partial stays reusable.
 	mux.HandleFunc("/conditions/library", a.handleConditionLibrary)
+	// The skill picker behind the sheet's "Apply Shift" button, offering every
+	// configured skill for a single-skill shift card.
+	mux.HandleFunc("/shifts/library", a.handleShiftLibrary)
 	mux.HandleFunc("/perks/library", a.handlePerkLibrary)
 	// The passive picker and its configure modal. Both share the perk modal on
 	// the perks page, so they are routed alongside the perk library rather than

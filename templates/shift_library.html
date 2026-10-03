@@ -1,0 +1,55 @@
+{{/*
+  The "Apply Shift" picker.
+
+  Unlike the condition picker, every configured skill is offered with no
+  exceptions - a shift card is the player choosing a target directly, so the
+  only thing that can make a skill unshiftable is a ruleset that no longer
+  defines it. Groups mirror the sheet's own sections (general / offense /
+  defense / vital), because the same skill name can exist in several of them
+  and the group is what makes "Magic" unambiguous.
+*/}}
+{{ define "shift_library" }}
+<div class="cond-library">
+  <div class="cond-library-head">
+    <h2>Apply Shift</h2>
+    <button class="btn" type="button" onclick="closeShiftModal()">Close</button>
+  </div>
+
+  {{ if .Groups }}
+  {{ $charID := .CharacterID }}
+
+  {{ range .Groups }}{{ if .Skills }}
+  {{ $g := . }}
+  <details class="cond-cat"{{ if .First }} open{{ end }}>
+    <summary class="cond-cat-head">{{ .Label }} skills</summary>
+    <div class="cond-cat-body">
+      {{ range .Skills }}
+      {{ $info := skillInfo $.Cfg $g.ID .Skill }}
+      <div class="cond-card">
+        <div class="cond-card-head">
+          <strong>{{ .Skill }}</strong>
+          {{ if $info }}
+          <span class="condition-info" tabindex="0" aria-label="What this skill does">
+            i
+            <span class="condition-tip" role="tooltip">
+              <strong>{{ .Skill }}</strong>
+              <span class="condition-tip-text">{{ $info }}</span>
+            </span>
+          </span>
+          {{ end }}
+          <form action="/characters/{{ $charID }}/shifts/apply" method="post">
+            <input type="hidden" name="skill_key" value="{{ .Key }}">
+            <button class="btn primary" type="submit">Apply</button>
+          </form>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </details>
+  {{ end }}{{ end }}
+
+  {{ else }}
+  <p class="muted">No skills are configured in this ruleset.</p>
+  {{ end }}
+</div>
+{{ end }}

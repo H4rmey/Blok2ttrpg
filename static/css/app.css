@@ -1453,6 +1453,18 @@ dialog .dialog-section hr {
   line-height: 1.4;
 }
 
+/* The applied "Enact Shift" strip. Its rows reuse the condition card
+   ("condition") classes wholesale, so the two plays read as one family. The
+   value dropdown is capped: the global select rule stretches selects to full
+   width, and a bare signed number needs only a few characters. */
+.shift-group {
+  font-size: 0.8rem;
+  margin-left: 0.25rem;
+}
+.shifts-strip .condition-shift {
+  width: 4rem;
+}
+
 /* The hover "i". Implemented purely in CSS so it needs no script and degrades
    to nothing rather than to a broken control. :focus-within is included so the
    tooltip is reachable by keyboard, not mouse only. */

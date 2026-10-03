@@ -260,6 +260,21 @@ func mergeTraitMap(base *TraitMap, in TraitMap) {
 }
 
 func mergeSkillMap(base *SkillMap, in SkillMap) {
+	// Per-skill help text and the render flag ride on the map, not on a skill
+	// list, so they must be folded across before the early return the same way
+	// mergeComponentMap carries its map-level fields: a merge that kept only
+	// Order/Items would discard the information entirely.
+	if in.RenderInformation {
+		base.RenderInformation = in.RenderInformation
+	}
+	if len(in.Information) > 0 {
+		if base.Information == nil {
+			base.Information = map[string]string{}
+		}
+		for k, v := range in.Information {
+			base.Information[k] = v
+		}
+	}
 	if len(in.Order) == 0 {
 		return
 	}

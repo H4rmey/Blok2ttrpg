@@ -1,0 +1,78 @@
+{{/*
+  The applied "Enact Shift" strip on the character sheet.
+
+  These cards are the hand-applied counterpart of the conditions strip: where a
+  condition moves whatever skills its config declares, a shift card is the
+  player pointing at one skill and moving it directly. The two live in separate
+  sections so a player asking "why is this number wrong?" can separate
+  rules-fixed effects from table decisions at a glance.
+*/}}
+{{ define "shift_strip" }}
+{{ $c := .Character }}
+<section class="conditions-strip shifts-strip">
+  <div class="conditions-head">
+    <h2 class="section-heading">Shifts</h2>
+    <button class="btn primary" type="button"
+            hx-get="/shifts/library?character={{ $c.ID }}"
+            hx-target="#shift-modal-body" hx-swap="innerHTML"
+            onclick="openShiftModal()">Apply Shift</button>
+  </div>
+
+  {{ if .Shifts }}
+  {{/*
+       The card reuses the condition row styling so the two plays read as
+       one family of effects. The dropdown posts to the card's index, not its
+       skill key: the same skill may carry several cards and the index is what
+       makes removing one of them exact.
+    */}}
+  <ul class="condition-list">
+    {{ range $i, $row := .Shifts }}
+    <li class="condition{{ if not $row.Known }} condition-unknown{{ end }}">
+      {{ if $row.Information }}
+      {{/* The same hover "i" the condition rows use: plain CSS, so it keeps
+           working on a printed sheet where a click-to-open panel would be
+           blank. */}}
+      <span class="condition-info" tabindex="0" aria-label="What this skill does">
+        i
+        <span class="condition-tip" role="tooltip">
+          <strong>{{ $row.Skill }}</strong>
+          <span class="condition-tip-text">{{ $row.Information }}</span>
+        </span>
+      </span>
+      {{ end }}
+
+      <span class="condition-name">
+        {{ if $row.Known }}{{ $row.Skill }}{{ else }}{{ $row.SkillKey }}{{ end }}
+        {{ if $row.GroupLabel }}<span class="muted shift-group">({{ $row.GroupLabel }})</span>{{ end }}
+      </span>
+
+      <select class="condition-shift"
+              name="shift"
+              hx-post="/characters/{{ $c.ID }}/shifts/{{ $i }}/shift">
+        {{ range $row.Options }}
+        <option value="{{ . }}" {{ if eq . $row.Shift }}selected{{ end }}>{{ signedInt . }}</option>
+        {{ end }}
+      </select>
+
+      {{ if not $row.Known }}
+      {{/* The skill key no longer resolves against the ruleset, so it shifts
+           nothing; the row only survives so the user can delete it. */}}
+      <span class="muted">no longer a configured skill</span>
+      {{ end }}
+
+      <button class="btn danger condition-remove" type="button"
+              hx-delete="/characters/{{ $c.ID }}/shifts/{{ $i }}"
+              aria-label="Remove {{ $row.Skill }} shift">X</button>
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <p class="muted">No shifts applied.</p>
+  {{ end }}
+</section>
+
+<div id="shift-modal" class="modal" hidden>
+  <div class="modal-backdrop" onclick="closeShiftModal()"></div>
+  <div class="modal-content" id="shift-modal-body"></div>
+</div>
+{{ end }}

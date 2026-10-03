@@ -30,6 +30,13 @@ type Character struct {
 	// Shifts exists to avoid.
 	Conditions []AppliedCondition `json:"conditions,omitempty"`
 
+	// Shifts are the hand-applied "Enact Shift" play cards: one card moves one
+	// skill, at a magnitude the player picks. Like Conditions they are play
+	// state stored as a derived overlay (see engine.SkillShifts), so removing a
+	// card is exact by construction and several cards on the same skill simply
+	// stack.
+	Shifts []AppliedShift `json:"shifts,omitempty"`
+
 	// Packages lists the currently installed content packages. Each records
 	// exactly what it applied (proficiency shifts) so removal is precise and
 	// reversible even when multiple packages stack shifts on the same skill.
@@ -74,6 +81,22 @@ type AppliedCondition struct {
 	// table forgetting to clear a condition that never had anywhere to record
 	// when it ends.
 	Note string `json:"note,omitempty"`
+}
+
+// AppliedShift is one hand-applied shift card: a temporary adjustment to a
+// single skill, created from the character sheet's Apply Shift button. Unlike a
+// condition it names its skill directly rather than going through a config
+// entry, and its magnitude comes from the Enact Shift rules (a player choice of
+// the configured range).
+type AppliedShift struct {
+	// SkillKey is the "<group>.<skill>" key it moves, picking the ruleset's
+	// composite skill key for the picker (see model.SkillKey). A key the config
+	// no longer defines is tolerated on read and rendered as removable.
+	SkillKey string `json:"skill_key"`
+
+	// Shift is the magnitude the player chose (signed; the config's Enact Shift
+	// range currently allows -6..6 without 0).
+	Shift int `json:"shift,omitempty"`
 }
 
 // Name returns a display name, falling back to the id.

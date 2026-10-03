@@ -173,21 +173,7 @@ func (a *App) applyCondition(w http.ResponseWriter, r *http.Request, c *model.Ch
 // applying a condition never silently imposes the maximum penalty; the player
 // has to choose that.
 func defaultShiftFor(cfg *config.Config, cond config.Condition) int {
-	opts := cfg.ShiftOptionsFor(cond.ID)
-	best := 0
-	for _, v := range opts {
-		if best == 0 || abs(v) < abs(best) {
-			best = v
-		}
-	}
-	return best
-}
-
-func abs(n int) int {
-	if n < 0 {
-		return -n
-	}
-	return n
+	return config.SmallestShift(cfg.ShiftOptionsFor(cond.ID))
 }
 
 // setConditionShift changes the magnitude of one applied condition. The index
@@ -253,10 +239,11 @@ func (a *App) removeCondition(w http.ResponseWriter, r *http.Request, c *model.C
 	w.Header().Set("HX-Redirect", "/characters/"+c.ID)
 }
 
-// conditionWarning reports the conditions whose shift could not be applied in
-// full because a skill already sat at an end of the proficiency ladder. It is
-// surfaced as the sheet's non-blocking notice so a debuff that appears to do
-// nothing is visibly explained rather than argued about.
+// conditionWarning reports the skills whose shifts (from applied conditions AND
+// hand-applied shift cards) could not be applied in full because the skill
+// already sat at an end of the proficiency ladder. It is surfaced as the
+// sheet's non-blocking notice so a debuff that appears to do nothing is
+// visibly explained rather than argued about.
 func (a *App) conditionWarning(c *model.Character) string {
 	views := engine.EffectiveSkills(a.Cfg.Config, *c)
 	var clamped []string
@@ -270,5 +257,5 @@ func (a *App) conditionWarning(c *model.Character) string {
 	}
 	slices.Sort(clamped)
 	return "These skills are already at the end of the proficiency ladder, so the " +
-		"full condition shift could not be applied: " + joinComma(clamped) + "."
+		"full condition or shift could not be applied: " + joinComma(clamped) + "."
 }

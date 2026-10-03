@@ -78,6 +78,48 @@ func TestUnmarshalRoundTrip(t *testing.T) {
 	}
 }
 
+// TestUnmarshalKeepsShifts guards the characterJSON mirror: the mirror struct
+// fully replaces Character for decoding, so a field missing from it is silently
+// dropped on READ - the code compiles and every saved shift card quietly
+// disappears the first time the character is opened. Adding "shifts" to a
+// stored document therefore needs the mirror updated, and this is the test
+// that catches it if it ever is not.
+func TestUnmarshalKeepsShifts(t *testing.T) {
+	const doc = `{
+		"id": "char-5",
+		"level": 1,
+		"traits": {"name": "wren"},
+		"skills": {"offense.Strength": "novice"},
+		"shifts": [{"skill_key": "offense.Strength", "shift": -1}]
+	}`
+
+	var c Character
+	if err := json.Unmarshal([]byte(doc), &c); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if len(c.Shifts) != 1 {
+		t.Fatalf("shifts decoded as %d cards, want 1: the characterJSON mirror "+
+			"must list every live field or JSON drops it on read", len(c.Shifts))
+	}
+	if c.Shifts[0].SkillKey != "offense.Strength" || c.Shifts[0].Shift != -1 {
+		t.Errorf("shift card = %+v, want offense.Strength at -1", c.Shifts[0])
+	}
+
+	// And the same through the app's own write path.
+	in := c
+	data, err := json.Marshal(in)
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+	var out Character
+	if err := json.Unmarshal(data, &out); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if len(out.Shifts) != 1 || out.Shifts[0].Shift != -1 {
+		t.Errorf("round trip dropped or changed the shift cards: %+v", out.Shifts)
+	}
+}
+
 // TestUnmarshalEmptyMapsAreInitialised guards the handlers, which write straight
 // into these maps without a nil check.
 func TestUnmarshalEmptyMapsAreInitialised(t *testing.T) {

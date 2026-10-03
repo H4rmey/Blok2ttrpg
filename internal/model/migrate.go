@@ -41,6 +41,11 @@ type characterJSON struct {
 	// a field missing from it is silently dropped on read. Nothing about it is
 	// legacy - it predates no rename - it just has to be listed.
 	Conditions []AppliedCondition `json:"conditions,omitempty"`
+
+	// Shifts is listed for the same reason as Conditions. Omitting it would
+	// compile green and silently drop every saved shift card the first time a
+	// character is read.
+	Shifts []AppliedShift `json:"shifts,omitempty"`
 }
 
 // UnmarshalJSON decodes a character, migrating the pre-rename key layout when it
@@ -56,6 +61,7 @@ func (c *Character) UnmarshalJSON(data []byte) error {
 	c.Perks = raw.Perks
 	c.Packages = raw.Packages
 	c.Conditions = raw.Conditions
+	c.Shifts = raw.Shifts
 
 	// A legacy document is one that carries the old "attributes" key. In that
 	// layout "traits" holds the dice-backed roster, so it becomes Skills and
