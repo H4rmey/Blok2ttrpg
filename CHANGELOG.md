@@ -4,6 +4,14 @@ All notable changes to Blok2 TTRPG are recorded here. The newest release is
 listed first. Entries are written for players and game masters: they describe
 what changed in the rules and in the app, not how the code was refactored.
 
+## 2026-10-03
+
+## Updated Conditions, Skills and Enact Modification
+
+- Enact Modification renamed to Enact Shift
+- Added Apply Shift button to apply shifts to your character
+- Updated the Conditions Documentation
+
 ## 2026-10-02
 
 ## Updated the documentation
