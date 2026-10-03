@@ -10,9 +10,9 @@ enactments:
   - type: modification
     fields:
       comment: Their arms go slack.
-      modification-skills: offense.Strength
-      modification-shift-amount: -1
-      modification-shift-duration: 2
+      shift-skills: offense.Strength
+      shift-amount: -1
+      shift-duration: 2
     interaction: direct
     interaction_data:
       comment: ""
@@ -29,9 +29,9 @@ enactments:
     new_target: true
     fields:
       comment: And yours fill out.
-      modification-skills: offense.Strength
-      modification-shift-amount: 1
-      modification-shift-duration: 2
+      shift-skills: offense.Strength
+      shift-amount: 1
+      shift-duration: 2
     interaction: self
     interaction_data:
       comment: ""

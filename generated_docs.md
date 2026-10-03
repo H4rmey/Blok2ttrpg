@@ -1617,7 +1617,7 @@ Enact Phase allows you to shift some skills now and then reverse the effects lat
    - *Offense:* Strength, Precision, Wisdom, Magic
    - *Defense:* Constitution, Reflex, Wisdom, Magic
 
-## Enact Modification
+## Enact Shift
 
 Enact Shift allows you to temporarily enhance or weaken Skills. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens.
 

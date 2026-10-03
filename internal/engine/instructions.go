@@ -298,10 +298,10 @@ func successLine(cfg *config.Config, en model.Enactment, plural bool) string {
 			line += fmt.Sprintf(" of %s", rollText(src))
 		}
 		return line + "."
-	case "modification":
-		skill := skillName(asString(f["modification-skills"]))
-		shift := asInt(f["modification-shift-amount"])
-		rounds := asInt(f["modification-shift-duration"])
+	case "shift":
+		skill := skillName(asString(f["shift-skills"]))
+		shift := asInt(f["shift-amount"])
+		rounds := asInt(f["shift-duration"])
 		return fmt.Sprintf("Shift %s's %s %s for %s.",
 			targets, skill, shiftWords(shift), rounds2str(maxInt(rounds, 1)))
 	case "phase":

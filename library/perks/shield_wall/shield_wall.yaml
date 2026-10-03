@@ -11,9 +11,9 @@ enactments:
   - type: modification
     fields:
       comment: Ally gains cover behind your shield.
-      modification-skills: defense.Constitution
-      modification-shift-amount: 1
-      modification-shift-duration: 2
+      shift-skills: defense.Constitution
+      shift-amount: 1
+      shift-duration: 2
     interaction: direct
     interaction_data:
       comment: ""

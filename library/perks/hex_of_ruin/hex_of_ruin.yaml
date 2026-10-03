@@ -31,6 +31,6 @@ enactments:
     # inherits the target above.
     fields:
       comment: Their guard slips with it.
-      modification-skills: defense.Reflex
-      modification-shift-amount: -1
-      modification-shift-duration: 2
+      shift-skills: defense.Reflex
+      shift-amount: -1
+      shift-duration: 2

@@ -52,7 +52,7 @@ The Enactment is the actual effect. Ask yourself what the perk should *do*, then
 | Move something or someone | Enact Motion |
 | Apply a condition (prone, stunned, burning...) | Enact Condition |
 | Leave something ticking on the target | Enact Effect |
-| Make a skill better or worse for a while | Enact Modification |
+| Make a skill better or worse for a while | Enact Shift |
 | Borrow power now and pay it back later | Enact Phase |
 | Cripple yourself on purpose to afford more | Enact Nerf |
 | Stop an effect landing on you or an ally | Enact Negation |
@@ -115,7 +115,7 @@ Execution
 
 ```text
 Execution
-  Enact Modification (+1, 2 rounds)
+  Enact Shift (+1, 2 rounds)
     Direct
 ```
 

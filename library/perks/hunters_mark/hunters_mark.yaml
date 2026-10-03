@@ -33,9 +33,9 @@ enactments:
     new_target: true
     fields:
       comment: Your aim settles on them.
-      modification-skills: offense.Precision
-      modification-shift-amount: 1
-      modification-shift-duration: 3
+      shift-skills: offense.Precision
+      shift-amount: 1
+      shift-duration: 3
     interaction: self
     interaction_data:
       comment: ""

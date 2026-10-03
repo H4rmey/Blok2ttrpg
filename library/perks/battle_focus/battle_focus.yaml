@@ -10,9 +10,9 @@ enactments:
   - type: modification
     fields:
       comment: Sharpen your aim.
-      modification-skills: offense.Precision
-      modification-shift-amount: 1
-      modification-shift-duration: 2
+      shift-skills: offense.Precision
+      shift-amount: 1
+      shift-duration: 2
     interaction: self
     interaction_data:
       comment: ""

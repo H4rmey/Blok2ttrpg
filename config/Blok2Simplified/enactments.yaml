@@ -294,19 +294,19 @@ enactments:
           increase: { build_cost: 1 }
           decrease: { build_cost: -1 }
 
-  modification:
-    type: "Enact Modification"
+  shift:
+    type: "Enact Shift"
     information: "Enact Shift allows you to temporarily enhance or weaken Skills. They always have a shift value ranging from -6 to 6, which decides how much and in what direction the shift happens."
     render_information: false
     base_cost:
       build_cost: 2
       energy_cost: 0
     fields:
-      - key: modification-skills
+      - key: shift-skills
         label: "Skill"
         type: dropdown
         options_source: skills_all
-      - key: modification-shift-amount
+      - key: shift-amount
         label: "Shift -/+"
         type: free_number
         default: 0
@@ -316,7 +316,7 @@ enactments:
         per_step:
           increase: { build_cost: 1 }
           decrease: { build_cost: 1 }
-      - key: modification-shift-duration
+      - key: shift-duration
         label: "Duration"
         type: free_number
         default: 1
@@ -405,8 +405,8 @@ enactments:
           - value: condition
             label: "Condition"
 
-          - value: modification
-            label: "Modification"
+          - value: shift
+            label: "Shift"
 
           - value: adjustment
             label: "Adjustment"

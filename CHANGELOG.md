@@ -4,6 +4,17 @@ All notable changes to Blok2 TTRPG are recorded here. The newest release is
 listed first. Entries are written for players and game masters: they describe
 what changed in the rules and in the app, not how the code was refactored.
 
+## 2026-10-02
+
+## Updated the documentation
+
+- Added QuickStartGuide.md
+- Updated the documentation to be up to date with some of the new rulesets
+- Remove documentation that is not required
+- re-organised the chapters of the documentation
+- Reworked the side bar when reading the documentation so it now supports 3 headers #, ## and ###
+- Reworked the markdown renderer for the documentation for better readability
+
 ## 2026-09-30
 
 ### Changed: Perk creation now starts from one modal

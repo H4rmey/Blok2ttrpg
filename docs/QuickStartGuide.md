@@ -145,7 +145,7 @@ Choose one or more **Enactments**.
 | Motion | Moves a target |
 | Condition | Applies a Condition |
 | Effect | Creates an ongoing effect |
-| Modification | Improves or reduces Skills |
+| Shift | Improves or reduces Skills |
 
 Additional Enactments make a Perk more flexible or powerful, but also increase its Energy cost.
 
