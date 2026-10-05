@@ -40,3 +40,15 @@ traits:
       - key: trait_3
         label: "Trait 3"
         type: free_text
+  temporaries:
+    label: "Temporary Traits"
+    fields:
+      - key: trait_1
+        label: "Trait 1"
+        type: free_text
+      - key: trait_2
+        label: "Trait 2"
+        type: free_text
+      - key: trait_3
+        label: "Trait 3"
+        type: free_text
