@@ -7,3 +7,4 @@ server.log
 .vscode
 docs/!!!meta.json
 data/*/*json
+.env
