@@ -28,6 +28,7 @@ file_order:
   - ./docs/modules/perk-builder/leveling.md
   - ./docs/QuickStartGuide.md
   - ./docs/modules/perk-builder/configuration.md
+  - ./docs/modules/perk-builder/prompts.md
   #- ./docs/modules/magic-system/magic-system.md
   #- ./docs/modules/magic-system/imbuing.md
   #- ./docs/modules/magic-system/curses.md

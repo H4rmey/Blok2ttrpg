@@ -305,7 +305,7 @@ func (a *App) togglePackage(w http.ResponseWriter, r *http.Request, c *model.Cha
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID)
+	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=extras#tab-extras")
 }
 
 // packageRedirect sends the user back to the character sheet after an import,
@@ -431,5 +431,5 @@ func (a *App) removePackage(w http.ResponseWriter, r *http.Request, c *model.Cha
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID)
+	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=extras#tab-extras")
 }

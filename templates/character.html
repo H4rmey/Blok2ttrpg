@@ -1,181 +1,280 @@
 {{ template "head" . }}
 {{ $c := .Character }}
-<div class="page-head">
-  <h1>{{ if $c.ID }}{{ $c.Name }}{{ else }}New Character{{ end }}</h1>
-  {{ if $c.ID }}
-  <div class="toolbar">
-    <a class="btn" href="/characters/{{ $c.ID }}/perks">Perks ({{ len $c.Perks }})</a>
-    <a class="btn" href="/characters/{{ $c.ID }}/export">Export YAML</a>
-    <a class="btn" href="/characters/{{ $c.ID }}/pdf" target="_blank">PDF</a>
-    <button class="btn danger" hx-delete="/characters/{{ $c.ID }}" hx-confirm="Delete this character?">Delete</button>
-  </div>
-  {{ end }}
-</div>
+
+{{ template "character_bar" . }}
 
 {{ if .Warning }}
 <div class="notice-warn">{{ .Warning }}</div>
 {{ end }}
 
-{{ template "character_bar" . }}
-
-{{/* Conditions come before the sheet body because they change how everything
-     below them is read. A new character has no id yet and nothing to apply a
-     condition to, so the strip only appears once the character exists. */}}
-{{ if $c.ID }}
-{{ template "condition_strip" . }}
-{{ template "shift_strip" . }}
-{{ end }}
-
-<form method="post" id="character-form" action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
-      data-stats-url="/characters/{{ $c.ID }}/stats">
-
-
-  <h2 class="section-heading">Traits</h2>
-  {{ range traits .Cfg }}
-
-  <fieldset class="section section-traits">
-    <legend>{{ .Label }}</legend>
-
-    {{ range .Fields }}
-    <div class="field">
-      <label>{{ .Label }}</label>
-      <input type="text" name="attr_{{ .Key }}" value="{{ attrStr $c .Key }}">
-    </div>
-    {{ end }}
-  </fieldset>
+{{/* ── Tab nav ─────────────────────────────────────────────────────────── */}}
+<nav class="char-tabs" id="char-tabs">
+  <button class="char-tab active" data-tab="tab-traits">Traits</button>
+  <button class="char-tab" data-tab="tab-skills">Skills</button>
+  {{ if $c.ID }}
+  <button class="char-tab" data-tab="tab-perks">Perks</button>
+  <button class="char-tab" data-tab="tab-extras">Extras</button>
   {{ end }}
+</nav>
 
-  <h2 class="section-heading">Skills</h2>
-  {{ range skillGroups .Cfg }}
+{{/* ── Tab: Traits ──────────────────────────────────────────────────────── */}}
+<div class="char-tab-panel active" id="tab-traits">
+  <form method="post" id="character-form"
+        action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
+        data-stats-url="/characters/{{ $c.ID }}/stats">
 
-  {{ $g := . }}
-  <fieldset class="section section-{{ $g.ID }}">
-    <legend>{{ .Label }}</legend>
-
-    <div class="skill-grid">
-
-      {{ range .Skills }}
-      {{ $skill := . }}
-      {{/* The view is the post-condition reading of this skill. The dropdown
-           keeps showing the character's OWN proficiency, because that is what
-           the form saves and editing it must never be a way to bake a temporary
-           condition into the character. The shifted value is shown beside it
-           instead, which also keeps the colour honest: the red marks the
-           effect, not the purchase. */}}
-      {{ $view := skillView $.SkillViews $g.ID $skill }}
-      {{ $info := skillInfo $.Cfg $g.ID $skill }}
-      <div class="field skill-field{{ if $view.Down }} skill-shifted-down{{ else if $view.Up }} skill-shifted-up{{ end }}">
-        <label>
-          {{ $skill }}
-          {{ if and $info (not $.Cfg.Skills.RenderInformation) }}
-          {{/* The same hover "i" the condition rows use: pure CSS, so it
-               survives on a printed sheet where a click-to-open panel would
-               be blank. */}}
-          <span class="condition-info" tabindex="0" aria-label="What this skill does">
-            i
-            <span class="condition-tip" role="tooltip">
-              <strong>{{ $skill }}</strong>
-              <span class="condition-tip-text">{{ $info }}</span>
-            </span>
-          </span>
-          {{ end }}
-          {{ if $view.Shifted }}
-          {{/* The badge repeats the shift as a number so the row still reads
-               correctly in greyscale, on a printout, and for a colour-blind
-               player: colour is never the only signal. */}}
-          <span class="skill-shift-badge">{{ signedInt $view.Shift }}</span>
-          {{ end }}
-        </label>
-        {{ if and $info $.Cfg.Skills.RenderInformation }}
-        {{/* With render_information the text is plainly readable instead of
-             stashed behind the hover badge, so it sits under the label the
-             same way a field's information does in the builder. */}}
-        <small class="field-info">{{ $info }}</small>
-        {{ end }}
-        <select name="skill_{{ $g.ID }}_{{ $skill }}">
-          {{ $current := skillProf $c $g.ID $skill }}
-          {{ range $.Cfg.Proficiencies }}
-          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profSkillLabel $.Cfg . $g.ID $skill }}</option>
-          {{ end }}
-        </select>
-        {{ if $view.Shifted }}
-        <span class="skill-effective">
-          Now:
-          {{ range $.Cfg.Proficiencies }}{{ if eq .ID $view.Effective }}{{ profSkillLabel $.Cfg . $g.ID $skill }}{{ end }}{{ end }}
-          {{ if $view.Clamped }}<span class="skill-clamped" title="Already at the end of the proficiency ladder, so the full shift could not be applied.">(capped)</span>{{ end }}
-        </span>
-        {{ end }}
+    {{ range traits .Cfg }}
+    <fieldset class="section section-traits">
+      <legend>{{ .Label }}</legend>
+      {{ range .Fields }}
+      <div class="field">
+        <label>{{ .Label }}</label>
+        <input type="text" name="attr_{{ .Key }}" value="{{ attrStr $c .Key }}">
       </div>
       {{ end }}
+    </fieldset>
+    {{ end }}
+
+    <div class="toolbar">
+      <button class="btn primary" type="submit">Save</button>
+      <a class="btn" href="/">Cancel</a>
     </div>
-  </fieldset>
-  {{ end }}
+  </form>
+</div>
 
-  <div class="toolbar">
-    <button class="btn primary" type="submit">Save</button>
-    <a class="btn" href="/">Cancel</a>
-  </div>
-</form>
+{{/* ── Tab: Skills ──────────────────────────────────────────────────────── */}}
+<div class="char-tab-panel" id="tab-skills">
+  <form method="post" id="skills-form"
+        action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
+        data-stats-url="/characters/{{ $c.ID }}/stats">
 
-{{ if $c.ID }}
-<section class="packages">
-  <h2>Packages</h2>
-  <p class="muted">Packages bundle proficiency shifts and perks. Removing a
-    package undoes exactly what it added.</p>
+    {{ range traits .Cfg }}{{ range .Fields }}
+    <input type="hidden" name="attr_{{ .Key }}" value="{{ attrStr $c .Key }}">
+    {{ end }}{{ end }}
+    <input type="hidden" name="level" value="{{ $c.Level }}">
 
-  <div class="toolbar">
-    <button class="btn primary" type="button"
-            hx-get="/packages/library?character={{ $c.ID }}"
-            hx-target="#package-modal-body" hx-swap="innerHTML"
-            onclick="openPackageModal()">Import Package</button>
-    <button class="btn" type="button"
-            onclick="document.getElementById('package-import-input').click()">Import Custom Package</button>
-    <form id="package-import-form" action="/characters/{{ $c.ID }}/packages/import-custom"
-          method="post" enctype="multipart/form-data" hidden>
-      <input id="package-import-input" type="file" name="file" accept=".yaml,.yml"
-             onchange="this.form.submit()">
-    </form>
-  </div>
-
-  <h3>Imported Packages</h3>
-  {{ if $c.Packages }}
-  <ul class="installed-packages">
-    {{ range $c.Packages }}
-    <li class="installed-package{{ if and .Toggleable (not .Enabled) }} pkg-disabled{{ end }}">
-      <div class="installed-package-info">
-        {{ if .Toggleable }}
-        <label class="pkg-toggle">
-          <input type="checkbox" {{ if .Enabled }}checked{{ end }}
-                 hx-post="/characters/{{ $c.ID }}/packages/{{ .ID }}/toggle">
-          <span class="pkg-name">{{ .Name }}</span>
-        </label>
-        {{ else }}
-        <span class="pkg-name">{{ .Name }}</span>
-        {{ end }}
-        {{ if .Shifts }}
-        <div class="pkg-shifts">
-          {{ range $skill, $delta := .Shifts }}
-          <span class="pkg-shift">{{ $skill }} {{ printf "%+d" $delta }}</span>
+    {{ range skillGroups .Cfg }}
+    {{ $g := . }}
+    <fieldset class="section section-{{ $g.ID }}">
+      <legend>{{ .Label }}</legend>
+      <div class="skill-grid">
+        {{ range .Skills }}
+        {{ $skill := . }}
+        {{ $view := skillView $.SkillViews $g.ID $skill }}
+        {{ $info := skillInfo $.Cfg $g.ID $skill }}
+        <div class="field skill-field{{ if $view.Down }} skill-shifted-down{{ else if $view.Up }} skill-shifted-up{{ end }}">
+          <label>
+            {{ $skill }}
+            {{ if and $info (not $.Cfg.Skills.RenderInformation) }}
+            <span class="condition-info" tabindex="0" aria-label="What this skill does">
+              i
+              <span class="condition-tip" role="tooltip">
+                <strong>{{ $skill }}</strong>
+                <span class="condition-tip-text">{{ $info }}</span>
+              </span>
+            </span>
+            {{ end }}
+            {{ if $view.Shifted }}
+            <span class="skill-shift-badge">{{ signedInt $view.Shift }}</span>
+            {{ end }}
+          </label>
+          {{ if and $info $.Cfg.Skills.RenderInformation }}
+          <small class="field-info">{{ $info }}</small>
+          {{ end }}
+          <select name="skill_{{ $g.ID }}_{{ $skill }}" form="skills-form">
+            {{ $current := skillProf $c $g.ID $skill }}
+            {{ range $.Cfg.Proficiencies }}
+            <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profSkillLabel $.Cfg . $g.ID $skill }}</option>
+            {{ end }}
+          </select>
+          {{ if $view.Shifted }}
+          <span class="skill-effective">
+            Now:
+            {{ range $.Cfg.Proficiencies }}{{ if eq .ID $view.Effective }}{{ profSkillLabel $.Cfg . $g.ID $skill }}{{ end }}{{ end }}
+            {{ if $view.Clamped }}<span class="skill-clamped" title="Already at the end of the proficiency ladder, so the full shift could not be applied.">(capped)</span>{{ end }}
+          </span>
           {{ end }}
         </div>
         {{ end }}
       </div>
-      <button class="btn danger" type="button"
-              hx-delete="/characters/{{ $c.ID }}/packages/{{ .ID }}"
-              hx-confirm="Remove this package and everything it added?">X</button>
-    </li>
-
+    </fieldset>
     {{ end }}
-  </ul>
 
-  {{ else }}
-  <p class="muted">No packages imported yet.</p>
+    <div class="toolbar">
+      <button class="btn primary" type="submit">Save</button>
+    </div>
+  </form>
+
+  {{/* Conditions and shifts are shown at the bottom of the skills tab because
+       they directly affect skill values — keeping them co-located avoids the
+       need to switch tabs while adjusting a character mid-session. */}}
+  {{ if $c.ID }}
+  {{ template "condition_strip" . }}
+  {{ template "shift_strip" . }}
   {{ end }}
-</section>
+</div>
 
-<div id="package-modal" class="modal" hidden>
-  <div class="modal-backdrop" onclick="closePackageModal()"></div>
-  <div class="modal-content" id="package-modal-body"></div>
+{{ if $c.ID }}
+{{/* ── Tab: Perks ───────────────────────────────────────────────────────── */}}
+<div class="char-tab-panel" id="tab-perks">
+  <div class="toolbar">
+    <button class="btn primary" type="button"
+            onclick="document.getElementById('new-perk-modal').showModal()">+ New Perk</button>
+    {{/* The built-in library is reachable directly from the toolbar, not only
+         from inside the New Perk dialog, since importing a premade perk is a
+         different intent from building one. */}}
+    <button class="btn" type="button"
+            hx-get="/perks/library?character={{ $c.ID }}"
+            hx-target="#perk-modal-body" hx-swap="innerHTML"
+            onclick="openPerkModal()">Import Perk</button>
+    <button class="btn" type="button"
+            onclick="document.getElementById('perk-import-input').click()">Import Custom Perk</button>
+    <button class="btn icon-btn" type="button" title="Recalculate all perk costs"
+            hx-get="/characters/{{ $c.ID }}/perks/refresh"
+            hx-target="#tab-perks-list" hx-swap="innerHTML">&#8635;</button>
+    <form id="perk-import-form" action="/characters/{{ $c.ID }}/perks/import-custom"
+          method="post" enctype="multipart/form-data" hidden>
+      <input id="perk-import-input" type="file" name="file" accept=".yaml,.yml"
+             onchange="this.form.submit()">
+    </form>
+  </div>
+
+  <div id="perk-modal" class="modal" hidden>
+    <div class="modal-backdrop" onclick="closePerkModal()"></div>
+    <div class="modal-content" id="perk-modal-body"></div>
+  </div>
+
+  <dialog id="new-perk-modal">
+    <form method="get" action="/characters/{{ $c.ID }}/perks/new" id="new-perk-form"
+          data-character-id="{{ $c.ID }}">
+      <h2>New Perk</h2>
+      <label for="new-perk-name">Name</label>
+      <input id="new-perk-name" type="text" name="name" placeholder="Perk name" required autofocus>
+      <div class="field">
+        <label for="new-perk-type">Type</label>
+        <div class="select-row">
+          <select id="new-perk-type" name="type" class="opt-select">
+            {{ range perkTypes .Cfg }}
+            <option value="{{ .ID }}" title="{{ .Information }}">{{ .DisplayName }}</option>
+            {{ end }}
+            <option value="passive" data-info="Passive perks are picked from a predefined list rather than built." data-render-info="true">Passive</option>
+          </select>
+          <span class="info-icon option-info" tabindex="0" data-tooltip="" hidden>i</span>
+        </div>
+        <small class="field-info option-info-text" hidden></small>
+      </div>
+      <div class="toolbar">
+        <button class="btn primary" type="submit">Continue</button>
+        <button class="btn" type="button"
+                onclick="document.getElementById('new-perk-modal').close()">Cancel</button>
+      </div>
+    </form>
+    <div class="dialog-section">
+      <hr>
+      <p class="muted">Or browse the built-in library:</p>
+      <button class="btn" type="button"
+              hx-get="/perks/library?character={{ $c.ID }}"
+              hx-target="#perk-modal-body" hx-swap="innerHTML"
+              onclick="document.getElementById('new-perk-modal').close(); openPerkModal();">
+        + Premade Perk
+      </button>
+    </div>
+  </dialog>
+
+  {{/* data-load-url is read by tabs.js, which fetches the list the first time
+       the Perks tab is opened so costs are always current. An hx-trigger cannot
+       be used here: the element starts inside a hidden panel and would never
+       fire. The refresh button above stays for an explicit recalculation. */}}
+  <div id="tab-perks-list"
+       data-load-url="/characters/{{ $c.ID }}/perks/refresh">
+    {{ template "perk_list" . }}
+  </div>
+</div>
+
+{{/* ── Tab: Extras ──────────────────────────────────────────────────────── */}}
+<div class="char-tab-panel" id="tab-extras">
+
+  <section class="extras-section">
+    <h2 class="section-heading">Character Actions</h2>
+    <div class="extras-menu">
+      <a class="extras-item" href="/characters/{{ $c.ID }}/export">
+        <span class="extras-icon">&#128190;</span>
+        <span class="extras-label">Export YAML</span>
+        <span class="extras-desc">Download the full character as a YAML file.</span>
+      </a>
+      <a class="extras-item" href="/characters/{{ $c.ID }}/pdf" target="_blank">
+        <span class="extras-icon">&#128196;</span>
+        <span class="extras-label">Print / PDF</span>
+        <span class="extras-desc">Open a print-ready character sheet.</span>
+      </a>
+      <button class="extras-item extras-danger" type="button"
+              hx-delete="/characters/{{ $c.ID }}"
+              hx-confirm="Delete this character? This cannot be undone.">
+        <span class="extras-icon">&#128465;</span>
+        <span class="extras-label">Delete Character</span>
+        <span class="extras-desc">Permanently remove this character and all their data.</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="extras-section packages">
+    <h2 class="section-heading">Packages</h2>
+    <p class="muted">Packages bundle proficiency shifts and perks. Removing a
+      package undoes exactly what it added.</p>
+
+    <div class="toolbar">
+      <button class="btn primary" type="button"
+              hx-get="/packages/library?character={{ $c.ID }}"
+              hx-target="#package-modal-body" hx-swap="innerHTML"
+              onclick="openPackageModal()">Import Package</button>
+      <button class="btn" type="button"
+              onclick="document.getElementById('package-import-input').click()">Import Custom</button>
+      <form id="package-import-form"
+            action="/characters/{{ $c.ID }}/packages/import-custom"
+            method="post" enctype="multipart/form-data" hidden>
+        <input id="package-import-input" type="file" name="file" accept=".yaml,.yml"
+               onchange="this.form.submit()">
+      </form>
+    </div>
+
+    {{ if $c.Packages }}
+    <ul class="installed-packages">
+      {{ range $c.Packages }}
+      <li class="installed-package{{ if and .Toggleable (not .Enabled) }} pkg-disabled{{ end }}">
+        <div class="installed-package-info">
+          {{ if .Toggleable }}
+          <label class="pkg-toggle">
+            <input type="checkbox" {{ if .Enabled }}checked{{ end }}
+                   hx-post="/characters/{{ $c.ID }}/packages/{{ .ID }}/toggle">
+            <span class="pkg-name">{{ .Name }}</span>
+          </label>
+          {{ else }}
+          <span class="pkg-name">{{ .Name }}</span>
+          {{ end }}
+          {{ if .Shifts }}
+          <div class="pkg-shifts">
+            {{ range $skill, $delta := .Shifts }}
+            <span class="pkg-shift">{{ $skill }} {{ printf "%+d" $delta }}</span>
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+        <button class="btn danger" type="button"
+                hx-delete="/characters/{{ $c.ID }}/packages/{{ .ID }}"
+                hx-confirm="Remove this package and everything it added?">Remove</button>
+      </li>
+      {{ end }}
+    </ul>
+    {{ else }}
+    <p class="muted">No packages imported yet.</p>
+    {{ end }}
+  </section>
+
+  <div id="package-modal" class="modal" hidden>
+    <div class="modal-backdrop" onclick="closePackageModal()"></div>
+    <div class="modal-content" id="package-modal-body"></div>
+  </div>
 </div>
 {{ end }}
+
 {{ template "foot" . }}

@@ -176,5 +176,5 @@ func (a *App) importBuiltinPerk(w http.ResponseWriter, r *http.Request, c *model
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"?t=perks#tab-perks", http.StatusSeeOther)
 }

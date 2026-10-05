@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Title }}</title>
-  <link rel="stylesheet" href="/static/css/app.css?v=13">
+  <link rel="stylesheet" href="/static/css/app.css?v=14">
+  <link rel="stylesheet" href="/static/css/tabs.css?v=1">
 
 
 
@@ -19,7 +20,7 @@
          scoped to it (sheet, perks, perk builder), so you always know which
          character you are editing. Navigation lives on the pages themselves. */}}
     {{ with .Character }}{{ if .ID }}
-    
+    <span class="char-name">{{ .Name }}</span>
     {{ end }}{{ end }}
     {{/* On narrow screens the links collapse behind this button instead of
          wrapping into the character name. The theme toggle stays outside the
@@ -47,7 +48,8 @@
 
 {{ define "foot" }}
   </main>
-  <script src="/static/js/app.js?v=12"></script>
+  <script src="/static/js/app.js?v=14"></script>
+  <script src="/static/js/tabs.js?v=3"></script>
 
 </body>
 </html>

@@ -167,7 +167,7 @@ func (a *App) applyShift(w http.ResponseWriter, r *http.Request, c *model.Charac
 	// A real redirect, not an HX-Redirect header: the Apply button in the
 	// picker is an ordinary form submit, so the browser navigates itself and
 	// would render an empty page if we only set the HTMX header.
-	http.Redirect(w, r, "/characters/"+c.ID, http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"?t=skills#tab-skills", http.StatusSeeOther)
 }
 
 // setShift changes the magnitude of one applied shift card. The index
@@ -207,7 +207,7 @@ func (a *App) setShift(w http.ResponseWriter, r *http.Request, c *model.Characte
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID)
+	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=skills#tab-skills")
 }
 
 // removeShift drops one applied shift card by index. Nothing else has to be
@@ -224,7 +224,7 @@ func (a *App) removeShift(w http.ResponseWriter, r *http.Request, c *model.Chara
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID)
+	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=skills#tab-skills")
 }
 
 // skillExists reports whether the ruleset defines the given skill in the given

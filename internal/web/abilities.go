@@ -42,9 +42,10 @@ type perkPage struct {
 
 // handlePerks dispatches /characters/{id}/perks[/...] routes.
 func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Character, rest []string) {
-	// /perks        -> list
+	// /perks -> the standalone list page no longer exists; the perk list is a
+	// tab on the character page, so send the user straight there.
 	if len(rest) == 0 {
-		a.renderPerkList(w, c)
+		http.Redirect(w, r, "/characters/"+c.ID+"?t=perks#tab-perks", http.StatusSeeOther)
 		return
 	}
 
@@ -100,7 +101,7 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 			// JavaScript enabled. This is the no-JS fallback: rather than
 			// silently open a builder that cannot express a passive, send
 			// the user back to the perk list.
-			http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
+			http.Redirect(w, r, "/characters/"+c.ID+"?t=perks#tab-perks", http.StatusSeeOther)
 			return
 		}
 		if ptype == "" {
@@ -148,7 +149,7 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 			// points are recovered.
 			c.Perks = append(c.Perks[:idx], c.Perks[idx+1:]...)
 			_ = a.Store.Save(*c)
-			w.Header().Set("HX-Redirect", "/characters/"+c.ID+"/perks")
+			w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=perks#tab-perks")
 		}
 		return
 	}
@@ -211,7 +212,7 @@ func (a *App) importPerk(w http.ResponseWriter, r *http.Request, c *model.Charac
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"?t=perks#tab-perks", http.StatusSeeOther)
 }
 
 // perkSummaries recomputes cost and instruction text for every perk the
@@ -298,7 +299,7 @@ func (a *App) perkListPage(c *model.Character) pageData {
 		Breadcrumbs: []crumb{
 			{Label: "Home", URL: "/"},
 			{Label: c.Name(), URL: "/characters/" + c.ID},
-			{Label: "Perks", URL: "/characters/" + c.ID + "/perks"},
+			{Label: "Perks", URL: "/characters/" + c.ID + "#tab-perks"},
 		},
 	}
 }
@@ -364,7 +365,7 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 		Breadcrumbs: []crumb{
 			{Label: "Home", URL: "/"},
 			{Label: c.Name(), URL: "/characters/" + c.ID},
-			{Label: "Perks", URL: "/characters/" + c.ID + "/perks"},
+			{Label: "Perks", URL: "/characters/" + c.ID + "#tab-perks"},
 			{Label: title, URL: "#"},
 		},
 	})
@@ -397,7 +398,7 @@ func (a *App) savePerk(w http.ResponseWriter, r *http.Request, c *model.Characte
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"?t=perks#tab-perks", http.StatusSeeOther)
 }
 
 // handleBuilderEnactment returns an enactment form partial for a given index.

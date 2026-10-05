@@ -165,7 +165,7 @@ func (a *App) applyCondition(w http.ResponseWriter, r *http.Request, c *model.Ch
 	// browser navigates itself and would render an empty page if we only set the
 	// HTMX header. The remove and shift controls below are HTMX-driven and do use
 	// the header.
-	http.Redirect(w, r, "/characters/"+c.ID, http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"?t=skills#tab-skills", http.StatusSeeOther)
 }
 
 // defaultShiftFor picks the magnitude a freshly applied condition starts at: the
@@ -219,7 +219,7 @@ func (a *App) setConditionShift(w http.ResponseWriter, r *http.Request, c *model
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID)
+	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=skills#tab-skills")
 }
 
 // removeCondition drops one applied condition by index. Nothing else has to be
@@ -236,7 +236,7 @@ func (a *App) removeCondition(w http.ResponseWriter, r *http.Request, c *model.C
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID)
+	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=skills#tab-skills")
 }
 
 // conditionWarning reports the skills whose shifts (from applied conditions AND

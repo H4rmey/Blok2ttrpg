@@ -438,7 +438,7 @@ func (a *App) addPassive(w http.ResponseWriter, r *http.Request, c *model.Charac
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/characters/"+c.ID+"/perks", http.StatusSeeOther)
+	http.Redirect(w, r, "/characters/"+c.ID+"?t=perks#tab-perks", http.StatusSeeOther)
 }
 
 // buildPassivePerk assembles the stored form of a configured passive. name is

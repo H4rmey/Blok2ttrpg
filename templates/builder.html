@@ -1,14 +1,21 @@
 {{ template "head" . }}
 {{ $c := .Character }}
 {{ $ab := .Perk }}
-<div class="page-head">
-  <h1>{{ if $ab.ID }}Edit Perk{{ else }}New Perk{{ end }}</h1>
-  <div class="toolbar">
-    <a class="btn" href="/characters/{{ $c.ID }}/perks">Back to Perks</a>
-  </div>
-</div>
 
 {{ template "character_bar" . }}
+
+{{/* ── Tab nav (Perks active) ──────────────────────────────────────────── */}}
+<nav class="char-tabs">
+  <a class="char-tab" href="/characters/{{ $c.ID }}#tab-traits">Traits</a>
+  <a class="char-tab" href="/characters/{{ $c.ID }}#tab-skills">Skills</a>
+  <a class="char-tab active" href="/characters/{{ $c.ID }}#tab-perks">Perks</a>
+  <a class="char-tab" href="/characters/{{ $c.ID }}#tab-extras">Extras</a>
+</nav>
+
+<div class="char-builder-header">
+  <h2 class="section-heading">{{ if $ab.ID }}Edit Perk{{ else }}New Perk{{ end }}</h2>
+  <a class="btn" href="/characters/{{ $c.ID }}#tab-perks">&#8592; Back to Perks</a>
+</div>
 
 <div class="builder-head">
   <div class="cost-cards" id="cost-badge">
@@ -121,7 +128,7 @@
   <div class="toolbar">
     <button class="btn primary" type="submit" id="save-perk">Save Perk</button>
 
-    <a class="btn" href="/characters/{{ $c.ID }}/perks">Cancel</a>
+    <a class="btn" href="/characters/{{ $c.ID }}#tab-perks">Cancel</a>
   </div>
 </form>
 

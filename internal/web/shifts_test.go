@@ -73,8 +73,10 @@ func TestApplyShiftAddsCard(t *testing.T) {
 	if rec.Code != http.StatusSeeOther {
 		t.Fatalf("apply returned %d, want 303: %s", rec.Code, rec.Body.String())
 	}
-	if rec.Header().Get("Location") != "/characters/char-1" {
-		t.Errorf("Location = %q, want the sheet", rec.Header().Get("Location"))
+	// The shift strip lives on the Skills tab, so the redirect carries the tab
+	// hash to come back to it rather than resetting the sheet to Traits.
+	if rec.Header().Get("Location") != "/characters/char-1?t=skills#tab-skills" {
+		t.Errorf("Location = %q, want the sheet's skills tab", rec.Header().Get("Location"))
 	}
 	if len(c.Shifts) != 1 || c.Shifts[0].SkillKey != "offense.Strength" {
 		t.Fatalf("shifts = %+v, want one offense.Strength card", c.Shifts)
@@ -120,7 +122,7 @@ func TestSetShiftValidatesAgainstConfigRange(t *testing.T) {
 		return rec
 	}
 
-	if rec := post("3"); rec.Code != http.StatusOK || rec.Header().Get("HX-Redirect") != "/characters/char-1" {
+	if rec := post("3"); rec.Code != http.StatusOK || rec.Header().Get("HX-Redirect") != "/characters/char-1?t=skills#tab-skills" {
 		t.Fatalf("setting 3 returned %d, want 200 with HX-Redirect: %s", rec.Code, rec.Body.String())
 	}
 	if c.Shifts[0].Shift != 3 {
@@ -152,8 +154,8 @@ func TestRemoveShiftByIndex(t *testing.T) {
 	rec := httptest.NewRecorder()
 	app.handleCharacterShifts(rec, req, c, []string{"1"})
 
-	if rec.Header().Get("HX-Redirect") != "/characters/char-1" {
-		t.Errorf("remove must HX-Redirect to the sheet, got %q", rec.Header().Get("HX-Redirect"))
+	if rec.Header().Get("HX-Redirect") != "/characters/char-1?t=skills#tab-skills" {
+		t.Errorf("remove must HX-Redirect to the sheet's skills tab, got %q", rec.Header().Get("HX-Redirect"))
 	}
 	if len(c.Shifts) != 2 || c.Shifts[0].Shift != 1 || c.Shifts[1].SkillKey != "vital.Movement" {
 		t.Fatalf("removal removed the wrong card(s): %+v", c.Shifts)

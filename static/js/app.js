@@ -875,3 +875,4 @@ document.addEventListener("input", function (e) {
   nameInput.addEventListener("change", syncGate);
   syncGate();
 })();
+
