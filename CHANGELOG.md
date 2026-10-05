@@ -4,6 +4,37 @@ All notable changes to Blok2 TTRPG are recorded here. The newest release is
 listed first. Entries are written for players and game masters: they describe
 what changed in the rules and in the app, not how the code was refactored.
 
+## 2026-10-05
+
+### Changed: The character sheet is now one page with tabs
+
+- The character sheet, perk list and perk builder were separate pages you had to
+  navigate between. They are now **four tabs on a single page**: **Traits**,
+  **Skills**, **Perks** and **Extras**. Your level and the point and vital cards
+  stay pinned at the top of every tab, so the numbers are always in view no
+  matter what you are editing.
+- The **banner is persistent** and now names the character you have open, on
+  every tab and in the perk builder, so you always know whose sheet you are on.
+- **Conditions** and **Enact Shift** cards moved to the bottom of the **Skills**
+  tab. They change how skills read, so they now sit with the skills they affect
+  instead of at the top of the sheet.
+- The **Perks** tab holds the full perk list and its toolbar: **+ New Perk**,
+  **Import Perk** for the built-in library, **Import Custom Perk** for a YAML
+  file, and a refresh control to recalculate every cost. The perk list is
+  recalculated automatically the first time you open the tab.
+- The perk builder opens with the same tab bar, with **Perks** marked as where
+  you came from, so getting back to the list is one click.
+- **Extras** gathers everything that is not day-to-day play: **Export YAML**,
+  **Print / PDF**, **Delete Character**, and the **Packages** manager, each
+  described so it is clear what it does before you press it.
+- The separate `/perks` address no longer exists. Old links and bookmarks to it
+  now open the character sheet on the Perks tab.
+
+### Fixed
+
+- Applying a condition, applying a shift, or changing a shift's value updated
+  the sheet only after a manual refresh. The new values now appear immediately.
+
 ## 2026-10-03
 
 ## Updated Conditions, Skills and Enact Modification
