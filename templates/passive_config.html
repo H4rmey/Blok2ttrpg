@@ -72,7 +72,7 @@
   <form class="toolbar"
         {{ if .Editing }}
         hx-post="/characters/{{ .CharacterID }}/perks/{{ .PerkID }}/configure"
-        hx-target="#perk-list" hx-swap="innerHTML"
+        hx-target="#tab-perks-list" hx-swap="innerHTML"
         hx-on::after-request="closePerkModal()"
         {{ else }}
         action="/characters/{{ .CharacterID }}/perks/passives" method="post"

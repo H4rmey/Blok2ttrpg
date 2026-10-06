@@ -53,7 +53,8 @@
       {{ if $row.NeedsShiftValue }}
       <select class="condition-shift"
               name="shift"
-              hx-post="/characters/{{ $c.ID }}/conditions/{{ $i }}/shift">
+              hx-post="/characters/{{ $c.ID }}/conditions/{{ $i }}/shift"
+              hx-target="#tab-skills" hx-swap="innerHTML">
         {{ range $row.ShiftOptions }}
         <option value="{{ . }}" {{ if eq . $row.Shift }}selected{{ end }}>{{ signedInt . }}</option>
         {{ end }}
@@ -66,6 +67,7 @@
 
       <button class="btn danger condition-remove" type="button"
               hx-delete="/characters/{{ $c.ID }}/conditions/{{ $i }}"
+              hx-target="#tab-skills" hx-swap="innerHTML"
               aria-label="Remove {{ $row.Name }}">X</button>
     </li>
     {{ end }}

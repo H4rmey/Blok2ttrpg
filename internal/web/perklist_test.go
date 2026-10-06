@@ -94,7 +94,7 @@ func TestPerkListRefreshPartial(t *testing.T) {
 	app, c := testAppWithPerk(t)
 
 	rec := httptest.NewRecorder()
-	app.renderPerkListPartial(rec, c, 0)
+	app.renderPerkListPartial(rec, c, 0, false)
 	body := rec.Body.String()
 
 	if strings.Contains(body, "<html") {

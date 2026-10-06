@@ -271,9 +271,34 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
+			// HTMX autosave: return the appropriate partial so the page
+			// updates without a full-page redirect or tab jump.
+			if r.Header.Get("HX-Request") == "true" {
+				data := a.characterPage(&c, false)
+				data.Cfg = a.Cfg.Config
+				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				// The skills form targets #tab-skills so it can re-render the
+				// "Now:" effective text and Warning alongside stat_cards (via
+				// OOB swap inside the skills_tab template).
+				tmplName := "stat_cards"
+				if strings.TrimSpace(r.FormValue("_tab")) == "tab-skills" {
+					tmplName = "skills_tab"
+				}
+				if err := a.Tmpl.ExecuteTemplate(w, tmplName, data); err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+				}
+				return
+			}
+			// Manual save: redirect back to the same tab the user was on.
 			target := "/characters/" + id
+			tab := strings.TrimSpace(r.FormValue("_tab"))
 			if warn != "" {
 				target += "?warn=" + url.QueryEscape(warn)
+				if tab != "" {
+					target += "#" + tab
+				}
+			} else if tab != "" {
+				target += "#" + tab
 			}
 			http.Redirect(w, r, target, http.StatusSeeOther)
 		case http.MethodDelete:
@@ -420,9 +445,14 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) string {
 	warning := ""
 	if !a.Cfg.AllowsNegativeSkillPoints() {
 		budget := a.Cfg.SkillPointBudget(c.Level)
-		if used := engine.SkillPointsUsed(a.Cfg.Config, *c); used > budget {
+		usedBefore := engine.SkillPointsUsed(a.Cfg.Config, model.Character{Level: c.Level, Skills: before})
+		usedAfter := engine.SkillPointsUsed(a.Cfg.Config, *c)
+		// Only reject the change if it increased spending past the budget.
+		// Lowering skills (e.g. to inept for a refund) is always allowed, even
+		// when currently over budget, because it is a corrective action.
+		if usedAfter > budget && usedAfter > usedBefore {
 			c.Skills = before
-			warning = fmt.Sprintf("That selection would use %d skill points but only %d are available at level %d. Your skill changes were not applied.", used, budget, c.Level)
+			warning = fmt.Sprintf("That selection would use %d skill points but only %d are available at level %d. Your skill changes were not applied.", usedAfter, budget, c.Level)
 		}
 	}
 	// Current values for editable vitals (HP/Energy). Stored as traits
@@ -443,6 +473,18 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) string {
 		}
 	}
 	return warning
+}
+
+// renderSkillsTab writes the skills_tab partial for the given character.
+// Used by shifts, conditions, and the skills autosave to update the skills
+// panel (including "Now:" effective text and Warning) in place.
+func (a *App) renderSkillsTab(w http.ResponseWriter, c *model.Character) {
+	data := a.characterPage(c, false)
+	data.Cfg = a.Cfg.Config
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if err := a.Tmpl.ExecuteTemplate(w, "skills_tab", data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (a *App) characterPage(c *model.Character, isNew bool) pageData {

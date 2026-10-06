@@ -46,7 +46,9 @@
            (catalogue id, configured values, resolved description) round-trips
            through the same YAML shape as a built perk. */}}
       <a class="btn" href="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}/export">Export</a>
-      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}" hx-confirm="Give up this passive? Its perk points are refunded.">Delete</button>
+      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}"
+              hx-target="#tab-perks-list" hx-swap="innerHTML"
+              hx-confirm="Give up this passive? Its perk points are refunded.">Delete</button>
     </div>
     {{ else }}
     <span class="muted">{{ $ab.Type }} &middot; {{ len $ab.Enactments }} enactment(s)</span>
@@ -57,7 +59,9 @@
     <div class="actions">
       <a class="btn" href="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}">Configure</a>
       <a class="btn" href="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}/export">Export</a>
-      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}" hx-confirm="Delete perk?">Delete</button>
+      <button class="btn danger" hx-delete="/characters/{{ $c.ID }}/perks/{{ $ab.ID }}"
+              hx-target="#tab-perks-list" hx-swap="innerHTML"
+              hx-confirm="Delete perk?">Delete</button>
     </div>
     {{ end }}
   </li>

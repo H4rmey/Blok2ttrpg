@@ -61,7 +61,8 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		a.renderPerkListPartial(w, c, changed)
+		quiet := r.URL.Query().Get("quiet") == "1"
+		a.renderPerkListPartial(w, c, changed, quiet)
 		return
 	}
 
@@ -149,7 +150,9 @@ func (a *App) handlePerks(w http.ResponseWriter, r *http.Request, c *model.Chara
 			// points are recovered.
 			c.Perks = append(c.Perks[:idx], c.Perks[idx+1:]...)
 			_ = a.Store.Save(*c)
-			w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=perks#tab-perks")
+			// Return the updated perk list partial so the card disappears in
+			// place without a full page reload or tab jump.
+			a.renderPerkListPartial(w, c, 0, true)
 		}
 		return
 	}
@@ -328,11 +331,13 @@ func refreshNotice(changed int) string {
 // This is the HTMX fragment counterpart of renderPerkList above, which renders
 // the whole page. The two were distinct before the Abilities -> Perks rename
 // collapsed their names together.
-func (a *App) renderPerkListPartial(w http.ResponseWriter, c *model.Character, changed int) {
+func (a *App) renderPerkListPartial(w http.ResponseWriter, c *model.Character, changed int, quiet bool) {
 
 	data := a.perkListPage(c)
 	data.Cfg = a.Cfg.Config
-	data.RefreshNotice = refreshNotice(changed)
+	if !quiet {
+		data.RefreshNotice = refreshNotice(changed)
+	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if err := a.Tmpl.ExecuteTemplate(w, "perk_list", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

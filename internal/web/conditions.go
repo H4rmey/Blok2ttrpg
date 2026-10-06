@@ -219,7 +219,7 @@ func (a *App) setConditionShift(w http.ResponseWriter, r *http.Request, c *model
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=skills#tab-skills")
+	a.renderSkillsTab(w, c)
 }
 
 // removeCondition drops one applied condition by index. Nothing else has to be
@@ -236,7 +236,7 @@ func (a *App) removeCondition(w http.ResponseWriter, r *http.Request, c *model.C
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=skills#tab-skills")
+	a.renderSkillsTab(w, c)
 }
 
 // conditionWarning reports the skills whose shifts (from applied conditions AND

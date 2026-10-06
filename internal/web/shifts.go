@@ -207,7 +207,7 @@ func (a *App) setShift(w http.ResponseWriter, r *http.Request, c *model.Characte
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=skills#tab-skills")
+	a.renderSkillsTab(w, c)
 }
 
 // removeShift drops one applied shift card by index. Nothing else has to be
@@ -224,7 +224,7 @@ func (a *App) removeShift(w http.ResponseWriter, r *http.Request, c *model.Chara
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("HX-Redirect", "/characters/"+c.ID+"?t=skills#tab-skills")
+	a.renderSkillsTab(w, c)
 }
 
 // skillExists reports whether the ruleset defines the given skill in the given

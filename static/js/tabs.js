@@ -20,7 +20,10 @@
     var url = list.getAttribute('data-load-url');
     if (!url) return;
     perksLoaded = true;
-    htmx.ajax('GET', url, { target: list, swap: 'innerHTML' });
+    // Append quiet=1 so the server omits the "already up to date" notice that
+    // is only meaningful when the user manually presses the refresh button.
+    var loadUrl = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'quiet=1';
+    htmx.ajax('GET', loadUrl, { target: list, swap: 'innerHTML' });
   }
 
   function activateById(id) {

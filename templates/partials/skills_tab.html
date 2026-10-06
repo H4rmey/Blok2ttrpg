@@ -1,0 +1,92 @@
+{{/* Skills tab panel innards — extracted so the autosave HTMX response can
+     swap the whole panel (keeping "Now:" and Warning in sync) while also
+     pushing an OOB update to #stat-cards. */}}
+{{ define "skills_tab" }}
+{{ $c := .Character }}
+{{ if .Warning }}
+<div class="notice-warn">{{ .Warning }}</div>
+{{ end }}
+
+<form method="post" id="skills-form"
+      action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
+      data-stats-url="/characters/{{ $c.ID }}/stats"
+      hx-post="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
+      hx-trigger="change"
+      hx-target="#tab-skills"
+      hx-swap="innerHTML">
+  <input type="hidden" name="_tab" value="tab-skills">
+
+  {{ range traits .Cfg }}{{ range .Fields }}
+  <input type="hidden" name="attr_{{ .Key }}" value="{{ attrStr $c .Key }}">
+  {{ end }}{{ end }}
+  <input type="hidden" name="level" value="{{ $c.Level }}">
+  {{/* Carry current HP/Energy through so upgrading a vital skill does not
+       reset the player's live counter back to the new maximum. */}}
+  {{ range .Vitals }}{{ if .Editable }}
+  <input type="hidden" name="current_{{ .Key }}" value="{{ .Current }}">
+  {{ end }}{{ end }}
+
+  {{ range skillGroups .Cfg }}
+  {{ $g := . }}
+  <fieldset class="section section-{{ $g.ID }}">
+    <legend>{{ .Label }}</legend>
+    <div class="skill-grid">
+      {{ range .Skills }}
+      {{ $skill := . }}
+      {{ $view := skillView $.SkillViews $g.ID $skill }}
+      {{ $info := skillInfo $.Cfg $g.ID $skill }}
+      <div class="field skill-field{{ if $view.Down }} skill-shifted-down{{ else if $view.Up }} skill-shifted-up{{ end }}">
+        <label>
+          {{ $skill }}
+          {{ if and $info (not $.Cfg.Skills.RenderInformation) }}
+          <span class="condition-info" tabindex="0" aria-label="What this skill does">
+            i
+            <span class="condition-tip" role="tooltip">
+              <strong>{{ $skill }}</strong>
+              <span class="condition-tip-text">{{ $info }}</span>
+            </span>
+          </span>
+          {{ end }}
+          {{ if $view.Shifted }}
+          <span class="skill-shift-badge">{{ signedInt $view.Shift }}</span>
+          {{ end }}
+        </label>
+        {{ if and $info $.Cfg.Skills.RenderInformation }}
+        <small class="field-info">{{ $info }}</small>
+        {{ end }}
+        <select name="skill_{{ $g.ID }}_{{ $skill }}" form="skills-form">
+          {{ $current := skillProf $c $g.ID $skill }}
+          {{ range $.Cfg.Proficiencies }}
+          <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profSkillLabel $.Cfg . $g.ID $skill }}</option>
+          {{ end }}
+        </select>
+        {{ if $view.Shifted }}
+        <span class="skill-effective">
+          Now:
+          {{ range $.Cfg.Proficiencies }}{{ if eq .ID $view.Effective }}{{ profSkillLabel $.Cfg . $g.ID $skill }}{{ end }}{{ end }}
+          {{ if $view.Clamped }}<span class="skill-clamped" title="Already at the end of the proficiency ladder, so the full shift could not be applied.">(capped)</span>{{ end }}
+        </span>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </fieldset>
+  {{ end }}
+
+  <div class="toolbar">
+    <button class="btn primary" type="submit">Save</button>
+  </div>
+</form>
+
+{{/* Conditions and shifts are shown at the bottom of the skills tab because
+     they directly affect skill values. */}}
+{{ if $c.ID }}
+{{ template "condition_strip" . }}
+{{ template "shift_strip" . }}
+{{ end }}
+
+{{/* OOB swap: keep stat-cards in sync after a skill change. */}}
+<div id="stat-cards" hx-swap-oob="innerHTML">
+  {{ template "stat_cards" . }}
+</div>
+{{ end }}

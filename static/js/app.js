@@ -837,12 +837,12 @@ function recalcCharacterStats() {
     .then(function (html) { target.innerHTML = html; });
 }
 
-// Delegated listeners so recalculation fires no matter when the elements were
-// added and regardless of event-bubbling quirks with the external level input.
+// The level input lives outside both character forms and drives a preview-only
+// recalc (no save). The forms themselves autosave via HTMX hx-trigger="change"
+// and the server returns updated stat_cards, so no separate recalc is needed
+// for field/dropdown changes inside a form.
 document.addEventListener("change", function (e) {
-  var t = e.target;
-  if (!t) return;
-  if (t.id === "character-level" || (t.closest && t.closest("#character-form"))) {
+  if (e.target && e.target.id === "character-level") {
     recalcCharacterStats();
   }
 });

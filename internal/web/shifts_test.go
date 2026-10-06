@@ -122,8 +122,8 @@ func TestSetShiftValidatesAgainstConfigRange(t *testing.T) {
 		return rec
 	}
 
-	if rec := post("3"); rec.Code != http.StatusOK || rec.Header().Get("HX-Redirect") != "/characters/char-1?t=skills#tab-skills" {
-		t.Fatalf("setting 3 returned %d, want 200 with HX-Redirect: %s", rec.Code, rec.Body.String())
+	if rec := post("3"); rec.Code != http.StatusOK {
+		t.Fatalf("setting 3 returned %d, want 200: %s", rec.Code, rec.Body.String())
 	}
 	if c.Shifts[0].Shift != 3 {
 		t.Errorf("stored shift = %d, want 3", c.Shifts[0].Shift)
@@ -154,8 +154,8 @@ func TestRemoveShiftByIndex(t *testing.T) {
 	rec := httptest.NewRecorder()
 	app.handleCharacterShifts(rec, req, c, []string{"1"})
 
-	if rec.Header().Get("HX-Redirect") != "/characters/char-1?t=skills#tab-skills" {
-		t.Errorf("remove must HX-Redirect to the sheet's skills tab, got %q", rec.Header().Get("HX-Redirect"))
+	if rec.Code != http.StatusOK {
+		t.Errorf("remove returned %d, want 200 with skills_tab partial", rec.Code)
 	}
 	if len(c.Shifts) != 2 || c.Shifts[0].Shift != 1 || c.Shifts[1].SkillKey != "vital.Movement" {
 		t.Fatalf("removal removed the wrong card(s): %+v", c.Shifts)

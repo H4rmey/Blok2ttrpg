@@ -3,10 +3,6 @@
 
 {{ template "character_bar" . }}
 
-{{ if .Warning }}
-<div class="notice-warn">{{ .Warning }}</div>
-{{ end }}
-
 {{/* ── Tab nav ─────────────────────────────────────────────────────────── */}}
 <nav class="char-tabs" id="char-tabs">
   <button class="char-tab active" data-tab="tab-traits">Traits</button>
@@ -21,7 +17,12 @@
 <div class="char-tab-panel active" id="tab-traits">
   <form method="post" id="character-form"
         action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
-        data-stats-url="/characters/{{ $c.ID }}/stats">
+        data-stats-url="/characters/{{ $c.ID }}/stats"
+        hx-post="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
+        hx-trigger="change"
+        hx-target="#stat-cards"
+        hx-swap="innerHTML">
+    <input type="hidden" name="_tab" value="tab-traits" id="char-form-tab">
 
     {{ range traits .Cfg }}
     <fieldset class="section section-traits">
@@ -44,80 +45,13 @@
 
 {{/* ── Tab: Skills ──────────────────────────────────────────────────────── */}}
 <div class="char-tab-panel" id="tab-skills">
-  <form method="post" id="skills-form"
-        action="{{ if $c.ID }}/characters/{{ $c.ID }}{{ else }}/characters/create{{ end }}"
-        data-stats-url="/characters/{{ $c.ID }}/stats">
-
-    {{ range traits .Cfg }}{{ range .Fields }}
-    <input type="hidden" name="attr_{{ .Key }}" value="{{ attrStr $c .Key }}">
-    {{ end }}{{ end }}
-    <input type="hidden" name="level" value="{{ $c.Level }}">
-
-    {{ range skillGroups .Cfg }}
-    {{ $g := . }}
-    <fieldset class="section section-{{ $g.ID }}">
-      <legend>{{ .Label }}</legend>
-      <div class="skill-grid">
-        {{ range .Skills }}
-        {{ $skill := . }}
-        {{ $view := skillView $.SkillViews $g.ID $skill }}
-        {{ $info := skillInfo $.Cfg $g.ID $skill }}
-        <div class="field skill-field{{ if $view.Down }} skill-shifted-down{{ else if $view.Up }} skill-shifted-up{{ end }}">
-          <label>
-            {{ $skill }}
-            {{ if and $info (not $.Cfg.Skills.RenderInformation) }}
-            <span class="condition-info" tabindex="0" aria-label="What this skill does">
-              i
-              <span class="condition-tip" role="tooltip">
-                <strong>{{ $skill }}</strong>
-                <span class="condition-tip-text">{{ $info }}</span>
-              </span>
-            </span>
-            {{ end }}
-            {{ if $view.Shifted }}
-            <span class="skill-shift-badge">{{ signedInt $view.Shift }}</span>
-            {{ end }}
-          </label>
-          {{ if and $info $.Cfg.Skills.RenderInformation }}
-          <small class="field-info">{{ $info }}</small>
-          {{ end }}
-          <select name="skill_{{ $g.ID }}_{{ $skill }}" form="skills-form">
-            {{ $current := skillProf $c $g.ID $skill }}
-            {{ range $.Cfg.Proficiencies }}
-            <option value="{{ .ID }}" {{ if eq .ID $current }}selected{{ end }}>{{ profSkillLabel $.Cfg . $g.ID $skill }}</option>
-            {{ end }}
-          </select>
-          {{ if $view.Shifted }}
-          <span class="skill-effective">
-            Now:
-            {{ range $.Cfg.Proficiencies }}{{ if eq .ID $view.Effective }}{{ profSkillLabel $.Cfg . $g.ID $skill }}{{ end }}{{ end }}
-            {{ if $view.Clamped }}<span class="skill-clamped" title="Already at the end of the proficiency ladder, so the full shift could not be applied.">(capped)</span>{{ end }}
-          </span>
-          {{ end }}
-        </div>
-        {{ end }}
-      </div>
-    </fieldset>
-    {{ end }}
-
-    <div class="toolbar">
-      <button class="btn primary" type="submit">Save</button>
-    </div>
-  </form>
-
-  {{/* Conditions and shifts are shown at the bottom of the skills tab because
-       they directly affect skill values — keeping them co-located avoids the
-       need to switch tabs while adjusting a character mid-session. */}}
-  {{ if $c.ID }}
-  {{ template "condition_strip" . }}
-  {{ template "shift_strip" . }}
-  {{ end }}
+  {{ template "skills_tab" . }}
 </div>
 
 {{ if $c.ID }}
 {{/* ── Tab: Perks ───────────────────────────────────────────────────────── */}}
 <div class="char-tab-panel" id="tab-perks">
-  <div class="toolbar">
+  <div class="toolbar toolbar-spaced">
     <button class="btn primary" type="button"
             onclick="document.getElementById('new-perk-modal').showModal()">+ New Perk</button>
     {{/* The built-in library is reachable directly from the toolbar, not only

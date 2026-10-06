@@ -513,5 +513,5 @@ func (a *App) configurePassive(w http.ResponseWriter, r *http.Request, c *model.
 	}
 	// The whole list is returned rather than the single card: reconfiguring moves
 	// the perk-point total, which every other card is measured against.
-	a.renderPerkListPartial(w, c, 0)
+	a.renderPerkListPartial(w, c, 0, true)
 }
