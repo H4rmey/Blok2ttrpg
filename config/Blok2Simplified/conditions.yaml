@@ -278,6 +278,7 @@ conditions:
   - id: doomed
     name: "Doomed"
     description: "You will move to Dying in x turns."
+    selectable: false
     build_cost: 3
   - id: zombified
     name: "Zombified"

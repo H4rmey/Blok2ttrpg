@@ -255,12 +255,23 @@ option_groups:
 
   roll_damage:
     groups:
-      - source: skills.offense
-        label: "Offense"
       - source: roll_generic
         label: "Generic"
+      - source: skills.offense
+        label: "Offense"
       - source: skills.general
         label: "General"
+
+  skills_complete:
+    groups:
+      - source: skills.general
+        label: "General"
+      - source: skills.offense
+        label: "Offense"
+      - source: skills.defense
+        label: "Defense"
+      - source: skills.vital
+        label: "Vitals"
 
   roll_heal:
     groups:
@@ -342,5 +353,5 @@ validations:
               offense: { build_cost: 2 }
               general: { build_cost: 1 }
       per_item:
-        increase: { build_cost: 1 }
-        decrease: { build_cost: -1 }
+        increase: { build_cost: -1 }
+        decrease: { build_cost: 1 }

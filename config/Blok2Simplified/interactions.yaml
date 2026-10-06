@@ -32,10 +32,10 @@ interactions:
             cost: { build_cost: 1 }
           - value: "25"
             label: "25m (Medium)"
-            cost: { build_cost: 2 }
+            cost: { build_cost: 5 }
           - value: "50"
             label: "50m (Long)"
-            cost: { build_cost: 3 }
+            cost: { build_cost: 8 }
       - key: targets
         label: "Targets"
         type: free_number
@@ -68,13 +68,13 @@ interactions:
             cost: { build_cost: 0 }
           - value: "5"
             label: "5m (Close)"
-            cost: { build_cost: 1 }
+            cost: { build_cost: 2 }
           - value: "25"
             label: "25m (Medium)"
-            cost: { build_cost: 2 }
+            cost: { build_cost: 5 }
           - value: "50"
             label: "50m (Long)"
-            cost: { build_cost: 3 }
+            cost: { build_cost: 9 }
       - key: zone-radius
         label: "Radius (meter)"
         type: free_number

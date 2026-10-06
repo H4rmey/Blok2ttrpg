@@ -39,23 +39,22 @@ enactments:
           - value: "unlimited"
             label: "Unlimited"
             cost: { build_cost: 8, energy_cost: 0 }
-      - key: solution
-        information: "Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this perk then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action."
-        label: "Solutions"
-        type: multiselect
-        default_count: 2
-        row_fields:
-          - key: value
-            label: "Solution"
-            type: dropdown
-            options_source: skills_general_defense
-            group_offsets:
-              default_group: defense
-              offsets:
-                general: { build_cost: 0 }
-        per_item:
-          increase: { build_cost: 0 }
-          decrease: { build_cost: 0 }
+      - key: solution_1
+        label: "Solution 1"
+        type: dropdown
+        options_source: skills_general_defense
+        group_offsets:
+          default_group: defense
+          offsets:
+            general: { build_cost: 0 }
+      - key: solution_2
+        label: "Solution 2"
+        type: dropdown
+        options_source: skills_general_defense
+        group_offsets:
+          default_group: defense
+          offsets:
+            general: { build_cost: 0 }
       - key: solution_dc
         label: "Solution DC"
         type: free_number
@@ -76,14 +75,15 @@ enactments:
       energy_cost: 0
     fields:
       - key: source
-        label: "Source"
+        label: "Damage Source"
         type: dropdown
         options_source: roll_damage
         information: "The offensive skill whose die is rolled for damage."
         group_offsets:
-          default_group: skills.offensive
+          default_group: roll_generic
           offsets:
-            general: { build_cost: 1 }
+            general: { build_cost: 2 }
+            offense: { build_cost: 1 }
 
 
   effect:
@@ -116,23 +116,22 @@ enactments:
         per_step:
           increase: { build_cost: 1 }
           decrease: { build_cost: -1 }
-      - key: solution
-        information: "Solutions are the way to resolve the applied conditions/effects. You can image that when someone is put on fire the solution might be to stop drop and roll (a simple dexterity check) but it can also be to use magic to remove the flames. By default you always give your opponent two options if they meet or beat the required DC set for this perk then the Condition/Effect is removed. At any time during the Target's turn may they attempt the solution roll to see if they can remove the Condition/Effect. This however will cost them one Action."
-        label: "Solutions"
-        type: multiselect
-        default_count: 2
-        row_fields:
-          - key: value
-            label: "Solution"
-            type: dropdown
-            options_source: skills_general_defense
-            group_offsets:
-              default_group: defense
-              offsets:
-                general: { build_cost: 0 }
-        per_item:
-          increase: { build_cost: 0 }
-          decrease: { build_cost: 0 }
+      - key: solution_1
+        label: "Solution 1"
+        type: dropdown
+        options_source: skills_general_defense
+        group_offsets:
+          default_group: defense
+          offsets:
+            general: { build_cost: 0 }
+      - key: solution_2
+        label: "Solution 2"
+        type: dropdown
+        options_source: skills_general_defense
+        group_offsets:
+          default_group: defense
+          offsets:
+            general: { build_cost: 0 }
       - key: solution_dc
         label: "Solution DC"
         type: free_number
@@ -153,7 +152,7 @@ enactments:
       energy_cost: 0
     fields:
       - key: source
-        label: "Source"
+        label: "Healing Source"
         type: dropdown
         default: d4
         options_source: roll_heal
@@ -192,56 +191,6 @@ enactments:
         per_item:
           increase: { build_cost: 0 }
 
-  # negation:
-  #   type: "Enact Negation"
-  #   information: "Enact Negation allows characters to ignore/nullify the effects of an enactment you or someone else are the target for."
-  #   render_information: false
-  #   base_cost:
-  #     build_cost: 4
-  #     energy_cost: 0
-
-  # nerf:
-  #   type: "Enact Nerf"
-  #   information: "Enact Nerf can only be applied to yourself. Enact Nerf will apply a state or proficiency shift to your character to gain perk points or energy."
-  #   render_information: false
-  #   base_cost: 
-  #     build_cost: 0
-  #     energy_cost: 0
-  #   allowed_interactions:
-  #     - self
-  #   fields:
-  #     - key: nerf-shifted-skill
-  #       label: "Skill"
-  #       type: dropdown
-  #       options_source: skills_all
-  #     - key: nerf-shift-amount
-  #       label: "Shift -/+"
-  #       type: free_number
-  #       default: -1
-  #       min: -6
-  #       max: -1
-  #       step: 1
-  #       per_step:
-  #         increase:
-  #           build_cost: 0
-  #           energy_cost: 1
-  #         decrease:
-  #           build_cost: 0
-  #           energy_cost: -1
-  #     - key: nerf-duration
-  #       label: "Duration (rounds)"
-  #       type: free_number
-  #       default: 1
-  #       min: 1
-  #       max: 5
-  #       step: 1
-  #       per_step:
-  #         increase:
-  #           build_cost: 0
-  #           energy_cost: -1
-  #         decrease:
-  #           build_cost: 0
-  #           energy_cost: 1
 
   phase:
     name: "Enact Phase"
@@ -305,7 +254,7 @@ enactments:
       - key: shift-skills
         label: "Skill"
         type: dropdown
-        options_source: skills_all
+        options_source: skills_complete
       - key: shift-amount
         label: "Shift -/+"
         type: free_number
