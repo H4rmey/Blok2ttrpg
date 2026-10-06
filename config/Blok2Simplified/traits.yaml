@@ -43,12 +43,12 @@ traits:
   temporaries:
     label: "Temporary Traits"
     fields:
-      - key: trait_1
+      - key: trait_11
         label: "Trait 1"
         type: free_text
-      - key: trait_2
+      - key: trait_22
         label: "Trait 2"
         type: free_text
-      - key: trait_3
+      - key: trait_33
         label: "Trait 3"
         type: free_text
