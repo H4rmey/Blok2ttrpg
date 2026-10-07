@@ -56,7 +56,7 @@ proficiencies:
     vitals:
       hp: 10
       movement: 3
-      energy: 8
+      energy: 16
   - id: novice
     name: "Novice"
     cost: 1
@@ -64,7 +64,7 @@ proficiencies:
     vitals:
       hp: 13
       movement: 4
-      energy: 11
+      energy: 22
   - id: proficient
     name: "Proficient"
     cost: 1
@@ -72,7 +72,7 @@ proficiencies:
     vitals:
       hp: 16
       movement: 5
-      energy: 14
+      energy: 28
   - id: expert
     name: "Expert"
     cost: 1
@@ -80,7 +80,7 @@ proficiencies:
     vitals:
       hp: 19
       movement: 6
-      energy: 17
+      energy: 34
   - id: master
     name: "Master"
     cost: 1
@@ -88,7 +88,7 @@ proficiencies:
     vitals:
       hp: 22
       movement: 7
-      energy: 20
+      energy: 40
   - id: grandmaster
     name: "Grandmaster"
     # The die is capped at d12; further rungs add a flat bonus instead.
@@ -97,7 +97,7 @@ proficiencies:
     vitals:
       hp: 25
       movement: 8
-      energy: 23
+      energy: 46
   - id: champion
     name: "Champion"
     cost: 2
@@ -105,7 +105,7 @@ proficiencies:
     vitals:
       hp: 28
       movement: 9
-      energy: 26
+      energy: 46
   - id: legendary
     name: "Legendary"
     cost: 3
@@ -113,4 +113,4 @@ proficiencies:
     vitals:
       hp: 31
       movement: 10
-      energy: 29
+      energy: 62

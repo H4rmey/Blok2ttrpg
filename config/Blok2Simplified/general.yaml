@@ -10,7 +10,7 @@ skill_categories:
   - defense
 combat:
   actions:
-    amount: 3
+    amount: 2
   # Energy regained per rest. A full three-action round costs about 3 Energy,
   # so this is a deliberately slow trickle that keeps Energy scarce between
   # fights. The app never spends or restores Energy by itself; this value is a
@@ -133,44 +133,6 @@ option_sources:
       label: "1d12+3"
       cost: { build_cost: 7, energy_cost: 0 }
 
-  # Balanced per-knockout costs for Phase perks. A knockout is a condition
-  # that interrupts an active Phase, so it is a drawback: the more easily a
-  # knockout can be triggered, the larger the build discount it grants. "None"
-  # (no way to interrupt) is a benefit and therefore costs build points.
-  knockout_options:
-    - value: "None"
-      cost: { build_cost: 2 }
-    - value: "Engager takes damage"
-      cost: { build_cost: -1 }
-    - value: "Engager falls unconscious"
-      cost: { build_cost: 0 }
-    - value: "Engager dies"
-      cost: { build_cost: 0 }
-    - value: "Engager gets grabbed or restrained"
-      cost: { build_cost: 0 }
-    - value: "Engager moves voluntarily"
-      cost: { build_cost: -1 }
-    - value: "Engager is moved by another effect"
-      cost: { build_cost: 0 }
-    - value: "Engager fails a validation"
-      cost: { build_cost: -1 }
-    - value: "Engager uses another phase"
-      cost: { build_cost: 0 }
-    - value: "Engager loses line of sight to target"
-      cost: { build_cost: 0 }
-    - value: "Target moves out of range"
-      cost: { build_cost: 0 }
-    - value: "Target falls unconscious"
-      cost: { build_cost: 0 }
-    - value: "Target dies"
-      cost: { build_cost: 0 }
-    - value: "Target succeeds on a counter roll"
-      cost: { build_cost: -1 }
-    - value: "Phase duration expires"
-      cost: { build_cost: 0 }
-    - value: "Engager runs out of energy"
-      cost: { build_cost: 0 }
-
   # How the per-round upkeep of a Concentration perk is paid.
   concentration_upkeep:
     - value: "1 Action and 1 Energy"
@@ -180,7 +142,7 @@ option_sources:
     - value: "1 Energy"
       cost: { build_cost: 2, energy_cost: 0 }
     - value: "Effortless (no upkeep cost)"
-      cost: { build_cost: 4, energy_cost: 0 }
+      cost: { build_cost: 8, energy_cost: 0 }
 
   directions:
     - Towards
@@ -325,9 +287,9 @@ validations:
   # bounds and per-step pricing here; every opted-in enactment follows.
   dc_validation:
     label: "Difficulty (DC)"
-    default_dc: 2
-    min_dc: 2
-    max_dc: 12
+    default_dc: 3
+    min_dc: 1
+    max_dc: 5
     per_step:
       increase: { build_cost: 1 }
       decrease: { build_cost: -1 }

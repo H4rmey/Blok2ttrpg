@@ -88,10 +88,11 @@ conditions:
     build_cost: 2
   - id: untargetable
     name: "Untouchable"
-    description: "You cannot be targeted."
+    description: "You cannot be targeted and hit"
     # Near-total denial of incoming attacks for the duration, so tier 5. At 4 it
     # was priced level with Charmed while being harder to play around.
     build_cost: 5
+    selectable: false
   - id: ignored
     name: "Ignored"
     description: "You cannot be targeted, but you can still get hit."

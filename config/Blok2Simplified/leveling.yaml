@@ -76,11 +76,11 @@ leveling:
     start: 13
     per_level: 3
   perk_points:
-    start: 28
-    per_level: 5
+    start: 20
+    per_level: 4
   invoke_points:
     start: 3
     # per_step points are granted every levels_per_step levels after the first.
     per_step: 1
-    levels_per_step: 2
+    levels_per_step: 3
 
