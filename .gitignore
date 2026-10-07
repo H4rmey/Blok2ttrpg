@@ -8,3 +8,5 @@ server.log
 docs/!!!meta.json
 data/*/*json
 .env
+deploy.sh
+
