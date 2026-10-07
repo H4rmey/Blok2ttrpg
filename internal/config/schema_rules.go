@@ -18,6 +18,89 @@ type Validations struct {
 	Information       string  `yaml:"information,omitempty" json:"information,omitempty"`
 	RenderInformation bool    `yaml:"render_information,omitempty" json:"render_information,omitempty"`
 	Fields            []Field `yaml:"fields,omitempty" json:"fields,omitempty"`
+
+	// DCValidation configures the flat-DC validation mode an enactment opts
+	// into via use_dc_validation. It defines the DC field the builder shows
+	// (label, default, bounds and per-step cost) instead of the counter_skill
+	// list. Nil means no enactment can meaningfully opt in.
+	DCValidation *DCValidation `yaml:"dc_validation,omitempty" json:"dc_validation,omitempty"`
+}
+
+// DCValidation is the configurable shape of flat-DC validation. An enactment
+// with use_dc_validation renders one free_number field under this label and
+// rolls its engage source against the chosen DC.
+type DCValidation struct {
+	// Label is the builder label for the DC field.
+	Label string `yaml:"label,omitempty" json:"label,omitempty"`
+	// DefaultDC is the DC a fresh enactment starts at.
+	DefaultDC int `yaml:"default_dc,omitempty" json:"default_dc,omitempty"`
+	// MinDC/MaxDC bound the DC the builder offers.
+	MinDC int `yaml:"min_dc,omitempty" json:"min_dc,omitempty"`
+	MaxDC int `yaml:"max_dc,omitempty" json:"max_dc,omitempty"`
+	// PerStep prices each DC step above/below the default, mirroring the
+	// per_step of a free_number field.
+	PerStep *PerStep `yaml:"per_step,omitempty" json:"per_step,omitempty"`
+}
+
+// DCField builds the synthetic validation field for the flat DC value, so the
+// builder, normalization and cost engine all share one definition.
+func (v *Validations) DCField() *Field {
+	d := v.DCValidation
+	if d == nil {
+		return nil
+	}
+	label := d.Label
+	if label == "" {
+		label = "Difficulty (DC)"
+	}
+	def, min, max := d.DefaultDC, d.MinDC, d.MaxDC
+	if def == 0 {
+		def = 2
+	}
+	if min == 0 {
+		min = 2
+	}
+	if max == 0 {
+		max = def
+	}
+	return &Field{
+		Key:     "validation_dc",
+		Label:   label,
+		Type:    "free_number",
+		Default: def,
+		Min:     min,
+		Max:     max,
+		Step:    1,
+		PerStep: d.PerStep,
+	}
+}
+
+// DCValidationDC clamps a stored flat-DC value into the configured bounds,
+// falling back to the configured default when nothing was stored.
+func (c *Config) DCValidationDC(stored int) int {
+	d := c.Validations.DCValidation
+	def, min, max := 2, 2, 2
+	if d != nil {
+		if d.DefaultDC != 0 {
+			def = d.DefaultDC
+		}
+		if d.MinDC != 0 {
+			min = d.MinDC
+		}
+		if d.MaxDC != 0 {
+			max = d.MaxDC
+		}
+	}
+	if stored <= 0 {
+		return def
+	}
+	if stored < min {
+		return min
+	}
+	if max > min && stored > max {
+		return max
+	}
+	return stored
 }
 
 // Proficiency is a single skill tier.

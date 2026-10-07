@@ -30,8 +30,9 @@ type perkPage struct {
 	// level/points/vitals header as every other character-scoped page.
 	charStats
 
-	// ReadOnlyStats is always true on the builder: the character bar's inputs
-	// belong to the character sheet form, which does not exist here.
+	// ReadOnlyStats renders the bar without editable inputs. It stays true on
+	// the library/browser pages that have no character form; the builder sets
+	// it false so the bar is fully editable there, like on the sheet.
 	ReadOnlyStats bool
 
 	// Instructions is the generated play-facing rules text for the perk,
@@ -362,8 +363,11 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 		// Over budget is advisory only: it never blocks saving.
 		OverBudget: cost.Build > budget,
 
-		charStats:     a.characterStats(c),
-		ReadOnlyStats: true,
+		charStats: a.characterStats(c),
+		// The builder bar is fully editable, like the sheet: the same level
+		// and current-vital inputs post to the same character endpoint, and
+		// perk edits refresh the bar live without resetting Current to Max.
+		ReadOnlyStats: false,
 
 		Instructions: engine.PerkInstructions(a.Cfg.Config, *ab),
 
@@ -661,7 +665,27 @@ func (a *App) handleBuilderAutosave(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("X-Perk-ID", ab.ID)
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, `{"id":%q}`, ab.ID)
+	// Return the refreshed character bar alongside the perk id: perk edits
+	// change PerkUsed, so the bar goes stale unless it is re-rendered. The
+	// current-vital inputs are preserved client-side (see app.js), so a live
+	// update never resets Current back to Max.
+	bar, err := a.renderStatCards(c, a.characterStats(&c))
+	if err != nil {
+		fmt.Fprintf(w, `{"id":%q}`, ab.ID)
+		return
+	}
+	fmt.Fprintf(w, `{"id":%q,"stat_cards":%q}`, ab.ID, bar)
+}
+
+// renderStatCards renders the stat_cards partial for a character to a string.
+// Used by the builder autosave to push live bar updates without a reload.
+func (a *App) renderStatCards(c model.Character, stats charStats) (string, error) {
+	data := a.characterPage(&c, false)
+	var buf strings.Builder
+	if err := a.Tmpl.ExecuteTemplate(&buf, "stat_cards", data); err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }
 
 // buildPerkFromForm parses the builder form into an Perk. Shared by the
@@ -710,15 +734,21 @@ func (a *App) readEnactments(r *http.Request) []model.Enactment {
 		if ic, ok := a.Cfg.Interaction(en.Interaction); ok {
 			en.InteractionData = readFieldValues(a.Cfg.Config, ic.Fields, prefix+"i_", r)
 		}
-		if len(a.Cfg.Validations.Fields) > 0 {
-			en.ValidationData = readFieldValues(a.Cfg.Config, a.Cfg.Validations.Fields, prefix+"v_", r)
+		// The validation region renders ValidationFieldsFor(etype), which for
+		// a flat-DC enactment is engage plus the synthetic DC field. Parse
+		// exactly that set so the form, cost and instructions agree.
+		if fields := a.Cfg.ValidationFieldsFor(etype); len(fields) > 0 {
+			en.ValidationData = readFieldValues(a.Cfg.Config, fields, prefix+"v_", r)
 		}
 		out = append(out, en)
 	}
 	return out
 }
 
-// handleBuilderCost recomputes advisory cost from posted form values.
+// handleBuilderCost recomputes advisory cost from posted form values. It also
+// pushes the refreshed character bar out of band, so the builder's top bar
+// stays live (perk-points-used follows the edit) instead of freezing at the
+// values the page opened with.
 
 func (a *App) handleBuilderCost(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
@@ -732,17 +762,52 @@ func (a *App) handleBuilderCost(w http.ResponseWriter, r *http.Request) {
 	// Budget for the over-budget hint; the character id is passed as a form
 	// value so this conditionless partial can look it up.
 	budget := 0
-	if c, ok := a.Store.Get(r.FormValue("character_id")); ok {
+	var c model.Character
+	if found, ok := a.Store.Get(r.FormValue("character_id")); ok {
+		c = found
 		budget = a.Cfg.PerkPointBudget(c.Level)
+	}
+	// Preview the perk as if the current form were saved, so the bar reflects
+	// the edit in progress rather than the last autosave.
+	preview := c
+	if preview.ID != "" {
+		norm := engine.NormalizePerk(a.Cfg.Config, ab)
+		if ab.ID != "" {
+			if idx := findPerk(&preview, ab.ID); idx >= 0 {
+				preview.Perks[idx] = norm
+			} else {
+				preview.Perks = append(preview.Perks, norm)
+			}
+		} else {
+			preview.Perks = append(preview.Perks, norm)
+		}
+		if lvl := r.FormValue("level"); lvl != "" {
+			if n, err := strconv.Atoi(lvl); err == nil {
+				preview.Level = a.Cfg.ClampLevel(n)
+			}
+		}
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	data := perkPage{
-		Cost:       cost,
-		Budget:     budget,
-		OverBudget: budget > 0 && cost.Build > budget,
+		Cfg:           a.Cfg.Config,
+		Character:     &preview,
+		Cost:          cost,
+		Budget:        budget,
+		OverBudget:    budget > 0 && cost.Build > budget,
+		charStats:     a.characterStats(&preview),
+		ReadOnlyStats: false,
 	}
 	if err := a.Tmpl.ExecuteTemplate(w, "cost_cards", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// Live top bar: push the recomputed stat cards alongside the cost badge.
+	// Current-vital inputs are preserved client-side (see app.js), so this
+	// never resets Current back to Max while typing.
+	if preview.ID != "" {
+		_, _ = w.Write([]byte(`<div id="stat-cards" hx-swap-oob="innerHTML">`))
+		_ = a.Tmpl.ExecuteTemplate(w, "stat_cards", data)
+		_, _ = w.Write([]byte(`</div>`))
 	}
 }
 

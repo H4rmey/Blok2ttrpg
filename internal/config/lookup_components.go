@@ -87,12 +87,28 @@ func (c *Config) InteractionsFor(enactmentID string) []*Component {
 // ValidationFieldsFor returns the validation fields visible for the given
 // enactment id, filtered by that enactment's allowed_validations/
 // blocked_validations lists (keyed by field key). Filtering is UI-only. An
-// unknown enactment id yields the full validation field list.
+// unknown enactment id yields the full validation field list. An enactment
+// that opts into flat-DC validation shows the engage source plus the
+// configured DC field instead of the counter_skill list, which is unused in
+// that mode.
 func (c *Config) ValidationFieldsFor(enactmentID string) []Field {
 	all := c.Validations.Fields
 	comp, ok := c.Enactments.Get(enactmentID)
 	if !ok {
 		return all
+	}
+	if comp.UsesDCValidation() {
+		out := make([]Field, 0, len(all)+1)
+		for _, f := range all {
+			if f.Key == "counter_skill" {
+				continue
+			}
+			out = append(out, f)
+		}
+		if dc := c.Validations.DCField(); dc != nil {
+			out = append(out, *dc)
+		}
+		return out
 	}
 	ids := make([]string, 0, len(all))
 	for _, f := range all {

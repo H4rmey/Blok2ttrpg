@@ -2,8 +2,9 @@
      Rendered on every page that is scoped to an open character (sheet, perk
      list, perk builder) so the same figures are always in view. When
      ReadOnlyStats is set the level and current-vital boxes render as plain
-     text, because their inputs belong to the character sheet form which only
-     exists on the sheet itself. */}}
+     text; otherwise the level input saves on its own via hx-post (the old
+     form= link plus preview-only recalc left level edits unsaved, so a
+     reload always showed the old level and skills kept budgeting at it). */}}
 {{ define "character_bar" }}
 {{ $c := .Character }}
 <div class="stats-bar{{ if .ReadOnlyStats }} stats-bar-readonly{{ end }}">
@@ -15,7 +16,12 @@
     {{/* max comes from leveling.max_level; the server clamps to the same
          value, so the input bound is a convenience and not the only guard. */}}
     <input type="number" name="level" min="1" max="{{ .Cfg.MaxLevel }}"
-           value="{{ $c.Level }}" form="character-form" id="character-level">
+           value="{{ $c.Level }}" id="character-level"
+           hx-post="/characters/{{ $c.ID }}"
+           hx-trigger="change"
+           hx-swap="none"
+           hx-vals='{"_tab": "level-only"}'
+           hx-include=".stats-bar [name^='current_']">
     {{ end }}
   </div>
 

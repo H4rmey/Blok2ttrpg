@@ -147,6 +147,10 @@ enactments:
     type: "Enact Healing"
     information: "Enact Healing perks allow characters to restore health to themselves or others. It always has a Source Die and may contain other bonuses."
     render_information: false
+    # Healing validates against a flat DC (see validations.dc_validation in
+    # general.yaml) instead of a contested roll: mending an ally is not
+    # opposed, so the engage source only has to beat a fixed difficulty.
+    use_dc_validation: true
     base_cost:
       build_cost: 1
       energy_cost: 0

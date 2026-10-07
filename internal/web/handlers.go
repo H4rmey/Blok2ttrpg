@@ -283,6 +283,16 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 				tmplName := "stat_cards"
 				if strings.TrimSpace(r.FormValue("_tab")) == "tab-skills" {
 					tmplName = "skills_tab"
+				} else if strings.TrimSpace(r.FormValue("_tab")) == "level-only" {
+					// The top-bar level input posts alone. Saving it here
+					// persists the level, and the OOB skills_tab refresh
+					// carries the new level into the skills form's hidden
+					// field so the next skill edit is budgeted at the new
+					// level instead of the old one.
+					tmplName = "level_sync"
+				}
+				if warn != "" {
+					data.Warning = warn
 				}
 				if err := a.Tmpl.ExecuteTemplate(w, tmplName, data); err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -379,11 +389,55 @@ func (a *App) handleImportCharacter(w http.ResponseWriter, r *http.Request) {
 	// An imported file may name any level, so normalise it against the
 	// ruleset's cap before the character is stored.
 	c.Level = a.Cfg.ClampLevel(c.Level)
+	// A hand-written file may omit skills (which would otherwise render blank
+	// and read as the first ladder rung, Inept) or leave perks without unique
+	// ids (which makes every Configure link open the same perk).
+	a.ensureSkillsComplete(&c)
+	a.repairPerkIDs(&c)
+	for i := range c.Perks {
+		c.Perks[i] = engine.NormalizePerk(a.Cfg.Config, c.Perks[i])
+	}
 	if err := a.Store.Save(c); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/characters/"+c.ID, http.StatusSeeOther)
+}
+
+// ensureSkillsComplete backfills every configured skill missing from the
+// character with the default proficiency. An imported file that names only a
+// few skills would otherwise leave the rest blank, and a blank dropdown shows
+// the browser-first ladder rung (Inept) instead of the configured default
+// (Untrained).
+func (a *App) ensureSkillsComplete(c *model.Character) {
+	if c.Skills == nil {
+		c.Skills = map[string]string{}
+	}
+	def := a.Cfg.DefaultProficiencyID()
+	for _, g := range a.Cfg.Skills.List() {
+		for _, t := range g.Skills {
+			key := model.SkillKey(g.ID, t)
+			if v, ok := c.Skills[key]; !ok || v == "" {
+				c.Skills[key] = def
+			}
+		}
+	}
+}
+
+// repairPerkIDs gives every perk a unique non-empty id. Imported files may
+// omit ids entirely or repeat them; without this every perk link resolves via
+// findPerk to the same record, so all imported perks open as one.
+func (a *App) repairPerkIDs(c *model.Character) {
+	seen := map[string]bool{}
+	for i := range c.Perks {
+		id := c.Perks[i].ID
+		if id == "" || seen[id] {
+			id = fmt.Sprintf("perk-%d-%d", time.Now().UnixNano(), i)
+			c.Perks[i].ID = id
+			time.Sleep(time.Nanosecond)
+		}
+		seen[id] = true
+	}
 }
 
 // blankCharacter builds a character with defaults for every configured skill.

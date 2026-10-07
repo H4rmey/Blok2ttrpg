@@ -173,7 +173,7 @@ option_sources:
 
   # How the per-round upkeep of a Concentration perk is paid.
   concentration_upkeep:
-    - value: "1 Action or 1 Energy"
+    - value: "1 Action and 1 Energy"
       cost: { build_cost: 0, energy_cost: 0 }
     - value: "1 Action"
       cost: { build_cost: 1, energy_cost: 0 }
@@ -319,6 +319,18 @@ option_groups:
 validations:
   information: "What rolls are needed?"
   render_information: false
+  # Flat-DC validation for enactments that opt in via use_dc_validation.
+  # Such an enactment rolls its Engage source against this fixed Difficulty
+  # instead of a contested roll against counter skills. Tune the default,
+  # bounds and per-step pricing here; every opted-in enactment follows.
+  dc_validation:
+    label: "Difficulty (DC)"
+    default_dc: 2
+    min_dc: 2
+    max_dc: 12
+    per_step:
+      increase: { build_cost: 1 }
+      decrease: { build_cost: -1 }
   fields:
     - key: engage
       label: "Engage"

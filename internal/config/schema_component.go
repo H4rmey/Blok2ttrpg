@@ -53,6 +53,13 @@ type Component struct {
 	DefaultRadius   int `yaml:"default_radius,omitempty" json:"default_radius,omitempty"`
 	DefaultDuration int `yaml:"default_duration,omitempty" json:"default_duration,omitempty"`
 
+	// UseDCValidation opts an enactment into flat-DC validation: instead of a
+	// contested roll against the target's counter skills, the enactment rolls
+	// its engage source against a fixed DC configured under validations in
+	// general.yaml. Unset (false) keeps the historical contested roll. This is
+	// enactment-only by design; interactions never force it.
+	UseDCValidation bool `yaml:"use_dc_validation,omitempty" json:"use_dc_validation,omitempty"`
+
 	// Allowed/blocked lists drive UI filtering only; they are never enforced
 	// on save. The rule is: when the allowed list is non-empty only those ids
 	// are shown (in config order); otherwise when the blocked list is
@@ -89,6 +96,10 @@ func (c Component) DisplayName() string {
 	}
 	return c.ID
 }
+
+// UsesDCValidation reports whether the enactment validates against a flat DC
+// rather than a contested roll.
+func (c Component) UsesDCValidation() bool { return c.UseDCValidation }
 
 // Field drives both the builder UI and the cost engine.
 type Field struct {

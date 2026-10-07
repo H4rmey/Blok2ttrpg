@@ -31,7 +31,8 @@
   {{ if and .Editable (not $.ReadOnlyStats) }}
   <span class="cost-card-value vital-editable">
     <input type="number" class="vital-current" name="current_{{ .Key }}"
-           value="{{ .Current }}" form="character-form" min="0">
+           value="{{ .Current }}" form="character-form" min="0"
+           data-vital-input>
     <span class="vital-sep">/</span>
     <span class="vital-max">{{ .Max }}</span>
   </span>
@@ -61,7 +62,8 @@
   {{ else }}
   <span class="cost-card-value vital-editable">
     <input type="number" class="vital-current" name="current_invoke"
-           value="{{ .InvokeCurrent }}" form="character-form" min="0">
+           value="{{ .InvokeCurrent }}" form="character-form" min="0"
+           data-vital-input>
     <span class="vital-sep">/</span>
     <span class="vital-max">{{ .InvokeBudget }}</span>
   </span>

@@ -2,6 +2,15 @@
 {{ $c := .Character }}
 {{ $ab := .Perk }}
 
+{{/* The builder bar is fully editable: the stats inputs post to the character
+     endpoint through this hidden character form (same path as the sheet), so
+     level/vital edits here persist and never reset Current back to Max. */}}
+<form method="post" id="character-form" action="/characters/{{ $c.ID }}"
+      hx-post="/characters/{{ $c.ID }}" hx-trigger="change"
+      hx-target="#stat-cards" hx-swap="innerHTML" hidden>
+  <input type="hidden" name="_tab" value="builder-bar">
+</form>
+
 {{ template "character_bar" . }}
 
 {{/* ── Tab nav (Perks active) ──────────────────────────────────────────── */}}

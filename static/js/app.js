@@ -764,7 +764,17 @@ function dispatchChange(el) {
           var idInput = document.getElementById("perk-id");
           if (idInput) idInput.value = hid;
         }
-        return null;
+        // The server returns the refreshed top bar (stat_cards) in the JSON
+        // payload so the perk-points figures follow the edit. Current-vital
+        // inputs are never overwritten while focused or dirty, so a live
+        // update cannot reset Current back to Max mid-typing.
+        return r
+          .json()
+          .catch(function () { return null; })
+          .then(function (payload) {
+            if (payload && payload.stat_cards) applyStatCards(payload.stat_cards);
+            return null;
+          });
       })
       .catch(function () { /* ignore transient autosave errors */ })
       .then(function () {
@@ -774,6 +784,29 @@ function dispatchChange(el) {
           runAutosave();
         }
       });
+  }
+
+  // applyStatCards swaps the top-bar numbers while preserving what the player
+  // is editing: focused inputs, and inputs whose live value differs from the
+  // fresh markup (typed but not yet saved), keep their live value.
+  function applyStatCards(html) {
+    var target = document.getElementById("stat-cards");
+    if (!target) return;
+    var live = {};
+    target.querySelectorAll("input").forEach(function (el) {
+      if (!el.name) return;
+      live[el.name] = { value: el.value, active: document.activeElement === el };
+    });
+    target.innerHTML = html;
+    if (window.htmx) window.htmx.process(target);
+    Object.keys(live).forEach(function (name) {
+      var st = live[name];
+      var fresh = target.querySelector('input[name="' + name + '"]');
+      if (!fresh) return;
+      if (st.active || fresh.value !== st.value) {
+        fresh.value = st.value;
+      }
+    });
   }
 
   document.addEventListener("change", function (e) {
@@ -794,6 +827,37 @@ document.addEventListener("htmx:afterSwap", function (e) {
   syncAllOptionInfo(e && e.target ? e.target : document);
 });
 
+// Preserve Current-vital inputs across any #stat-cards swap (level saves,
+// skill saves, builder cost previews): a refresh must update the numbers
+// without resetting a value the player is editing back to Max.
+var stashedVitals = {};
+document.addEventListener("htmx:oobBeforeSwap", function (e) {
+  if (e.target && e.target.id === "stat-cards") stashVitalInputs(e.target);
+});
+document.addEventListener("htmx:oobAfterSwap", function (e) {
+  if (e.target && e.target.id === "stat-cards") restoreVitalInputs(e.target);
+});
+function stashVitalInputs(target) {
+  stashedVitals = {};
+  if (!target) return;
+  target.querySelectorAll("input").forEach(function (el) {
+    if (!el.name) return;
+    stashedVitals[el.name] = { value: el.value, active: document.activeElement === el };
+  });
+}
+function restoreVitalInputs(target) {
+  if (!target) return;
+  Object.keys(stashedVitals).forEach(function (name) {
+    var st = stashedVitals[name];
+    var fresh = target.querySelector('input[name="' + name + '"]');
+    if (!fresh) return;
+    if (st.active || (st.value !== "" && fresh.value !== st.value)) {
+      fresh.value = st.value;
+    }
+  });
+  stashedVitals = {};
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   applyVisibility();
   syncAllOptionInfo();
@@ -801,11 +865,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // ---------------------------------------------------------------------------
-// Character sheet: recalculate the whole stats bar (trait points, perk
-// points) on the server whenever any field changes. We always post the full
-// form (including the level input, which lives outside the form via the
-// form="" attribute) so the backend recomputes everything from scratch, just
-// like the perk builder does.
+// Character sheet: live preview of the stats bar while the level field is
+// being typed. The authoritative save happens on change via the input's own
+// hx-post (see character_bar.html), which persists the level and pushes the
+// refreshed skills tab out of band; this preview only re-renders the numbers
+// without saving, so typing never commits a half-entered value.
 // ---------------------------------------------------------------------------
 function recalcCharacterStats() {
   var form = document.getElementById("character-form");
@@ -837,13 +901,15 @@ function recalcCharacterStats() {
     .then(function (html) { target.innerHTML = html; });
 }
 
-// The level input lives outside both character forms and drives a preview-only
-// recalc (no save). The forms themselves autosave via HTMX hx-trigger="change"
-// and the server returns updated stat_cards, so no separate recalc is needed
-// for field/dropdown changes inside a form.
+// Typing in the level box only previews (no save); committing happens on
+// change through the input's hx-post. The forms themselves autosave via HTMX
+// hx-trigger="change" and the server returns updated stat_cards, so no
+// separate recalc is needed for field/dropdown changes inside a form.
 document.addEventListener("change", function (e) {
   if (e.target && e.target.id === "character-level") {
-    recalcCharacterStats();
+    // Let the hx-post save run first; only fall back to a preview when htmx
+    // is absent.
+    if (!window.htmx) recalcCharacterStats();
   }
 });
 document.addEventListener("input", function (e) {

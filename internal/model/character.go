@@ -125,12 +125,12 @@ func SkillKey(groupID, skill string) string { return groupID + "." + skill }
 // Perk is a built perk. Its structured data lives generically in Fields
 // and its attached enactments; there are no hardcoded perk-type fields.
 type Perk struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
+	ID          string `json:"id" yaml:"id,omitempty"`
+	Name        string `json:"name" yaml:"name,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 
 	// Type is an perk-type component id from the config.
-	Type string `json:"type"`
+	Type string `json:"type" yaml:"type,omitempty"`
 
 	// Tags are free-form labels set by the perk author. Deliberately not
 	// validated against any list: there is no tag vocabulary in the config, so a
@@ -144,9 +144,9 @@ type Perk struct {
 	Tags []string `json:"tags,omitempty" yaml:"tags,omitempty"`
 
 	// Fields holds the perk-type-level field values.
-	Fields map[string]any `json:"fields,omitempty"`
+	Fields map[string]any `json:"fields,omitempty" yaml:"fields,omitempty"`
 
-	Enactments []Enactment `json:"enactments,omitempty"`
+	Enactments []Enactment `json:"enactments,omitempty" yaml:"enactments,omitempty"`
 
 	// PackageID, when set, records the package this perk was imported from.
 	// It is used only for package removal: deleting a package removes every
@@ -158,14 +158,14 @@ type Perk struct {
 // Enactment is one effect attached to an perk. Type is an enactment
 // component id; Interaction is an optional interaction component id.
 type Enactment struct {
-	Type        string         `json:"type"`
-	Fields      map[string]any `json:"fields,omitempty"`
-	Interaction string         `json:"interaction,omitempty"`
+	Type        string         `json:"type" yaml:"type,omitempty"`
+	Fields      map[string]any `json:"fields,omitempty" yaml:"fields,omitempty"`
+	Interaction string         `json:"interaction,omitempty" yaml:"interaction,omitempty"`
 	// Explicit yaml tags are required on the multi-word keys: yaml.v3 lowercases
 	// the Go field name by default ("interactiondata") and would silently ignore
 	// the "interaction_data" key used in the library and export files, which
 	// made interaction and validation costs vanish on import.
-	InteractionData map[string]any `json:"interaction_data,omitempty"`
+	InteractionData map[string]any `json:"interaction_data,omitempty" yaml:"interaction_data,omitempty"`
 	// ValidationData holds the engagement/counter (validation) field values.
 	ValidationData map[string]any `json:"validation_data,omitempty" yaml:"validation_data,omitempty"`
 

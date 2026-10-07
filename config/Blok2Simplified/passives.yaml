@@ -165,22 +165,6 @@ passives:
         round. It still applies to everyone else normally.
       build_cost: 2
 
-    - id: efficient_caster
-      name: "Efficient Caster"
-      description: >-
-        Once per combat, use one perk whose build cost is {limit} or less without
-        paying its energy cost.
-      build_cost: 2
-      fields:
-        - key: limit
-          label: "Build cost limit"
-          type: free_number
-          default: 3
-          min: 2
-          max: 6
-          per_step:
-            increase: { build_cost: 1 }
-
     - id: opportunist
       name: "Opportunist"
       description: >-

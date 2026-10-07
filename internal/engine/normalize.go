@@ -56,9 +56,24 @@ func normalizeEnactment(cfg *config.Config, en model.Enactment) model.Enactment 
 	// validation at all used to be left alone, but that leaves the perk
 	// half-specified: the generated rules text has no roll to make, and the
 	// stored perk disagrees with the builder, which renders the region anyway.
-	// Every enactment therefore gets a complete, valid validation block.
+	// Every enactment therefore gets a complete, valid validation block. An
+	// enactment that opts into flat-DC validation gets the engage source plus
+	// the configured DC instead of the counter_skill list.
 	if len(cfg.Validations.Fields) > 0 {
 		out.ValidationData = normalizeFields(cfg, cfg.Validations.Fields, en.ValidationData)
+	}
+	if ec, ok := cfg.Enactment(en.Type); ok && ec.UsesDCValidation() {
+		if out.ValidationData == nil {
+			out.ValidationData = map[string]any{}
+		}
+		if dcField := cfg.Validations.DCField(); dcField != nil {
+			raw, present := out.ValidationData[dcField.Key]
+			n := asInt(raw)
+			if !present {
+				n = asInt(dcField.Default)
+			}
+			out.ValidationData[dcField.Key] = clampNumber(*dcField, n)
+		}
 	}
 	return out
 }

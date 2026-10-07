@@ -89,6 +89,7 @@ var schemaPurposes = map[string]map[string]string{
 		"default_targets":       "Default number of targets an interaction affects.",
 		"default_radius":        "Default radius of an area interaction, in metres.",
 		"default_duration":      "Default duration of an area interaction, in rounds.",
+		"use_dc_validation":     "When true, this enactment validates against a flat DC from validations.dc_validation instead of a contested roll against the target's counter skills. Enactment-only: interactions never force it.",
 		"allowed_interactions":  "When set, only these interactions are offered for this enactment, in the order listed.",
 		"blocked_interactions":  "When set (and no allowed list is given), every interaction except these is offered.",
 		"allowed_validations":   "When set, only these validation fields are shown for this enactment.",
@@ -248,5 +249,6 @@ var schemaPurposes = map[string]map[string]string{
 		"information":        "Help text for the validation section as a whole.",
 		"render_information": "When true, show the section information as plain text under the header instead of behind a hover indicator.",
 		"fields":             "The validation choices offered, such as which skill resolves the engagement roll and what counters it.",
+		"dc_validation":      "The flat Difficulty a use_dc_validation enactment rolls against. Set the label, default_dc, min_dc, max_dc and per_step cost here; every opted-in enactment follows.",
 	},
 }

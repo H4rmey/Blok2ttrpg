@@ -98,11 +98,20 @@ func PerkCost(cfg *config.Config, a model.Perk) Cost {
 				total.Energy += c.Energy
 			}
 		}
-		// Validation (engagement/counter) fields also contribute cost.
+		// Validation (engagement/counter) fields also contribute cost. An
+		// enactment in flat-DC mode pays for its engage source plus the
+		// configured DC instead of the counter_skill list, so the unused
+		// counter rows are skipped rather than charged.
 		if ownsTarget && len(cfg.Validations.Fields) > 0 {
-			c := FieldsCost(cfg, cfg.Validations.Fields, en.ValidationData)
-			total.Build += c.Build
-			total.Energy += c.Energy
+			if ec, ok := cfg.Enactment(en.Type); ok && ec.UsesDCValidation() {
+				c := validationDCCost(cfg, en.ValidationData)
+				total.Build += c.Build
+				total.Energy += c.Energy
+			} else {
+				c := FieldsCost(cfg, cfg.Validations.Fields, en.ValidationData)
+				total.Build += c.Build
+				total.Energy += c.Energy
+			}
 		}
 	}
 
@@ -136,6 +145,33 @@ func PerkCost(cfg *config.Config, a model.Perk) Cost {
 // component to inspect. An id that no longer resolves is still treated as a
 // passive, so removing an entry from the catalogue cannot retroactively saddle a
 // character's passive with an energy cost.
+// validationDCCost prices the validation region of an enactment in flat-DC
+// mode: the engage field keeps its normal (die/skill) pricing, and the flat
+// DC pays the per-step cost configured under validations.dc_validation. The
+// counter_skill list is unused in this mode and contributes nothing.
+func validationDCCost(cfg *config.Config, values map[string]any) Cost {
+	var total Cost
+	for _, f := range cfg.Validations.Fields {
+		if f.Key == "counter_skill" {
+			continue
+		}
+		total = addValidationFieldCost(cfg, total, f, values)
+	}
+	if dcField := cfg.Validations.DCField(); dcField != nil {
+		total = addValidationFieldCost(cfg, total, *dcField, values)
+	}
+	return total
+}
+
+// addValidationFieldCost prices a single validation field value using the
+// same generic field coster as every other component.
+func addValidationFieldCost(cfg *config.Config, total Cost, f config.Field, values map[string]any) Cost {
+	c := FieldsCost(cfg, []config.Field{f}, values)
+	total.Build += c.Build
+	total.Energy += c.Energy
+	return total
+}
+
 func isPassive(cfg *config.Config, a model.Perk) bool {
 	return asString(a.Fields[passiveIDKey]) != ""
 }

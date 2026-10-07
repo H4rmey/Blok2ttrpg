@@ -233,9 +233,19 @@ func interactionLine(cfg *config.Config, en model.Enactment) (string, bool) {
 }
 
 // validationLine describes the contested roll. An engage source with no counter
-// skills (or a self interaction) needs no roll.
+// skills needs no roll. An enactment that opts into flat-DC validation (see
+// Component.UseDCValidation) rolls its engage source against a fixed DC taken
+// from general.yaml instead of against the target's skills.
 func validationLine(cfg *config.Config, en model.Enactment, plural bool) string {
 	engage := asString(en.ValidationData["engage"])
+	if cfg != nil {
+		if ec, ok := cfg.Enactment(en.Type); ok && ec.UsesDCValidation() {
+			if engage == "" {
+				return "No roll required."
+			}
+			return fmt.Sprintf("Roll %s vs DC %d.", rollText(engage), cfg.DCValidationDC(asInt(en.ValidationData["validation_dc"])))
+		}
+	}
 	counters := skillNames(asRows(en.ValidationData["counter_skill"]))
 	if engage == "" || len(counters) == 0 {
 		return "No roll required."
@@ -322,6 +332,25 @@ func successLine(cfg *config.Config, en model.Enactment, plural bool) string {
 		return "The targeted enactment is nullified and has no effect."
 	case "adjustment":
 		return fmt.Sprintf("Add %s to that enactment's Source result.", rollText(asString(f["source"])))
+	case "resource":
+		name := asString(f["resource_name"])
+		if name == "" {
+			name = "resources"
+		}
+		switch asString(f["resource_mode"]) {
+		case "consume":
+			effect := asString(f["consumed_effect"])
+			if effect == "" {
+				effect = "the linked effect"
+			}
+			return fmt.Sprintf("Consume stored %s to execute %s once per resource consumed.", name, strings.ToLower(effect))
+		default:
+			amount := asInt(f["generate_amount"])
+			if amount < 1 {
+				amount = 1
+			}
+			return fmt.Sprintf("Gain %d %s.", amount, name)
+		}
 	}
 	return ""
 }
@@ -337,17 +366,59 @@ func noteLine(cfg *config.Config, en model.Enactment) string {
 }
 
 // solutionLine describes how a target ends a condition or effect early. It is
-// only produced for enactments that define solution fields.
+// only produced for enactments that define solution fields. The config names
+// them solution_1/solution_2 (two dropdowns plus a solution_dc number); older
+// files may carry a legacy "solution" row list, which is still honoured.
 func solutionLine(cfg *config.Config, en model.Enactment) string {
-	rows := asRows(en.Fields["solution"])
-	names := skillNames(rows)
+	var names []string
+	seen := map[string]bool{}
+	add := func(v string) {
+		name := skillName(v)
+		if name == "" || seen[name] {
+			return
+		}
+		seen[name] = true
+		names = append(names, name)
+	}
+	// Current config shape: two plain dropdown values.
+	add(asString(en.Fields["solution_1"]))
+	add(asString(en.Fields["solution_2"]))
+	// Legacy shape: a repeatable row list under "solution".
+	for _, n := range skillNames(asRows(en.Fields["solution"])) {
+		if !seen[n] {
+			seen[n] = true
+			names = append(names, n)
+		}
+	}
 	if len(names) == 0 {
 		return ""
 	}
 	dc := asInt(en.Fields["solution_dc"])
+	if dc <= 0 {
+		dc = defaultSolutionDC(cfg, en.Type)
+	}
 	what := "the effect"
 	if en.Type == "condition" {
 		what = "the condition"
 	}
 	return fmt.Sprintf("1 Action, %s vs DC %d ends %s.", joinOr(names), dc, what)
+}
+
+// defaultSolutionDC reads the configured default of the solution_dc field for
+// the given enactment type, so an instruction never reports DC 0 when the
+// stored value is missing or was clamped away.
+func defaultSolutionDC(cfg *config.Config, enactmentID string) int {
+	if cfg == nil {
+		return 0
+	}
+	if ec, ok := cfg.Enactment(enactmentID); ok {
+		for _, f := range ec.Fields {
+			if f.Key == "solution_dc" {
+				if n := asInt(f.Default); n > 0 {
+					return n
+				}
+			}
+		}
+	}
+	return 0
 }

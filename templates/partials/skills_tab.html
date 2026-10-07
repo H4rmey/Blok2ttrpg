@@ -90,3 +90,12 @@
   {{ template "stat_cards" . }}
 </div>
 {{ end }}
+{{/* Level-only save response: the level input posts outside either form, so the
+     reply swaps the bar in place and pushes the fresh skills tab (with its new
+     hidden level and current budgets) out of band. */}}
+{{ define "level_sync" }}
+{{ template "stat_cards" . }}
+<div id="tab-skills" hx-swap-oob="innerHTML">
+  {{ template "skills_tab" . }}
+</div>
+{{ end }}
