@@ -305,27 +305,27 @@ validations:
           offense: { build_cost: 0 }
           general: { build_cost: 1 }
           defense: { build_cost: 2 }
-    - key: counter_skill
-      label: "Counter Skill"
-      type: multiselect
-      default_count: 2
+    - key: counter_option_1
+      label: "Counter Option 1"
+      type: dropdown
       options_source: skills_all
-      row_defaults:
-        - value: "defense.Reflex"
-        - value: "defense.Constitution"
-      row_fields:
-        - key: value
-          label: "Counter Skill"
-          type: dropdown
-          options_source: skills_all
-          # A counter roll is expected to use a Defensive skill. Choosing a
-          # skill from any other category costs extra build points.
-          group_offsets:
-            default_group: defense
-            offsets:
-              defense: { build_cost: 0 }
-              offense: { build_cost: 2 }
-              general: { build_cost: 1 }
-      per_item:
-        increase: { build_cost: -1 }
-        decrease: { build_cost: 1 }
+      # A counter roll is expected to use a Defensive skill. Choosing a
+      # skill from any other category costs extra build points.
+      group_offsets:
+        default_group: defense
+        offsets:
+          defense: { build_cost: 0 }
+          offense: { build_cost: 2 }
+          general: { build_cost: 1 }
+    - key: counter_option_2
+      label: "Counter Option 2"
+      type: dropdown
+      options_source: skills_all
+      # A counter roll is expected to use a Defensive skill. Choosing a
+      # skill from any other category costs extra build points.
+      group_offsets:
+        default_group: defense
+        offsets:
+          defense: { build_cost: 0 }
+          offense: { build_cost: 2 }
+          general: { build_cost: 1 }
