@@ -112,8 +112,8 @@ func funcMap() template.FuncMap {
 		"interactionsFor": func(cfg *config.Config, enactmentID string) []*config.Component {
 			return cfg.InteractionsFor(enactmentID)
 		},
-		"validationFieldsFor": func(cfg *config.Config, enactmentID string) []config.Field {
-			return cfg.ValidationFieldsFor(enactmentID)
+		"validationFieldsFor": func(cfg *config.Config, enactmentID, interactionID string) []config.Field {
+			return cfg.ValidationFieldsFor(enactmentID, interactionID)
 		},
 		// validationFields exposes the engagement/counter (validation) fields so
 		// each enactment can render its own validation region.

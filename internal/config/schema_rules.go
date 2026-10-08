@@ -21,7 +21,7 @@ type Validations struct {
 
 	// DCValidation configures the flat-DC validation mode an enactment opts
 	// into via use_dc_validation. It defines the DC field the builder shows
-	// (label, default, bounds and per-step cost) instead of the counter_skill
+	// (label, default, bounds and per-step cost) instead of the counter-roll
 	// list. Nil means no enactment can meaningfully opt in.
 	DCValidation *DCValidation `yaml:"dc_validation,omitempty" json:"dc_validation,omitempty"`
 }

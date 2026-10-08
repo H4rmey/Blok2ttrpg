@@ -2,11 +2,14 @@ package web
 
 import (
 	"bytes"
+	"fmt"
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
+	"github.com/harmey/blok2ttrpg-v5/internal/config"
 	"github.com/harmey/blok2ttrpg-v5/internal/engine"
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
@@ -95,7 +98,7 @@ func TestHealingValidationUsesFlatDC(t *testing.T) {
 		Enactments: []model.Enactment{{
 			Type:           "healing",
 			Fields:         map[string]any{"source": "d6"},
-			ValidationData: map[string]any{"engage": "d6", "validation_dc": 2},
+			ValidationData: map[string]any{"engage": "d6"},
 		}},
 	}
 	norm := engine.NormalizePerk(cfg, perk)
@@ -103,8 +106,9 @@ func TestHealingValidationUsesFlatDC(t *testing.T) {
 	if len(lines) == 0 {
 		t.Fatal("no instructions generated")
 	}
-	if got := lines[0].Validation; got != "Roll 1d6 vs DC 2." {
-		t.Errorf("healing validation = %q, want flat-DC line", got)
+	want := fmt.Sprintf("Roll 1d6 vs DC %d.", cfg.DCValidationDC(0))
+	if got := lines[0].Validation; got != want {
+		t.Errorf("healing validation = %q, want %q", got, want)
 	}
 }
 
@@ -133,6 +137,121 @@ func TestConditionSolutionShowsBothSkillsAndDC(t *testing.T) {
 	for _, want := range []string{"Wisdom", "Reflex", "DC 3"} {
 		if !bytes.Contains([]byte(got), []byte(want)) {
 			t.Errorf("solution %q missing %q", got, want)
+		}
+	}
+}
+
+// TestSelfInteractionUsesFlatDC pins that use_dc_validation on an interaction
+// (Self) switches validation to the flat DC, not just the enactment-level flag.
+func TestSelfInteractionUsesFlatDC(t *testing.T) {
+	cfg := loadCfg(t)
+	if ic, ok := cfg.Interaction("self"); !ok || !ic.UsesDCValidation() {
+		t.Skip("config/Blok2Simplified self interaction is not flagged")
+	}
+	perk := model.Perk{
+		Name: "Hex",
+		Type: "execution",
+		Enactments: []model.Enactment{{
+			Type:            "damage",
+			Interaction:     "self",
+			Fields:          map[string]any{"source": "d6"},
+			InteractionData: map[string]any{},
+			ValidationData:  map[string]any{"engage": "d6"},
+		}},
+	}
+	norm := engine.NormalizePerk(cfg, perk)
+	// The flat DC must be normalized in and the counter list dropped.
+	if _, ok := norm.Enactments[0].ValidationData["validation_dc"]; !ok {
+		t.Fatalf("self interaction did not normalize a validation_dc: %v", norm.Enactments[0].ValidationData)
+	}
+	lines := engine.PerkInstructions(cfg, norm)
+	if len(lines) == 0 {
+		t.Fatal("no instructions generated")
+	}
+	want := fmt.Sprintf("Roll 1d6 vs DC %d.", cfg.DCValidationDC(0))
+	if got := lines[0].Validation; got != want {
+		t.Errorf("self interaction validation = %q, want %q", got, want)
+	}
+}
+
+// TestFlatDCValidationFieldsDropCounters pins the builder region for a
+// flat-DC enactment: it must show the engage source and the DC, and none of
+// the counter-roll options (which the config names counter_option_1/2, not the
+// old counter_skill).
+func TestFlatDCValidationFieldsDropCounters(t *testing.T) {
+	cfg := loadCfg(t)
+	fields := cfg.ValidationFieldsFor("healing", "")
+	var hasEngage, hasDC, hasCounter bool
+	for _, f := range fields {
+		switch {
+		case f.Key == "engage":
+			hasEngage = true
+		case f.Key == "validation_dc":
+			hasDC = true
+		case config.IsCounterValidationField(f.Key):
+			hasCounter = true
+		}
+	}
+	if !hasEngage || !hasDC {
+		t.Fatalf("flat-DC fields missing engage or DC: %+v", fields)
+	}
+	if hasCounter {
+		t.Errorf("flat-DC still shows counter options: %+v", fields)
+	}
+}
+
+// TestSelfInteractionBuilderRequestShowsOnlyEngageAndDC pins the interaction
+// dropdown's request: it must include the enactment type (hx-include), so the
+// handler recognises flat-DC mode and returns engage + DC rather than the
+// counter options or nothing.
+func TestSelfInteractionBuilderRequestShowsOnlyEngageAndDC(t *testing.T) {
+	app, _ := testAppWithBlankChar(t)
+	req := httptest.NewRequest(http.MethodGet,
+		"/builder/interaction-fields?index=0&en0_interaction=self&en0_type=condition", nil)
+	rec := httptest.NewRecorder()
+	app.Router().ServeHTTP(rec, req)
+	body := rec.Body.String()
+	if !strings.Contains(body, "en0_v_validation_dc") {
+		t.Errorf("self interaction did not render the DC field:\n%s", body)
+	}
+	if strings.Contains(body, "en0_v_counter_option") {
+		t.Errorf("self interaction still rendered counter options:\n%s", body)
+	}
+}
+
+// TestContestedValidationShowsCounterSkills pins that a normal contested
+// enactment reads its real counter fields (counter_option_1/2) into the
+// instruction, instead of the previously-missing line reading "No roll
+// required".
+func TestContestedValidationShowsCounterSkills(t *testing.T) {
+	cfg := loadCfg(t)
+	perk := model.Perk{
+		Name: "Strike",
+		Type: "execution",
+		Enactments: []model.Enactment{{
+			Type:            "damage",
+			Interaction:     "direct",
+			Fields:          map[string]any{"source": "d6"},
+			InteractionData: map[string]any{},
+			ValidationData: map[string]any{
+				"engage":           "d6",
+				"counter_option_1": "defense.Reflex",
+				"counter_option_2": "defense.Wisdom",
+			},
+		}},
+	}
+	norm := engine.NormalizePerk(cfg, perk)
+	lines := engine.PerkInstructions(cfg, norm)
+	if len(lines) == 0 {
+		t.Fatal("no instructions generated")
+	}
+	got := lines[0].Validation
+	if got == "No roll required." || got == "" {
+		t.Fatalf("contested validation produced %q", got)
+	}
+	for _, want := range []string{"Roll", "Reflex", "Wisdom"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("validation %q missing %q", got, want)
 		}
 	}
 }

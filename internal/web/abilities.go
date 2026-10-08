@@ -463,8 +463,10 @@ func (a *App) handleBuilderEnactment(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleEnactmentFields renders just the config-driven fields for the selected
-// enactment type. Only the enactment field sub-region is swapped, so changing
-// the enactment type leaves the Validation and Interaction regions untouched.
+// enactment type. It also pushes an out-of-band refresh of the Validation
+// region, because whether validation is a contested roll or a flat DC depends
+// on the enactment (and the interaction), so that region must re-render when
+// the enactment type changes.
 func (a *App) handleEnactmentFields(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
 	idx := r.URL.Query().Get("index")
@@ -485,11 +487,32 @@ func (a *App) handleEnactmentFields(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	a.writeValidationFieldsOOB(w, idx, etype, r.FormValue(fmt.Sprintf("en%s_interaction", idx)))
+}
+
+// writeValidationFieldsOOB emits the Validation region fields for one
+// enactment as an htmx out-of-band swap, so a change to the enactment or
+// interaction type refreshes the validation inputs (contested roll vs flat DC)
+// live.
+func (a *App) writeValidationFieldsOOB(w http.ResponseWriter, idx, etype, itype string) {
+	vfields := a.Cfg.ValidationFieldsFor(etype, itype)
+	fmt.Fprintf(w, `<div id="en%s_validation-fields" hx-swap-oob="innerHTML">`, idx)
+	vprefix := fmt.Sprintf("en%s_v_", idx)
+	for _, f := range vfields {
+		data := map[string]any{"Cfg": a.Cfg.Config, "Field": f, "Prefix": vprefix}
+		if err := a.Tmpl.ExecuteTemplate(w, "field", data); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	fmt.Fprint(w, `</div>`)
 }
 
 // handleInteractionFields renders just the config-driven fields for the
-// selected interaction type. Only the interaction field sub-region is swapped,
-// so changing the interaction type leaves the Validation region untouched.
+// selected interaction type. It also pushes an out-of-band refresh of the
+// enactment's Validation region: whether validation is a contested roll or a
+// flat DC depends on the selected interaction (a flagged Self interaction
+// switches it), so that region must re-render when the interaction changes.
 func (a *App) handleInteractionFields(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
 	idx := r.URL.Query().Get("index")
@@ -510,6 +533,9 @@ func (a *App) handleInteractionFields(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	// Refresh the validation region for the new interaction.
+	etype := r.FormValue(fmt.Sprintf("en%s_type", idx))
+	a.writeValidationFieldsOOB(w, idx, etype, itype)
 }
 
 // handleInlineFields renders the nested fields of the component referenced by
@@ -737,7 +763,7 @@ func (a *App) readEnactments(r *http.Request) []model.Enactment {
 		// The validation region renders ValidationFieldsFor(etype), which for
 		// a flat-DC enactment is engage plus the synthetic DC field. Parse
 		// exactly that set so the form, cost and instructions agree.
-		if fields := a.Cfg.ValidationFieldsFor(etype); len(fields) > 0 {
+		if fields := a.Cfg.ValidationFieldsFor(etype, en.Interaction); len(fields) > 0 {
 			en.ValidationData = readFieldValues(a.Cfg.Config, fields, prefix+"v_", r)
 		}
 		out = append(out, en)

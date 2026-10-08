@@ -239,14 +239,14 @@ func interactionLine(cfg *config.Config, en model.Enactment) (string, bool) {
 func validationLine(cfg *config.Config, en model.Enactment, plural bool) string {
 	engage := asString(en.ValidationData["engage"])
 	if cfg != nil {
-		if ec, ok := cfg.Enactment(en.Type); ok && ec.UsesDCValidation() {
+		if cfg.EnactmentUsesDCValidation(en.Type, en.Interaction) {
 			if engage == "" {
 				return "No roll required."
 			}
 			return fmt.Sprintf("Roll %s vs DC %d.", rollText(engage), cfg.DCValidationDC(asInt(en.ValidationData["validation_dc"])))
 		}
 	}
-	counters := skillNames(asRows(en.ValidationData["counter_skill"]))
+	counters := counterSkills(cfg, en.ValidationData)
 	if engage == "" || len(counters) == 0 {
 		return "No roll required."
 	}
@@ -255,6 +255,45 @@ func validationLine(cfg *config.Config, en model.Enactment, plural bool) string 
 		subject = "each target's"
 	}
 	return fmt.Sprintf("Roll %s vs %s %s.", rollText(engage), subject, joinOr(counters))
+}
+
+// counterSkills resolves the counter-roll skills a contested validation is
+// resisted by. The config names them counter_option_1/counter_option_2 as
+// single-skill dropdowns; an older shape stored a repeated row list under a
+// single "counter_skill" key. Both are read here so the generated line never
+// silently reads as "No roll required" just because the key was renamed.
+func counterSkills(cfg *config.Config, values map[string]any) []string {
+	var out []string
+	seen := map[string]bool{}
+	add := func(name string) {
+		if name != "" && !seen[name] {
+			seen[name] = true
+			out = append(out, name)
+		}
+	}
+	if cfg != nil {
+		for _, f := range cfg.Validations.Fields {
+			if !config.IsCounterValidationField(f.Key) {
+				continue
+			}
+			v, ok := values[f.Key]
+			if !ok {
+				continue
+			}
+			if rows := asRows(v); len(rows) > 0 {
+				for _, n := range skillNames(rows) {
+					add(n)
+				}
+				continue
+			}
+			add(skillName(asString(v)))
+		}
+	}
+	// Legacy shape: a repeated row list under a single "counter_skill" key.
+	for _, n := range skillNames(asRows(values["counter_skill"])) {
+		add(n)
+	}
+	return out
 }
 
 // successLine describes what happens when the validation succeeds. Each branch

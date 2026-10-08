@@ -80,7 +80,7 @@ func allowedCombinations(cfg *config.Config, comp *config.Component) string {
 		}
 	}
 	if len(comp.AllowedValidations) > 0 || len(comp.BlockedValidations) > 0 {
-		if names := fieldLabels(cfg.ValidationFieldsFor(comp.ID)); names != "" {
+		if names := fieldLabels(cfg.ValidationFieldsFor(comp.ID, "")); names != "" {
 			lines = append(lines, "*   Validation rolls: "+names)
 		}
 	}

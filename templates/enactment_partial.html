@@ -107,7 +107,8 @@
                   hx-target="#{{ $prefix }}interaction-fields"
                   hx-swap="innerHTML"
                   hx-vals='{"index": "{{ $i }}"}'
-                  hx-trigger="change">
+                  hx-trigger="change"
+                  hx-include="closest .enactment">
             {{ range interactionsFor $cfg $type }}
             <option value="{{ .ID }}"{{ if .Information }} title="{{ .Information }}" data-info="{{ .Information }}" data-render-info="{{ if .RenderInformation }}true{{ else }}false{{ end }}"{{ end }} {{ if eq .ID $interaction }}selected{{ end }}>{{ .DisplayName }}</option>
             {{ end }}
@@ -137,10 +138,12 @@
 
       {{ if and $cfg.Validations.Information $cfg.Validations.RenderInformation }}<small class="component-info">{{ $cfg.Validations.Information }}</small>{{ end }}
 
-      {{ range validationFieldsFor $cfg $type }}
+      <div id="{{ $prefix }}validation-fields">
+      {{ range validationFieldsFor $cfg $type $interaction }}
 
       {{ template "field" dict "Cfg" $cfg "Field" . "Prefix" (printf "%sv_" $prefix) "Values" $validationData }}
       {{ end }}
+      </div>
 
     </div>
   </div>

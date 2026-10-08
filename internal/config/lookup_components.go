@@ -1,6 +1,8 @@
 // Component lookups: resolving perk types, enactments and interactions by id, and applying the UI-only allowed/blocked filtering between them.
 package config
 
+import "strings"
+
 // PerkType returns the perk-type component with the given id.
 func (c *Config) PerkType(id string) (Component, bool) {
 	if comp, ok := c.PerkTypes.Get(id); ok {
@@ -84,23 +86,48 @@ func (c *Config) InteractionsFor(enactmentID string) []*Component {
 	return out
 }
 
+// IsCounterValidationField reports whether a validation field key names a
+// counter-roll option (counter_option_1, counter_option_2, ...). Those fields
+// are the contested-roll counters; flat-DC validation replaces all of them
+// with a single DC, so they must be recognised by key rather than by assuming
+// one fixed name.
+func IsCounterValidationField(key string) bool {
+	return strings.HasPrefix(key, "counter")
+}
+
+// EnactmentUsesDCValidation reports whether an enactment validates against a
+// flat DC. It is true when either the enactment component or the interaction
+// it uses opts in via use_dc_validation, so flat-DC mode can be attached to a
+// shared interaction (Self) as well as to an individual enactment.
+func (c *Config) EnactmentUsesDCValidation(enactmentID, interactionID string) bool {
+	if ec, ok := c.Enactment(enactmentID); ok && ec.UsesDCValidation() {
+		return true
+	}
+	if interactionID != "" {
+		if ic, ok := c.Interaction(interactionID); ok && ic.UsesDCValidation() {
+			return true
+		}
+	}
+	return false
+}
+
 // ValidationFieldsFor returns the validation fields visible for the given
-// enactment id, filtered by that enactment's allowed_validations/
-// blocked_validations lists (keyed by field key). Filtering is UI-only. An
-// unknown enactment id yields the full validation field list. An enactment
-// that opts into flat-DC validation shows the engage source plus the
-// configured DC field instead of the counter_skill list, which is unused in
-// that mode.
-func (c *Config) ValidationFieldsFor(enactmentID string) []Field {
+// enactment id and its selected interaction id, filtered by that enactment's
+// allowed_validations/blocked_validations lists (keyed by field key). Filtering
+// is UI-only. An unknown enactment id yields the full validation field list. An
+// enactment (or its interaction) that opts into flat-DC validation shows the
+// engage source plus the configured DC field instead of the counter-roll
+// options, which are unused in that mode.
+func (c *Config) ValidationFieldsFor(enactmentID, interactionID string) []Field {
 	all := c.Validations.Fields
 	comp, ok := c.Enactments.Get(enactmentID)
 	if !ok {
 		return all
 	}
-	if comp.UsesDCValidation() {
+	if c.EnactmentUsesDCValidation(enactmentID, interactionID) {
 		out := make([]Field, 0, len(all)+1)
 		for _, f := range all {
-			if f.Key == "counter_skill" {
+			if IsCounterValidationField(f.Key) {
 				continue
 			}
 			out = append(out, f)

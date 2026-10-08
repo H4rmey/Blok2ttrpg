@@ -100,10 +100,10 @@ func PerkCost(cfg *config.Config, a model.Perk) Cost {
 		}
 		// Validation (engagement/counter) fields also contribute cost. An
 		// enactment in flat-DC mode pays for its engage source plus the
-		// configured DC instead of the counter_skill list, so the unused
+		// configured DC instead of the counter-roll options, so the unused
 		// counter rows are skipped rather than charged.
 		if ownsTarget && len(cfg.Validations.Fields) > 0 {
-			if ec, ok := cfg.Enactment(en.Type); ok && ec.UsesDCValidation() {
+			if cfg.EnactmentUsesDCValidation(en.Type, en.Interaction) {
 				c := validationDCCost(cfg, en.ValidationData)
 				total.Build += c.Build
 				total.Energy += c.Energy
@@ -148,11 +148,11 @@ func PerkCost(cfg *config.Config, a model.Perk) Cost {
 // validationDCCost prices the validation region of an enactment in flat-DC
 // mode: the engage field keeps its normal (die/skill) pricing, and the flat
 // DC pays the per-step cost configured under validations.dc_validation. The
-// counter_skill list is unused in this mode and contributes nothing.
+// counter-roll options are unused in this mode and contribute nothing.
 func validationDCCost(cfg *config.Config, values map[string]any) Cost {
 	var total Cost
 	for _, f := range cfg.Validations.Fields {
-		if f.Key == "counter_skill" {
+		if config.IsCounterValidationField(f.Key) {
 			continue
 		}
 		total = addValidationFieldCost(cfg, total, f, values)
