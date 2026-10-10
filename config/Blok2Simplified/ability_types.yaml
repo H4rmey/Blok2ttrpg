@@ -36,7 +36,7 @@ perk_types:
 
   reaction:
     name: "Reaction"
-    information: "A Reaction is a perk that fires out of turn, when a trigger you picked at build time happens. You do not choose to use it on your turn; you choose the circumstance in advance and it goes off when that circumstance arrives. You may only act out of turn once per round, counting every Reaction you own together with any Invoke Action you improvise."
+    information: "A Reaction is a perk that fires out of turn, when a trigger you picked at build time happens. You do not choose to use it on your turn; you choose the circumstance in advance and it goes off when that circumstance arrives. You may only act out of turn once per round"
     render_information: false
     # A reaction costs one more build point and one more energy than an
     # Execution: acting out of turn is worth a premium, and paying for it in
@@ -58,7 +58,7 @@ perk_types:
         label: "Trigger"
         type: dropdown
         options_source: reaction_triggers
-        information: "When this reaction goes off. Broader triggers fire more often and therefore cost more build points."
+        information: "This is the when this happens, do that part."
       # How far from you the trigger may happen. This is the watch radius, and
       # is deliberately separate from an enactment's own interaction range: a
       # reaction can watch a wide area and still only reach an adjacent target,

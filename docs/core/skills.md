@@ -8,9 +8,9 @@ Your Skill Point budget is set by your level:
 
 $$SkillPoints = {{ .Leveling.SkillPoints.Start }} + {{ .Leveling.SkillPoints.PerLevel }} \times (Level - 1)$$
 
-So you begin with **{{ .Leveling.SkillPoints.Start }}** points at Level 1 and gain **{{ .Leveling.SkillPoints.PerLevel }}** more each level, up to level {{ .Leveling.MaxLevel }}. See [Leveling](leveling.md) for the reasoning behind those numbers.
+So you begin with **{{ .Leveling.SkillPoints.Start }}** points at Level 1 and gain **{{ .Leveling.SkillPoints.PerLevel }}** more each level, up to level {{ .Leveling.MaxLevel }}. See [Leveling](leveling.md).
 
-You can also gain Skill Points back by lowering a Proficiency. For instance, if you are an Expert in a Skill but want to balance out your spread, you can lower it back toward the starting rung and recover what you spent; dropping below the starting rung refunds an extra point. Spending points does not lock you into your choices; you can always reallocate them as needed.
+You can also gain Skill Points back by lowering a Proficiency. This can only be done when the Players get a few days downtime between quests. 
 
 ## Skill List
 

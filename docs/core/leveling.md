@@ -21,10 +21,6 @@ For Skill Points that is **{{ .Leveling.SkillPoints.Start }}** at Level 1 and **
 
 Starting Skill Points are set so a new character can raise their Vital Skills off the bottom rung and still put a handful of Skills into their speciality. The per-level gain is one visible die step plus change, and it matches the Perk Point gain so both halves of your character sheet grow at the same rate.
 
-### Refunding Points
-
-You can dynamically gain Skill Points by lowering a Proficiency. For instance, if you are an Expert in a Skill but want to balance things out, you can lower it back toward the starting rung and recover the points you spent. Dropping a Skill *below* the starting rung to Inept even refunds an extra point. Spending points never locks you into your choices; you can always reallocate them.
-
 ## Proficiency Tiers
 
 The dice ladder rises by a flat +1 average per rung. The die is capped at {{ highestDie }}; rungs above that add a flat bonus instead, which keeps high-end rolls from becoming wildly swingy. {{ defaultProficiencyName }} is the starting rung and is free. The rung below it refunds a point. HP and Energy climb by 3 per rung and Movement by 1.

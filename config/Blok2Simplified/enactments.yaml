@@ -82,8 +82,8 @@ enactments:
         group_offsets:
           default_group: roll_generic
           offsets:
-            general: { build_cost: 2 }
-            offense: { build_cost: 1 }
+            general: { build_cost: 3 }
+            offense: { build_cost: 2 }
 
 
   effect:

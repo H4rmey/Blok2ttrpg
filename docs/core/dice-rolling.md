@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Skill. The ladder runs from {{ lowestDie }} at the bottom to {{ highestDie }} at the top; the die itself is capped at d12, and rungs beyond that add a flat bonus instead of a bigger die, which keeps the highest-end rolls from becoming wildly swingy.
+Every roll in this system uses the die granted by your **Proficiency Level** in the relevant Skill. The ladder runs from {{ lowestDie }} at the bottom to {{ highestDie }} at the top; the die itself is capped at d12, and going beyond that will add a flat bonus instead.
 
 {{ proficiencyDiceTable }}
 
@@ -19,9 +19,9 @@ Each Proficiency Level is directly tied to its Dice Tier. When referring to dice
 *   Shifting down a **Proficiency Level** means downgrading to the corresponding Dice Tier (e.g., Expert → Trained).
 *   You can also state that you can have a **die shift** of -2 (Shifting to tiers down) or a **die shift** of +1 Shifting up one time.
 
-### Engagement and Counter Rolls
+### Attempting a skill check
 
-When attempting an action where the outcome is uncertain, the acting character must make a **Skill Check**. Unlike systems that use a d20 and flat modifiers, this system relies entirely on variable Dice Tiers.
+Skill checks work like most system. However it is defined by having an Engagement Roll or Counter Roll. 
 
 **1\. The Engagement Roll**
 
@@ -29,10 +29,7 @@ The character initiating the action is called the **Engager**. To determine thei
 
 **2\. The Counter Roll**
 
-The obstacle, creature, or entity the Engager is acting against is called the **Target**. The Target opposes the Engager with a **Counter Roll**, determined by the Game Master in one of two ways:
-
-*   **Static Difficulty:** The GM sets a fixed difficulty number between 1 and 12.
-*   **Opposed Die:** The GM selects a Dice Tier that represents the Target's resistance (e.g., a d10 for a sturdy vault door, or a d6 for an average guard) and rolls it.
+The obstacle, creature, or entity the Engager is acting against is called the **Target**. The Target opposes the Engager with a **Counter Roll**. The Die for the is determined by the GM, based on the difficulty of the roll.
 
 **3\. Resolution**
 
@@ -83,6 +80,6 @@ The idea is that when someone in the group fails. The other PC's can still aid t
 
 ### Aid/Help
 
-You can choose to help someone on a **Skill Check**. This uses the same rules as a **Group Roll**. But only the people aiding and the PC making the **Skill Check** have to roll. **Aiding/Helping** someone can also be done after noticing the PC making the **Skill Check** has failed. 
+You can choose to help someone on a **Skill Check**. This uses the same rules as a **Group Roll**. But only the people aiding and the Player making the **Skill Check** have to roll. **Aiding/Helping** someone can also be done after noticing the PC making the **Skill Check** has failed. 
 
 \page

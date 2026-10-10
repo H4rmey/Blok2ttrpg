@@ -105,9 +105,6 @@ option_sources:
   # is gone: it jumped the average by 4 in a single step for 2 points and made
   # the roll wildly swingy.
   roll_generic:
-    - value: "1"
-      label: "1 (flat, no roll)"
-      cost: { build_cost: -1, energy_cost: 0 }
     - value: "d4"
       label: "1d4"
       cost: { build_cost: 0, energy_cost: 0 }
@@ -167,29 +164,29 @@ option_sources:
   # generated perk instructions and the rulebook all read this list. The value
   # is the stored id, so renaming a label never invalidates a saved reaction.
   reaction_triggers:
-    - value: attack_hits
-      label: "An attack against someone within range hits"
-      information: "Resolved after the attack roll lands, so you already know it hit."
+    - value: validation_success
+      label: "A validation near you succeeds"
+      information: "Resolved after the attack roll lands"
       cost: { build_cost: 0 }
-    - value: attack_misses
-      label: "An attack against someone within range misses"
-      information: "The riposte trigger: the attack resolved and failed."
+    - value: validation_fail
+      label: "A validation near you fails"
+      information: "Resolved after the attack roll lands"
       cost: { build_cost: 0 }
-    - value: moves_out_of_reach
-      label: "Someone leaves your reach"
-      information: "The attack-of-opportunity trigger. Bounded by your own reach rather than the trigger range."
+    - value: moves_away
+      label: "Someone moves away from you."
+      information: "The attack-of-opportunity trigger. Someone moves away from you"
       cost: { build_cost: 0 }
+    - value: moves_towards
+      label: "Someone moves towards you."
+      information: "When someone moves towards you."
+      cost: { build_cost: 1 }
     - value: someone_drops
       label: "Someone within range is reduced to 0 HP"
       information: "Rare and dramatic, so it is priced as a conditional trigger."
       cost: { build_cost: 0 }
-    - value: moves_into_range
-      label: "Someone enters your range"
-      information: "Zone control. Fires often in a fight where anyone is moving."
-      cost: { build_cost: 1 }
     - value: crit_or_crit_fail
-      label: "Someone within range critically succeeds or critically fails"
-      information: "Either end of the dice ladder, so it comes up regularly across a table of rolls."
+      label: "Someone within range critically succeeds or critically fails."
+      information: "You normally crit if you get 4 below or above."
       cost: { build_cost: 1 }
     - value: attacked
       label: "Someone within range is attacked"

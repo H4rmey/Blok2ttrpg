@@ -8,16 +8,15 @@
 file_order:
   - ./docs/blok2ttrpg.md
   - ./docs/core/character-traits.md
+  - ./docs/core/invoking.md
   - ./docs/core/skills.md
   - ./docs/core/dice-rolling.md
-  - ./docs/core/invoking.md
   - ./docs/core/combat.md
-  - ./docs/core/preparing-actions.md
   - ./docs/core/negotiation.md
   - ./docs/core/conditions.md
+  - ./docs/core/leveling.md
 
   #- ./docs/core/perks.md
-  - ./docs/core/leveling.md
   #- ./docs/modules/skill-trees.md
   - ./docs/modules/perk-builder/introduction.md
   - ./docs/modules/perk-builder/perk-creation-guide.md
