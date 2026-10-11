@@ -3,6 +3,7 @@
 <div class="toolbar toolbar-spaced">
   <button class="btn" type="button" onclick="document.getElementById('new-character-modal').showModal()">+ New Character</button>
   <button class="btn" type="button" onclick="document.getElementById('character-import-input').click()">Import YAML</button>
+  <button class="btn" type="button" onclick="document.getElementById('generate-character-modal').showModal()">Generate Character</button>
   <form id="character-import-form" action="/characters/import" method="post" enctype="multipart/form-data" hidden>
     <input id="character-import-input" type="file" name="file" accept=".yaml,.yml" onchange="this.form.submit()">
   </form>
@@ -19,6 +20,59 @@
       <button class="btn" type="button" onclick="document.getElementById('new-character-modal').close()">Cancel</button>
     </div>
   </form>
+</dialog>
+
+<dialog id="generate-character-modal" class="ai-modal">
+  <h2>Generate Character</h2>
+  <p class="muted">Describe a character concept and the AI will build a complete, level-appropriate character that spends every point. Uses your own OpenAI-compatible endpoint and key.</p>
+
+  <label for="ai-description">Character description</label>
+  <textarea id="ai-description" rows="5" placeholder="Describe your character concept, playstyle, and background"></textarea>
+
+  <label for="ai-level">Level</label>
+  <select id="ai-level">
+    {{ range levelOptions .Cfg }}<option value="{{ . }}">{{ . }}</option>{{ end }}
+  </select>
+
+  <div class="toolbar">
+    <button class="btn primary" type="button" id="ai-generate-btn" onclick="aiGenerate()">Generate</button>
+    <button class="btn" type="button" id="ai-cancel-btn" onclick="aiCancel()" hidden>Cancel</button>
+    <button class="btn" type="button" onclick="aiToggleSettings()">AI Settings</button>
+    <button class="btn" type="button" onclick="document.getElementById('generate-character-modal').close()">Close</button>
+  </div>
+
+  <section id="ai-settings-panel" class="dialog-section" hidden>
+    <h3>AI Settings</h3>
+    <label for="ai-endpoint">API Endpoint URL</label>
+    <input id="ai-endpoint" type="text" placeholder="https://api.openai.com/v1" autocomplete="off">
+    <label for="ai-apikey">API Key</label>
+    <input id="ai-apikey" type="password" placeholder="Bearer token" autocomplete="off">
+    <label for="ai-model-select">Model</label>
+    <select id="ai-model-select" onchange="aiPickModel()"></select>
+    <input id="ai-model-text" type="text" placeholder="or type a model id" autocomplete="off">
+    <div class="toolbar">
+      <button class="btn" type="button" onclick="aiFetchModels()">Fetch models</button>
+      <button class="btn" type="button" onclick="aiClearCredentials()">Clear Saved Credentials</button>
+    </div>
+    <label class="checkbox-label">
+      <input id="ai-consent" type="checkbox"> Save endpoint, model, and API key locally in this browser
+    </label>
+    <p id="ai-settings-msg" class="muted" hidden></p>
+  </section>
+
+  <div id="ai-progress" hidden>
+    <p id="ai-progress-text" class="ai-progress-line" aria-live="polite"></p>
+  </div>
+  <p id="ai-error" class="ai-error" hidden></p>
+</dialog>
+
+<dialog id="ai-keep-modal" class="ai-modal">
+  <h2>Keep this character?</h2>
+  <p id="ai-keep-summary" class="muted"></p>
+  <div class="toolbar">
+    <button class="btn primary" type="button" onclick="aiKeepDraft()">Keep</button>
+    <button class="btn" type="button" onclick="aiDiscardDraft()">Discard</button>
+  </div>
 </dialog>
 
 {{ if .Characters }}

@@ -383,6 +383,21 @@ func (a *App) handleImportCharacter(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	id, err := a.saveImportedCharacter(c)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/characters/"+id, http.StatusSeeOther)
+}
+
+// saveImportedCharacter normalises a character that arrived from outside the
+// app (an uploaded file or an AI draft) and stores it. It gives the character
+// an id when it has none, clamps its level, backfills every configured skill,
+// gives every perk a unique id and normalises the perks. Both the import
+// handler and the AI import endpoint route through this, so an AI draft gets
+// the same repairs a hand-written file does.
+func (a *App) saveImportedCharacter(c model.Character) (string, error) {
 	if c.ID == "" {
 		c.ID = fmt.Sprintf("char-%d", time.Now().UnixNano())
 	}
@@ -398,10 +413,9 @@ func (a *App) handleImportCharacter(w http.ResponseWriter, r *http.Request) {
 		c.Perks[i] = engine.NormalizePerk(a.Cfg.Config, c.Perks[i])
 	}
 	if err := a.Store.Save(c); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return "", err
 	}
-	http.Redirect(w, r, "/characters/"+c.ID, http.StatusSeeOther)
+	return c.ID, nil
 }
 
 // ensureSkillsComplete backfills every configured skill missing from the

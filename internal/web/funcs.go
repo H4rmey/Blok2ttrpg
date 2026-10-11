@@ -220,6 +220,19 @@ func funcMap() template.FuncMap {
 		},
 		"add": func(a, b int) int { return a + b },
 		"sub": func(a, b int) int { return a - b },
+		// levelOptions returns 1..MaxLevel so the AI generator's level picker
+		// offers exactly the levels the ruleset allows.
+		"levelOptions": func(cfg *config.Config) []int {
+			max := 1
+			if cfg != nil {
+				max = cfg.MaxLevel()
+			}
+			out := make([]int, 0, max)
+			for i := 1; i <= max; i++ {
+				out = append(out, i)
+			}
+			return out
+		},
 		// atoi parses a string index into an int (0 on failure), so the
 		// enactment partial can turn its string ".Index" into a number for the
 		// showInteraction/showValidation guards.

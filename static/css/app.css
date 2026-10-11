@@ -2003,3 +2003,87 @@ h4:hover > .heading-anchor,
   .doc-nav { max-height: 60vh; }
   .doc-body { margin: 1rem 0 3rem; }
 }
+
+/* AI character generator modal. Unlike the small create/import dialogs this
+   one holds a description box, settings and progress, so it is wider and
+   manages its own padding (it is not wrapped in a <form>). */
+dialog.ai-modal {
+  max-width: 560px;
+  padding: 1.5rem;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+/* Only lay the dialog out when it is actually open. Setting display here
+   unconditionally would override the browser's "hidden until showModal()"
+   rule and leave the dialog on screen all the time. */
+dialog.ai-modal[open] {
+  display: flex;
+}
+/* Keep hidden sections hidden: the shared `dialog .dialog-section` rule sets
+   display:flex, which would otherwise beat the [hidden] attribute. */
+dialog.ai-modal [hidden] {
+  display: none !important;
+}
+dialog.ai-modal h2 {
+  margin: 0 0 0.25rem;
+}
+dialog.ai-modal h3 {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+dialog.ai-modal textarea,
+dialog.ai-modal select {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+  width: 100%;
+}
+dialog.ai-modal textarea:focus,
+dialog.ai-modal select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-strong);
+}
+dialog.ai-modal .dialog-section {
+  padding: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+dialog.ai-modal .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.ai-modal #ai-progress {
+  margin-top: 0.5rem;
+}
+/* Rotating "what the AI is doing" line, Gemini-style. Gently pulses so it
+   reads as active without a determinate bar. */
+.ai-progress-line {
+  margin: 0;
+  min-height: 1.3em;
+  font-style: italic;
+  color: var(--muted);
+  animation: ai-pulse 1.8s ease-in-out infinite;
+}
+@keyframes ai-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.ai-error {
+  color: var(--danger, #f87171);
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
+}

@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"sync"
 
 	"github.com/harmey/blok2ttrpg-v5/internal/config"
 	"github.com/harmey/blok2ttrpg-v5/internal/premade"
@@ -18,6 +19,12 @@ type App struct {
 	Store   *store.Store
 	Tmpl    *template.Template
 	Library *premade.Library
+
+	// aiRef memoizes the config-derived rules summary handed to the AI
+	// generator. The config is static for the life of the process, so it only
+	// needs rendering once no matter how many generations run.
+	aiRefOnce sync.Once
+	aiRef     string
 }
 
 // NewApp parses templates and returns a ready App. libraryRoot points at the
@@ -48,6 +55,14 @@ func (a *App) Router() http.Handler {
 	mux.HandleFunc("/characters/new", a.handleNewCharacter)
 	mux.HandleFunc("/characters/create", a.handleCreateCharacter)
 	mux.HandleFunc("/characters/import", a.handleImportCharacter)
+
+	// AI character generation (BYOK). The browser supplies the endpoint, key
+	// and model on each request; the server relays the provider call, runs the
+	// validation retry loop, and imports the result. Nothing is persisted
+	// server-side.
+	mux.HandleFunc("/ai/generate", a.handleAIGenerate)
+	mux.HandleFunc("/ai/models", a.handleAIModels)
+	mux.HandleFunc("/ai/import", a.handleAIImport)
 	// Printable, fill-in-by-hand templates. They take no character and no perk:
 	// the config alone drives what appears on them, so they are reachable from
 	// the top bar on every page.
