@@ -54,12 +54,19 @@ func withPassives(c model.Character, n int) model.Character {
 	return c
 }
 
+// levelOne starts every fixture at level 1 explicitly, since the model chooses
+// the level now and Validate reads it off the character.
+func levelOne(c model.Character) model.Character {
+	c.Level = 1
+	return c
+}
+
 func TestValidateExactSpendIsValid(t *testing.T) {
 	cfg := loadCfg(t)
-	c := withSkillPoints(model.Character{}, 13)
+	c := withSkillPoints(levelOne(model.Character{}), 13)
 	c = withPassives(c, 20) // level 1 perk budget is 20
 
-	report := Validate(cfg, c, 1)
+	report := Validate(cfg, c)
 	if !report.Valid {
 		t.Fatalf("expected valid, got issues: %v", report.Issues)
 	}
@@ -76,8 +83,8 @@ func TestValidateExactSpendIsValid(t *testing.T) {
 func TestValidateReportsUnspentAndOverspentSkillPoints(t *testing.T) {
 	cfg := loadCfg(t)
 
-	under := withPassives(withSkillPoints(model.Character{}, 10), 20)
-	r := Validate(cfg, under, 1)
+	under := withPassives(withSkillPoints(levelOne(model.Character{}), 10), 20)
+	r := Validate(cfg, under)
 	if r.Valid {
 		t.Fatal("character with unspent points reported valid")
 	}
@@ -85,8 +92,8 @@ func TestValidateReportsUnspentAndOverspentSkillPoints(t *testing.T) {
 		t.Errorf("missing unspent issue: %v", r.Issues)
 	}
 
-	over := withPassives(withSkillPoints(model.Character{}, 14), 20)
-	r = Validate(cfg, over, 1)
+	over := withPassives(withSkillPoints(levelOne(model.Character{}), 14), 20)
+	r = Validate(cfg, over)
 	if !hasIssue(r.Issues, "1 over budget on skill points") {
 		t.Errorf("missing overspend issue: %v", r.Issues)
 	}
@@ -95,38 +102,70 @@ func TestValidateReportsUnspentAndOverspentSkillPoints(t *testing.T) {
 func TestValidateReportsUnknownIDs(t *testing.T) {
 	cfg := loadCfg(t)
 
-	c := withSkillPoints(model.Character{}, 13)
+	c := withSkillPoints(levelOne(model.Character{}), 13)
 	c.Skills["bogus.Skill"] = "novice"
 	c = withPassives(c, 20)
-	r := Validate(cfg, c, 1)
+	r := Validate(cfg, c)
 	if !hasIssue(r.Issues, `unknown skill key "bogus.Skill"`) {
 		t.Errorf("missing unknown skill issue: %v", r.Issues)
 	}
 
-	c = withSkillPoints(model.Character{}, 13)
+	c = withSkillPoints(levelOne(model.Character{}), 13)
 	c.Perks = append(c.Perks, model.Perk{Name: "Bad", Type: "not_a_type"})
-	r = Validate(cfg, c, 1)
+	r = Validate(cfg, c)
 	if !hasIssue(r.Issues, `unknown type "not_a_type"`) {
 		t.Errorf("missing unknown type issue: %v", r.Issues)
+	}
+}
+
+// TestValidateRejectsEmptyPerk pins the rule that a non-passive perk must have
+// at least one enactment, while a passive (which carries a passive_id) is
+// exempt and needs none.
+func TestValidateRejectsEmptyPerk(t *testing.T) {
+	cfg := loadCfg(t)
+
+	c := withSkillPoints(levelOne(model.Character{}), 13)
+	c.Perks = append(c.Perks, model.Perk{Name: "Empty", Type: cfg.PerkTypes.List()[0].ID})
+	r := Validate(cfg, c)
+	if !hasIssue(r.Issues, `perk "Empty" has no enactments`) {
+		t.Errorf("empty non-passive perk was not rejected: %v", r.Issues)
+	}
+
+	// The same budgets with passives instead are fine: a passive is exempt.
+	ok := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 20)
+	if r := Validate(cfg, ok); !r.Valid {
+		t.Errorf("passive character should be valid, got: %v", r.Issues)
+	}
+}
+
+// TestValidatePerk checks the single-perk validator used by the perk generator.
+func TestValidatePerk(t *testing.T) {
+	cfg := loadCfg(t)
+
+	if issues := ValidatePerk(cfg, model.Perk{Name: "Empty", Type: cfg.PerkTypes.List()[0].ID}); len(issues) == 0 {
+		t.Error("ValidatePerk accepted a non-passive perk with no enactments")
+	}
+	if issues := ValidatePerk(cfg, model.Perk{Name: "PM", Type: "passive", Fields: map[string]any{"passive_id": "mobile_attacker"}}); len(issues) != 0 {
+		t.Errorf("ValidatePerk rejected a valid passive: %v", issues)
 	}
 }
 
 func TestValidatePerkSpendFloor(t *testing.T) {
 	cfg := loadCfg(t)
 	// Level 1 perk budget is 20, so the 80% floor is 16.
-	atFloor := withPassives(withSkillPoints(model.Character{}, 13), 16)
-	if r := Validate(cfg, atFloor, 1); !r.Valid {
+	atFloor := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 16)
+	if r := Validate(cfg, atFloor); !r.Valid {
 		t.Errorf("16/20 perk points should be valid, got: %v", r.Issues)
 	}
 
-	below := withPassives(withSkillPoints(model.Character{}, 13), 15)
-	r := Validate(cfg, below, 1)
+	below := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 15)
+	r := Validate(cfg, below)
 	if r.Valid || !hasIssue(r.Issues, "only 15 of 20 perk points spent") {
 		t.Errorf("15/20 perk points should be rejected, got: %v", r.Issues)
 	}
 
-	over := withPassives(withSkillPoints(model.Character{}, 13), 21)
-	if r := Validate(cfg, over, 1); r.Valid || !hasIssue(r.Issues, "over budget on perk points") {
+	over := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 21)
+	if r := Validate(cfg, over); r.Valid || !hasIssue(r.Issues, "over budget on perk points") {
 		t.Errorf("21/20 perk points should be rejected, got: %v", r.Issues)
 	}
 }

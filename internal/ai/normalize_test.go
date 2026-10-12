@@ -74,7 +74,7 @@ func TestNormalizedPassiveValidates(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unmarshal: %v", err)
 	}
-	report := Validate(cfg, c, 1)
+	report := Validate(cfg, c)
 	for _, issue := range report.Issues {
 		if strings.Contains(issue, "no type") {
 			t.Errorf("passive still reported as typeless: %v", report.Issues)

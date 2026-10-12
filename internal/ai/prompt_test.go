@@ -14,7 +14,7 @@ func TestSystemPromptListsTraitKeys(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load config: %v", err)
 	}
-	prompt := SystemPrompt(loaded, "", 1)
+	prompt := SystemPrompt(loaded, "")
 	for _, key := range []string{"name:", "age:", "description:", "motivation:", "problem:", "trait_1:", "trait_2:", "trait_3:"} {
 		if !strings.Contains(prompt, key) {
 			t.Errorf("system prompt is missing trait key %q", key)

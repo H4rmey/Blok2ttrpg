@@ -86,11 +86,21 @@
 {{ end }}
 
 {{ end }}
-{{/* Level-only save response: the level input posts outside either form, so the
-     reply swaps the bar in place and pushes the fresh skills tab (with its new
-     hidden level and current budgets) out of band. */}}
+
+{{/* Autosave response for a skill change: the skills form targets #tab-skills,
+     so the fresh panel is the primary content and the point totals are pushed
+     out of band. Keeping the OOB block out of "skills_tab" itself is what keeps
+     the initial page render free of a duplicate #stat-cards. */}}
+{{ define "skills_sync" }}
+<div id="stat-cards" hx-swap-oob="innerHTML">{{ template "stat_cards" . }}</div>
+{{ template "skills_tab" . }}
+{{ end }}
+
+{{/* Level-only save response: the level input posts outside either form and
+     uses hx-swap="none", so BOTH the bar and the skills tab have to be pushed
+     out of band (the primary content would be discarded). */}}
 {{ define "level_sync" }}
-{{ template "stat_cards" . }}
+<div id="stat-cards" hx-swap-oob="innerHTML">{{ template "stat_cards" . }}</div>
 <div id="tab-skills" hx-swap-oob="innerHTML">
   {{ template "skills_tab" . }}
 </div>

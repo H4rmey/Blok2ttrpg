@@ -36,11 +36,10 @@ type Report struct {
 	Issues []string `json:"issues"`
 }
 
-// Validate checks a generated character at the requested level. The level is
-// forced to the requested (clamped) value so the budgets always match what the
-// user asked for, even if the model emitted a different level.
-func Validate(cfg *config.Config, c model.Character, level int) Report {
-	c.Level = cfg.ClampLevel(level)
+// Validate checks a generated character. The model chooses the level, so the
+// character's own level (clamped to the ruleset cap) drives the budgets.
+func Validate(cfg *config.Config, c model.Character) Report {
+	c.Level = cfg.ClampLevel(c.Level)
 	var issues []string
 
 	// Referential integrity. The cost engine silently prices an unknown perk
@@ -97,6 +96,13 @@ func poolIssue(p Pool) string {
 	return ""
 }
 
+// ValidatePerk checks one generated perk for the referential integrity the
+// cost engine assumes and the non-passive-has-enactments rule. It returns the
+// issues found, empty when the perk is valid.
+func ValidatePerk(cfg *config.Config, p model.Perk) []string {
+	return validatePerks(cfg, model.Character{Perks: []model.Perk{p}})
+}
+
 // validateSkills reports unknown skill keys or proficiency ids.
 func validateSkills(cfg *config.Config, c model.Character) []string {
 	known := map[string]bool{}
@@ -151,6 +157,9 @@ func validatePerks(cfg *config.Config, c model.Character) []string {
 		}
 		if _, ok := cfg.PerkType(p.Type); !ok {
 			issues = append(issues, fmt.Sprintf("perk %q has unknown type %q.", name, p.Type))
+		}
+		if len(p.Enactments) == 0 {
+			issues = append(issues, fmt.Sprintf("perk %q has no enactments; every non-passive perk needs at least one enactment, or use the passive shape (type: passive with fields.passive_id).", name))
 		}
 		for _, en := range p.Enactments {
 			if en.Type == "" {

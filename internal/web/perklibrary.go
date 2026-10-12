@@ -167,6 +167,10 @@ func (a *App) importBuiltinPerk(w http.ResponseWriter, r *http.Request, c *model
 	}
 	ab.ID = fmt.Sprintf("perk-%d", time.Now().UnixNano())
 	ab = engine.NormalizePerk(a.Cfg.Config, ab)
+	if reason := perkRequiresEnactment(a.Cfg.Config, ab); reason != "" {
+		http.Error(w, reason, http.StatusBadRequest)
+		return
+	}
 	if ok, reason := a.affordPerk(c, ab); !ok {
 		http.Error(w, reason, http.StatusBadRequest)
 		return

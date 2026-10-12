@@ -24,15 +24,10 @@
 
 <dialog id="generate-character-modal" class="ai-modal">
   <h2>Generate Character</h2>
-  <p class="muted">Describe a character concept and the AI will build a complete, level-appropriate character that spends every point. Uses your own OpenAI-compatible endpoint and key.</p>
+  <p class="muted">Describe a character concept and the AI will choose an appropriate level and build a complete character that spends every point. Uses your own OpenAI-compatible endpoint and key.</p>
 
   <label for="ai-description">Character description</label>
-  <textarea id="ai-description" rows="5" placeholder="Describe your character concept, playstyle, and background"></textarea>
-
-  <label for="ai-level">Level</label>
-  <select id="ai-level">
-    {{ range levelOptions .Cfg }}<option value="{{ . }}">{{ . }}</option>{{ end }}
-  </select>
+  <textarea id="ai-description" rows="5" placeholder="Describe your character concept, playstyle, and background. The AI picks a fitting level."></textarea>
 
   <div class="toolbar">
     <button class="btn primary" type="button" id="ai-generate-btn" onclick="aiGenerate()">Generate</button>
@@ -41,24 +36,7 @@
     <button class="btn" type="button" onclick="document.getElementById('generate-character-modal').close()">Close</button>
   </div>
 
-  <section id="ai-settings-panel" class="dialog-section" hidden>
-    <h3>AI Settings</h3>
-    <label for="ai-endpoint">API Endpoint URL</label>
-    <input id="ai-endpoint" type="text" placeholder="https://api.openai.com/v1" autocomplete="off">
-    <label for="ai-apikey">API Key</label>
-    <input id="ai-apikey" type="password" placeholder="Bearer token" autocomplete="off">
-    <label for="ai-model-select">Model</label>
-    <select id="ai-model-select" onchange="aiPickModel()"></select>
-    <input id="ai-model-text" type="text" placeholder="or type a model id" autocomplete="off">
-    <div class="toolbar">
-      <button class="btn" type="button" onclick="aiFetchModels()">Fetch models</button>
-      <button class="btn" type="button" onclick="aiClearCredentials()">Clear Saved Credentials</button>
-    </div>
-    <label class="checkbox-label">
-      <input id="ai-consent" type="checkbox"> Save endpoint, model, and API key locally in this browser
-    </label>
-    <p id="ai-settings-msg" class="muted" hidden></p>
-  </section>
+  {{ template "ai_settings" . }}
 
   <div id="ai-progress" hidden>
     <p id="ai-progress-text" class="ai-progress-line" aria-live="polite"></p>

@@ -67,7 +67,6 @@ func generateEvents(t *testing.T, app *App, endpoint string) []streamedEvent {
 	t.Helper()
 	body := map[string]any{
 		"description": "a stealthy rogue",
-		"level":       1,
 		"endpoint":    endpoint,
 		"apiKey":      "test-key",
 		"model":       "test-model",
@@ -157,8 +156,8 @@ func TestAIGenerateStopsAfterSixAttempts(t *testing.T) {
 	}
 }
 
-// TestIndexHasGenerateCharacterEntryPoint pins the UI entry point and that the
-// level picker renders the configured range.
+// TestIndexHasGenerateCharacterEntryPoint pins the UI entry point. The level
+// picker was removed: the model chooses the level from the description.
 func TestIndexHasGenerateCharacterEntryPoint(t *testing.T) {
 	app, _ := testAppWithBlankChar(t)
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
@@ -168,10 +167,13 @@ func TestIndexHasGenerateCharacterEntryPoint(t *testing.T) {
 		t.Fatalf("index returned %d", rec.Code)
 	}
 	body := rec.Body.String()
-	for _, want := range []string{"Generate Character", "generate-character-modal", "ai-generate-btn", `<option value="10">`} {
+	for _, want := range []string{"Generate Character", "generate-character-modal", "ai-generate-btn", "ai-description"} {
 		if !strings.Contains(body, want) {
 			t.Errorf("index page missing %q", want)
 		}
+	}
+	if strings.Contains(body, "ai-level") {
+		t.Errorf("index page still renders the removed level input")
 	}
 }
 

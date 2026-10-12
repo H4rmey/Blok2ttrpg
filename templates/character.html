@@ -54,6 +54,8 @@
   <div class="toolbar toolbar-spaced">
     <button class="btn primary" type="button"
             onclick="document.getElementById('new-perk-modal').showModal()">+ New Perk</button>
+    <button class="btn" type="button"
+            onclick="document.getElementById('generate-perk-modal').showModal()">Generate Perk</button>
     {{/* The built-in library is reachable directly from the toolbar, not only
          from inside the New Perk dialog, since importing a premade perk is a
          different intent from building one. */}}
@@ -112,6 +114,37 @@
               onclick="document.getElementById('new-perk-modal').close(); openPerkModal();">
         + Premade Perk
       </button>
+    </div>
+  </dialog>
+
+  <dialog id="generate-perk-modal" class="ai-modal" data-character-id="{{ $c.ID }}">
+    <h2>Generate Perk</h2>
+    <p class="muted">Describe the perk and the AI will build a single perk that fits. Uses your own OpenAI-compatible endpoint and key.</p>
+
+    <label for="ai-perk-description">Perk description</label>
+    <textarea id="ai-perk-description" rows="5" placeholder="e.g. energy cost: 2, action cost: 1, build points: 5. A fiery melee attack that ignites the target."></textarea>
+
+    <div class="toolbar">
+      <button class="btn primary" type="button" id="ai-generate-btn" onclick="aiGeneratePerk()">Generate</button>
+      <button class="btn" type="button" id="ai-cancel-btn" onclick="aiCancel()" hidden>Cancel</button>
+      <button class="btn" type="button" onclick="aiToggleSettings()">AI Settings</button>
+      <button class="btn" type="button" onclick="document.getElementById('generate-perk-modal').close()">Close</button>
+    </div>
+
+    {{ template "ai_settings" . }}
+
+    <div id="ai-progress" hidden>
+      <p id="ai-progress-text" class="ai-progress-line" aria-live="polite"></p>
+    </div>
+    <p id="ai-error" class="ai-error" hidden></p>
+  </dialog>
+
+  <dialog id="ai-keep-perk-modal" class="ai-modal">
+    <h2>Keep this perk?</h2>
+    <p id="ai-keep-perk-summary" class="muted"></p>
+    <div class="toolbar">
+      <button class="btn primary" type="button" onclick="aiKeepPerkDraft()">Keep</button>
+      <button class="btn" type="button" onclick="aiDiscardPerkDraft()">Discard</button>
     </div>
   </dialog>
 

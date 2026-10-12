@@ -1,10 +1,14 @@
-// AI character generator (client half).
+// AI generator (client half): characters and single perks.
 //
 // Credentials are BYOK: the user enters an OpenAI-compatible endpoint, key and
 // model. They are kept only in this browser (localStorage) when the user grants
 // consent, otherwise in memory for this page session. The actual provider call
 // and the validation retry loop run server-side; this file streams progress and
-// imports the accepted character.
+// imports the accepted result.
+//
+// The character modal (index page) and the perk modal (character page) never
+// appear on the same page, so they deliberately share the ai-* element ids and
+// the settings helpers below work for either.
 (function () {
   "use strict";
 
@@ -14,6 +18,7 @@
   // not consented to localStorage.
   var memorySettings = null;
   var draftYAML = "";
+  var draftPerkYAML = "";
 
   // Live generation state, so progress and elapsed time can be shown and the
   // request aborted.
@@ -94,6 +99,21 @@
     return settingsFromPanel();
   }
 
+  // resolveSettings picks the credentials to use, preferring what is currently
+  // in the panel. It opens the panel and returns null when they are incomplete.
+  function resolveSettings() {
+    var panel = el("ai-settings-panel");
+    var s = settingsFromPanel();
+    if (!s.endpoint || !s.apiKey || !s.model) s = effectiveSettings();
+    if (!s.endpoint || !s.apiKey || !s.model) {
+      if (panel) panel.hidden = false;
+      fillSettings();
+      setSettingsMsg("Enter your API endpoint, key and model, then Generate again.");
+      return null;
+    }
+    return s;
+  }
+
   // -- Settings panel --------------------------------------------------------
 
   window.aiToggleSettings = function () {
@@ -122,7 +142,6 @@
 
   window.aiFetchModels = function () {
     var s = settingsFromPanel();
-    var msg = el("ai-settings-msg");
     if (!s.endpoint || !s.apiKey) {
       setSettingsMsg("Enter an endpoint and API key first.");
       return;
@@ -199,7 +218,6 @@
     "Teaching the AI what a d12 is...",
     "Spending your points responsibly...",
     "Checking the tables twice...",
-    "Summoning a level-appropriate hero...",
     "Untangling the perk tree...",
     "Convincing the GM it's balanced...",
     "Inking the character sheet...",
@@ -259,49 +277,24 @@
     if (cancel) cancel.hidden = !busy;
   }
 
-  window.aiGenerate = function () {
-    showError("");
-    var desc = value(el("ai-description")).trim();
-    if (!desc) {
-      showError("Describe your character first.");
-      return;
-    }
-
-    var panel = el("ai-settings-panel");
-    // Prefer what is currently in the panel (so edits to the endpoint/key/model
-    // take effect even when settings were previously saved), falling back to
-    // saved session memory when the panel is empty.
-    var s = settingsFromPanel();
-    if (!s.endpoint || !s.apiKey || !s.model) s = effectiveSettings();
-    if (!s.endpoint || !s.apiKey || !s.model) {
-      if (panel) panel.hidden = false;
-      fillSettings();
-      setSettingsMsg("Enter your API endpoint, key and model, then Generate again.");
-      return;
-    }
-    persist(s);
-
-    var level = parseInt(value(el("ai-level")), 10) || 1;
+  // runGeneration posts to the given endpoint and streams the reply, calling
+  // onDone(doneEvent) when the stream finishes. Shared by the character and
+  // perk generators; only the URL, payload and completion handler differ.
+  function runGeneration(url, payload, onDone) {
     controller = typeof AbortController !== "undefined" ? new AbortController() : null;
     startedAt = Date.now();
     ticks = 0;
     funIndex = 0;
     setBusy(true);
     showProgress();
-    setStatus("Generating character...");
+    setStatus("Generating...");
     startTimer();
 
-    fetch("/ai/generate", {
+    return fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       signal: controller ? controller.signal : undefined,
-      body: JSON.stringify({
-        description: desc,
-        level: level,
-        endpoint: s.endpoint,
-        apiKey: s.apiKey,
-        model: s.model,
-      }),
+      body: JSON.stringify(payload),
     })
       .then(function (resp) {
         if (!resp.ok || !resp.body) {
@@ -309,7 +302,7 @@
             throw new Error(t || "generation failed");
           });
         }
-        return readStream(resp.body);
+        return readStream(resp.body, onDone);
       })
       .catch(function (err) {
         if (err && err.name === "AbortError") return;
@@ -320,7 +313,69 @@
         setBusy(false);
         controller = null;
       });
+  }
+
+  window.aiGenerate = function () {
+    showError("");
+    var desc = value(el("ai-description")).trim();
+    if (!desc) {
+      showError("Describe your character first.");
+      return;
+    }
+    var s = resolveSettings();
+    if (!s) return;
+    persist(s);
+
+    runGeneration(
+      "/ai/generate",
+      { description: desc, endpoint: s.endpoint, apiKey: s.apiKey, model: s.model },
+      function (ev) {
+        if (ev.valid) {
+          aiImport(ev.yaml);
+        } else {
+          draftYAML = ev.yaml || "";
+          showKeepModal(ev.message || "The character did not fully validate.");
+        }
+      }
+    );
   };
+
+  window.aiGeneratePerk = function () {
+    showError("");
+    var desc = value(el("ai-perk-description")).trim();
+    if (!desc) {
+      showError("Describe the perk first.");
+      return;
+    }
+    var s = resolveSettings();
+    if (!s) return;
+    persist(s);
+
+    runGeneration(
+      "/ai/generate-perk",
+      {
+        description: desc,
+        character: characterID("generate-perk-modal"),
+        endpoint: s.endpoint,
+        apiKey: s.apiKey,
+        model: s.model,
+      },
+      function (ev) {
+        if (ev.valid) {
+          aiImportPerk(ev.yaml);
+        } else {
+          draftPerkYAML = ev.yaml || "";
+          showKeepPerkModal(ev.message || "The perk did not fully validate.");
+        }
+      }
+    );
+  };
+
+  // characterID reads the id a generator modal is scoped to.
+  function characterID(modalID) {
+    var modal = el(modalID);
+    return modal ? modal.getAttribute("data-character-id") || "" : "";
+  }
 
   function stopTimer() {
     if (timer) {
@@ -336,8 +391,9 @@
     setStatus("Cancelled.", 60000);
   };
 
-  // readStream consumes the NDJSON progress stream.
-  function readStream(body) {
+  // readStream consumes the NDJSON progress stream and hands the final "done"
+  // event to onDone.
+  function readStream(body, onDone) {
     var reader = body.getReader();
     var dec = new TextDecoder();
     var buf = "";
@@ -366,12 +422,8 @@
     }
 
     function finish() {
-      if (!doneEvent) return;
-      if (doneEvent.valid) {
-        return aiImport(doneEvent.yaml);
-      }
-      draftYAML = doneEvent.yaml || "";
-      showKeepModal(doneEvent.message || "The character did not fully validate.");
+      if (!doneEvent || !onDone) return;
+      onDone(doneEvent);
     }
 
     return pump();
@@ -396,12 +448,13 @@
         break;
       case "done":
         stopTimer();
-        setStatus(ev.valid ? "Character ready." : "Finished with validation issues.", 60000);
+        setStatus(ev.valid ? "Ready." : "Finished with validation issues.", 60000);
         break;
     }
   }
 
-  // aiImport posts YAML to the server, which repairs and stores it.
+  // aiImport posts a generated character YAML to the server, which repairs and
+  // stores it.
   function aiImport(yaml) {
     if (!yaml) {
       showError("No character data to import.");
@@ -425,6 +478,36 @@
       })
       .catch(function (err) {
         showError("Could not save the character: " + err.message);
+      });
+  }
+
+  // aiImportPerk posts a generated perk YAML and appends it to the character
+  // the perk modal is scoped to.
+  function aiImportPerk(yaml) {
+    var character = characterID("generate-perk-modal");
+    if (!yaml) {
+      showError("No perk data to import.");
+      return Promise.resolve();
+    }
+    var url = "/ai/import-perk" + (character ? "?character=" + encodeURIComponent(character) : "");
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-yaml" },
+      body: yaml,
+    })
+      .then(function (resp) {
+        return resp.json().then(function (body) {
+          return { ok: resp.ok, body: body };
+        });
+      })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.body && res.body.error ? res.body.error : "import failed");
+        var modal = el("generate-perk-modal");
+        if (modal) modal.close();
+        window.location.href = "/characters/" + character + "?t=perks#tab-perks";
+      })
+      .catch(function (err) {
+        showError("Could not save the perk: " + err.message);
       });
   }
 
@@ -455,17 +538,44 @@
     if (gen) gen.showModal();
   };
 
+  function showKeepPerkModal(summary) {
+    var gen = el("generate-perk-modal");
+    if (gen) gen.close();
+    var text = el("ai-keep-perk-summary");
+    if (text) {
+      text.textContent =
+        "Failed to generate a valid perk, still want to keep what was created anyways? " + summary;
+    }
+    var modal = el("ai-keep-perk-modal");
+    if (modal) modal.showModal();
+  }
+
+  window.aiKeepPerkDraft = function () {
+    var modal = el("ai-keep-perk-modal");
+    if (modal) modal.close();
+    aiImportPerk(draftPerkYAML);
+  };
+
+  window.aiDiscardPerkDraft = function () {
+    var modal = el("ai-keep-perk-modal");
+    if (modal) modal.close();
+    var gen = el("generate-perk-modal");
+    if (gen) gen.showModal();
+  };
+
   // -- Init ------------------------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", function () {
-    var modal = el("generate-character-modal");
-    if (!modal) return;
-    // Closing the modal while a generation is running aborts it, so a slow
+    // Closing a modal while a generation is running aborts it, so a slow
     // provider call does not keep running invisibly.
-    modal.addEventListener("close", function () {
-      if (controller) controller.abort();
-      stopTimer();
-      setBusy(false);
+    ["generate-character-modal", "generate-perk-modal"].forEach(function (id) {
+      var modal = el(id);
+      if (!modal) return;
+      modal.addEventListener("close", function () {
+        if (controller) controller.abort();
+        stopTimer();
+        setBusy(false);
+      });
     });
     var s = readSaved();
     if (s) {

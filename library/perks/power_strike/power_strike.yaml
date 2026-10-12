@@ -6,3 +6,21 @@ fields:
   comment: A heavy swing meant to overwhelm a single target.
   energy_steps: 0
   action_steps: 0
+enactments:
+  - type: damage
+    fields:
+      comment: A heavy swing meant to overwhelm a single target.
+      source: offense.Strength
+      flat: 0
+      damage_type:
+        - value: Slashing
+    interaction: direct
+    interaction_data:
+      comment: ""
+      range: "1"
+      targets: 1
+    validation_data:
+      comment: ""
+      engage: d6
+      counter_skill:
+        - value: defense.Reflex

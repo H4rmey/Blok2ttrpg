@@ -61,8 +61,10 @@ func (a *App) Router() http.Handler {
 	// validation retry loop, and imports the result. Nothing is persisted
 	// server-side.
 	mux.HandleFunc("/ai/generate", a.handleAIGenerate)
+	mux.HandleFunc("/ai/generate-perk", a.handleAIGeneratePerk)
 	mux.HandleFunc("/ai/models", a.handleAIModels)
 	mux.HandleFunc("/ai/import", a.handleAIImport)
+	mux.HandleFunc("/ai/import-perk", a.handleAIImportPerk)
 	// Printable, fill-in-by-hand templates. They take no character and no perk:
 	// the config alone drives what appears on them, so they are reachable from
 	// the top bar on every page.

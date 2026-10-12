@@ -207,6 +207,10 @@ func (a *App) importPerk(w http.ResponseWriter, r *http.Request, c *model.Charac
 	// existing one on the character.
 	ab.ID = fmt.Sprintf("perk-%d", time.Now().UnixNano())
 	ab = engine.NormalizePerk(a.Cfg.Config, ab)
+	if reason := perkRequiresEnactment(a.Cfg.Config, ab); reason != "" {
+		http.Error(w, reason, http.StatusBadRequest)
+		return
+	}
 	if ok, reason := a.affordPerk(c, ab); !ok {
 		http.Error(w, reason, http.StatusBadRequest)
 		return
@@ -383,6 +387,25 @@ func (a *App) renderBuilder(w http.ResponseWriter, c *model.Character, ab *model
 	}
 }
 
+// perkRequiresEnactment returns a reason when a non-passive perk has no
+// enactments, or "" when the perk is fine. A passive (one carrying a
+// passive_id) is exempt: its rules live in the catalogue, not in enactments.
+// Enforced on manual save and on every import path so an empty perk can never
+// reach storage through the builder or a file.
+func perkRequiresEnactment(cfg *config.Config, p model.Perk) string {
+	if passiveIDOf(p) != "" {
+		return ""
+	}
+	if len(p.Enactments) == 0 {
+		name := p.Name
+		if name == "" {
+			name = p.ID
+		}
+		return fmt.Sprintf("%q has no enactments; a non-passive perk needs at least one enactment, or it should be a passive.", name)
+	}
+	return ""
+}
+
 // savePerk parses the builder form into an perk and stores it. Cost is
 // never validated here; over-budget perks are allowed by design.
 func (a *App) savePerk(w http.ResponseWriter, r *http.Request, c *model.Character, existingID string) {
@@ -398,6 +421,10 @@ func (a *App) savePerk(w http.ResponseWriter, r *http.Request, c *model.Characte
 	// field present, repeatable fields expanded, numbers in range. The cost
 	// engine and the builder then read the same values and cannot disagree.
 	ab = engine.NormalizePerk(a.Cfg.Config, ab)
+	if reason := perkRequiresEnactment(a.Cfg.Config, ab); reason != "" {
+		http.Error(w, reason+" Add an enactment before saving.", http.StatusBadRequest)
+		return
+	}
 	if idx := findPerk(c, existingID); idx >= 0 {
 		c.Perks[idx] = ab
 	} else {

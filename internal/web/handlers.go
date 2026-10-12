@@ -282,7 +282,10 @@ func (a *App) handleCharacter(w http.ResponseWriter, r *http.Request) {
 				// OOB swap inside the skills_tab template).
 				tmplName := "stat_cards"
 				if strings.TrimSpace(r.FormValue("_tab")) == "tab-skills" {
-					tmplName = "skills_tab"
+					// skills_sync wraps the fresh skills panel with an OOB
+					// stat-cards push, so a skill edit updates the point totals
+					// in the bar as well as the panel.
+					tmplName = "skills_sync"
 				} else if strings.TrimSpace(r.FormValue("_tab")) == "level-only" {
 					// The top-bar level input posts alone. Saving it here
 					// persists the level, and the OOB skills_tab refresh
@@ -411,6 +414,9 @@ func (a *App) saveImportedCharacter(c model.Character) (string, error) {
 	a.repairPerkIDs(&c)
 	for i := range c.Perks {
 		c.Perks[i] = engine.NormalizePerk(a.Cfg.Config, c.Perks[i])
+		if reason := perkRequiresEnactment(a.Cfg.Config, c.Perks[i]); reason != "" {
+			return "", fmt.Errorf("cannot import character: %s", reason)
+		}
 	}
 	if err := a.Store.Save(c); err != nil {
 		return "", err
@@ -545,12 +551,14 @@ func (a *App) applyCharacterForm(c *model.Character, r *http.Request) string {
 
 // renderSkillsTab writes the skills_tab partial for the given character.
 // Used by shifts, conditions, and the skills autosave to update the skills
-// panel (including "Now:" effective text and Warning) in place.
+// panel (including "Now:" effective text and Warning) in place. It renders
+// skills_sync so the character bar's point and vital totals are refreshed
+// out of band at the same time (conditions can shift vitals).
 func (a *App) renderSkillsTab(w http.ResponseWriter, c *model.Character) {
 	data := a.characterPage(c, false)
 	data.Cfg = a.Cfg.Config
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	if err := a.Tmpl.ExecuteTemplate(w, "skills_tab", data); err != nil {
+	if err := a.Tmpl.ExecuteTemplate(w, "skills_sync", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
