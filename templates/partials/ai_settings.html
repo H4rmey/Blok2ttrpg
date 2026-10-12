@@ -1,0 +1,24 @@
+{{/* Shared AI (BYOK) settings panel. It is included by both the character
+     generator modal (index page) and the perk generator modal (character page).
+     The two modals never appear on the same page, so the ai-* element ids can be
+     shared and the settings JS (aigen.js) works unchanged for either. */}}
+{{ define "ai_settings" }}
+<section id="ai-settings-panel" class="dialog-section" hidden>
+  <h3>AI Settings</h3>
+  <label for="ai-endpoint">API Endpoint URL</label>
+  <input id="ai-endpoint" type="text" placeholder="https://api.openai.com/v1" autocomplete="off">
+  <label for="ai-apikey">API Key</label>
+  <input id="ai-apikey" type="password" placeholder="Bearer token" autocomplete="off">
+  <label for="ai-model-select">Model</label>
+  <select id="ai-model-select" onchange="aiPickModel()"></select>
+  <input id="ai-model-text" type="text" placeholder="or type a model id" autocomplete="off">
+  <div class="toolbar">
+    <button class="btn" type="button" onclick="aiFetchModels()">Fetch models</button>
+    <button class="btn" type="button" onclick="aiClearCredentials()">Clear Saved Credentials</button>
+  </div>
+  <label class="checkbox-label">
+    <input id="ai-consent" type="checkbox"> Save endpoint, model, and API key locally in this browser
+  </label>
+  <p id="ai-settings-msg" class="muted" hidden></p>
+</section>
+{{ end }}
