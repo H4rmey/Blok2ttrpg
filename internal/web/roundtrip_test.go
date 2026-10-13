@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"net/http/httptest"
 	"net/url"
 	"regexp"
@@ -37,6 +38,43 @@ func TestBuilderCostMatchesStoredCost(t *testing.T) {
 	if replayed.Build != stored.Build || replayed.Energy != stored.Energy {
 		t.Errorf("builder round trip changed the cost: stored build=%d energy=%d, builder build=%d energy=%d\nform: %v",
 			stored.Build, stored.Energy, replayed.Build, replayed.Energy, form)
+	}
+}
+
+// TestBuilderCostPreviewCountsEditedPerkOnce guards the reported regression: the
+// cost preview must price the perk being edited in place (replace it), not add a
+// second copy on top of the stored one. Counting it twice made the top bar read
+// as if the build cost had been subtracted from the perk points twice.
+func TestBuilderCostPreviewCountsEditedPerkOnce(t *testing.T) {
+	app, c := testAppWithPerk(t)
+	if err := app.Store.Save(*c); err != nil {
+		t.Fatalf("save character: %v", err)
+	}
+	cost := engine.PerkCost(app.Cfg.Config, c.Perks[0]).Build
+	budget := app.Cfg.PerkPointBudget(c.Level)
+
+	rec := httptest.NewRecorder()
+	app.renderBuilder(rec, c, &c.Perks[0], false)
+	form := formValuesFromHTML(rec.Body.String())
+
+	req := httptest.NewRequest("POST", "/builder/cost", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	out := httptest.NewRecorder()
+	app.handleBuilderCost(out, req)
+
+	body := out.Body.String()
+	i := strings.Index(body, `id="stat-cards"`)
+	if i < 0 {
+		t.Fatalf("cost preview did not push the stat cards:\n%s", body)
+	}
+	m := regexp.MustCompile(`(-?\d+)/(\d+)`).FindStringSubmatch(body[i:])
+	if m == nil {
+		t.Fatalf("no perk-points reading in the previewed bar:\n%s", body)
+	}
+	want := fmt.Sprintf("%d", budget-cost)
+	if m[1] != want {
+		t.Errorf("preview shows %s/%s perk points, want %s/%s: the edited perk was counted twice",
+			m[1], m[2], want, m[2])
 	}
 }
 

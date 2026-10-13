@@ -24,13 +24,14 @@ func SkillPointsUsed(cfg *config.Config, c model.Character) int {
 	return used
 }
 
-// cumulativeSkillCost returns the total points needed to raise a skill from the
+// cumulativeSkillCost returns the total points needed to move a skill from the
 // default tier to the given proficiency tier. Tiers are ordered by their
 // position in cfg.Proficiencies; the configured default tier is free. The cost
 // is the sum of the per-tier `cost` values for each tier strictly above the
-// default up to and including the selected tier. Selecting a tier at or below
-// the default costs zero, so tiers below the default (e.g. negative modifiers)
-// are free choices rather than discounts.
+// default up to and including the selected tier. Selecting a tier below the
+// default refunds the per-tier cost of every rung between it and the default
+// (negated), so an Inept skill hands a point back instead of being a free
+// choice. An unknown or missing tier costs zero.
 func cumulativeSkillCost(cfg *config.Config, profID string) int {
 	base := cfg.DefaultProficiencyIndex()
 	target := -1
@@ -40,12 +41,18 @@ func cumulativeSkillCost(cfg *config.Config, profID string) int {
 			break
 		}
 	}
-	if target <= base {
+	if target < 0 || target == base {
 		return 0
 	}
 	sum := 0
-	for i := base + 1; i <= target && i < len(cfg.Proficiencies); i++ {
-		sum += cfg.Proficiencies[i].Cost
+	if target > base {
+		for i := base + 1; i <= target && i < len(cfg.Proficiencies); i++ {
+			sum += cfg.Proficiencies[i].Cost
+		}
+	} else {
+		for i := target + 1; i <= base && i < len(cfg.Proficiencies); i++ {
+			sum -= cfg.Proficiencies[i].Cost
+		}
 	}
 	return sum
 }

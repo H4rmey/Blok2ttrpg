@@ -83,8 +83,8 @@ type Config struct {
 
 	// DefaultProficiency names the proficiency tier id that new characters
 	// start every skill at (the "free" baseline). When empty the first tier in
-	// the Proficiencies list is used. Tiers below the default are free; tiers
-	// above the default accrue their cumulative per-tier cost.
+	// the Proficiencies list is used. Tiers above the default accrue their
+	// cumulative per-tier cost; tiers below it refund the per-rung cost.
 	DefaultProficiency string `yaml:"default_proficiency,omitempty" json:"default_proficiency,omitempty"`
 
 	// Leveling budgets, given as per-level tables.

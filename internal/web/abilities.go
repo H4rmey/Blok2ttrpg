@@ -805,7 +805,7 @@ func (a *App) readEnactments(r *http.Request) []model.Enactment {
 
 func (a *App) handleBuilderCost(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
-	ab := model.Perk{Type: r.FormValue("type"), Fields: map[string]any{}}
+	ab := model.Perk{ID: r.FormValue("perk_id"), Type: r.FormValue("type"), Fields: map[string]any{}}
 	if at, ok := a.Cfg.PerkType(ab.Type); ok {
 		ab.Fields = readFieldValues(a.Cfg.Config, at.Fields, "atype_", r)
 	}
