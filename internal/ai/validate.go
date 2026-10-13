@@ -6,7 +6,6 @@ package ai
 
 import (
 	"fmt"
-	"math"
 	"sort"
 	"strings"
 
@@ -14,12 +13,6 @@ import (
 	"github.com/harmey/blok2ttrpg-v5/internal/engine"
 	"github.com/harmey/blok2ttrpg-v5/internal/model"
 )
-
-// PerkSpendFloor is the minimum fraction of the perk-point budget that must be
-// spent. Perk costs do not divide evenly into the budget, so hitting it exactly
-// is often impossible; any spend from this floor up to the full budget (but
-// never over) is accepted. Skill points are still spent exactly.
-const PerkSpendFloor = 0.8
 
 // Pool is one build budget and how much of it the character spent.
 type Pool struct {
@@ -73,19 +66,9 @@ func Validate(cfg *config.Config, c model.Character) Report {
 }
 
 // poolIssue describes a spending violation in one pool, or "" when the pool is
-// within its rules. Skill points must be spent exactly; perk points may be left
-// partly unspent down to PerkSpendFloor of the budget, but never overspent.
+// within its rules. Both pools must be spent exactly: the 1-point dials in the
+// reference always make that reachable, so any leftover or overage is an error.
 func poolIssue(p Pool) string {
-	if p.Name == "perk" {
-		floor := int(math.Ceil(PerkSpendFloor * float64(p.Budget)))
-		switch {
-		case p.Used > p.Budget:
-			return fmt.Sprintf("%d over budget on perk points (%d used of %d).", p.Used-p.Budget, p.Used, p.Budget)
-		case p.Used < floor:
-			return fmt.Sprintf("only %d of %d perk points spent; at least %d (80%%) is required.", p.Used, p.Budget, floor)
-		}
-		return ""
-	}
 	delta := p.Budget - p.Used
 	switch {
 	case delta > 0:
@@ -165,17 +148,113 @@ func validatePerks(cfg *config.Config, c model.Character) []string {
 			if en.Type == "" {
 				continue
 			}
-			if _, ok := cfg.Enactment(en.Type); !ok {
+			ecomp, eok := cfg.Enactment(en.Type)
+			if !eok {
 				issues = append(issues, fmt.Sprintf("perk %q has unknown enactment %q.", name, en.Type))
+				continue
 			}
 			if en.Interaction != "" {
 				if _, ok := cfg.Interaction(en.Interaction); !ok {
 					issues = append(issues, fmt.Sprintf("perk %q has unknown interaction %q.", name, en.Interaction))
 				}
 			}
+			issues = append(issues, validateResourceEnactment(cfg, name, en, ecomp)...)
+		}
+	}
+	issues = append(issues, validateResourcePairs(c)...)
+	return issues
+}
+
+// validateResourceEnactment checks one resource enactment: a generate entry
+// only generates, a consume entry only consumes and names a real effect, and
+// neither writes the app-built nested key by hand.
+func validateResourceEnactment(cfg *config.Config, perkName string, en model.Enactment, ecomp config.Component) []string {
+	if en.Type != "resource" {
+		return nil
+	}
+	var issues []string
+	mode := resourceMode(en.Fields)
+	switch mode {
+	case "generate":
+		if effect := fieldString(en.Fields, "consumed_effect"); effect != "" && !isDefaultConsumedEffect(cfg, ecomp, effect) {
+			issues = append(issues, fmt.Sprintf("perk %q generates resources but also sets consumed_effect; generate and consume must be separate perks sharing one resource_name.", perkName))
+		}
+		if name := strings.TrimSpace(fieldString(en.Fields, "resource_name")); name == "" {
+			issues = append(issues, fmt.Sprintf("perk %q generates resources without a resource_name; name the resource the spender will consume.", perkName))
+		}
+	case "consume":
+		if name := strings.TrimSpace(fieldString(en.Fields, "resource_name")); name == "" {
+			issues = append(issues, fmt.Sprintf("perk %q consumes resources without a resource_name; use the generator perk's resource_name.", perkName))
+		}
+		if effect := fieldString(en.Fields, "consumed_effect"); effect == "" || effect == "generate" {
+			issues = append(issues, fmt.Sprintf("perk %q consumes resources without a real consumed_effect (damage, healing, motion, condition, shift, adjustment, phase); the nested fields are configured in the app afterwards.", perkName))
+		}
+	}
+	if _, nested := en.Fields["consumed_effect_ib"]; nested {
+		issues = append(issues, fmt.Sprintf("perk %q writes consumed_effect_ib by hand; omit it (the app builds it) and set only resource_mode, resource_name and consumed_effect.", perkName))
+	}
+	return issues
+}
+
+// validateResourcePairs checks that every consumed resource_name has a
+// generator perk and every generator's resource is consumed somewhere.
+func validateResourcePairs(c model.Character) []string {
+	generated, consumed := map[string]string{}, map[string]string{}
+	for _, p := range c.Perks {
+		name := p.Name
+		if name == "" {
+			name = "an unnamed perk"
+		}
+		for _, en := range p.Enactments {
+			if en.Type != "resource" {
+				continue
+			}
+			res := strings.ToLower(strings.TrimSpace(fieldString(en.Fields, "resource_name")))
+			if res == "" {
+				continue
+			}
+			switch resourceMode(en.Fields) {
+			case "generate":
+				generated[res] = name
+			case "consume":
+				consumed[res] = name
+			}
+		}
+	}
+	var issues []string
+	for res, perk := range consumed {
+		if _, ok := generated[res]; !ok {
+			issues = append(issues, fmt.Sprintf("perk %q consumes resource %q but no perk generates it; add a separate generator perk with resource_mode: generate and the same resource_name.", perk, res))
+		}
+	}
+	for res, perk := range generated {
+		if _, ok := consumed[res]; !ok {
+			issues = append(issues, fmt.Sprintf("perk %q generates resource %q but no perk consumes it; add a separate spender perk with resource_mode: consume and the same resource_name.", perk, res))
 		}
 	}
 	return issues
+}
+
+// resourceMode reads a resource enactment's mode, defaulting to the config
+// default (generate) when unset.
+func resourceMode(fields map[string]any) string {
+	if mode := strings.ToLower(strings.TrimSpace(fieldString(fields, "resource_mode"))); mode != "" {
+		return mode
+	}
+	return "generate"
+}
+
+// isDefaultConsumedEffect reports whether the value equals the resource
+// component's own default for consumed_effect, which is present even on a pure
+// generator that did not mean to consume anything.
+func isDefaultConsumedEffect(cfg *config.Config, ecomp config.Component, value string) bool {
+	for _, f := range ecomp.Fields {
+		if f.Key != "consumed_effect" {
+			continue
+		}
+		return strings.EqualFold(fmt.Sprintf("%v", f.Default), strings.TrimSpace(value))
+	}
+	return false
 }
 
 // Correction builds the user-role retry message appended after an invalid
@@ -184,10 +263,24 @@ func Correction(r Report) string {
 	var b strings.Builder
 	b.WriteString("Your character failed validation. ")
 	b.WriteString(strings.Join(r.Issues, " "))
-	b.WriteString(" Spend ALL skill points exactly, and spend at least 80% of the perk points without exceeding the perk budget.")
+	b.WriteString(" Spend ALL skill and perk points exactly; to adjust the perk total, tune only the 1-point dials from the reference, without adding or removing perks.")
+	if hasResourceSplitIssue(r) {
+		b.WriteString(" A resource generator and its spender must be two separate perks sharing one resource_name; never combine generate and consume in one perk.")
+	}
 	b.WriteString(" Use lowercase proficiency ids (novice, proficient, expert, ...), not tier names, and set fields.passive_id for any passive perk.")
 	b.WriteString(" Return the full corrected character YAML only, with no markdown fences or commentary.")
 	return b.String()
+}
+
+// hasResourceSplitIssue reports whether any issue touches resource usage, so
+// the retry can restate the generator/spender split exactly when it is broken.
+func hasResourceSplitIssue(r Report) bool {
+	for _, issue := range r.Issues {
+		if strings.Contains(issue, "resource") {
+			return true
+		}
+	}
+	return false
 }
 
 // fieldString reads a string field from a loosely-typed values map.

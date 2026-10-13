@@ -3,10 +3,11 @@
 //
 // Models reliably choose the right concept but express a few things in human
 // terms rather than the exact ids and nesting the importer expects: a
-// proficiency as its tier name ("Expert"), or a passive as a `passives:` list
-// instead of `fields.passive_id`. Normalising those here means a character that
-// is correct in spirit imports on the first try instead of bouncing through
-// retries for a cosmetic mismatch.
+// proficiency as its tier name ("Expert"), a passive as a `passives:` list
+// instead of `fields.passive_id`, or a hand-built `consumed_effect_ib` nested
+// map with the wrong prefixed keys. Normalising those here means a character
+// that is correct in spirit imports on the first try instead of bouncing
+// through retries for a cosmetic mismatch.
 package ai
 
 import (
@@ -66,6 +67,28 @@ func normalizePerks(cfg *config.Config, doc map[string]any) {
 	for _, raw := range perks {
 		if p, ok := raw.(map[string]any); ok {
 			normalizePassive(p, idx)
+			normalizeResource(p)
+		}
+	}
+}
+
+// normalizeResource drops a hand-written consumed_effect_ib nested map from a
+// resource enactment. The app builds that value itself (NormalizePerk), and the
+// model's hand-written copy always names the wrong prefixed keys. The intent
+// (resource_mode, resource_name, consumed_effect) is preserved, so validation
+// can still judge the generate/spender split.
+func normalizeResource(p map[string]any) {
+	enactments, _ := p["enactments"].([]any)
+	for _, raw := range enactments {
+		en, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if t, _ := en["type"].(string); !strings.EqualFold(strings.TrimSpace(t), "resource") {
+			continue
+		}
+		if fields, ok := en["fields"].(map[string]any); ok {
+			delete(fields, "consumed_effect_ib")
 		}
 	}
 }

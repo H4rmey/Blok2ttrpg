@@ -61,6 +61,36 @@ func TestNormalizePassiveSpellings(t *testing.T) {
 	}
 }
 
+// TestNormalizeResourceStripsNestedKey pins that a hand-written
+// consumed_effect_ib nested map is dropped while the mode/resource intent is
+// preserved for validation.
+func TestNormalizeResourceStripsNestedKey(t *testing.T) {
+	raw := `perks:
+  - name: Spender
+    type: execution
+    enactments:
+      - type: resource
+        fields:
+          resource_mode: consume
+          resource_name: Rage
+          consumed_effect: damage
+          consumed_effect_ib:
+            source: 1d6
+`
+	doc := decode(t, raw)
+	perks, _ := doc["perks"].([]any)
+	p, _ := perks[0].(map[string]any)
+	ens, _ := p["enactments"].([]any)
+	en, _ := ens[0].(map[string]any)
+	fields, _ := en["fields"].(map[string]any)
+	if _, ok := fields["consumed_effect_ib"]; ok {
+		t.Error("consumed_effect_ib was not stripped")
+	}
+	if fields["resource_mode"] != "consume" || fields["consumed_effect"] != "damage" {
+		t.Errorf("intent was lost: %v", fields)
+	}
+}
+
 // TestNormalizedPassiveValidates ensures the reshaping produces a perk the
 // validator accepts (as a passive, via passive_id) rather than "has no type".
 func TestNormalizedPassiveValidates(t *testing.T) {

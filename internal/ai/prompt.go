@@ -28,6 +28,8 @@ func SystemPrompt(loaded *config.Loaded, reference string) string {
 	b.WriteString("- Output ONLY the raw YAML. No markdown fences, no explanation, no commentary before or after.\n")
 	b.WriteString("- The YAML must use the schema below and reference only ids from the reference section.\n")
 	fmt.Fprintf(&b, "- Choose a level from 1 to %d that fits the description and set it in the `level` field. Spend EXACTLY 100%% of that level's point pools: no unspent points, no overspending. Both the skill-point and perk-point totals must equal their budgets exactly.\n", cfg.MaxLevel())
+	b.WriteString("- To hit the perk budget exactly, tune ONLY the number dials listed under \"Exact perk spending: the 1-point dials\" (each step is exactly 1 build point). Do not add or remove perks to balance the budget.\n")
+	b.WriteString("- A resource generator and its spender are ALWAYS two separate perks sharing one `resource_name`. Never put generate and consume in the same perk; never write `consumed_effect_ib` (the app builds it afterwards).\n")
 	b.WriteString("- Every skill listed in `skills` must use a proficiency id from the ladder; skills not listed default to the free baseline.\n")
 	b.WriteString("- Proficiency values are lowercase ids (`novice`, `expert`, ...), NEVER the tier name (`Novice`, `Expert`).\n")
 	b.WriteString("- Build cohesive perks that fit the character's described theme and highest skills.\n")

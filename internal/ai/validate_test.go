@@ -138,6 +138,92 @@ func TestValidateRejectsEmptyPerk(t *testing.T) {
 	}
 }
 
+// TestValidatePerkExactSpend pins that the perk pool is back to exact spend now
+// that the 1-point dials make an exact total reachable.
+func TestValidatePerkExactSpend(t *testing.T) {
+	cfg := loadCfg(t)
+
+	atBudget := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 20)
+	if r := Validate(cfg, atBudget); !r.Valid {
+		t.Errorf("20/20 perk points should be valid, got: %v", r.Issues)
+	}
+
+	below := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 19)
+	if r := Validate(cfg, below); r.Valid || !hasIssue(r.Issues, "1 unspent perk points") {
+		t.Errorf("19/20 perk points should be rejected, got: %v", r.Issues)
+	}
+
+	over := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 21)
+	if r := Validate(cfg, over); r.Valid || !hasIssue(r.Issues, "over budget on perk points") {
+		t.Errorf("21/20 perk points should be rejected, got: %v", r.Issues)
+	}
+}
+
+// TestValidateResourceSplit pins the resource pair rule: generate and consume
+// must live in two separate perks sharing one resource_name, and every side
+// needs its counterpart.
+func TestValidateResourceSplit(t *testing.T) {
+	cfg := loadCfg(t)
+	fields := func(pairs ...string) map[string]any {
+		m := map[string]any{}
+		for i := 0; i+1 < len(pairs); i += 2 {
+			m[pairs[i]] = pairs[i+1]
+		}
+		return m
+	}
+	gen := func(name string, extras ...string) model.Enactment {
+		f := append([]string{"resource_mode", "generate", "resource_name", name}, extras...)
+		return model.Enactment{Type: "resource", Fields: fields(f...)}
+	}
+	use := func(name, effect string) model.Enactment {
+		return model.Enactment{Type: "resource", Fields: fields(
+			"resource_mode", "consume", "resource_name", name, "consumed_effect", effect)}
+	}
+
+	// One perk that generates and names an effect in a single enactment must fail.
+	combined := levelOne(model.Character{Perks: []model.Perk{{
+		Name: "Combo", Type: "execution",
+		Enactments: []model.Enactment{gen("Rage", "consumed_effect", "damage")},
+	}}})
+	if r := Validate(cfg, combined); !hasIssue(r.Issues, "separate perks") {
+		t.Errorf("combined generate+consume should be rejected, got: %v", r.Issues)
+	}
+
+	// A consumer with no generator must fail.
+	orphan := levelOne(model.Character{Perks: []model.Perk{{
+		Name: "Spender", Type: "execution", Enactments: []model.Enactment{use("Rage", "damage")},
+	}}})
+	if r := Validate(cfg, orphan); !hasIssue(r.Issues, "no perk generates it") {
+		t.Errorf("orphan consumer should be rejected, got: %v", r.Issues)
+	}
+
+	// A generator with no consumer must fail.
+	lonely := levelOne(model.Character{Perks: []model.Perk{{
+		Name: "Builder", Type: "execution", Enactments: []model.Enactment{gen("Rage")},
+	}}})
+	if r := Validate(cfg, lonely); !hasIssue(r.Issues, "no perk consumes it") {
+		t.Errorf("orphan generator should be rejected, got: %v", r.Issues)
+	}
+
+	// The matching pair must pass the resource checks.
+	pair := levelOne(model.Character{Perks: []model.Perk{
+		{Name: "Builder", Type: "execution", Enactments: []model.Enactment{gen("Rage")}},
+		{Name: "Spender", Type: "execution", Enactments: []model.Enactment{use("Rage", "damage")}},
+	}})
+	for _, issue := range Validate(cfg, pair).Issues {
+		if strings.Contains(issue, "resource") || strings.Contains(issue, "generates") || strings.Contains(issue, "consumes") {
+			t.Errorf("valid pair flagged: %q", issue)
+		}
+	}
+
+	// A hand-written consumed_effect_ib is flagged even on the pair.
+	withIB := pair
+	withIB.Perks[1].Enactments[0].Fields["consumed_effect_ib"] = map[string]any{"source": "1d6"}
+	if r := Validate(cfg, withIB); !hasIssue(r.Issues, "consumed_effect_ib") {
+		t.Errorf("hand-written nested key should be rejected, got: %v", r.Issues)
+	}
+}
+
 // TestValidatePerk checks the single-perk validator used by the perk generator.
 func TestValidatePerk(t *testing.T) {
 	cfg := loadCfg(t)
@@ -147,26 +233,6 @@ func TestValidatePerk(t *testing.T) {
 	}
 	if issues := ValidatePerk(cfg, model.Perk{Name: "PM", Type: "passive", Fields: map[string]any{"passive_id": "mobile_attacker"}}); len(issues) != 0 {
 		t.Errorf("ValidatePerk rejected a valid passive: %v", issues)
-	}
-}
-
-func TestValidatePerkSpendFloor(t *testing.T) {
-	cfg := loadCfg(t)
-	// Level 1 perk budget is 20, so the 80% floor is 16.
-	atFloor := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 16)
-	if r := Validate(cfg, atFloor); !r.Valid {
-		t.Errorf("16/20 perk points should be valid, got: %v", r.Issues)
-	}
-
-	below := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 15)
-	r := Validate(cfg, below)
-	if r.Valid || !hasIssue(r.Issues, "only 15 of 20 perk points spent") {
-		t.Errorf("15/20 perk points should be rejected, got: %v", r.Issues)
-	}
-
-	over := withPassives(withSkillPoints(levelOne(model.Character{}), 13), 21)
-	if r := Validate(cfg, over); r.Valid || !hasIssue(r.Issues, "over budget on perk points") {
-		t.Errorf("21/20 perk points should be rejected, got: %v", r.Issues)
 	}
 }
 

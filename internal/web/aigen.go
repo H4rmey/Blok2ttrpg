@@ -102,9 +102,10 @@ func (a *App) handleAIGenerate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		cleaned := extractYAML(reply)
-		// Lead the model: rewrite tier names and passive spellings into the
-		// canonical import shape before parsing, so a character that is correct
-		// in spirit is not rejected on a cosmetic mismatch.
+		// Lead the model: rewrite tier names, passive spellings and the
+		// hand-written consumed_effect_ib into the canonical import shape
+		// before parsing, so a character that is correct in spirit is not
+		// rejected on a cosmetic mismatch.
 		yamlDoc := cleaned
 		if normalized, nerr := ai.NormalizeYAML(a.Cfg.Config, []byte(cleaned)); nerr == nil {
 			yamlDoc = string(normalized)

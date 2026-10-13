@@ -76,7 +76,7 @@ leveling:
     start: 13
     per_level: 3
   perk_points:
-    start: 20
+    start: 24
     per_level: 4
   invoke_points:
     start: 3
